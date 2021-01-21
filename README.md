@@ -2,7 +2,7 @@
 Web-based conky-like monitoring platform.
 
 ## Conky?
-Conky is a program I've been using for quite a while. But recently I've been wondering if the real estate consumed by its window was really worth it:
+[Conky](https://github.com/brndnmtthws/conky) is a program I've been using for quite a while. But recently I've been wondering if the real estate consumed by its window was really worth it:
 
 * Either the window is docked and it consumes quite a bit of real estate on the screen.
 * Either the window is decorating the desktop background and I never see it.
