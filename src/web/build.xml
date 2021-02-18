@@ -1,0 +1,7 @@
+<project name="conkw-static-webapp" default="build_static_webapp" basedir=".">
+  <target name="build_static_webapp">
+    <zip destfile="../java/src/main/resources/webapp-static.zip" basedir="."/>
+  </target>
+</project>
+
+

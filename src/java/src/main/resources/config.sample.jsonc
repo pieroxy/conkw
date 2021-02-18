@@ -1,0 +1,18 @@
+{
+  // This is the list of things conkw will be able to fetch infos from.
+  "grabbers":[
+    {
+      // This is the system grabber for Linux OS.
+      "id":"procgrabber.Proc",
+      "parameters": {
+        // List here the block devices of your machine, to monitor I/O, separated by a comma
+        "blockDevices":"sda",
+        // List here all the mount points of your machines to monitor free space, separated by a comma
+        "mountPoints":"/"
+      }
+    }
+  ],
+  // This is the port the web server will listen to. Note that values below 1024 are discouraged as they require
+  // the process to be launched as root.
+  "httpPort": 12789
+}
