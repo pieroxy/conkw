@@ -12,4 +12,7 @@ Conkw was spawned out of a simple idea: We all have an old laptop or tablet lyin
 
 * The easiest client-server setup is a web server and a browser.
 * All tablets and laptops have browsers.
-* Every reasonably beefy computer can host a web server.
+* Every reasonably modern computer can host a web server.
+
+## Project status
+This project is being imported from a dirty local repository, so hang in there for a few days and something usable should pop up soon.
