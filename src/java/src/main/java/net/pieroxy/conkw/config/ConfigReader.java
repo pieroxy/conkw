@@ -52,6 +52,14 @@ public class ConfigReader {
         return new File(getHomeDir(), "tmp");
     }
 
+    public static File getBinDir() {
+        return new File(getHomeDir(), "bin");
+    }
+
+    public static File getLogDir() {
+        return new File(getHomeDir(), "log");
+    }
+
     public static File getWebappDir() {
         return new File(getHomeDir(), "webapp/ROOT");
     }
@@ -65,6 +73,8 @@ public class ConfigReader {
                 getDataDir().exists() && getDataDir().isDirectory() &&
                 getConfDir().exists() && getConfDir().isDirectory() &&
                 getTmpDir().exists() && getTmpDir().isDirectory() &&
+                getLogDir().exists() && getLogDir().isDirectory() &&
+                getBinDir().exists() && getBinDir().isDirectory() &&
                 getWebappDir().exists() && getWebappDir().isDirectory() &&
                 getUiDir().exists() && getUiDir().isDirectory();
     }

@@ -4,7 +4,10 @@ import net.pieroxy.conkw.config.ConfigReader;
 import net.pieroxy.conkw.utils.ZipUtil;
 
 import java.io.*;
+import java.nio.file.CopyOption;
+import java.nio.file.FileSystem;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 import static net.pieroxy.conkw.utils.StreamTools.copyStreamAndClose;
 
@@ -20,22 +23,42 @@ public class Installer {
         if (name.equalsIgnoreCase("y") || name.equalsIgnoreCase("yes") || name.isEmpty()) {
             System.out.println("Installing conkw in " + ConfigReader.getHomeDir());
             doInstall();
+            printInstructions();
+            System.exit(1);
         } else {
             System.out.println("Run this program again with the CONKW_HOME env variable set to the place you wish to install it. Remember to always set this env variable to the same path whenever you run conkw.");
             System.exit(1);
         }
     }
 
+    private void printInstructions() {
+        System.out.println("Congratulations. You can now run conkw by typing:");
+        System.out.println("$ sh " + ConfigReader.getBinDir() + File.separator + "run.sh");
+        System.out.println("");
+        System.out.println("If you want to have this program automatically launched at startup, just add the following line to your crontab:");
+        System.out.println("@reboot sh " + ConfigReader.getBinDir() + File.separator + "run.sh");
+    }
+
     private void doInstall() throws Exception {
+        String java = System.getProperty("java.home");
         Files.createDirectories(ConfigReader.getConfDir().toPath());
         copyStreamAndClose(
                 getClass().getClassLoader().getResourceAsStream("config.sample.jsonc"),
                 new FileOutputStream(ConfigReader.getConfigFile()));
         Files.createDirectories(ConfigReader.getDataDir().toPath());
         Files.createDirectories(ConfigReader.getTmpDir().toPath());
+        Files.createDirectories(ConfigReader.getBinDir().toPath());
+        Files.createDirectories(ConfigReader.getLogDir().toPath());
         Files.createDirectories(ConfigReader.getUiDir().toPath());
         Files.createDirectories(ConfigReader.getWebappDir().toPath());
         initWebapp();
+        Files.copy(
+                new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI()).toPath(),
+                new File(ConfigReader.getBinDir(), "conkw.jar").toPath(),
+                StandardCopyOption.REPLACE_EXISTING);
+        FileOutputStream script = new FileOutputStream(new File(ConfigReader.getBinDir(), "run.sh"));
+        script.write((java + "/bin/java -jar " + ConfigReader.getBinDir() + File.separator + "conkw.jar >> " + ConfigReader.getLogDir() + "/system.log 2>&1\n").getBytes());
+        script.close();
     }
 
     private void initWebapp() throws IOException {
