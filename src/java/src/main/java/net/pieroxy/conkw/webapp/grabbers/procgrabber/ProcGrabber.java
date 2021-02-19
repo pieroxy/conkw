@@ -124,7 +124,16 @@ public class ProcGrabber extends AsyncGrabber {
     grabBlockDeviceIo(r);
     getFreeSpace(r);
     getNetStats(r);
+    getHostname(r);
     return r;
+  }
+
+  private void getHostname(ResponseData r) {
+    try (Stream<String> stream = Files.lines( Paths.get("/etc/hostname"), StandardCharsets.UTF_8)) {
+      r.addMetric("hostname", stream.findFirst().get());
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   private void getNetStats(ResponseData r) {
