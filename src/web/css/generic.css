@@ -16,52 +16,6 @@ gauge>div.gaugewarning {
     background-color: #800000 ! important;
 }
 
-clock {
-    width: 100px;
-    height: 100px;
-    border-radius: 100%;
-    position: relative;
-    display: block;
-    background-repeat: no-repeat;
-    background-size: contain;
-}
-
-clock>div {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    transform: translateY(-4px);
-}
-
-clock>div>div,
-clock>div>img {
-    position: absolute;
-    transform: rotate(90deg);
-    /*transition: 0.3s all;
-  transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);*/
-}
-
-clock #clock-second {
-    height: 2px;
-    width: 45%;
-    left: 15%;
-    transform-origin: 77.777%;
-}
-
-clock #clock-hour {
-    height: 3px;
-    width: 30%;
-    transform-origin: 83.333%;
-    left: 25%;
-    /*border-radius: 4px;*/
-}
-
-clock #clock-minute {
-    width: 40%;
-    left: 15%;
-    transform-origin: 87.5%;
-    height: 3px;
-}
 
 .lcd.cw-stale,
 .lcd.cw-stale *,
