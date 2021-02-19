@@ -6,6 +6,8 @@ import net.pieroxy.conkw.utils.ZipUtil;
 import java.io.*;
 import java.nio.file.Files;
 
+import static net.pieroxy.conkw.utils.StreamTools.copyStreamAndClose;
+
 public class Installer {
 
     public void run() throws Exception {
@@ -13,13 +15,13 @@ public class Installer {
                 new BufferedReader(new InputStreamReader(System.in));
 
         System.out.println("** INSTALLING CONKW **");
-        System.out.println("About to install conkw in " + ConfigReader.getHomeDir() + " (Y/n)");
+        System.out.println("Install conkw in " + ConfigReader.getHomeDir() + "? (Y/n)");
         String name = reader.readLine();
         if (name.equalsIgnoreCase("y") || name.equalsIgnoreCase("yes") || name.isEmpty()) {
             System.out.println("Installing conkw in " + ConfigReader.getHomeDir());
             doInstall();
         } else {
-            System.out.println("Runthis program again with the CONKW_HOME env variable set to the place you wish to install it. Remember to always set this env variable to the same path whenever you run conkw.");
+            System.out.println("Run this program again with the CONKW_HOME env variable set to the place you wish to install it. Remember to always set this env variable to the same path whenever you run conkw.");
             System.exit(1);
         }
     }
@@ -46,16 +48,4 @@ public class Installer {
         ZipUtil.unzip(getClass().getClassLoader().getResourceAsStream("webapp-static.zip"), h);
     }
 
-    private void copyStreamAndClose(InputStream is, OutputStream os) throws IOException {
-        try {
-            int read = 0;
-            byte[]buffer = new byte[10240];
-            while ((read = is.read(buffer))!=-1) {
-                os.write(buffer, 0, read);
-            }
-        } finally {
-            os.close();
-            is.close();
-        }
-    }
 }

@@ -3,10 +3,7 @@ package net.pieroxy.conkw.webapp.grabbers;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
@@ -69,5 +66,11 @@ public class FileGrabber extends AsyncGrabber {
     setNameFromConfig(config, "file");
     this.file = new File((String)config.get("file"));
     this.path = this.file.toPath();
+  }
+
+  @Override
+  public void writeHtmlTemplate(Writer writer) throws IOException {
+    ResponseData rd = grabSync();
+    // TODO implement it
   }
 }

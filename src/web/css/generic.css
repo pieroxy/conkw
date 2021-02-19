@@ -1,228 +1,132 @@
-div#errorDiv {
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-color: #aaa;
-  color: black;
-  white-space: normal;
-}
-
-label, cw-label {
-  white-space: pre;
-  display: inline-block;
-  overflow:hidden;
-  vertical-align: top;
-}
-
-a {
-  color: #44f;
-}
-a:visited {
-  color: #84f;
-}
-
-cw-label.error {
-  background-color:#f40;
-  color:black;
-}
-
-gauge, hgauge {
-  width: 200px;
-  background-color: #202040  ;
-  height: 1em;
-  display: inline-block;
-  margin-left: 30px;
-  margin-bottom: 2px;
-  vertical-align: top;
-  position:relative;
-  overflow:hidden;
-}
-
-gauge > div {
-  height:100%;
-  position: absolute;
-}
-
-gauge > div.redright {
-  background-color: #301030;
-  position: absolute;
-  right:0px;
-}
-gauge > div.redleft {
-  background-color: rgba(0,0,0,0);
-  border-right:1px solid rgba(0,0,0,0.2);
-  position: absolute;
-  left:0px;
-  z-index:10;
-}
-
-gauge > div.gauge {
-  background-color: #474;
-}
-
 .lcd gauge {
-  background-color: #709181
+    background-color: #709181
 }
 
-.lcd gauge > div.gauge {
-  background-color: #283830;
+.lcd gauge>div.gauge {
+    background-color: #283830;
 }
 
-
-body.animated gauge > div.gauge {
-  transition-property: width, left;
-  transition-duration: 0.3s;
-  transition-timing-function: linear;
+body.animated gauge>div.gauge {
+    transition-property: width, left;
+    transition-duration: 0.3s;
+    transition-timing-function: linear;
 }
 
-gauge > div.gaugewarning {
-  background-color: #800000 ! important;
+gauge>div.gaugewarning {
+    background-color: #800000 ! important;
 }
-
 
 clock {
-  width: 100px;
-  height: 100px;
-  border-radius: 100%;
-  position: relative;
-  display: block;
-  background-repeat: no-repeat;
-  background-size: contain;
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
+    position: relative;
+    display: block;
+    background-repeat: no-repeat;
+    background-size: contain;
 }
 
-clock > div {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transform: translateY(-4px);
+clock>div {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform: translateY(-4px);
 }
 
-clock > div > div, clock > div > img {
-  position: absolute;
-  transform: rotate(90deg);
-  /*transition: 0.3s all;
+clock>div>div,
+clock>div>img {
+    position: absolute;
+    transform: rotate(90deg);
+    /*transition: 0.3s all;
   transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);*/
 }
 
 clock #clock-second {
-  height: 2px;
-  width: 45%;
-  left:15%;
-  transform-origin: 77.777%;
+    height: 2px;
+    width: 45%;
+    left: 15%;
+    transform-origin: 77.777%;
 }
+
 clock #clock-hour {
-  height: 3px;
-  width: 30%;
-  transform-origin: 83.333%;
-  left:25%;
-  /*border-radius: 4px;*/
+    height: 3px;
+    width: 30%;
+    transform-origin: 83.333%;
+    left: 25%;
+    /*border-radius: 4px;*/
 }
+
 clock #clock-minute {
-  width: 40%;
-  left:15%;
-  transform-origin: 87.5%;
-  height: 3px;
+    width: 40%;
+    left: 15%;
+    transform-origin: 87.5%;
+    height: 3px;
 }
 
-
-hgauge>div {
-  height:100%;
-  position: absolute;
+.lcd.cw-stale,
+.lcd.cw-stale *,
+.cw-stale .lcd,
+.cw-stale .lcd * {
+    color: #709181;
+    text-shadow: 0.1em 0.1em #779989;
 }
 
-hgauge>div.ch {
-  height:100%;
-  position: static;
-  width:2px;
-  float:left;
-  margin-left:-1px;
+.cw-stale.lcd gauge,
+.cw-stale .lcd gauge {
+    background-color: #779989;
 }
 
-hgauge>div.ch div {
-  position: absolute;
-  margin: 0;
-  padding: 0;
-  width: 2px;
+.cw-stale.lcd gauge>div.gauge,
+.cw-stale .lcd gauge>div.gauge {
+    background-color: #709181;
 }
-
-hgauge.w2>div.ch {
-  width:3px;
-}
-
-hgauge.w2>div.ch div {
-  width: 3px;
-}
-
-hgauge.w3>div.ch {
-  width:4px;
-}
-
-hgauge.w3>div.ch div {
-  width: 4px;
-}
-
-.lcd.cw-stale, .lcd.cw-stale *, .cw-stale .lcd, .cw-stale .lcd * {
-  color: #709181;
-  text-shadow: 0.1em 0.1em #779989;
-}
-
-.cw-stale.lcd gauge, .cw-stale .lcd gauge {
-  background-color: #779989;
-}
-
-.cw-stale.lcd gauge > div.gauge, .cw-stale .lcd gauge > div.gauge {
-  background-color: #709181;
-}
-
 
 .cw-stale {
-  color: #888;
+    color: #888;
 }
 
-
 .steelborder {
-  padding: 8px;
-  background-image: url(/backgrounds/stainless2.jpg);
-  box-shadow: inset -3px -3px 3px -3px black, inset 3px 3px 3px -3px white;
-  background-size: 100%;
-  background-position: top;
+    padding: 8px;
+    background-image: url(/backgrounds/stainless2.jpg);
+    box-shadow: inset -3px -3px 3px -3px black, inset 3px 3px 3px -3px white;
+    background-size: 100%;
+    background-position: top;
 }
 
 .steelborder img {
-  height: 35px;
-  padding-top: 10px;
-  filter: drop-shadow(0px 0px 1px rgba(0,0,0,1));
+    height: 35px;
+    padding-top: 10px;
+    filter: drop-shadow(0px 0px 1px rgba(0, 0, 0, 1));
 }
 
 @font-face {
-  font-family: 'LCDVARA';
-  src:  url('/fonts/pixelmix-custom.woff') format('woff');
+    font-family: 'LCDVARA';
+    src: url('/fonts/pixelmix-custom.woff') format('woff');
 }
 
 img.inlineimage {
-  height: 1em;
-  width: unset!important;
+    height: 1em;
+    width: unset!important;
 }
 
 .lcd {
-  background-color: #7da190;
-  box-shadow: inset 1px 1px 10px black;
-  font-family: LCDVARA, monospace;
-  font-size: 15px;
-  color: #283830;
-  padding: 10px;
-  text-shadow: 0.1em 0.1em #709181;
-  overflow: hidden;
+    background-color: #7da190;
+    box-shadow: inset 1px 1px 10px black;
+    font-family: LCDVARA, monospace;
+    font-size: 15px;
+    color: #283830;
+    padding: 10px;
+    text-shadow: 0.1em 0.1em #709181;
+    overflow: hidden;
 }
 
-.lcd > div {
-  padding: 0;
-  margin: 0;
-  overflow:hidden;
-  background-color: #799c8c;
+.lcd>div {
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    background-color: #799c8c;
 }
 
-.lcd > div * {
-  padding-bottom: 0.2em;
+.lcd>div * {
+    padding-bottom: 0.2em;
 }
-

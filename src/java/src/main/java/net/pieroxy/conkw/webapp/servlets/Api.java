@@ -1,4 +1,4 @@
-package net.pieroxy.conkw.webapp;
+package net.pieroxy.conkw.webapp.servlets;
 
 import com.dslplatform.json.DslJson;
 import com.dslplatform.json.JsonWriter;
@@ -31,17 +31,6 @@ public class Api extends HttpServlet {
       grabbers = g;
       return;
     }
-    System.out.println("Reloading configuration.");
-    // this is a hot swap :
-    // Start threads and all.
-    g.forEach((gr) -> gr.grab());
-    // Replace the grabbers.
-    Collection<Grabber>old=grabbers;
-    grabbers = g;
-    // Recycle the old grabbers.
-    old.forEach((gr) -> gr.dispose());
-    old = null;
-    System.gc();
   }
 
   public static void close() {

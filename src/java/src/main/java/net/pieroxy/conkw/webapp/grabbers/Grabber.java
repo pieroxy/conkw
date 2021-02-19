@@ -5,6 +5,7 @@ import net.pieroxy.conkw.webapp.model.ResponseData;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
+import java.io.Writer;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -107,4 +108,6 @@ public abstract class Grabber {
   private final void setName(String name) {
     this.name = name;
   }
+
+  public abstract void writeHtmlTemplate(Writer writer) throws IOException;
 }

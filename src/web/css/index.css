@@ -1,34 +1,11 @@
-@-ms-viewport { width: device-width; }
-html { -webkit-text-size-adjust: 100%; }
-
-body {
-    background-color: #000032;
-    color: white;
-    font-family: monospace;
-    font-size: 14px;
-    margin:0;
-    padding:0;
-    white-space: nowrap;
-    transform-origin: top left;
-    overflow: hidden;
-}
-
-body > div {
+body>div {
     padding: 10px;
     display: inline-block;
     vertical-align: top;
 }
 
-heading {
-    display:block;
-    color:#a0a0ff;
-    font-weight:bold;
-    margin-top:20px;
-}
-
-
 hr {
-    border-color:#336;
+    border-color: #336;
 }
 
 multigauge {
@@ -39,8 +16,8 @@ multigauge {
     margin-left: 30px;
     margin-bottom: 2px;
     vertical-align: top;
-    position:relative;
-    overflow:hidden;
+    position: relative;
+    overflow: hidden;
 }
 
 multigauge {
@@ -48,47 +25,43 @@ multigauge {
     background-color: #202040;
 }
 
-
-label.error, hgauge div.ch.error {
-    background-color:red;
-    color:black;
-}
-
-hgauge div.ch.error {
-    position: relative;
-    z-index: 100;
+label.error {
+    background-color: red;
+    color: black;
 }
 
 .softlabel {
-  color:#447;
+    color: #447;
 }
 
 p {
-    margin:0;
+    margin: 0;
 }
 
 pre {
-    display:inline-block;
-    margin:0;
+    display: inline-block;
+    margin: 0;
 }
-
 
 .weatherblock img {
-    width:30px;
+    width: 30px;
 }
+
 .weatherblock {
-    text-align:center;
+    text-align: center;
     display: inline-block;
-    font-size:10px;
+    font-size: 10px;
 }
+
 .bweatherblock img {
-    width:50px;
+    width: 50px;
 }
+
 .bweatherblock {
-    text-align:center;
+    text-align: center;
     display: inline-block;
-    font-size:12px;
-    width:50px;
+    font-size: 12px;
+    width: 50px;
     overflow: hidden;
 }
 

@@ -1,0 +1,145 @@
+@-ms-viewport {
+    width: device-width;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    background-color: #000032;
+    color: white;
+    font-family: monospace;
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+    transform-origin: top left;
+    overflow: hidden;
+    column-width: 350px;
+}
+
+
+/* Generic and misc elements */
+
+div#errorDiv {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #aaa;
+    color: black;
+    white-space: normal;
+}
+
+label,
+cw-label {
+    white-space: pre;
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+}
+
+a {
+    color: #44f;
+}
+
+a:visited {
+    color: #84f;
+}
+
+.cw-block {
+    display: inline-block;
+}
+
+cw-label.error {
+    background-color: #f40;
+    color: black;
+}
+
+heading {
+    display: block;
+    color: #a0a0ff;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+
+/* Gauge elements */
+
+gauge,
+hgauge {
+    width: 200px;
+    background-color: #202040;
+    height: 1em;
+    display: inline-block;
+    margin-left: 30px;
+    margin-bottom: 2px;
+    vertical-align: top;
+    position: relative;
+    overflow: hidden;
+}
+
+gauge>div {
+    height: 100%;
+    position: absolute;
+}
+
+gauge>div.redright {
+    background-color: #301030;
+    position: absolute;
+    right: 0px;
+}
+
+gauge>div.redleft {
+    background-color: rgba(0, 0, 0, 0);
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+    position: absolute;
+    left: 0px;
+    z-index: 10;
+}
+
+gauge>div.gauge {
+    background-color: #474;
+}
+
+hgauge>div {
+    height: 100%;
+    position: absolute;
+}
+
+hgauge>div.ch {
+    height: 100%;
+    position: static;
+    width: 2px;
+    float: left;
+    margin-left: -1px;
+}
+
+hgauge>div.ch div {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    width: 2px;
+}
+
+hgauge.w2>div.ch {
+    width: 3px;
+}
+
+hgauge.w2>div.ch div {
+    width: 3px;
+}
+
+hgauge.w3>div.ch {
+    width: 4px;
+}
+
+hgauge.w3>div.ch div {
+    width: 4px;
+}
+
+hgauge div.ch.error {
+    background-color: red;
+    color: black;
+    position: relative;
+    z-index: 100;
+}

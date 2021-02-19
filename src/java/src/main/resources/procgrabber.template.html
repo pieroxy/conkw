@@ -1,0 +1,121 @@
+<label>  Uptime : </label>
+<cw-label cw-ns="proc" cw-value="m:num:time:uptime"></cw-label>
+<BR/>
+
+<div id="mem" class="cw-block">
+    <heading>MEMORY USAGE </heading>
+    <label>    Total: </label>
+    <cw-label cw-ns="proc" cw-value="m:num:size:ramTotal"></cw-label>
+    <gauge cw-ns="proc" cw-min="l:num::0" cw-max="m:num::ramTotal" cw-gauge0="#474:m:num::ramUsed" cw-gauge1="#252:m:num::ramCached"></gauge>
+    <BR/>
+    <label>     Used: </label>
+    <cw-label cw-warn="e:num:above:${num.ramTotal*0.8}" cw-ns="proc" cw-value="m:num:size:ramUsed"></cw-label>
+    <hgauge cw-ns="proc" cw-hgauge0="#474:m:num::ramUsed" cw-hgauge1="#252:m:num::ramCached" cw-min="l:num::0" cw-max="m:num::ramTotal" style="height:3em;position:absolute;"></hgauge>
+    <BR/>
+    <label>     Free: </label>
+    <cw-label cw-ns="proc" cw-value="m:num:size:ramFree"></cw-label>
+    <BR/>
+    <label>   Cached: </label>
+    <cw-label cw-ns="proc" cw-value="m:num:size:ramCached"></cw-label>
+    <BR/>
+    <label>      </label>
+    <cw-label cw-ns="proc" cw-value="m:num:prc:prc_top1mem"></cw-label>
+    <cw-label style="width: 70px; text-align:right" cw-ns="proc" cw-value="m:str::pid_top1mem"></cw-label>
+    <cw-label style="width:200px" cw-ns="proc" cw-value="m:str::top1mem"></cw-label>
+    <BR/>
+    <label>      </label>
+    <cw-label cw-ns="proc" cw-value="m:num:prc:prc_top2mem"></cw-label>
+    <cw-label style="width: 70px; text-align:right" cw-ns="proc" cw-value="m:str::pid_top2mem"></cw-label>
+    <cw-label style="width:200px" cw-ns="proc" cw-value="m:str::top2mem"></cw-label>
+    <BR/>
+    <label>      </label>
+    <cw-label cw-ns="proc" cw-value="m:num:prc:prc_top3mem"></cw-label>
+    <cw-label style="width: 70px; text-align:right" cw-ns="proc" cw-value="m:str::pid_top3mem"></cw-label>
+    <cw-label style="width:200px" cw-ns="proc" cw-value="m:str::top3mem"></cw-label>
+    <BR/>
+    <heading>SWAP USAGE</heading>
+    <label>  </label>
+    <cw-label cw-warn="e:num:above:${num.sawpTotal*0.1}" cw-ns="proc" cw-value="m:num:size:swapUsed"></cw-label> /
+    <cw-label cw-ns="proc" cw-value="m:num:size:swapTotal"></cw-label>
+    <gauge cw-ns="proc" cw-min="l:num::0" cw-max="m:num::swapTotal" cw-warn="e:num::${num.swapTotal*0.5}" cw-gauge0="default:m:num::swapUsed"></gauge>
+</div>
+<div id="cpu" class="cw-block">
+    <heading>CPU /proc</heading>
+    <label>      used: </label>
+    <cw-label cw-warn="l:num:above:80" cw-ns="proc" cw-value="m:num:cpu:cpu_usg_used"></cw-label>
+    <gauge cw-ns="proc" cw-min="l:num::0" cw-max="l:num::100" cw-gauge0="#5b5:m:num::cpu_usg_sys" cw-gauge1="#474:m:num::cpu_usg_user" cw-gauge2="#252:m:num::cpu_usg_nice" cw-gauge3="#252:m:num::cpu_usg_wait"></gauge>
+    <BR/>
+    <label>       sys: </label>
+    <cw-label cw-ns="proc" cw-value="m:num:cpu:cpu_usg_sys"></cw-label>
+    <hgauge style="height:4em;position:absolute;" cw-ns="proc" cw-hgauge0="#5b5:m:num::cpu_usg_sys" cw-hgauge1="#474:m:num::cpu_usg_user" cw-hgauge2="#252:m:num::cpu_usg_nice" cw-hgauge3="#252:m:num::cpu_usg_wait" cw-min="l:num::0" cw-max="l:num::100"></hgauge>
+    <BR/>
+    <label>      user: </label>
+    <cw-label cw-ns="proc" cw-value="m:num:cpu:cpu_usg_user"></cw-label>
+    <BR/>
+    <label>      nice: </label>
+    <cw-label cw-ns="proc" cw-value="m:num:cpu:cpu_usg_nice"></cw-label>
+    <BR/>
+    <label>      wait: </label>
+    <cw-label cw-ns="proc" cw-value="m:num:cpu:cpu_usg_wait"></cw-label>
+    <BR/>
+    <label>      </label>
+    <cw-label cw-ns="proc" cw-value="m:num:prc:prc_top1cpu"></cw-label>
+    <cw-label style="width: 70px; text-align:right" cw-ns="proc" cw-value="m:str::pid_top1cpu"></cw-label>
+    <cw-label style="width:200px" cw-ns="proc" cw-value="m:str::top1cpu"></cw-label>
+    <BR/>
+    <label>      </label>
+    <cw-label cw-ns="proc" cw-value="m:num:prc:prc_top2cpu"></cw-label>
+    <cw-label style="width: 70px; text-align:right" cw-ns="proc" cw-value="m:str::pid_top2cpu"></cw-label>
+    <cw-label style="width:200px" cw-ns="proc" cw-value="m:str::top2cpu"></cw-label>
+    <BR/>
+    <label>      </label>
+    <cw-label cw-ns="proc" cw-value="m:num:prc:prc_top3cpu"></cw-label>
+    <cw-label style="width: 70px; text-align:right" cw-ns="proc" cw-value="m:str::pid_top3cpu"></cw-label>
+    <cw-label style="width:200px" cw-ns="proc" cw-value="m:str::top3cpu"></cw-label>
+    <BR/>
+</div>
+<div id="hdd io" class="cw-block">
+    <heading>HDD I/O</heading>
+    <label>  read : </label>
+    <cw-label cw-ns="proc" cw-value="m:num:size:read_bytes_all"></cw-label>/s
+    <hgauge cw-ns="proc" cw-hgauge0="#208020:m:num::read_bytes_all" cw-min="l:num::0" cw-max="l:num::3000000000" style="height:2em" log="true"></hgauge>
+    <BR/>
+    <label> write : </label>
+    <cw-label cw-ns="proc" cw-value="m:num:size:write_bytes_all"></cw-label>/s
+    <hgauge cw-ns="proc" cw-hgauge0="#208020:m:num::write_bytes_all" cw-min="l:num::0" cw-max="l:num::1000000000" style="height:2em" log="true"></hgauge>
+    <BR/>
+
+</div>
+<div id="net" class="cw-block">
+    <heading>NETWORK I/O</heading>
+    <label>  read : </label>
+    <cw-label cw-ns="proc" cw-value="m:num:size:netp_in"></cw-label>/s
+    <hgauge cw-ns="proc" style="height:2em" log="true" cw-hgauge0="#208020:m:num::netp_in" cw-min="l:num::0" cw-max="l:num::150000000"></hgauge>
+    <BR/>
+    <label> write : </label>
+    <cw-label cw-ns="proc" cw-value="m:num:size:netp_out"></cw-label>/s
+    <hgauge cw-ns="proc" style="height:2em" log="true" cw-hgauge0="#208020:m:num::netp_out" cw-min="l:num::0" cw-max="l:num::150000000"></hgauge>
+    <BR/>
+</div>
+<div id="load" class="cw-block">
+    <heading>LOAD AVG</heading>
+    <label>        1mn: </label>
+    <cw-label cw-warn="l:num:above:16" cw-ns="proc" cw-value="m:num::loadavg1"></cw-label>
+    <gauge cw-ns="proc" cw-gauge0="default:m:num::loadavg1" cw-min="l:num::0" cw-max="l:num::16" cw-warn="l:num::15.9"></gauge>
+    <BR/>
+    <label>        5mn: </label>
+    <cw-label cw-ns="proc" cw-value="m:num::loadavg2"></cw-label>
+    <gauge cw-ns="proc" cw-gauge0="default:m:num::loadavg2" cw-min="l:num::0" cw-max="l:num::16" cw-warn="l:num::15.9"></gauge>
+    <BR/>
+    <label>       15mn: </label>
+    <cw-label cw-ns="proc" cw-value="m:num::loadavg3"></cw-label>
+    <gauge cw-ns="proc" cw-gauge0="default:m:num::loadavg3" cw-min="l:num::0" cw-max="l:num::16" cw-warn="l:num::15.9"></gauge>
+    <BR/>
+</div>
+<div id="hdd" class="cw-block">
+    <heading>HDD USAGE</heading>
+    name&nbsp;&nbsp;size&nbsp;&nbsp;&nbsp;&nbsp;free
+    <BR/><HR/>
+_EMP_ <label>$$: </label><cw-label cw-ns="proc" cw-value="m:num:size:fsf_total_$"></cw-label>&nbsp;&nbsp;<cw-label cw-ns="proc" cw-value="m:num:size:fsf_usable_$"></cw-label><gauge cw-ns="proc" cw-gauge0="#6060a0:m:num::fsf_used_$" cw-min="l:num::0" cw-max="m:num::fsf_total_$"></gauge><BR/>
+    
+</div>

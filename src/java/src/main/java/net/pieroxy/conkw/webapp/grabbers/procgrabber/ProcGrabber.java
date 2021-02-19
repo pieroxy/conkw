@@ -1,13 +1,13 @@
 package net.pieroxy.conkw.webapp.grabbers.procgrabber;
 
 import net.pieroxy.conkw.utils.PerformanceTools;
+import net.pieroxy.conkw.utils.StreamTools;
 import net.pieroxy.conkw.webapp.grabbers.AsyncGrabber;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.FilenameFilter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileStore;
 import java.nio.file.Files;
@@ -65,6 +65,31 @@ public class ProcGrabber extends AsyncGrabber {
     }
   }
 
+  @Override
+  public void writeHtmlTemplate(Writer writer) throws IOException {
+    String namespaceAttr = "cw-ns=\""+getName()+"\"";
+    InputStream is = getClass().getClassLoader().getResourceAsStream("procgrabber.template.html");
+    BufferedReader br = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF8")));
+    String line;
+    while ((line = br.readLine())!=null) {
+      if (line.startsWith("_EMP_")) {
+        line = line.substring(5);
+        for (String mp : mountPoints) {
+          writer.write(line.replaceAll("cw-ns=\"proc\"", namespaceAttr).replaceAll("\\$\\$", sumMountPoint(mp)).replaceAll("\\$", mp));
+        }
+      } else {
+        writer.write(line.replaceAll("cw-ns=\"proc\"", namespaceAttr));
+      }
+    }
+  }
+
+  private String sumMountPoint(String mp) {
+    if (mp.equals("/")) return "root";
+    while (mp.length()<4) mp = " " + mp;
+    if (mp.length()>4) mp = mp.substring(mp.length()-4);
+    return mp;
+  }
+
   static FilenameFilter filter = new FilenameFilter() {
     @Override
     public boolean accept(File f, String str) {
@@ -92,14 +117,13 @@ public class ProcGrabber extends AsyncGrabber {
   @Override
   public synchronized ResponseData grabSync() {
     ResponseData r = new ResponseData(getName(), System.currentTimeMillis());
-    // Total 280k/s
-    grabProcesses(r); // 220k
-    grabUptimeAndLoad(r); // 0k
-    grabCpuUsage(r); // 30k
-    grabMemUsage(r); // 30k
-    grabBlockDeviceIo(r); // 10k
-    getFreeSpace(r); // 0k
-    getNetStats(r); // 40k
+    grabProcesses(r);
+    grabUptimeAndLoad(r);
+    grabCpuUsage(r);
+    grabMemUsage(r);
+    grabBlockDeviceIo(r);
+    getFreeSpace(r);
+    getNetStats(r);
     return r;
   }
 
