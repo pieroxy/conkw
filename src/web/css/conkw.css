@@ -48,6 +48,7 @@ a:visited {
 
 .cw-block {
     display: inline-block;
+    width:350px;
 }
 
 cw-label.error {
@@ -67,7 +68,7 @@ heading {
 
 gauge,
 hgauge {
-    width: 200px;
+    width: 150px;
     background-color: #202040;
     height: 1em;
     display: inline-block;
