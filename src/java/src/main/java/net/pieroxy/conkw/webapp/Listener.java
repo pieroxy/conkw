@@ -44,6 +44,8 @@ public class Listener implements ServletContextListener {
         // Recycle the old grabbers.
         old.forEach((gr) -> gr.dispose());
         old = null;
+      } else {
+        grabbers = newg;
       }
       // This forces newly generated garbage to be recycled. Benefits:
       // - The user expects some slowliness when reloading the configuration, so the cost is low.
