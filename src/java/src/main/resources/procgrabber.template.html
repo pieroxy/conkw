@@ -13,7 +13,7 @@
     <BR/>
     <label>     Used: </label>
     <cw-label cw-warn="e:num:above:${num.ramTotal*0.8}" cw-ns="proc" cw-value="m:num:size:ramUsed"></cw-label>
-    <hgauge cw-ns="proc" cw-hgauge0="#474:m:num::ramUsed" cw-hgauge1="#252:m:num::ramCached" cw-min="l:num::0" cw-max="m:num::ramTotal" style="height:3em;position:absolute;"></hgauge>
+    <hgauge cw-bgcolor="#202040" cw-ns="proc" cw-hgauge0="#474:m:num::ramUsed" cw-hgauge1="#252:m:num::ramCached" cw-min="l:num::0" cw-max="m:num::ramTotal" style="height:3em;position:absolute;"></hgauge>
     <BR/>
     <label>     Free: </label>
     <cw-label cw-ns="proc" cw-value="m:num:size:ramFree"></cw-label>
@@ -50,7 +50,7 @@
     <BR/>
     <label>       sys: </label>
     <cw-label cw-ns="proc" cw-value="m:num:cpu:cpu_usg_sys"></cw-label>
-    <hgauge style="height:4em;position:absolute;" cw-ns="proc" cw-hgauge0="#5b5:m:num::cpu_usg_sys" cw-hgauge1="#474:m:num::cpu_usg_user" cw-hgauge2="#252:m:num::cpu_usg_nice" cw-hgauge3="#252:m:num::cpu_usg_wait" cw-min="l:num::0" cw-max="l:num::100"></hgauge>
+    <hgauge cw-bgcolor="#202040" style="height:4em;position:absolute;" cw-ns="proc" cw-hgauge0="#5b5:m:num::cpu_usg_sys" cw-hgauge1="#474:m:num::cpu_usg_user" cw-hgauge2="#252:m:num::cpu_usg_nice" cw-hgauge3="#252:m:num::cpu_usg_wait" cw-min="l:num::0" cw-max="l:num::100"></hgauge>
     <BR/>
     <label>      user: </label>
     <cw-label cw-ns="proc" cw-value="m:num:cpu:cpu_usg_user"></cw-label>
@@ -81,11 +81,11 @@
     <heading>HDD I/O</heading>
     <label>  read : </label>
     <cw-label cw-ns="proc" cw-value="m:num:size:read_bytes_all"></cw-label>/s
-    <hgauge cw-ns="proc" cw-hgauge0="#208020:m:num::read_bytes_all" cw-min="l:num::0" cw-max="l:num::3000000000" style="height:2em" log="true"></hgauge>
+    <hgauge cw-bgcolor="#202040" cw-ns="proc" cw-hgauge0="#208020:m:num::read_bytes_all" cw-min="l:num::0" cw-max="l:num::3000000000" style="height:2em" log="true"></hgauge>
     <BR/>
     <label> write : </label>
     <cw-label cw-ns="proc" cw-value="m:num:size:write_bytes_all"></cw-label>/s
-    <hgauge cw-ns="proc" cw-hgauge0="#208020:m:num::write_bytes_all" cw-min="l:num::0" cw-max="l:num::1000000000" style="height:2em" log="true"></hgauge>
+    <hgauge cw-bgcolor="#202040" cw-ns="proc" cw-hgauge0="#208020:m:num::write_bytes_all" cw-min="l:num::0" cw-max="l:num::1000000000" style="height:2em" log="true"></hgauge>
     <BR/>
 
 </div>
@@ -93,11 +93,11 @@
     <heading>NETWORK I/O</heading>
     <label>  read : </label>
     <cw-label cw-ns="proc" cw-value="m:num:size:netp_in"></cw-label>/s
-    <hgauge cw-ns="proc" style="height:2em" log="true" cw-hgauge0="#208020:m:num::netp_in" cw-min="l:num::0" cw-max="l:num::150000000"></hgauge>
+    <hgauge cw-bgcolor="#202040" cw-ns="proc" style="height:2em" log="true" cw-hgauge0="#208020:m:num::netp_in" cw-min="l:num::0" cw-max="l:num::150000000"></hgauge>
     <BR/>
     <label> write : </label>
     <cw-label cw-ns="proc" cw-value="m:num:size:netp_out"></cw-label>/s
-    <hgauge cw-ns="proc" style="height:2em" log="true" cw-hgauge0="#208020:m:num::netp_out" cw-min="l:num::0" cw-max="l:num::150000000"></hgauge>
+    <hgauge cw-bgcolor="#202040" cw-ns="proc" style="height:2em" log="true" cw-hgauge0="#208020:m:num::netp_out" cw-min="l:num::0" cw-max="l:num::150000000"></hgauge>
     <BR/>
 </div>
 <div id="load" class="cw-block">

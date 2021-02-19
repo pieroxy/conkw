@@ -716,11 +716,13 @@ class HistoryGaugeHolder {
     constructor(e, fv) {
         this.element = e;
         this.ns = e.getAttribute("cw-ns");
+        this.bgcolor = e.getAttribute("cw-bgcolor");
         this.log = e.getAttribute("log") == "true";
         this.min = parseValueExpression(e.getAttribute("cw-min"));
         this.max = parseValueExpression(e.getAttribute("cw-max"));
         this.warn = parseValueExpression(e.getAttribute("cw-warn"));
         this.wmax = e.getAttribute("cw-warningmax") === "true";
+        e.style.backgroundColor = this.bgcolor;
 
         this.colors = [];
         this.valueExprs = [];
@@ -759,6 +761,13 @@ class HistoryGaugeHolder {
             bar.style.bottom = bottom + "%";
             bottom += posprc;
             bar.style.backgroundColor = color;
+            container.appendChild(bar);
+        }
+        if (bottom<100) {
+            let bar = document.createElement("div");
+            bar.style.height = (100-bottom) + "%";
+            bar.style.bottom = bottom + "%";
+            bar.style.backgroundColor = this.bgcolor;
             container.appendChild(bar);
         }
         e.appendChild(container);
