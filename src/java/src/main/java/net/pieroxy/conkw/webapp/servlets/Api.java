@@ -27,10 +27,7 @@ public class Api extends HttpServlet {
       thread = new Thread(Api::run, "Api Thread");
       thread.start();
     }
-    if (grabbers == null) {
-      grabbers = g;
-      return;
-    }
+    grabbers = g;
   }
 
   public static void close() {
