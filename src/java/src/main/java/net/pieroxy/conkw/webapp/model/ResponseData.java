@@ -43,6 +43,9 @@ public class ResponseData {
   public void addMetric(String name, int value) {
     addMetric(name, (double)value);
   }
+  public void addMetric(String name, long value) {
+    addMetric(name, (double)value);
+  }
 
   public synchronized void atomicAddMetricWithTimestamp(String name, Double value) {
     String tsName = TIMESTAMP_PREFIX + name;

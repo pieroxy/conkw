@@ -209,6 +209,8 @@ function getProperLabel(key, value) {
             return getPercentLabel(value);
         case "prc":
             return getPercentLabel(value);
+        case "prc01":
+            return getPercentLabel(value * 100);
         case "stockchangeprc":
             return getStockChange(value * 100);
         case "stockchange":
@@ -596,8 +598,8 @@ class PropertyHolder {
         this.element = e;
         this.propertyName = pn;
         this.valueExpr = parseValueExpression(v);
-        this.cacheKey = pn + "." + v;
         this.ns = ns;
+        this.cacheKey = pn + "." + this.ns + "." + v;
         window.values[this.cacheKey] = "--not-a-valid-value--";
     }
     update(data) {
@@ -610,8 +612,8 @@ class ValueHolder {
     constructor(e, v) {
         this.element = e;
         this.valueExpr = parseValueExpression(v);
-        this.cacheKey = "value." + v;
         this.ns = e.getAttribute("cw-ns");
+        this.cacheKey = "value." + this.ns + "." + v;
         this.warn = parseValueExpression(e.getAttribute("cw-warn"));
         window.values[this.cacheKey] = "--not-a-valid-value--";
     }
@@ -625,8 +627,8 @@ class StaleHolder {
     constructor(e, v) {
         this.element = e;
         this.valueExpr = parseValueExpression(v);
-        this.cacheKey = "value." + v;
         this.ns = e.getAttribute("cw-ns");
+        this.cacheKey = "value." + this.ns + "." + v;
         window.values[this.cacheKey] = "--not-a-valid-value--";
     }
     update(data) {
@@ -673,7 +675,7 @@ class GaugeHolder {
             e.appendChild(gauge);
             i++;
         }
-        this.cacheKey = "gauge." + ck + e.getAttribute("cw-min") + e.getAttribute("cw-max") + e.getAttribute("cw-warn") + e.getAttribute("cw-warningmax");
+        this.cacheKey = "gauge." + this.ns + "." + ck + e.getAttribute("cw-min") + e.getAttribute("cw-max") + e.getAttribute("cw-warn") + e.getAttribute("cw-warningmax");
         window.values[this.cacheKey] = "--not-a-valid-value--";
     }
     update(data) {
