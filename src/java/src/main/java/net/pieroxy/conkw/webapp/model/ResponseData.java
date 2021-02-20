@@ -1,12 +1,16 @@
 package net.pieroxy.conkw.webapp.model;
 
 import com.dslplatform.json.CompiledJson;
+import net.pieroxy.conkw.webapp.Listener;
 
 import java.time.Duration;
 import java.util.*;
+import java.util.logging.Logger;
 
 @CompiledJson(onUnknown = CompiledJson.Behavior.FAIL)
 public class ResponseData {
+  private final static Logger LOGGER = Logger.getLogger(ResponseData.class.getName());
+
   public static final String TIMESTAMP_PREFIX="ts:";
 
   private long timestamp;
@@ -107,7 +111,7 @@ public class ResponseData {
           nnum.remove(gstrKey);
           nnum.remove(tsKey);
           changed = true;
-          System.out.println("PURGED " + gstrKey);
+          LOGGER.info("PURGED " + gstrKey);
         }
       }
     }

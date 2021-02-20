@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.time.Duration;
+import java.util.logging.Level;
 
 public abstract class TimeThrottledGrabber extends AsyncGrabber {
 
@@ -32,7 +33,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber {
       ResponseData data = JsonHelper.getJson().deserialize(ResponseData.class, fis);
       return data;
     } catch (Exception e) {
-      log(LOG_ERROR, e.getMessage());
+      log(Level.SEVERE, "Could not load cached data file.", e);
       return null;
     }
   }
@@ -46,7 +47,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber {
         json.serialize(w, data);
         w.flush();
       } catch (Exception e) {
-        log(LOG_ERROR, e.getMessage());
+        log(Level.SEVERE, e.getMessage());
       }
     }
   }
@@ -65,7 +66,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber {
     if (lastRun==-1) {
       ResponseData data = loadCacheFile();
       if (data!=null) {
-        log(LOG_INFO, "Loading from cache " + getCacheFile().getAbsolutePath());
+        log(Level.INFO, "Loading from cache " + getCacheFile().getAbsolutePath());
         lastRun = data.getTimestamp();
         return data;
       }
@@ -77,7 +78,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber {
       writeCacheFile(r);
       return r;
     } catch (Exception e) {
-      e.printStackTrace();
+      log(Level.SEVERE, "Grabbing " + getName(), e);
       return new ResponseData(getName(), System.currentTimeMillis());
     }
   }

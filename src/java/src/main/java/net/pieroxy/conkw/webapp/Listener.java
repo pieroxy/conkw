@@ -3,6 +3,7 @@ package net.pieroxy.conkw.webapp;
 import net.pieroxy.conkw.config.Config;
 import net.pieroxy.conkw.config.ConfigReader;
 import net.pieroxy.conkw.config.GrabberConfig;
+import net.pieroxy.conkw.standalone.Runner;
 import net.pieroxy.conkw.webapp.grabbers.*;
 import net.pieroxy.conkw.webapp.servlets.Api;
 import net.pieroxy.conkw.webapp.servlets.HtmlTemplates;
@@ -14,8 +15,11 @@ import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Listener implements ServletContextListener {
+  private final static Logger LOGGER = Logger.getLogger(Listener.class.getName());
 
   Config config;
 
@@ -35,7 +39,7 @@ public class Listener implements ServletContextListener {
 
       Collection<Grabber> old= grabbers;
       if (old!=null) {
-        System.out.println("Reloading configuration.");
+        LOGGER.info("Reloading configuration.");
         // this is a hot swap :
         // Start threads and all.
         newg.forEach((gr) -> gr.grab());
@@ -74,8 +78,7 @@ public class Listener implements ServletContextListener {
           StandardWatchEventKinds.ENTRY_MODIFY,
           StandardWatchEventKinds.OVERFLOW);
     } catch (IOException e) {
-      System.out.println("Cannot watch config directory. Config file will not be hot swappable.");
-      e.printStackTrace();
+      LOGGER.log(Level.SEVERE, "Cannot watch config directory. Config file will not be hot swappable.", e);
     }
 
     new Thread(() -> runThread(), "ConfigListener").start();
@@ -88,10 +91,12 @@ public class Listener implements ServletContextListener {
       Api.close();
       HtmlTemplates.close();
     } catch (Exception e) {
+      LOGGER.log(Level.FINE, "", e);
     }
     try {
       watchService.close();
     } catch (IOException e) {
+      LOGGER.log(Level.FINE, "", e);
     }
     for (Grabber g: grabbers) {
       g.dispose();

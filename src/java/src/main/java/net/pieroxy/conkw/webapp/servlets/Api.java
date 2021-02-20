@@ -3,6 +3,7 @@ package net.pieroxy.conkw.webapp.servlets;
 import com.dslplatform.json.DslJson;
 import com.dslplatform.json.JsonWriter;
 import net.pieroxy.conkw.utils.JsonHelper;
+import net.pieroxy.conkw.webapp.Listener;
 import net.pieroxy.conkw.webapp.grabbers.Grabber;
 import net.pieroxy.conkw.webapp.model.Response;
 
@@ -13,8 +14,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Api extends HttpServlet {
+  private final static Logger LOGGER = Logger.getLogger(Api.class.getName());
+
   private static Collection<Grabber> grabbers;
 
   static Response loadedResponse;
@@ -53,7 +58,7 @@ public class Api extends HttpServlet {
         try {
           resp.getOutputStream().write(res.getBytes(StandardCharsets.UTF_8));
         } catch (IOException e) {
-          e.printStackTrace();
+          LOGGER.log(Level.SEVERE, "Grabbing " + g.getName(), e);
         }
       }
       });
@@ -102,7 +107,7 @@ public class Api extends HttpServlet {
         }
       }
     }
-    System.out.println("Api Thread stopped.");
+    LOGGER.info("Api Thread stopped.");
     stopped = true;
   }
 }

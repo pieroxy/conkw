@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
 import java.util.Properties;
+import java.util.logging.Level;
 
 public class FileGrabber extends AsyncGrabber {
   File file;
@@ -23,7 +24,7 @@ public class FileGrabber extends AsyncGrabber {
     try {
       return Files.getLastModifiedTime(path).toMillis() != lastTimestamp;
     } catch (IOException e) {
-      e.printStackTrace();
+      log(Level.SEVERE, "Grabbing " + getName(), e);
       return false;
     }
   }
@@ -41,8 +42,7 @@ public class FileGrabber extends AsyncGrabber {
             try {
               r.addMetric(pname.substring(4), Double.parseDouble(p.getProperty(pname)));
             } catch (Exception e) {
-              this.log(LOG_ERROR, "Error with property " + pname);
-              e.printStackTrace();
+              log(Level.SEVERE, "Error with unparseable property " + pname, e);
             }
           }
           if (pname.startsWith("str_")) {
@@ -53,7 +53,7 @@ public class FileGrabber extends AsyncGrabber {
       lastTimestamp = ts;
       return r;
     } catch (Exception e) {
-      e.printStackTrace();
+      log(Level.SEVERE, "Grabbing " + getName(), e);
       ResponseData r = new ResponseData(getName(), System.currentTimeMillis());
       r.addError(getName()+":"+e.getMessage());
       return r;
@@ -62,7 +62,7 @@ public class FileGrabber extends AsyncGrabber {
 
   @Override
   public void setConfig(Map<String, String> config){
-    this.log(LOG_INFO, "FileGrabber Name is " + config.get("name"));
+    this.log(Level.INFO, "FileGrabber Name is " + config.get("name"));
     setNameFromConfig(config, "file");
     this.file = new File((String)config.get("file"));
     this.path = this.file.toPath();

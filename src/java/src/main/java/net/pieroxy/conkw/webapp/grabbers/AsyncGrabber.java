@@ -2,6 +2,8 @@ package net.pieroxy.conkw.webapp.grabbers;
 
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
+import java.util.logging.Level;
+
 public abstract class AsyncGrabber extends Grabber implements Runnable {
   private ResponseData cached;
 
@@ -38,7 +40,7 @@ public abstract class AsyncGrabber extends Grabber implements Runnable {
     if (thread == null) {
       running = true;
       thread = new Thread(this, this.getClass().getSimpleName() + "/" + getName());
-      this.log(LOG_INFO, "Starts " + getName());
+      this.log(Level.INFO, "Starts " + getName());
       thread.start();
     }
 
@@ -49,7 +51,7 @@ public abstract class AsyncGrabber extends Grabber implements Runnable {
     while (!shouldStop && thread == Thread.currentThread()) {
       runEverySecond();
     }
-    this.log(LOG_INFO, "Dispose " + getName());
+    this.log(Level.INFO, "Dispose " + getName());
     running = false;
   }
 
@@ -62,16 +64,16 @@ public abstract class AsyncGrabber extends Grabber implements Runnable {
       if (delay <=0 || delay > 1500) delay = 1000;
       if (delay<500) delay+=1000;
       if (delay<=0) delay = 1000;
-      if (isFine()) log(LOG_FINE, System.currentTimeMillis() + "::"+getName() + " waiting for " + delay);
+      if (canLogFiner()) log(Level.FINER, System.currentTimeMillis() + "::"+getName() + " waiting for " + delay);
       synchronized (this) {
-        if (isDebug()) this.log(LOG_DEBUG, "Waiting " + (delay));
+        if (canLogFine()) this.log(Level.FINE, "Waiting " + (delay));
         this.wait(delay);
       }
-      if (isFine()) log(LOG_FINE, System.currentTimeMillis() + "::"+getName() + " up");
+      if (canLogFiner()) log(Level.FINER, System.currentTimeMillis() + "::"+getName() + " up");
       try {
         if (now - lastGrab < 2100) {
           if (changed()) {
-            if (isFine()) log(LOG_FINE, System.currentTimeMillis() + "::" + getName() + " GO GO GO");
+            if (canLogFiner()) log(Level.FINER, System.currentTimeMillis() + "::" + getName() + " GO GO GO");
             now = System.currentTimeMillis();
             cached = grabSync();
             long eor = System.currentTimeMillis();
@@ -79,18 +81,18 @@ public abstract class AsyncGrabber extends Grabber implements Runnable {
             count++;
             time *= 0.9; // 0.9 factor to forget old values over time.
             count *= 0.9;
-            if (isDebug())
-              this.log(LOG_DEBUG, getName() + " takes " + (long) (time / count) + " this time " + (eor - now));
+            if (canLogFine())
+              this.log(Level.FINE, getName() + " takes " + (long) (time / count) + " this time " + (eor - now));
           }
         } else {
           // Pause the grabbers after 5s of inactivity.
-          if (isDebug()) this.log(LOG_DEBUG, "Avoid run because of no activity for " + getName());
+          if (canLogFine()) this.log(Level.FINE, "Avoid run because of no activity for " + getName());
         }
       } catch (Exception e) {
-        e.printStackTrace();
+        log(Level.SEVERE, "Grabbing " + getName(), e);
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      log(Level.SEVERE, "Grabbing " + getName(), e);
     }
   }
 }

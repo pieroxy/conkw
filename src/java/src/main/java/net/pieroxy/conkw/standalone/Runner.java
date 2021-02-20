@@ -7,8 +7,11 @@ import org.apache.catalina.core.StandardContext;
 import org.apache.catalina.startup.Tomcat;
 
 import java.io.File;
+import java.util.logging.Logger;
 
 public class Runner {
+    private final static Logger LOGGER = Logger.getLogger(Runner.class.getName());
+
     public static void main(String[] args) throws Exception {
         if (!has(args, "--run-server")) {
             if (!ConfigReader.exists() || has(args,"--force-reinstall")) {
@@ -29,7 +32,7 @@ public class Runner {
 
             tomcat.setConnector(ctr);
 
-            System.out.println("Configuring app with basedir: " + webappDirLocation.getAbsolutePath());
+            LOGGER.info("Configuring app with basedir: " + webappDirLocation.getAbsolutePath());
             StandardContext ctx = (StandardContext) tomcat.addWebapp("", webappDirLocation.getAbsolutePath());
 
             tomcat.start();

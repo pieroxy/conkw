@@ -13,6 +13,7 @@ import java.nio.file.FileStore;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.stream.Stream;
 
 public class ProcGrabber extends AsyncGrabber {
@@ -59,7 +60,7 @@ public class ProcGrabber extends AsyncGrabber {
       try {
         mountPointsStores.add(Files.getFileStore(Paths.get(mp)));
       } catch (IOException e) {
-        e.printStackTrace();
+        log(Level.SEVERE, "Getting FileStore for " + mp, e);
         mountPointsStores.add(null);
       }
     }
@@ -132,7 +133,7 @@ public class ProcGrabber extends AsyncGrabber {
     try (Stream<String> stream = Files.lines( Paths.get("/etc/hostname"), StandardCharsets.UTF_8)) {
       r.addMetric("hostname", stream.findFirst().get());
     } catch (IOException e) {
-      e.printStackTrace();
+      log(Level.SEVERE, "Grabbing /etc/hostname", e);
     }
   }
 
@@ -171,7 +172,7 @@ public class ProcGrabber extends AsyncGrabber {
       }
 
     } catch (IOException e) {
-      e.printStackTrace();
+      log(Level.SEVERE, "Grabbing /proc/net/netstat", e);
     }
   }
 
@@ -187,7 +188,7 @@ public class ProcGrabber extends AsyncGrabber {
           r.addMetric("fsf_usable_" + mp, (double) store.getUsableSpace());
           r.addMetric("fsf_used_" + mp, (double) (store.getTotalSpace() - store.getUnallocatedSpace()));
         } catch (IOException e) {
-          e.printStackTrace();
+          log(Level.SEVERE, "Grabbing free space for " + mp, e);
         }
       }
     }
@@ -201,7 +202,7 @@ public class ProcGrabber extends AsyncGrabber {
           String fl = stream.findFirst().get();
           blockDeviceSectorSize.put(bd, Integer.parseInt(fl));
         } catch (IOException e) {
-          e.printStackTrace();
+          log(Level.SEVERE, "Grabbing sector size for " + bd, e);
         }
       }
     }
@@ -264,7 +265,7 @@ public class ProcGrabber extends AsyncGrabber {
       r.addMetric("swapFree", swapFree*1024);
 
     } catch (IOException e) {
-      e.printStackTrace();
+      log(Level.SEVERE, "Grabbing /proc/meminfo", e);
     }
   }
 
@@ -297,7 +298,7 @@ public class ProcGrabber extends AsyncGrabber {
       r.addMetric("cpu_usg_wait", (cpu[4]+cpu[5]+cpu[6]-lastCpuUsage[4]-lastCpuUsage[5]-lastCpuUsage[6])*100/allcpu);
       lastCpuUsage = cpu;
     } catch (IOException e) {
-      e.printStackTrace();
+      log(Level.SEVERE, "Grabbing /proc/stat", e);
     }
   }
 

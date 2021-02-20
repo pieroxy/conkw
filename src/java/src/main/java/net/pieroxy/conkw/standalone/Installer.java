@@ -4,8 +4,6 @@ import net.pieroxy.conkw.config.ConfigReader;
 import net.pieroxy.conkw.utils.ZipUtil;
 
 import java.io.*;
-import java.nio.file.CopyOption;
-import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
@@ -43,6 +41,9 @@ public class Installer {
         copyStreamAndClose(
                 getClass().getClassLoader().getResourceAsStream("config.sample.jsonc"),
                 new FileOutputStream(ConfigReader.getConfigFile()));
+        copyStreamAndClose(
+                getClass().getClassLoader().getResourceAsStream("logging.properties"),
+                new FileOutputStream(ConfigReader.getLoggingConfigFile()));
         Files.createDirectories(ConfigReader.getDataDir().toPath());
         Files.createDirectories(ConfigReader.getTmpDir().toPath());
         Files.createDirectories(ConfigReader.getBinDir().toPath());
@@ -55,7 +56,7 @@ public class Installer {
                 new File(ConfigReader.getBinDir(), "conkw.jar").toPath(),
                 StandardCopyOption.REPLACE_EXISTING);
         FileOutputStream script = new FileOutputStream(new File(ConfigReader.getBinDir(), "run.sh"));
-        script.write((java + "/bin/java -Xms50m -jar " + ConfigReader.getBinDir() + File.separator + "conkw.jar --run-server >> " + ConfigReader.getLogDir() + "/system.log 2>&1\n").getBytes());
+        script.write((java + "/bin/java -Djava.util.logging.config.file="+ConfigReader.getLoggingConfigFile().getAbsolutePath()+" -Xms50m -jar " + ConfigReader.getBinDir() + File.separator + "conkw.jar --run-server >> " + ConfigReader.getLogDir() + "/system.log 2>&1\n").getBytes());
         script.close();
     }
 

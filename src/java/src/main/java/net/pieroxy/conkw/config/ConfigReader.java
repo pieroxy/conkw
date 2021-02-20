@@ -10,6 +10,7 @@ import java.io.InputStream;
 
 public class ConfigReader {
     public static final String NAME = "config.jsonc";
+    public static final String LOGGING_NAME = "logging.properties";
 
     private static File home;
 
@@ -46,6 +47,10 @@ public class ConfigReader {
 
     public static File getConfigFile() {
         return new File(getConfDir(), NAME);
+    }
+
+    public static File getLoggingConfigFile() {
+        return new File(getConfDir(), LOGGING_NAME);
     }
 
     public static File getTmpDir() {
