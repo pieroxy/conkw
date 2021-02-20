@@ -1,7 +1,6 @@
 package net.pieroxy.conkw.webapp.grabbers.procgrabber;
 
 import net.pieroxy.conkw.utils.PerformanceTools;
-import net.pieroxy.conkw.utils.StreamTools;
 import net.pieroxy.conkw.webapp.grabbers.AsyncGrabber;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 

@@ -10,6 +10,11 @@
         // List here all the mount points of your machines to monitor free space, separated by a comma
         "mountPoints":"/"
       }
+    },
+    {
+      // Some CPU usage view, working on all platforms
+      "id":"JavaSystemView",
+      "parameters": {}
     }
   ],
   // This is the port the web server will listen to. Note that values below 1024 are discouraged as they require

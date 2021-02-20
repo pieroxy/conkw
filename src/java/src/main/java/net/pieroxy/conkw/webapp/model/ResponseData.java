@@ -40,6 +40,10 @@ public class ResponseData {
     str.put(name, value);
   }
 
+  public void addMetric(String name, int value) {
+    addMetric(name, (double)value);
+  }
+
   public synchronized void atomicAddMetricWithTimestamp(String name, Double value) {
     String tsName = TIMESTAMP_PREFIX + name;
     if (!num.containsKey(name) || !num.containsKey(tsName)) {
@@ -173,4 +177,5 @@ public class ResponseData {
   public void setStr(Map<String, String> str) {
     this.str = str;
   }
+
 }
