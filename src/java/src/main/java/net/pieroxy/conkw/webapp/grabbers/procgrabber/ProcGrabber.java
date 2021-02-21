@@ -43,7 +43,6 @@ public class ProcGrabber extends AsyncGrabber {
 
   @Override
   public void setConfig(Map<String, String> config){
-    setNameFromConfig(config, NAME);
     blockDevices = Arrays.asList(config.get("blockDevices").split(","));
     if (blockDevices == null) {
       blockDevices = new ArrayList<>();
@@ -112,6 +111,11 @@ public class ProcGrabber extends AsyncGrabber {
 
   @Override
   public void processHttp(HttpServletRequest req) {
+  }
+
+  @Override
+  public String getDefaultName() {
+    return NAME;
   }
 
   @Override

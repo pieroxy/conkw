@@ -63,9 +63,13 @@ public class FileGrabber extends AsyncGrabber {
   @Override
   public void setConfig(Map<String, String> config){
     this.log(Level.INFO, "FileGrabber Name is " + config.get("name"));
-    setNameFromConfig(config, "file");
     this.file = new File((String)config.get("file"));
     this.path = this.file.toPath();
+  }
+
+  @Override
+  public String getDefaultName() {
+    return "file";
   }
 
   @Override

@@ -86,7 +86,11 @@ public class JavaSystemViewGrabber extends AsyncGrabber {
 
   @Override
   public void setConfig(Map<String, String> config) {
-    setNameFromConfig(config, NAME);
+  }
+
+  @Override
+  public String getDefaultName() {
+    return NAME;
   }
 
   @Override

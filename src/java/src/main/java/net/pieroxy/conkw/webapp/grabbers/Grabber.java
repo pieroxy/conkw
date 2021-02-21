@@ -32,6 +32,7 @@ public abstract class Grabber {
   public abstract void processHttp(HttpServletRequest req);
   public abstract ResponseData grab();
   public abstract void dispose();
+  public abstract String getDefaultName();
 
   public abstract void setConfig(Map<String, String> config);
 
@@ -47,6 +48,7 @@ public abstract class Grabber {
       logLevel = Level.INFO;
       LOGGER.severe("Could not parse log level " + llas + ". Using INFO.");
     }
+    setNameFromConfig(config, getDefaultName());
     setConfig(config);
   }
 
@@ -61,7 +63,7 @@ public abstract class Grabber {
     return new File(getTmp(), filename);
   }
 
-  protected void setNameFromConfig(Map<String, String> config, String defaultValue) {
+  private void setNameFromConfig(Map<String, String> config, String defaultValue) {
     setName(String.valueOf(config.getOrDefault(NAME_CONFIG_PROPERTY, defaultValue)));
   }
 
