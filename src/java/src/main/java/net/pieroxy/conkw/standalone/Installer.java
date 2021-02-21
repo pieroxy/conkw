@@ -1,10 +1,15 @@
 package net.pieroxy.conkw.standalone;
 
 import net.pieroxy.conkw.config.ConfigReader;
+import net.pieroxy.conkw.utils.StreamTools;
 import net.pieroxy.conkw.utils.ZipUtil;
 
 import java.io.*;
+import java.net.URI;
+import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 import static net.pieroxy.conkw.utils.StreamTools.copyStreamAndClose;
@@ -38,12 +43,12 @@ public class Installer {
     private void doInstall() throws Exception {
         String java = System.getProperty("java.home");
         Files.createDirectories(ConfigReader.getConfDir().toPath());
-        copyStreamAndClose(
+        StreamTools.copyTextFilePreserveOriginalAndWarnOnStdout(
                 getClass().getClassLoader().getResourceAsStream("config.sample.jsonc"),
-                new FileOutputStream(ConfigReader.getConfigFile()));
-        copyStreamAndClose(
+                ConfigReader.getConfigFile());
+        StreamTools.copyTextFilePreserveOriginalAndWarnOnStdout(
                 getClass().getClassLoader().getResourceAsStream("logging.properties"),
-                new FileOutputStream(ConfigReader.getLoggingConfigFile()));
+                ConfigReader.getLoggingConfigFile());
         Files.createDirectories(ConfigReader.getDataDir().toPath());
         Files.createDirectories(ConfigReader.getTmpDir().toPath());
         Files.createDirectories(ConfigReader.getBinDir().toPath());
