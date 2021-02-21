@@ -6,15 +6,16 @@
       "id":"procgrabber.Proc",
       "parameters": {
         // List here the block devices of your machine, to monitor I/O, separated by a comma
-        "blockDevices":"sda",
-        // List here all the mount points of your machines to monitor free space, separated by a comma
-        "mountPoints":"/"
+        "blockDevices":"sda"
       }
     },
     {
       // Some CPU usage view, working on all platforms
       "id":"JavaSystemView",
-      "parameters": {}
+      "parameters": {
+        // List here all the mount points of your machines to monitor free space, separated by a comma
+        "mountPoints":"/"
+      }
     }
   ],
   // This is the port the web server will listen to. Note that values below 1024 are discouraged as they require

@@ -33,8 +33,6 @@ public class ProcGrabber extends AsyncGrabber {
   private byte[]babuffer1k = new byte[1024];
 
   private Collection<String> blockDevices;
-  private List<String> mountPoints;
-  private List<FileStore> mountPointsStores;
 
   @Override
   public boolean changed() {
@@ -48,20 +46,6 @@ public class ProcGrabber extends AsyncGrabber {
       blockDevices = new ArrayList<>();
       blockDevices.add("sda");
     }
-    mountPoints = Arrays.asList(config.get("mountPoints").split(","));
-    if (mountPoints == null) {
-      mountPoints = new ArrayList<>();
-      mountPoints.add("/");
-    }
-    mountPointsStores = new ArrayList<>(mountPoints.size());
-    for (String mp : mountPoints) {
-      try {
-        mountPointsStores.add(Files.getFileStore(Paths.get(mp)));
-      } catch (IOException e) {
-        log(Level.SEVERE, "Getting FileStore for " + mp, e);
-        mountPointsStores.add(null);
-      }
-    }
   }
 
   @Override
@@ -71,22 +55,8 @@ public class ProcGrabber extends AsyncGrabber {
     BufferedReader br = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF8")));
     String line;
     while ((line = br.readLine())!=null) {
-      if (line.startsWith("_EMP_")) {
-        line = line.substring(5);
-        for (String mp : mountPoints) {
-          writer.write(line.replaceAll("cw-ns=\"proc\"", namespaceAttr).replaceAll("\\$\\$", sumMountPoint(mp)).replaceAll("\\$", mp));
-        }
-      } else {
-        writer.write(line.replaceAll("cw-ns=\"proc\"", namespaceAttr));
-      }
+      writer.write(line.replaceAll("cw-ns=\"proc\"", namespaceAttr));
     }
-  }
-
-  private String sumMountPoint(String mp) {
-    if (mp.equals("/")) return "root";
-    while (mp.length()<4) mp = " " + mp;
-    if (mp.length()>4) mp = mp.substring(mp.length()-4);
-    return mp;
   }
 
   static FilenameFilter filter = new FilenameFilter() {
@@ -121,14 +91,13 @@ public class ProcGrabber extends AsyncGrabber {
   @Override
   public synchronized ResponseData grabSync() {
     ResponseData r = new ResponseData(getName(), System.currentTimeMillis());
-    grabProcesses(r);
-    grabUptimeAndLoad(r);
-    grabCpuUsage(r);
-    grabMemUsage(r);
-    grabBlockDeviceIo(r);
-    getFreeSpace(r);
-    getNetStats(r);
-    getHostname(r);
+    if (shouldExtract("processes")) grabProcesses(r);
+    if (shouldExtract("uptime")) grabUptimeAndLoad(r);
+    if (shouldExtract("cpu")) grabCpuUsage(r);
+    if (shouldExtract("mem")) grabMemUsage(r);
+    if (shouldExtract("bdio")) grabBlockDeviceIo(r);
+    if (shouldExtract("net")) getNetStats(r);
+    if (shouldExtract("hostname")) getHostname(r);
     return r;
   }
 
@@ -176,24 +145,6 @@ public class ProcGrabber extends AsyncGrabber {
 
     } catch (IOException e) {
       log(Level.SEVERE, "Grabbing /proc/net/netstat", e);
-    }
-  }
-
-  private void getFreeSpace(ResponseData r) {
-    if (mountPoints.isEmpty()) return;
-    for (int i=0 ; i<mountPoints.size() ; i++)
-    {
-      String mp = mountPoints.get(i);
-      FileStore store = mountPointsStores.get(i);
-      if (store != null) {
-        try {
-          r.addMetric("fsf_total_" + mp, (double) store.getTotalSpace());
-          r.addMetric("fsf_usable_" + mp, (double) store.getUsableSpace());
-          r.addMetric("fsf_used_" + mp, (double) (store.getTotalSpace() - store.getUnallocatedSpace()));
-        } catch (IOException e) {
-          log(Level.SEVERE, "Grabbing free space for " + mp, e);
-        }
-      }
     }
   }
 

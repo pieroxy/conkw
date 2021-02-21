@@ -1,16 +1,15 @@
 package net.pieroxy.conkw.webapp.grabbers;
 
-import net.pieroxy.conkw.webapp.Listener;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
-import java.nio.file.Files;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,9 +18,11 @@ public abstract class Grabber {
 
   private File storageFolder = new File(System.getProperty("user.home"), "/.conkw/data/");
   private File tmpFolder = new File(System.getProperty("user.home"), "/.conkw/tmp/");
+  private Set<String> extract = new HashSet<>();
 
   public static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
   public static String NAME_CONFIG_PROPERTY = "name";
+  public static String EXTRACT_CONFIG_PROPERTY = "extract";
   public static String LOGLEVEL_CONFIG_PROPERTY = "logLevel";
   private String name;
   private Level logLevel = Level.INFO;
@@ -37,11 +38,6 @@ public abstract class Grabber {
   public abstract void setConfig(Map<String, String> config);
 
   public void initConfig(File homeDir, Map<String, String> config) throws IOException {
-    tmpFolder = new File(homeDir, "tmp");
-    storageFolder = new File(homeDir, "data");
-    Files.createDirectories(getStorage().toPath());
-    Files.createDirectories(getTmp().toPath());
-
     String llas = config.getOrDefault(LOGLEVEL_CONFIG_PROPERTY, "INFO");
     logLevel = Level.parse(llas);
     if (logLevel == null) {
@@ -49,7 +45,26 @@ public abstract class Grabber {
       LOGGER.severe("Could not parse log level " + llas + ". Using INFO.");
     }
     setNameFromConfig(config, getDefaultName());
+    setExtractProperty(config);
     setConfig(config);
+  }
+
+  private void setExtractProperty(Map<String, String> config) {
+    String v = config.get(EXTRACT_CONFIG_PROPERTY);
+    if (v!=null && !v.equals("all") && !v.equals("")) {
+      String[]values = v.split(",");
+      for (String val : values) {
+        extract.add(val);
+      }
+    }
+  }
+
+  protected boolean shouldExtract(String value) {
+    return extract.isEmpty() || extract.contains(value);
+  }
+
+  private void setNameFromConfig(Map<String, String> config, String defaultValue) {
+    setName(config.getOrDefault(NAME_CONFIG_PROPERTY, defaultValue));
   }
 
   public File getStorage() {
@@ -61,10 +76,6 @@ public abstract class Grabber {
   }
   protected File getTmp(String filename) {
     return new File(getTmp(), filename);
-  }
-
-  private void setNameFromConfig(Map<String, String> config, String defaultValue) {
-    setName(String.valueOf(config.getOrDefault(NAME_CONFIG_PROPERTY, defaultValue)));
   }
 
   protected final void log(Level loglevel, String message) {
