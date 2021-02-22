@@ -71,12 +71,12 @@ hgauge {
     width: 150px;
     background-color: #202040;
     height: 1em;
-    display: inline-block;
+    display: block;
     margin-left: 30px;
     margin-bottom: 2px;
-    vertical-align: top;
     position: relative;
     overflow: hidden;
+    float: right;
 }
 
 gauge>div {
