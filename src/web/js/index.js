@@ -714,6 +714,7 @@ class GaugeHolder {
 class HistoryGaugeHolder {
     constructor(e, fv) {
         this.element = e;
+        this.elementWidth = e.scrollWidth;
         this.ns = e.getAttribute("cw-ns");
         this.bgcolor = e.getAttribute("cw-bgcolor");
         this.log = e.getAttribute("log") == "true";
@@ -770,7 +771,7 @@ class HistoryGaugeHolder {
             container.appendChild(bar);
         }
         e.appendChild(container);
-        while (e.childElementCount > 199) {
+        while (e.childElementCount > this.elementWidth) {
             e.removeChild(e.firstChild);
         }
     }
