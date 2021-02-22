@@ -15,8 +15,8 @@ function init() {
     window.jsError = "";
     window.apiErrors = [];
     initClocks();
-    setTimeout(() => { window.geometry = 0;
-        checkScreen() }, 2000);
+    window.geometry = 0;
+    checkScreen();
 }
 
 function handleError(e) {
@@ -126,15 +126,12 @@ function checkScreen() {
     if (geometry != getGeometry()) {
         zoom(100);
         geometry = getGeometry()
-        setTimeout(function() {
-            var zv = window.innerHeight * 100 / window.document.body.scrollHeight;
-            var zh = window.innerWidth * 100 / window.document.body.scrollWidth;
-            var tz = Math.min(100, zv, zh);
-            if (tz < 100) tz *= 0.99;
-            window.zoomlevel = tz;
-            zoom(tz);
-
-        }, 1000);
+        var zv = window.innerHeight * 100 / window.document.body.scrollHeight;
+        var zh = window.innerWidth * 100 / window.document.body.scrollWidth;
+        var tz = Math.min(100, zv, zh);
+        if (tz < 100) tz *= 0.99;
+        window.zoomlevel = tz;
+        zoom(tz);
     }
 }
 
