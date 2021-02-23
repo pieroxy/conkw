@@ -1,5 +1,6 @@
 package net.pieroxy.conkw.webapp.grabbers;
 
+import com.dslplatform.json.processor.LogLevel;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,13 +39,15 @@ public abstract class Grabber {
   public abstract void setConfig(Map<String, String> config);
 
   public void initConfig(File homeDir, Map<String, String> config) throws IOException {
+    setNameFromConfig(config, getDefaultName());
     String llas = config.getOrDefault(LOGLEVEL_CONFIG_PROPERTY, "INFO");
     logLevel = Level.parse(llas);
     if (logLevel == null) {
       logLevel = Level.INFO;
       LOGGER.severe("Could not parse log level " + llas + ". Using INFO.");
     }
-    setNameFromConfig(config, getDefaultName());
+    if (logLevel != Level.INFO) LOGGER.info(getName() + " logLevel is " + logLevel);
+    LOGGER.setLevel(logLevel);
     setExtractProperty(config);
     setConfig(config);
   }
