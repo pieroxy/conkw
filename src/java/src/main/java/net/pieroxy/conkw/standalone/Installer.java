@@ -61,7 +61,7 @@ public class Installer {
                 new File(ConfigReader.getBinDir(), "conkw.jar").toPath(),
                 StandardCopyOption.REPLACE_EXISTING);
         FileOutputStream script = new FileOutputStream(new File(ConfigReader.getBinDir(), "run.sh"));
-        script.write((java + "/bin/java -Djava.util.logging.config.file="+ConfigReader.getLoggingConfigFile().getAbsolutePath()+" -Xms50m -jar " + ConfigReader.getBinDir() + File.separator + "conkw.jar --run-server >> " + ConfigReader.getLogDir() + "/system.log 2>&1\n").getBytes());
+        script.write((java + "/bin/java -verbose:gc -Djava.util.logging.config.file="+ConfigReader.getLoggingConfigFile().getAbsolutePath()+" -Xms50m -jar " + ConfigReader.getBinDir() + File.separator + "conkw.jar --run-server >> " + ConfigReader.getLogDir() + "/system.log 2>&1\n").getBytes());
         script.close();
     }
 
