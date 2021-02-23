@@ -73,7 +73,7 @@ public abstract class AsyncGrabber extends Grabber implements Runnable {
       try {
         if (now - lastGrab < 2100) {
           if (changed()) {
-            if (canLogFiner()) log(Level.FINER, System.currentTimeMillis() + "::" + getName() + " GO GO GO");
+            if (canLogFiner()) log(Level.FINER, System.currentTimeMillis() + "::" + getName() + " grab");
             now = System.currentTimeMillis();
             cached = grabSync();
             long eor = System.currentTimeMillis();

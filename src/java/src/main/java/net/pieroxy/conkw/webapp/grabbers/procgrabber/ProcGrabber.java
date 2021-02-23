@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.FileStore;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -27,10 +26,10 @@ public class ProcGrabber extends AsyncGrabber {
   private int procStatFileLimit=0;
   private long lastNin, lastNout;
 
-  private long[]long2buffer = new long[2];
-  private double[]double3buffer = new double[3];
-  private int[]int2buffer = new int[2];
-  private byte[]babuffer1k = new byte[1024];
+  private final long[]long2buffer = new long[2];
+  private final double[]double3buffer = new double[3];
+  private final int[]int2buffer = new int[2];
+  private final byte[]babuffer1k = new byte[1024];
 
   private Collection<String> blockDevices;
 
@@ -98,6 +97,19 @@ public class ProcGrabber extends AsyncGrabber {
     if (shouldExtract("bdio")) grabBlockDeviceIo(r);
     if (shouldExtract("net")) getNetStats(r);
     if (shouldExtract("hostname")) getHostname(r);
+
+    System.out.println("FINER ? " + canLogFiner());
+    if (canLogFiner()) {
+      log(Level.FINER, "ProcGrabber usage: ");
+      log(Level.FINER, "   lastProcessesCpuUsage: " + lastProcessesCpuUsage.size());
+      log(Level.FINER, "            lastCpuUsage: " + lastCpuUsage.length);
+      log(Level.FINER, "     lastBlockDeviceRead: " + lastBlockDeviceRead.size());
+      log(Level.FINER, "    lastBlockDeviceWrite: " + lastBlockDeviceWrite.size());
+      log(Level.FINER, "   blockDeviceSectorSize: " + blockDeviceSectorSize.size());
+      log(Level.FINER, "            procStatFile: " + procStatFile.size());
+      log(Level.FINER, "            blockDevices: " + blockDevices.size());
+    }
+
     return r;
   }
 
@@ -327,7 +339,7 @@ public class ProcGrabber extends AsyncGrabber {
       ProcessStat.releaseAll();
       if (procStatFileLimit>0) {
         if (procStatFile.size()>procStatFileLimit) {
-          gcProcStatFileLimit();
+          gcProcStatFile();
           procStatFileLimit = 0;
         }
       }
@@ -337,7 +349,7 @@ public class ProcGrabber extends AsyncGrabber {
     }
   }
 
-  private void gcProcStatFileLimit() {
+  private void gcProcStatFile() {
     Set<Long> expiredKeys = new HashSet<>(procStatFile.size()/2);
     long now = System.currentTimeMillis();
 
@@ -345,7 +357,11 @@ public class ProcGrabber extends AsyncGrabber {
       if (now-e.getValue().lastUsed>2000) expiredKeys.add(e.getKey());
     }
 
+    if (canLogFine()) log(Level.FINE, "GC procStatFile by removing " + expiredKeys.size() + " out of " + procStatFile.size() + " entries.");
     expiredKeys.forEach(k -> procStatFile.remove(k));
+    Map<Long, Long> lpcu = new HashMap<>(procStatFile.size());
+    procStatFile.keySet().forEach(k -> lpcu.put(k, lastProcessesCpuUsage.get(k)));
+    lastProcessesCpuUsage = lpcu;
   }
 
   private File getStatFileForProcess(Long pid, long now) {
