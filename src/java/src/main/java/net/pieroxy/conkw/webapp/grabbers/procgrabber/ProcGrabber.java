@@ -98,7 +98,6 @@ public class ProcGrabber extends AsyncGrabber {
     if (shouldExtract("net")) getNetStats(r);
     if (shouldExtract("hostname")) getHostname(r);
 
-    System.out.println("FINER ? " + canLogFiner());
     if (canLogFiner()) {
       log(Level.FINER, "ProcGrabber usage: ");
       log(Level.FINER, "   lastProcessesCpuUsage: " + lastProcessesCpuUsage.size());
