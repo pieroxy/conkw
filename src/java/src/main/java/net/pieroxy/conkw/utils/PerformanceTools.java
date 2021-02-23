@@ -109,6 +109,26 @@ public class PerformanceTools {
     }
   }
 
+  public static long parseLongInFile(File file, byte[]babuffer) {
+    try (FileInputStream fis = new FileInputStream(file)) {
+      int pos=0,read=0;
+      while (read!=-1) {
+        pos += read;
+        read = fis.read(babuffer, pos, babuffer.length-pos);
+      }
+      long extracted = 0;
+      for (int i=0 ; i<pos ; i++) {
+        byte b = babuffer[i];
+        int digit = b-48;
+        if (digit >= 0 && digit < 10) extracted = extracted*10 + digit;
+        else break;
+      }
+      return extracted;
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
+
   public static ProcessStat parseProcessStatFile(File f, long pid, byte[]babuffer) {
     if (!f.exists()) return null;
     try (FileInputStream fis = new FileInputStream(f)) {

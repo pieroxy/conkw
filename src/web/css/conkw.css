@@ -63,7 +63,6 @@ heading {
     margin-top: 20px;
 }
 
-
 /* Gauge elements */
 
 gauge,
@@ -145,6 +144,11 @@ hgauge div.ch.error {
     z-index: 100;
 }
 
+gauge>div.gaugewarning {
+    background-color: #800000 ! important;
+}
+
+
 
 /* Clock elements */
 clock {
@@ -168,8 +172,9 @@ clock>div>div,
 clock>div>img {
     position: absolute;
     transform: rotate(90deg);
-    /*transition: 0.3s all;
-  transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);*/
+    /* So cool, but the impact on performance is drastic.
+    transition: 0.3s all;
+    transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);*/
 }
 
 clock #clock-second {
@@ -191,4 +196,37 @@ clock #clock-minute {
     left: 15%;
     transform-origin: 87.5%;
     height: 3px;
+}
+
+/* Battery elements */
+.battery {
+    margin-left: 20px;
+    display: inline-block;
+}
+
+.battery > img {
+    height: 2em;
+}
+
+.battery > span {
+    background-image: url(/battery/batt_middle.png);
+    display: inline-block;
+    width: 100px;
+    background-repeat: repeat;
+    height: 2em;
+    background-size: contain;
+}
+
+.battery > span > gauge {
+    margin-top:0.5em;
+    width: 95px;
+    margin-right: 3px;
+}
+
+.battery > span > img {
+    height: 1em;
+    position: absolute;
+    z-index: 10;
+    margin-top: 0.5em;
+    margin-left: 2em;
 }

@@ -115,3 +115,12 @@
     <gauge cw-ns="proc" cw-gauge0="default:m:num::loadavg3" cw-min="l:num::0" cw-max="l:num::16" cw-warn="l:num::15.9"></gauge>
     <BR/>
 </div>
+<div id="battery" class="cw-block">
+    <heading>BATTERY LEVEL</heading>
+    <div cw-ns="proc" cw-style-display="e:num::${num.bat_exists==1?'none':''}">No battery detected</div>
+    <div cw-ns="proc" cw-style-display="e:num::${num.bat_exists!=1?'none':''}">
+        <cw-label style="margin-top:0.5em" cw-warn="l:num:below:20" cw-ns="proc" cw-value="m:num:prc:bat_prc"></cw-label>
+        <div class="battery"><img src="battery/batt_left.png"><span class="battery_middle"><img cw-ns="proc" cw-style-display="e:str::${num.bat_plugged==1?'':'none'}" src="battery/batt_plugged.png"><gauge cw-ns="proc" cw-gauge0="default:m:num::bat_prc" cw-min="l:num::0" cw-max="l:num::100" cw-warn="l:num:below:25"></gauge></span><img src="battery/batt_right.png"></div>
+    </div>
+    <BR/>
+</div>

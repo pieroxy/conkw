@@ -34,6 +34,12 @@ public class ProcGrabber extends AsyncGrabber {
 
   private Collection<String> blockDevices;
 
+  private File BAT_FULL, BAT_NOW, BAT_AC;
+  private Boolean BAT_present;
+  private long BAT_plugged;
+  private double BAT_prc;
+  private int BAT_counter;
+
   @Override
   public boolean changed() {
     return true;
@@ -98,6 +104,7 @@ public class ProcGrabber extends AsyncGrabber {
     if (shouldExtract("bdio")) grabBlockDeviceIo(r);
     if (shouldExtract("net")) getNetStats(r);
     if (shouldExtract("hostname")) getHostname(r);
+    if (shouldExtract("battery")) getBattery(r);
 
     if (canLogFiner()) {
       log(Level.FINER, "ProcGrabber usage: ");
@@ -111,6 +118,47 @@ public class ProcGrabber extends AsyncGrabber {
     }
 
     return r;
+  }
+
+  private void getBattery(ResponseData r) {
+    if (BAT_present == null) {
+      BAT_FULL = new File("/sys/class/power_supply/BAT0/charge_full");
+      BAT_NOW = new File("/sys/class/power_supply/BAT0/charge_now");
+      if (!BAT_FULL.exists() || !BAT_NOW.exists()) {
+        if (!BAT_FULL.exists()) log(Level.INFO, BAT_FULL.getAbsolutePath() + " doesn't exist, skipping battery status extraction.");
+        if (!BAT_NOW.exists()) log(Level.INFO, BAT_NOW.getAbsolutePath() + " doesn't exist, skipping battery status extraction.");
+        BAT_present = false;
+        return;
+      }
+      BAT_AC = new File("/sys/class/power_supply/AC/online");
+      if (!BAT_AC.exists()) {
+        log(Level.INFO, BAT_AC.getAbsolutePath() + " doesn't exist, trying alternative.");
+        BAT_AC = new File("/sys/class/power_supply/AC0/online");
+      }
+      if (!BAT_AC.exists()) {
+        log(Level.INFO, BAT_AC.getAbsolutePath() + " doesn't exist, skipping battery status extraction.");
+        BAT_present = false;
+        return;
+      }
+
+      BAT_present = true;
+    }
+    if (BAT_present) {
+      if ((BAT_counter++%10)==0) {
+        long full = PerformanceTools.parseLongInFile(BAT_FULL, babuffer1k);
+        long now = PerformanceTools.parseLongInFile(BAT_NOW, babuffer1k);
+        long plugged = PerformanceTools.parseLongInFile(BAT_AC, babuffer1k);
+        r.addMetric("bat_exists", 1);
+        r.addMetric("bat_prc", BAT_prc = now*100./full);
+        r.addMetric("bat_plugged", BAT_plugged = plugged);
+      } else {
+        r.addMetric("bat_exists", 1);
+        r.addMetric("bat_prc", BAT_prc);
+        r.addMetric("bat_plugged", BAT_plugged);
+      }
+    } else {
+      r.addMetric("bat_exists", 0);
+    }
   }
 
   private void getHostname(ResponseData r) {
