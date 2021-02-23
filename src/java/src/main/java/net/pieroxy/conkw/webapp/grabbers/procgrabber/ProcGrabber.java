@@ -18,6 +18,7 @@ public class ProcGrabber extends AsyncGrabber {
   static final String NAME = "proc";
 
   private Map<Long,Long> lastProcessesCpuUsage = new HashMap<>();
+  // This is not the number of CPU but the number of ints to parse from the first line of /proc/stat
   private double[] lastCpuUsage = new double[7];
   private Map<String, Long> lastBlockDeviceRead = new HashMap<>();
   private Map<String, Long> lastBlockDeviceWrite = new HashMap<>();
