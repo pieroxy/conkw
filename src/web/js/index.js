@@ -648,7 +648,7 @@ class GaugeHolder {
         this.min = parseValueExpression(e.getAttribute("cw-min"));
         this.max = parseValueExpression(e.getAttribute("cw-max"));
         this.warn = parseValueExpression(e.getAttribute("cw-warn"));
-        this.wmax = e.getAttribute("cw-warningmax") === "true";
+        this.wmax = this.warn.format === "below";
 
         let green = document.createElement("div");
         green.className = "red" + (this.wmax ? "left" : "right");
@@ -672,7 +672,7 @@ class GaugeHolder {
             e.appendChild(gauge);
             i++;
         }
-        this.cacheKey = "gauge." + this.ns + "." + ck + e.getAttribute("cw-min") + e.getAttribute("cw-max") + e.getAttribute("cw-warn") + e.getAttribute("cw-warningmax");
+        this.cacheKey = "gauge." + this.ns + "." + ck + e.getAttribute("cw-min") + e.getAttribute("cw-max") + e.getAttribute("cw-warn");
         window.values[this.cacheKey] = "--not-a-valid-value--";
     }
     update(data) {
@@ -721,7 +721,7 @@ class HistoryGaugeHolder {
         this.min = parseValueExpression(e.getAttribute("cw-min"));
         this.max = parseValueExpression(e.getAttribute("cw-max"));
         this.warn = parseValueExpression(e.getAttribute("cw-warn"));
-        this.wmax = e.getAttribute("cw-warningmax") === "true";
+        this.wmax = this.warn.format === "below";
         e.style.backgroundColor = this.bgcolor;
 
         this.colors = [];
