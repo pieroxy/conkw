@@ -1,5 +1,6 @@
 package net.pieroxy.conkw.webapp.grabbers;
 
+import net.pieroxy.conkw.utils.PerformanceTools;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import javax.management.*;
@@ -7,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
+import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.nio.file.FileStore;
 import java.nio.file.Files;
@@ -16,8 +18,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class JavaSystemViewGrabber extends AsyncGrabber {
+  private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
 
 
   static final String NAME = "sys";
@@ -36,6 +40,8 @@ public class JavaSystemViewGrabber extends AsyncGrabber {
   public synchronized ResponseData grabSync() {
     ResponseData r = new ResponseData(getName(), System.currentTimeMillis());
     if (shouldExtract("sys")) grabSys(r);
+    if (shouldExtract("cpu")) grabCpu(r);
+    if (shouldExtract("mem")) grabMem(r);
     if (shouldExtract("freespace")) getFreeSpace(r);
     return r;
   }
@@ -43,14 +49,22 @@ public class JavaSystemViewGrabber extends AsyncGrabber {
   private void grabSys(ResponseData res) {
     res.addMetric("arch", osBean.getArch());
     res.addMetric("nbcpu", osBean.getAvailableProcessors());
-    res.addMetric("systemloadavg", osBean.getSystemLoadAverage());
     res.addMetric("osname", osBean.getName());
     res.addMetric("osversion", osBean.getVersion());
-
+    res.addMetric("user", System.getProperty("user.name"));
+    try {
+      res.addMetric("hostname", java.net.InetAddress.getLocalHost().getHostName());
+    } catch (UnknownHostException e) {
+      LOGGER.log(Level.SEVERE, "Getting hostname", e);
+    }
+  }
+  private void grabCpu(ResponseData res) {
+    res.addMetric("systemloadavg", osBean.getSystemLoadAverage());
     res.addMetric("processCpuUsage", readInternalValueAsDouble("ProcessCpuLoad"));
     res.addMetric("ProcessCpuTime", readInternalValueAsLong("ProcessCpuTime"));
     res.addMetric("totalCpuUsage", readInternalValueAsDouble("SystemCpuLoad"));
-
+  }
+  private void grabMem(ResponseData res) {
     long availablemem = readInternalValueAsLong("CommittedVirtualMemorySize");
     long freemem = readInternalValueAsLong("FreePhysicalMemorySize");
     long totalmem = readInternalValueAsLong ("TotalPhysicalMemorySize");
