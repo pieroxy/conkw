@@ -30,6 +30,9 @@ public class JavaSystemViewGrabber extends AsyncGrabber {
   private MBeanServer pfBean = ManagementFactory.getPlatformMBeanServer();
   private List<String> mountPoints;
   private List<FileStore> mountPointsStores;
+  private ObjectName on = null;
+  private Long cache_totalmem;
+  private Long cache_totalswp;
 
   @Override
   public boolean changed() {
@@ -66,19 +69,17 @@ public class JavaSystemViewGrabber extends AsyncGrabber {
   }
   private void grabMem(ResponseData res) {
     long availablemem = readInternalValueAsLong("CommittedVirtualMemorySize");
-    long freemem = readInternalValueAsLong("FreePhysicalMemorySize");
-    long totalmem = readInternalValueAsLong ("TotalPhysicalMemorySize");
-
-    res.addMetric("ramTotal", totalmem);
-    res.addMetric("ramFree", freemem);
     res.addMetric("ramAvailable", availablemem);
-    res.addMetric("ramUsed", totalmem - availablemem);
+    if (cache_totalmem==null) cache_totalmem = readInternalValueAsLong ("TotalPhysicalMemorySize");
+
+    res.addMetric("ramTotal", cache_totalmem);
+    res.addMetric("ramUsed", cache_totalmem - availablemem);
 
     long swapfree = readInternalValueAsLong("FreeSwapSpaceSize");
-    long swaptotal = readInternalValueAsLong("TotalSwapSpaceSize");
+    if (cache_totalswp == null) cache_totalswp = readInternalValueAsLong("TotalSwapSpaceSize");
 
-    res.addMetric("swapTotal", swaptotal);
-    res.addMetric("swapUsed", swaptotal-swapfree);
+    res.addMetric("swapTotal", cache_totalswp);
+    res.addMetric("swapUsed", cache_totalswp-swapfree);
     res.addMetric("swapFree", swapfree);
   }
 
@@ -104,7 +105,8 @@ public class JavaSystemViewGrabber extends AsyncGrabber {
   long readInternalValueAsLong(String attr) {
     Object o = null;
     try {
-      o = pfBean.getAttribute(new ObjectName("java.lang", "type", "OperatingSystem"), attr);
+      if (on == null) on = new ObjectName("java.lang", "type", "OperatingSystem");
+      o = pfBean.getAttribute(on, attr);
       return (Long)o;
     } catch (Exception e) {
       log(Level.SEVERE, "Getting system information attribute " + attr, e);
@@ -116,7 +118,8 @@ public class JavaSystemViewGrabber extends AsyncGrabber {
   double readInternalValueAsDouble(String attr) {
     Object o = null;
     try {
-      o = pfBean.getAttribute(new ObjectName("java.lang", "type", "OperatingSystem"), attr);
+      if (on == null) on = new ObjectName("java.lang", "type", "OperatingSystem");
+      o = pfBean.getAttribute(on, attr);
       return (Double)o;
     } catch (Exception e) {
       log(Level.SEVERE, "Getting system information attribute " + attr, e);
