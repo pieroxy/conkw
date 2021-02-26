@@ -15,7 +15,7 @@ public class MdstatParser {
 
   public static MdstatResult parseMdstat(File f) {
     MdstatResult res = new MdstatResult();
-    StringBuilder sb = new StringBuilder();
+    StringBuilder summary = new StringBuilder();
     if (f.exists()) {
       try (BufferedReader br = new BufferedReader(new FileReader(f))) {
         br.readLine();
@@ -24,38 +24,39 @@ public class MdstatParser {
           resline.setLength(0);
           String first = br.readLine();
           if (first == null || first.startsWith("unused")) {
-            res.setOneline(sb.toString());
+            res.setOneline(summary.toString());
             return res;
           }
           String second = br.readLine();
           resline.append(first.split(":")[0].trim());
-          sb.append(resline).append(":");
+          if (summary.length()>0) summary.append(" ");
+          summary.append(resline).append(":");
           res.setFailedDisks(res.getFailedDisks() + StringUtil.countMatches(first, "(F)"));
           String status = second.substring(second.indexOf('[')+1, second.indexOf(']'));
-          sb.append('[').append(status).append(']');
+          summary.append('[').append(status).append(']');
           resline.append(":[").append(status).append("]");
           String l;
           l=br.readLine();
           while (true) {
             if (l==null) {
               res.getIndividual().add(resline.toString());
-              res.setOneline(sb.toString());
+              res.setOneline(summary.toString());
               return res;
             }
             if (l.length()==0) {
               res.getIndividual().add(resline.toString());
-              res.setOneline(sb.toString());
+              res.setOneline(summary.toString());
               break;
             }
 
             if (l.contains("recovery")) {
               try {
                 double prc = Double.parseDouble(l.substring(l.indexOf("recovery = ")+11, l.indexOf("%")));
-                sb.append("<").append((int)Math.round(prc)).append(">");
-                resline.append("<").append((int)Math.round(prc)).append(">");
+                summary.append("<").append((int)Math.round(prc)).append("%>");
+                resline.append("<").append((int)Math.round(prc)).append("%>");
               } catch (Exception e) {
                 LOGGER.log(Level.WARNING, "", e);
-                sb.append("<*>");
+                summary.append("<*>");
               }
             }
 

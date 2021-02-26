@@ -22,12 +22,12 @@ public class MdstatParserTest extends TestCase {
     assertEquals("md2:[2/2]", res.getIndividual().get(1));
     assertEquals("md3:[10/10]", res.getIndividual().get(2));
     assertEquals("md0:[2/2]", res.getIndividual().get(3));
-    assertEquals("md1:[2/2]md2:[2/2]md3:[10/10]md0:[2/2]", res.getOneline());
+    assertEquals("md1:[2/2] md2:[2/2] md3:[10/10] md0:[2/2]", res.getOneline());
     assertEquals(0, res.getFailedDisks());
     res = MdstatParser.parseMdstat(new File("../../test-data/mdstat/d"));
     assertEquals(1, res.getIndividual().size());
-    assertEquals("md127:[6/5]<13>", res.getIndividual().get(0));
-    assertEquals("md127:[6/5]<13>", res.getOneline());
+    assertEquals("md127:[6/5]<13%>", res.getIndividual().get(0));
+    assertEquals("md127:[6/5]<13%>", res.getOneline());
     assertEquals(0, res.getFailedDisks());
     res = MdstatParser.parseMdstat(new File("../../test-data/mdstat/e"));
     assertEquals(1, res.getIndividual().size());

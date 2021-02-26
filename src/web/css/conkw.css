@@ -51,7 +51,7 @@ a:visited {
     width:350px;
 }
 
-cw-label.error {
+cw-label.error, .cw-error {
     background-color: #f40;
     color: black;
 }
