@@ -1,6 +1,5 @@
 package net.pieroxy.conkw.webapp.grabbers;
 
-import net.pieroxy.conkw.utils.PerformanceTools;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import javax.management.*;
@@ -68,7 +67,7 @@ public class JavaSystemViewGrabber extends AsyncGrabber {
     res.addMetric("totalCpuUsage", readInternalValueAsDouble("SystemCpuLoad"));
   }
   private void grabMem(ResponseData res) {
-    long availablemem = readInternalValueAsLong("CommittedVirtualMemorySize");
+    long availablemem = readInternalValueAsLong("FreePhysicalMemorySize");
     res.addMetric("ramAvailable", availablemem);
     if (cache_totalmem==null) cache_totalmem = readInternalValueAsLong ("TotalPhysicalMemorySize");
 
@@ -84,7 +83,7 @@ public class JavaSystemViewGrabber extends AsyncGrabber {
   }
 
   private void getFreeSpace(ResponseData r) {
-    if (mountPoints.isEmpty()) return;
+    if (mountPoints==null || mountPoints.isEmpty()) return;
     for (int i=0 ; i<mountPoints.size() ; i++)
     {
       String mp = mountPoints.get(i);
