@@ -380,6 +380,9 @@ function loadDom(e) {
                 window.holders.push(new PropertyHolder(e.style, e.getAttribute("cw-ns"), e.getAttribute(names[i]), names[i].split("-")[2]));
             }
             switch (names[i]) {
+                case "cw-warn":
+                    window.holders.push(new WarnHolder(e, e.getAttribute(names[i])));
+                    break;
                 case "cw-stale":
                     window.holders.push(new StaleHolder(e, e.getAttribute(names[i])));
                     break;
@@ -544,7 +547,7 @@ function updateField(field, property, cacheKey, value, warning) {
     if (window.values[cacheKey] !== value) {
         let oldvalue = window.values[cacheKey];
         window.values[cacheKey] = value;
-        if (value === undefined) {
+        if (value === undefined && field.classList) {
             field.classList.add("cw-stale");
             return;
         }
@@ -563,7 +566,7 @@ function updateField(field, property, cacheKey, value, warning) {
 
 function isWarning(vExpr, wExpr, data) {
     if (wExpr && !wExpr.invalid) {
-        let vv = extractRawValue(vExpr, data);
+        let vv = vExpr ? extractRawValue(vExpr, data) : null;
         let vw = extractRawValue(wExpr, data);
         switch (wExpr.format) {
             case "ifnot":
@@ -576,8 +579,19 @@ function isWarning(vExpr, wExpr, data) {
                 return vv > vw ? "yes" : "no";
             case "valuebelow":
                 return vv < vw ? "yes" : "no";
+        }
+    }
+    return false;
+}
+
+function isStandaloneWarning(wExpr, data) {
+    if (wExpr && !wExpr.invalid) {
+        let vw = extractRawValue(wExpr, data);
+        switch (wExpr.format) {
             case "notzero":
                 return vw!==0 ? "yes" : "no";
+            case "zero":
+                return vw===0 ? "yes" : "no";
         }
     }
     return false;
@@ -609,13 +623,30 @@ class PropertyHolder {
     }
 }
 
+class WarnHolder {
+    constructor(e, v) {
+        this.element = e;
+        this.valueExpr = parseValueExpression(v);
+        this.ns = e.getAttribute("cw-ns");
+        this.cacheKey = "warn." + this.ns + "." + v;
+        window.values[this.cacheKey] = "--not-a-valid-value--";
+    }
+    update(data) {
+        if (isStandaloneWarning(this.valueExpr, data)==='yes')
+            this.element.classList.add("cw-error");
+        else
+            this.element.classList.remove("cw-error");
+
+    }
+}
+
 class ValueHolder {
     constructor(e, v) {
         this.element = e;
         this.valueExpr = parseValueExpression(v);
         this.ns = e.getAttribute("cw-ns");
         this.cacheKey = "value." + this.ns + "." + v;
-        this.warn = parseValueExpression(e.getAttribute("cw-warn"));
+        this.warn = parseValueExpression(e.getAttribute("cw-value-warn"));
         window.values[this.cacheKey] = "--not-a-valid-value--";
     }
     update(data) {
@@ -651,7 +682,7 @@ class GaugeHolder {
         this.ns = e.getAttribute("cw-ns");
         this.min = parseValueExpression(e.getAttribute("cw-min"));
         this.max = parseValueExpression(e.getAttribute("cw-max"));
-        this.warn = parseValueExpression(e.getAttribute("cw-warn"));
+        this.warn = parseValueExpression(e.getAttribute("cw-value-warn"));
         this.wmax = this.warn.format === "below";
 
         let green = document.createElement("div");
@@ -676,7 +707,7 @@ class GaugeHolder {
             e.appendChild(gauge);
             i++;
         }
-        this.cacheKey = "gauge." + this.ns + "." + ck + e.getAttribute("cw-min") + e.getAttribute("cw-max") + e.getAttribute("cw-warn");
+        this.cacheKey = "gauge." + this.ns + "." + ck + e.getAttribute("cw-min") + e.getAttribute("cw-max") + e.getAttribute("cw-value-warn");
         window.values[this.cacheKey] = "--not-a-valid-value--";
     }
     update(data) {
@@ -724,7 +755,7 @@ class HistoryGaugeHolder {
         this.log = e.getAttribute("log") == "true";
         this.min = parseValueExpression(e.getAttribute("cw-min"));
         this.max = parseValueExpression(e.getAttribute("cw-max"));
-        this.warn = parseValueExpression(e.getAttribute("cw-warn"));
+        this.warn = parseValueExpression(e.getAttribute("cw-value-warn"));
         this.wmax = this.warn.format === "below";
         e.style.backgroundColor = this.bgcolor;
 
