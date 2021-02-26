@@ -570,10 +570,14 @@ function isWarning(vExpr, wExpr, data) {
                 return vv != vw ? "yes" : "no";
             case "if":
                 return vv == vw ? "yes" : "no";
-            case "above":
+            case "valuecontains":
+                return (vv+"").indexOf(vw)!=-1 ? "yes" : "no";
+            case "valueabove":
                 return vv > vw ? "yes" : "no";
-            case "below":
+            case "valuebelow":
                 return vv < vw ? "yes" : "no";
+            case "notzero":
+                return vw!==0 ? "yes" : "no";
         }
     }
     return false;

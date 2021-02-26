@@ -12,9 +12,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 public class ProcGrabber extends AsyncGrabber {
+  static final String MDSTAT_FILE = "/proc/mdstat";
   static final String NAME = "proc";
 
   private Map<Long,Long> lastProcessesCpuUsage = new HashMap<>();
@@ -40,6 +42,9 @@ public class ProcGrabber extends AsyncGrabber {
   private double BAT_prc;
   private int BAT_counter;
 
+  private File mdstatFile;
+
+
   @Override
   public boolean changed() {
     return true;
@@ -51,6 +56,12 @@ public class ProcGrabber extends AsyncGrabber {
     if (blockDevices == null) {
       blockDevices = new ArrayList<>();
       blockDevices.add("sda");
+    }
+    if (config.get("mdstatFile")!=null) {
+      mdstatFile = new File(config.get("mdstatFile"));
+      log(Level.INFO, "Using mdstat file from " + mdstatFile.getAbsolutePath());
+    } else {
+      mdstatFile = new File(MDSTAT_FILE);
     }
   }
 
@@ -105,6 +116,7 @@ public class ProcGrabber extends AsyncGrabber {
     if (shouldExtract("net")) getNetStats(r);
     if (shouldExtract("hostname")) getHostname(r);
     if (shouldExtract("battery")) getBattery(r);
+    if (shouldExtract("mdstat")) grabMdstat(r);
 
     if (canLogFiner()) {
       log(Level.FINER, "ProcGrabber usage: ");
@@ -118,6 +130,16 @@ public class ProcGrabber extends AsyncGrabber {
     }
 
     return r;
+  }
+
+  private void grabMdstat(ResponseData r) {
+    MdstatParser.MdstatResult data = MdstatParser.parseMdstat(mdstatFile);
+    r.addMetric("mdstatFailed", data.getFailedDisks());
+    r.addMetric("mdstatSummary", data.getOneline());
+    r.addMetric("mdstatNbDevices", data.getIndividual().size());
+    int i=0;
+    for (String s : data.getIndividual())
+      r.addMetric("mdstatByArray" + i++, s);
   }
 
   private void getBattery(ResponseData r) {

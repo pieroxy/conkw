@@ -12,7 +12,7 @@
     <gauge cw-ns="proc" cw-min="l:num::0" cw-max="m:num::ramTotal" cw-gauge0="#474:m:num::ramUsed" cw-gauge1="#252:m:num::ramCached"></gauge>
     <BR/>
     <label>     Used: </label>
-    <cw-label cw-warn="e:num:above:${num.ramTotal*0.8}" cw-ns="proc" cw-value="m:num:size:ramUsed"></cw-label>
+    <cw-label cw-warn="e:num:valueabove:${num.ramTotal*0.8}" cw-ns="proc" cw-value="m:num:size:ramUsed"></cw-label>
     <hgauge cw-bgcolor="#202040" cw-ns="proc" cw-hgauge0="#474:m:num::ramUsed" cw-hgauge1="#252:m:num::ramCached" cw-min="l:num::0" cw-max="m:num::ramTotal" style="height:3em;"></hgauge>
     <BR/>
     <label>     Free: </label>
@@ -38,14 +38,14 @@
     <BR/>
     <heading>SWAP USAGE</heading>
     <label>  </label>
-    <cw-label cw-warn="e:num:above:${num.sawpTotal*0.5}" cw-ns="proc" cw-value="m:num:size:swapUsed"></cw-label> /
+    <cw-label cw-warn="e:num:valueabove:${num.sawpTotal*0.5}" cw-ns="proc" cw-value="m:num:size:swapUsed"></cw-label> /
     <cw-label cw-ns="proc" cw-value="m:num:size:swapTotal"></cw-label>
     <gauge cw-ns="proc" cw-min="l:num::0" cw-max="m:num::swapTotal" cw-warn="e:num::${num.swapTotal*0.5}" cw-gauge0="default:m:num::swapUsed"></gauge>
 </div>
 <div id="cpu" class="cw-block">
     <heading>CPU /proc</heading>
     <label>      used: </label>
-    <cw-label cw-warn="l:num:above:80" cw-ns="proc" cw-value="m:num:cpu:cpu_usg_used"></cw-label>
+    <cw-label cw-warn="l:num:valueabove:80" cw-ns="proc" cw-value="m:num:cpu:cpu_usg_used"></cw-label>
     <gauge cw-ns="proc" cw-min="l:num::0" cw-max="l:num::100" cw-gauge0="#5b5:m:num::cpu_usg_sys" cw-gauge1="#474:m:num::cpu_usg_user" cw-gauge2="#252:m:num::cpu_usg_nice" cw-gauge3="#252:m:num::cpu_usg_wait"></gauge>
     <BR/>
     <label>       sys: </label>
@@ -103,7 +103,7 @@
 <div id="load" class="cw-block">
     <heading>LOAD AVG</heading>
     <label>        1mn: </label>
-    <cw-label cw-warn="l:num:above:16" cw-ns="proc" cw-value="m:num::loadavg1"></cw-label>
+    <cw-label cw-warn="l:num:valueabove:16" cw-ns="proc" cw-value="m:num::loadavg1"></cw-label>
     <gauge cw-ns="proc" cw-gauge0="default:m:num::loadavg1" cw-min="l:num::0" cw-max="l:num::16" cw-warn="l:num::15.9"></gauge>
     <BR/>
     <label>        5mn: </label>
@@ -119,8 +119,15 @@
     <heading>BATTERY LEVEL</heading>
     <div cw-ns="proc" cw-style-display="e:num::${num.bat_exists==1?'none':''}">No battery detected</div>
     <div cw-ns="proc" cw-style-display="e:num::${num.bat_exists!=1?'none':''}">
-        <cw-label style="margin-top:0.5em" cw-warn="l:num:below:20" cw-ns="proc" cw-value="m:num:prc:bat_prc"></cw-label>
-        <div class="battery"><img src="battery/batt_left.png"><span class="battery_middle"><img cw-ns="proc" cw-style-display="e:str::${num.bat_plugged==1?'':'none'}" src="battery/batt_plugged.png"><gauge cw-ns="proc" cw-gauge0="default:m:num::bat_prc" cw-min="l:num::0" cw-max="l:num::100" cw-warn="l:num:below:25"></gauge></span><img src="battery/batt_right.png"></div>
+        <cw-label style="margin-top:0.5em" cw-warn="l:num:valuebelow:20" cw-ns="proc" cw-value="m:num:prc:bat_prc"></cw-label>
+        <div class="battery"><img src="battery/batt_left.png"><span class="battery_middle"><img cw-ns="proc" cw-style-display="e:str::${num.bat_plugged==1?'':'none'}" src="battery/batt_plugged.png"><gauge cw-ns="proc" cw-gauge0="default:m:num::bat_prc" cw-min="l:num::0" cw-max="l:num::100" cw-warn="l:num:valuebelow:25"></gauge></span><img src="battery/batt_right.png"></div>
     </div>
+    <BR/>
+</div>
+<div id="mdstat" class="cw-block">
+    <heading>MDADM Status</heading>
+    <div cw-ns="proc" cw-style-display="e:num::${num.mdstatNbDevices!=0?'none':''}">No mdadm device found</div>
+    <div cw-ns="proc" cw-style-display="e:num::${num.mdstatNbDevices==0?'none':''}">
+        <cw-label cw-ns="proc" cw-warn="l:str:valuecontains:&lt;" cw-value="m:str::mdstatSummary"></cw-label> dev:<cw-label cw-ns="proc" cw-value="m:num:num:mdstatNbDevices"></cw-label> fail:<cw-label cw-ns="proc" cw-value="m:num:num:mdstatFailed"></cw-label>
     <BR/>
 </div>

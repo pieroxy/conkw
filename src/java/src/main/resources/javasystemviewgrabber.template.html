@@ -38,14 +38,14 @@
 
     <heading>SWAP USAGE</heading>
     <label>  </label>
-    <cw-label cw-warn="e:num:above:${num.sawpTotal*0.5}" cw-ns="sys" cw-value="m:num:size:swapUsed"></cw-label> /
+    <cw-label cw-warn="e:num:valueabove:${num.sawpTotal*0.5}" cw-ns="sys" cw-value="m:num:size:swapUsed"></cw-label> /
     <cw-label cw-ns="sys" cw-value="m:num:size:swapTotal"></cw-label>
     <gauge cw-ns="sys" cw-min="l:num::0" cw-max="m:num::swapTotal" cw-warn="e:num::${num.swapTotal*0.5}" cw-gauge0="default:m:num::swapUsed"></gauge>
 </div>
 <div id="system cpu" class="cw-block">
     <heading>CPU </heading>
     <label>     Usage: </label>
-    <cw-label cw-ns="sys" cw-warn="l:num:above:0.8" cw-value="m:num:prc01:totalCpuUsage"></cw-label>
+    <cw-label cw-ns="sys" cw-warn="l:num:valueabove:0.8" cw-value="m:num:prc01:totalCpuUsage"></cw-label>
     <gauge cw-ns="sys" cw-min="l:num::0" cw-warn="l:num::0.8" cw-max="l:num::1" cw-gauge0="#474:m:num::totalCpuUsage"></gauge>
     <BR/>
     <hgauge cw-bgcolor="#202040" cw-ns="sys" cw-hgauge0="#474:m:num::totalCpuUsage" cw-min="l:num::0" cw-max="l:num::1" style="height:2em;width:300px"></hgauge>
