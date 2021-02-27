@@ -18,6 +18,7 @@ Those existing that need to be ported to conkw (so, expect them soon)
 
 Those planned (so expect them later)
 * lm-sensors - to get temperatures, voltages and fan speeds on linux.
+* smartctl - to get metrics out of hdd, specifically their health status.
 * MPRIS2 - to get music playing for most Linux players.
 * Calendar Google - to get next meetings
 * Calendar Outlook - to get next meetings
