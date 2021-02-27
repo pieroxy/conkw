@@ -7,6 +7,9 @@ Here are the things we have in mind for conkw. This is kind of my TODO list.
 
 ## Grabbers
 
+In progress:
+* OSHIGrabber to fetch system metrics on all OSes.
+
 Those existing that need to be ported to conkw (so, expect them soon)
 * *External Metrics Ingestion*: allow an external system to push metrics
 * *News* Grab news headlines, details being configurable.
@@ -14,13 +17,14 @@ Those existing that need to be ported to conkw (so, expect them soon)
 * *Spotify* Grab the music currently playing.
 
 Those planned (so expect them later)
-* lm-sensors
-* Calendar Google
-* Calendar Outlook
-* Mail Google
-* Mail Outlook
-* Freebox
-* https cert expiration date
+* lm-sensors - to get temperatures, voltages and fan speeds on linux.
+* MPRIS2 - to get music playing for most Linux players.
+* Calendar Google - to get next meetings
+* Calendar Outlook - to get next meetings
+* Mail Google - to get latest mails
+* Mail Outlook - to get latest mails
+* Freebox - to get internet status on this home router
+* https cert expiration date - to make sure your https certs are not about to expire.
 * Fetch another instance on the network and ingest all or part of its metrics
 * Push metrics to another instance on the network through Emi (See above)
 
