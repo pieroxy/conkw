@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,6 +22,8 @@ import java.util.stream.Collectors;
 public class OshiGrabber extends AsyncGrabber {
   static final String NAME = "oshi";
 
+  static final Duration staticDataDelay = Duration.ofDays(1);
+  static final Duration preciseDataDelay = Duration.ofMinutes(1);
   OSHIExtractor extractor = new OSHIExtractor();
   long[]ticks;
   long[][]ticksByCpu;
@@ -41,36 +44,36 @@ public class OshiGrabber extends AsyncGrabber {
     // Garbage generated and time elapsed are measured on my computer. They give an order of magnitude.
     // Overall: 146m / 1.2s
     ResponseData res = new ResponseData(getName(), System.currentTimeMillis());
-    if (shouldExtract("sensors")) extractSensors(res); // 250k
-    if (shouldExtract("memory")) extractMemory(res); // 41k
-    if (shouldExtract("physicalmemory")) extractPhysicalMemory(res); // 8k
-    if (shouldExtract("virtualmemory")) extractVirtualMemory(res); // 193k
-    if (shouldExtract("computer")) extractComputer(res); // 9k
-    if (shouldExtract("baseboard")) extractBaseboard(res); // 9k
-    if (shouldExtract("firmware")) extractFirmware(res); // 9k
-    if (shouldExtract("cpu")) extractCpu(res); // 1.2m / 70ms
-    if (shouldExtract("cpubycore")) extractCpuByCore(res); // 70k
-    if (shouldExtract("cpuident")) extractCpuIdent(res); // 9k
-    if (shouldExtract("displays")) extractDisplays(res); // 26k
-    if (shouldExtract("disksio")) extractDisksIo(res); // 11k
-    if (shouldExtract("disksinfos")) extractDisks(res); // 20k
-    if (shouldExtract("graphicscards")) extractGraphicsCards(res); // 10k
-    if (shouldExtract("nics")) extractNics(res); // 12k
-    if (shouldExtract("battery")) extractBattery(res); // 8k
-    if (shouldExtract("psus")) extractPsus(res); // 8k
-    if (shouldExtract("soundcards")) extractSoundCards(res); // 9k
-    if (shouldExtract("usb")) extractUsbDevices(res); // 17k
-    if (shouldExtract("os")) extractOperatingSystem(res); // 350k
-    if (shouldExtract("filestores")) extractFileStores(res); // 28k
-    if (shouldExtract("tcpv4")) extractTcpv4(res); // 9k
-    if (shouldExtract("tcpv6")) extractTcpv6(res); // 9k
-    if (shouldExtract("udpv4")) extractUdpv4(res); // 9k
-    if (shouldExtract("udpv6")) extractUdpv6(res); // 9k
-    if (shouldExtract("sessions")) extractSessions(res); // 10k
-    if (shouldExtract("shortsessions")) extractShortSessions(res); // 9k
-    if (shouldExtract("netp")) extractNetworkParams(res); // 198k
-    if (shouldExtract("processes")) extractProcesses(res); // 125m / 400ms
-    if (shouldExtract("services")) extractServices(res); // 20m / 400ms
+    extractFixedDelay(res, "sensors", this::extractSensors, Duration.ZERO); // 250k
+    extractFixedDelay(res, "memory", this::extractMemory, Duration.ZERO); // 41k
+    extractFixedDelay(res, "physicalmemory", this::extractPhysicalMemory, staticDataDelay); // 8k
+    extractFixedDelay(res, "virtualmemory", this::extractVirtualMemory, Duration.ZERO); // 193k
+    extractFixedDelay(res, "computer", this::extractComputer, staticDataDelay); // 9k
+    extractFixedDelay(res, "baseboard", this::extractBaseboard, staticDataDelay); // 9k
+    extractFixedDelay(res, "firmware", this::extractFirmware, staticDataDelay); // 9k
+    extractFixedDelay(res, "cpu", this::extractCpu, Duration.ZERO); // 1.2m / 70ms
+    extractFixedDelay(res, "cpubycore", this::extractCpuByCore, Duration.ZERO); // 70k
+    extractFixedDelay(res, "cpuident", this::extractCpuIdent, staticDataDelay); // 9k
+    extractFixedDelay(res, "displays", this::extractDisplays, staticDataDelay); // 26k
+    extractFixedDelay(res, "disksio", this::extractDisksIo, Duration.ZERO); // 11k
+    extractFixedDelay(res, "disksinfos", this::extractDisks, preciseDataDelay); // 20k
+    extractFixedDelay(res, "graphicscards", this::extractGraphicsCards, staticDataDelay); // 10k
+    extractFixedDelay(res, "nics", this::extractNics, preciseDataDelay); // 12k
+    extractFixedDelay(res, "battery", this::extractBattery, Duration.ofSeconds(5)); // 8k
+    extractFixedDelay(res, "psus", this::extractPsus, preciseDataDelay); // 8k
+    extractFixedDelay(res, "soundcards", this::extractSoundCards, staticDataDelay); // 9k
+    extractFixedDelay(res, "usb", this::extractUsbDevices, Duration.ofSeconds(5)); // 17k
+    extractFixedDelay(res, "os", this::extractOperatingSystem, Duration.ofSeconds(5)); // 350k
+    extractFixedDelay(res, "filestores", this::extractFileStores, Duration.ZERO); // 28k
+    extractFixedDelay(res, "tcpv4", this::extractTcpv4, preciseDataDelay); // 9k
+    extractFixedDelay(res, "tcpv6", this::extractTcpv6, preciseDataDelay); // 9k
+    extractFixedDelay(res, "udpv4", this::extractUdpv4, preciseDataDelay); // 9k
+    extractFixedDelay(res, "udpv6", this::extractUdpv6, preciseDataDelay); // 9k
+    extractFixedDelay(res, "sessions", this::extractSessions, preciseDataDelay); // 10k
+    extractFixedDelay(res, "shortsessions", this::extractShortSessions, Duration.ZERO); // 9k
+    extractFixedDelay(res, "netp", this::extractNetworkParams, preciseDataDelay); // 198k
+    extractFixedDelay(res, "processes", this::extractProcesses, preciseDataDelay); // 125m / 400ms
+    extractFixedDelay(res, "services", this::extractServices, preciseDataDelay); // 20m / 400ms
     return res;
   }
 

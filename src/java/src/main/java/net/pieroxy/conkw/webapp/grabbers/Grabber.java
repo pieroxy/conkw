@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.Period;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -42,6 +43,10 @@ public abstract class Grabber {
 
   public void extractFixedDelay(ResponseData toFill, String extractName, ExtractMethod method, java.time.Duration delay) {
     if (shouldExtract(extractName)) {
+      if (delay.equals(Duration.ZERO)) {
+        method.extract(toFill);
+        return;
+      }
       long now = System.currentTimeMillis();
       ResponseData cached = cachedResponses.get(extractName);
       if (cached==null || (now-cached.getTimestamp() > delay.toMillis())) {
