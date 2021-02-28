@@ -232,6 +232,8 @@ function getProperLabel(key, value) {
             return formatDow(value);
         case "tsstodow":
             return formatDow(value * 1000);
+        case "si":
+            return getSI(value);
         case "tsstodow3":
             return formatDow(value * 1000).substring(0, 3);
         case "currencyBig":
@@ -341,6 +343,18 @@ function getSizeLabel(i) {
     if (i < 1024) return getPrecision(i) + "GB";
     i /= 1024;
     return getPrecision(i) + "TB";
+}
+
+function getSI(i) {
+    if (i < 1000) return getPrecision(i) + " ";
+    i /= 1000;
+    if (i < 1000) return getPrecision(i) + "K";
+    i /= 1000;
+    if (i < 1000) return getPrecision(i) + "M";
+    i /= 1000;
+    if (i < 1000) return getPrecision(i) + "G";
+    i /= 1000;
+    return getPrecision(i) + "T";
 }
 
 function getPrecision(i) {
