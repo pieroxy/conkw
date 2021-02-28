@@ -156,11 +156,40 @@
           <br/>
         </div>
     
+        <div cw-ns="oshi" cw-ifextracted="cpubycore" class="cw-block">
+          <heading>CPU BY CORE</heading>
+          <span cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::cpubycore_count" cw-multinode-pattern="#">
+            <label>  Core <cw-label cw-ns="oshi" cw-value="l:num:num:#"></cw-label> : </label><cw-label cw-ns="oshi" cw-value="m:num:prc01:cpubycore_load_#"></cw-label>
+            <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="l:num::1" cw-value-warn="l:num::0.8" cw-gauge0="default:m:num::cpubycore_load_#"></gauge>
+            <br/>
+          </span>
+        </div>
 
+
+        <div cw-ns="oshi" cw-ifextracted="cpuident" class="cw-block">
+          <heading>CPU IDENT</heading>
+          <label>  Identifier : </label><cw-label cw-ns="oshi" cw-value="m:str::cpuident_identifier"></cw-label>
+          <br/>
+          <label>        Name : </label><cw-label cw-ns="oshi" cw-value="m:str::cpuident_name"></cw-label>
+          <br/>
+          <label>       Model : </label><cw-label cw-ns="oshi" cw-value="m:str::cpuident_model"></cw-label>
+          <br/>
+          <label> ProcessorID : </label><cw-label cw-ns="oshi" cw-value="m:str::cpuident_processor_id"></cw-label>
+          <br/>
+          <label>      Family : </label><cw-label cw-ns="oshi" cw-value="m:str::cpuident_family"></cw-label>
+          <br/>
+          <label>   Microarch : </label><cw-label cw-ns="oshi" cw-value="m:str::cpuident_micro_arch"></cw-label>
+          <br/>
+          <label>      Vendor : </label><cw-label cw-ns="oshi" cw-value="m:str::cpuident_vendor"></cw-label>
+          <br/>
+          <label>  VendorFreq : </label><cw-label cw-ns="oshi" cw-value="m:num:si:cpuident_vendor_freq"></cw-label>Hz
+          <br/>
+          <label>    Stepping : </label><cw-label cw-ns="oshi" cw-value="m:str::cpuident_stepping"></cw-label>
+          <br/>
+          <label>    Cpu64bit : </label><cw-label cw-ns="oshi" cw-value="e:str::${num.cpuident_64bits?'Yes':'No'}"></cw-label>
+          <br/>
+        </div>
     
-
-
-
     
 
 
