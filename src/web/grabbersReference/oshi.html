@@ -19,7 +19,7 @@
         <meta name="theme-color" content="#ffffff">
     </head>
     <body onload="init()">
-        <heading>CONKW</heading>
+        <heading>CONKW - Reference UI for <code>oshi.Oshi</code></heading>
         <label>  Status : </label><cw-label style="max-width:200px;display:inline-block" id="cw-status"></cw-label><BR/>
         <label>   Delay : </label><label id="cw-delay"></label><BR/>
         <div id="clockanddate" class="cw-block" style="text-align:center;font-size:16px;">
@@ -31,6 +31,74 @@
             <br/>
             <clock style="width:240px;height:240px;overflow: hidden;padding-top:3px;margin:auto" onclick="rotateClockFace(event, this)"></clock>
         </div>
-        <div class="section" cw-fill="grabberDefault:*"></div>
+        
+
+        <div cw-ns="oshi" cw-ifextracted="sensors">
+          <heading>SENSORS</heading>
+          <span cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::sensors_fan_count" cw-multinode-pattern="#">
+            <label>      Fan # : </label><cw-label cw-ns="oshi" cw-value="m:num:rpm:sensors_fan_speed_#"></cw-label>
+            <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="l:num::2000" cw-gauge0="default:m:num::sensors_fan_speed_#"></gauge>
+            <br/>
+          </span>
+          <label>   CPU Temp : </label><cw-label cw-ns="oshi" cw-value="m:num:temp:sensors_cputemp"></cw-label>
+          <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="l:num::100" cw-value-warn="l:num:valueabove:80" cw-gauge0="default:m:num::sensors_cputemp"></gauge>
+          <br/>
+          <label>CPU Voltage : </label><cw-label cw-ns="oshi" cw-value="m:num:num:sensors_cpuvolt"></cw-label> V
+        </div>
+    
+        <div cw-ns="oshi" cw-ifextracted="memory">
+          <heading>MEMORY</heading>
+          <label>       Total : </label><cw-label cw-ns="oshi" cw-value="m:num:size:memory_total"></cw-label>
+          <br/>
+          <label>   available : </label><cw-label cw-ns="oshi" cw-value="m:num:size:memory_available"></cw-label>
+          <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::memory_total" cw-value-warn="e:num:valueabove:${num.memory_total*0.8}" cw-gauge0="default:m:num::memory_available"></gauge>
+          <br/>
+        </div>
+    
+    
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     </body>
 </html>
