@@ -683,7 +683,7 @@ class GaugeHolder {
         this.min = parseValueExpression(e.getAttribute("cw-min"));
         this.max = parseValueExpression(e.getAttribute("cw-max"));
         this.warn = parseValueExpression(e.getAttribute("cw-value-warn"));
-        this.wmax = this.warn.format === "below";
+        this.wmax = this.warn.format === "valuebelow";
 
         let green = document.createElement("div");
         green.className = "red" + (this.wmax ? "left" : "right");
@@ -756,7 +756,7 @@ class HistoryGaugeHolder {
         this.min = parseValueExpression(e.getAttribute("cw-min"));
         this.max = parseValueExpression(e.getAttribute("cw-max"));
         this.warn = parseValueExpression(e.getAttribute("cw-value-warn"));
-        this.wmax = this.warn.format === "below";
+        this.wmax = this.warn.format === "valuebelow";
         e.style.backgroundColor = this.bgcolor;
 
         this.colors = [];
