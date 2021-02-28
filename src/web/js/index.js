@@ -281,7 +281,7 @@ function getHHMMLabel(value) {
 
 function getRpmLabel(value) {
     let res = "" + Math.round(value);
-    while (res.length < 4) res = "&nbsp;" + res;
+    while (res.length < 4) res = " " + res;
     return res + " rpm";
 }
 
@@ -295,7 +295,7 @@ function getLoadLabel(i) {
         res = "" + i;
     }
     let missing = 5 - res.length;
-    while (missing-- > 0) res = res + "&nbsp;";
+    while (missing-- > 0) res = res + " ";
     return res;
 }
 
@@ -359,72 +359,61 @@ function getPrecision(i) {
 
 function initDomCache() {
     window.holders = [];
-    loadDom(document.body)
+    loadDom(document.body, window.holders)
 }
 
-function loadDom(e) {
+function loadDom(e, holders) {
     let ns = e.getAttribute("cw-ns");
-
-    function add(e, attrName, build) {
-        let v = e.getAttribute(attrName);
-        if (v) window.holders.push(build(e, v));
-    }
+    let processChildren = true;
 
     if (ns) {
         let names = e.getAttributeNames();
         for (let i = 0; i < names.length; i++) {
             if (names[i].startsWith("cw-prop-")) {
-                window.holders.push(new PropertyHolder(e, e.getAttribute("cw-ns"), e.getAttribute(names[i]), names[i].split("-")[2]));
+                holders.push(new PropertyHolder(e, e.getAttribute("cw-ns"), e.getAttribute(names[i]), names[i].split("-")[2]));
             }
             if (names[i].startsWith("cw-style-")) {
-                window.holders.push(new PropertyHolder(e.style, e.getAttribute("cw-ns"), e.getAttribute(names[i]), names[i].split("-")[2]));
+                holders.push(new PropertyHolder(e.style, e.getAttribute("cw-ns"), e.getAttribute(names[i]), names[i].split("-")[2]));
             }
             switch (names[i]) {
                 case "cw-warn":
-                    window.holders.push(new WarnHolder(e, e.getAttribute(names[i])));
+                    holders.push(new WarnHolder(e, e.getAttribute(names[i])));
                     break;
                 case "cw-stale":
-                    window.holders.push(new StaleHolder(e, e.getAttribute(names[i])));
+                    holders.push(new StaleHolder(e, e.getAttribute(names[i])));
                     break;
                 case "cw-value":
-                    window.holders.push(new ValueHolder(e, e.getAttribute(names[i])));
+                    holders.push(new ValueHolder(e, e.getAttribute(names[i])));
                     break;
                 case "cw-gauge0":
-                    window.holders.push(new GaugeHolder(e, e.getAttribute(names[i])));
+                    holders.push(new GaugeHolder(e, e.getAttribute(names[i])));
                     break;
                 case "cw-hgauge0":
-                    window.holders.push(new HistoryGaugeHolder(e, e.getAttribute(names[i])));
+                    holders.push(new HistoryGaugeHolder(e, e.getAttribute(names[i])));
+                    break;
+                case "cw-multinode-pattern":
+                    holders.push(new MultivalueHolder(e));
+                    processChildren = false;
                     break;
             }
         }
 
         if (!e.getAttribute("cw-stale") && e.getAttribute("cw-stale") && e.getAttribute("cw-stale").startsWith("m:")) {
-            window.holders.push(new StaleHolder(e, v));
+            holders.push(new StaleHolder(e, v));
         }
     }
 
     expandNode(e);
 
-    for (let i = 0; i < e.childElementCount; i++)
-        loadDom(e.children[i]);
+    if (processChildren) loadChildren(e, holders);
+}
+
+function loadChildren(e, holders) {
+  for (let i = 0; i < e.childElementCount; i++)
+    loadDom(e.children[i], holders);
 }
 
 function expandNode(e) {
-    if (e.getAttribute("cw-multinode-values") && e.getAttribute("cw-multinode-pattern")) {
-        let values = [];
-        let v = e.getAttribute("cw-multinode-values").split("-");
-        let pattern = e.getAttribute("cw-multinode-pattern");
-        let html = "";
-        for (let i = v[0]; i <= v[1]; i++) {
-            values.push("" + i);
-        }
-        for (let i = 0; i < values.length; i++) {
-            html += e.innerHTML.replaceAll(pattern, values[i]);
-        }
-        e.innerHTML = html;
-        e.removeAttribute("cw-multinode-values");
-        e.removeAttribute("cw-multinode-pattern");
-    }
     if (e.getAttribute("cw-fill")) {
         let fill = e.getAttribute("cw-fill");
         if (fill.indexOf("grabberDefault:") == 0) {
@@ -808,6 +797,57 @@ class HistoryGaugeHolder {
         e.appendChild(container);
         while (e.childElementCount > this.elementWidth) {
             e.removeChild(e.firstChild);
+        }
+    }
+}
+
+class MultivalueHolder {
+    constructor(e) {
+        this.element = e;
+        this.ns = e.getAttribute("cw-ns");
+        this.from = parseValueExpression(e.getAttribute("cw-multinode-from"));
+        this.to = parseValueExpression(e.getAttribute("cw-multinode-to"));
+        this.in = parseValueExpression(e.getAttribute("cw-multinode-in"));
+        this.pattern = e.getAttribute("cw-multinode-pattern");
+        this.childHolders = [];
+        this.content = e.innerHTML;
+        this.cacheKey = "multivalue." + this.ns + "." + JSON.stringify(this.from) + "." + JSON.stringify(this.to) + "." + JSON.stringify(this.in) + "." + JSON.stringify(this.pattern);
+        window.values[this.cacheKey] = "--not-a-valid-value--";
+    }
+    update(data) {
+        if (this.in.invalid) { // In a list of values
+            let from = extractTypedValue(this.from, data);
+            let to = extractTypedValue(this.to, data);
+            let cacheValue = from + "/" + to;
+            if (window.values[this.cacheKey] !== cacheValue) {
+                if (typeof from === "number" && typeof to === "number") {
+                    this.childHolders = [];
+                    let html = "";
+                    for (let i = from; i < to; i++) {
+                        html += this.content.replaceAll(this.pattern, i+"");
+                    }
+                    this.element.innerHTML = html;
+                    loadChildren(this.element, this.childHolders);
+                } else {
+                    handleError("From ("+(typeof from)+") or to ("+(typeof from)+") are not numbers in element id=" + this.element.id);
+                }
+            } // Else nothing changed.
+        } else { // numeric from -> to
+            let invalues = extractFormattedValue(this.in, data);
+            if (window.values[this.cacheKey] !== invalues) {
+                window.values[this.cacheKey] = invalues;
+                this.childHolders = [];
+                let values = invalues.split(",");
+                let html = "";
+                for (let i = 0; i < values.length; i++) {
+                    html += this.content.replaceAll(this.pattern, values[i]);
+                }
+                this.element.innerHTML = html;
+                loadChildren(this.element, this.childHolders);
+            } // Else nothing changed.
+        }
+        for (let i=0 ; i<this.childHolders.length ; i++) {
+            this.childHolders[i].update(data);
         }
     }
 }
