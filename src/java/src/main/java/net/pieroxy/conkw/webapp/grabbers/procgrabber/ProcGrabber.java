@@ -10,6 +10,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -114,9 +115,9 @@ public class ProcGrabber extends AsyncGrabber {
     if (shouldExtract("mem")) grabMemUsage(r);
     if (shouldExtract("bdio")) grabBlockDeviceIo(r);
     if (shouldExtract("net")) getNetStats(r);
-    if (shouldExtract("hostname")) getHostname(r);
-    if (shouldExtract("battery")) getBattery(r);
-    if (shouldExtract("mdstat")) grabMdstat(r);
+    extractFixedDelay(r,"battery", this::getBattery, Duration.ofSeconds(5));
+    extractFixedDelay(r,"mdstat", this::grabMdstat, Duration.ofSeconds(10));
+    extractFixedDelay(r,"hostname", this::getHostname, Duration.ofHours(1));
 
     if (canLogFiner()) {
       log(Level.FINER, "ProcGrabber usage: ");

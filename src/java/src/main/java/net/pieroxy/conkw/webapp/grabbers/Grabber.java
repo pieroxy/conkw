@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.text.SimpleDateFormat;
+import java.time.Period;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -28,6 +30,8 @@ public abstract class Grabber {
   private String name;
   private Level logLevel = Level.INFO;
 
+  Map<String, ResponseData> cachedResponses = new HashMap<>();
+
   public String processAction(Map parameterMap) {
     return "";
   }
@@ -35,6 +39,26 @@ public abstract class Grabber {
   public abstract ResponseData grab();
   public abstract void dispose();
   public abstract String getDefaultName();
+
+  public void extractFixedDelay(ResponseData toFill, String extractName, ExtractMethod method, java.time.Duration delay) {
+    if (shouldExtract(extractName)) {
+      long now = System.currentTimeMillis();
+      ResponseData cached = cachedResponses.get(extractName);
+      if (cached==null || (now-cached.getTimestamp() > delay.toMillis())) {
+        if (canLogFiner()) {
+          if (cached == null)
+            log(Level.INFO,now +  " Grabbing " + extractName + " cached on null with delay " + delay.toMillis());
+          else
+            log(Level.INFO,now + " Grabbing " + extractName + " cached on " + cached.getTimestamp() + " with delay " + delay.toMillis());
+        }
+        cached = new ResponseData(extractName, now);
+        method.extract(cached);
+        cachedResponses.put(extractName, cached);
+      }
+      toFill.getNum().putAll(cached.getNum());
+      toFill.getStr().putAll(cached.getStr());
+    }
+  }
 
   public abstract void setConfig(Map<String, String> config);
 
