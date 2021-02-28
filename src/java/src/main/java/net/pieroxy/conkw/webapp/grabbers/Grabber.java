@@ -41,7 +41,7 @@ public abstract class Grabber {
   public abstract void dispose();
   public abstract String getDefaultName();
 
-  public void extractFixedDelay(ResponseData toFill, String extractName, ExtractMethod method, java.time.Duration delay) {
+  public void extract(ResponseData toFill, String extractName, ExtractMethod method, java.time.Duration delay) {
     if (shouldExtract(extractName)) {
       if (delay.equals(Duration.ZERO)) {
         method.extract(toFill);
@@ -62,6 +62,7 @@ public abstract class Grabber {
       }
       toFill.getNum().putAll(cached.getNum());
       toFill.getStr().putAll(cached.getStr());
+      toFill.addExtracted(extractName);
     }
   }
 
@@ -91,7 +92,7 @@ public abstract class Grabber {
     }
   }
 
-  protected boolean shouldExtract(String value) {
+  private boolean shouldExtract(String value) {
     return extract.isEmpty() || extract.contains(value);
   }
 

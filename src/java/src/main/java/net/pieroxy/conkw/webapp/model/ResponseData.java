@@ -19,6 +19,7 @@ public class ResponseData {
   private String name;
   private Map<String, Double> num = new HashMap<>();
   private Map<String, String> str = new HashMap<>();
+  private Set<String> extracted   = new HashSet<>();
 
   public ResponseData() {
   }
@@ -26,6 +27,10 @@ public class ResponseData {
   public ResponseData(String name, long timestamp) {
     this.timestamp = timestamp;
     this.name = name;
+  }
+
+  public void addExtracted(String e) {
+    extracted.add(e);
   }
 
   public void addError(String e) {
@@ -181,4 +186,11 @@ public class ResponseData {
     this.str = str;
   }
 
+  public Set<String> getExtracted() {
+    return extracted;
+  }
+
+  public void setExtracted(Set<String> extracted) {
+    this.extracted = extracted;
+  }
 }

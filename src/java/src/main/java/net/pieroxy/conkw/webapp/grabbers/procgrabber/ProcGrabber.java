@@ -109,15 +109,15 @@ public class ProcGrabber extends AsyncGrabber {
   @Override
   public synchronized ResponseData grabSync() {
     ResponseData r = new ResponseData(getName(), System.currentTimeMillis());
-    if (shouldExtract("processes")) grabProcesses(r);
-    if (shouldExtract("uptime")) grabUptimeAndLoad(r);
-    if (shouldExtract("cpu")) grabCpuUsage(r);
-    if (shouldExtract("mem")) grabMemUsage(r);
-    if (shouldExtract("bdio")) grabBlockDeviceIo(r);
-    if (shouldExtract("net")) getNetStats(r);
-    extractFixedDelay(r,"battery", this::getBattery, Duration.ofSeconds(5));
-    extractFixedDelay(r,"mdstat", this::grabMdstat, Duration.ofSeconds(10));
-    extractFixedDelay(r,"hostname", this::getHostname, Duration.ofHours(1));
+    extract(r,"processes", this::grabProcesses, Duration.ZERO);
+    extract(r,"uptime", this::grabUptimeAndLoad, Duration.ZERO);
+    extract(r,"cpu", this::grabCpuUsage, Duration.ZERO);
+    extract(r,"mem", this::grabMemUsage, Duration.ZERO);
+    extract(r,"bdio", this::grabBlockDeviceIo, Duration.ZERO);
+    extract(r,"net", this::getNetStats, Duration.ZERO);
+    extract(r,"battery", this::getBattery, Duration.ofSeconds(5));
+    extract(r,"mdstat", this::grabMdstat, Duration.ofSeconds(10));
+    extract(r,"hostname", this::getHostname, Duration.ofHours(1));
 
     if (canLogFiner()) {
       log(Level.FINER, "ProcGrabber usage: ");
