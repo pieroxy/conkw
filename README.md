@@ -17,5 +17,7 @@ Conkw was spawned out of a simple idea: We all have an old laptop or tablet lyin
 ## Project status
 This project is being imported from a dirty local repository, so hang in there for a few days and something usable should pop up soon.
 
+For now, breaking changes are going to be frequent and without any warning, so be aware.
+
 ## Documentation
 [Getting started here](doc/INDEX.md)
