@@ -19,4 +19,22 @@ public class StringUtil {
     }
     return count;
   }
+
+  public static String toFixedLengthRightPadded(String value, int len) {
+    StringBuilder sbf = new StringBuilder(len);
+    addPaddedString(sbf, value, len);
+    return sbf.toString();
+  }
+
+  public static void addPaddedString(StringBuilder sbf, String toAdd, int len) {
+    if (toAdd.length() == len) sbf.append(toAdd);
+    else if (toAdd.length()<len) {
+      for (int i=0 ; i<len-toAdd.length() ; i++)
+        sbf.append(" ");
+      sbf.append(toAdd);
+    } else {
+      sbf.append(toAdd.substring(toAdd.length() - len));
+    }
+  }
+
 }

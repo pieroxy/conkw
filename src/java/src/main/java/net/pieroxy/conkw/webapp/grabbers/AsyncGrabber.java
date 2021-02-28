@@ -82,7 +82,7 @@ public abstract class AsyncGrabber extends Grabber implements Runnable {
             time *= 0.9; // 0.9 factor to forget old values over time.
             count *= 0.9;
             if (canLogFine())
-              this.log(Level.FINE, getName() + " takes " + (long) (time / count) + " this time " + (eor - now));
+              this.log(Level.FINE, getName() + " takes on avg " + (long) (time / count) + " (this time " + (eor - now)+ ")");
           }
         } else {
           // Pause the grabbers after 5s of inactivity.

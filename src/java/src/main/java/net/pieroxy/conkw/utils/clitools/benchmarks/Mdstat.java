@@ -1,4 +1,4 @@
-package net.pieroxy.conkw.utils.benchmarks;
+package net.pieroxy.conkw.utils.clitools.benchmarks;
 
 import net.pieroxy.conkw.webapp.grabbers.procgrabber.MdstatParser;
 

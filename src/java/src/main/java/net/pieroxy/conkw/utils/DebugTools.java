@@ -26,14 +26,4 @@ public class DebugTools {
     return new ByteArrayInputStream(s.getBytes(StandardCharsets.UTF_8));
   }
 
-  public static void addPaddedString(StringBuilder sbf, String toAdd, int len) {
-    if (toAdd.length() == len) sbf.append(toAdd);
-    else if (toAdd.length()<len) {
-      for (int i=0 ; i<len-toAdd.length() ; i++)
-        sbf.append(" ");
-      sbf.append(toAdd);
-    } else {
-      sbf.append(toAdd.substring(toAdd.length() - len));
-    }
-  }
 }

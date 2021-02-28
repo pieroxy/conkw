@@ -1,4 +1,4 @@
-package net.pieroxy.conkw.utils.benchmarks;
+package net.pieroxy.conkw.utils.clitools.benchmarks;
 
 import java.lang.management.GarbageCollectorMXBean;
 import java.lang.management.ManagementFactory;

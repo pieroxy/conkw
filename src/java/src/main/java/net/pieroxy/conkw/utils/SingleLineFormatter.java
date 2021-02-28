@@ -21,9 +21,9 @@ public class SingleLineFormatter extends Formatter {
     StringBuilder sbf = new StringBuilder();
 
     sbf.append(sdf.format(new Date()));
-    DebugTools.addPaddedString(sbf, record.getLevel().getName(), 7);
+    StringUtil.addPaddedString(sbf, record.getLevel().getName(), 7);
     sbf.append(" ");
-    DebugTools.addPaddedString(sbf,record.getLoggerName(),20);
+    StringUtil.addPaddedString(sbf,record.getLoggerName(),20);
     sbf.append(" ");
 
     sbf.append(record.getMessage());
