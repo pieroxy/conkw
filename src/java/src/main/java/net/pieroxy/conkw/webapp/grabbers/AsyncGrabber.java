@@ -77,6 +77,7 @@ public abstract class AsyncGrabber extends Grabber implements Runnable {
             now = System.currentTimeMillis();
             cached = grabSync();
             long eor = System.currentTimeMillis();
+            cached.setElapsedToGrab(eor - now);
             time += eor - now;
             count++;
             time *= 0.9; // 0.9 factor to forget old values over time.
