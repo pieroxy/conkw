@@ -460,8 +460,3 @@ public class ProcGrabber extends AsyncGrabber {
 }
 
 
-class ProcStatHelper {
-  long pid;
-  long lastUsed;
-  File file;
-}
