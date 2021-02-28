@@ -12,6 +12,7 @@ import java.nio.charset.Charset;
 import java.nio.file.FileStore;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -41,7 +42,7 @@ public class JavaSystemViewGrabber extends AsyncGrabber {
   @Override
   public synchronized ResponseData grabSync() {
     ResponseData r = new ResponseData(getName(), System.currentTimeMillis());
-    if (shouldExtract("sys")) grabSys(r);
+    extractFixedDelay(r, "sys", this::grabSys, Duration.ofMinutes(1));
     if (shouldExtract("cpu")) grabCpu(r);
     if (shouldExtract("mem")) grabMem(r);
     if (shouldExtract("freespace")) getFreeSpace(r);
