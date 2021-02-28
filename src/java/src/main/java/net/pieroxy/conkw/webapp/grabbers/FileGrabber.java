@@ -42,7 +42,7 @@ public class FileGrabber extends AsyncGrabber {
             try {
               r.addMetric(pname.substring(4), Double.parseDouble(p.getProperty(pname)));
             } catch (Exception e) {
-              log(Level.SEVERE, "Error with unparseable property " + pname, e);
+              log(Level.SEVERE, "Error: unparseable property " + pname, e);
             }
           }
           if (pname.startsWith("str_")) {
