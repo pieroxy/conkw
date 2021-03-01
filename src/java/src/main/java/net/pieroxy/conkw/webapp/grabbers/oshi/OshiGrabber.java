@@ -291,6 +291,7 @@ public class OshiGrabber extends AsyncGrabber {
       res.addMetric("psus_time_remaining_estimated_"+i, psu.getTimeRemainingEstimated());
       res.addMetric("psus_voltage_"+i, psu.getVoltage());
       res.addMetric("psus_time_remaining_instant_"+i, psu.getTimeRemainingInstant());
+      i++;
     }
     res.addMetric("psus_count", i);
   }

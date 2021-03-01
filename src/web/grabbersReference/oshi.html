@@ -320,17 +320,67 @@
           <br/>
           <br/>
         </div>
+
+        <div cw-ns="oshi" cw-ifextracted="battery" class="cw-block">
+          <heading>BATTERY</heading>
+          <div cw-ns="oshi" cw-style-display="e:num::${num.battery_remaining_prc===undefined?'':'none'}">No battery detected</div>
+          <div cw-ns="oshi" cw-style-display="e:num::${num.battery_remaining_prc===undefined?'none':''}">
+            <cw-label style="margin-top:0.5em" cw-value-warn="l:num:valuebelow:0.2" cw-ns="oshi" cw-value="m:num:prc01:battery_remaining_prc"></cw-label>
+            <div class="battery"><img src="/battery/batt_left.png"><span class="battery_middle"><img cw-ns="oshi" cw-style-display="e:str::${num.bat_plugged==1?'':'none'}" src="battery/batt_plugged.png"><gauge cw-ns="oshi" cw-gauge0="default:m:num::battery_remaining_prc" cw-min="l:num::0" cw-max="l:num::1" cw-value-warn="l:num:valuebelow:0.25"></gauge></span><img src="/battery/batt_right.png"></div>
+          </div>
+        </div>
+
+        <div cw-ns="oshi" cw-ifextracted="psus" class="cw-block">
+          <heading>PSUs</heading>
+          <div cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::psus_count" cw-multinode-pattern="#">
+            <hr/>
+            <label style="font-weight:bold">         PSU : </label><cw-label cw-ns="oshi" cw-value="m:str::psus_name_#">#</cw-label>
+            <br/>
+            <label>Manufacturer : </label><cw-label cw-ns="oshi" cw-value="m:str::psus_manufacturer_#"></cw-label>
+            <br/>
+            <label> Serial Num. : </label><cw-label cw-ns="oshi" cw-value="m:str::psus_serial_number_#"></cw-label>
+            <br/>
+            <label>   Chemistry : </label><cw-label cw-ns="oshi" cw-value="m:str::psus_chemistry_#"></cw-label>
+            <br/>
+            <label>  Deice Name : </label><cw-label cw-ns="oshi" cw-value="m:str::psus_device_name_#"></cw-label>
+            <br/>
+            <label>    Amperage : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_amperage_#"></cw-label>
+            <br/>
+            <label>  Cap. Units : </label><cw-label cw-ns="oshi" cw-value="m:str::psus_capacity_units_#"></cw-label>
+            <br/>
+            <label>Current Cap. : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_current_capacity_#"></cw-label>
+            <br/>
+            <label> Cycle count : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_cycle_count_#"></cw-label>
+            <br/>
+            <label> Design Cap. : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_design_capacity_#"></cw-label>
+            <br/>
+            <label> Manuf. Date : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_manufacture_date_#"></cw-label>
+            <br/>
+            <label>Pwr Usg Rate : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_power_usage_rate_#"></cw-label>
+            <br/>
+            <label>Remain Cap. %: </label><cw-label cw-ns="oshi" cw-value="m:num::psus_remaining_capacity_percent_#"></cw-label>
+            <br/>
+            <label> Temperature : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_temperature_#"></cw-label>
+            <br/>
+            <label>Time Rem Est : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_time_remaining_estimated_#"></cw-label>
+            <br/>
+            <label>     Voltage : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_voltage_#"></cw-label>
+            <br/>
+            <label>Time Rem Inst: </label><cw-label cw-ns="oshi" cw-value="m:num::psus_time_remaining_instant_#"></cw-label>
+            <br/>
+          </div>
+        </div>
     
 
 
-
+        
 
 
       
 
 
 
-
+  
 
 
 
