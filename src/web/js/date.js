@@ -637,3 +637,7 @@ function formatDate(ts) {
   let date = new Date(ts);
   return date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate();
 }
+
+function formatDatetime(ts) {
+  return formatDate(ts) + " " + formatTime(ts);
+}

@@ -158,7 +158,6 @@ public class OshiGrabber extends AsyncGrabber {
       res.addMetric("sessions_login_time_"+i, s.getLoginTime());
       res.addMetric("sessions_user_name_"+i, s.getUserName());
       res.addMetric("sessions_terminal_device_"+i, s.getTerminalDevice());
-
       i++;
     }
     res.addMetric("sessions_count", i);

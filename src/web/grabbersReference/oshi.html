@@ -540,7 +540,42 @@
           <br/>
         </div>
   
-    
+        <div cw-ns="oshi" cw-ifextracted="netp" class="cw-block">
+          <heading>NETP (Network Params)</heading>
+          <label>  Domain name : </label><cw-label cw-ns="oshi" cw-value="m:str::netp_domain_name"></cw-label>
+          <br/>
+          <label>     Hostname : </label><cw-label cw-ns="oshi" cw-value="m:str::netp_host_name"></cw-label>
+          <br/>
+          <label> ipv4 gateway : </label><cw-label cw-ns="oshi" cw-value="m:str::netp_ipv4_default_gateway"></cw-label>
+          <br/>
+          <label> ipv6 gateway : </label><cw-label cw-ns="oshi" cw-value="m:str::netp_ipv6_default_gateway"></cw-label>
+          <br/>
+          <label>          DNS : </label><cw-label cw-ns="oshi" cw-value="m:str::netp_dns"></cw-label>
+          <br/>
+        </div>
+  
+        <div cw-ns="oshi" cw-ifextracted="shortsessions" class="cw-block">
+          <heading>SHORT SESSIONS</heading>
+          <div cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::shortsessions_count" cw-multinode-pattern="#">
+            <cw-label cw-ns="oshi" cw-value="m:str::shortsessions_name_#" cw-prop-title="m:str::shortsessions_name_#"></cw-label> : <cw-label cw-ns="oshi" cw-value="m:num::shortsessions_nbs_#"></cw-label>
+            <br/>
+          </div>
+        </div>
 
+        <div cw-ns="oshi" cw-ifextracted="sessions">
+          <heading>SESSIONS</heading>
+          <div cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::sessions_count" cw-multinode-pattern="#">
+            <div class="cw-block">
+              <label>     Host : </label><cw-label cw-ns="oshi" cw-value="m:str::sessions_host_#"></cw-label>
+              <br/>
+              <label>    Login : </label><cw-label cw-ns="oshi" cw-value="m:num:tstodatetime:sessions_login_time_#"></cw-label>
+              <br/>
+              <label>     User : </label><cw-label cw-ns="oshi" cw-value="m:str::sessions_user_name_#"></cw-label>
+              <br/>
+              <label> Terminal : </label><cw-label cw-ns="oshi" cw-value="m:str::sessions_terminal_device_#"></cw-label>
+              <br/>
+            </div>
+          </div>
+        </div>
     </body>
 </html>
