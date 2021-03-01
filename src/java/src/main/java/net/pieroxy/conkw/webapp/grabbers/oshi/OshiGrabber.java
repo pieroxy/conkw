@@ -244,12 +244,12 @@ public class OshiGrabber extends AsyncGrabber {
   private void extractUsbDevices(ResponseData res) {
     int i=0;
     for (UsbDevice u : extractor.getUsbDevices()) {
-      res.addMetric("usb_name"+i, u.getName());
-      res.addMetric("usb_serial_number"+i, u.getSerialNumber());
-      res.addMetric("usb_vendor"+i, u.getVendor());
-      res.addMetric("usb_vendor_id"+i, u.getVendorId());
-      res.addMetric("usb_product_id"+i, u.getProductId());
-      res.addMetric("usb_unique_device_id"+i, u.getUniqueDeviceId());
+      res.addMetric("usb_name_"+i, u.getName());
+      res.addMetric("usb_serial_number_"+i, u.getSerialNumber());
+      res.addMetric("usb_vendor_"+i, u.getVendor());
+      res.addMetric("usb_vendor_id_"+i, u.getVendorId());
+      res.addMetric("usb_product_id_"+i, u.getProductId());
+      res.addMetric("usb_unique_device_id_"+i, u.getUniqueDeviceId());
       i++;
     }
     res.addMetric("usb_count", i);
@@ -258,9 +258,10 @@ public class OshiGrabber extends AsyncGrabber {
   private void extractSoundCards(ResponseData res) {
     int i=0;
     for (SoundCard sc : extractor.getSoundCards()) {
-      res.addMetric("soundcards_name"+i, sc.getName());
-      res.addMetric("soundcards_codec"+i, sc.getCodec());
-      res.addMetric("soundcards_driver_version"+i, sc.getDriverVersion());
+      res.addMetric("soundcards_name_"+i, sc.getName());
+      res.addMetric("soundcards_codec_"+i, sc.getCodec());
+      res.addMetric("soundcards_driver_version_"+i, sc.getDriverVersion());
+      i++;
     }
     res.addMetric("soundcards_count", i);
   }

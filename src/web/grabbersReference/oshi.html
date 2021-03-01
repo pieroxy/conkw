@@ -326,7 +326,7 @@
           <div cw-ns="oshi" cw-style-display="e:num::${num.battery_remaining_prc===undefined?'':'none'}">No battery detected</div>
           <div cw-ns="oshi" cw-style-display="e:num::${num.battery_remaining_prc===undefined?'none':''}">
             <cw-label style="margin-top:0.5em" cw-value-warn="l:num:valuebelow:0.2" cw-ns="oshi" cw-value="m:num:prc01:battery_remaining_prc"></cw-label>
-            <div class="battery"><img src="/battery/batt_left.png"><span class="battery_middle"><img cw-ns="oshi" cw-style-display="e:str::${num.bat_plugged==1?'':'none'}" src="battery/batt_plugged.png"><gauge cw-ns="oshi" cw-gauge0="default:m:num::battery_remaining_prc" cw-min="l:num::0" cw-max="l:num::1" cw-value-warn="l:num:valuebelow:0.25"></gauge></span><img src="/battery/batt_right.png"></div>
+            <div class="battery"><img src="/battery/batt_left.png"><span class="battery_middle"><img cw-ns="oshi" cw-style-display="e:str::${num.bat_plugged==1?'':'none'}" src="/battery/batt_plugged.png"><gauge cw-ns="oshi" cw-gauge0="default:m:num::battery_remaining_prc" cw-min="l:num::0" cw-max="l:num::1" cw-value-warn="l:num:valuebelow:0.25"></gauge></span><img src="/battery/batt_right.png"></div>
           </div>
         </div>
 
@@ -371,11 +371,40 @@
           </div>
         </div>
     
+        <div cw-ns="oshi" cw-ifextracted="soundcards" class="cw-block">
+          <heading>SOUNDCARDS</heading>
+          <div cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::soundcards_count" cw-multinode-pattern="#">
+            <hr/>
+            <label style="font-weight:bold">  SOUNDCARD : </label><cw-label cw-ns="oshi" cw-value="m:str::soundcards_name_#">#</cw-label>
+            <br/>
+            <label>      Codec : </label><cw-label cw-ns="oshi" cw-value="m:str::soundcards_codec_#"></cw-label>
+            <br/>
+            <label>Driver Vers : </label><cw-label cw-ns="oshi" cw-value="m:str::soundcards_driver_version_#"></cw-label>
+            <br/>
+          </div>
+        </div>
+    
+        <div cw-ns="oshi" cw-ifextracted="usb" class="cw-block">
+          <heading>USB</heading>
+          <div cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::usb_count" cw-multinode-pattern="#">
+            <hr/>
+            <label style="font-weight:bold">  DEVICE : </label><cw-label cw-ns="oshi" cw-value="m:str::usb_name_#">#</cw-label>
+            <br/>
+            <label>     S/N : </label><cw-label cw-ns="oshi" cw-value="m:str::usb_serial_number_#"></cw-label>
+            <br/>
+            <label>  Vendor : </label><cw-label cw-ns="oshi" cw-value="m:str::usb_vendor_#"></cw-label>
+            <br/>
+            <label>VendorID : </label><cw-label cw-ns="oshi" cw-value="m:str::usb_vendor_id_#"></cw-label>
+            <br/>
+            <label>ProductID: </label><cw-label cw-ns="oshi" cw-value="m:str::usb_product_id_#"></cw-label>
+            <br/>
+            <label>Un. DevID: </label><cw-label cw-ns="oshi" cw-value="m:str::usb_unique_device_id_#"></cw-label>
+            <br/>
+          </div>
+        </div>
 
 
-        
-
-
+      
       
 
 
