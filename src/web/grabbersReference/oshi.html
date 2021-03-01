@@ -259,15 +259,74 @@
         </div>
 
 
+        <div cw-ns="oshi" cw-ifextracted="graphicscards" class="cw-block">
+          <heading>GRAPHICS CARDS</heading>
+          <div cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::graphicscards_count" cw-multinode-pattern="#">
+            <hr/>
+            <label style="font-weight:bold">        Card : </label><cw-label cw-ns="oshi" cw-value="m:str::graphicscards_name_#">#</cw-label>
+            <br/>
+            <label>      Vendor : </label><cw-label cw-ns="oshi" cw-value="m:str::graphicscards_vendor_#"></cw-label>
+            <br/>
+            <label>   Device id : </label><cw-label cw-ns="oshi" cw-value="m:str::graphicscards_device_id_#"></cw-label>
+            <br/>
+            <label>     Version : </label><cw-label cw-ns="oshi" cw-value="m:str::graphicscards_version_#"></cw-label>
+            <br/>
+          </div>
+        </div>
+    
+        <div cw-ns="oshi" cw-ifextracted="nics" class="cw-block">
+          <heading>NICs</heading>
+          <div cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::nics_count" cw-multinode-pattern="#">
+            <hr/>
+            <label style="font-weight:bold">         NIC : </label><cw-label cw-ns="oshi" cw-value="m:str::nics_name_#">#</cw-label>
+            <br/>
+            <label>    Mac Addr : </label><cw-label cw-ns="oshi" cw-value="m:str::nics_macaddr_#"></cw-label>
+            <br/>
+            <label>        Type : </label><cw-label cw-ns="oshi" cw-value="m:str::nics_if_type_#"></cw-label>
+            <br/>
+            <label>   IPv4 Addr : </label><cw-label cw-ns="oshi" cw-value="m:str::nics_ipv4_#"></cw-label>
+            <br/>
+            <label>   IPv6 Addr : </label><cw-label cw-ns="oshi" cw-value="m:str::nics_ipv6_#"></cw-label>
+            <br/>
+            <label>    Bytes in : </label><cw-label cw-ns="oshi" cw-value="m:num:size:nics_bytes_recv_#"></cw-label>
+            <br/>
+            <label>   Bytes out : </label><cw-label cw-ns="oshi" cw-value="m:num:size:nics_bytes_sent_#"></cw-label>
+            <br/>
+            <label>       Speed : </label><cw-label cw-ns="oshi" cw-value="m:num:size:nics_speed_#"></cw-label>/s
+            <br/>
+          </div>
+        </div>
+    
+        <div cw-ns="oshi" cw-ifextracted="netbw" class="cw-block">
+          <heading>NET BW</heading>
+          <div cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::netbw_count" cw-multinode-pattern="#">
+            <label style="font-weight:bold">     NIC : </label><cw-label cw-ns="oshi" cw-value="m:str::nics_name_#">#</cw-label>
+            <br/>
+            <label>      In : </label><cw-label cw-ns="oshi" cw-value="m:num:size:netbw_in_#"></cw-label>
+            <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::netbw_speed_#" cw-value-warn="e:num::${num.netbw_speed_#*0.9}" cw-gauge0="default:m:num::netbw_in_#"></gauge>
+            <br/>
+            <label>     Out : </label><cw-label cw-ns="oshi" cw-value="m:num:size:netbw_out_#"></cw-label>
+            <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::netbw_speed_#" cw-value-warn="e:num::${num.netbw_speed_#*0.9}" cw-gauge0="default:m:num::netbw_out_#"></gauge>
+            <br/>
+          </div>
+          <br/>
+          <label>All Read : </label><cw-label cw-ns="oshi" cw-value="m:num:size:netbw_in"></cw-label>
+          <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::netbw_speed" cw-value-warn="e:num::${num.netbw_speed*0.9}" cw-gauge0="default:m:num::netbw_in"></gauge>
+          <hgauge cw-ns="oshi" cw-min="l:num::0" log="true" cw-max="m:num::netbw_speed" cw-hgauge0="#208020:m:num::netbw_in"></hgauge>
+          <br clear="both"/>
+          <label>All Wrt. : </label><cw-label cw-ns="oshi" cw-value="m:num:size:netbw_out"></cw-label>
+          <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::netbw_speed" cw-value-warn="e:num::${num.netbw_speed*0.9}" cw-gauge0="default:m:num::netbw_out"></gauge>
+          <hgauge cw-ns="oshi" cw-min="l:num::0" log="true" cw-max="m:num::netbw_speed" cw-hgauge0="#208020:m:num::netbw_out"></hgauge>
+          <br/>
+          <br/>
+        </div>
     
 
 
 
 
 
-
-
-
+      
 
 
 

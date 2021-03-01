@@ -27,9 +27,10 @@ public class OshiGrabber extends AsyncGrabber {
   OSHIExtractor extractor = new OSHIExtractor();
   long[]ticks;
   long[][]ticksByCpu;
-  Map<String, DiskStats> disksStats;
+  Map<String, IOStats> disksStats;
+  Map<String, IOStats> netStats;
 
-  private class DiskStats {
+  private class IOStats {
     long reads;
     long writes;
   }
@@ -59,6 +60,7 @@ public class OshiGrabber extends AsyncGrabber {
     extract(res, "disksinfos", this::extractDisks, preciseDataDelay); // 20k
     extract(res, "graphicscards", this::extractGraphicsCards, staticDataDelay); // 10k
     extract(res, "nics", this::extractNics, preciseDataDelay); // 12k
+    extract(res, "netbw", this::extractNetbw, Duration.ZERO); // 12k
     extract(res, "battery", this::extractBattery, Duration.ofSeconds(5)); // 8k
     extract(res, "psus", this::extractPsus, preciseDataDelay); // 8k
     extract(res, "soundcards", this::extractSoundCards, staticDataDelay); // 9k
@@ -302,13 +304,48 @@ public class OshiGrabber extends AsyncGrabber {
       res.addMetric("nics_bytes_recv_"+i, nic.getBytesRecv());
       res.addMetric("nics_bytes_sent_"+i, nic.getBytesSent());
       res.addMetric("nics_if_type_"+i, nic.getIfType());
-      res.addMetric("nics_speed_"+i, nic.getSpeed());
+      res.addMetric("nics_speed_"+i, nic.getSpeed()/8);
       res.addMetric("nics_ipv4_"+i, Arrays.stream(nic.getIPv4addr()).collect(Collectors.joining(" ")));
       res.addMetric("nics_ipv6_"+i, Arrays.stream(nic.getIPv6addr()).collect(Collectors.joining(" ")));
       res.addMetric("nics_subnet_mask_"+i, Arrays.stream(nic.getSubnetMasks()).map(l -> ""+l).collect(Collectors.joining(" ")));
       i++;
     }
     res.addMetric("nics_count", i);
+  }
+
+  private void extractNetbw(ResponseData res) {
+    if (netStats==null) netStats = new HashMap<>();
+    int i=0;
+    long totalin=0, totalout=0, totalspeed=0;
+    boolean globalextract = true;
+    for (NetworkIF nic : extractor.getNICs()) {
+      String name = nic.getName();
+      IOStats stats = netStats.get(name);
+      boolean extract = true;
+      if (stats == null) {
+        netStats.put(name, stats = new IOStats());
+        extract = globalextract = false;
+      }
+      long in = nic.getBytesRecv() - stats.reads;
+      long out = nic.getBytesSent() - stats.writes;
+      if (extract) {
+        res.addMetric("netbw_in_"+i, in);
+        res.addMetric("netbw_out_"+i, out);
+        res.addMetric("netbw_speed_"+i, nic.getSpeed()/8);
+      }
+      totalin+=in;
+      totalout+=out;
+      totalspeed+=nic.getSpeed()/8;
+      stats.writes = nic.getBytesSent();
+      stats.reads = nic.getBytesRecv();
+      i++;
+    }
+    res.addMetric("netbw_count", i);
+    if (globalextract) {
+      res.addMetric("netbw_in", totalin);
+      res.addMetric("netbw_out", totalout);
+      res.addMetric("netbw_speed", totalspeed);
+    }
   }
 
   private void extractGraphicsCards(ResponseData res) {
@@ -329,9 +366,9 @@ public class OshiGrabber extends AsyncGrabber {
     StringBuilder allnames = new StringBuilder();
     for (HWDiskStore d : extractor.getDisks()) {
       String name = d.getName();
-      DiskStats ds = disksStats.get(name);
+      IOStats ds = disksStats.get(name);
       if (ds == null) {
-        disksStats.put(d.getName(), ds = new DiskStats());
+        disksStats.put(d.getName(), ds = new IOStats());
       } else {
         long r=d.getReadBytes()-ds.reads;
         long w=d.getWriteBytes()-ds.writes;

@@ -15,17 +15,14 @@ public class OSHIExtractor {
   private ComputerSystem computerSystem;
   private CentralProcessor processor;
   private List<UsbDevice> usbDevices;
-  private List<HWDiskStore> diskStores;
   private List<SoundCard> soundCards;
   private List<PowerSource> powerSources;
-  private List<NetworkIF> networkIfaces;
   private List<GraphicsCard> graphicsCards;
   private List<Display> displays;
   private VirtualMemory virtualMemory;
   private List<PhysicalMemory> physicalMemory;
   private Baseboard baseBoard;
   private Firmware firmware;
-  private List<CentralProcessor.LogicalProcessor> logicalProcessor;
   private CentralProcessor.ProcessorIdentifier processorIdent;
   private OperatingSystem.OSVersionInfo osvi;
   private FileSystem osfs;
@@ -158,8 +155,7 @@ public class OSHIExtractor {
   }
 
   public List<HWDiskStore> getDisks() {
-    if (diskStores == null) diskStores = getHardware().getDiskStores();
-    return diskStores;
+    return getHardware().getDiskStores();
   }
 
   public List<Display> getDisplays() {
@@ -173,8 +169,7 @@ public class OSHIExtractor {
   }
 
   public List<NetworkIF> getNICs() {
-    if (networkIfaces == null) networkIfaces = getHardware().getNetworkIFs();
-    return networkIfaces;
+    return getHardware().getNetworkIFs();
   }
 
   public List<PowerSource> getPowerSources() {
