@@ -122,6 +122,10 @@ function getGeometry() {
     return window.innerHeight + " " + window.innerWidth; //window.document.body.scrollHeight +  + " " + window.document.body.scrollWidth;
 }
 
+function forceScreenRefresh() {
+    geometry="";
+}
+
 function checkScreen() {
     if (geometry != getGeometry()) {
         zoom(100);
@@ -178,6 +182,7 @@ const fillTemplate = function(templateString, templateVars) {
 function refresh(data) {
     window.lastupdate = new Date().getTime();
     refreshNew(data);
+    checkScreen();
 }
 
 function getPercent(value, min, max, log) {
@@ -842,9 +847,12 @@ class MultivalueHolder {
         if (this.in.invalid) { // In a list of values
             let from = extractTypedValue(this.from, data);
             let to = extractTypedValue(this.to, data);
-            let cacheValue = from + "/" + to;
-            if (window.values[this.cacheKey] !== cacheValue) {
-                if (typeof from === "number" && typeof to === "number") {
+            if (typeof from === "number" && typeof to === "number") {
+                let cacheValue = from + "/" + to;
+                if (window.values[this.cacheKey] !== cacheValue) {
+                    forceScreenRefresh();
+                    console.log("Redrawing " + cacheValue + " !== " + window.values[this.cacheKey]);
+                    window.values[this.cacheKey] = cacheValue;
                     this.childHolders = [];
                     let html = "";
                     for (let i = from; i < to; i++) {
@@ -852,13 +860,15 @@ class MultivalueHolder {
                     }
                     this.element.innerHTML = html;
                     loadChildren(this.element, this.childHolders);
-                } else {
-                    handleError("From ("+(typeof from)+") or to ("+(typeof from)+") are not numbers in element id=" + this.element.id);
-                }
-            } // Else nothing changed.
+                } // Else nothing changed.
+            } else {
+                handleError("From ("+(typeof from)+") or to ("+(typeof from)+") are not numbers in element id=" + this.element.id);
+            }
         } else { // numeric from -> to
             let invalues = extractFormattedValue(this.in, data);
             if (window.values[this.cacheKey] !== invalues) {
+                console.log("Redrawing " + invalues + " !== " + window.values[this.cacheKey]);
+                forceScreenRefresh();
                 window.values[this.cacheKey] = invalues;
                 this.childHolders = [];
                 let values = invalues.split(",");
