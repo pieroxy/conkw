@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover"/>
+        <meta charset="utf-8">
+        <meta name="format-detection" content="telephone=no">
+        <title>ConkW</title>
+        <link href="/css/conkw.css" rel="stylesheet">
+        <script src="/js/polyfills.js"></script>
+        <script src="/js/date.js"></script>
+        <script src="/js/index.js"></script>
+        <link rel="icon" type="image/png" sizes="256x256" href="/icon.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="manifest" href="/site.webmanifest">
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000066">
+        <meta name="msapplication-TileColor" content="#000066">
+        <meta name="theme-color" content="#ffffff">
+        <style>
+          cw-label {
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        </style>
+    </head>
+    <body onload="init()">
+        <heading>CONKW - Reference UI for <code>oshi.Oshi</code></heading>
+        <label>  Status : </label><cw-label style="max-width:200px;display:inline-block" id="cw-status"></cw-label><BR/>
+        <label>   Delay : </label><label id="cw-delay"></label><BR/>
+        <div id="clockanddate" class="cw-block" style="text-align:center;font-size:16px;">
+            <br/>
+            <cw-date cw-id="dayoftheweek"></cw-date>
+            <cw-date cw-id="month"></cw-date> <cw-date cw-id="dayofmonth"></cw-date>
+            <cw-date cw-id="year"></cw-date>
+            <br/>
+            <br/>
+            <clock style="width:240px;height:240px;overflow: hidden;padding-top:3px;margin:auto" onclick="rotateClockFace(event, this)"></clock>
+        </div>
+        
+        <div cw-ns="oshi">
+          <heading>INDEX</heading>
+          <a href="/grabbersReference/oshi.html">Go back to oshi ref ui</a><br/>
+          <a href="/grabbersReference/oshi-procs.html">Go see the processes</a>
+        </div>
+
+        <div cw-ns="oshi" cw-ifextracted="services">
+          <heading>SERVICES</heading>
+          <span cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::services_count" cw-multinode-pattern="#">
+            <div class="cw-block">
+              <cw-label style="max-width:300px;font-weight: 900;" cw-ns="oshi" cw-value="m:str::services_name_#"></cw-label> : <br/>
+              <span cw-ns="oshi" cw-style-display="e:str::${num.services_process_id_# === 0 ? 'none' : ''}"><label>    </label><cw-label cw-ns="oshi" cw-value="m:str::services_state_#"></cw-label> - <cw-label cw-ns="oshi" cw-value="m:num::services_process_id_#"></cw-label><br/></span>
+              <span cw-ns="oshi" cw-style-display="e:str::${num.services_process_id_# === 0 ? '' : 'none'}"><label>    </label><cw-label cw-ns="oshi" cw-value="m:str:2:services_state_#"></cw-label><br/></span>
+            </div>
+          </span>
+        </div>
+      
+    </body>
+</html>

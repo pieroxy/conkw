@@ -400,6 +400,8 @@ function cos(number) {
 }
 
 function updateClock(forceUpdate) {
+  if (!window.cwClock) return;
+  
   const now = new Date();
 
   updateDates(now);

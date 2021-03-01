@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover"/>
+        <meta charset="utf-8">
+        <meta name="format-detection" content="telephone=no">
+        <title>ConkW</title>
+        <link href="/css/conkw.css" rel="stylesheet">
+        <script src="/js/polyfills.js"></script>
+        <script src="/js/date.js"></script>
+        <script src="/js/index.js"></script>
+        <link rel="icon" type="image/png" sizes="256x256" href="/icon.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="manifest" href="/site.webmanifest">
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000066">
+        <meta name="msapplication-TileColor" content="#000066">
+        <meta name="theme-color" content="#ffffff">
+        <style>
+          cw-label {
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+          body {
+            column-width: unset;
+          }
+          body,html {
+            height: 100%;
+          }
+          .pline:hover {
+            background-color: #101040;
+          }
+          .pline {
+            white-space: nowrap;
+          }
+          .hblock {
+            display:inline-block;
+            margin: 0 20px;
+          }
+        </style>
+    </head>
+    <body onload="init()">
+        <heading style="text-align:center">CONKW - Reference UI for <code>oshi.Oshi</code></heading>
+        <div class="hblock" style="width:300px">
+          <label>  Status : </label><cw-label style="max-width:200px;display:inline-block" id="cw-status"></cw-label><BR/>
+          <label>   Delay : </label><label id="cw-delay"></label><BR/>
+        </div>
+        <div id="clockanddate" class="hblock" style="text-align:center;font-size:16px;">
+            <br/>
+            <cw-date cw-id="dayoftheweek"></cw-date>
+            <cw-date cw-id="month"></cw-date> <cw-date cw-id="dayofmonth"></cw-date>
+            <cw-date cw-id="year"></cw-date>
+        </div>
+        
+        <div cw-ns="oshi" class="hblock">
+          <heading>INDEX</heading>
+          <a href="/grabbersReference/oshi.html">Go back to oshi ref ui</a><br/>
+          <a href="/grabbersReference/oshi-services.html">Go see the services</a>
+        </div>
+
+        <div cw-ns="oshi" cw-ifextracted="processes" style="height:80%">
+          <heading>PROCESSES</heading>
+          <span class="pline">
+            <cw-label style="width:150px;font-weight: 900;">PROCESS</cw-label>
+            <cw-label style="width:90px;">PID</cw-label>
+            <cw-label cw-ns="oshi">bits</cw-label>
+            <cw-label cw-ns="oshi">CPU %</cw-label>
+            <cw-label cw-ns="oshi">READ  </cw-label>
+            <cw-label cw-ns="oshi">WRITE </cw-label>
+            <cw-label cw-ns="oshi">PRIO</cw-label>
+            <cw-label style="width:150px;">USER</cw-label>
+            <cw-label style="width:150px;">GROUP</cw-label>
+            <cw-label cw-ns="oshi">THRD</cw-label>
+            <cw-label cw-ns="oshi">FILE</cw-label>
+            <cw-label cw-ns="oshi">VSS   </cw-label>
+            <cw-label cw-ns="oshi">RSS   </cw-label>
+            <cw-label style="width:80px;">UPTIME</cw-label>
+            <cw-label style="width:80px;">USER T</cw-label>
+            <cw-label style="width:80px;">KERN T</cw-label>
+            <cw-label style="width:80px;">STATE</cw-label>
+            <cw-label>CMDLINE</cw-label>
+          </span>            
+          <br/>
+          <div cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::processes_count" cw-multinode-pattern="#" style="width:100%;height:100%;overflow:scroll">
+            <span class="pline">
+              <cw-label style="width:150px;font-weight: 900;" cw-ns="oshi" cw-value="m:str::processes_name_#"></cw-label>
+              <cw-label style="width:90px;" cw-ns="oshi" cw-value="m:num:2:processes_process_id_#"></cw-label>
+              <cw-label cw-ns="oshi" cw-value="m:num:2:processes_bitness_#"></cw-label>
+              <cw-label cw-ns="oshi" cw-value="m:num:prc01:processes_process_cpu_load_cumulative_#"></cw-label>
+              <cw-label cw-ns="oshi" cw-value="m:num:size:processes_bytes_read_#"></cw-label>
+              <cw-label cw-ns="oshi" cw-value="m:num:size:processes_bytes_written_#"></cw-label>
+              <cw-label cw-ns="oshi" cw-value="m:num:num:processes_priority_#"></cw-label>
+              <cw-label style="width:150px;" cw-ns="oshi" cw-value="m:str::processes_user_#"></cw-label>
+              <cw-label style="width:150px;" cw-ns="oshi" cw-value="m:str:num:processes_group_#"></cw-label>
+              <cw-label cw-ns="oshi" cw-value="m:num:num:processes_thread_count_#"></cw-label>
+              <cw-label cw-ns="oshi" cw-value="m:num:num:processes_open_files_#"></cw-label>
+              <cw-label cw-ns="oshi" cw-value="m:num:size:processes_virtual_size_#"></cw-label>
+              <cw-label cw-ns="oshi" cw-value="m:num:size:processes_resident_set_size_#"></cw-label>
+              <cw-label style="width:80px;" cw-ns="oshi" cw-value="m:num:time_ms:processes_up_time_#"></cw-label>
+              <cw-label style="width:80px;" cw-ns="oshi" cw-value="m:num:time_ms:processes_user_time_#"></cw-label>
+              <cw-label style="width:80px;" cw-ns="oshi" cw-value="m:num:time_ms:processes_kernel_time_#"></cw-label>
+              <cw-label style="width:80px;" cw-ns="oshi" cw-value="m:str::processes_state_#"></cw-label>
+              <cw-label style="width:700px;max-width: 800px;" cw-ns="oshi" cw-value="m:str::processes_command_line_#"></cw-label>
+              
+            </span>            
+            <br/>
+          </div>
+        </div>
+
+<!--
+        res.addMetric("processes_affinity_mask_"+i, p.getAffinityMask());
+        res.addMetric("processes_command_line_"+i, p.getCommandLine().replace((char)0,(char)32));
+        res.addMetric("processes_current_working_directory_"+i, p.getCurrentWorkingDirectory());
+        res.addMetric("processes_major_faults_"+i, p.getMajorFaults());
+        res.addMetric("processes_minor_faults_"+i, p.getMinorFaults());
+        res.addMetric("processes_parent_process_id_"+i, p.getParentProcessID());
+        res.addMetric("processes_path_"+i, p.getPath());
+
+        res.addMetric("processes_start_time_"+i, p.getStartTime());
+        res.addMetric("processes_group_id_"+i, p.getGroupID());
+        res.addMetric("processes_user_id_"+i, p.getUserID());
+  
+-->
+
+    </body>
+</html>
