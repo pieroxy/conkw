@@ -214,6 +214,8 @@ function getProperLabel(key, value) {
             return getStockChange(value);
         case "time":
             return getTimeLabel(value);
+        case "time_ms":
+            return getTimeLabel(value/1000);
         case "load":
             return getLoadLabel(value);
         case "rpm":
@@ -222,6 +224,8 @@ function getProperLabel(key, value) {
             return "" + Math.round(value);
         case "hhmm":
             return getHHMMLabel(value);
+        case "tstohhmmss":
+            return formatTimeSecs(value);
         case "tstohhmm":
             return formatTime(value);
         case "tsstohhmm":
@@ -232,12 +236,18 @@ function getProperLabel(key, value) {
             return formatDow(value);
         case "tsstodow":
             return formatDow(value * 1000);
+        case "tsstodate":
+            return formatDate(value * 1000);
+        case "tstodate":
+            return formatDate(value);
         case "si":
             return getSI(value);
         case "tsstodow3":
             return formatDow(value * 1000).substring(0, 3);
         case "currencyBig":
             return formatCurrency(value);
+        case "yesno":
+            return value===1 ? "Yes" : "No";
     }
     if (key.startsWith("fixeddec.")) {
         return Number(value).toFixed(key.split(".")[1] - 0);

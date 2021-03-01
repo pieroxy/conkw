@@ -612,6 +612,16 @@ function formatTime(ts) {
   if (m < 10) m = "0" + m;
   return h + ":" + m;
 }
+function formatTimeSecs(ts) {
+  let date = new Date(ts);
+  let h = date.getHours();
+  let m = date.getMinutes();
+  let s = date.getSeconds();
+  if (h < 10) h = "0" + h;
+  if (m < 10) m = "0" + m;
+  if (s < 10) s = "0" + s;
+  return h + ":" + m + ":" + s;
+}
 
 function formatHour(ts) {
   let date = new Date(ts);
@@ -621,4 +631,9 @@ function formatHour(ts) {
 
 function formatDow(ts) {
   return getDow(new Date(ts));
+}
+
+function formatDate(ts) {
+  let date = new Date(ts);
+  return date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate();
 }

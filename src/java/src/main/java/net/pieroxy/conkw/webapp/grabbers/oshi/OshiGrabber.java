@@ -326,6 +326,7 @@ public class OshiGrabber extends AsyncGrabber {
   private void extractDisksIo(ResponseData res) {
     if (disksStats == null) disksStats =  new HashMap<>();
     long tr=0,tw=0;
+    StringBuilder allnames = new StringBuilder();
     for (HWDiskStore d : extractor.getDisks()) {
       String name = d.getName();
       DiskStats ds = disksStats.get(name);
@@ -338,11 +339,14 @@ public class OshiGrabber extends AsyncGrabber {
         res.addMetric("diskios_write_bytes_"+name, w);
         tr+=r;
         tw+=w;
+        if (allnames.length()>0) allnames.append(',');
+        allnames.append(name);
       }
       ds.reads = d.getReadBytes();
       ds.writes = d.getWriteBytes();
       res.addMetric("diskios_read_bytes", tr);
       res.addMetric("diskios_write_bytes", tw);
+      res.addMetric("diskios_disks", allnames.toString());
     }
   }
 
@@ -368,7 +372,6 @@ public class OshiGrabber extends AsyncGrabber {
     for (Display d : extractor.getDisplays()) {
       res.addMetric("displays_digital_" + i, EdidUtil.isDigital(d.getEdid())?1:0);
       res.addMetric("displays_manufacturer_" + i, EdidUtil.getManufacturerID(d.getEdid()));
-      res.addMetric("displays_digital_" + i, EdidUtil.isDigital(d.getEdid())?1:0);
       res.addMetric("displays_product_id_"+i, EdidUtil.getProductID(d.getEdid()));
       res.addMetric("displays_serial_"+i, EdidUtil.getSerialNo(d.getEdid()));
       res.addMetric("displays_version_"+i, EdidUtil.getVersion(d.getEdid()));

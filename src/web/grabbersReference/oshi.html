@@ -186,23 +186,80 @@
           <br/>
           <label>    Stepping : </label><cw-label cw-ns="oshi" cw-value="m:str::cpuident_stepping"></cw-label>
           <br/>
-          <label>    Cpu64bit : </label><cw-label cw-ns="oshi" cw-value="e:str::${num.cpuident_64bits?'Yes':'No'}"></cw-label>
+          <label>    Cpu64bit : </label><cw-label cw-ns="oshi" cw-value="m:num:yesno:cpuident_64bits"></cw-label>
           <br/>
         </div>
     
+        <div cw-ns="oshi" cw-ifextracted="displays" class="cw-block">
+          <heading>DISPLAYS</heading>
+          <span cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::displays_count" cw-multinode-pattern="#">
+            <label style="font-weight:bold">   Display # : </label><cw-label cw-ns="oshi" cw-value="m:str::displays_product_id_#"></cw-label>
+            <br/>
+            <label>     Digital : </label><cw-label cw-ns="oshi" cw-value="m:num:yesno:displays_digital_#"></cw-label>
+            <br/>
+            <label>Manufacturer : </label><cw-label cw-ns="oshi" cw-value="m:str::displays_manufacturer_#"></cw-label>
+            <br/>
+            <label>  Serial Num : </label><cw-label cw-ns="oshi" cw-value="m:str::displays_serial_#"></cw-label>
+            <br/>
+            <label>     Version : </label><cw-label cw-ns="oshi" cw-value="m:str::displays_version_#"></cw-label>
+            <br/>
+            <label>Release Week : </label><cw-label cw-ns="oshi" cw-value="m:num::displays_week_#"></cw-label>
+            <br/>
+            <label>Release Year : </label><cw-label cw-ns="oshi" cw-value="m:num::displays_year_#"></cw-label>
+            <br/>
+          </span>
+        </div>
+
+        <div cw-ns="oshi" cw-ifextracted="diskios" class="cw-block">
+          <heading>DISK IOs</heading>
+          <span cw-ns="oshi" cw-multinode-in="m:str::diskios_disks" cw-multinode-pattern="#">
+            <label style="font-weight:bold">        Disk : </label><cw-label>#</cw-label>
+            <br/>
+            <label>    Read : </label><cw-label cw-ns="oshi" cw-value="m:num:size:diskios_read_bytes_#"></cw-label>
+            <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="l:num::100000000" cw-value-warn="l:num::90000000" cw-gauge0="default:m:num::diskios_read_bytes_#"></gauge>
+            <br/>
+            <label>   Write : </label><cw-label cw-ns="oshi" cw-value="m:num:size:diskios_write_bytes_#"></cw-label>
+            <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="l:num::100000000" cw-value-warn="l:num::90000000" cw-gauge0="default:m:num::diskios_write_bytes_#"></gauge>
+            <br/>
+          </span>
+          <br/>
+          <label>All Read : </label><cw-label cw-ns="oshi" cw-value="m:num:size:diskios_read_bytes"></cw-label>
+          <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="l:num::100000000" cw-value-warn="l:num::90000000" cw-gauge0="default:m:num::diskios_read_bytes"></gauge>
+          <br/>
+          <label>All Wrt. : </label><cw-label cw-ns="oshi" cw-value="m:num:size:diskios_write_bytes"></cw-label>
+          <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="l:num::100000000" cw-value-warn="l:num::90000000" cw-gauge0="default:m:num::diskios_write_bytes"></gauge>
+          <br/>
+        </div>
+
+        <div cw-ns="oshi" cw-ifextracted="diskinfos">
+          <heading>DISK INFOS</heading>
+          <div cw-ns="oshi" cw-multinode-in="m:str::diskinfos_names" cw-multinode-pattern="#">
+            <div class="cw-block">
+              <hr/>
+              <label style="font-weight:bold">        Disk : </label><cw-label>#</cw-label>
+              <br/>
+              <label>       Model : </label><cw-label cw-ns="oshi" cw-value="m:str::diskinfos_model_#"></cw-label>
+              <br/>
+              <label>  Serial Num : </label><cw-label cw-ns="oshi" cw-value="m:str::diskinfos_serial_#"></cw-label>
+              <br/>
+              <label>Cur Q Length : </label><cw-label cw-ns="oshi" cs-warn="l:num:valueabove:0" cw-value="m:num:num:diskinfos_current_queue_length_#"></cw-label>
+              <br/>
+              <label>       Reads : </label><cw-label cw-ns="oshi" cw-value="m:num:si:diskinfos_reads_#"></cw-label>  <cw-label cw-ns="oshi" cw-value="m:num:size:diskinfos_read_bytes_#"></cw-label>
+              <br/>
+              <label>        Size : </label><cw-label cw-ns="oshi" cw-value="m:num:size:diskinfos_size_#"></cw-label>
+              <br/>
+              <label>   Timestamp : </label><cw-label cw-ns="oshi" cw-value="m:num:tstohhmmss:diskinfos_timestamp_#"></cw-label>
+              <br/>
+              <label>Transfer Time: </label><cw-label cw-ns="oshi" cw-value="m:num:time_ms:diskinfos_transfer_time_#"></cw-label>
+              <br/>
+              <label>       Write : </label><cw-label cw-ns="oshi" cw-value="m:num:si:diskinfos_writes_#"></cw-label>  <cw-label cw-ns="oshi" cw-value="m:num:size:diskinfos_write_bytes_#"></cw-label>
+              <br/>
+            </div>
+          </div>
+        </div>
+
+
     
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
