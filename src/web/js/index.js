@@ -245,6 +245,8 @@ function getProperLabel(key, value) {
             return formatDate(value * 1000);
         case "tstodate":
             return formatDate(value);
+        case "tsstodate":
+            return formatDate(value * 1000);
         case "si":
             return getSI(value);
         case "tsstodow3":

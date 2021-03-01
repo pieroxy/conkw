@@ -219,10 +219,9 @@ public class OshiGrabber extends AsyncGrabber {
       res.addMetric("filestores_free_space_"+i, fs.getFreeSpace());
       res.addMetric("filestores_total_space_"+i, fs.getTotalSpace());
       res.addMetric("filestores_usable_space_"+i, fs.getUsableSpace());
-
       i++;
     }
-    res.addMetric("usb_count", i);
+    res.addMetric("filestores_count", i);
   }
 
   private void extractOperatingSystem(ResponseData res) {

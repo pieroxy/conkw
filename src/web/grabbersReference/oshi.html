@@ -384,35 +384,163 @@
           </div>
         </div>
     
-        <div cw-ns="oshi" cw-ifextracted="usb" class="cw-block">
+        <div cw-ns="oshi" cw-ifextracted="usb">
           <heading>USB</heading>
           <div cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::usb_count" cw-multinode-pattern="#">
-            <hr/>
-            <label style="font-weight:bold">  DEVICE : </label><cw-label cw-ns="oshi" cw-value="m:str::usb_name_#">#</cw-label>
-            <br/>
-            <label>     S/N : </label><cw-label cw-ns="oshi" cw-value="m:str::usb_serial_number_#"></cw-label>
-            <br/>
-            <label>  Vendor : </label><cw-label cw-ns="oshi" cw-value="m:str::usb_vendor_#"></cw-label>
-            <br/>
-            <label>VendorID : </label><cw-label cw-ns="oshi" cw-value="m:str::usb_vendor_id_#"></cw-label>
-            <br/>
-            <label>ProductID: </label><cw-label cw-ns="oshi" cw-value="m:str::usb_product_id_#"></cw-label>
-            <br/>
-            <label>Un. DevID: </label><cw-label cw-ns="oshi" cw-value="m:str::usb_unique_device_id_#"></cw-label>
-            <br/>
+            <div class="cw-block">
+              <hr/>
+              <label style="font-weight:bold">  DEVICE : </label><cw-label cw-ns="oshi" cw-value="m:str::usb_name_#">#</cw-label>
+              <br/>
+              <label>     S/N : </label><cw-label cw-ns="oshi" cw-value="m:str::usb_serial_number_#"></cw-label>
+              <br/>
+              <label>  Vendor : </label><cw-label cw-ns="oshi" cw-value="m:str::usb_vendor_#"></cw-label>
+              <br/>
+              <label>VendorID : </label><cw-label cw-ns="oshi" cw-value="m:str::usb_vendor_id_#"></cw-label>
+              <br/>
+              <label>ProductID: </label><cw-label cw-ns="oshi" cw-value="m:str::usb_product_id_#"></cw-label>
+              <br/>
+              <label>Un. DevID: </label><cw-label cw-ns="oshi" cw-value="m:str::usb_unique_device_id_#"></cw-label>
+              <br/>
+            </div>
           </div>
         </div>
 
 
       
-      
+        <div cw-ns="oshi" cw-ifextracted="os" class="cw-block">
+          <heading>OS</heading>
+          <label>Manufacturer : </label><cw-label cw-ns="oshi" cw-value="m:str::os_manufacturer"></cw-label>
+          <br/>
+          <label>      Family : </label><cw-label cw-ns="oshi" cw-value="m:str::os_family"></cw-label>
+          <br/>
+          <label>     Bitness : </label><cw-label cw-ns="oshi" cw-value="m:num::os_bitness"></cw-label>
+          <br/>
+          <label>   NbProcess : </label><cw-label cw-ns="oshi" cw-value="m:num::os_process_count"></cw-label>
+          <br/>
+          <label>  Process ID : </label><cw-label cw-ns="oshi" cw-value="m:num::os_process_id"></cw-label>
+          <br/>
+          <label>   Boot time : </label><cw-label cw-ns="oshi" cw-value="m:num:tsstodate:os_system_boot_time"></cw-label>
+          <br/>
+          <label>      Uptime : </label><cw-label cw-ns="oshi" cw-value="m:num:time:os_system_uptime"></cw-label>
+          <br/>
+          <label>    NbThread : </label><cw-label cw-ns="oshi" cw-value="m:num::os_thread_count"></cw-label>
+          <br/>
+          <label>     Version : </label><cw-label cw-ns="oshi" cw-value="m:str::os_version"></cw-label>
+          <br/>
+          <label>   Build Num : </label><cw-label cw-ns="oshi" cw-value="m:str::os_build_number"></cw-label>
+          <br/>
+          <label>   Code Name : </label><cw-label cw-ns="oshi" cw-value="m:str::os_code_name"></cw-label>
+          <br/>
+          <label>      Max FD : </label><cw-label cw-ns="oshi" cw-value="m:num::os_max_file_descriptors"></cw-label>
+          <br/>
+          <label>     Open FD : </label><cw-label cw-ns="oshi" cw-value="m:num::os_open_file_descriptors"></cw-label>
+          <br/>
+        </div>
+    
+
+        <div cw-ns="oshi" cw-ifextracted="filestores">
+          <heading>FILESTORES</heading>
+          <div cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::filestores_count" cw-multinode-pattern="#">
+            <div class="cw-block">
+              <hr/>
+              <label style="font-weight:bold">FILESTORE : </label><cw-label cw-ns="oshi" cw-value="m:str::filestores_name_#">#</cw-label>
+              <br/>
+              <label>    Desc : </label><cw-label cw-ns="oshi" cw-value="m:str::filestores_description_#"></cw-label>
+              <br/>
+              <label>    Type : </label><cw-label cw-ns="oshi" cw-value="m:str::filestores_type_#"></cw-label>
+              <br/>
+              <label>   Label : </label><cw-label cw-ns="oshi" cw-value="m:str::filestores_label_#"></cw-label>
+              <br/>
+              <label>   Mount : </label><cw-label cw-ns="oshi" cw-value="m:str::filestores_mount_#"></cw-label>
+              <br/>
+              <label>Log. Vol : </label><cw-label cw-ns="oshi" cw-value="m:str::filestores_logical_volume_#"></cw-label>
+              <br/>
+              <label> Options : </label><cw-label cw-ns="oshi" cw-value="m:str::filestores_options_#"></cw-label>
+              <br/>
+              <label>    UUID : </label><cw-label cw-ns="oshi" cw-value="m:str::filestores_uuid_#"></cw-label>
+              <br/>
+              <label>  Volume : </label><cw-label cw-ns="oshi" cw-value="m:str::filestores_volume_#"></cw-label>
+              <br/>
+              <label> (T/F/U) : </label><cw-label cw-ns="oshi" cw-value="m:num:size:filestores_free_space_#"></cw-label> ~<cw-label cw-ns="oshi" cw-value="m:num:size:filestores_usable_space_#"></cw-label> / <cw-label cw-ns="oshi" cw-value="m:num:size:filestores_total_space_#"></cw-label>
+              <br/>
+            </div>
+          </div>
+        </div>
 
 
-
+        <div cw-ns="oshi" cw-ifextracted="tcpv4" class="cw-block">
+          <heading>TCP v4</heading>
+          <label>    Conn Fail : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv4_connection_failures"></cw-label>
+          <br/>
+          <label>  Conn Active : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv4_connections_active"></cw-label>
+          <br/>
+          <label>Conn Estblshd : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv4_connections_established"></cw-label>
+          <br/>
+          <label>    Out reset : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv4_out_resets"></cw-label>
+          <br/>
+          <label> Conn Passive : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv4_connections_passive"></cw-label>
+          <br/>
+          <label>   Conn Reset : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv4_connections_reset"></cw-label>
+          <br/>
+          <label>    In Errors : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv4_in_errors"></cw-label>
+          <br/>
+          <label>      Seg Rcv : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv4_segments_received"></cw-label>
+          <br/>
+          <label>     Seg Retr : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv4_segments_retransmitted"></cw-label>
+          <br/>
+          <label>     Seg Sent : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv4_segments_sent"></cw-label>
+          <br/>
+        </div>
   
-
-
-
+        <div cw-ns="oshi" cw-ifextracted="tcpv6" class="cw-block">
+          <heading>TCP v6</heading>
+          <label>    Conn Fail : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv6_connection_failures"></cw-label>
+          <br/>
+          <label>  Conn Active : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv6_connections_active"></cw-label>
+          <br/>
+          <label>Conn Estblshd : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv6_connections_established"></cw-label>
+          <br/>
+          <label>    Out reset : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv6_out_resets"></cw-label>
+          <br/>
+          <label> Conn Passive : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv6_connections_passive"></cw-label>
+          <br/>
+          <label>   Conn Reset : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv6_connections_reset"></cw-label>
+          <br/>
+          <label>    In Errors : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv6_in_errors"></cw-label>
+          <br/>
+          <label>      Seg Rcv : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv6_segments_received"></cw-label>
+          <br/>
+          <label>     Seg Retr : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv6_segments_retransmitted"></cw-label>
+          <br/>
+          <label>     Seg Sent : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv6_segments_sent"></cw-label>
+          <br/>
+        </div>
+  
+        <div cw-ns="oshi" cw-ifextracted="udpv4" class="cw-block">
+          <heading>UDP v4</heading>
+          <label>  Dtg no port : </label><cw-label cw-ns="oshi" cw-value="m:num::udpv4_datagrams_no_port"></cw-label>
+          <br/>
+          <label>     Dtg Recv : </label><cw-label cw-ns="oshi" cw-value="m:num::udpv4_datagrams_received"></cw-label>
+          <br/>
+          <label>     Dtg Sent : </label><cw-label cw-ns="oshi" cw-value="m:num::udpv4_datagrams_sent"></cw-label>
+          <br/>
+          <label> Out Recv Err : </label><cw-label cw-ns="oshi" cw-value="m:num::udpv4_datagrams_received_errors"></cw-label>
+          <br/>
+        </div>
+  
+        <div cw-ns="oshi" cw-ifextracted="udpv6" class="cw-block">
+          <heading>UDP v6</heading>
+          <label>  Dtg no port : </label><cw-label cw-ns="oshi" cw-value="m:num::udpv6_datagrams_no_port"></cw-label>
+          <br/>
+          <label>     Dtg Recv : </label><cw-label cw-ns="oshi" cw-value="m:num::udpv6_datagrams_received"></cw-label>
+          <br/>
+          <label>     Dtg Sent : </label><cw-label cw-ns="oshi" cw-value="m:num::udpv6_datagrams_sent"></cw-label>
+          <br/>
+          <label> Out Recv Err : </label><cw-label cw-ns="oshi" cw-value="m:num::udpv6_datagrams_received_errors"></cw-label>
+          <br/>
+        </div>
+  
+    
 
     </body>
 </html>
