@@ -33,9 +33,12 @@ public class Listener implements ServletContextListener {
       List<Grabber> newg = new ArrayList<>();
       for (GrabberConfig gc : config.getGrabbers()) {
         Grabber g = (Grabber) Class.forName("net.pieroxy.conkw.webapp.grabbers." + gc.getId() + "Grabber").newInstance();
+
+        // Extract
         if (gc.getExtract()!=null && !gc.getExtract().equals("all") && !gc.getExtract().equals("")) {
           g.setExtractProperties(gc.getExtract().split(","));
         }
+        // logLevel
         String llas = gc.getLogLevel();
         if (llas!=null) {
           Level logLevel = Level.parse(llas);
@@ -44,6 +47,11 @@ public class Listener implements ServletContextListener {
             LOGGER.severe("Could not parse log level " + llas + ". Using INFO.");
           }
           g.setLogLevel(logLevel);
+        }
+        // Name
+        System.out.println("NAME IS " + gc.getName());
+        if (gc.getName() != null) {
+          g.setName(gc.getName());
         }
 
         g.initConfig(ConfigReader.getHomeDir(), gc.getParameters());

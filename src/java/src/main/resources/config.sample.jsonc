@@ -31,25 +31,25 @@
       },
       /* Do not extract "sessions" and "processes" which are the most expensive. */
       "extract":"sensors,memory,physicalmemory,virtualmemory,computer,baseboard,firmware,cpu,cpubycore,cpuident,displays,disksio,disksinfos,graphicscards,nics,netbw,battery,psus,soundcards,usb,os,filestores,tcpv4,tcpv6,udpv4,udpv6,sessions,shortsessions,netp",
-      "logLevel":"FINER"
+      "logLevel":"INFO"
     },
     {
       /* OSHI/JNA view of the system. This one extracts only the processes. */
       "id":"oshi.Oshi",
+      "name":"oshi-processes",
+      "extract":"processes",
       "parameters": {
-        "name":"oshi-processes",
         "detailedDataDelay":"5"
-      },
-      "extract":"processes"
+      }
     },
     {
       /* OSHI/JNA view of the system. This one extracts only the services. */
       "id":"oshi.Oshi",
+      "extract":"services",
+      "name":"oshi-services",
       "parameters": {
-        "name":"oshi-services",
         "detailedDataDelay":"5"
-      },
-      "extract":"services"
+      }
     }
   ],
   /* This is the port the web server will listen to. Note that values below 1024 are discouraged as they require

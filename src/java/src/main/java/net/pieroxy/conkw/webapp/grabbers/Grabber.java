@@ -1,6 +1,5 @@
 package net.pieroxy.conkw.webapp.grabbers;
 
-import com.dslplatform.json.processor.LogLevel;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,7 +8,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.time.Period;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -18,17 +16,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public abstract class Grabber {
-  private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
+  private Logger LOGGER = createLogger();
 
   private File storageFolder = new File(System.getProperty("user.home"), "/.conkw/data/");
   private File tmpFolder = new File(System.getProperty("user.home"), "/.conkw/tmp/");
   private Set<String> extract = new HashSet<>();
 
   public static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-  public static String NAME_CONFIG_PROPERTY = "name";
-  public static String EXTRACT_CONFIG_PROPERTY = "extract";
-  public static String LOGLEVEL_CONFIG_PROPERTY = "logLevel";
   private String name;
+  private Level logLevel = Level.INFO;
 
   Map<String, ResponseData> cachedResponses = new HashMap<>();
 
@@ -51,9 +47,9 @@ public abstract class Grabber {
       if (cached==null || (now-cached.getTimestamp() > delay.toMillis())) {
         if (canLogFiner()) {
           if (cached == null)
-            log(Level.INFO,now +  " Grabbing " + extractName + " cached on null with delay " + delay.toMillis());
+            log(Level.FINER,now +  " Grabbing " + extractName + " cached on null with delay " + delay.toMillis());
           else
-            log(Level.INFO,now + " Grabbing " + extractName + " cached on " + cached.getTimestamp() + " with delay " + delay.toMillis());
+            log(Level.FINER,now + " Grabbing " + extractName + " cached on " + cached.getTimestamp() + " with delay " + delay.toMillis());
         }
         cached = new ResponseData(null, now);
         method.extract(cached);
@@ -68,14 +64,13 @@ public abstract class Grabber {
   public abstract void setConfig(Map<String, String> config);
 
   public void initConfig(File homeDir, Map<String, String> config) throws IOException {
-    setNameFromConfig(config, getDefaultName());
     setConfig(config);
   }
 
   public void setLogLevel(Level l) {
-    if (l != Level.INFO) LOGGER.info(getName() + " logLevel is " + l);
+    if (l != logLevel) LOGGER.info(getName() + " logLevel is " + l);
+    logLevel = l;
     LOGGER.setLevel(l);
-
   }
 
   public void setExtractProperties(String[]toExtract) {
@@ -86,10 +81,6 @@ public abstract class Grabber {
 
   private boolean shouldExtract(String value) {
     return extract.isEmpty() || extract.contains(value);
-  }
-
-  private void setNameFromConfig(Map<String, String> config, String defaultValue) {
-    setName(config.getOrDefault(NAME_CONFIG_PROPERTY, defaultValue));
   }
 
   public File getStorage() {
@@ -123,8 +114,17 @@ public abstract class Grabber {
     return name;
   }
 
-  private final void setName(String name) {
+  public void setName(String name) {
     this.name = name;
+    LOGGER = createLogger();
+  }
+
+  private Logger createLogger() {
+    String n = getName();
+    if (n==null) n = getDefaultName();
+    Logger l = Logger.getLogger(this.getClass().getName() + "/" + n);
+    l.setLevel(logLevel);
+    return l;
   }
 
   public abstract void writeHtmlTemplate(Writer writer) throws IOException;

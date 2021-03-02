@@ -7,6 +7,7 @@ import java.util.Map;
 @CompiledJson(onUnknown = CompiledJson.Behavior.FAIL)
 public class GrabberConfig {
   private String id;
+  private String name;
   private String extract;
   private String logLevel;
   private Map<String, String> parameters;
@@ -41,5 +42,13 @@ public class GrabberConfig {
 
   public void setLogLevel(String logLevel) {
     this.logLevel = logLevel;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 }
