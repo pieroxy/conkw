@@ -1,30 +1,58 @@
 {
-  // This is the list of things conkw will be able to fetch infos from.
+  /* This is the list of Grabbers. Grabbers are things conkw will be able to fetch infos from. */
   "grabbers":[
     {
-      // This is the system grabber for Linux OS.
+      /* This is the system grabber for Linux OS. */
       "id":"procgrabber.Proc",
       "parameters": {
-        // List here the block devices of your machine, to monitor I/O, separated by a comma
+        /* List here the block devices of your machine, to monitor I/O, separated by a comma */
         "blockDevices":"sda"
       }
     },
     {
-      // Some CPU usage view, working on all platforms
+      /* Some CPU usage view, filesystem space monitoring, working on all platforms */
       "id":"JavaSystemView",
       "parameters": {
-        // List here all the mount points of your machines to monitor free space, separated by a comma
+        /* List here all the mount points of your machines to monitor free space, separated by a comma */
         "mountPoints":"/"
       }
     },
     {
-      // JNA view of the system, detailed, works on most platforms
+      /* OSHI/JNA view of the system, detailed, works on most platforms, much slower and accurate than Proc on Linux */
       "id":"oshi.Oshi",
       "parameters": {
-      }
+        /* Default name is "oshi" */
+        //"name":"oshi"
+        /* In seconds, the delay between refreshes of the data deemed "static". Defaults to one day. */
+        //"staticDataDelay":"",
+        /* In seconds, the delay between refreshes of the data deemed "detailed" which is .more expensice to extract.
+           Defaults to one minute. */
+        //"detailedDataDelay":"",
+      },
+      /* Do not extract "sessions" and "processes" which are the most expensive. */
+      "extract":"sensors,memory,physicalmemory,virtualmemory,computer,baseboard,firmware,cpu,cpubycore,cpuident,displays,disksio,disksinfos,graphicscards,nics,netbw,battery,psus,soundcards,usb,os,filestores,tcpv4,tcpv6,udpv4,udpv6,sessions,shortsessions,netp",
+      "logLevel":"FINER"
+    },
+    {
+      /* OSHI/JNA view of the system. This one extracts only the processes. */
+      "id":"oshi.Oshi",
+      "parameters": {
+        "name":"oshi-processes",
+        "detailedDataDelay":"5"
+      },
+      "extract":"processes"
+    },
+    {
+      /* OSHI/JNA view of the system. This one extracts only the services. */
+      "id":"oshi.Oshi",
+      "parameters": {
+        "name":"oshi-services",
+        "detailedDataDelay":"5"
+      },
+      "extract":"services"
     }
   ],
-  // This is the port the web server will listen to. Note that values below 1024 are discouraged as they require
-  // the process to be launched as root.
+  /* This is the port the web server will listen to. Note that values below 1024 are discouraged as they require
+  the process to be launched as root. */
   "httpPort": 12789
 }

@@ -29,7 +29,6 @@ public abstract class Grabber {
   public static String EXTRACT_CONFIG_PROPERTY = "extract";
   public static String LOGLEVEL_CONFIG_PROPERTY = "logLevel";
   private String name;
-  private Level logLevel = Level.INFO;
 
   Map<String, ResponseData> cachedResponses = new HashMap<>();
 
@@ -70,25 +69,18 @@ public abstract class Grabber {
 
   public void initConfig(File homeDir, Map<String, String> config) throws IOException {
     setNameFromConfig(config, getDefaultName());
-    String llas = config.getOrDefault(LOGLEVEL_CONFIG_PROPERTY, "INFO");
-    logLevel = Level.parse(llas);
-    if (logLevel == null) {
-      logLevel = Level.INFO;
-      LOGGER.severe("Could not parse log level " + llas + ". Using INFO.");
-    }
-    if (logLevel != Level.INFO) LOGGER.info(getName() + " logLevel is " + logLevel);
-    LOGGER.setLevel(logLevel);
-    setExtractProperty(config);
     setConfig(config);
   }
 
-  private void setExtractProperty(Map<String, String> config) {
-    String v = config.get(EXTRACT_CONFIG_PROPERTY);
-    if (v!=null && !v.equals("all") && !v.equals("")) {
-      String[]values = v.split(",");
-      for (String val : values) {
-        extract.add(val);
-      }
+  public void setLogLevel(Level l) {
+    if (l != Level.INFO) LOGGER.info(getName() + " logLevel is " + l);
+    LOGGER.setLevel(l);
+
+  }
+
+  public void setExtractProperties(String[]toExtract) {
+    for (String val : toExtract) {
+      extract.add(val);
     }
   }
 

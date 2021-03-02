@@ -54,28 +54,28 @@
             <cw-date cw-id="year"></cw-date>
         </div>
         
-        <div cw-ns="oshi" class="hblock">
+        <div cw-ns="oshi-processes" class="hblock">
           <heading>INDEX</heading>
           <a href="/grabbersReference/oshi.html">Go back to oshi ref ui</a><br/>
           <a href="/grabbersReference/oshi-services.html">Go see the services</a>
         </div>
 
-        <div cw-ns="oshi" cw-ifextracted="processes" style="height:80%">
+        <div cw-ns="oshi-processes" cw-ifextracted="processes" style="height:80%">
           <heading>PROCESSES</heading>
           <span class="pline">
             <cw-label style="width:150px;font-weight: 900;">PROCESS</cw-label>
             <cw-label style="width:90px;">PID</cw-label>
-            <cw-label cw-ns="oshi">bits</cw-label>
-            <cw-label cw-ns="oshi">CPU %</cw-label>
-            <cw-label cw-ns="oshi">READ  </cw-label>
-            <cw-label cw-ns="oshi">WRITE </cw-label>
-            <cw-label cw-ns="oshi">PRIO</cw-label>
+            <cw-label cw-ns="oshi-processes">bits</cw-label>
+            <cw-label cw-ns="oshi-processes">CPU %</cw-label>
+            <cw-label cw-ns="oshi-processes">READ  </cw-label>
+            <cw-label cw-ns="oshi-processes">WRITE </cw-label>
+            <cw-label cw-ns="oshi-processes">PRIO</cw-label>
             <cw-label style="width:150px;">USER</cw-label>
             <cw-label style="width:150px;">GROUP</cw-label>
-            <cw-label cw-ns="oshi">THRD</cw-label>
-            <cw-label cw-ns="oshi">FILE</cw-label>
-            <cw-label cw-ns="oshi">VSS   </cw-label>
-            <cw-label cw-ns="oshi">RSS   </cw-label>
+            <cw-label cw-ns="oshi-processes">THRD</cw-label>
+            <cw-label cw-ns="oshi-processes">FILE</cw-label>
+            <cw-label cw-ns="oshi-processes">VSS   </cw-label>
+            <cw-label cw-ns="oshi-processes">RSS   </cw-label>
             <cw-label style="width:80px;">UPTIME</cw-label>
             <cw-label style="width:80px;">USER T</cw-label>
             <cw-label style="width:80px;">KERN T</cw-label>
@@ -83,26 +83,26 @@
             <cw-label>CMDLINE</cw-label>
           </span>            
           <br/>
-          <div cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::processes_count" cw-multinode-pattern="#" style="width:100%;height:100%;overflow:scroll">
+          <div cw-ns="oshi-processes" cw-multinode-from="l:num::0" cw-multinode-to="m:num::processes_count" cw-multinode-pattern="#" style="width:100%;height:100%;overflow:scroll">
             <span class="pline">
-              <cw-label style="width:150px;font-weight: 900;" cw-ns="oshi" cw-value="m:str::processes_name_#"></cw-label>
-              <cw-label style="width:90px;" cw-ns="oshi" cw-value="m:num:2:processes_process_id_#"></cw-label>
-              <cw-label cw-ns="oshi" cw-value="m:num:2:processes_bitness_#"></cw-label>
-              <cw-label cw-ns="oshi" cw-value="m:num:prc01:processes_process_cpu_load_cumulative_#"></cw-label>
-              <cw-label cw-ns="oshi" cw-value="m:num:size:processes_bytes_read_#"></cw-label>
-              <cw-label cw-ns="oshi" cw-value="m:num:size:processes_bytes_written_#"></cw-label>
-              <cw-label cw-ns="oshi" cw-value="m:num:num:processes_priority_#"></cw-label>
-              <cw-label style="width:150px;" cw-ns="oshi" cw-value="m:str::processes_user_#"></cw-label>
-              <cw-label style="width:150px;" cw-ns="oshi" cw-value="m:str:num:processes_group_#"></cw-label>
-              <cw-label cw-ns="oshi" cw-value="m:num:num:processes_thread_count_#"></cw-label>
-              <cw-label cw-ns="oshi" cw-value="m:num:num:processes_open_files_#"></cw-label>
-              <cw-label cw-ns="oshi" cw-value="m:num:size:processes_virtual_size_#"></cw-label>
-              <cw-label cw-ns="oshi" cw-value="m:num:size:processes_resident_set_size_#"></cw-label>
-              <cw-label style="width:80px;" cw-ns="oshi" cw-value="m:num:time_ms:processes_up_time_#"></cw-label>
-              <cw-label style="width:80px;" cw-ns="oshi" cw-value="m:num:time_ms:processes_user_time_#"></cw-label>
-              <cw-label style="width:80px;" cw-ns="oshi" cw-value="m:num:time_ms:processes_kernel_time_#"></cw-label>
-              <cw-label style="width:80px;" cw-ns="oshi" cw-value="m:str::processes_state_#"></cw-label>
-              <cw-label style="width:700px;max-width: 800px;" cw-ns="oshi" cw-value="m:str::processes_command_line_#"></cw-label>
+              <cw-label style="width:150px;font-weight: 900;" cw-ns="oshi-processes" cw-value="m:str::processes_name_#"></cw-label>
+              <cw-label style="width:90px;" cw-ns="oshi-processes" cw-value="m:num:2:processes_process_id_#"></cw-label>
+              <cw-label cw-ns="oshi-processes" cw-value="m:num:2:processes_bitness_#"></cw-label>
+              <cw-label cw-ns="oshi-processes" cw-value="m:num:prc01:processes_process_cpu_load_cumulative_#"></cw-label>
+              <cw-label cw-ns="oshi-processes" cw-value="m:num:size:processes_bytes_read_#"></cw-label>
+              <cw-label cw-ns="oshi-processes" cw-value="m:num:size:processes_bytes_written_#"></cw-label>
+              <cw-label cw-ns="oshi-processes" cw-value="m:num:num:processes_priority_#"></cw-label>
+              <cw-label style="width:150px;" cw-ns="oshi-processes" cw-value="m:str::processes_user_#"></cw-label>
+              <cw-label style="width:150px;" cw-ns="oshi-processes" cw-value="m:str:num:processes_group_#"></cw-label>
+              <cw-label cw-ns="oshi-processes" cw-value="m:num:num:processes_thread_count_#"></cw-label>
+              <cw-label cw-ns="oshi-processes" cw-value="m:num:num:processes_open_files_#"></cw-label>
+              <cw-label cw-ns="oshi-processes" cw-value="m:num:size:processes_virtual_size_#"></cw-label>
+              <cw-label cw-ns="oshi-processes" cw-value="m:num:size:processes_resident_set_size_#"></cw-label>
+              <cw-label style="width:80px;" cw-ns="oshi-processes" cw-value="m:num:time_ms:processes_up_time_#"></cw-label>
+              <cw-label style="width:80px;" cw-ns="oshi-processes" cw-value="m:num:time_ms:processes_user_time_#"></cw-label>
+              <cw-label style="width:80px;" cw-ns="oshi-processes" cw-value="m:num:time_ms:processes_kernel_time_#"></cw-label>
+              <cw-label style="width:80px;" cw-ns="oshi-processes" cw-value="m:str::processes_state_#"></cw-label>
+              <cw-label style="width:700px;max-width: 800px;" cw-ns="oshi-processes" cw-value="m:str::processes_command_line_#"></cw-label>
               
             </span>            
             <br/>

@@ -22,8 +22,11 @@ import java.util.stream.Collectors;
 public class OshiGrabber extends AsyncGrabber {
   static final String NAME = "oshi";
 
-  static final Duration staticDataDelay = Duration.ofDays(1);
-  static final Duration preciseDataDelay = Duration.ofMinutes(1);
+  public static final String CONFIG_STATIC_DATA_DELAY="staticDataDelay";
+  public static final String CONFIG_DETAILED_DATA_DELAY="detailedDataDelay";
+
+  private Duration staticDataDelay = Duration.ofDays(1);
+  private Duration detailedDataDelay = Duration.ofMinutes(1);
   OSHIExtractor extractor = new OSHIExtractor();
   long[]ticks;
   long[][]ticksByCpu;
@@ -57,25 +60,25 @@ public class OshiGrabber extends AsyncGrabber {
     extract(res, "cpuident", this::extractCpuIdent, staticDataDelay); // 9k
     extract(res, "displays", this::extractDisplays, staticDataDelay); // 26k
     extract(res, "disksio", this::extractDisksIo, Duration.ZERO); // 11k
-    extract(res, "disksinfos", this::extractDisks, preciseDataDelay); // 20k
+    extract(res, "disksinfos", this::extractDisks, detailedDataDelay); // 20k
     extract(res, "graphicscards", this::extractGraphicsCards, staticDataDelay); // 10k
-    extract(res, "nics", this::extractNics, preciseDataDelay); // 12k
+    extract(res, "nics", this::extractNics, detailedDataDelay); // 12k
     extract(res, "netbw", this::extractNetbw, Duration.ZERO); // 12k
     extract(res, "battery", this::extractBattery, Duration.ofSeconds(5)); // 8k
-    extract(res, "psus", this::extractPsus, preciseDataDelay); // 8k
+    extract(res, "psus", this::extractPsus, detailedDataDelay); // 8k
     extract(res, "soundcards", this::extractSoundCards, staticDataDelay); // 9k
-    extract(res, "usb", this::extractUsbDevices, Duration.ofSeconds(5)); // 17k
-    extract(res, "os", this::extractOperatingSystem, Duration.ofSeconds(5)); // 350k
+    extract(res, "usb", this::extractUsbDevices, detailedDataDelay); // 17k
+    extract(res, "os", this::extractOperatingSystem, detailedDataDelay); // 350k
     extract(res, "filestores", this::extractFileStores, Duration.ZERO); // 28k
-    extract(res, "tcpv4", this::extractTcpv4, preciseDataDelay); // 9k
-    extract(res, "tcpv6", this::extractTcpv6, preciseDataDelay); // 9k
-    extract(res, "udpv4", this::extractUdpv4, preciseDataDelay); // 9k
-    extract(res, "udpv6", this::extractUdpv6, preciseDataDelay); // 9k
-    extract(res, "sessions", this::extractSessions, preciseDataDelay); // 10k
+    extract(res, "tcpv4", this::extractTcpv4, detailedDataDelay); // 9k
+    extract(res, "tcpv6", this::extractTcpv6, detailedDataDelay); // 9k
+    extract(res, "udpv4", this::extractUdpv4, detailedDataDelay); // 9k
+    extract(res, "udpv6", this::extractUdpv6, detailedDataDelay); // 9k
+    extract(res, "sessions", this::extractSessions, detailedDataDelay); // 10k
     extract(res, "shortsessions", this::extractShortSessions, Duration.ZERO); // 9k
-    extract(res, "netp", this::extractNetworkParams, preciseDataDelay); // 198k
-    extract(res, "processes", this::extractProcesses, preciseDataDelay); // 125m / 400ms
-    extract(res, "services", this::extractServices, preciseDataDelay); // 20m / 400ms
+    extract(res, "netp", this::extractNetworkParams, detailedDataDelay); // 198k
+    extract(res, "processes", this::extractProcesses, detailedDataDelay); // 125m / 400ms
+    extract(res, "services", this::extractServices, detailedDataDelay); // 20m / 400ms
     return res;
   }
 
@@ -534,6 +537,14 @@ public class OshiGrabber extends AsyncGrabber {
 
   @Override
   public void setConfig(Map<String, String> config) {
+    String ddd = config.get(CONFIG_DETAILED_DATA_DELAY);
+    if (ddd!=null) {
+      detailedDataDelay = Duration.ofSeconds(Long.parseLong(ddd));
+    }
+    String sdd = config.get(CONFIG_STATIC_DATA_DELAY);
+    if (sdd!=null) {
+      staticDataDelay = Duration.ofSeconds(Long.parseLong(sdd));
+    }
   }
 
   @Override
