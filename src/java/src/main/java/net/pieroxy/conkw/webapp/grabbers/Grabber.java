@@ -56,7 +56,7 @@ public abstract class Grabber {
           else
             log(Level.INFO,now + " Grabbing " + extractName + " cached on " + cached.getTimestamp() + " with delay " + delay.toMillis());
         }
-        cached = new ResponseData(extractName, now);
+        cached = new ResponseData(null, now);
         method.extract(cached);
         cachedResponses.put(extractName, cached);
       }

@@ -108,7 +108,7 @@ public class ProcGrabber extends AsyncGrabber {
 
   @Override
   public synchronized ResponseData grabSync() {
-    ResponseData r = new ResponseData(getName(), System.currentTimeMillis());
+    ResponseData r = new ResponseData(this, System.currentTimeMillis());
     extract(r,"processes", this::grabProcesses, Duration.ZERO);
     extract(r,"uptime", this::grabUptimeAndLoad, Duration.ZERO);
     extract(r,"cpu", this::grabCpuUsage, Duration.ZERO);

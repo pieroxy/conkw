@@ -2,6 +2,7 @@ package net.pieroxy.conkw.webapp.model;
 
 import com.dslplatform.json.CompiledJson;
 import net.pieroxy.conkw.webapp.Listener;
+import net.pieroxy.conkw.webapp.grabbers.Grabber;
 
 import java.time.Duration;
 import java.util.*;
@@ -16,7 +17,7 @@ public class ResponseData {
   private long timestamp;
   private long elapsedToGrab;
   private Collection<String> errors=new LinkedList<>();
-  private String name;
+  private String name,extractor;
   private Map<String, Double> num = new HashMap<>();
   private Map<String, String> str = new HashMap<>();
   private Set<String> extracted   = new HashSet<>();
@@ -24,9 +25,12 @@ public class ResponseData {
   public ResponseData() {
   }
 
-  public ResponseData(String name, long timestamp) {
+  public ResponseData(Grabber grabber, long timestamp) {
     this.timestamp = timestamp;
-    this.name = name;
+    if (grabber!=null) {
+      this.name = grabber.getName();
+      this.extractor = grabber.getClass().getSimpleName();
+    }
   }
 
   public void addExtracted(String e) {
@@ -192,5 +196,13 @@ public class ResponseData {
 
   public void setExtracted(Set<String> extracted) {
     this.extracted = extracted;
+  }
+
+  public String getExtractor() {
+    return extractor;
+  }
+
+  public void setExtractor(String extractor) {
+    this.extractor = extractor;
   }
 }

@@ -44,7 +44,7 @@ public class OshiGrabber extends AsyncGrabber {
   public ResponseData grabSync() {
     // Garbage generated and time elapsed are measured on my computer. They give an order of magnitude.
     // Overall: 146m / 1.2s
-    ResponseData res = new ResponseData(getName(), System.currentTimeMillis());
+    ResponseData res = new ResponseData(this, System.currentTimeMillis());
     extract(res, "sensors", this::extractSensors, Duration.ZERO); // 250k
     extract(res, "memory", this::extractMemory, Duration.ZERO); // 41k
     extract(res, "physicalmemory", this::extractPhysicalMemory, staticDataDelay); // 8k

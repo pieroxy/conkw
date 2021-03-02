@@ -33,7 +33,7 @@ public class FileGrabber extends AsyncGrabber {
   public ResponseData grabSync() {
     try {
       long ts = Files.getLastModifiedTime(path).toMillis();
-      ResponseData r = new ResponseData(getName(), ts);
+      ResponseData r = new ResponseData(this, ts);
       Properties p = new Properties();
       try (Reader reader = new FileReader(file)) {
         p.load(reader);
@@ -54,7 +54,7 @@ public class FileGrabber extends AsyncGrabber {
       return r;
     } catch (Exception e) {
       log(Level.SEVERE, "Grabbing " + getName(), e);
-      ResponseData r = new ResponseData(getName(), System.currentTimeMillis());
+      ResponseData r = new ResponseData(this, System.currentTimeMillis());
       r.addError(getName()+":"+e.getMessage());
       return r;
     }

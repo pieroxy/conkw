@@ -72,14 +72,14 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber {
       }
     }
     try {
-      ResponseData r = new ResponseData(getName(), System.currentTimeMillis());
+      ResponseData r = new ResponseData(this, System.currentTimeMillis());
       load(r);
       lastRun = System.currentTimeMillis();
       writeCacheFile(r);
       return r;
     } catch (Exception e) {
       log(Level.SEVERE, "Grabbing " + getName(), e);
-      return new ResponseData(getName(), System.currentTimeMillis());
+      return new ResponseData(this, System.currentTimeMillis());
     }
   }
 }
