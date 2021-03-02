@@ -11,8 +11,9 @@ public class JsonHelper {
 
   public static DslJson<Object> getJson() {
     if (dslJson == null) {
-      dslJson = new DslJson<>(Settings.basicSetup());
-      writer = dslJson.newWriter();
+      DslJson<Object> nj = new DslJson<>(Settings.basicSetup());
+      writer = nj.newWriter();
+      dslJson = nj;
     }
     return dslJson;
   }
