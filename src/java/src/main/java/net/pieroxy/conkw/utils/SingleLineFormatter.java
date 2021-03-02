@@ -23,7 +23,7 @@ public class SingleLineFormatter extends Formatter {
     sbf.append(sdf.format(new Date()));
     StringUtil.addPaddedString(sbf, record.getLevel().getName(), 7);
     sbf.append(" ");
-    StringUtil.addPaddedString(sbf,record.getLoggerName(),20);
+    StringUtil.addPaddedString(sbf,record.getLoggerName(),30);
     sbf.append(" ");
 
     sbf.append(record.getMessage());
