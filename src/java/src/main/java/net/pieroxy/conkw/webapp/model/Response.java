@@ -21,6 +21,9 @@ public class Response {
 
   public void add(ResponseData response) {
     if (response == null) return;
+    if (response.getName() == null) {
+      throw new NullPointerException("ResponseData has no name.");
+    }
     metrics.put(response.getName(), response);
     errors.addAll(response.getErrors());
   }

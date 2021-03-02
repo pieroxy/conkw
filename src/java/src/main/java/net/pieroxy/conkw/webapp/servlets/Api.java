@@ -89,7 +89,11 @@ public class Api extends HttpServlet {
       if (nowms-lastGet < 2100) {
         Response r = new Response();
         for (Grabber g : grabbers) {
-          r.add(g.grab());
+          try {
+            r.add(g.grab());
+          } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Grabber grab failed : " + g.toString(), e);
+          }
         }
         loadedResponse = r;
       }

@@ -65,6 +65,7 @@ public abstract class Grabber {
 
   public void initConfig(File homeDir, Map<String, String> config) throws IOException {
     setConfig(config);
+    if (name == null) setName(getDefaultName());
   }
 
   public void setLogLevel(Level l) {
@@ -125,6 +126,11 @@ public abstract class Grabber {
     Logger l = Logger.getLogger(this.getClass().getName() + "/" + n);
     l.setLevel(logLevel);
     return l;
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getName() + "/" + getName();
   }
 
   public abstract void writeHtmlTemplate(Writer writer) throws IOException;

@@ -12,9 +12,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import java.io.*;
 import java.nio.file.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,6 +29,7 @@ public class Listener implements ServletContextListener {
     Config config = ConfigReader.getConfig();
     try {
       List<Grabber> newg = new ArrayList<>();
+      Set<String> newgnames = new HashSet<>();
       for (GrabberConfig gc : config.getGrabbers()) {
         Grabber g = (Grabber) Class.forName("net.pieroxy.conkw.webapp.grabbers." + gc.getId() + "Grabber").newInstance();
 
@@ -49,13 +48,17 @@ public class Listener implements ServletContextListener {
           g.setLogLevel(logLevel);
         }
         // Name
-        System.out.println("NAME IS " + gc.getName());
         if (gc.getName() != null) {
           g.setName(gc.getName());
         }
-
         g.initConfig(ConfigReader.getHomeDir(), gc.getParameters());
-        newg.add(g);
+
+        if (newgnames.contains(g.getName())) {
+          throw new IllegalArgumentException("At least two grabbers share the same name: " + g.getName());
+        } else {
+          newg.add(g);
+          newgnames.add(g.getName());
+        }
       }
 
       Collection<Grabber> old= grabbers;
@@ -87,9 +90,7 @@ public class Listener implements ServletContextListener {
 
   @Override
   public void contextInitialized(ServletContextEvent servletContextEvent) {
-
     loadConfig();
-
     try {
       watchService = FileSystems.getDefault().newWatchService();
       Path dir = ConfigReader.getConfDir().toPath();
