@@ -69,7 +69,7 @@ gauge,
 hgauge {
     width: 150px;
     background-color: #202040;
-    height: 1em;
+    height: 0.9em;
     display: block;
     margin-left: 30px;
     margin-bottom: 2px;
