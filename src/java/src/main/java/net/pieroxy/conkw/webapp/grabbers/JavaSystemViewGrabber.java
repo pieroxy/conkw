@@ -85,20 +85,24 @@ public class JavaSystemViewGrabber extends AsyncGrabber {
 
   private void getFreeSpace(ResponseData r) {
     if (mountPoints==null || mountPoints.isEmpty()) return;
+    StringBuilder mps = new StringBuilder();
     for (int i=0 ; i<mountPoints.size() ; i++)
     {
       String mp = mountPoints.get(i);
       FileStore store = mountPointsStores.get(i);
       if (store != null) {
         try {
-          r.addMetric("fsf_total_" + mp, (double) store.getTotalSpace());
-          r.addMetric("fsf_usable_" + mp, (double) store.getUsableSpace());
-          r.addMetric("fsf_used_" + mp, (double) (store.getTotalSpace() - store.getUnallocatedSpace()));
+          if (mps.length()>0) mps.append(',');
+          mps.append(mp);
+          r.addMetric("freespace_total_" + mp, (double) store.getTotalSpace());
+          r.addMetric("freespace_usable_" + mp, (double) store.getUsableSpace());
+          r.addMetric("freespace_used_" + mp, (double) (store.getTotalSpace() - store.getUnallocatedSpace()));
         } catch (IOException e) {
           log(Level.SEVERE, "Grabbing free space for " + mp, e);
         }
       }
     }
+    r.addMetric("freespace_mountpoints", mps.toString());
   }
 
 
