@@ -13,12 +13,13 @@ import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.*;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 public class ProcGrabber extends AsyncGrabber {
   static final String MDSTAT_FILE = "/proc/mdstat";
   static final String NAME = "proc";
+
+  private boolean disabled = false;
 
   private Map<Long,Long> lastProcessesCpuUsage = new HashMap<>();
   // This is not the number of CPU but the number of ints to parse from the first line of /proc/stat
@@ -53,6 +54,13 @@ public class ProcGrabber extends AsyncGrabber {
 
   @Override
   public void setConfig(Map<String, String> config){
+
+    if (!new File("/proc/").exists() && !new File("/sys/").exists()) {
+      disabled = true;
+      log(Level.WARNING, "Neither /proc nor /sys exists, disabling ProcGrabber.");
+      return;
+    }
+
     blockDevices = Arrays.asList(config.get("blockDevices").split(","));
     if (blockDevices == null) {
       blockDevices = new ArrayList<>();
@@ -109,6 +117,9 @@ public class ProcGrabber extends AsyncGrabber {
   @Override
   public synchronized ResponseData grabSync() {
     ResponseData r = new ResponseData(this, System.currentTimeMillis());
+    if (disabled) {
+      return r;
+    }
     extract(r,"processes", this::grabProcesses, Duration.ZERO);
     extract(r,"uptime", this::grabUptimeAndLoad, Duration.ZERO);
     extract(r,"cpu", this::grabCpuUsage, Duration.ZERO);
