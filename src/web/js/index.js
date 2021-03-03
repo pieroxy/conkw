@@ -874,7 +874,9 @@ class MultivalueHolder {
                     loadChildren(this.element, this.childHolders);
                 } // Else nothing changed.
             } else {
-                handleError("From ("+(typeof from)+") or to ("+(typeof from)+") are not numbers in element id=" + this.element.id);
+                if (typeof from !== "undefined" || typeof to !== "undefined") {
+                    handleError("From ("+(typeof from)+") or to ("+(typeof from)+") are not numbers in element id=" + this.element.id);
+                }
             }
         } else { // numeric from -> to
             let invalues = extractFormattedValue(this.in, data);
