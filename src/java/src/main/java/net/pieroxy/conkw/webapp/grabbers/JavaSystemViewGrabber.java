@@ -9,9 +9,7 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
-import java.nio.file.FileStore;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public class JavaSystemViewGrabber extends AsyncGrabber {
   private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
@@ -96,7 +96,7 @@ public class JavaSystemViewGrabber extends AsyncGrabber {
           mps.append(mp);
           r.addMetric("freespace_total_" + mp, (double) store.getTotalSpace());
           r.addMetric("freespace_usable_" + mp, (double) store.getUsableSpace());
-          r.addMetric("freespace_used_" + mp, (double) (store.getTotalSpace() - store.getUnallocatedSpace()));
+          r.addMetric("freespace_used_" + mp, (double) (store.getTotalSpace() - store.getUsableSpace()));
         } catch (IOException e) {
           log(Level.SEVERE, "Grabbing free space for " + mp, e);
         }
@@ -138,17 +138,38 @@ public class JavaSystemViewGrabber extends AsyncGrabber {
 
   @Override
   public void setConfig(Map<String, String> config) {
-    mountPoints = Arrays.asList(config.get("mountPoints").split(","));
-    if (mountPoints == null) {
-      mountPoints = new ArrayList<>();
-      mountPoints.add("/");
+    String mpstr = config.get("mountPoints");
+    if (mpstr == null) {
+      try {
+        mountPoints = StreamSupport.stream(FileSystems.getDefault().getFileStores().spliterator(), false)
+            .map(f -> f.toString().split("\\(")[0].trim())
+            .filter(s -> !s.startsWith("/dev"))
+            .filter(s -> !s.startsWith("/snap"))
+            .filter(s -> !s.startsWith("/sys"))
+            .filter(s -> !s.startsWith("/System"))
+            .filter(s -> !s.startsWith("/proc"))
+            .filter(s -> !s.startsWith("/run"))
+            .collect(Collectors.toList());
+      } catch (Exception e) {
+        log(Level.WARNING, "Could not detect file stores", e);
+        mountPoints.clear();
+        if (new File("/").exists()) mountPoints.add("/");
+        if (new File("C:\\").exists()) mountPoints.add("C:\\");
+      }
+      if (canLogInfo()) log(Level.INFO, "Detected mount points to be " + mountPoints.stream().collect(Collectors.joining(",")));
+    } else {
+      mountPoints = Arrays.asList(mpstr.split(","));
     }
     mountPointsStores = new ArrayList<>(mountPoints.size());
     for (String mp : mountPoints) {
       try {
         mountPointsStores.add(Files.getFileStore(Paths.get(mp)));
       } catch (IOException e) {
-        log(Level.SEVERE, "Getting FileStore for " + mp, e);
+        if (canLogFine()) {
+          log(Level.SEVERE, "Getting FileStore for " + mp, e);
+        } else {
+          log(Level.WARNING, "Getting FileStore for " + mp + " failed.");
+        }
         mountPointsStores.add(null);
       }
     }

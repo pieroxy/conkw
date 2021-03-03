@@ -106,13 +106,12 @@
 
       <div id="hdd" class="cw-block">
           <heading>HDD USAGE</heading>
-          name&nbsp;&nbsp;size&nbsp;&nbsp;&nbsp;&nbsp;free
+          size&nbsp;&nbsp;&nbsp;used&nbsp;&nbsp;&nbsp;free<span style="float:right;">name</span>
           <BR/><HR/>
           <div cw-ns="sys" cw-multinode-in="m:str::freespace_mountpoints" cw-multinode-pattern="#">
-            <label cw-ns="sys" cw-value="l:str:fixedlen.4:#"></label>  <cw-label cw-ns="sys" cw-value="m:num:size:freespace_total_#"></cw-label>&nbsp;<cw-label cw-ns="sys" cw-value="m:num:size:freespace_usable_#"></cw-label><gauge cw-ns="sys" cw-gauge0="#6060a0:m:num::freespace_used_#" cw-min="l:num::0" cw-max="m:num::freespace_total_#"></gauge><BR/>
+            <label cw-ns="sys" cw-value="l:str::#" style="display:block;text-align:right"></label>
+            <cw-label cw-ns="sys" cw-value="m:num:size:freespace_total_#"></cw-label>&nbsp;<cw-label cw-ns="sys" cw-value="m:num:size:freespace_used_#"></cw-label>&nbsp;<cw-label cw-ns="sys" cw-value="m:num:size:freespace_usable_#"></cw-label><gauge cw-ns="sys" cw-gauge0="#6060a0:m:num::freespace_used_#" cw-min="l:num::0" cw-max="m:num::freespace_total_#"></gauge><BR/>
           </div>
-          
       </div>
-              
     </body>
 </html>
