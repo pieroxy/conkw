@@ -60,7 +60,7 @@ function scheduleLoad() {
 function load() {
     updateDelay();
     var xmlhttp = new XMLHttpRequest();
-    var url = "/api";
+    var url = "/api?grabbers=" + document.body.getAttribute("grabbers");
     var removeQS = false;
     if (location.href.indexOf("?") > 0) {
         url += location.href.substring(location.href.indexOf("?"));

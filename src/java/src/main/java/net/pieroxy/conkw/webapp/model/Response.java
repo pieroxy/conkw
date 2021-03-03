@@ -14,6 +14,18 @@ public class Response {
   public Response() {
     this.timestamp = System.currentTimeMillis();
   }
+  public Response(Response r, int jitter, String[]grabbers) {
+    this.timestamp = r.timestamp;
+    this.responseJitter = jitter;
+    this.errors = r.errors;
+    this.metrics = new HashMap<>(grabbers.length*2);
+    for (String s : grabbers) {
+      ResponseData rd = r.metrics.get(s);
+      if (rd!=null) {
+        this.metrics.put(s, rd);
+      }
+    }
+  }
 
   public void addError(String e) {
     errors.add(e);

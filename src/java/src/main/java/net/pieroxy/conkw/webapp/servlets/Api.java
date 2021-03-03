@@ -3,7 +3,6 @@ package net.pieroxy.conkw.webapp.servlets;
 import com.dslplatform.json.DslJson;
 import com.dslplatform.json.JsonWriter;
 import net.pieroxy.conkw.utils.JsonHelper;
-import net.pieroxy.conkw.webapp.Listener;
 import net.pieroxy.conkw.webapp.grabbers.Grabber;
 import net.pieroxy.conkw.webapp.model.Response;
 
@@ -14,25 +13,28 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Api extends HttpServlet {
   private final static Logger LOGGER = Logger.getLogger(Api.class.getName());
 
-  private static Collection<Grabber> grabbers;
+  private static Collection<Grabber> allGrabbers;
 
   static Response loadedResponse;
   static Thread thread;
   static boolean stopped;
   static long lastGet =  System.currentTimeMillis();
+  static Map<String, Long> lastRequestPerGrabber = new HashMap<>();
 
-  public static synchronized void setGrabbers(Collection<Grabber>g) {
+  public static synchronized void setAllGrabbers(Collection<Grabber>g) {
     if (thread == null) {
       thread = new Thread(Api::run, "Api Thread");
       thread.start();
     }
-    grabbers = g;
+    allGrabbers = g;
   }
 
   public static void close() {
@@ -50,35 +52,50 @@ public class Api extends HttpServlet {
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    lastGet =  System.currentTimeMillis();
+    long now = lastGet =  System.currentTimeMillis();
     String action = req.getParameter("_grabber_");
     if (action!=null) {
-      grabbers.forEach((g) -> {if (g.getName().equals(action)) {
-        String res = g.processAction(req.getParameterMap());
-        try {
-          resp.getOutputStream().write(res.getBytes(StandardCharsets.UTF_8));
-        } catch (IOException e) {
-          LOGGER.log(Level.SEVERE, "Grabbing " + g.getName(), e);
+      allGrabbers.forEach((g) -> {
+        if (g.getName().equals(action)) {
+          String res = g.processAction(req.getParameterMap());
+          try {
+            resp.getOutputStream().write(res.getBytes(StandardCharsets.UTF_8));
+          } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "Grabbing " + g.getName(), e);
+          }
         }
-      }
       });
     } else {
-      for (Grabber g : grabbers) g.processHttp(req);
-      writeResponse(resp);
+      // TODO: Remove this old crap. Messages should go through the process up there (action).
+      for (Grabber g : allGrabbers) g.processHttp(req);
+      String[]grabbersRequested = req.getParameter("grabbers").split(",");
+      markGrabbersRequested(grabbersRequested, now);
+      writeResponse(resp, grabbersRequested);
     }
   }
 
-  private void writeResponse(HttpServletResponse resp) throws IOException {
+  private void markGrabbersRequested(String[]grabbersRequested, long ts) {
+    for (String gname : grabbersRequested) {
+      Long l = lastRequestPerGrabber.get(gname);
+      if (l==null) {
+        Map<String, Long> newmap = new HashMap<>(lastRequestPerGrabber);
+        newmap.put(gname, ts);
+        lastRequestPerGrabber = newmap;
+      } else {
+        lastRequestPerGrabber.put(gname, ts);
+      }
+    }
+  }
+
+  private void writeResponse(HttpServletResponse resp, String[] grabbersRequested) throws IOException {
     resp.setContentType("application/json;charset=utf-8");
     DslJson<Object> json = JsonHelper.getJson();
     JsonWriter w = JsonHelper.getWriter();
     synchronized (w) {
-      //synchronized (loadedResponse) { -> Probably no need. int assignment is atomic and if two threads are concurrently there they will have ~ the same timestamp.
-        loadedResponse.setResponseJitter((int)(System.currentTimeMillis()%1000));
-        w.reset(resp.getOutputStream());
-        json.serialize(w, loadedResponse);
-        w.flush();
-      //}
+      Response r = new Response(loadedResponse, (int)(System.currentTimeMillis()%1000), grabbersRequested);
+      w.reset(resp.getOutputStream());
+      json.serialize(w, r);
+      w.flush();
     }
   }
 
@@ -86,17 +103,18 @@ public class Api extends HttpServlet {
     while (thread == Thread.currentThread()) {
       long nowms= System.currentTimeMillis();
 
-      if (nowms-lastGet < 2100) {
-        Response r = new Response();
-        for (Grabber g : grabbers) {
-          try {
+      Response r = new Response();
+      for (Grabber g : allGrabbers) {
+        try {
+          if (isGrabberActive(g, nowms)) {
             r.add(g.grab());
-          } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Grabber grab failed : " + g.toString(), e);
+            if (LOGGER.isLoggable(Level.FINE)) LOGGER.fine("Grabbing " + g.getName());
           }
+        } catch (Exception e) {
+          LOGGER.log(Level.SEVERE, "Grabber grab failed : " + g.toString(), e);
         }
-        loadedResponse = r;
       }
+      loadedResponse = r;
 
       long now= System.currentTimeMillis() % 1000;
       long wait = 1000-now;
@@ -113,6 +131,11 @@ public class Api extends HttpServlet {
     }
     LOGGER.info("Api Thread stopped.");
     stopped = true;
+  }
+
+  private static boolean isGrabberActive(Grabber g, long now) {
+    Long lastSeen = lastRequestPerGrabber.get(g.getName());
+    return lastSeen!=null && (now-lastSeen < 3000);
   }
 }
 

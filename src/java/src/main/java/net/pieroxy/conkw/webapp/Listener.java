@@ -3,7 +3,6 @@ package net.pieroxy.conkw.webapp;
 import net.pieroxy.conkw.config.Config;
 import net.pieroxy.conkw.config.ConfigReader;
 import net.pieroxy.conkw.config.GrabberConfig;
-import net.pieroxy.conkw.standalone.Runner;
 import net.pieroxy.conkw.webapp.grabbers.*;
 import net.pieroxy.conkw.webapp.servlets.Api;
 import net.pieroxy.conkw.webapp.servlets.HtmlTemplates;
@@ -81,7 +80,7 @@ public class Listener implements ServletContextListener {
       //   GC shrinks it back closer to whatever is needed.
       System.gc();
 
-      Api.setGrabbers(grabbers);
+      Api.setAllGrabbers(grabbers);
       HtmlTemplates.setGrabbers(grabbers);
     } catch (Exception e) {
       throw new RuntimeException(e);
