@@ -72,18 +72,6 @@
           <br/>
         </div>
     
-        <div cw-ns="oshi" cw-ifextracted="physicalmemory" class="cw-block">
-          <heading>PHYSICAL MEMORY</heading>
-          <div cw-ns="oshi" cw-style-display="e:num::${num.physicalmemory_nb==0?'':'none'}" style="text-align:right">No modules detected</div>
-          <span cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::physicalmemory_nb" cw-multinode-pattern="#">
-            <label>  Module # : </label><cw-label cw-ns="oshi" cw-value="m:str::physicalmemory_name_#"></cw-label><br/>
-            <label>  Capacity : </label><cw-label cw-ns="oshi" cw-value="m:num:size:physicalmemory_capacity_#"></cw-label><br/>
-            <label>      Type : </label><cw-label cw-ns="oshi" cw-value="m:str::physicalmemory_type_#"></cw-label><br/>
-            <label>     Clock : </label><cw-label cw-ns="oshi" cw-value="m:num:si:physicalmemory_clock_#"></cw-label>Hz<br/>
-            <label>  Manufact : </label><cw-label cw-ns="oshi" cw-value="m:str::physicalmemory_manufacturer_#"></cw-label><br/>
-          </span>
-        </div>
-    
         <div cw-ns="oshi" cw-ifextracted="virtualmemory" class="cw-block">
           <heading>VIRTUAL MEMORY</heading>
           <label>       Max : </label><cw-label cw-ns="oshi" cw-value="m:num:size:virtualmemory_max"></cw-label>
@@ -98,8 +86,111 @@
           <br/>
           <label> Swap Used : </label><cw-label cw-ns="oshi" cw-value="m:num:size:virtualmemory_swap_used"></cw-label>
           <gauge cw-ns="oshi" cw-min="l:num::0" log="true" cw-max="m:num::virtualmemory_swap_total" cw-value-warn="e:num::${num.virtualmemory_swap_total*0.5}" cw-gauge0="#208020:m:num::virtualmemory_swap_used"></gauge>
-
           <br/>
+        </div>
+
+        <div cw-ns="oshi" cw-ifextracted="cpu" class="cw-block">
+          <heading>CPU</heading>
+          <label>Ctx switches : </label><cw-label cw-ns="oshi" cw-value="m:num::cpu_context_switches"></cw-label>
+          <br/>
+          <label>  Interrupts : </label><cw-label cw-ns="oshi" cw-value="m:num::cpu_interrupts"></cw-label>
+          <br/>
+          <label> Log Proc Ct : </label><cw-label cw-ns="oshi" cw-value="m:num::cpu_logical_processor_count"></cw-label>
+          <br/>
+          <label> Phy Proc Ct : </label><cw-label cw-ns="oshi" cw-value="m:num::cpu_physical_processor_count"></cw-label>
+          <br/>
+          <label>    Max Freq : </label><cw-label cw-ns="oshi" cw-value="m:num:si:cpu_max_freq"></cw-label>Hz
+          <br/>
+          <label>  Phy Pkg Ct : </label><cw-label cw-ns="oshi" cw-value="m:num::cpu_physical_package_count"></cw-label>
+          <br/>
+          <label>    load 1mn : </label><cw-label cw-ns="oshi" cw-value="m:num:load:cpu_load_1"></cw-label>
+          <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::cpu_logical_processor_count" cw-value-warn="e:num:valueabove:${num.cpu_logical_processor_count*0.8}" cw-gauge0="default:m:num::cpu_load_1"></gauge>
+          <br/>
+          <label>    load 5mn : </label><cw-label cw-ns="oshi" cw-value="m:num:load:cpu_load_2"></cw-label>
+          <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::cpu_logical_processor_count" cw-value-warn="e:num:valueabove:${num.cpu_logical_processor_count*0.8}" cw-gauge0="default:m:num::cpu_load_2"></gauge>
+          <br/>
+          <label>   load 15mn : </label><cw-label cw-ns="oshi" cw-value="m:num:load:cpu_load_3"></cw-label>
+          <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::cpu_logical_processor_count" cw-value-warn="e:num:valueabove:${num.cpu_logical_processor_count*0.8}" cw-gauge0="default:m:num::cpu_load_3"></gauge>
+          <br/>
+          <label>   CPU usage : </label><cw-label cw-ns="oshi" cw-value="m:num:prc01:cpu_load"></cw-label>
+          <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="l:num::1" cw-value-warn="l:num::0.8" cw-gauge0="default:m:num::cpu_load"></gauge>
+          <br/>
+        </div>
+    
+        <div cw-ns="oshi" cw-ifextracted="cpubycore" class="cw-block">
+          <heading>CPU BY CORE</heading>
+          <span cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::cpubycore_count" cw-multinode-pattern="#">
+            <label>  Core <cw-label cw-ns="oshi" cw-value="l:num:num:#"></cw-label> : </label><cw-label cw-ns="oshi" cw-value="m:num:prc01:cpubycore_load_#"></cw-label>
+            <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="l:num::1" cw-value-warn="l:num::0.8" cw-gauge0="default:m:num::cpubycore_load_#"></gauge>
+            <br/>
+          </span>
+        </div>
+
+        <div cw-ns="oshi" cw-ifextracted="diskios" class="cw-block">
+          <heading>DISK IOs</heading>
+          <span cw-ns="oshi" cw-multinode-in="m:str::diskios_disks" cw-multinode-pattern="#">
+            <label style="font-weight:bold">        Disk : </label><cw-label>#</cw-label>
+            <br/>
+            <label>    Read : </label><cw-label cw-ns="oshi" cw-value="m:num:size:diskios_read_bytes_#"></cw-label>
+            <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="l:num::100000000" cw-value-warn="l:num::90000000" cw-gauge0="default:m:num::diskios_read_bytes_#"></gauge>
+            <br/>
+            <label>   Write : </label><cw-label cw-ns="oshi" cw-value="m:num:size:diskios_write_bytes_#"></cw-label>
+            <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="l:num::100000000" cw-value-warn="l:num::90000000" cw-gauge0="default:m:num::diskios_write_bytes_#"></gauge>
+            <br/>
+          </span>
+          <br/>
+          <label>All Read : </label><cw-label cw-ns="oshi" cw-value="m:num:size:diskios_read_bytes"></cw-label>
+          <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="l:num::100000000" cw-value-warn="l:num::90000000" cw-gauge0="default:m:num::diskios_read_bytes"></gauge>
+          <br/>
+          <label>All Wrt. : </label><cw-label cw-ns="oshi" cw-value="m:num:size:diskios_write_bytes"></cw-label>
+          <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="l:num::100000000" cw-value-warn="l:num::90000000" cw-gauge0="default:m:num::diskios_write_bytes"></gauge>
+          <br/>
+        </div>
+
+        <div cw-ns="oshi" cw-ifextracted="netbw" class="cw-block">
+          <heading>NET BW</heading>
+          <div cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::netbw_count" cw-multinode-pattern="#">
+            <label style="font-weight:bold">     NIC : </label><cw-label cw-ns="oshi" cw-value="m:str::nics_name_#">#</cw-label>
+            <br/>
+            <label>      In : </label><cw-label cw-ns="oshi" cw-value="m:num:size:netbw_in_#"></cw-label>
+            <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::netbw_speed_#" cw-value-warn="e:num::${num.netbw_speed_#*0.9}" cw-gauge0="default:m:num::netbw_in_#"></gauge>
+            <br/>
+            <label>     Out : </label><cw-label cw-ns="oshi" cw-value="m:num:size:netbw_out_#"></cw-label>
+            <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::netbw_speed_#" cw-value-warn="e:num::${num.netbw_speed_#*0.9}" cw-gauge0="default:m:num::netbw_out_#"></gauge>
+            <br/>
+          </div>
+          <br/>
+          <label>All Read : </label><cw-label cw-ns="oshi" cw-value="m:num:size:netbw_in"></cw-label>
+          <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::netbw_speed" cw-value-warn="e:num::${num.netbw_speed*0.9}" cw-gauge0="default:m:num::netbw_in"></gauge>
+          <hgauge cw-ns="oshi" cw-min="l:num::0" log="true" cw-max="m:num::netbw_speed" cw-hgauge0="#208020:m:num::netbw_in"></hgauge>
+          <br clear="both"/>
+          <label>All Wrt. : </label><cw-label cw-ns="oshi" cw-value="m:num:size:netbw_out"></cw-label>
+          <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::netbw_speed" cw-value-warn="e:num::${num.netbw_speed*0.9}" cw-gauge0="default:m:num::netbw_out"></gauge>
+          <hgauge cw-ns="oshi" cw-min="l:num::0" log="true" cw-max="m:num::netbw_speed" cw-hgauge0="#208020:m:num::netbw_out"></hgauge>
+          <br/>
+          <br/>
+        </div>
+
+        <div cw-ns="oshi" cw-ifextracted="battery" class="cw-block">
+          <heading>BATTERY</heading>
+          <div cw-ns="oshi" cw-style-display="e:num::${num.battery_remaining_prc===undefined?'':'none'}">No battery detected</div>
+          <div cw-ns="oshi" cw-style-display="e:num::${num.battery_remaining_prc===undefined?'none':''}">
+            <cw-label style="margin-top:0.5em" cw-value-warn="l:num:valuebelow:0.2" cw-ns="oshi" cw-value="m:num:prc01:battery_remaining_prc"></cw-label>
+            <div class="battery"><img src="/battery/batt_left.png"><span class="battery_middle"><img cw-ns="oshi" cw-style-display="e:str::${num.bat_plugged==1?'':'none'}" src="/battery/batt_plugged.png"><gauge cw-ns="oshi" cw-gauge0="default:m:num::battery_remaining_prc" cw-min="l:num::0" cw-max="l:num::1" cw-value-warn="l:num:valuebelow:0.25"></gauge></span><img src="/battery/batt_right.png"></div>
+          </div>
+        </div>
+
+
+        <div cw-ns="oshi" cw-ifextracted="physicalmemory" class="cw-block">
+          <heading>PHYSICAL MEMORY</heading>
+          <div cw-ns="oshi" cw-style-display="e:num::${num.physicalmemory_nb==0?'':'none'}" style="text-align:right">No modules detected</div>
+          <span cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::physicalmemory_nb" cw-multinode-pattern="#">
+            <label>  Module # : </label><cw-label cw-ns="oshi" cw-value="m:str::physicalmemory_name_#"></cw-label><br/>
+            <label>  Capacity : </label><cw-label cw-ns="oshi" cw-value="m:num:size:physicalmemory_capacity_#"></cw-label><br/>
+            <label>      Type : </label><cw-label cw-ns="oshi" cw-value="m:str::physicalmemory_type_#"></cw-label><br/>
+            <label>     Clock : </label><cw-label cw-ns="oshi" cw-value="m:num:si:physicalmemory_clock_#"></cw-label>Hz<br/>
+            <label>  Manufact : </label><cw-label cw-ns="oshi" cw-value="m:str::physicalmemory_manufacturer_#"></cw-label><br/>
+          </span>
         </div>
     
         <div cw-ns="oshi" cw-ifextracted="computer" class="cw-block">
@@ -140,43 +231,6 @@
           <br/>
         </div>
     
-        <div cw-ns="oshi" cw-ifextracted="cpu" class="cw-block">
-          <heading>CPU</heading>
-          <label>Ctx switches : </label><cw-label cw-ns="oshi" cw-value="m:num::cpu_context_switches"></cw-label>
-          <br/>
-          <label>  Interrupts : </label><cw-label cw-ns="oshi" cw-value="m:num::cpu_interrupts"></cw-label>
-          <br/>
-          <label> Log Proc Ct : </label><cw-label cw-ns="oshi" cw-value="m:num::cpu_logical_processor_count"></cw-label>
-          <br/>
-          <label> Phy Proc Ct : </label><cw-label cw-ns="oshi" cw-value="m:num::cpu_physical_processor_count"></cw-label>
-          <br/>
-          <label>    Max Freq : </label><cw-label cw-ns="oshi" cw-value="m:num:si:cpu_max_freq"></cw-label>Hz
-          <br/>
-          <label>  Phy Pkg Ct : </label><cw-label cw-ns="oshi" cw-value="m:num::cpu_physical_package_count"></cw-label>
-          <br/>
-          <label>    load 1mn : </label><cw-label cw-ns="oshi" cw-value="m:num:load:cpu_load_1"></cw-label>
-          <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::cpu_logical_processor_count" cw-value-warn="e:num:valueabove:${num.cpu_logical_processor_count*0.8}" cw-gauge0="default:m:num::cpu_load_1"></gauge>
-          <br/>
-          <label>    load 5mn : </label><cw-label cw-ns="oshi" cw-value="m:num:load:cpu_load_2"></cw-label>
-          <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::cpu_logical_processor_count" cw-value-warn="e:num:valueabove:${num.cpu_logical_processor_count*0.8}" cw-gauge0="default:m:num::cpu_load_2"></gauge>
-          <br/>
-          <label>   load 15mn : </label><cw-label cw-ns="oshi" cw-value="m:num:load:cpu_load_3"></cw-label>
-          <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::cpu_logical_processor_count" cw-value-warn="e:num:valueabove:${num.cpu_logical_processor_count*0.8}" cw-gauge0="default:m:num::cpu_load_3"></gauge>
-          <br/>
-          <label>   CPU usage : </label><cw-label cw-ns="oshi" cw-value="m:num:prc01:cpu_load"></cw-label>
-          <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="l:num::1" cw-value-warn="l:num::0.8" cw-gauge0="default:m:num::cpu_load"></gauge>
-          <br/>
-        </div>
-    
-        <div cw-ns="oshi" cw-ifextracted="cpubycore" class="cw-block">
-          <heading>CPU BY CORE</heading>
-          <span cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::cpubycore_count" cw-multinode-pattern="#">
-            <label>  Core <cw-label cw-ns="oshi" cw-value="l:num:num:#"></cw-label> : </label><cw-label cw-ns="oshi" cw-value="m:num:prc01:cpubycore_load_#"></cw-label>
-            <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="l:num::1" cw-value-warn="l:num::0.8" cw-gauge0="default:m:num::cpubycore_load_#"></gauge>
-            <br/>
-          </span>
-        </div>
-
 
         <div cw-ns="oshi" cw-ifextracted="cpuident" class="cw-block">
           <heading>CPU IDENT</heading>
@@ -220,27 +274,6 @@
             <label>Release Year : </label><cw-label cw-ns="oshi" cw-value="m:num::displays_year_#"></cw-label>
             <br/>
           </span>
-        </div>
-
-        <div cw-ns="oshi" cw-ifextracted="diskios" class="cw-block">
-          <heading>DISK IOs</heading>
-          <span cw-ns="oshi" cw-multinode-in="m:str::diskios_disks" cw-multinode-pattern="#">
-            <label style="font-weight:bold">        Disk : </label><cw-label>#</cw-label>
-            <br/>
-            <label>    Read : </label><cw-label cw-ns="oshi" cw-value="m:num:size:diskios_read_bytes_#"></cw-label>
-            <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="l:num::100000000" cw-value-warn="l:num::90000000" cw-gauge0="default:m:num::diskios_read_bytes_#"></gauge>
-            <br/>
-            <label>   Write : </label><cw-label cw-ns="oshi" cw-value="m:num:size:diskios_write_bytes_#"></cw-label>
-            <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="l:num::100000000" cw-value-warn="l:num::90000000" cw-gauge0="default:m:num::diskios_write_bytes_#"></gauge>
-            <br/>
-          </span>
-          <br/>
-          <label>All Read : </label><cw-label cw-ns="oshi" cw-value="m:num:size:diskios_read_bytes"></cw-label>
-          <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="l:num::100000000" cw-value-warn="l:num::90000000" cw-gauge0="default:m:num::diskios_read_bytes"></gauge>
-          <br/>
-          <label>All Wrt. : </label><cw-label cw-ns="oshi" cw-value="m:num:size:diskios_write_bytes"></cw-label>
-          <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="l:num::100000000" cw-value-warn="l:num::90000000" cw-gauge0="default:m:num::diskios_write_bytes"></gauge>
-          <br/>
         </div>
 
         <div cw-ns="oshi" cw-ifextracted="diskinfos">
@@ -309,39 +342,6 @@
           </div>
         </div>
     
-        <div cw-ns="oshi" cw-ifextracted="netbw" class="cw-block">
-          <heading>NET BW</heading>
-          <div cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::netbw_count" cw-multinode-pattern="#">
-            <label style="font-weight:bold">     NIC : </label><cw-label cw-ns="oshi" cw-value="m:str::nics_name_#">#</cw-label>
-            <br/>
-            <label>      In : </label><cw-label cw-ns="oshi" cw-value="m:num:size:netbw_in_#"></cw-label>
-            <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::netbw_speed_#" cw-value-warn="e:num::${num.netbw_speed_#*0.9}" cw-gauge0="default:m:num::netbw_in_#"></gauge>
-            <br/>
-            <label>     Out : </label><cw-label cw-ns="oshi" cw-value="m:num:size:netbw_out_#"></cw-label>
-            <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::netbw_speed_#" cw-value-warn="e:num::${num.netbw_speed_#*0.9}" cw-gauge0="default:m:num::netbw_out_#"></gauge>
-            <br/>
-          </div>
-          <br/>
-          <label>All Read : </label><cw-label cw-ns="oshi" cw-value="m:num:size:netbw_in"></cw-label>
-          <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::netbw_speed" cw-value-warn="e:num::${num.netbw_speed*0.9}" cw-gauge0="default:m:num::netbw_in"></gauge>
-          <hgauge cw-ns="oshi" cw-min="l:num::0" log="true" cw-max="m:num::netbw_speed" cw-hgauge0="#208020:m:num::netbw_in"></hgauge>
-          <br clear="both"/>
-          <label>All Wrt. : </label><cw-label cw-ns="oshi" cw-value="m:num:size:netbw_out"></cw-label>
-          <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::netbw_speed" cw-value-warn="e:num::${num.netbw_speed*0.9}" cw-gauge0="default:m:num::netbw_out"></gauge>
-          <hgauge cw-ns="oshi" cw-min="l:num::0" log="true" cw-max="m:num::netbw_speed" cw-hgauge0="#208020:m:num::netbw_out"></hgauge>
-          <br/>
-          <br/>
-        </div>
-
-        <div cw-ns="oshi" cw-ifextracted="battery" class="cw-block">
-          <heading>BATTERY</heading>
-          <div cw-ns="oshi" cw-style-display="e:num::${num.battery_remaining_prc===undefined?'':'none'}">No battery detected</div>
-          <div cw-ns="oshi" cw-style-display="e:num::${num.battery_remaining_prc===undefined?'none':''}">
-            <cw-label style="margin-top:0.5em" cw-value-warn="l:num:valuebelow:0.2" cw-ns="oshi" cw-value="m:num:prc01:battery_remaining_prc"></cw-label>
-            <div class="battery"><img src="/battery/batt_left.png"><span class="battery_middle"><img cw-ns="oshi" cw-style-display="e:str::${num.bat_plugged==1?'':'none'}" src="/battery/batt_plugged.png"><gauge cw-ns="oshi" cw-gauge0="default:m:num::battery_remaining_prc" cw-min="l:num::0" cw-max="l:num::1" cw-value-warn="l:num:valuebelow:0.25"></gauge></span><img src="/battery/batt_right.png"></div>
-          </div>
-        </div>
-
         <div cw-ns="oshi" cw-ifextracted="psus" class="cw-block">
           <heading>PSUs</heading>
           <div cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::psus_count" cw-multinode-pattern="#">
