@@ -2,13 +2,11 @@
 Here are the things we have in mind for conkw. This is kind of my TODO list.
 
 ## UI
-* Explode default UI on the server side to allow easy cloning.
+* Explode default UI on the server side to allow easy cloning - IN PROGRESS
 * Allow to override UI elements - today you need to mess with files that are going to be overriden at the next update.
+* Design gauges so that they don't need a maximum. Sometimes you don't know the max.
 
 ## Grabbers
-
-In progress:
-* OSHIGrabber to fetch system metrics on all OSes.
 
 Those existing that need to be ported to conkw (so, expect them soon)
 * *External Metrics Ingestion*: allow an external system to push metrics
