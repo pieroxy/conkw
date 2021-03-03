@@ -116,6 +116,7 @@ function updateStatus() {
 function zoom(zl) {
     console.log("zooming to " + zl);
     document.body.style.transform = "scale(" + (zl / 100) + ")";
+    document.body.style.width = (10000/zl) + "%";
 }
 
 function getGeometry() {
@@ -129,13 +130,18 @@ function forceScreenRefresh() {
 function checkScreen() {
     if (geometry != getGeometry()) {
         zoom(100);
-        geometry = getGeometry()
-        var zv = window.innerHeight * 100 / window.document.body.scrollHeight;
-        var zh = window.innerWidth * 100 / window.document.body.scrollWidth;
-        var tz = Math.min(100, zv, zh);
-        if (tz < 100) tz *= 0.99;
-        window.zoomlevel = tz;
-        zoom(tz);
+        let ctz = 100;
+        while (true) {
+            geometry = getGeometry()
+            var zv = window.innerHeight * (100) / window.document.body.scrollHeight;
+            var zh = window.innerWidth * (10000/ctz) / window.document.body.scrollWidth;
+            var tz = Math.min(100, zv, zh);
+            if (tz < 100) tz *= 0.99;
+            if (tz >= ctz) break;
+
+            window.zoomlevel = ctz = ctz*0.9;
+            zoom(ctz);
+        }
     }
 }
 

@@ -61,9 +61,14 @@
         <div cw-ns="oshi" cw-ifextracted="memory" class="cw-block">
           <heading>MEMORY</heading>
           <label>     Total : </label><cw-label cw-ns="oshi" cw-value="m:num:size:memory_total"></cw-label>
+          <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::memory_total" cw-value-warn="e:num:valueabove:${num.memory_total*0.8}" cw-gauge0="default:m:num::memory_in_use"></gauge>
           <br/>
           <label> available : </label><cw-label cw-ns="oshi" cw-value="m:num:size:memory_available"></cw-label>
-          <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::memory_total" cw-value-warn="e:num:valueabove:${num.memory_total*0.8}" cw-gauge0="default:m:num::memory_available"></gauge>
+          <hgauge style="height:3em" cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::memory_total" cw-hgauge0="#208020:m:num::memory_in_use"></hgauge>
+          <br/>
+          <label>    in use : </label><cw-label cw-ns="oshi" cw-value="m:num:size:memory_in_use"></cw-label>
+          <br/>
+          <label> page size : </label><cw-label cw-ns="oshi" cw-value="m:num:size:memory_page_size"></cw-label>
           <br/>
         </div>
     
@@ -81,17 +86,19 @@
     
         <div cw-ns="oshi" cw-ifextracted="virtualmemory" class="cw-block">
           <heading>VIRTUAL MEMORY</heading>
-          <label>         Max : </label><cw-label cw-ns="oshi" cw-value="m:num:size:virtualmemory_max"></cw-label>
+          <label>       Max : </label><cw-label cw-ns="oshi" cw-value="m:num:size:virtualmemory_max"></cw-label>
           <br/>
-          <label>      In Use : </label><cw-label cw-ns="oshi" cw-value="m:num:size:virtualmemory_in_use"></cw-label>
+          <label>    In Use : </label><cw-label cw-ns="oshi" cw-value="m:num:size:virtualmemory_in_use"></cw-label>
           <br/>
-          <label>     Swap in : </label><cw-label cw-ns="oshi" cw-value="m:num:si:virtualmemory_swap_in"></cw-label>
+          <label>   Swap in : </label><cw-label cw-ns="oshi" cw-value="m:num:si:virtualmemory_swap_in"></cw-label>
           <br/>
-          <label>    Swap out : </label><cw-label cw-ns="oshi" cw-value="m:num:si:virtualmemory_swap_out"></cw-label>
+          <label>  Swap out : </label><cw-label cw-ns="oshi" cw-value="m:num:si:virtualmemory_swap_out"></cw-label>
           <br/>
-          <label>  Swap Total : </label><cw-label cw-ns="oshi" cw-value="m:num:size:virtualmemory_swap_total"></cw-label>
+          <label>Swap Total : </label><cw-label cw-ns="oshi" cw-value="m:num:size:virtualmemory_swap_total"></cw-label>
           <br/>
-          <label>   Swap Used : </label><cw-label cw-ns="oshi" cw-value="m:num:size:virtualmemory_swap_used"></cw-label>
+          <label> Swap Used : </label><cw-label cw-ns="oshi" cw-value="m:num:size:virtualmemory_swap_used"></cw-label>
+          <gauge cw-ns="oshi" cw-min="l:num::0" log="true" cw-max="m:num::virtualmemory_swap_total" cw-value-warn="e:num::${num.virtualmemory_swap_total*0.5}" cw-gauge0="#208020:m:num::virtualmemory_swap_used"></gauge>
+
           <br/>
         </div>
     
