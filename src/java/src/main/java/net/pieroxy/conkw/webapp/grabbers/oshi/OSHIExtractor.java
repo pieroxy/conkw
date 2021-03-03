@@ -16,7 +16,6 @@ public class OSHIExtractor {
   private CentralProcessor processor;
   private List<UsbDevice> usbDevices;
   private List<SoundCard> soundCards;
-  private List<PowerSource> powerSources;
   private List<GraphicsCard> graphicsCards;
   private List<Display> displays;
   private VirtualMemory virtualMemory;
@@ -173,8 +172,7 @@ public class OSHIExtractor {
   }
 
   public List<PowerSource> getPowerSources() {
-    if (powerSources == null) powerSources = getHardware().getPowerSources();
-    return powerSources;
+    return getHardware().getPowerSources();
   }
 
   public List<SoundCard> getSoundCards() {

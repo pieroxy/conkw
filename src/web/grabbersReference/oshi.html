@@ -176,7 +176,7 @@
           <div cw-ns="oshi" cw-style-display="e:num::${num.battery_remaining_prc===undefined?'':'none'}">No battery detected</div>
           <div cw-ns="oshi" cw-style-display="e:num::${num.battery_remaining_prc===undefined?'none':''}">
             <cw-label style="margin-top:0.5em" cw-value-warn="l:num:valuebelow:0.2" cw-ns="oshi" cw-value="m:num:prc01:battery_remaining_prc"></cw-label>
-            <div class="battery"><img src="/battery/batt_left.png"><span class="battery_middle"><img cw-ns="oshi" cw-style-display="e:str::${num.bat_plugged==1?'':'none'}" src="/battery/batt_plugged.png"><gauge cw-ns="oshi" cw-gauge0="default:m:num::battery_remaining_prc" cw-min="l:num::0" cw-max="l:num::1" cw-value-warn="l:num:valuebelow:0.25"></gauge></span><img src="/battery/batt_right.png"></div>
+            <div class="battery"><img src="/battery/batt_left.png"><span class="battery_middle"><img cw-ns="oshi" cw-style-display="e:str::${num.battery_plugged==1?'':'none'}" src="/battery/batt_plugged.png"><gauge cw-ns="oshi" cw-gauge0="default:m:num::battery_remaining_prc" cw-min="l:num::0" cw-max="l:num::1" cw-value-warn="l:num:valuebelow:0.25"></gauge></span><img src="/battery/batt_right.png"></div>
           </div>
         </div>
 
@@ -380,6 +380,12 @@
             <br/>
             <label>Time Rem Inst: </label><cw-label cw-ns="oshi" cw-value="m:num::psus_time_remaining_instant_#"></cw-label>
             <br/>
+            <label>   In Charge : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_in_charge_#"></cw-label>
+            <br/>
+            <label>In Discharge : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_in_discharge_#"></cw-label>
+            <br/>
+            <label>  Pwr Online : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_power_online_#"></cw-label>
+            <br/>
           </div>
         </div>
     
@@ -473,7 +479,7 @@
               <br/>
               <label>  Volume : </label><cw-label cw-ns="oshi" cw-value="m:str::filestores_volume_#"></cw-label>
               <br/>
-              <label> (T/F/U) : </label><cw-label cw-ns="oshi" cw-value="m:num:size:filestores_free_space_#"></cw-label> ~<cw-label cw-ns="oshi" cw-value="m:num:size:filestores_usable_space_#"></cw-label> / <cw-label cw-ns="oshi" cw-value="m:num:size:filestores_total_space_#"></cw-label>
+              <label> (F/U/T) : </label><cw-label cw-ns="oshi" cw-value="m:num:size:filestores_free_space_#"></cw-label> ~<cw-label cw-ns="oshi" cw-value="m:num:size:filestores_usable_space_#"></cw-label> / <cw-label cw-ns="oshi" cw-value="m:num:size:filestores_total_space_#"></cw-label>
               <br/>
             </div>
           </div>
