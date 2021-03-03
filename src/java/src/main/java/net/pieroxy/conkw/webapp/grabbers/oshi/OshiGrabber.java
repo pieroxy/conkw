@@ -512,8 +512,12 @@ public class OshiGrabber extends AsyncGrabber {
   }
 
   private void extractMemory(ResponseData res) {
-    res.addMetric("memory_available", extractor.getMemory().getAvailable());
-    res.addMetric("memory_total", extractor.getMemory().getTotal());
+    long av = extractor.getMemory().getAvailable();
+    long total = extractor.getMemory().getTotal();
+    res.addMetric("memory_available", av);
+    res.addMetric("memory_total", total);
+    res.addMetric("memory_in_use", total-av);
+    res.addMetric("memory_page_size", extractor.getMemory().getPageSize());
   }
 
   private void extractSensors(ResponseData res) {
