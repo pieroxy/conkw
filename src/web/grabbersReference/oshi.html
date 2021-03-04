@@ -93,17 +93,21 @@
 
         <div cw-ns="oshi" cw-ifextracted="cpu" class="cw-block">
           <heading>CPU</heading>
+          <label>    Max Freq : </label><cw-label cw-ns="oshi" cw-value="m:num:si:cpu_max_freq"></cw-label>Hz
+          <br/>
           <label>Ctx switches : </label><cw-label cw-ns="oshi" cw-value="m:num::cpu_context_switches"></cw-label>
           <br/>
           <label>  Interrupts : </label><cw-label cw-ns="oshi" cw-value="m:num::cpu_interrupts"></cw-label>
           <br/>
-          <label> Log Proc Ct : </label><cw-label cw-ns="oshi" cw-value="m:num::cpu_logical_processor_count"></cw-label>
+          <label>   CPU usage : </label><cw-label cw-ns="oshi" cw-value="m:num:prc01:cpu_load"></cw-label>
+          <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="l:num::1" cw-value-warn="l:num::0.8" cw-gauge0="default:m:num::cpu_load"></gauge>
+          <br/>
+          <label>  Phy Pkg Ct : </label><cw-label cw-ns="oshi" cw-value="m:num::cpu_physical_package_count"></cw-label>
+          <hgauge style="height:3em" cw-ns="oshi" cw-min="l:num::0" cw-max="l:num::1" cw-hgauge0="default:m:num::cpu_load"></hgauge>
           <br/>
           <label> Phy Proc Ct : </label><cw-label cw-ns="oshi" cw-value="m:num::cpu_physical_processor_count"></cw-label>
           <br/>
-          <label>    Max Freq : </label><cw-label cw-ns="oshi" cw-value="m:num:si:cpu_max_freq"></cw-label>Hz
-          <br/>
-          <label>  Phy Pkg Ct : </label><cw-label cw-ns="oshi" cw-value="m:num::cpu_physical_package_count"></cw-label>
+          <label> Log Proc Ct : </label><cw-label cw-ns="oshi" cw-value="m:num::cpu_logical_processor_count"></cw-label>
           <br/>
           <label>    load 1mn : </label><cw-label cw-ns="oshi" cw-value="m:num:load:cpu_load_1"></cw-label>
           <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::cpu_logical_processor_count" cw-value-warn="e:num:valueabove:${num.cpu_logical_processor_count*0.8}" cw-gauge0="default:m:num::cpu_load_1"></gauge>
@@ -113,9 +117,6 @@
           <br/>
           <label>   load 15mn : </label><cw-label cw-ns="oshi" cw-value="m:num:load:cpu_load_3"></cw-label>
           <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::cpu_logical_processor_count" cw-value-warn="e:num:valueabove:${num.cpu_logical_processor_count*0.8}" cw-gauge0="default:m:num::cpu_load_3"></gauge>
-          <br/>
-          <label>   CPU usage : </label><cw-label cw-ns="oshi" cw-value="m:num:prc01:cpu_load"></cw-label>
-          <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="l:num::1" cw-value-warn="l:num::0.8" cw-gauge0="default:m:num::cpu_load"></gauge>
           <br/>
         </div>
     
