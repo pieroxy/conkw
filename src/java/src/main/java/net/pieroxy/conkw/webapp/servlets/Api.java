@@ -53,7 +53,7 @@ public class Api extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     long now = lastGet =  System.currentTimeMillis();
-    String action = req.getParameter("_grabber_");
+    final String action = req.getParameter("_grabber_");
     if (action!=null) {
       allGrabbers.forEach((g) -> {
         if (g.getName().equals(action)) {
@@ -68,9 +68,14 @@ public class Api extends HttpServlet {
     } else {
       // TODO: Remove this old crap. Messages should go through the process up there (action).
       for (Grabber g : allGrabbers) g.processHttp(req);
-      String[]grabbersRequested = req.getParameter("grabbers").split(",");
-      markGrabbersRequested(grabbersRequested, now);
-      writeResponse(resp, grabbersRequested);
+      String grabbers = req.getParameter("grabbers");
+      if (grabbers == null) {
+        writeResponse(resp, Response.getError("Grabbers were not specified"));
+      } else {
+        String[] grabbersRequested = grabbers.split(",");
+        markGrabbersRequested(grabbersRequested, now);
+        buildAndWriteResponse(resp, grabbersRequested);
+      }
     }
   }
 
@@ -87,12 +92,16 @@ public class Api extends HttpServlet {
     }
   }
 
-  private void writeResponse(HttpServletResponse resp, String[] grabbersRequested) throws IOException {
+  private void buildAndWriteResponse(HttpServletResponse resp, String[] grabbersRequested) throws IOException {
     resp.setContentType("application/json;charset=utf-8");
+    Response r = new Response(loadedResponse, (int)(System.currentTimeMillis()%1000), grabbersRequested);
+    writeResponse(resp, r);
+  }
+
+  private void writeResponse(HttpServletResponse resp, Response r) throws IOException {
     DslJson<Object> json = JsonHelper.getJson();
     JsonWriter w = JsonHelper.getWriter();
     synchronized (w) {
-      Response r = new Response(loadedResponse, (int)(System.currentTimeMillis()%1000), grabbersRequested);
       w.reset(resp.getOutputStream());
       json.serialize(w, r);
       w.flush();

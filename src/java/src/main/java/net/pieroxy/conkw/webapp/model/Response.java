@@ -27,6 +27,12 @@ public class Response {
     }
   }
 
+  public static Response getError(String message) {
+    Response res = new Response();
+    res.addError(message);
+    return res;
+  }
+
   public void addError(String e) {
     errors.add(e);
   }
