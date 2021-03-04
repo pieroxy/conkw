@@ -821,6 +821,7 @@ class HistoryGaugeHolder {
             let value = extractTypedValue(this.valueExprs[i], data);
             let color = this.colors[i];
             let bar = document.createElement("div");
+            bar.className = "hgauge";
             let posprc = getPercent(value, min, max, this.log);
             bar.style.height = posprc + "%";
             bar.style.bottom = bottom + "%";
@@ -830,6 +831,7 @@ class HistoryGaugeHolder {
         }
         if (bottom<100) {
             let bar = document.createElement("div");
+            bar.className = "hgaugebg";
             bar.style.height = (100-bottom) + "%";
             bar.style.bottom = bottom + "%";
             bar.style.backgroundColor = this.bgcolor;
