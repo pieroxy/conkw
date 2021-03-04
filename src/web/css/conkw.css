@@ -101,6 +101,13 @@ gauge>div.gauge {
     background-color: #474;
 }
 
+hgauge>div.ch>div.hgauge {
+    background-color: #474;
+}
+hgauge>div.ch>div.hgaugebg {
+    background-color: #202040;
+}
+
 hgauge>div {
     height: 100%;
     position: absolute;
