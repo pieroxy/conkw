@@ -882,7 +882,7 @@ class MultivalueHolder {
             }
         } else { // numeric from -> to
             let invalues = extractFormattedValue(this.in, data);
-            if (window.values[this.cacheKey] !== invalues) {
+            if (invalues && window.values[this.cacheKey] !== invalues) {
                 console.log("Redrawing " + invalues + " !== " + window.values[this.cacheKey]);
                 forceScreenRefresh();
                 window.values[this.cacheKey] = invalues;
