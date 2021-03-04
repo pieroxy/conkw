@@ -1,5 +1,6 @@
 package net.pieroxy.conkw.webapp.grabbers;
 
+import net.pieroxy.conkw.utils.OsCheck;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import javax.management.*;
@@ -140,21 +141,26 @@ public class JavaSystemViewGrabber extends AsyncGrabber {
   public void setConfig(Map<String, String> config) {
     String mpstr = config.get("mountPoints");
     if (mpstr == null) {
-      try {
-        mountPoints = StreamSupport.stream(FileSystems.getDefault().getFileStores().spliterator(), false)
-            .map(f -> f.toString().split("\\(")[0].trim())
-            .filter(s -> !s.startsWith("/dev"))
-            .filter(s -> !s.startsWith("/snap"))
-            .filter(s -> !s.startsWith("/sys"))
-            .filter(s -> !s.startsWith("/System"))
-            .filter(s -> !s.startsWith("/proc"))
-            .filter(s -> !s.startsWith("/run"))
-            .collect(Collectors.toList());
-      } catch (Exception e) {
-        log(Level.WARNING, "Could not detect file stores", e);
-        mountPoints.clear();
-        if (new File("/").exists()) mountPoints.add("/");
-        if (new File("C:\\").exists()) mountPoints.add("C:\\");
+      if (OsCheck.getOperatingSystemType() == OsCheck.OSType.Windows) {
+        File[]roots = File.listRoots();
+        mountPoints = Arrays.stream(roots).map(f -> f.getAbsolutePath()).collect(Collectors.toList());
+      } else {
+        try {
+          mountPoints = StreamSupport.stream(FileSystems.getDefault().getFileStores().spliterator(), false)
+              .map(f -> f.toString().split("\\(")[0].trim())
+              .filter(s -> !s.startsWith("/dev"))
+              .filter(s -> !s.startsWith("/snap"))
+              .filter(s -> !s.startsWith("/sys"))
+              .filter(s -> !s.startsWith("/System"))
+              .filter(s -> !s.startsWith("/proc"))
+              .filter(s -> !s.startsWith("/run"))
+              .collect(Collectors.toList());
+        } catch (Exception e) {
+          log(Level.WARNING, "Could not detect file stores", e);
+          mountPoints.clear();
+          if (new File("/").exists()) mountPoints.add("/");
+          if (new File("C:\\").exists()) mountPoints.add("C:\\");
+        }
       }
       if (canLogInfo()) log(Level.INFO, "Detected mount points to be " + mountPoints.stream().collect(Collectors.joining(",")));
     } else {
