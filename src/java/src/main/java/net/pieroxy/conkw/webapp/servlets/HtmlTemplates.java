@@ -2,7 +2,6 @@ package net.pieroxy.conkw.webapp.servlets;
 
 import net.pieroxy.conkw.webapp.grabbers.Grabber;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

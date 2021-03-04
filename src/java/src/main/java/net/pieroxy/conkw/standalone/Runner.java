@@ -2,8 +2,12 @@ package net.pieroxy.conkw.standalone;
 
 import net.pieroxy.conkw.config.Config;
 import net.pieroxy.conkw.config.ConfigReader;
+import net.pieroxy.conkw.webapp.Listener;
+import net.pieroxy.conkw.webapp.servlets.Api;
+import net.pieroxy.conkw.webapp.servlets.HtmlTemplates;
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.core.StandardContext;
+import org.apache.catalina.servlets.DefaultServlet;
 import org.apache.catalina.startup.Tomcat;
 
 import java.io.File;
@@ -29,11 +33,24 @@ public class Runner {
 
             Connector ctr = new Connector();
             ctr.setPort(webPort);
-
             tomcat.setConnector(ctr);
 
             LOGGER.info("Configuring app with basedir: " + webappDirLocation.getAbsolutePath());
-            StandardContext ctx = (StandardContext) tomcat.addWebapp("", webappDirLocation.getAbsolutePath());
+
+            String contextPath = "/";
+            StandardContext ctx = (StandardContext) tomcat.addContext(contextPath, webappDirLocation.getAbsolutePath());
+            ctx.addWelcomeFile("index.html");
+
+            tomcat.addServlet(contextPath, "api", new Api());
+            ctx.addServletMappingDecoded("/api", "api");
+
+            tomcat.addServlet(contextPath, "default", new DefaultServlet());
+            ctx.addServletMappingDecoded("/", "default");
+
+            tomcat.addServlet(contextPath, "templates", new HtmlTemplates());
+            ctx.addServletMappingDecoded("/htmlTemplates", "templates");
+
+            ctx.addApplicationLifecycleListener(new Listener());
 
             tomcat.start();
             tomcat.getServer().await();

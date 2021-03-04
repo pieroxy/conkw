@@ -87,9 +87,6 @@ public class Installer {
         File h = ConfigReader.getWebappDir();
         File webinf = new File(h, "WEB-INF");
         Files.createDirectories(webinf.toPath());
-        copyStreamAndClose(
-                getClass().getClassLoader().getResourceAsStream("web.xml"),
-                new FileOutputStream(new File(webinf, "web.xml")));
         ZipUtil.unzip(getClass().getClassLoader().getResourceAsStream("webapp-static.zip"), h);
     }
 

@@ -78,7 +78,6 @@
       <groupId>org.apache.tomcat</groupId>
       <artifactId>tomcat-annotations-api</artifactId>
       <version>${tomcat.version}</version>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
