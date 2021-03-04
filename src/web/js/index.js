@@ -877,7 +877,7 @@ class MultivalueHolder {
                 } // Else nothing changed.
             } else {
                 if (typeof from !== "undefined" || typeof to !== "undefined") {
-                    handleError("From ("+(typeof from)+") or to ("+(typeof from)+") are not numbers in element id=" + this.element.id);
+                    handleError("From ("+(typeof from)+") or to ("+(typeof to)+") are not numbers in element id=" + this.element.id);
                 }
             }
         } else { // numeric from -> to
