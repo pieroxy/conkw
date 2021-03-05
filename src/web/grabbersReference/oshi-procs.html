@@ -81,6 +81,7 @@
             <cw-label style="width:80px;">UPTIME</cw-label>
             <cw-label style="width:80px;">USER T</cw-label>
             <cw-label style="width:80px;">KERN T</cw-label>
+            <cw-label cw-ns="oshi-processes">CPU %</cw-label>
             <cw-label style="width:80px;">STATE</cw-label>
             <cw-label>CMDLINE</cw-label>
           </span>            
@@ -90,7 +91,7 @@
               <cw-label style="width:150px;font-weight: 900;" cw-ns="oshi-processes" cw-value="m:str::processes_name_#"></cw-label>
               <cw-label style="width:90px;" cw-ns="oshi-processes" cw-value="m:num:2:processes_process_id_#"></cw-label>
               <cw-label cw-ns="oshi-processes" cw-value="m:num:2:processes_bitness_#"></cw-label>
-              <cw-label cw-ns="oshi-processes" cw-value="m:num:prc01:processes_process_cpu_load_cumulative_#"></cw-label>
+              <cw-label cw-ns="oshi-processes" cw-value="m:num:prc01:processes_process_cpu_load_instant_#"></cw-label>
               <cw-label cw-ns="oshi-processes" cw-value="m:num:size:processes_bytes_read_#"></cw-label>
               <cw-label cw-ns="oshi-processes" cw-value="m:num:size:processes_bytes_written_#"></cw-label>
               <cw-label cw-ns="oshi-processes" cw-value="m:num:num:processes_priority_#"></cw-label>
@@ -103,9 +104,9 @@
               <cw-label style="width:80px;" cw-ns="oshi-processes" cw-value="m:num:time_ms:processes_up_time_#"></cw-label>
               <cw-label style="width:80px;" cw-ns="oshi-processes" cw-value="m:num:time_ms:processes_user_time_#"></cw-label>
               <cw-label style="width:80px;" cw-ns="oshi-processes" cw-value="m:num:time_ms:processes_kernel_time_#"></cw-label>
+              <cw-label cw-ns="oshi-processes" cw-value="m:num:prc01:processes_process_cpu_load_cumulative_#"></cw-label>
               <cw-label style="width:80px;" cw-ns="oshi-processes" cw-value="m:str::processes_state_#"></cw-label>
               <cw-label style="width:700px;max-width: 800px;" cw-ns="oshi-processes" cw-value="m:str::processes_command_line_#"></cw-label>
-              
             </span>            
             <br/>
           </div>

@@ -14,9 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.Writer;
 import java.time.Duration;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public class OshiGrabber extends AsyncGrabber {
@@ -27,6 +26,7 @@ public class OshiGrabber extends AsyncGrabber {
 
   private Duration staticDataDelay = Duration.ofDays(1);
   private Duration detailedDataDelay = Duration.ofMinutes(1);
+  private Map<Integer, OSProcess> previousProcesses;
   OSHIExtractor extractor = new OSHIExtractor();
   long[]ticks;
   long[][]ticksByCpu;
@@ -94,8 +94,14 @@ public class OshiGrabber extends AsyncGrabber {
   }
 
   private void extractProcesses(ResponseData res) {
+    if (previousProcesses == null) previousProcesses = new HashMap<>();
     int i=0;
-    for (OSProcess p : extractor.getProcesses()) {
+    List<OSProcess> procs = extractor.getProcesses();
+    Map<Integer, OSProcess> newP = new HashMap<>();
+    procs.forEach(p -> newP.put(p.getProcessID(), p));
+    Collections.sort(procs, Comparator.comparingDouble(this::getInstantCpu).reversed());
+    while (procs.size()>50) procs.remove(procs.size()-1);
+    for (OSProcess p : procs) {
       res.addMetric("processes_affinity_mask_"+i, p.getAffinityMask());
       res.addMetric("processes_bitness_"+i, p.getBitness());
       res.addMetric("processes_name_"+i, p.getName());
@@ -112,6 +118,7 @@ public class OshiGrabber extends AsyncGrabber {
       res.addMetric("processes_parent_process_id_"+i, p.getParentProcessID());
       res.addMetric("processes_path_"+i, p.getPath());
       res.addMetric("processes_priority_"+i, p.getPriority());
+      res.addMetric("processes_process_cpu_load_instant_"+i, getInstantCpu(p));
       res.addMetric("processes_process_cpu_load_cumulative_"+i, p.getProcessCpuLoadCumulative());
       res.addMetric("processes_process_id_"+i, p.getProcessID());
       res.addMetric("processes_resident_set_size_"+i, p.getResidentSetSize());
@@ -125,7 +132,13 @@ public class OshiGrabber extends AsyncGrabber {
       res.addMetric("processes_state_"+i, p.getState().name());
       i++;
     }
+    previousProcesses = newP;
     res.addMetric("processes_count", i);
+  }
+
+  private double getInstantCpu(OSProcess p) {
+    OSProcess old = previousProcesses.get(p.getProcessID());
+    return old == null ? p.getProcessCpuLoadCumulative() : p.getProcessCpuLoadBetweenTicks(old);
   }
 
   private void extractNetworkParams(ResponseData res) {
