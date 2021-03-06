@@ -886,8 +886,10 @@ class MultivalueHolder {
                     loadChildren(this.element, this.childHolders);
                 } // Else nothing changed.
             } else {
-                if (typeof from !== "undefined" || typeof to !== "undefined") {
+                if (typeof from !== "undefined" && typeof to !== "undefined") {
                     handleError("From ("+(typeof from)+") or to ("+(typeof to)+") are not numbers in element id=" + this.element.id);
+                } else {
+                    console.log("Cannot expand multinode with id " + this.element.id + " from " + from + " to " + to);
                 }
             }
         } else { // numeric from -> to
