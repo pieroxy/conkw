@@ -4,7 +4,6 @@ import net.pieroxy.conkw.config.Config;
 import net.pieroxy.conkw.config.ConfigReader;
 import net.pieroxy.conkw.webapp.Listener;
 import net.pieroxy.conkw.webapp.servlets.Api;
-import net.pieroxy.conkw.webapp.servlets.HtmlTemplates;
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.core.StandardContext;
 import org.apache.catalina.servlets.DefaultServlet;
@@ -46,9 +45,6 @@ public class Runner {
 
             tomcat.addServlet(contextPath, "default", new DefaultServlet());
             ctx.addServletMappingDecoded("/", "default");
-
-            tomcat.addServlet(contextPath, "templates", new HtmlTemplates());
-            ctx.addServletMappingDecoded("/htmlTemplates", "templates");
 
             ctx.addApplicationLifecycleListener(new Listener());
 

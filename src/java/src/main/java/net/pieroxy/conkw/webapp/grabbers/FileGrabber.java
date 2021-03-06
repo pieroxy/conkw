@@ -71,10 +71,4 @@ public class FileGrabber extends AsyncGrabber {
   public String getDefaultName() {
     return "file";
   }
-
-  @Override
-  public void writeHtmlTemplate(Writer writer) throws IOException {
-    ResponseData rd = grabSync();
-    // TODO implement it
-  }
 }

@@ -5,7 +5,6 @@ import net.pieroxy.conkw.config.ConfigReader;
 import net.pieroxy.conkw.config.GrabberConfig;
 import net.pieroxy.conkw.webapp.grabbers.*;
 import net.pieroxy.conkw.webapp.servlets.Api;
-import net.pieroxy.conkw.webapp.servlets.HtmlTemplates;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -81,7 +80,6 @@ public class Listener implements ServletContextListener {
       System.gc();
 
       Api.setAllGrabbers(grabbers);
-      HtmlTemplates.setGrabbers(grabbers);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -110,7 +108,6 @@ public class Listener implements ServletContextListener {
     toDestroy = true;
     try {
       Api.close();
-      HtmlTemplates.close();
     } catch (Exception e) {
       LOGGER.log(Level.FINE, "", e);
     }

@@ -566,8 +566,4 @@ public class OshiGrabber extends AsyncGrabber {
       staticDataDelay = Duration.ofSeconds(Long.parseLong(sdd));
     }
   }
-
-  @Override
-  public void writeHtmlTemplate(Writer writer) throws IOException {
-  }
 }

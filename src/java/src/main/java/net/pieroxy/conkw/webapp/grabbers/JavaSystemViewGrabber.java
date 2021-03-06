@@ -185,29 +185,4 @@ public class JavaSystemViewGrabber extends AsyncGrabber {
   public String getDefaultName() {
     return NAME;
   }
-
-  @Override
-  public void writeHtmlTemplate(Writer writer) throws IOException {
-    String namespaceAttr = "cw-ns=\""+getName()+"\"";
-    InputStream is = getClass().getClassLoader().getResourceAsStream("javasystemviewgrabber.template.html");
-    BufferedReader br = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF8")));
-    String line;
-    while ((line = br.readLine())!=null) {
-      if (line.startsWith("_EMP_")) {
-        line = line.substring(5);
-        for (String mp : mountPoints) {
-          writer.write(line.replaceAll("cw-ns=\"sys\"", namespaceAttr).replaceAll("\\$\\$", sumMountPoint(mp)).replaceAll("\\$", mp));
-        }
-      } else {
-        writer.write(line.replaceAll("cw-ns=\"sys\"", namespaceAttr));
-      }
-    }
-  }
-
-  private String sumMountPoint(String mp) {
-    if (mp.equals("/")) return "root";
-    while (mp.length()<4) mp = " " + mp;
-    if (mp.length()>4) mp = mp.substring(mp.length()-4);
-    return mp;
-  }
 }

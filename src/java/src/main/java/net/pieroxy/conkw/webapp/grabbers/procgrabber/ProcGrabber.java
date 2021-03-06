@@ -74,17 +74,6 @@ public class ProcGrabber extends AsyncGrabber {
     }
   }
 
-  @Override
-  public void writeHtmlTemplate(Writer writer) throws IOException {
-    String namespaceAttr = "cw-ns=\""+getName()+"\"";
-    InputStream is = getClass().getClassLoader().getResourceAsStream("procgrabber.template.html");
-    BufferedReader br = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF8")));
-    String line;
-    while ((line = br.readLine())!=null) {
-      writer.write(line.replaceAll("cw-ns=\"proc\"", namespaceAttr));
-    }
-  }
-
   static FilenameFilter filter = new FilenameFilter() {
     @Override
     public boolean accept(File f, String str) {

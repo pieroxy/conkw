@@ -132,6 +132,4 @@ public abstract class Grabber {
   public String toString() {
     return getClass().getName() + "/" + getName();
   }
-
-  public abstract void writeHtmlTemplate(Writer writer) throws IOException;
 }
