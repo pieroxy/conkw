@@ -1,0 +1,26 @@
+@-ms-viewport {
+  width: device-width;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+pagetitle {
+  display: block;
+  text-align: center;
+  font-family: Raleway, sans-serif;
+  font-weight: 300;
+  font-size: 20px;
+  margin: 10px;
+}
+
+inlinelogo {
+  background-image: url("/android-chrome-256x256.png");
+  background-size: cover;
+  height:1em; 
+  width:1em; 
+  vertical-align: middle;
+  margin-right:30px;
+  display: inline-block;
+}

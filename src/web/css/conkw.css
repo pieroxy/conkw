@@ -1,11 +1,3 @@
-@-ms-viewport {
-    width: device-width;
-}
-
-html {
-    -webkit-text-size-adjust: 100%;
-}
-
 body {
     background-color: #000032;
     color: white;
@@ -19,14 +11,12 @@ body {
 
 
 /* Generic and misc elements */
-
-pagetitle {
-    display: block;
-    text-align: center;
-    font-family: sans-serif;
-    font-weight: 900;
+  
+pagetitle code {
+    font-family: Raleway, sans-serif;
+    font-weight: 600;
     font-size: 20px;
-    margin: 10px;
+    font-style: italic;
 }
 
 columncontainer {
