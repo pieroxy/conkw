@@ -17,11 +17,13 @@ function initStatic() {
 initStatic();
 
 function init() {
+    let options = document.body.getAttribute("cw-options");
+    let checkScreenFlag = options.indexOf("noresize")==-1;
     initDomCache();
     scheduleLoad();
-    window.onresize = checkScreen;
+    if (checkScreenFlag) window.onresize = checkScreen;
     initClocks();
-    checkScreen();
+    if (checkScreenFlag) checkScreen();
 }
 
 function handleError(e) {
