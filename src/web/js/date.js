@@ -12,9 +12,9 @@ window.ConkW.clockFaces = [
         radius: "0",
         clip: "polygon(0px 20%, 100% 0%, 100% 100%, 0px 80%)"
       },
-      shadowOffset: 0.02,
+      shadowOffset: 0.01,
       shadowSpread: 0.001,
-      shadowRadius: 0.01,
+      shadowRadius: 0.003,
       shadowAngle: 90,
       shadowColor: "#00000060"
     },
@@ -29,21 +29,20 @@ window.ConkW.clockFaces = [
       },
       shadowOffset: 0.02,
       shadowSpread: 0.001,
-      shadowRadius: 0.01,
+      shadowRadius: 0.004,
       shadowAngle: 90,
       shadowColor: "#00000060"
     },
     second: {
-      div: {
-        forwardLength: 0.8,
-        backLength: 0.3,
-        width: 0.01,
-        color: "#a10c06",
-        radius: "0"
+      img: {
+        width: 1436,
+        height: 98,
+        centerPosition: 1033,
+        scale: 0.5,
+        src: "/clocks/wallclock-seconds.png"
       },
-      shadowOffset: 0.02,
-      shadowSpread: 0.001,
-      shadowRadius: 0.01,
+      shadowOffset: 0.03,
+      shadowRadius: 0.005,
       shadowAngle: 90,
       shadowColor: "#00000060"
     }
@@ -331,7 +330,20 @@ window.ConkW.clockFaces = [
       shadowAngle: 180,
       shadowColor: "#00000060"
     },
-    second: {}
+    second: {
+      img: {
+        width: 1436,
+        height: 98,
+        centerPosition: 1033,
+        scale: 0.5,
+        src: "/clocks/wallclock-seconds.png"
+      },
+      shadowOffset: 0.03,
+      shadowRadius: 0.005,
+      shadowAngle: 180,
+      shadowColor: "#00000060"
+
+    }
   },
   {
     background: "/clocks/antique.png",
@@ -401,7 +413,7 @@ function cos(number) {
 
 function updateClock(forceUpdate) {
   if (!window.cwClock) return;
-  
+
   const now = new Date();
 
   updateDates(now);
