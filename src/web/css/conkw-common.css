@@ -15,6 +15,11 @@ pagetitle {
   margin: 10px;
 }
 
+pagetitle a, pagetitle a:visited {
+  color: white;
+  text-decoration: none;
+}
+
 inlinelogo {
   background-image: url("/android-chrome-256x256.png");
   background-size: cover;

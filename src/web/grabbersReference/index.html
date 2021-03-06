@@ -20,18 +20,41 @@
         <meta name="msapplication-TileColor" content="#000066">
         <meta name="theme-color" content="#ffffff">
         <style>
+          body {
+            font-family: Raleway, sans-serif;
+          }
           cw-label {
             max-width: 200px;
             overflow: hidden;
             text-overflow: ellipsis;
           }
-        </style>
+
+          block {
+            border: 10px solid #fff2;
+            display: inline-block;
+            width: 300px;
+            padding: 10px;
+            margin: 10px;
+            text-align: left;
+            font-size: 16px;
+            font-weight: 300;
+          }
+          block a {
+            display: block;
+            text-align: center;
+            font-weight: 600;
+          }
+          block code {
+            font-family: Raleway, sans-serif;
+            font-weight: 600;
+          }
+       </style>
     </head>
     <body onload="init();">
-        <pagetitle><inlinelogo></inlinelogo>CONKW - The default grabbers</pagetitle>
+        <pagetitle><inlinelogo></inlinelogo><a href="/">CONKW</a> - The default grabbers</pagetitle>
         <div id="clockanddate" class="cw-block" style="text-align:center;font-size:16px;float:left;margin:20px;">
             <br/>
-            <cw-date cw-id="dayoftheweek"></cw-date>
+            <cw-date style="font-weight: 100;font-size: 50px;display: block;" cw-id="dayoftheweek"></cw-date>
             <cw-date cw-id="month"></cw-date> <cw-date cw-id="dayofmonth"></cw-date>
             <cw-date cw-id="year"></cw-date>
             <br/>
@@ -39,18 +62,31 @@
             <clock style="width:240px;height:240px;overflow: hidden;padding-top:3px;margin:auto" onclick="rotateClockFace(event, this)"></clock>
         </div>
         <div style="text-align:center; margin:40px 20px;">
-          <heading>Welcome!</heading>
-          <div>
-            This page lists all the grabbers that are actually up and running.
-          </div>
-          <heading>The grabbers</heading>
-          <a href="/">Go to conkw home</a><br/><br/>
-          <a href="/grabbersReference/oshi.html">OSHI Grabber - universal system grabber</a><br/><br/>
-          <a href="/grabbersReference/proc.html">Proc Grabber - System grabber optimized for Linux</a><br/><br/>
-          <a href="/grabbersReference/sys.html">Sys Grabber - Basic universal system grabber</a><br/><br/>
-          File Grabber - This grabber is not configured by default. It allows conkw to read data from any file
-          that respects the properties format with some restrictions added. Look up the documentation for more
-          information.
+          <heading>This page lists all the grabbers available</heading>
+          <div style="display:flex; flex-wrap: wrap;">
+            <block>
+              <a href="/grabbersReference/oshi.html">OSHI Grabber</a>
+              This is the universal system grabber. Not necessarily extremely optimized, it can get data from most 
+              systems. From a top-like UI to the brand of your RAM modules. Beware on particularly old and slow systems,
+              this grabber (if all extractors are enabled) can drain your system.
+            </block>
+            <block>
+              <a href="/grabbersReference/proc.html">Proc Grabber</a>
+              This grabber gather its data from the <code>/proc</code> and <code>/sys</code> filesystems on Linux. It
+              is fast and reasonably optimized.
+            </block>
+            <block>
+              <a href="/grabbersReference/sys.html">Sys Grabber</a>
+              The Sys grabber is a universal system grabber, just using standard Java stuff. It provides basic CPU, load,
+              memory and filesystems metrics.
+            </block>
+            <block>
+              <a href="javascript:alert('Grabber not configured')">File Grabber</a>
+              This grabber is not configured by default. It allows conkw to read data from any file
+              that respects the properties format with some restrictions added. Look up the documentation for more
+              information.
+            </block>
+            </div>
         </div>
     </body>
 </html>
