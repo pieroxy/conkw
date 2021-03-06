@@ -1,0 +1,45 @@
+@-ms-viewport {
+  width: device-width;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: Raleway, sans-serif;
+  font-size:18px;
+  background-color: #300a24;
+  color: white;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+
+/* Generic and misc elements */
+
+pagetitle {
+  display: block;
+  text-align: center;
+  font-weight: 100;
+  font-size: 40px;
+  margin: 10px;
+}
+
+a {
+  color: #88f;
+}
+
+a:visited {
+  color: #a8f;
+}
+
+heading {
+  display: block;
+  color: #a0a0ff;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+li {
+  margin: 10px;
+}

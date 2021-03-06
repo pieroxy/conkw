@@ -26,92 +26,94 @@
         </style>
     </head>
     <body onload="init()" grabbers="sys">
-        <heading>CONKW - Reference UI for <code>JavaSystemView</code></heading>
-        <label>  Status : </label><cw-label style="max-width:200px;display:inline-block" id="cw-status"></cw-label><BR/>
-        <label>   Delay : </label><label id="cw-delay"></label><BR/>
-        <div id="clockanddate" class="cw-block" style="text-align:center;font-size:16px;">
-            <br/>
-            <cw-date cw-id="dayoftheweek"></cw-date>
-            <cw-date cw-id="month"></cw-date> <cw-date cw-id="dayofmonth"></cw-date>
-            <cw-date cw-id="year"></cw-date>
-            <br/>
-            <br/>
-            <clock style="width:240px;height:240px;overflow: hidden;padding-top:3px;margin:auto" onclick="rotateClockFace(event, this)"></clock>
-        </div>
-        
-        <div cw-ns="proc">
-          <heading>INDEX</heading>
-          <a href="/grabbersReference/">Go to the grabbers index</a><br/>
-        </div>
-
-        <div id="system general" class="cw-block">
-          <heading>SYSTEM</heading>
-          <label>      user : </label>
-          <cw-label cw-ns="sys" cw-value="m:str::user"></cw-label>
-          <br/>
-          <label>  hostname : </label>
-          <cw-label cw-ns="sys" cw-value="m:str::hostname"></cw-label>
-          <br/>
-          <label>  cpu arch : </label>
-          <cw-label cw-ns="sys" cw-value="m:str::arch"></cw-label>
-          <br/>
-          <label>        OS : </label>
-          <cw-label cw-ns="sys" cw-value="m:str::osname"></cw-label>
-          <br/>
-          <label>OS version : </label>
-          <cw-label cw-ns="sys" cw-value="m:str::osversion"></cw-label>
-          <br/>
-          <label>    nb cpu : </label>
-          <cw-label cw-ns="sys" cw-value="m:num::nbcpu"></cw-label>
-          <BR/>
-          <label>  load avg : </label>
-          <cw-label cw-ns="sys" cw-value="m:num::systemloadavg"></cw-label>
-          <gauge cw-ns="sys" cw-gauge0="default:m:num::systemloadavg" cw-min="l:num::0" cw-max="e:num::${num.nbcpu*2}" cw-value-warn="m:num::nbcpu"></gauge>
-      </div>
-
-      <div id="system mem" class="cw-block">
-          <heading>MEMORY USAGE </heading>
-          <label>    Total: </label>
-          <cw-label cw-ns="sys" cw-value="m:num:size:ramTotal"></cw-label>
-          <gauge cw-ns="sys" cw-min="l:num::0" cw-max="m:num::ramTotal" cw-gauge0="#474:m:num::ramUsed"></gauge>
-          <BR/>
-          <label>     Used: </label>
-          <cw-label cw-ns="sys" cw-value="m:num:size:ramUsed"></cw-label>
-          <hgauge cw-bgcolor="#202040" cw-ns="sys" cw-hgauge0="#474:m:num::ramUsed" cw-min="l:num::0" cw-max="m:num::ramTotal" style="height:2em;"></hgauge>
-          <BR/>
-          <label>Available: </label>
-          <cw-label cw-ns="sys" cw-value="m:num:size:ramAvailable"></cw-label>
-          <BR/>
-      
-          <heading>SWAP USAGE</heading>
-          <label>  </label>
-          <cw-label cw-value-warn="e:num:valueabove:${num.sawpTotal*0.5}" cw-ns="sys" cw-value="m:num:size:swapUsed"></cw-label> /
-          <cw-label cw-ns="sys" cw-value="m:num:size:swapTotal"></cw-label>
-          <gauge cw-ns="sys" cw-min="l:num::0" cw-max="m:num::swapTotal" cw-value-warn="e:num::${num.swapTotal*0.5}" cw-gauge0="default:m:num::swapUsed"></gauge>
-      </div>
-
-      <div id="system cpu" class="cw-block">
-          <heading>CPU </heading>
-          <label>     Usage: </label>
-          <cw-label cw-ns="sys" cw-value-warn="l:num:valueabove:0.8" cw-value="m:num:prc01:totalCpuUsage"></cw-label>
-          <gauge cw-ns="sys" cw-min="l:num::0" cw-value-warn="l:num::0.8" cw-max="l:num::1" cw-gauge0="#474:m:num::totalCpuUsage"></gauge>
-          <BR/>
-          <hgauge cw-bgcolor="#202040" cw-ns="sys" cw-hgauge0="#474:m:num::totalCpuUsage" cw-min="l:num::0" cw-max="l:num::1" style="height:2em;width:300px"></hgauge>
-          <BR/>
-          <label>     conkw: </label>
-          <cw-label cw-ns="sys" cw-value="m:num:prc01:processCpuUsage"></cw-label>
-          <gauge cw-ns="sys" cw-min="l:num::0" cw-max="l:num::1" cw-gauge0="#474:m:num::processCpuUsage"></gauge>
-          <BR/>
-      </div>
-
-      <div id="hdd" class="cw-block">
-          <heading>HDD USAGE</heading>
-          size&nbsp;&nbsp;&nbsp;used&nbsp;&nbsp;&nbsp;free<span style="float:right;">name</span>
-          <BR/><HR/>
-          <div cw-ns="sys" cw-multinode-in="m:str::freespace_mountpoints" cw-multinode-pattern="#">
-            <label cw-ns="sys" cw-value="l:str::#" style="display:block;text-align:right"></label>
-            <cw-label cw-ns="sys" cw-value="m:num:size:freespace_total_#"></cw-label>&nbsp;<cw-label cw-ns="sys" cw-value="m:num:size:freespace_used_#"></cw-label>&nbsp;<cw-label cw-ns="sys" cw-value="m:num:size:freespace_usable_#"></cw-label><gauge cw-ns="sys" cw-gauge0="default:m:num::freespace_used_#" cw-min="l:num::0" cw-max="m:num::freespace_total_#"></gauge><BR/>
+        <pagetitle>CONKW - Reference UI for <code>JavaSystemView</code></pagetitle>
+        <columncontainer>
+          <label>  Status : </label><cw-label style="max-width:200px;display:inline-block" id="cw-status"></cw-label><BR/>
+          <label>   Delay : </label><label id="cw-delay"></label><BR/>
+          <div id="clockanddate" class="cw-block" style="text-align:center;font-size:16px;">
+              <br/>
+              <cw-date cw-id="dayoftheweek"></cw-date>
+              <cw-date cw-id="month"></cw-date> <cw-date cw-id="dayofmonth"></cw-date>
+              <cw-date cw-id="year"></cw-date>
+              <br/>
+              <br/>
+              <clock style="width:240px;height:240px;overflow: hidden;padding-top:3px;margin:auto" onclick="rotateClockFace(event, this)"></clock>
           </div>
-      </div>
+          
+          <div cw-ns="proc">
+            <heading>INDEX</heading>
+            <a href="/grabbersReference/">Go to the grabbers index</a><br/>
+          </div>
+
+          <div id="system general" class="cw-block">
+            <heading>SYSTEM</heading>
+            <label>      user : </label>
+            <cw-label cw-ns="sys" cw-value="m:str::user"></cw-label>
+            <br/>
+            <label>  hostname : </label>
+            <cw-label cw-ns="sys" cw-value="m:str::hostname"></cw-label>
+            <br/>
+            <label>  cpu arch : </label>
+            <cw-label cw-ns="sys" cw-value="m:str::arch"></cw-label>
+            <br/>
+            <label>        OS : </label>
+            <cw-label cw-ns="sys" cw-value="m:str::osname"></cw-label>
+            <br/>
+            <label>OS version : </label>
+            <cw-label cw-ns="sys" cw-value="m:str::osversion"></cw-label>
+            <br/>
+            <label>    nb cpu : </label>
+            <cw-label cw-ns="sys" cw-value="m:num::nbcpu"></cw-label>
+            <BR/>
+            <label>  load avg : </label>
+            <cw-label cw-ns="sys" cw-value="m:num::systemloadavg"></cw-label>
+            <gauge cw-ns="sys" cw-gauge0="default:m:num::systemloadavg" cw-min="l:num::0" cw-max="e:num::${num.nbcpu*2}" cw-value-warn="m:num::nbcpu"></gauge>
+        </div>
+
+        <div id="system mem" class="cw-block">
+            <heading>MEMORY USAGE </heading>
+            <label>    Total: </label>
+            <cw-label cw-ns="sys" cw-value="m:num:size:ramTotal"></cw-label>
+            <gauge cw-ns="sys" cw-min="l:num::0" cw-max="m:num::ramTotal" cw-gauge0="#474:m:num::ramUsed"></gauge>
+            <BR/>
+            <label>     Used: </label>
+            <cw-label cw-ns="sys" cw-value="m:num:size:ramUsed"></cw-label>
+            <hgauge cw-bgcolor="#202040" cw-ns="sys" cw-hgauge0="#474:m:num::ramUsed" cw-min="l:num::0" cw-max="m:num::ramTotal" style="height:2em;"></hgauge>
+            <BR/>
+            <label>Available: </label>
+            <cw-label cw-ns="sys" cw-value="m:num:size:ramAvailable"></cw-label>
+            <BR/>
+        
+            <heading>SWAP USAGE</heading>
+            <label>  </label>
+            <cw-label cw-value-warn="e:num:valueabove:${num.sawpTotal*0.5}" cw-ns="sys" cw-value="m:num:size:swapUsed"></cw-label> /
+            <cw-label cw-ns="sys" cw-value="m:num:size:swapTotal"></cw-label>
+            <gauge cw-ns="sys" cw-min="l:num::0" cw-max="m:num::swapTotal" cw-value-warn="e:num::${num.swapTotal*0.5}" cw-gauge0="default:m:num::swapUsed"></gauge>
+        </div>
+
+        <div id="system cpu" class="cw-block">
+            <heading>CPU </heading>
+            <label>     Usage: </label>
+            <cw-label cw-ns="sys" cw-value-warn="l:num:valueabove:0.8" cw-value="m:num:prc01:totalCpuUsage"></cw-label>
+            <gauge cw-ns="sys" cw-min="l:num::0" cw-value-warn="l:num::0.8" cw-max="l:num::1" cw-gauge0="#474:m:num::totalCpuUsage"></gauge>
+            <BR/>
+            <hgauge cw-bgcolor="#202040" cw-ns="sys" cw-hgauge0="#474:m:num::totalCpuUsage" cw-min="l:num::0" cw-max="l:num::1" style="height:2em;width:300px"></hgauge>
+            <BR/>
+            <label>     conkw: </label>
+            <cw-label cw-ns="sys" cw-value="m:num:prc01:processCpuUsage"></cw-label>
+            <gauge cw-ns="sys" cw-min="l:num::0" cw-max="l:num::1" cw-gauge0="#474:m:num::processCpuUsage"></gauge>
+            <BR/>
+        </div>
+
+        <div id="hdd" class="cw-block">
+            <heading>HDD USAGE</heading>
+            size&nbsp;&nbsp;&nbsp;used&nbsp;&nbsp;&nbsp;free<span style="float:right;">name</span>
+            <BR/><HR/>
+            <div cw-ns="sys" cw-multinode-in="m:str::freespace_mountpoints" cw-multinode-pattern="#">
+              <label cw-ns="sys" cw-value="l:str::#" style="display:block;text-align:right"></label>
+              <cw-label cw-ns="sys" cw-value="m:num:size:freespace_total_#"></cw-label>&nbsp;<cw-label cw-ns="sys" cw-value="m:num:size:freespace_used_#"></cw-label>&nbsp;<cw-label cw-ns="sys" cw-value="m:num:size:freespace_usable_#"></cw-label><gauge cw-ns="sys" cw-gauge0="default:m:num::freespace_used_#" cw-min="l:num::0" cw-max="m:num::freespace_total_#"></gauge><BR/>
+            </div>
+        </div>
+      </columncontainer>
     </body>
 </html>

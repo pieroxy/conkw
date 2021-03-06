@@ -25,10 +25,8 @@
           }
         </style>
     </head>
-    <body onload="init()" grabbers="oshi">
-        <heading>CONKW - Reference UI for <code>oshi.Oshi</code></heading>
-        <label>  Status : </label><cw-label style="max-width:200px;display:inline-block" id="cw-status"></cw-label><BR/>
-        <label>   Delay : </label><label id="cw-delay"></label><BR/>
+    <body onload="init();">
+        <pagetitle>CONKW - Reference UI for <code>oshi.Oshi</code></pagetitle>
         <div id="clockanddate" class="cw-block" style="text-align:center;font-size:16px;">
             <br/>
             <cw-date cw-id="dayoftheweek"></cw-date>
@@ -38,8 +36,12 @@
             <br/>
             <clock style="width:240px;height:240px;overflow: hidden;padding-top:3px;margin:auto" onclick="rotateClockFace(event, this)"></clock>
         </div>
-        <hr>
-        <div cw-ns="oshi">
+        <div>
+          <heading>The grabbers</heading>
+          <div>
+            Welcome to CONKW!
+
+          </div>
           <heading>The grabbers</heading>
           <a href="/grabbersReference/oshi.html">OSHI Grabber - universal system grabber</a><br/>
           <a href="/grabbersReference/proc.html">Proc Grabber - System grabber optimized for Linux</a><br/>

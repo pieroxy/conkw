@@ -26,441 +26,443 @@
         </style>
     </head>
     <body onload="init()" grabbers="oshi">
-        <heading>CONKW - Reference UI for <code>oshi.Oshi</code></heading>
+      <pagetitle>CONKW - Reference UI for <code>oshi.Oshi</code></pagetitle>
+      <columncontainer>
         <label>  Status : </label><cw-label style="max-width:200px;display:inline-block" id="cw-status"></cw-label><BR/>
-        <label>   Delay : </label><label id="cw-delay"></label><BR/>
-        <div id="clockanddate" class="cw-block" style="text-align:center;font-size:16px;">
-            <br/>
-            <cw-date cw-id="dayoftheweek"></cw-date>
-            <cw-date cw-id="month"></cw-date> <cw-date cw-id="dayofmonth"></cw-date>
-            <cw-date cw-id="year"></cw-date>
-            <br/>
-            <br/>
-            <clock style="width:240px;height:240px;overflow: hidden;padding-top:3px;margin:auto" onclick="rotateClockFace(event, this)"></clock>
-        </div>
-        
-        <div cw-ns="oshi">
-          <heading>OSHI INDEX</heading>
-          <a href="/grabbersReference/">Go to the grabbers index</a><br/>
-          <a href="/grabbersReference/oshi.html">Go see the summary view</a><br/>
-          <a href="/grabbersReference/oshi-services.html">Go see the services</a><br/>
-          <a href="/grabbersReference/oshi-procs.html">Go see the processes</a>
-        </div>
-
-
-        <div cw-ns="oshi" cw-ifextracted="physicalmemory" class="cw-block">
-          <heading>PHYSICAL MEMORY</heading>
-          <div cw-ns="oshi" cw-style-display="e:num::${num.physicalmemory_nb==0?'':'none'}" style="text-align:right">No modules detected</div>
-          <span cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::physicalmemory_nb" cw-multinode-pattern="#">
-            <label>  Module # : </label><cw-label cw-ns="oshi" cw-value="m:str::physicalmemory_name_#"></cw-label><br/>
-            <label>  Capacity : </label><cw-label cw-ns="oshi" cw-value="m:num:size:physicalmemory_capacity_#"></cw-label><br/>
-            <label>      Type : </label><cw-label cw-ns="oshi" cw-value="m:str::physicalmemory_type_#"></cw-label><br/>
-            <label>     Clock : </label><cw-label cw-ns="oshi" cw-value="m:num:si:physicalmemory_clock_#"></cw-label>Hz<br/>
-            <label>  Manufact : </label><cw-label cw-ns="oshi" cw-value="m:str::physicalmemory_manufacturer_#"></cw-label><br/>
-          </span>
-        </div>
-    
-        <div cw-ns="oshi" cw-ifextracted="computer" class="cw-block">
-          <heading>COMPUTER</heading>
-          <label>Manufacturer : </label><cw-label cw-ns="oshi" cw-value="m:str::computer_manufacturer"></cw-label>
-          <br/>
-          <label>        UUID : </label><cw-label cw-ns="oshi" cw-value="m:str::computer_UUID"></cw-label>
-          <br/>
-          <label>       Model : </label><cw-label cw-ns="oshi" cw-value="m:str::computer_model"></cw-label>
-          <br/>
-          <label>Serial Number: </label><cw-label cw-ns="oshi" cw-value="m:str::computer_serial_number"></cw-label>
-          <br/>
-        </div>
-    
-        <div cw-ns="oshi" cw-ifextracted="baseboard" class="cw-block">
-          <heading>BASEBOARD</heading>
-          <label>Manufacturer : </label><cw-label cw-ns="oshi" cw-value="m:str::baseboard_manufacturer"></cw-label>
-          <br/>
-          <label>     Version : </label><cw-label cw-ns="oshi" cw-value="m:str::baseboard_version"></cw-label>
-          <br/>
-          <label>       Model : </label><cw-label cw-ns="oshi" cw-value="m:str::baseboard_model"></cw-label>
-          <br/>
-          <label>Serial Number: </label><cw-label cw-ns="oshi" cw-value="m:str::baseboard_serial_number"></cw-label>
-          <br/>
-        </div>
-    
-        <div cw-ns="oshi" cw-ifextracted="firmware" class="cw-block">
-          <heading>FIRMWARE</heading>
-          <label>Manufacturer : </label><cw-label cw-ns="oshi" cw-value="m:str::firmware_manufacturer"></cw-label>
-          <br/>
-          <label>        Name : </label><cw-label cw-ns="oshi" cw-value="m:str::firmware_name"></cw-label>
-          <br/>
-          <label> Description : </label><cw-label cw-ns="oshi" cw-value="m:str::firmware_description"></cw-label>
-          <br/>
-          <label>     Version : </label><cw-label cw-ns="oshi" cw-value="m:str::firmware_version"></cw-label>
-          <br/>
-          <label>     Release : </label><cw-label cw-ns="oshi" cw-value="m:str::firmware_release_date"></cw-label>
-          <br/>
-        </div>
-    
-
-        <div cw-ns="oshi" cw-ifextracted="cpuident" class="cw-block">
-          <heading>CPU IDENT</heading>
-          <label>  Identifier : </label><cw-label cw-ns="oshi" cw-value="m:str::cpuident_identifier"></cw-label>
-          <br/>
-          <label>        Name : </label><cw-label cw-ns="oshi" cw-value="m:str::cpuident_name"></cw-label>
-          <br/>
-          <label>       Model : </label><cw-label cw-ns="oshi" cw-value="m:str::cpuident_model"></cw-label>
-          <br/>
-          <label> ProcessorID : </label><cw-label cw-ns="oshi" cw-value="m:str::cpuident_processor_id"></cw-label>
-          <br/>
-          <label>      Family : </label><cw-label cw-ns="oshi" cw-value="m:str::cpuident_family"></cw-label>
-          <br/>
-          <label>   Microarch : </label><cw-label cw-ns="oshi" cw-value="m:str::cpuident_micro_arch"></cw-label>
-          <br/>
-          <label>      Vendor : </label><cw-label cw-ns="oshi" cw-value="m:str::cpuident_vendor"></cw-label>
-          <br/>
-          <label>  VendorFreq : </label><cw-label cw-ns="oshi" cw-value="m:num:si:cpuident_vendor_freq"></cw-label>Hz
-          <br/>
-          <label>    Stepping : </label><cw-label cw-ns="oshi" cw-value="m:str::cpuident_stepping"></cw-label>
-          <br/>
-          <label>    Cpu64bit : </label><cw-label cw-ns="oshi" cw-value="m:num:yesno:cpuident_64bits"></cw-label>
-          <br/>
-        </div>
-    
-        <div cw-ns="oshi" cw-ifextracted="displays" class="cw-block">
-          <heading>DISPLAYS</heading>
-          <span cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::displays_count" cw-multinode-pattern="#">
-            <label style="font-weight:bold">   Display # : </label><cw-label cw-ns="oshi" cw-value="m:str::displays_product_id_#"></cw-label>
-            <br/>
-            <label>     Digital : </label><cw-label cw-ns="oshi" cw-value="m:num:yesno:displays_digital_#"></cw-label>
-            <br/>
-            <label>Manufacturer : </label><cw-label cw-ns="oshi" cw-value="m:str::displays_manufacturer_#"></cw-label>
-            <br/>
-            <label>  Serial Num : </label><cw-label cw-ns="oshi" cw-value="m:str::displays_serial_#"></cw-label>
-            <br/>
-            <label>     Version : </label><cw-label cw-ns="oshi" cw-value="m:str::displays_version_#"></cw-label>
-            <br/>
-            <label>Release Week : </label><cw-label cw-ns="oshi" cw-value="m:num::displays_week_#"></cw-label>
-            <br/>
-            <label>Release Year : </label><cw-label cw-ns="oshi" cw-value="m:num::displays_year_#"></cw-label>
-            <br/>
-          </span>
-        </div>
-
-        <div cw-ns="oshi" cw-ifextracted="diskinfos">
-          <heading>DISK INFOS</heading>
-          <div cw-ns="oshi" cw-multinode-in="m:str::diskinfos_names" cw-multinode-pattern="#">
-            <div class="cw-block">
-              <hr/>
-              <label style="font-weight:bold">        Disk : </label><cw-label>#</cw-label>
+          <label>   Delay : </label><label id="cw-delay"></label><BR/>
+          <div id="clockanddate" class="cw-block" style="text-align:center;font-size:16px;">
               <br/>
-              <label>       Model : </label><cw-label cw-ns="oshi" cw-value="m:str::diskinfos_model_#"></cw-label>
+              <cw-date cw-id="dayoftheweek"></cw-date>
+              <cw-date cw-id="month"></cw-date> <cw-date cw-id="dayofmonth"></cw-date>
+              <cw-date cw-id="year"></cw-date>
               <br/>
-              <label>  Serial Num : </label><cw-label cw-ns="oshi" cw-value="m:str::diskinfos_serial_#"></cw-label>
               <br/>
-              <label>Cur Q Length : </label><cw-label cw-ns="oshi" cs-warn="l:num:valueabove:0" cw-value="m:num:num:diskinfos_current_queue_length_#"></cw-label>
-              <br/>
-              <label>       Reads : </label><cw-label cw-ns="oshi" cw-value="m:num:si:diskinfos_reads_#"></cw-label>  <cw-label cw-ns="oshi" cw-value="m:num:size:diskinfos_read_bytes_#"></cw-label>
-              <br/>
-              <label>        Size : </label><cw-label cw-ns="oshi" cw-value="m:num:size:diskinfos_size_#"></cw-label>
-              <br/>
-              <label>   Timestamp : </label><cw-label cw-ns="oshi" cw-value="m:num:tstohhmmss:diskinfos_timestamp_#"></cw-label>
-              <br/>
-              <label>Transfer Time: </label><cw-label cw-ns="oshi" cw-value="m:num:time_ms:diskinfos_transfer_time_#"></cw-label>
-              <br/>
-              <label>       Write : </label><cw-label cw-ns="oshi" cw-value="m:num:si:diskinfos_writes_#"></cw-label>  <cw-label cw-ns="oshi" cw-value="m:num:size:diskinfos_write_bytes_#"></cw-label>
-              <br/>
-            </div>
+              <clock style="width:240px;height:240px;overflow: hidden;padding-top:3px;margin:auto" onclick="rotateClockFace(event, this)"></clock>
           </div>
-        </div>
+          
+          <div cw-ns="oshi">
+            <heading>OSHI INDEX</heading>
+            <a href="/grabbersReference/">Go to the grabbers index</a><br/>
+            <a href="/grabbersReference/oshi.html">Go see the summary view</a><br/>
+            <a href="/grabbersReference/oshi-services.html">Go see the services</a><br/>
+            <a href="/grabbersReference/oshi-procs.html">Go see the processes</a>
+          </div>
 
 
-        <div cw-ns="oshi" cw-ifextracted="graphicscards" class="cw-block">
-          <heading>GRAPHICS CARDS</heading>
-          <div cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::graphicscards_count" cw-multinode-pattern="#">
-            <hr/>
-            <label style="font-weight:bold">        Card : </label><cw-label cw-ns="oshi" cw-value="m:str::graphicscards_name_#">#</cw-label>
-            <br/>
-            <label>      Vendor : </label><cw-label cw-ns="oshi" cw-value="m:str::graphicscards_vendor_#"></cw-label>
-            <br/>
-            <label>   Device id : </label><cw-label cw-ns="oshi" cw-value="m:str::graphicscards_device_id_#"></cw-label>
-            <br/>
-            <label>     Version : </label><cw-label cw-ns="oshi" cw-value="m:str::graphicscards_version_#"></cw-label>
-            <br/>
+          <div cw-ns="oshi" cw-ifextracted="physicalmemory" class="cw-block">
+            <heading>PHYSICAL MEMORY</heading>
+            <div cw-ns="oshi" cw-style-display="e:num::${num.physicalmemory_nb==0?'':'none'}" style="text-align:right">No modules detected</div>
+            <span cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::physicalmemory_nb" cw-multinode-pattern="#">
+              <label>  Module # : </label><cw-label cw-ns="oshi" cw-value="m:str::physicalmemory_name_#"></cw-label><br/>
+              <label>  Capacity : </label><cw-label cw-ns="oshi" cw-value="m:num:size:physicalmemory_capacity_#"></cw-label><br/>
+              <label>      Type : </label><cw-label cw-ns="oshi" cw-value="m:str::physicalmemory_type_#"></cw-label><br/>
+              <label>     Clock : </label><cw-label cw-ns="oshi" cw-value="m:num:si:physicalmemory_clock_#"></cw-label>Hz<br/>
+              <label>  Manufact : </label><cw-label cw-ns="oshi" cw-value="m:str::physicalmemory_manufacturer_#"></cw-label><br/>
+            </span>
           </div>
-        </div>
-    
-        <div cw-ns="oshi" cw-ifextracted="nics" class="cw-block">
-          <heading>NICs</heading>
-          <div cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::nics_count" cw-multinode-pattern="#">
-            <hr/>
-            <label style="font-weight:bold">         NIC : </label><cw-label cw-ns="oshi" cw-value="m:str::nics_name_#">#</cw-label>
-            <br/>
-            <label>    Mac Addr : </label><cw-label cw-ns="oshi" cw-value="m:str::nics_macaddr_#"></cw-label>
-            <br/>
-            <label>        Type : </label><cw-label cw-ns="oshi" cw-value="m:str::nics_if_type_#"></cw-label>
-            <br/>
-            <label>   IPv4 Addr : </label><cw-label cw-ns="oshi" cw-value="m:str::nics_ipv4_#"></cw-label>
-            <br/>
-            <label>   IPv6 Addr : </label><cw-label cw-ns="oshi" cw-value="m:str::nics_ipv6_#"></cw-label>
-            <br/>
-            <label>    Bytes in : </label><cw-label cw-ns="oshi" cw-value="m:num:size:nics_bytes_recv_#"></cw-label>
-            <br/>
-            <label>   Bytes out : </label><cw-label cw-ns="oshi" cw-value="m:num:size:nics_bytes_sent_#"></cw-label>
-            <br/>
-            <label>       Speed : </label><cw-label cw-ns="oshi" cw-value="m:num:size:nics_speed_#"></cw-label>/s
-            <br/>
-          </div>
-        </div>
-    
-        <div cw-ns="oshi" cw-ifextracted="psus" class="cw-block">
-          <heading>PSUs</heading>
-          <div cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::psus_count" cw-multinode-pattern="#">
-            <hr/>
-            <label style="font-weight:bold">         PSU : </label><cw-label cw-ns="oshi" cw-value="m:str::psus_name_#">#</cw-label>
-            <br/>
-            <label>Manufacturer : </label><cw-label cw-ns="oshi" cw-value="m:str::psus_manufacturer_#"></cw-label>
-            <br/>
-            <label> Serial Num. : </label><cw-label cw-ns="oshi" cw-value="m:str::psus_serial_number_#"></cw-label>
-            <br/>
-            <label>   Chemistry : </label><cw-label cw-ns="oshi" cw-value="m:str::psus_chemistry_#"></cw-label>
-            <br/>
-            <label>  Deice Name : </label><cw-label cw-ns="oshi" cw-value="m:str::psus_device_name_#"></cw-label>
-            <br/>
-            <label>    Amperage : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_amperage_#"></cw-label>
-            <br/>
-            <label>  Cap. Units : </label><cw-label cw-ns="oshi" cw-value="m:str::psus_capacity_units_#"></cw-label>
-            <br/>
-            <label>Current Cap. : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_current_capacity_#"></cw-label>
-            <br/>
-            <label> Cycle count : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_cycle_count_#"></cw-label>
-            <br/>
-            <label> Design Cap. : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_design_capacity_#"></cw-label>
-            <br/>
-            <label> Manuf. Date : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_manufacture_date_#"></cw-label>
-            <br/>
-            <label>Pwr Usg Rate : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_power_usage_rate_#"></cw-label>
-            <br/>
-            <label>Remain Cap. %: </label><cw-label cw-ns="oshi" cw-value="m:num::psus_remaining_capacity_percent_#"></cw-label>
-            <br/>
-            <label> Temperature : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_temperature_#"></cw-label>
-            <br/>
-            <label>Time Rem Est : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_time_remaining_estimated_#"></cw-label>
-            <br/>
-            <label>     Voltage : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_voltage_#"></cw-label>
-            <br/>
-            <label>Time Rem Inst: </label><cw-label cw-ns="oshi" cw-value="m:num::psus_time_remaining_instant_#"></cw-label>
-            <br/>
-            <label>   In Charge : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_in_charge_#"></cw-label>
-            <br/>
-            <label>In Discharge : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_in_discharge_#"></cw-label>
-            <br/>
-            <label>  Pwr Online : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_power_online_#"></cw-label>
-            <br/>
-          </div>
-        </div>
-    
-        <div cw-ns="oshi" cw-ifextracted="soundcards" class="cw-block">
-          <heading>SOUNDCARDS</heading>
-          <div cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::soundcards_count" cw-multinode-pattern="#">
-            <hr/>
-            <label style="font-weight:bold">  SOUNDCARD : </label><cw-label cw-ns="oshi" cw-value="m:str::soundcards_name_#">#</cw-label>
-            <br/>
-            <label>      Codec : </label><cw-label cw-ns="oshi" cw-value="m:str::soundcards_codec_#"></cw-label>
-            <br/>
-            <label>Driver Vers : </label><cw-label cw-ns="oshi" cw-value="m:str::soundcards_driver_version_#"></cw-label>
-            <br/>
-          </div>
-        </div>
-    
-        <div cw-ns="oshi" cw-ifextracted="usb">
-          <heading>USB</heading>
-          <div cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::usb_count" cw-multinode-pattern="#">
-            <div class="cw-block">
-              <hr/>
-              <label style="font-weight:bold">  DEVICE : </label><cw-label cw-ns="oshi" cw-value="m:str::usb_name_#">#</cw-label>
-              <br/>
-              <label>     S/N : </label><cw-label cw-ns="oshi" cw-value="m:str::usb_serial_number_#"></cw-label>
-              <br/>
-              <label>  Vendor : </label><cw-label cw-ns="oshi" cw-value="m:str::usb_vendor_#"></cw-label>
-              <br/>
-              <label>VendorID : </label><cw-label cw-ns="oshi" cw-value="m:str::usb_vendor_id_#"></cw-label>
-              <br/>
-              <label>ProductID: </label><cw-label cw-ns="oshi" cw-value="m:str::usb_product_id_#"></cw-label>
-              <br/>
-              <label>Un. DevID: </label><cw-label cw-ns="oshi" cw-value="m:str::usb_unique_device_id_#"></cw-label>
-              <br/>
-            </div>
-          </div>
-        </div>
-
-
       
-        <div cw-ns="oshi" cw-ifextracted="os" class="cw-block">
-          <heading>OS</heading>
-          <label>Manufacturer : </label><cw-label cw-ns="oshi" cw-value="m:str::os_manufacturer"></cw-label>
-          <br/>
-          <label>      Family : </label><cw-label cw-ns="oshi" cw-value="m:str::os_family"></cw-label>
-          <br/>
-          <label>     Bitness : </label><cw-label cw-ns="oshi" cw-value="m:num::os_bitness"></cw-label>
-          <br/>
-          <label>   NbProcess : </label><cw-label cw-ns="oshi" cw-value="m:num::os_process_count"></cw-label>
-          <br/>
-          <label>  Process ID : </label><cw-label cw-ns="oshi" cw-value="m:num::os_process_id"></cw-label>
-          <br/>
-          <label>   Boot time : </label><cw-label cw-ns="oshi" cw-value="m:num:tsstodate:os_system_boot_time"></cw-label>
-          <br/>
-          <label>      Uptime : </label><cw-label cw-ns="oshi" cw-value="m:num:time:os_system_uptime"></cw-label>
-          <br/>
-          <label>    NbThread : </label><cw-label cw-ns="oshi" cw-value="m:num::os_thread_count"></cw-label>
-          <br/>
-          <label>     Version : </label><cw-label cw-ns="oshi" cw-value="m:str::os_version"></cw-label>
-          <br/>
-          <label>   Build Num : </label><cw-label cw-ns="oshi" cw-value="m:str::os_build_number"></cw-label>
-          <br/>
-          <label>   Code Name : </label><cw-label cw-ns="oshi" cw-value="m:str::os_code_name"></cw-label>
-          <br/>
-          <label>      Max FD : </label><cw-label cw-ns="oshi" cw-value="m:num::os_max_file_descriptors"></cw-label>
-          <br/>
-          <label>     Open FD : </label><cw-label cw-ns="oshi" cw-value="m:num::os_open_file_descriptors"></cw-label>
-          <br/>
-        </div>
-    
-
-        <div cw-ns="oshi" cw-ifextracted="filestores">
-          <heading>FILESTORES</heading>
-          <div cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::filestores_count" cw-multinode-pattern="#">
-            <div class="cw-block">
-              <hr/>
-              <label style="font-weight:bold">FILESTORE : </label><cw-label cw-ns="oshi" cw-value="m:str::filestores_name_#">#</cw-label>
-              <br/>
-              <label>    Desc : </label><cw-label cw-ns="oshi" cw-value="m:str::filestores_description_#"></cw-label>
-              <br/>
-              <label>    Type : </label><cw-label cw-ns="oshi" cw-value="m:str::filestores_type_#"></cw-label>
-              <br/>
-              <label>   Label : </label><cw-label cw-ns="oshi" cw-value="m:str::filestores_label_#"></cw-label>
-              <br/>
-              <label>   Mount : </label><cw-label cw-ns="oshi" cw-value="m:str::filestores_mount_#"></cw-label>
-              <br/>
-              <label>Log. Vol : </label><cw-label cw-ns="oshi" cw-value="m:str::filestores_logical_volume_#"></cw-label>
-              <br/>
-              <label> Options : </label><cw-label cw-ns="oshi" cw-value="m:str::filestores_options_#"></cw-label>
-              <br/>
-              <label>    UUID : </label><cw-label cw-ns="oshi" cw-value="m:str::filestores_uuid_#"></cw-label>
-              <br/>
-              <label>  Volume : </label><cw-label cw-ns="oshi" cw-value="m:str::filestores_volume_#"></cw-label>
-              <br/>
-              <label> (F/U/T) : </label><cw-label cw-ns="oshi" cw-value="m:num:size:filestores_free_space_#"></cw-label> ~<cw-label cw-ns="oshi" cw-value="m:num:size:filestores_usable_space_#"></cw-label> / <cw-label cw-ns="oshi" cw-value="m:num:size:filestores_total_space_#"></cw-label>
-              <br/>
-            </div>
-          </div>
-        </div>
-
-
-        <div cw-ns="oshi" cw-ifextracted="tcpv4" class="cw-block">
-          <heading>TCP v4</heading>
-          <label>    Conn Fail : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv4_connection_failures"></cw-label>
-          <br/>
-          <label>  Conn Active : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv4_connections_active"></cw-label>
-          <br/>
-          <label>Conn Estblshd : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv4_connections_established"></cw-label>
-          <br/>
-          <label>    Out reset : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv4_out_resets"></cw-label>
-          <br/>
-          <label> Conn Passive : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv4_connections_passive"></cw-label>
-          <br/>
-          <label>   Conn Reset : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv4_connections_reset"></cw-label>
-          <br/>
-          <label>    In Errors : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv4_in_errors"></cw-label>
-          <br/>
-          <label>      Seg Rcv : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv4_segments_received"></cw-label>
-          <br/>
-          <label>     Seg Retr : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv4_segments_retransmitted"></cw-label>
-          <br/>
-          <label>     Seg Sent : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv4_segments_sent"></cw-label>
-          <br/>
-        </div>
-  
-        <div cw-ns="oshi" cw-ifextracted="tcpv6" class="cw-block">
-          <heading>TCP v6</heading>
-          <label>    Conn Fail : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv6_connection_failures"></cw-label>
-          <br/>
-          <label>  Conn Active : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv6_connections_active"></cw-label>
-          <br/>
-          <label>Conn Estblshd : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv6_connections_established"></cw-label>
-          <br/>
-          <label>    Out reset : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv6_out_resets"></cw-label>
-          <br/>
-          <label> Conn Passive : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv6_connections_passive"></cw-label>
-          <br/>
-          <label>   Conn Reset : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv6_connections_reset"></cw-label>
-          <br/>
-          <label>    In Errors : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv6_in_errors"></cw-label>
-          <br/>
-          <label>      Seg Rcv : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv6_segments_received"></cw-label>
-          <br/>
-          <label>     Seg Retr : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv6_segments_retransmitted"></cw-label>
-          <br/>
-          <label>     Seg Sent : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv6_segments_sent"></cw-label>
-          <br/>
-        </div>
-  
-        <div cw-ns="oshi" cw-ifextracted="udpv4" class="cw-block">
-          <heading>UDP v4</heading>
-          <label>  Dtg no port : </label><cw-label cw-ns="oshi" cw-value="m:num::udpv4_datagrams_no_port"></cw-label>
-          <br/>
-          <label>     Dtg Recv : </label><cw-label cw-ns="oshi" cw-value="m:num::udpv4_datagrams_received"></cw-label>
-          <br/>
-          <label>     Dtg Sent : </label><cw-label cw-ns="oshi" cw-value="m:num::udpv4_datagrams_sent"></cw-label>
-          <br/>
-          <label> Out Recv Err : </label><cw-label cw-ns="oshi" cw-value="m:num::udpv4_datagrams_received_errors"></cw-label>
-          <br/>
-        </div>
-  
-        <div cw-ns="oshi" cw-ifextracted="udpv6" class="cw-block">
-          <heading>UDP v6</heading>
-          <label>  Dtg no port : </label><cw-label cw-ns="oshi" cw-value="m:num::udpv6_datagrams_no_port"></cw-label>
-          <br/>
-          <label>     Dtg Recv : </label><cw-label cw-ns="oshi" cw-value="m:num::udpv6_datagrams_received"></cw-label>
-          <br/>
-          <label>     Dtg Sent : </label><cw-label cw-ns="oshi" cw-value="m:num::udpv6_datagrams_sent"></cw-label>
-          <br/>
-          <label> Out Recv Err : </label><cw-label cw-ns="oshi" cw-value="m:num::udpv6_datagrams_received_errors"></cw-label>
-          <br/>
-        </div>
-  
-        <div cw-ns="oshi" cw-ifextracted="netp" class="cw-block">
-          <heading>NETP (Network Params)</heading>
-          <label>  Domain name : </label><cw-label cw-ns="oshi" cw-value="m:str::netp_domain_name"></cw-label>
-          <br/>
-          <label>     Hostname : </label><cw-label cw-ns="oshi" cw-value="m:str::netp_host_name"></cw-label>
-          <br/>
-          <label> ipv4 gateway : </label><cw-label cw-ns="oshi" cw-value="m:str::netp_ipv4_default_gateway"></cw-label>
-          <br/>
-          <label> ipv6 gateway : </label><cw-label cw-ns="oshi" cw-value="m:str::netp_ipv6_default_gateway"></cw-label>
-          <br/>
-          <label>          DNS : </label><cw-label cw-ns="oshi" cw-value="m:str::netp_dns"></cw-label>
-          <br/>
-        </div>
-  
-        <div cw-ns="oshi" cw-ifextracted="shortsessions" class="cw-block">
-          <heading>SHORT SESSIONS</heading>
-          <div cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::shortsessions_count" cw-multinode-pattern="#">
-            <cw-label cw-ns="oshi" cw-value="m:str::shortsessions_name_#" cw-prop-title="m:str::shortsessions_name_#"></cw-label> : <cw-label cw-ns="oshi" cw-value="m:num::shortsessions_nbs_#"></cw-label>
+          <div cw-ns="oshi" cw-ifextracted="computer" class="cw-block">
+            <heading>COMPUTER</heading>
+            <label>Manufacturer : </label><cw-label cw-ns="oshi" cw-value="m:str::computer_manufacturer"></cw-label>
+            <br/>
+            <label>        UUID : </label><cw-label cw-ns="oshi" cw-value="m:str::computer_UUID"></cw-label>
+            <br/>
+            <label>       Model : </label><cw-label cw-ns="oshi" cw-value="m:str::computer_model"></cw-label>
+            <br/>
+            <label>Serial Number: </label><cw-label cw-ns="oshi" cw-value="m:str::computer_serial_number"></cw-label>
             <br/>
           </div>
-        </div>
+      
+          <div cw-ns="oshi" cw-ifextracted="baseboard" class="cw-block">
+            <heading>BASEBOARD</heading>
+            <label>Manufacturer : </label><cw-label cw-ns="oshi" cw-value="m:str::baseboard_manufacturer"></cw-label>
+            <br/>
+            <label>     Version : </label><cw-label cw-ns="oshi" cw-value="m:str::baseboard_version"></cw-label>
+            <br/>
+            <label>       Model : </label><cw-label cw-ns="oshi" cw-value="m:str::baseboard_model"></cw-label>
+            <br/>
+            <label>Serial Number: </label><cw-label cw-ns="oshi" cw-value="m:str::baseboard_serial_number"></cw-label>
+            <br/>
+          </div>
+      
+          <div cw-ns="oshi" cw-ifextracted="firmware" class="cw-block">
+            <heading>FIRMWARE</heading>
+            <label>Manufacturer : </label><cw-label cw-ns="oshi" cw-value="m:str::firmware_manufacturer"></cw-label>
+            <br/>
+            <label>        Name : </label><cw-label cw-ns="oshi" cw-value="m:str::firmware_name"></cw-label>
+            <br/>
+            <label> Description : </label><cw-label cw-ns="oshi" cw-value="m:str::firmware_description"></cw-label>
+            <br/>
+            <label>     Version : </label><cw-label cw-ns="oshi" cw-value="m:str::firmware_version"></cw-label>
+            <br/>
+            <label>     Release : </label><cw-label cw-ns="oshi" cw-value="m:str::firmware_release_date"></cw-label>
+            <br/>
+          </div>
+      
 
-        <div cw-ns="oshi" cw-ifextracted="sessions">
-          <heading>SESSIONS</heading>
-          <div cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::sessions_count" cw-multinode-pattern="#">
-            <div class="cw-block">
-              <label>     Host : </label><cw-label cw-ns="oshi" cw-value="m:str::sessions_host_#"></cw-label>
+          <div cw-ns="oshi" cw-ifextracted="cpuident" class="cw-block">
+            <heading>CPU IDENT</heading>
+            <label>  Identifier : </label><cw-label cw-ns="oshi" cw-value="m:str::cpuident_identifier"></cw-label>
+            <br/>
+            <label>        Name : </label><cw-label cw-ns="oshi" cw-value="m:str::cpuident_name"></cw-label>
+            <br/>
+            <label>       Model : </label><cw-label cw-ns="oshi" cw-value="m:str::cpuident_model"></cw-label>
+            <br/>
+            <label> ProcessorID : </label><cw-label cw-ns="oshi" cw-value="m:str::cpuident_processor_id"></cw-label>
+            <br/>
+            <label>      Family : </label><cw-label cw-ns="oshi" cw-value="m:str::cpuident_family"></cw-label>
+            <br/>
+            <label>   Microarch : </label><cw-label cw-ns="oshi" cw-value="m:str::cpuident_micro_arch"></cw-label>
+            <br/>
+            <label>      Vendor : </label><cw-label cw-ns="oshi" cw-value="m:str::cpuident_vendor"></cw-label>
+            <br/>
+            <label>  VendorFreq : </label><cw-label cw-ns="oshi" cw-value="m:num:si:cpuident_vendor_freq"></cw-label>Hz
+            <br/>
+            <label>    Stepping : </label><cw-label cw-ns="oshi" cw-value="m:str::cpuident_stepping"></cw-label>
+            <br/>
+            <label>    Cpu64bit : </label><cw-label cw-ns="oshi" cw-value="m:num:yesno:cpuident_64bits"></cw-label>
+            <br/>
+          </div>
+      
+          <div cw-ns="oshi" cw-ifextracted="displays" class="cw-block">
+            <heading>DISPLAYS</heading>
+            <span cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::displays_count" cw-multinode-pattern="#">
+              <label style="font-weight:bold">   Display # : </label><cw-label cw-ns="oshi" cw-value="m:str::displays_product_id_#"></cw-label>
               <br/>
-              <label>    Login : </label><cw-label cw-ns="oshi" cw-value="m:num:tstodatetime:sessions_login_time_#"></cw-label>
+              <label>     Digital : </label><cw-label cw-ns="oshi" cw-value="m:num:yesno:displays_digital_#"></cw-label>
               <br/>
-              <label>     User : </label><cw-label cw-ns="oshi" cw-value="m:str::sessions_user_name_#"></cw-label>
+              <label>Manufacturer : </label><cw-label cw-ns="oshi" cw-value="m:str::displays_manufacturer_#"></cw-label>
               <br/>
-              <label> Terminal : </label><cw-label cw-ns="oshi" cw-value="m:str::sessions_terminal_device_#"></cw-label>
+              <label>  Serial Num : </label><cw-label cw-ns="oshi" cw-value="m:str::displays_serial_#"></cw-label>
+              <br/>
+              <label>     Version : </label><cw-label cw-ns="oshi" cw-value="m:str::displays_version_#"></cw-label>
+              <br/>
+              <label>Release Week : </label><cw-label cw-ns="oshi" cw-value="m:num::displays_week_#"></cw-label>
+              <br/>
+              <label>Release Year : </label><cw-label cw-ns="oshi" cw-value="m:num::displays_year_#"></cw-label>
+              <br/>
+            </span>
+          </div>
+
+          <div cw-ns="oshi" cw-ifextracted="diskinfos">
+            <heading>DISK INFOS</heading>
+            <div cw-ns="oshi" cw-multinode-in="m:str::diskinfos_names" cw-multinode-pattern="#">
+              <div class="cw-block">
+                <hr/>
+                <label style="font-weight:bold">        Disk : </label><cw-label>#</cw-label>
+                <br/>
+                <label>       Model : </label><cw-label cw-ns="oshi" cw-value="m:str::diskinfos_model_#"></cw-label>
+                <br/>
+                <label>  Serial Num : </label><cw-label cw-ns="oshi" cw-value="m:str::diskinfos_serial_#"></cw-label>
+                <br/>
+                <label>Cur Q Length : </label><cw-label cw-ns="oshi" cs-warn="l:num:valueabove:0" cw-value="m:num:num:diskinfos_current_queue_length_#"></cw-label>
+                <br/>
+                <label>       Reads : </label><cw-label cw-ns="oshi" cw-value="m:num:si:diskinfos_reads_#"></cw-label>  <cw-label cw-ns="oshi" cw-value="m:num:size:diskinfos_read_bytes_#"></cw-label>
+                <br/>
+                <label>        Size : </label><cw-label cw-ns="oshi" cw-value="m:num:size:diskinfos_size_#"></cw-label>
+                <br/>
+                <label>   Timestamp : </label><cw-label cw-ns="oshi" cw-value="m:num:tstohhmmss:diskinfos_timestamp_#"></cw-label>
+                <br/>
+                <label>Transfer Time: </label><cw-label cw-ns="oshi" cw-value="m:num:time_ms:diskinfos_transfer_time_#"></cw-label>
+                <br/>
+                <label>       Write : </label><cw-label cw-ns="oshi" cw-value="m:num:si:diskinfos_writes_#"></cw-label>  <cw-label cw-ns="oshi" cw-value="m:num:size:diskinfos_write_bytes_#"></cw-label>
+                <br/>
+              </div>
+            </div>
+          </div>
+
+
+          <div cw-ns="oshi" cw-ifextracted="graphicscards" class="cw-block">
+            <heading>GRAPHICS CARDS</heading>
+            <div cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::graphicscards_count" cw-multinode-pattern="#">
+              <hr/>
+              <label style="font-weight:bold">        Card : </label><cw-label cw-ns="oshi" cw-value="m:str::graphicscards_name_#">#</cw-label>
+              <br/>
+              <label>      Vendor : </label><cw-label cw-ns="oshi" cw-value="m:str::graphicscards_vendor_#"></cw-label>
+              <br/>
+              <label>   Device id : </label><cw-label cw-ns="oshi" cw-value="m:str::graphicscards_device_id_#"></cw-label>
+              <br/>
+              <label>     Version : </label><cw-label cw-ns="oshi" cw-value="m:str::graphicscards_version_#"></cw-label>
               <br/>
             </div>
           </div>
-        </div>
+      
+          <div cw-ns="oshi" cw-ifextracted="nics" class="cw-block">
+            <heading>NICs</heading>
+            <div cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::nics_count" cw-multinode-pattern="#">
+              <hr/>
+              <label style="font-weight:bold">         NIC : </label><cw-label cw-ns="oshi" cw-value="m:str::nics_name_#">#</cw-label>
+              <br/>
+              <label>    Mac Addr : </label><cw-label cw-ns="oshi" cw-value="m:str::nics_macaddr_#"></cw-label>
+              <br/>
+              <label>        Type : </label><cw-label cw-ns="oshi" cw-value="m:str::nics_if_type_#"></cw-label>
+              <br/>
+              <label>   IPv4 Addr : </label><cw-label cw-ns="oshi" cw-value="m:str::nics_ipv4_#"></cw-label>
+              <br/>
+              <label>   IPv6 Addr : </label><cw-label cw-ns="oshi" cw-value="m:str::nics_ipv6_#"></cw-label>
+              <br/>
+              <label>    Bytes in : </label><cw-label cw-ns="oshi" cw-value="m:num:size:nics_bytes_recv_#"></cw-label>
+              <br/>
+              <label>   Bytes out : </label><cw-label cw-ns="oshi" cw-value="m:num:size:nics_bytes_sent_#"></cw-label>
+              <br/>
+              <label>       Speed : </label><cw-label cw-ns="oshi" cw-value="m:num:size:nics_speed_#"></cw-label>/s
+              <br/>
+            </div>
+          </div>
+      
+          <div cw-ns="oshi" cw-ifextracted="psus" class="cw-block">
+            <heading>PSUs</heading>
+            <div cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::psus_count" cw-multinode-pattern="#">
+              <hr/>
+              <label style="font-weight:bold">         PSU : </label><cw-label cw-ns="oshi" cw-value="m:str::psus_name_#">#</cw-label>
+              <br/>
+              <label>Manufacturer : </label><cw-label cw-ns="oshi" cw-value="m:str::psus_manufacturer_#"></cw-label>
+              <br/>
+              <label> Serial Num. : </label><cw-label cw-ns="oshi" cw-value="m:str::psus_serial_number_#"></cw-label>
+              <br/>
+              <label>   Chemistry : </label><cw-label cw-ns="oshi" cw-value="m:str::psus_chemistry_#"></cw-label>
+              <br/>
+              <label>  Deice Name : </label><cw-label cw-ns="oshi" cw-value="m:str::psus_device_name_#"></cw-label>
+              <br/>
+              <label>    Amperage : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_amperage_#"></cw-label>
+              <br/>
+              <label>  Cap. Units : </label><cw-label cw-ns="oshi" cw-value="m:str::psus_capacity_units_#"></cw-label>
+              <br/>
+              <label>Current Cap. : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_current_capacity_#"></cw-label>
+              <br/>
+              <label> Cycle count : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_cycle_count_#"></cw-label>
+              <br/>
+              <label> Design Cap. : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_design_capacity_#"></cw-label>
+              <br/>
+              <label> Manuf. Date : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_manufacture_date_#"></cw-label>
+              <br/>
+              <label>Pwr Usg Rate : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_power_usage_rate_#"></cw-label>
+              <br/>
+              <label>Remain Cap. %: </label><cw-label cw-ns="oshi" cw-value="m:num::psus_remaining_capacity_percent_#"></cw-label>
+              <br/>
+              <label> Temperature : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_temperature_#"></cw-label>
+              <br/>
+              <label>Time Rem Est : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_time_remaining_estimated_#"></cw-label>
+              <br/>
+              <label>     Voltage : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_voltage_#"></cw-label>
+              <br/>
+              <label>Time Rem Inst: </label><cw-label cw-ns="oshi" cw-value="m:num::psus_time_remaining_instant_#"></cw-label>
+              <br/>
+              <label>   In Charge : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_in_charge_#"></cw-label>
+              <br/>
+              <label>In Discharge : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_in_discharge_#"></cw-label>
+              <br/>
+              <label>  Pwr Online : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_power_online_#"></cw-label>
+              <br/>
+            </div>
+          </div>
+      
+          <div cw-ns="oshi" cw-ifextracted="soundcards" class="cw-block">
+            <heading>SOUNDCARDS</heading>
+            <div cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::soundcards_count" cw-multinode-pattern="#">
+              <hr/>
+              <label style="font-weight:bold">  SOUNDCARD : </label><cw-label cw-ns="oshi" cw-value="m:str::soundcards_name_#">#</cw-label>
+              <br/>
+              <label>      Codec : </label><cw-label cw-ns="oshi" cw-value="m:str::soundcards_codec_#"></cw-label>
+              <br/>
+              <label>Driver Vers : </label><cw-label cw-ns="oshi" cw-value="m:str::soundcards_driver_version_#"></cw-label>
+              <br/>
+            </div>
+          </div>
+      
+          <div cw-ns="oshi" cw-ifextracted="usb">
+            <heading>USB</heading>
+            <div cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::usb_count" cw-multinode-pattern="#">
+              <div class="cw-block">
+                <hr/>
+                <label style="font-weight:bold">  DEVICE : </label><cw-label cw-ns="oshi" cw-value="m:str::usb_name_#">#</cw-label>
+                <br/>
+                <label>     S/N : </label><cw-label cw-ns="oshi" cw-value="m:str::usb_serial_number_#"></cw-label>
+                <br/>
+                <label>  Vendor : </label><cw-label cw-ns="oshi" cw-value="m:str::usb_vendor_#"></cw-label>
+                <br/>
+                <label>VendorID : </label><cw-label cw-ns="oshi" cw-value="m:str::usb_vendor_id_#"></cw-label>
+                <br/>
+                <label>ProductID: </label><cw-label cw-ns="oshi" cw-value="m:str::usb_product_id_#"></cw-label>
+                <br/>
+                <label>Un. DevID: </label><cw-label cw-ns="oshi" cw-value="m:str::usb_unique_device_id_#"></cw-label>
+                <br/>
+              </div>
+            </div>
+          </div>
+
+
+        
+          <div cw-ns="oshi" cw-ifextracted="os" class="cw-block">
+            <heading>OS</heading>
+            <label>Manufacturer : </label><cw-label cw-ns="oshi" cw-value="m:str::os_manufacturer"></cw-label>
+            <br/>
+            <label>      Family : </label><cw-label cw-ns="oshi" cw-value="m:str::os_family"></cw-label>
+            <br/>
+            <label>     Bitness : </label><cw-label cw-ns="oshi" cw-value="m:num::os_bitness"></cw-label>
+            <br/>
+            <label>   NbProcess : </label><cw-label cw-ns="oshi" cw-value="m:num::os_process_count"></cw-label>
+            <br/>
+            <label>  Process ID : </label><cw-label cw-ns="oshi" cw-value="m:num::os_process_id"></cw-label>
+            <br/>
+            <label>   Boot time : </label><cw-label cw-ns="oshi" cw-value="m:num:tsstodate:os_system_boot_time"></cw-label>
+            <br/>
+            <label>      Uptime : </label><cw-label cw-ns="oshi" cw-value="m:num:time:os_system_uptime"></cw-label>
+            <br/>
+            <label>    NbThread : </label><cw-label cw-ns="oshi" cw-value="m:num::os_thread_count"></cw-label>
+            <br/>
+            <label>     Version : </label><cw-label cw-ns="oshi" cw-value="m:str::os_version"></cw-label>
+            <br/>
+            <label>   Build Num : </label><cw-label cw-ns="oshi" cw-value="m:str::os_build_number"></cw-label>
+            <br/>
+            <label>   Code Name : </label><cw-label cw-ns="oshi" cw-value="m:str::os_code_name"></cw-label>
+            <br/>
+            <label>      Max FD : </label><cw-label cw-ns="oshi" cw-value="m:num::os_max_file_descriptors"></cw-label>
+            <br/>
+            <label>     Open FD : </label><cw-label cw-ns="oshi" cw-value="m:num::os_open_file_descriptors"></cw-label>
+            <br/>
+          </div>
+      
+
+          <div cw-ns="oshi" cw-ifextracted="filestores">
+            <heading>FILESTORES</heading>
+            <div cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::filestores_count" cw-multinode-pattern="#">
+              <div class="cw-block">
+                <hr/>
+                <label style="font-weight:bold">FILESTORE : </label><cw-label cw-ns="oshi" cw-value="m:str::filestores_name_#">#</cw-label>
+                <br/>
+                <label>    Desc : </label><cw-label cw-ns="oshi" cw-value="m:str::filestores_description_#"></cw-label>
+                <br/>
+                <label>    Type : </label><cw-label cw-ns="oshi" cw-value="m:str::filestores_type_#"></cw-label>
+                <br/>
+                <label>   Label : </label><cw-label cw-ns="oshi" cw-value="m:str::filestores_label_#"></cw-label>
+                <br/>
+                <label>   Mount : </label><cw-label cw-ns="oshi" cw-value="m:str::filestores_mount_#"></cw-label>
+                <br/>
+                <label>Log. Vol : </label><cw-label cw-ns="oshi" cw-value="m:str::filestores_logical_volume_#"></cw-label>
+                <br/>
+                <label> Options : </label><cw-label cw-ns="oshi" cw-value="m:str::filestores_options_#"></cw-label>
+                <br/>
+                <label>    UUID : </label><cw-label cw-ns="oshi" cw-value="m:str::filestores_uuid_#"></cw-label>
+                <br/>
+                <label>  Volume : </label><cw-label cw-ns="oshi" cw-value="m:str::filestores_volume_#"></cw-label>
+                <br/>
+                <label> (F/U/T) : </label><cw-label cw-ns="oshi" cw-value="m:num:size:filestores_free_space_#"></cw-label> ~<cw-label cw-ns="oshi" cw-value="m:num:size:filestores_usable_space_#"></cw-label> / <cw-label cw-ns="oshi" cw-value="m:num:size:filestores_total_space_#"></cw-label>
+                <br/>
+              </div>
+            </div>
+          </div>
+
+
+          <div cw-ns="oshi" cw-ifextracted="tcpv4" class="cw-block">
+            <heading>TCP v4</heading>
+            <label>    Conn Fail : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv4_connection_failures"></cw-label>
+            <br/>
+            <label>  Conn Active : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv4_connections_active"></cw-label>
+            <br/>
+            <label>Conn Estblshd : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv4_connections_established"></cw-label>
+            <br/>
+            <label>    Out reset : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv4_out_resets"></cw-label>
+            <br/>
+            <label> Conn Passive : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv4_connections_passive"></cw-label>
+            <br/>
+            <label>   Conn Reset : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv4_connections_reset"></cw-label>
+            <br/>
+            <label>    In Errors : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv4_in_errors"></cw-label>
+            <br/>
+            <label>      Seg Rcv : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv4_segments_received"></cw-label>
+            <br/>
+            <label>     Seg Retr : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv4_segments_retransmitted"></cw-label>
+            <br/>
+            <label>     Seg Sent : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv4_segments_sent"></cw-label>
+            <br/>
+          </div>
+    
+          <div cw-ns="oshi" cw-ifextracted="tcpv6" class="cw-block">
+            <heading>TCP v6</heading>
+            <label>    Conn Fail : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv6_connection_failures"></cw-label>
+            <br/>
+            <label>  Conn Active : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv6_connections_active"></cw-label>
+            <br/>
+            <label>Conn Estblshd : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv6_connections_established"></cw-label>
+            <br/>
+            <label>    Out reset : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv6_out_resets"></cw-label>
+            <br/>
+            <label> Conn Passive : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv6_connections_passive"></cw-label>
+            <br/>
+            <label>   Conn Reset : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv6_connections_reset"></cw-label>
+            <br/>
+            <label>    In Errors : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv6_in_errors"></cw-label>
+            <br/>
+            <label>      Seg Rcv : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv6_segments_received"></cw-label>
+            <br/>
+            <label>     Seg Retr : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv6_segments_retransmitted"></cw-label>
+            <br/>
+            <label>     Seg Sent : </label><cw-label cw-ns="oshi" cw-value="m:num::tcpv6_segments_sent"></cw-label>
+            <br/>
+          </div>
+    
+          <div cw-ns="oshi" cw-ifextracted="udpv4" class="cw-block">
+            <heading>UDP v4</heading>
+            <label>  Dtg no port : </label><cw-label cw-ns="oshi" cw-value="m:num::udpv4_datagrams_no_port"></cw-label>
+            <br/>
+            <label>     Dtg Recv : </label><cw-label cw-ns="oshi" cw-value="m:num::udpv4_datagrams_received"></cw-label>
+            <br/>
+            <label>     Dtg Sent : </label><cw-label cw-ns="oshi" cw-value="m:num::udpv4_datagrams_sent"></cw-label>
+            <br/>
+            <label> Out Recv Err : </label><cw-label cw-ns="oshi" cw-value="m:num::udpv4_datagrams_received_errors"></cw-label>
+            <br/>
+          </div>
+    
+          <div cw-ns="oshi" cw-ifextracted="udpv6" class="cw-block">
+            <heading>UDP v6</heading>
+            <label>  Dtg no port : </label><cw-label cw-ns="oshi" cw-value="m:num::udpv6_datagrams_no_port"></cw-label>
+            <br/>
+            <label>     Dtg Recv : </label><cw-label cw-ns="oshi" cw-value="m:num::udpv6_datagrams_received"></cw-label>
+            <br/>
+            <label>     Dtg Sent : </label><cw-label cw-ns="oshi" cw-value="m:num::udpv6_datagrams_sent"></cw-label>
+            <br/>
+            <label> Out Recv Err : </label><cw-label cw-ns="oshi" cw-value="m:num::udpv6_datagrams_received_errors"></cw-label>
+            <br/>
+          </div>
+    
+          <div cw-ns="oshi" cw-ifextracted="netp" class="cw-block">
+            <heading>NETP (Network Params)</heading>
+            <label>  Domain name : </label><cw-label cw-ns="oshi" cw-value="m:str::netp_domain_name"></cw-label>
+            <br/>
+            <label>     Hostname : </label><cw-label cw-ns="oshi" cw-value="m:str::netp_host_name"></cw-label>
+            <br/>
+            <label> ipv4 gateway : </label><cw-label cw-ns="oshi" cw-value="m:str::netp_ipv4_default_gateway"></cw-label>
+            <br/>
+            <label> ipv6 gateway : </label><cw-label cw-ns="oshi" cw-value="m:str::netp_ipv6_default_gateway"></cw-label>
+            <br/>
+            <label>          DNS : </label><cw-label cw-ns="oshi" cw-value="m:str::netp_dns"></cw-label>
+            <br/>
+          </div>
+    
+          <div cw-ns="oshi" cw-ifextracted="shortsessions" class="cw-block">
+            <heading>SHORT SESSIONS</heading>
+            <div cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::shortsessions_count" cw-multinode-pattern="#">
+              <cw-label cw-ns="oshi" cw-value="m:str::shortsessions_name_#" cw-prop-title="m:str::shortsessions_name_#"></cw-label> : <cw-label cw-ns="oshi" cw-value="m:num::shortsessions_nbs_#"></cw-label>
+              <br/>
+            </div>
+          </div>
+
+          <div cw-ns="oshi" cw-ifextracted="sessions">
+            <heading>SESSIONS</heading>
+            <div cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::sessions_count" cw-multinode-pattern="#">
+              <div class="cw-block">
+                <label>     Host : </label><cw-label cw-ns="oshi" cw-value="m:str::sessions_host_#"></cw-label>
+                <br/>
+                <label>    Login : </label><cw-label cw-ns="oshi" cw-value="m:num:tstodatetime:sessions_login_time_#"></cw-label>
+                <br/>
+                <label>     User : </label><cw-label cw-ns="oshi" cw-value="m:str::sessions_user_name_#"></cw-label>
+                <br/>
+                <label> Terminal : </label><cw-label cw-ns="oshi" cw-value="m:str::sessions_terminal_device_#"></cw-label>
+                <br/>
+              </div>
+            </div>
+          </div>
+        </columncontainer>
     </body>
 </html>

@@ -26,36 +26,38 @@
         </style>
     </head>
     <body onload="init()" grabbers="oshi-services">
-        <heading>CONKW - Reference UI for <code>oshi.Oshi</code></heading>
+      <pagetitle>CONKW - Reference UI for <code>oshi.Oshi</code></pagetitle>
+      <columncontainer>
         <label>  Status : </label><cw-label style="max-width:200px;display:inline-block" id="cw-status"></cw-label><BR/>
-        <label>   Delay : </label><label id="cw-delay"></label><BR/>
-        <div id="clockanddate" class="cw-block" style="text-align:center;font-size:16px;">
-            <br/>
-            <cw-date cw-id="dayoftheweek"></cw-date>
-            <cw-date cw-id="month"></cw-date> <cw-date cw-id="dayofmonth"></cw-date>
-            <cw-date cw-id="year"></cw-date>
-            <br/>
-            <br/>
-            <clock style="width:240px;height:240px;overflow: hidden;padding-top:3px;margin:auto" onclick="rotateClockFace(event, this)"></clock>
-        </div>
-        
-        <div cw-ns="oshi-services">
-          <heading>INDEX</heading>
-          <a href="/grabbersReference/">Go to the grabbers index</a><br/>
-          <a href="/grabbersReference/oshi.html">Go back to oshi ref ui</a><br/>
-          <a href="/grabbersReference/oshi-details.html">Go see the details</a><br/>
-          <a href="/grabbersReference/oshi-procs.html">Go see the processes</a>
-        </div>
+          <label>   Delay : </label><label id="cw-delay"></label><BR/>
+          <div id="clockanddate" class="cw-block" style="text-align:center;font-size:16px;">
+              <br/>
+              <cw-date cw-id="dayoftheweek"></cw-date>
+              <cw-date cw-id="month"></cw-date> <cw-date cw-id="dayofmonth"></cw-date>
+              <cw-date cw-id="year"></cw-date>
+              <br/>
+              <br/>
+              <clock style="width:240px;height:240px;overflow: hidden;padding-top:3px;margin:auto" onclick="rotateClockFace(event, this)"></clock>
+          </div>
+          
+          <div cw-ns="oshi-services">
+            <heading>INDEX</heading>
+            <a href="/grabbersReference/">Go to the grabbers index</a><br/>
+            <a href="/grabbersReference/oshi.html">Go back to oshi ref ui</a><br/>
+            <a href="/grabbersReference/oshi-details.html">Go see the details</a><br/>
+            <a href="/grabbersReference/oshi-procs.html">Go see the processes</a>
+          </div>
 
-        <div cw-ns="oshi-services" cw-ifextracted="services">
-          <heading>SERVICES</heading>
-          <span cw-ns="oshi-services" cw-multinode-from="l:num::0" cw-multinode-to="m:num::services_count" cw-multinode-pattern="#">
-            <div class="cw-block">
-              <cw-label style="max-width:300px;font-weight: 900;" cw-ns="oshi-services" cw-value="m:str::services_name_#"></cw-label> : <br/>
-              <span cw-ns="oshi-services" cw-style-display="e:str::${num.services_process_id_# === 0 ? 'none' : ''}"><label>    </label><cw-label cw-ns="oshi-services" cw-value="m:str::services_state_#"></cw-label> - <cw-label cw-ns="oshi-services" cw-value="m:num::services_process_id_#"></cw-label><br/></span>
-              <span cw-ns="oshi-services" cw-style-display="e:str::${num.services_process_id_# === 0 ? '' : 'none'}"><label>    </label><cw-label cw-ns="oshi-services" cw-value="m:str:2:services_state_#"></cw-label><br/></span>
-            </div>
-          </span>
-        </div>
+          <div cw-ns="oshi-services" cw-ifextracted="services">
+            <heading>SERVICES</heading>
+            <span cw-ns="oshi-services" cw-multinode-from="l:num::0" cw-multinode-to="m:num::services_count" cw-multinode-pattern="#">
+              <div class="cw-block">
+                <cw-label style="max-width:300px;font-weight: 900;" cw-ns="oshi-services" cw-value="m:str::services_name_#"></cw-label> : <br/>
+                <span cw-ns="oshi-services" cw-style-display="e:str::${num.services_process_id_# === 0 ? 'none' : ''}"><label>    </label><cw-label cw-ns="oshi-services" cw-value="m:str::services_state_#"></cw-label> - <cw-label cw-ns="oshi-services" cw-value="m:num::services_process_id_#"></cw-label><br/></span>
+                <span cw-ns="oshi-services" cw-style-display="e:str::${num.services_process_id_# === 0 ? '' : 'none'}"><label>    </label><cw-label cw-ns="oshi-services" cw-value="m:str:2:services_state_#"></cw-label><br/></span>
+              </div>
+            </span>
+          </div>
+        </columncontainer>
     </body>
 </html>

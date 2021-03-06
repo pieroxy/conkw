@@ -15,12 +15,25 @@ body {
     padding: 0;
     transform-origin: top left;
     overflow: hidden;
-    column-width: 350px;
 }
 
 
 /* Generic and misc elements */
 
+pagetitle {
+    display: block;
+    text-align: center;
+    font-family: sans-serif;
+    font-weight: 900;
+    font-size: 20px;
+    margin: 10px;
+}
+
+columncontainer {
+    column-width: 350px;
+    overflow: hidden;
+    display: block;
+}
 div#errorDiv {
     position: absolute;
     top: 0;

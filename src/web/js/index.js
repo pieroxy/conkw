@@ -3,19 +3,24 @@ window.onerror = function(message, file, lineNumber) {
 }
 setInterval(updateStatus, 1000);
 
-function init() {
+function initStatic() {
     window.showMetricGap = false;
-    window.values = {};
     window.geometry = 0;
-    initDomCache();
-    scheduleLoad();
-    window.onresize = checkScreen;
+    window.values = {};
     window.lastupdate = 0;
     window.debug = "";
     window.jsError = "";
     window.apiErrors = [];
-    initClocks();
     window.geometry = 0;
+}
+
+initStatic();
+
+function init() {
+    initDomCache();
+    scheduleLoad();
+    window.onresize = checkScreen;
+    initClocks();
     checkScreen();
 }
 
@@ -58,17 +63,20 @@ function scheduleLoad() {
 }
 
 function load() {
-    updateDelay();
-    var xmlhttp = new XMLHttpRequest();
-    var url = "/api?grabbers=" + document.body.getAttribute("grabbers");
-    var removeQS = false;
-    if (location.href.indexOf("?") > 0) {
-        url += location.href.substring(location.href.indexOf("?"));
-        removeQS = true;
+    let grabbers = document.body.getAttribute("grabbers");
+    if (grabbers) {
+        updateDelay();
+        var xmlhttp = new XMLHttpRequest();
+        var url = "/api?grabbers=" + grabbers;
+        var removeQS = false;
+        if (location.href.indexOf("?") > 0) {
+            url += location.href.substring(location.href.indexOf("?"));
+            removeQS = true;
+        }
+        xmlhttp.open("GET", url, true); // false = synchronous
+        xmlhttp.onreadystatechange = function() { loaded(xmlhttp, removeQS); }
+        xmlhttp.send();
     }
-    xmlhttp.open("GET", url, true); // false = synchronous
-    xmlhttp.onreadystatechange = function() { loaded(xmlhttp, removeQS); }
-    xmlhttp.send();
     updateClock();
 }
 
