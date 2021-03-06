@@ -109,6 +109,27 @@
     <finalName>conkw</finalName>
     <plugins>
       <plugin>
+        <groupId>com.ruleoftech</groupId>
+        <artifactId>markdown-page-generator-plugin</artifactId>
+        <version>2.1.0</version>
+        <executions>
+          <execution>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <headerHtmlFile>${basedir}/../resources/docTemplates/head.html</headerHtmlFile>
+          <footerHtmlFile>${basedir}/../resources/docTemplates/foot.html</footerHtmlFile>
+          <inputDirectory>${basedir}/../../doc</inputDirectory>
+          <outputDirectory>${basedir}/../web/doc</outputDirectory>
+          <inputEncoding>UTF-8</inputEncoding>
+          <outputEncoding>UTF-8</outputEncoding>
+        </configuration>
+      </plugin>
+      <plugin>
         <artifactId>maven-antrun-plugin</artifactId>
         <version>1.7</version>
         <executions>
@@ -116,6 +137,10 @@
             <phase>generate-resources</phase>
             <configuration>
               <target>
+                <echo message="Fixing documentation links." />
+                <replace dir="../web/doc/" token="md" value="html">
+                  <include name="**/*.html"/>
+                </replace>
                 <echo message="Packaging the web resources." />
                 <zip destfile="./src/main/resources/webapp-static.zip"  basedir="../web/"/>
               </target>
@@ -148,8 +173,6 @@
                   <mainClass>net.pieroxy.conkw.standalone.Runner</mainClass>
                 </transformer>
               </transformers>
-              <!-- shadedArtifactAttached>true</shadedArtifactAttached>
-              <shadedClassifierName>launcher</shadedClassifierName -->
             </configuration>
           </execution>
         </executions>
