@@ -17,7 +17,7 @@ function initStatic() {
 initStatic();
 
 function init() {
-    let options = document.body.getAttribute("cw-options");
+    let options = document.body.getAttribute("cw-options") || "";
     let checkScreenFlag = options.indexOf("noresize")==-1;
     initDomCache();
     scheduleLoad();
