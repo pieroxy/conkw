@@ -6,16 +6,17 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
-pagetitle {
+md h1, pagetitle {
   display: block;
   text-align: center;
   font-family: Raleway, sans-serif;
-  font-weight: 300;
-  font-size: 20px;
+  font-weight: 100;
+  font-size: 40px;
   margin: 10px;
 }
 
-pagetitle a, pagetitle a:visited {
+pagetitle a, pagetitle a:visited,
+md h1 a, md h1 a:visited {
   color: white;
   text-decoration: none;
 }
@@ -28,4 +29,18 @@ inlinelogo {
   vertical-align: middle;
   margin-right:30px;
   display: inline-block;
+}
+
+/* Markdown doc */
+md {
+  max-width: 800px;
+  display: block;
+  margin: auto;
+}
+
+md code {
+  font-size: 15px;
+  font-weight: 700;
+  background: #4e2e44;
+  padding: 3px 10px;
 }

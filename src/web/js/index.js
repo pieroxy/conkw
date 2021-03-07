@@ -24,6 +24,18 @@ function init() {
     if (checkScreenFlag) window.onresize = checkScreen;
     initClocks();
     if (checkScreenFlag) checkScreen();
+    initDocumentation();
+}
+
+function initDocumentation() {
+    let fbc = document.body.children[0];
+    if (fbc && fbc.tagName=="MD") {
+        console.log("MD detected");
+        let fmdc = fbc.children[0];
+        if (fmdc && fmdc.tagName=="H1") {
+            fmdc.innerHTML = '<inlinelogo></inlinelogo><a href="/">' + fmdc.innerHTML + "</a>";
+        }
+    }
 }
 
 function handleError(e) {

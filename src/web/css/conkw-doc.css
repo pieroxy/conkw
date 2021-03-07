@@ -10,11 +10,6 @@ body {
 
 /* Generic and misc elements */
 
-pagetitle {
-  font-weight: 100;
-  font-size: 40px;
-}
-
 a {
   color: #88f;
 }
