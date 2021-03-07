@@ -138,7 +138,7 @@
             <configuration>
               <target>
                 <echo message="Fixing documentation links." />
-                <replace dir="../web/doc/" token="md" value="html">
+                <replace dir="../web/doc/" token=".md&quot;" value=".html&quot;">
                   <include name="**/*.html"/>
                 </replace>
                 <echo message="Packaging the web resources." />
