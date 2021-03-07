@@ -6,33 +6,33 @@ This project is being developped, so things aren't all smoothed out yet. When re
 
 ## Prerequisites
 
-conkw only works on Linux for now.
+conkw works on Linux, MacOS and Windows.
 
 In order to install conkw you will need to have a working version of `java`, `ant`, and `maven` at your disposal. Java needs to be version 1.8 or greater.
 
 ## Howto
 
-1. Check out the repository
+### 1. Check out the repository
 
 ```
 git clone https://github.com/pieroxy/conkw.git
 ```
 
-2. Package the UI
+### 2. Package the UI
 
 ```
 cd conkw/src/web
 ant
 ```
 
-3. Build the solution
+### 3. Build the solution
 
 ```
 cd ../java
 mvn package
 ```
 
-4. Run the program
+### 4. Run the program
 
 ```
 java -jar ~/SRC/perso/conkw/src/java/target/conkw.jar
