@@ -1,5 +1,6 @@
 package net.pieroxy.conkw.webapp.grabbers.procgrabber;
 
+import net.pieroxy.conkw.utils.ExternalBinaryRunner;
 import net.pieroxy.conkw.utils.PerformanceTools;
 import net.pieroxy.conkw.webapp.grabbers.AsyncGrabber;
 import net.pieroxy.conkw.webapp.model.ResponseData;
@@ -13,6 +14,7 @@ import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.*;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ProcGrabber extends AsyncGrabber {
@@ -45,6 +47,8 @@ public class ProcGrabber extends AsyncGrabber {
   private int BAT_counter;
 
   private File mdstatFile;
+  private ExternalBinaryRunner blockDeviceDetector;
+  private boolean autoDetectBlockDevices;
 
 
   @Override
@@ -61,16 +65,82 @@ public class ProcGrabber extends AsyncGrabber {
       return;
     }
 
-    blockDevices = Arrays.asList(config.get("blockDevices").split(","));
+    String sbd = config.get("blockDevices");
+    if (sbd!=null) {
+      blockDevices = Arrays.asList(sbd.split(","));
+    }
     if (blockDevices == null) {
-      blockDevices = new ArrayList<>();
-      blockDevices.add("sda");
+      autoDetectBlockDevices = true;
     }
     if (config.get("mdstatFile")!=null) {
       mdstatFile = new File(config.get("mdstatFile"));
       log(Level.INFO, "Using mdstat file from " + mdstatFile.getAbsolutePath());
     } else {
       mdstatFile = new File(MDSTAT_FILE);
+    }
+
+  }
+
+  private void extractBlockDevices() {
+    if (!autoDetectBlockDevices) return;
+    if (blockDeviceDetector==null) blockDeviceDetector = new ExternalBinaryRunner(new String[] {"lsblk", "-d","-o","NAME,MODEL"});
+    if (blockDeviceDetector.exists()) {
+      if (blockDeviceDetector.exec()) {
+        byte[]out = blockDeviceDetector.getBuffer();
+        int len = blockDeviceDetector.getLength();
+        List<String> nbds = new ArrayList<>(blockDevices==null ? 10 : blockDevices.size()+10);
+        byte c=0;
+        int index=0;
+        int status=0;
+        int idxBegin=0;
+        int idxEnd=0;
+        while (c!='\n' && index<len) c = out[index++];
+        idxBegin = index;
+        while (true) {
+          if (index == len) {
+            c = '\n';
+            index++;
+          } else if (index > len) {
+            if (blockDevices==null || !blockDevices.equals(nbds)) {
+              blockDevices = nbds;
+              blockDeviceSectorSize.clear();
+              log(Level.INFO, "Block devices detected: " + blockDevices.stream().collect(Collectors.joining(",")));
+            }
+            return;
+          } else {
+            c = out[index++];
+          }
+          switch (status) {
+            case -1:
+              if (c == '\n') {
+                idxBegin=index;
+                status=0;
+              }
+              break;
+            case 0:
+              if (c == ' ') {
+                idxEnd=index;
+                status=1;
+              }
+              break;
+            case 1:
+              if (c == ' ') {
+              } else if (c == '\n') {
+                status=0;
+                idxBegin=index;
+              } else {
+                status=-1;
+                nbds.add(new String(out, idxBegin, idxEnd-idxBegin-1, StandardCharsets.UTF_8));
+              }
+              break;
+          }
+        }
+      }
+    } else {
+      log(Level.WARNING, "Could not find lsblk, skippind block devices detection.");
+      blockDevices = new ArrayList<>();
+      blockDevices.add("sda");
+      autoDetectBlockDevices = false;
     }
   }
 
@@ -232,8 +302,9 @@ public class ProcGrabber extends AsyncGrabber {
   }
 
   private void grabBlockDeviceIo(ResponseData r) {
+    extractBlockDevices();
     if (blockDevices.isEmpty()) return;
-    if (blockDeviceSectorSize.isEmpty()) {
+    if (blockDeviceSectorSize.size() != blockDevices.size()) {
       for (String bd : blockDevices) {
         try (Stream<String> stream = Files.lines( Paths.get("/sys/block/"+bd+"/queue/hw_sector_size"), StandardCharsets.UTF_8)) {
           String fl = stream.findFirst().get();
@@ -244,7 +315,10 @@ public class ProcGrabber extends AsyncGrabber {
       }
     }
     long allRead=0, allWrite=0;
+    StringBuilder allbd = new StringBuilder(blockDevices.size()*10);
     for (String bd : blockDevices) {
+      if (allbd.length()>0) allbd.append(",");
+      allbd.append(bd);
       int2buffer[0]=2;
       int2buffer[1]=6;
       long2buffer[0]=long2buffer[1]=0;
@@ -264,6 +338,7 @@ public class ProcGrabber extends AsyncGrabber {
     }
     r.addMetric("read_bytes_all", (double)allRead);
     r.addMetric("write_bytes_all", (double)allWrite);
+    r.addMetric("allbd", allbd.toString());
   }
 
 

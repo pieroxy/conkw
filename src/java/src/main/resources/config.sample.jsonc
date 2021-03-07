@@ -6,7 +6,7 @@
       "id":"procgrabber.Proc",
       "parameters": {
         // List here the block devices of your machine, to monitor I/O, separated by a comma
-        "blockDevices":"sda"
+        /* "blockDevices":"sda" */
       }
     },
     {
