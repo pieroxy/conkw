@@ -47,5 +47,10 @@ public class MdstatParserTest extends TestCase {
     assertEquals("md0:[6/5]", res.getIndividual().get(0));
     assertEquals("md0:[6/5]", res.getOneline());
     assertEquals(1, res.getFailedDisks());
+    res = MdstatParser.parseMdstat(new File("../../test-data/mdstat/i"));
+    assertEquals(1, res.getIndividual().size());
+    assertEquals("md0:[6/6]<64%>", res.getIndividual().get(0));
+    assertEquals("md0:[6/6]<64%>", res.getOneline());
+    assertEquals(0, res.getFailedDisks());
   }
 }

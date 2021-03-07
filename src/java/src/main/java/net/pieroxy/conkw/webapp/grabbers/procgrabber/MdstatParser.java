@@ -49,9 +49,9 @@ public class MdstatParser {
               break;
             }
 
-            if (l.contains("recovery")) {
+            if (l.contains("====>") || l.contains(">.....")) {
               try {
-                double prc = Double.parseDouble(l.substring(l.indexOf("recovery = ")+11, l.indexOf("%")));
+                double prc = Double.parseDouble(l.substring(l.indexOf(" = ")+3, l.indexOf("%")));
                 summary.append("<").append((int)Math.round(prc)).append("%>");
                 resline.append("<").append((int)Math.round(prc)).append("%>");
               } catch (Exception e) {
