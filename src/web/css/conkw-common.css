@@ -31,16 +31,3 @@ inlinelogo {
   display: inline-block;
 }
 
-/* Markdown doc */
-md {
-  max-width: 800px;
-  display: block;
-  margin: auto;
-}
-
-md code {
-  font-size: 15px;
-  font-weight: 700;
-  background: #4e2e44;
-  padding: 3px 10px;
-}

@@ -29,3 +29,22 @@ li {
   margin: 10px;
 }
 
+
+/* Markdown doc */
+md {
+  max-width: 800px;
+  display: block;
+  margin: auto;
+}
+
+md code {
+  font-size: 15px;
+  font-weight: 700;
+  background: #18040a;
+  padding: 3px 10px;
+}
+
+md pre code {
+  display: block;
+  padding: 10px 10px;
+}

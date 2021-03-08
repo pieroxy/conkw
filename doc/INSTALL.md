@@ -14,34 +14,27 @@ In order to install conkw you will need to have a working version of `java`, `an
 
 ### 1. Check out the repository
 
-```
+```sh
 git clone https://github.com/pieroxy/conkw.git
 ```
 
-### 2. Package the UI
+### 2. Build the solution
 
-```
-cd conkw/src/web
-ant
-```
-
-### 3. Build the solution
-
-```
-cd ../java
+```sh
+cd conkw/src/java
 mvn package
 ```
 
-### 4. Run the program
+### 3. Run the program
 
-```
-java -jar ~/SRC/perso/conkw/src/java/target/conkw.jar
+```sh
+java -jar target/conkw.jar
 ```
 
 This last step will ask you if you want to install the program in `~/.conkw`. If you want it installed somewhere else just define a `CONKW_HOME` environment variable and launch the program again. Just remember that at this stage, the program keeps all it needs in one place: Binaries, configuration, temp files, etc...
 
-The installation proram will give you instructions as to how to run the program.
+The installation program will give you instructions as to how to run the program.
 
-After it runs, you can access the program with any browser by typing the URL `http://localhost:12789`. You'll then be looking at the default setup, with one grabber: The system grabber.
+After it runs, you can access the program with any browser by typing the URL `http://localhost:12789`. You'll then be looking at the default UI, with access to the grabbers and the documentation.
 
 Hint: Click on the clock to see the different clock faces available.

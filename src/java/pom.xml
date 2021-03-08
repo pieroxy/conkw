@@ -121,6 +121,7 @@
           </execution>
         </executions>
         <configuration>
+          <pegdownExtensions>FENCED_CODE_BLOCKS</pegdownExtensions>
           <headerHtmlFile>${basedir}/../resources/docTemplates/head.html</headerHtmlFile>
           <footerHtmlFile>${basedir}/../resources/docTemplates/foot.html</footerHtmlFile>
           <inputDirectory>${basedir}/../../doc</inputDirectory>
