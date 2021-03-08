@@ -3,7 +3,7 @@
   "grabbers":[
     {
       // This is the system grabber for Linux OS.
-      "id":"procgrabber.Proc",
+      "implementation":"net.pieroxy.conkw.webapp.grabbers.procgrabber.ProcGrabber",
       "parameters": {
         // List here the block devices of your machine, to monitor I/O, separated by a comma
         /* "blockDevices":"sda" */
@@ -11,7 +11,7 @@
     },
     {
       // Some CPU usage view, filesystem space monitoring, working on all platforms
-      "id":"JavaSystemView",
+      "implementation":"net.pieroxy.conkw.webapp.grabbers.JavaSystemViewGrabber",
       "parameters": {
         // List here all the mount points of your machines to monitor free space, separated by a comma.
         // If not specified, mount points will be guessed.
@@ -20,7 +20,7 @@
     },
     {
       // OSHI/JNA view of the system, detailed, works on most platforms, much slower and accurate than Proc on Linux
-      "id":"oshi.Oshi",
+      "implementation":"net.pieroxy.conkw.webapp.grabbers.oshi.OshiGrabber",
       "parameters": {
         // Default name is "oshi"
         /* "name":"oshi" */
@@ -36,7 +36,7 @@
     },
     {
       // OSHI/JNA view of the system. This one extracts only the processes.
-      "id":"oshi.Oshi",
+      "implementation":"net.pieroxy.conkw.webapp.grabbers.oshi.OshiGrabber",
       "name":"oshi-processes",
       "extract":"processes",
       "parameters": {
@@ -45,7 +45,7 @@
     },
     {
       // OSHI/JNA view of the system. This one extracts only the services.
-      "id":"oshi.Oshi",
+      "implementation":"net.pieroxy.conkw.webapp.grabbers.oshi.OshiGrabber",
       "extract":"services",
       "name":"oshi-services",
       "parameters": {

@@ -29,7 +29,7 @@ public class Listener implements ServletContextListener {
       List<Grabber> newg = new ArrayList<>();
       Set<String> newgnames = new HashSet<>();
       for (GrabberConfig gc : config.getGrabbers()) {
-        Grabber g = (Grabber) Class.forName("net.pieroxy.conkw.webapp.grabbers." + gc.getId() + "Grabber").newInstance();
+        Grabber g = (Grabber) Class.forName(gc.getImplementation()).newInstance();
 
         // Extract
         if (gc.getExtract()!=null && !gc.getExtract().equals("all") && !gc.getExtract().equals("")) {

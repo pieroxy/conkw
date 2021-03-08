@@ -6,19 +6,11 @@ import java.util.Map;
 
 @CompiledJson(onUnknown = CompiledJson.Behavior.FAIL)
 public class GrabberConfig {
-  private String id;
+  private String implementation;
   private String name;
   private String extract;
   private String logLevel;
   private Map<String, String> parameters;
-
-  public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
-  }
 
   public Map<String, String> getParameters() {
     return parameters;
@@ -50,5 +42,13 @@ public class GrabberConfig {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public String getImplementation() {
+    return implementation;
+  }
+
+  public void setImplementation(String implementation) {
+    this.implementation = implementation;
   }
 }
