@@ -1,5 +1,7 @@
 # conkw
-Web-based conky-like monitoring platform.
+
+
+![](src/web/favicon-16x16.png) Web-based conky-like monitoring platform.
 
 ## Conky?
 [Conky](https://github.com/brndnmtthws/conky) is a program I've been using for quite a while. But recently I've been wondering if the real estate consumed by its window was really worth it:
