@@ -11,8 +11,6 @@ import oshi.util.EdidUtil;
 
 import javax.servlet.http.HttpServletRequest;
 
-import java.io.IOException;
-import java.io.Writer;
 import java.time.Duration;
 import java.util.*;
 import java.util.stream.Collectors;
