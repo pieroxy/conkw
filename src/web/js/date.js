@@ -1,6 +1,8 @@
 window.ConkW = window.ConkW || {};
+ConkW.data = ConkW.data || {};
+ConkW.dates = ConkW.dates || {};
 
-window.ConkW.clockFaces = [
+ConkW.clockFaces = [
   {
     background: "/clocks/arabic.png",
     hour: {
@@ -378,12 +380,12 @@ window.ConkW.clockFaces = [
   }
 ]
 
-function initClocks() {
+ConkW.dates.initClocks = function() {
   let cs = document.getElementsByTagName("clock");
-  if (cs && cs.length) initClock(cs[0]);
+  if (cs && cs.length) this.initClock(cs[0]);
 }
 
-function initClock(e) {
+ConkW.dates.initClock = function(e) {
   let clock = {
     root: e,
     face: document.createElement("DIV"),
@@ -393,37 +395,37 @@ function initClock(e) {
 
   e.appendChild(clock.face);
 
-  window.cwClock = clock;
+  ConkW.data.cwClock = clock;
 
   let cf = localStorage["conkw.clockFaceIndex"];
   if (!cf || cf > ConkW.clockFaces.length) cf = 0;
 
-  setClockFace(ConkW.clockFaces[cf]);
+  this.setClockFace(ConkW.clockFaces[cf]);
 
-  updateClock(true);
+  this.updateClock(true);
 }
 
-function sin(number) {
+ConkW.dates.sin = function(number) {
   return Math.sin(Math.PI*number/180);
 }
 
-function cos(number) {
+ConkW.dates.cos = function(number) {
   return Math.cos(Math.PI*number/180);
 }
 
-function updateClock(forceUpdate) {
-  if (!window.cwClock) return;
+ConkW.dates.updateClock = function(forceUpdate) {
+  if (!ConkW.data.cwClock) return;
 
   const now = new Date();
 
-  updateDates(now);
-  if (!window.clockInitialized) {
-    window.clockInitialized = 1;
+  this.updateDates(now);
+  if (!ConkW.data.clockInitialized) {
+    ConkW.data.clockInitialized = 1;
   }
 
 
 
-  function setShadow(element, faceElement, handangle) {
+  ConkW.dates.setShadow = function(element, faceElement, handangle) {
     if (faceElement.shadowColor) {
       let size = ConkW.currentClockFace.offsetWidth;
       let spread = 0.01;
@@ -438,8 +440,8 @@ function updateClock(forceUpdate) {
       let x = 0;
       let y = 0;
       if (distance) {
-        x = sin(angle+handangle-180) * distance * size;
-        y = cos(angle+handangle-180) * distance * size;
+        x = this.sin(angle+handangle-180) * distance * size;
+        y = this.cos(angle+handangle-180) * distance * size;
       }
 
       if (faceElement.div && !faceElement.div.clip) {
@@ -454,36 +456,36 @@ function updateClock(forceUpdate) {
 
   const seconds = now.getSeconds();
   const secondsDegree = (((seconds / 60) * 360) + 90);
-  if (cwClock.s) {
-    cwClock.s.style.transform = `rotate(${secondsDegree}deg)`
+  if (ConkW.data.cwClock.s) {
+    ConkW.data.cwClock.s.style.transform = `rotate(${secondsDegree}deg)`
     let sec = ConkW.currentClockFace.second;
-    setShadow(cwClock.s, ConkW.currentClockFace.second, secondsDegree);
+    this.setShadow(ConkW.data.cwClock.s, ConkW.currentClockFace.second, secondsDegree);
   }
 
   if (seconds%5==0 || forceUpdate) {
     const minutes = now.getMinutes() + seconds / 60;
     const minutesDegree = (((minutes / 60) * 360) + 90);
-    cwClock.m.style.transform = `rotate(${minutesDegree}deg)`
+    ConkW.data.cwClock.m.style.transform = `rotate(${minutesDegree}deg)`
 
     if (seconds==0 || forceUpdate) {
       if (ConkW.currentClockFace.minute.shadowColor) {
-        setShadow(cwClock.m, ConkW.currentClockFace.minute, minutesDegree);
+        this.setShadow(ConkW.data.cwClock.m, ConkW.currentClockFace.minute, minutesDegree);
       }
 
       const hours = now.getHours() + minutes / 60;
       const hoursDegree = (((hours / 12) * 360) + 90);
-      cwClock.h.style.transform = `rotate(${hoursDegree}deg)`
+      ConkW.data.cwClock.h.style.transform = `rotate(${hoursDegree}deg)`
       if (ConkW.currentClockFace.hour.shadowColor) {
-        setShadow(cwClock.h, ConkW.currentClockFace.hour, hoursDegree);
+        this.setShadow(ConkW.data.cwClock.h, ConkW.currentClockFace.hour, hoursDegree);
       }
     }
   }
 }
 
 
-function setClockFace(face) {
-  window.ConkW.currentClockFace = face;
-  let clock = window.cwClock;
+ConkW.dates.setClockFace = function(face) {
+  ConkW.currentClockFace = face;
+  let clock = ConkW.data.cwClock;
   if (clock.s) clock.face.removeChild(clock.s);
   if (clock.m) clock.face.removeChild(clock.m);
   if (clock.h) clock.face.removeChild(clock.h);
@@ -492,7 +494,7 @@ function setClockFace(face) {
   if (face.second.div || face.second.img) clock.face.appendChild(clock.s = document.createElement(face.second.div ? "DIV" : "IMG"));
   else clock.s = null;
   let size = clock.face.offsetWidth;
-  window.ConkW.currentClockFace.offsetWidth = size;
+  ConkW.currentClockFace.offsetWidth = size;
 
   function setProps(style, element, faceElement) {
 
@@ -536,11 +538,11 @@ function setClockFace(face) {
   }
   setProps(clock.m.style, clock.m, face.minute);
   setProps(clock.h.style, clock.h, face.hour);
-  updateClock(true);
+  this.updateClock(true);
 }
 
 
-function rotateClockFace(event, date) {
+ConkW.dates.rotateClockFace = function(event, date) {
   let e = event.target;
   while (e && e.tagName != "CLOCK") e = e.parentElement;
   if (e.tagName != "CLOCK") return;
@@ -549,14 +551,14 @@ function rotateClockFace(event, date) {
   if (!cf) cf = "0";
   cf = (cf - 0 + 1) % ConkW.clockFaces.length;
   localStorage["conkw.clockFaceIndex"] = cf;
-  setClockFace(ConkW.clockFaces[cf]);
+  this.setClockFace(ConkW.clockFaces[cf]);
 }
 
-function updateDates(now) {
-  if (!window.wmDates) {
-    window.wmDates = document.getElementsByTagName("cw-date");
+ConkW.dates.updateDates = function(now) {
+  if (!ConkW.data.wmDates) {
+    ConkW.data.wmDates = document.getElementsByTagName("cw-date");
   }
-  let todo = window.wmDates;
+  let todo = ConkW.data.wmDates;
   for (let i = 0; i < todo.length; i++) {
     let cacheKey;
     let e = todo[i];
@@ -565,25 +567,25 @@ function updateDates(now) {
     if (id) {
       switch (id) {
         case "dayoftheweek":
-          value = getDow(now);
+          value = this.getDow(now);
           break;
         case "dayofmonth":
-          value = getDom(now);
+          value = this.getDom(now);
           break;
         case "month":
-          value = getMon(now);
+          value = this.getMon(now);
           break;
         case "year":
           value = now.getFullYear();
           break;
       }
       cacheKey = "cw-dates-" + id;
-      updateField(e, "innerHTML", cacheKey, value, false);
+      ConkW.updateField(e, "innerHTML", cacheKey, value, false);
     }
   }
 }
 
-function getDow(date) {
+ConkW.dates.getDow = function(date) {
   switch (date.getDay()) {
     case 0: return "Sunday";
     case 1: return "Monday";
@@ -596,7 +598,7 @@ function getDow(date) {
   return "wtf ?"
 }
 
-function getMon(date) {
+ConkW.dates.getMon = function(date) {
   switch (date.getMonth()) {
     case 0: return "January";
     case 1: return "February";
@@ -614,11 +616,11 @@ function getMon(date) {
   return "wtf ?"
 }
 
-function getDom(date) {
+ConkW.dates.getDom = function(date) {
   return date.getDate() + "";
 }
 
-function formatTime(ts) {
+ConkW.dates.formatTime = function(ts) {
   let date = new Date(ts);
   let h = date.getHours();
   let m = date.getMinutes();
@@ -626,7 +628,7 @@ function formatTime(ts) {
   if (m < 10) m = "0" + m;
   return h + ":" + m;
 }
-function formatTimeSecs(ts) {
+ConkW.dates.formatTimeSecs = function(ts) {
   let date = new Date(ts);
   let h = date.getHours();
   let m = date.getMinutes();
@@ -637,21 +639,21 @@ function formatTimeSecs(ts) {
   return h + ":" + m + ":" + s;
 }
 
-function formatHour(ts) {
+ConkW.dates.formatHour = function(ts) {
   let date = new Date(ts);
   let h = date.getHours();
   return h + "h";
 }
 
-function formatDow(ts) {
-  return getDow(new Date(ts));
+ConkW.dates.formatDow = function(ts) {
+  return this.getDow(new Date(ts));
 }
 
-function formatDate(ts) {
+ConkW.dates.formatDate = function(ts) {
   let date = new Date(ts);
   return date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate();
 }
 
-function formatDatetime(ts) {
-  return formatDate(ts) + " " + formatTime(ts);
+ConkW.dates.formatDatetime = function(ts) {
+  return this.formatDate(ts) + " " + this.formatTime(ts);
 }

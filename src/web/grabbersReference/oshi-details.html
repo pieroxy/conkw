@@ -27,7 +27,7 @@
           }
         </style>
     </head>
-    <body onload="init()" grabbers="oshi">
+    <body onload="ConkW.init()" grabbers="oshi">
       <pagetitle><inlinelogo></inlinelogo><a href="/">CONKW</a> - Reference UI for <code>OshiGrabber</code></pagetitle>
       <pagetitle>The detailed view</pagetitle>
       <columncontainer>
@@ -40,7 +40,7 @@
               <cw-date cw-id="year"></cw-date>
               <br/>
               <br/>
-              <clock style="width:240px;height:240px;overflow: hidden;padding-top:3px;margin:auto" onclick="rotateClockFace(event, this)"></clock>
+              <clock style="width:240px;height:240px;overflow: hidden;padding-top:3px;margin:auto" onclick="ConkW.dates.rotateClockFace(event, this)"></clock>
           </div>
           
           <div cw-ns="oshi">

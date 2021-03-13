@@ -40,7 +40,7 @@
           }
         </style>
     </head>
-    <body onload="init()" grabbers="oshi-processes">
+    <body onload="ConkW.init()" grabbers="oshi-processes">
         <pagetitle><inlinelogo></inlinelogo><a href="/">CONKW</a> - Reference UI for <code>OshiGrabber</code></pagetitle>
         <pagetitle>The processes</pagetitle>
         <div class="hblock" style="width:300px">
@@ -92,7 +92,7 @@
               <cw-label cw-ns="oshi-processes" cw-value="m:num:num:processes_open_files_#"></cw-label>
               <cw-label cw-ns="oshi-processes" cw-value="m:num:size:processes_virtual_size_#"></cw-label>
               <cw-label cw-ns="oshi-processes" cw-value="m:num:size:processes_resident_set_size_#"></cw-label>
-              <cw-label style="width:150px;" cw-ns="oshi-processes" cw-value="m:num:time_ms:processes_up_time_#"  cw-prop-title="e:str::USR ${getProperLabel('time_ms', num.processes_user_time_#)}\nKERNEL ${getProperLabel('time_ms', num.processes_kernel_time_#)}\nCPU ${getProperLabel('prc01', num.processes_process_cpu_load_cumulative_#)}"></cw-label>
+              <cw-label style="width:150px;" cw-ns="oshi-processes" cw-value="m:num:time_ms:processes_up_time_#"  cw-prop-title="e:str::USR ${ConkW.getProperLabel('time_ms', num.processes_user_time_#)}\nKERNEL ${ConkW.getProperLabel('time_ms', num.processes_kernel_time_#)}\nCPU ${ConkW.getProperLabel('prc01', num.processes_process_cpu_load_cumulative_#)}"></cw-label>
               <cw-label style="width:80px;" cw-ns="oshi-processes" cw-value="m:str::processes_state_#"></cw-label>
               <cw-label style="width:150px;font-weight: 900;" cw-prop-title="m:str::processes_command_line_#" cw-ns="oshi-processes" cw-value="m:str::processes_name_#"></cw-label>
             </span>            
