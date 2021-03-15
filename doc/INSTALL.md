@@ -38,3 +38,9 @@ The installation program will give you instructions as to how to run the program
 After it runs, you can access the program with any browser by typing the URL `http://localhost:12789`. You'll then be looking at the default UI, with access to the grabbers and the documentation.
 
 Hint: Click on the clock to see the different clock faces available.
+
+### 4. Upgrade or reinstall the program
+
+The step 3 above will not do anything if conkw is already installed. To force installation to happen again, use the `--force-install` flag. If you edited and changed files in the `conf` directory, they will be kept and the new configuration will be installed as `config.jsonc.1` and/or `logging.properties.1` respectively.
+
+If you want ot reset the configuration to the new install configuration, use the `--override-config-modifications` flag. This way, both files will be reset, and if you made changes to them, your version will be saved as `config.jsonc.1` and/or `logging.properties.1` respectively.

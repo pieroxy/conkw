@@ -48,7 +48,15 @@ public class Runner {
             if (!ConfigReader.exists() || has(args,"--force-install")) {
                 new Installer(has(args,"--override-config-modifications")).run();
             } else {
-                System.out.println("Conkw installation looks complete. To reinstall it use the --force-reinstall flag.");
+                System.out.println("Conkw installation looks complete. Here are the flags you can use:");
+                System.out.println("");
+                System.out.println("  --force-install                 : Forces installation to happen again.");
+                System.out.println("  --override-config-modifications : Combined with the above flag, resets the");
+                System.out.println("                                    configuration.");
+                System.out.println("");
+                System.out.println("In both cases, if --force-install the current config file will be kept, either");
+                System.out.println("as the actual config, or as the backup config if --override-config-modifications");
+                System.out.println("is used.");
             }
         }
     }
