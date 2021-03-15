@@ -24,7 +24,7 @@ public class StreamTools {
   public static void copyTextFilePreserveOriginalAndWarnOnStdout(InputStream source, File out) throws IOException {
     String nf = copyTextFilePreserveOriginal(source, out);
     if (nf != null) {
-      System.out.println("WARNING: File " + out.getName() + " existed and was modified. New file was created as " + nf + ".");
+      System.out.println("WARNING: File " + out.getAbsolutePath() + " existed and was modified. New file was created as " + nf + ".");
     }
   }
 
@@ -37,25 +37,37 @@ public class StreamTools {
    */
   public static String copyTextFilePreserveOriginal(InputStream source, File out) throws IOException {
     List<String> sourceData = loadTextStream(source);
-    if (out.exists()) {
-      List<String> alreadyThere = loadTextFile(out.toPath());
-      if (!areEqual(sourceData, alreadyThere)) {
-        File newfile = findNewFilename(out);
-        writeTextFile(sourceData, newfile);
-        return newfile.getName();
-      }
+    if (isConflict(out)) {
+      File newfile = findNewFilename(out);
+      writeTextFiles(sourceData, newfile);
+      return newfile.getName();
     } else {
-      writeTextFile(sourceData, out);
+      writeTextFiles(sourceData, out);
     }
     return null;
   }
 
-  private static File findNewFilename(File out) {
+  private static boolean isConflict(File out) throws IOException {
+    if (out.exists() && getHiddenFile(out).exists()) {
+      List<String> original = loadTextFile(getHiddenFile(out).toPath());
+      List<String> alreadyThere = loadTextFile(out.toPath());
+      if (!areEqual(original, alreadyThere)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private static File getHiddenFile(File out) {
+    return new File(out.getParentFile(), "."+out.getName());
+  }
+
+  private static File findNewFilename(File out) throws IOException {
     String path = out.getAbsolutePath();
     int counter = 1;
     while (true) {
       File newFile = new File(path+"."+counter);
-      if (newFile.exists()) {
+      if (isConflict(newFile)) {
         counter++;
         continue;
       } else {
@@ -64,8 +76,14 @@ public class StreamTools {
     }
   }
 
-  public static void writeTextFile(List<String> data, File out) throws IOException {
+  public static void writeTextFiles(List<String> data, File out) throws IOException {
     Writer w = new FileWriter(out);
+    for (String s : data) {
+      w.write(s);
+      w.write(System.lineSeparator());
+    }
+    w.close();
+    w = new FileWriter(getHiddenFile(out));
     for (String s : data) {
       w.write(s);
       w.write(System.lineSeparator());
