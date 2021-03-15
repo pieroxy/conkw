@@ -16,13 +16,7 @@ public class Runner {
     private final static Logger LOGGER = Logger.getLogger(Runner.class.getName());
 
     public static void main(String[] args) throws Exception {
-        if (!has(args, "--run-server")) {
-            if (!ConfigReader.exists() || has(args,"--force-reinstall")) {
-                new Installer().run();
-            } else {
-                System.out.println("Conkw installation looks complete. To reinstall it use the --force-reinstall flag.");
-            }
-        } else {
+        if (has(args, "--run-server")) {
             Config config = ConfigReader.getConfig();
             File webappDirLocation = ConfigReader.getWebappDir();
             Tomcat tomcat = new Tomcat();
@@ -50,6 +44,12 @@ public class Runner {
 
             tomcat.start();
             tomcat.getServer().await();
+        } else {
+            if (!ConfigReader.exists() || has(args,"--force-install")) {
+                new Installer().run();
+            } else {
+                System.out.println("Conkw installation looks complete. To reinstall it use the --force-reinstall flag.");
+            }
         }
     }
 
