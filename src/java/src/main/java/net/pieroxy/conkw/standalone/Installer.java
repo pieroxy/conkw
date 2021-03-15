@@ -17,6 +17,12 @@ import static net.pieroxy.conkw.utils.StreamTools.copyStreamAndClose;
 
 public class Installer {
 
+    private final boolean overrideConfig;
+
+    public Installer(boolean overrideConfig) {
+        this.overrideConfig = overrideConfig;
+    }
+
     public void run() throws Exception {
         BufferedReader reader =
                 new BufferedReader(new InputStreamReader(System.in));
@@ -54,10 +60,12 @@ public class Installer {
         Files.createDirectories(ConfigReader.getConfDir().toPath());
         StreamTools.copyTextFilePreserveOriginalAndWarnOnStdout(
                 getClass().getClassLoader().getResourceAsStream("config.sample.jsonc"),
-                ConfigReader.getConfigFile());
+                ConfigReader.getConfigFile(),
+                overrideConfig);
         StreamTools.copyTextFilePreserveOriginalAndWarnOnStdout(
                 getClass().getClassLoader().getResourceAsStream("logging.properties"),
-                ConfigReader.getLoggingConfigFile());
+                ConfigReader.getLoggingConfigFile(),
+                overrideConfig);
         Files.createDirectories(ConfigReader.getDataDir().toPath());
         Files.createDirectories(ConfigReader.getTmpDir().toPath());
         Files.createDirectories(ConfigReader.getBinDir().toPath());
@@ -89,5 +97,4 @@ public class Installer {
         Files.createDirectories(webinf.toPath());
         ZipUtil.unzip(getClass().getClassLoader().getResourceAsStream("webapp-static.zip"), h);
     }
-
 }

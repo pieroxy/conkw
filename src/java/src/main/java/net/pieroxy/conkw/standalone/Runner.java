@@ -46,7 +46,7 @@ public class Runner {
             tomcat.getServer().await();
         } else {
             if (!ConfigReader.exists() || has(args,"--force-install")) {
-                new Installer().run();
+                new Installer(has(args,"--override-config-modifications")).run();
             } else {
                 System.out.println("Conkw installation looks complete. To reinstall it use the --force-reinstall flag.");
             }

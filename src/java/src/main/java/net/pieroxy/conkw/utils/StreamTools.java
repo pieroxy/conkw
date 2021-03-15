@@ -21,10 +21,13 @@ public class StreamTools {
     }
   }
 
-  public static void copyTextFilePreserveOriginalAndWarnOnStdout(InputStream source, File out) throws IOException {
-    String nf = copyTextFilePreserveOriginal(source, out);
+  public static void copyTextFilePreserveOriginalAndWarnOnStdout(InputStream source, File out, boolean overrideTarget) throws IOException {
+    String nf = copyTextFilePreserveOriginal(source, out, overrideTarget);
     if (nf != null) {
-      System.out.println("WARNING: File " + out.getAbsolutePath() + " existed and was modified. New file was created as " + nf + ".");
+      if (overrideTarget)
+        System.out.println("WARNING: File " + out.getAbsolutePath() + " existed and was modified. It has been renamed as " + nf + ".");
+      else
+        System.out.println("WARNING: File " + out.getAbsolutePath() + " existed and was modified. New file was created as " + nf + ".");
     }
   }
 
@@ -32,14 +35,21 @@ public class StreamTools {
    *
    * @param source
    * @param out
+   * @param overrideTarget
    * @return The final name of the new File if it was renamed.
    * @throws IOException
    */
-  public static String copyTextFilePreserveOriginal(InputStream source, File out) throws IOException {
+  public static String copyTextFilePreserveOriginal(InputStream source, File out, boolean overrideTarget) throws IOException {
     List<String> sourceData = loadTextStream(source);
     if (isConflict(out)) {
       File newfile = findNewFilename(out);
-      writeTextFiles(sourceData, newfile);
+      if (overrideTarget) {
+        writeTextFile(loadTextStream(new FileInputStream(out)), newfile);
+        writeTextFile(loadTextStream(new FileInputStream(getHiddenFile(out))), getHiddenFile(newfile));
+        writeTextFiles(sourceData, out);
+      } else {
+        writeTextFiles(sourceData, newfile);
+      }
       return newfile.getName();
     } else {
       writeTextFiles(sourceData, out);
@@ -77,13 +87,12 @@ public class StreamTools {
   }
 
   public static void writeTextFiles(List<String> data, File out) throws IOException {
+    writeTextFile(data, out);
+    writeTextFile(data, getHiddenFile(out));
+  }
+
+  public static void writeTextFile(List<String> data, File out) throws IOException {
     Writer w = new FileWriter(out);
-    for (String s : data) {
-      w.write(s);
-      w.write(System.lineSeparator());
-    }
-    w.close();
-    w = new FileWriter(getHiddenFile(out));
     for (String s : data) {
       w.write(s);
       w.write(System.lineSeparator());
