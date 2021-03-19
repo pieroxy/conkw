@@ -50,6 +50,8 @@ public class ProcGrabber extends AsyncGrabber {
   private ExternalBinaryRunner blockDeviceDetector;
   private boolean autoDetectBlockDevices;
 
+  private long lastGrabSync = -1;
+  private boolean computeMax = false;
 
   @Override
   public boolean changed() {
@@ -175,6 +177,10 @@ public class ProcGrabber extends AsyncGrabber {
 
   @Override
   public synchronized ResponseData grabSync() {
+    long now = System.currentTimeMillis();
+    computeMax = now-lastGrabSync < 1050; // Max should only be computed on the regular runs, not after a wake from sleep.
+    lastGrabSync = now;
+
     ResponseData r = new ResponseData(this, System.currentTimeMillis());
     if (disabled) {
       return r;
@@ -291,6 +297,10 @@ public class ProcGrabber extends AsyncGrabber {
         if (lastNin!=0) {
           r.addMetric("netp_in", (double) (in - lastNin));
           r.addMetric("netp_out", (double) (out - lastNout));
+          if (computeMax) {
+            r.addMetric("[max]netp_in", computeAutoMax("netp_in", in - lastNin));
+            r.addMetric("[max]netp_out", computeAutoMax("netp_out", out - lastNout));
+          }
         }
         lastNin=in;
         lastNout=out;

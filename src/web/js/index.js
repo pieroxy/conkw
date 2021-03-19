@@ -242,6 +242,8 @@ ConkW.getProperLabel = function(key, value) {
     switch (key) {
         case "size":
             return this.getSizeLabel(value);
+        case "datarate":
+            return this.getDataRateLabel(value);
         case "temp":
             return this.getTempLabel(value);
         case "wtemp":
@@ -403,6 +405,10 @@ ConkW.getSizeLabel = function(i) {
     if (i < 1024) return this.getPrecision(i) + "GB";
     i /= 1024;
     return this.getPrecision(i) + "TB";
+}
+
+ConkW.getDataRateLabel = function(i) {
+    return this.getSizeLabel(i) + "/s";
 }
 
 ConkW.getSI = function(i) {
@@ -681,7 +687,7 @@ class PropertyHolder {
         ConkW.data.cachedValues[this.cacheKey] = "--not-a-valid-value--";
     }
     update(data) {
-        let v = ConkW.extractRawValue(this.valueExpr, data);
+        let v = ConkW.extractFormattedValue(this.valueExpr, data);
         ConkW.updateField(this.element, this.propertyName, this.cacheKey, v, false);
     }
 }
