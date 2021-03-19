@@ -18,13 +18,15 @@ import java.util.logging.Logger;
 public abstract class Grabber {
   private Logger LOGGER = createLogger();
 
-  private File storageFolder = new File(System.getProperty("user.home"), "/.conkw/data/");
-  private File tmpFolder = new File(System.getProperty("user.home"), "/.conkw/tmp/");
+  private File storageFolder=null;
+  private File tmpFolder=null;
   private Set<String> extract = new HashSet<>();
 
   public static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
   private String name;
   private Level logLevel = Level.INFO;
+
+  private static volatile MaxComputer maxComputer = null;
 
   Map<String, ResponseData> cachedResponses = new HashMap<>();
 
@@ -61,11 +63,14 @@ public abstract class Grabber {
     }
   }
 
-  public abstract void setConfig(Map<String, String> config);
+  protected abstract void setConfig(Map<String, String> config);
 
   public void initConfig(File homeDir, Map<String, String> config) throws IOException {
     setConfig(config);
+    storageFolder = new File(homeDir, "data");
+    tmpFolder = new File(homeDir, "tmp");
     if (name == null) setName(getDefaultName());
+    if (maxComputer == null) maxComputer = new MaxComputer(getStorage());
   }
 
   public void setLogLevel(Level l) {
@@ -87,13 +92,13 @@ public abstract class Grabber {
   public File getStorage() {
     return storageFolder;
   }
-
   public File getTmp() {
     return tmpFolder;
   }
   protected File getTmp(String filename) {
     return new File(getTmp(), filename);
   }
+
 
   protected final void log(Level loglevel, String message) {
     LOGGER.log(loglevel, message);
@@ -127,6 +132,11 @@ public abstract class Grabber {
     l.setLevel(logLevel);
     return l;
   }
+
+  protected double computeAutoMax(String metricName, double value) {
+    return maxComputer.getMax(this, metricName, value);
+  }
+
 
   @Override
   public String toString() {
