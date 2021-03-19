@@ -43,4 +43,4 @@ Hint: Click on the clock to see the different clock faces available.
 
 The step 3 above will not do anything if conkw is already installed. To force installation to happen again, use the `--force-install` flag. If you edited and changed files in the `conf` directory, they will be kept and the new configuration will be installed as `config.jsonc.1` and/or `logging.properties.1` respectively.
 
-If you want ot reset the configuration to the new install configuration, use the `--override-config-modifications` flag. This way, both files will be reset, and if you made changes to them, your version will be saved as `config.jsonc.1` and/or `logging.properties.1` respectively.
+If you want to reset the configuration to the new install configuration, use the `--override-config-modifications` flag. This way, both files will be reset, and if you made changes to them, your version will be saved as `config.jsonc.1` and/or `logging.properties.1` respectively.
