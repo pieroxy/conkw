@@ -343,9 +343,18 @@ public class ProcGrabber extends AsyncGrabber {
       allWrite += write - lastwrite;
       r.addMetric("read_bytes_"+bd, (double)read - lastread);
       r.addMetric("write_bytes_"+bd, (double)write - lastwrite);
+      if (computeMax) {
+        r.addMetric("[max]read_bytes_"+bd, computeAutoMax("read_bytes_"+bd,read - lastread));
+        r.addMetric("[max]write_bytes_"+bd, computeAutoMax("write_bytes_"+bd,write - lastwrite));
+      }
       lastBlockDeviceRead.put(bd,read);
       lastBlockDeviceWrite.put(bd,write);
     }
+    if (computeMax) {
+      r.addMetric("[max]read_bytes_all", computeAutoMax("read_bytes_all",allRead));
+      r.addMetric("[max]write_bytes_all", computeAutoMax("write_bytes_all",allWrite));
+    }
+
     r.addMetric("read_bytes_all", (double)allRead);
     r.addMetric("write_bytes_all", (double)allWrite);
     r.addMetric("allbd", allbd.toString());
