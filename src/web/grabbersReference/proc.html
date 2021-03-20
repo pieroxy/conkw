@@ -155,12 +155,16 @@
             <div id="net" class="cw-block">
                 <heading>NETWORK I/O</heading>
                 <label>  read : </label>
-                <cw-label cw-prop-title="m:num:size:[max]netp_in" cw-ns="proc" cw-value="m:num:size:netp_in"></cw-label>/s
+                <cw-label cw-ns="proc" cw-value="m:num:size:netp_in"></cw-label>/s
                 <hgauge cw-bgcolor="#202040" cw-ns="proc" style="height:2em" log="true" cw-hgauge0="#208020:m:num::netp_in" cw-min="l:num::0" cw-max="m:num::[max]netp_in"></hgauge>
+                <label class="softlabel">   max :  <cw-label cw-value="m:num:size:[max]netp_in" cw-ns="proc"></cw-label>/s</label>
+                
                 <BR clear="right"/>
                 <label> write : </label>
                 <cw-label cw-prop-title="m:num:size:[max]netp_out" cw-ns="proc" cw-value="m:num:size:netp_out"></cw-label>/s
                 <hgauge cw-bgcolor="#202040" cw-ns="proc" style="height:2em" log="true" cw-hgauge0="#208020:m:num::netp_out" cw-min="l:num::0" cw-max="m:num::[max]netp_out"></hgauge>
+                <label class="softlabel">   max :  <cw-label cw-value="m:num:size:[max]netp_out" cw-ns="proc"></cw-label>/s</label>
+                
                 <BR/>
             </div>
 

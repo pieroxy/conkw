@@ -65,6 +65,12 @@ heading {
     margin-top: 20px;
 }
 
+.softlabel {
+    color: #447;
+}
+
+
+
 /* Gauge elements */
 
 gauge,
