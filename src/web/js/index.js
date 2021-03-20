@@ -824,6 +824,7 @@ class HistoryGaugeHolder {
         this.log = e.getAttribute("log") == "true";
         this.min = ConkW.parseValueExpression(e.getAttribute("cw-min"));
         this.max = ConkW.parseValueExpression(e.getAttribute("cw-max"));
+        this.maxValue = 0;
         this.warn = ConkW.parseValueExpression(e.getAttribute("cw-value-warn"));
         this.wmax = this.warn.format === "valuebelow";
         e.style.backgroundColor = this.bgcolor;
@@ -860,6 +861,7 @@ class HistoryGaugeHolder {
             let value = ConkW.extractTypedValue(this.valueExprs[i], data);
             let color = this.colors[i];
             let bar = document.createElement("div");
+            bar.setAttribute("value", value);
             bar.className = "hgauge";
             let posprc = ConkW.getPercent(value, min, max, this.log);
             bar.style.height = posprc + "%";
@@ -879,6 +881,26 @@ class HistoryGaugeHolder {
         e.appendChild(container);
         while (e.childElementCount > this.elementWidth) {
             e.removeChild(e.firstChild);
+        }
+
+        if (max != this.maxValue) {
+            this.maxValue = max;
+            //console.log("Recomputing heights, max has changed.");
+            // Max has changed, we need to recompute height of all elements.
+            e.childNodes.forEach(container => {
+                let bottom=0;
+                container.childNodes.forEach(bar => {
+                    if (bar.className === "hgauge") {
+                        let posprc = ConkW.getPercent(parseFloat(bar.getAttribute("value")), min, max, this.log);
+                        bar.style.height = posprc + "%";
+                        bar.style.bottom = bottom + "%";
+                        bottom += posprc;
+                    } else { // className is hgaugebg
+                        bar.style.height = (100-bottom) + "%";
+                        bar.style.bottom = bottom + "%";
+                    }
+                })
+            })
         }
     }
 }
