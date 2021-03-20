@@ -137,21 +137,27 @@
           <div cw-ns="oshi" cw-ifextracted="diskios" class="cw-block">
             <heading>DISK IOs</heading>
             <span cw-ns="oshi" cw-multinode-in="m:str::diskios_disks" cw-multinode-pattern="#">
-              <label style="font-weight:bold">        Disk : </label><cw-label>#</cw-label>
+              <label style="font-weight:bold;text-align:right"><cw-label>#</cw-label></label>
               <br/>
-              <label>    Read : </label><cw-label cw-ns="oshi" cw-value="m:num:size:diskios_read_bytes_#"></cw-label>
-              <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="l:num::100000000" cw-value-warn="l:num::90000000" cw-gauge0="default:m:num::diskios_read_bytes_#"></gauge>
+              <label>R </label><cw-label cw-ns="oshi" cw-value="m:num:size:diskios_read_bytes_#"></cw-label>/s
+              <label class="softlabel"><cw-label cw-ns="oshi" cw-value="m:num:size:max$diskios_read_bytes_#"></cw-label>/s</label>
+              <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::max$diskios_read_bytes_#" cw-value-warn="e:num::${num['max$diskios_read_bytes_#']*0.9}" cw-gauge0="default:m:num::diskios_read_bytes_#"></gauge>
               <br/>
-              <label>   Write : </label><cw-label cw-ns="oshi" cw-value="m:num:size:diskios_write_bytes_#"></cw-label>
-              <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="l:num::100000000" cw-value-warn="l:num::90000000" cw-gauge0="default:m:num::diskios_write_bytes_#"></gauge>
+              <label>W </label><cw-label cw-ns="oshi" cw-value="m:num:size:diskios_write_bytes_#"></cw-label>/s
+              <label class="softlabel"><cw-label cw-ns="oshi" cw-value="m:num:size:max$diskios_write_bytes_#"></cw-label>/s</label>
+              <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::max$diskios_write_bytes_#" cw-value-warn="e:num::${num['max$diskios_write_bytes_#']*0.9}" cw-gauge0="default:m:num::diskios_write_bytes_#"></gauge>
               <br/>
             </span>
             <br/>
             <label>All Read : </label><cw-label cw-ns="oshi" cw-value="m:num:size:diskios_read_bytes"></cw-label>
-            <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="l:num::100000000" cw-value-warn="l:num::90000000" cw-gauge0="default:m:num::diskios_read_bytes"></gauge>
+            <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::max$diskios_read_bytes" cw-value-warn="e:num::m:num::${num.max$diskios_read_bytes*0.9}" cw-gauge0="default:m:num::diskios_read_bytes"></gauge>
+            <label class="softlabel">     Max : <cw-label cw-ns="oshi" cw-value="m:num:size:max$diskios_read_bytes"></cw-label></label>
+            <hgauge cw-ns="oshi" cw-min="l:num::0" log="true" cw-max="m:num::max$diskios_read_bytes" cw-hgauge0="#208020:m:num::diskios_read_bytes"></hgauge>
             <br/>
             <label>All Wrt. : </label><cw-label cw-ns="oshi" cw-value="m:num:size:diskios_write_bytes"></cw-label>
-            <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="l:num::100000000" cw-value-warn="l:num::90000000" cw-gauge0="default:m:num::diskios_write_bytes"></gauge>
+            <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::max$diskios_write_bytes" cw-value-warn="e:num::m:num::${num.max$diskios_write_bytes*0.9}" cw-gauge0="default:m:num::diskios_write_bytes"></gauge>
+            <label class="softlabel">     Max : <cw-label cw-ns="oshi" cw-value="m:num:size:max$diskios_write_bytes"></cw-label></label>
+            <hgauge cw-ns="oshi" cw-min="l:num::0" log="true" cw-max="m:num::max$diskios_write_bytes" cw-hgauge0="#208020:m:num::diskios_write_bytes"></hgauge>
             <br/>
           </div>
 
@@ -160,20 +166,24 @@
             <div cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::netbw_count" cw-multinode-pattern="#">
               <label style="font-weight:bold">     NIC : </label><cw-label cw-ns="oshi" cw-value="m:str::nics_name_#">#</cw-label>
               <br/>
-              <label>      In : </label><cw-label cw-ns="oshi" cw-value="m:num:size:netbw_in_#"></cw-label>
+              <label>Dn: </label><cw-label cw-ns="oshi" cw-value="m:num:size:netbw_in_#"></cw-label>
+              <cw-label class="softlabel" cw-ns="oshi" cw-value="m:num:size:max$netbw_in_#"></cw-label>
               <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::netbw_speed_#" cw-value-warn="e:num::${num.netbw_speed_#*0.9}" cw-gauge0="default:m:num::netbw_in_#"></gauge>
               <br/>
-              <label>     Out : </label><cw-label cw-ns="oshi" cw-value="m:num:size:netbw_out_#"></cw-label>
+              <label>Up: </label><cw-label cw-ns="oshi" cw-value="m:num:size:netbw_out_#"></cw-label>
+              <cw-label class="softlabel" cw-ns="oshi" cw-value="m:num:size:max$netbw_out_#"></cw-label>
               <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::netbw_speed_#" cw-value-warn="e:num::${num.netbw_speed_#*0.9}" cw-gauge0="default:m:num::netbw_out_#"></gauge>
               <br/>
             </div>
             <br/>
-            <label>All Read : </label><cw-label cw-ns="oshi" cw-value="m:num:size:netbw_in"></cw-label>
+            <label>All Down : </label><cw-label cw-ns="oshi" cw-value="m:num:size:netbw_in"></cw-label>
             <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::netbw_speed" cw-value-warn="e:num::${num.netbw_speed*0.9}" cw-gauge0="default:m:num::netbw_in"></gauge>
+            <label class="softlabel" >     Max : <cw-label cw-ns="oshi" cw-value="m:num:size:max$netbw_in"></cw-label></label>
             <hgauge cw-ns="oshi" cw-min="l:num::0" log="true" cw-max="m:num::netbw_speed" cw-hgauge0="#208020:m:num::netbw_in"></hgauge>
             <br clear="both"/>
-            <label>All Wrt. : </label><cw-label cw-ns="oshi" cw-value="m:num:size:netbw_out"></cw-label>
+            <label>All Up   : </label><cw-label cw-ns="oshi" cw-value="m:num:size:netbw_out"></cw-label>
             <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::netbw_speed" cw-value-warn="e:num::${num.netbw_speed*0.9}" cw-gauge0="default:m:num::netbw_out"></gauge>
+            <label class="softlabel" >     Max : <cw-label class="softlabel" cw-ns="oshi" cw-value="m:num:size:max$netbw_out"></cw-label></label>
             <hgauge cw-ns="oshi" cw-min="l:num::0" log="true" cw-max="m:num::netbw_speed" cw-hgauge0="#208020:m:num::netbw_out"></hgauge>
             <br/>
             <br/>
@@ -181,8 +191,8 @@
 
           <div cw-ns="oshi" cw-ifextracted="battery" class="cw-block">
             <heading>BATTERY</heading>
-            <div cw-ns="oshi" cw-style-display="e:num::${num.battery_remaining_prc===undefined?'':'none'}">No battery detected</div>
-            <div cw-ns="oshi" cw-style-display="e:num::${num.battery_remaining_prc===undefined?'none':''}">
+            <div cw-ns="oshi" cw-style-display="e:str::${num.battery_remaining_prc===undefined?'':'none'}">No battery detected</div>
+            <div cw-ns="oshi" cw-style-display="e:str::${num.battery_remaining_prc===undefined?'none':''}">
               <cw-label style="margin-top:0.5em" cw-value-warn="l:num:valuebelow:0.2" cw-ns="oshi" cw-value="m:num:prc01:battery_remaining_prc"></cw-label>
               <div class="battery"><img src="/battery/batt_left.png"><span class="battery_middle"><img cw-ns="oshi" cw-style-display="e:str::${num.battery_plugged==1?'':'none'}" src="/battery/batt_plugged.png"><gauge cw-ns="oshi" cw-gauge0="default:m:num::battery_remaining_prc" cw-min="l:num::0" cw-max="l:num::1" cw-value-warn="l:num:valuebelow:0.25"></gauge></span><img src="/battery/batt_right.png"></div>
             </div>

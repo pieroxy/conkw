@@ -298,8 +298,8 @@ public class ProcGrabber extends AsyncGrabber {
           r.addMetric("netp_in", (double) (in - lastNin));
           r.addMetric("netp_out", (double) (out - lastNout));
           if (computeMax) {
-            r.addMetric("[max]netp_in", computeAutoMax("netp_in", in - lastNin));
-            r.addMetric("[max]netp_out", computeAutoMax("netp_out", out - lastNout));
+            r.addMetric("max$netp_in", computeAutoMax("netp_in", in - lastNin));
+            r.addMetric("max$netp_out", computeAutoMax("netp_out", out - lastNout));
           }
         }
         lastNin=in;
@@ -344,15 +344,15 @@ public class ProcGrabber extends AsyncGrabber {
       r.addMetric("read_bytes_"+bd, (double)read - lastread);
       r.addMetric("write_bytes_"+bd, (double)write - lastwrite);
       if (computeMax) {
-        r.addMetric("[max]read_bytes_"+bd, computeAutoMax("read_bytes_"+bd,read - lastread));
-        r.addMetric("[max]write_bytes_"+bd, computeAutoMax("write_bytes_"+bd,write - lastwrite));
+        r.addMetric("max$read_bytes_"+bd, computeAutoMax("read_bytes_"+bd,read - lastread));
+        r.addMetric("max$write_bytes_"+bd, computeAutoMax("write_bytes_"+bd,write - lastwrite));
       }
       lastBlockDeviceRead.put(bd,read);
       lastBlockDeviceWrite.put(bd,write);
     }
     if (computeMax) {
-      r.addMetric("[max]read_bytes_all", computeAutoMax("read_bytes_all",allRead));
-      r.addMetric("[max]write_bytes_all", computeAutoMax("write_bytes_all",allWrite));
+      r.addMetric("max$read_bytes_all", computeAutoMax("read_bytes_all",allRead));
+      r.addMetric("max$write_bytes_all", computeAutoMax("write_bytes_all",allWrite));
     }
 
     r.addMetric("read_bytes_all", (double)allRead);

@@ -135,13 +135,13 @@
                 <heading cw-ns="proc">HDD I/O</heading>
                 <label>  read : </label>
                 <cw-label cw-ns="proc" cw-value="m:num:size:read_bytes_all"></cw-label>/s
-                <hgauge cw-bgcolor="#202040" cw-ns="proc" cw-hgauge0="#208020:m:num::read_bytes_all" cw-min="l:num::0" cw-max="m:num::[max]read_bytes_all" style="height:2em" log="true"></hgauge>
-                <label class="softlabel">   max :  <cw-label cw-ns="proc" cw-value="m:num:size:[max]read_bytes_all"></cw-label>/s</label>
+                <hgauge cw-bgcolor="#202040" cw-ns="proc" cw-hgauge0="#208020:m:num::read_bytes_all" cw-min="l:num::0" cw-max="m:num::max$read_bytes_all" style="height:2em" log="true"></hgauge>
+                <label class="softlabel">   max :  <cw-label cw-ns="proc" cw-value="m:num:size:max$read_bytes_all"></cw-label>/s</label>
                 <BR clear="right"/>
                 <label> write : </label>
                 <cw-label cw-ns="proc" cw-value="m:num:size:write_bytes_all"></cw-label>/s
-                <hgauge cw-bgcolor="#202040" cw-ns="proc" cw-hgauge0="#208020:m:num::write_bytes_all" cw-min="l:num::0" cw-max="m:num::[max]write_bytes_all" style="height:2em" log="true"></hgauge>
-                <label class="softlabel">   max :  <cw-label cw-ns="proc" cw-value="m:num:size:[max]write_bytes_all"></cw-label>/s</label>
+                <hgauge cw-bgcolor="#202040" cw-ns="proc" cw-hgauge0="#208020:m:num::write_bytes_all" cw-min="l:num::0" cw-max="m:num::max$write_bytes_all" style="height:2em" log="true"></hgauge>
+                <label class="softlabel">   max :  <cw-label cw-ns="proc" cw-value="m:num:size:max$write_bytes_all"></cw-label>/s</label>
                 <BR/>
             </div>
 
@@ -149,8 +149,8 @@
                 <heading cw-ns="proc">HDD I/O - detail</heading>
                 <div cw-ns="proc" cw-multinode-in="m:str::allbd" cw-multinode-pattern="#">
                     <label cw-ns="proc" cw-value="l:str::#" style="display:block;text-align:right"></label>
-                    R: <cw-label cw-ns="proc" cw-value="m:num:size:read_bytes_#"></cw-label>/s <label title="max" class="softlabel"><cw-label cw-ns="proc" cw-value="m:num:size:[max]read_bytes_#"></cw-label>/s </label><gauge cw-ns="proc" cw-gauge0="default:m:num::read_bytes_#" cw-min="l:num::0" cw-max="l:num::100000000"></gauge><BR/>
-                    W: <cw-label cw-ns="proc" cw-value="m:num:size:write_bytes_#"></cw-label>/s <label title="max" class="softlabel"><cw-label cw-ns="proc" cw-value="m:num:size:[max]write_bytes_#"></cw-label>/s</label><gauge cw-ns="proc" cw-gauge0="default:m:num::write_bytes_#" cw-min="l:num::0" cw-max="l:num::100000000"></gauge><BR/>
+                    R: <cw-label cw-ns="proc" cw-value="m:num:size:read_bytes_#"></cw-label>/s <label title="max" class="softlabel"><cw-label cw-ns="proc" cw-value="m:num:size:max$read_bytes_#"></cw-label>/s </label><gauge cw-ns="proc" cw-gauge0="default:m:num::read_bytes_#" cw-min="l:num::0" cw-max="l:num::100000000"></gauge><BR/>
+                    W: <cw-label cw-ns="proc" cw-value="m:num:size:write_bytes_#"></cw-label>/s <label title="max" class="softlabel"><cw-label cw-ns="proc" cw-value="m:num:size:max$write_bytes_#"></cw-label>/s</label><gauge cw-ns="proc" cw-gauge0="default:m:num::write_bytes_#" cw-min="l:num::0" cw-max="l:num::100000000"></gauge><BR/>
                 </div>
             </div>
 
@@ -158,14 +158,14 @@
                 <heading>NETWORK I/O</heading>
                 <label>  read : </label>
                 <cw-label cw-ns="proc" cw-value="m:num:size:netp_in"></cw-label>/s
-                <hgauge cw-bgcolor="#202040" cw-ns="proc" style="height:2em" log="true" cw-hgauge0="#208020:m:num::netp_in" cw-min="l:num::0" cw-max="m:num::[max]netp_in"></hgauge>
-                <label class="softlabel">   max :  <cw-label cw-value="m:num:size:[max]netp_in" cw-ns="proc"></cw-label>/s</label>
+                <hgauge cw-bgcolor="#202040" cw-ns="proc" style="height:2em" log="true" cw-hgauge0="#208020:m:num::netp_in" cw-min="l:num::0" cw-max="m:num::max$netp_in"></hgauge>
+                <label class="softlabel">   max :  <cw-label cw-value="m:num:size:max$netp_in" cw-ns="proc"></cw-label>/s</label>
                 
                 <BR clear="right"/>
                 <label> write : </label>
                 <cw-label cw-ns="proc" cw-value="m:num:size:netp_out"></cw-label>/s
-                <hgauge cw-bgcolor="#202040" cw-ns="proc" style="height:2em" log="true" cw-hgauge0="#208020:m:num::netp_out" cw-min="l:num::0" cw-max="m:num::[max]netp_out"></hgauge>
-                <label class="softlabel">   max :  <cw-label cw-value="m:num:size:[max]netp_out" cw-ns="proc"></cw-label>/s</label>
+                <hgauge cw-bgcolor="#202040" cw-ns="proc" style="height:2em" log="true" cw-hgauge0="#208020:m:num::netp_out" cw-min="l:num::0" cw-max="m:num::max$netp_out"></hgauge>
+                <label class="softlabel">   max :  <cw-label cw-value="m:num:size:max$netp_out" cw-ns="proc"></cw-label>/s</label>
                 
                 <BR/>
             </div>

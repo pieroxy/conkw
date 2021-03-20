@@ -30,6 +30,9 @@ public class OshiGrabber extends AsyncGrabber {
   Map<String, IOStats> disksStats;
   Map<String, IOStats> netStats;
 
+  private long lastGrabSync = -1;
+  private boolean computeMax = false;
+
   private class IOStats {
     long reads;
     long writes;
@@ -42,6 +45,10 @@ public class OshiGrabber extends AsyncGrabber {
 
   @Override
   public ResponseData grabSync() {
+    long now = System.currentTimeMillis();
+    computeMax = now-lastGrabSync < 1050; // Max should only be computed on the regular runs, not after a wake from sleep.
+    lastGrabSync = now;
+
     // Garbage generated and time elapsed are measured on my computer. They give an order of magnitude.
     // Overall: 146m / 1.2s
     ResponseData res = new ResponseData(this, System.currentTimeMillis());
@@ -346,6 +353,10 @@ public class OshiGrabber extends AsyncGrabber {
       long in = nic.getBytesRecv() - stats.reads;
       long out = nic.getBytesSent() - stats.writes;
       if (extract) {
+        if (computeMax) {
+          res.addMetric("max$netbw_in_"+i, computeAutoMax("netbw_in_"+i, in));
+          res.addMetric("max$netbw_out_"+i, computeAutoMax("netbw_out_"+i, out));
+        }
         res.addMetric("netbw_in_"+i, in);
         res.addMetric("netbw_out_"+i, out);
         res.addMetric("netbw_speed_"+i, nic.getSpeed()/8);
@@ -359,6 +370,10 @@ public class OshiGrabber extends AsyncGrabber {
     }
     res.addMetric("netbw_count", i);
     if (globalextract) {
+      if (computeMax) {
+        res.addMetric("max$netbw_in", computeAutoMax("netbw_in", totalin));
+        res.addMetric("max$netbw_out", computeAutoMax("netbw_out", totalout));
+      }
       res.addMetric("netbw_in", totalin);
       res.addMetric("netbw_out", totalout);
       res.addMetric("netbw_speed", totalspeed);
@@ -391,6 +406,10 @@ public class OshiGrabber extends AsyncGrabber {
         long w=d.getWriteBytes()-ds.writes;
         res.addMetric("diskios_read_bytes_"+name, r);
         res.addMetric("diskios_write_bytes_"+name, w);
+        if (computeMax) {
+          res.addMetric("max$diskios_read_bytes_"+name, computeAutoMax("diskios_read_bytes_"+name, r));
+          res.addMetric("max$diskios_write_bytes_"+name, computeAutoMax("diskios_write_bytes_"+name, w));
+        }
         tr+=r;
         tw+=w;
         if (allnames.length()>0) allnames.append(',');
@@ -398,6 +417,10 @@ public class OshiGrabber extends AsyncGrabber {
       }
       ds.reads = d.getReadBytes();
       ds.writes = d.getWriteBytes();
+      if (computeMax) {
+        res.addMetric("max$diskios_read_bytes", computeAutoMax("diskios_read_bytes", tr));
+        res.addMetric("max$diskios_write_bytes", computeAutoMax("diskios_write_bytes", tw));
+      }
       res.addMetric("diskios_read_bytes", tr);
       res.addMetric("diskios_write_bytes", tw);
       res.addMetric("diskios_disks", allnames.toString());
