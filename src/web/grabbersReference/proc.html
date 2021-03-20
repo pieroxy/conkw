@@ -188,8 +188,8 @@
 
             <div id="battery" class="cw-block">
                 <heading>BATTERY LEVEL</heading>
-                <div cw-ns="proc" cw-style-display="e:num::${num.bat_exists==1?'none':''}">No battery detected</div>
-                <div cw-ns="proc" cw-style-display="e:num::${num.bat_exists!=1?'none':''}">
+                <div cw-ns="proc" cw-style-display="e:str::${num.bat_exists==1?'none':''}">No battery detected</div>
+                <div cw-ns="proc" cw-style-display="e:str::${num.bat_exists!=1?'none':''}">
                     <cw-label style="margin-top:0.5em" cw-value-warn="l:num:valuebelow:20" cw-ns="proc" cw-value="m:num:prc:bat_prc"></cw-label>
                     <div class="battery"><img src="/battery/batt_left.png"><span class="battery_middle"><img cw-ns="proc" cw-style-display="e:str::${num.bat_plugged==1?'':'none'}" src="/battery/batt_plugged.png"><gauge cw-ns="proc" cw-gauge0="default:m:num::bat_prc" cw-min="l:num::0" cw-max="l:num::100" cw-value-warn="l:num:valuebelow:25"></gauge></span><img src="/battery/batt_right.png"></div>
                 </div>
@@ -198,8 +198,8 @@
 
             <div id="mdstat" class="cw-block">
                 <heading>MDADM Status</heading>
-                <div cw-ns="proc" cw-style-display="e:num::${num.mdstatNbDevices!=0?'none':''}">No mdadm device found</div>
-                <div cw-ns="proc" cw-style-display="e:num::${num.mdstatNbDevices==0?'none':''}" cw-warn="m:num:notzero:mdstatFailed">
+                <div cw-ns="proc" cw-style-display="e:str::${num.mdstatNbDevices!=0?'none':''}">No mdadm device found</div>
+                <div cw-ns="proc" cw-style-display="e:str::${num.mdstatNbDevices==0?'none':''}" cw-warn="m:num:notzero:mdstatFailed">
                     <cw-label cw-ns="proc" cw-value-warn="l:str:valuecontains:&lt;" cw-value="m:str::mdstatSummary"></cw-label> dev:<cw-label cw-ns="proc" cw-value="m:num:num:mdstatNbDevices"></cw-label> fail:<cw-label cw-ns="proc" cw-value="m:num:num:mdstatFailed"></cw-label>
                     <BR/>
                 </div>
