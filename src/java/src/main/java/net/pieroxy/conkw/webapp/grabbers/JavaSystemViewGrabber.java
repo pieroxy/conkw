@@ -23,8 +23,6 @@ import java.util.stream.StreamSupport;
 
 public class JavaSystemViewGrabber extends AsyncGrabber {
   private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
-
-
   static final String NAME = "sys";
 
   private OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();

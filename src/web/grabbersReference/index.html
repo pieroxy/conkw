@@ -39,14 +39,29 @@
             font-size: 16px;
             font-weight: 300;
           }
-          block a {
+          block a.title {
             display: block;
             text-align: center;
             font-weight: 600;
           }
+          block a {
+            color:#88f;
+          }
+          block a:visited {
+            color:#94f;
+          }
           block code {
             font-family: Raleway, sans-serif;
             font-weight: 600;
+          }
+          .agdiv {
+            display:flex;
+            flex-wrap: wrap;
+          }
+          .agdiv img {
+            margin: 0 15px 10px 0;
+            float:left;
+            width:50px;
           }
        </style>
     </head>
@@ -63,25 +78,36 @@
         </div>
         <div style="text-align:center; margin:40px 20px;">
           <heading>This page lists all the grabbers available</heading>
-          <div style="display:flex; flex-wrap: wrap;">
+          <div class="agdiv">
             <block>
-              <a href="/grabbersReference/oshi.html">OSHI Grabber</a>
+              <a class="title" href="/grabbersReference/oshi.html">OSHI Grabber</a>
+              <img src="../icons/cpu.png">
               This is the universal system grabber. Not necessarily extremely optimized, it can get data from most 
               systems. From a top-like UI to the brand of your RAM modules. Beware on particularly old and slow systems,
               this grabber (if all extractors are enabled) can drain your system.
             </block>
             <block>
-              <a href="/grabbersReference/proc.html">Proc Grabber</a>
+              <a class="title" href="/grabbersReference/proc.html">Proc Grabber</a>
+              <img src="../icons/cpu.png">
               This grabber gather its data from the <code>/proc</code> and <code>/sys</code> filesystems on Linux. It
               is fast and reasonably optimized.
             </block>
             <block>
-              <a href="/grabbersReference/sys.html">Sys Grabber</a>
+              <a class="title" href="/grabbersReference/sys.html">Sys Grabber</a>
+              <img src="../icons/cpu.png">
               The Sys grabber is a universal system grabber, just using standard Java stuff. It provides basic CPU, load,
               memory and filesystems metrics.
             </block>
             <block>
-              <a href="javascript:alert('Grabber not configured')">File Grabber</a>
+              <a class="title" href="/grabbersReference/owm.html">Open Weather Map Grabber</a>
+              <img src="../icons/weather.png">
+              This grabber extracts the weather forecast from <a href="https://openweathermap.org/api/one-call-api">one 
+              call API</a> of the <a href="https://openweathermap.org/">openweathermap website</a>. You need to register
+              for a free account in order to use it.
+            </block>
+            <block>
+              <a class="title" href="javascript:alert('Grabber not configured')">File Grabber</a>
+              <img src="../icons/import.png">
               This grabber is not configured by default. It allows conkw to read data from any file
               that respects the properties format with some restrictions added. Look up the documentation for more
               information.

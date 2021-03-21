@@ -1,7 +1,5 @@
 package net.pieroxy.conkw.utils;
 
-import net.pieroxy.conkw.standalone.Runner;
-
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.nio.charset.StandardCharsets;

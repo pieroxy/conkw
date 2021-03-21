@@ -398,6 +398,7 @@ public class OshiGrabber extends AsyncGrabber {
     StringBuilder allnames = new StringBuilder();
     for (HWDiskStore d : extractor.getDisks()) {
       String name = d.getName();
+
       IOStats ds = disksStats.get(name);
       if (ds == null) {
         disksStats.put(d.getName(), ds = new IOStats());
