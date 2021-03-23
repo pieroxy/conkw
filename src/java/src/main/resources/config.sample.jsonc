@@ -57,7 +57,7 @@
       "implementation":"net.pieroxy.conkw.webapp.grabbers.openweathermap.OpenWeatherMapGrabber",
       "extract":"min,hour,day",
       "parameters": {
-        "token":"abb78c82538b86e756ec4e261125619f",
+        "token":"your api token here",
         "lat":"48.8817625",
         "lon":"2.0925783"
       }
