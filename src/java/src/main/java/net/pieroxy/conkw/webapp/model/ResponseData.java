@@ -205,4 +205,8 @@ public class ResponseData {
   public void setExtractor(String extractor) {
     this.extractor = extractor;
   }
+
+  public void setErrors(Collection<String> errors) {
+    this.errors = errors;
+  }
 }
