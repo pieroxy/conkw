@@ -426,13 +426,22 @@ ConkW.getSI = function(i) {
 ConkW.getPrecision = function(i) {
     let res = "" + i;
     if (res.includes(".")) {
-        if (i < 10) i = Math.round(i * 100) / 100;
-        else if (i < 100) i = Math.round(i * 10) / 10;
-        else i = Math.round(i);
+        if (i<0) {
+            if (i < 10) i = Math.round(i * 10) / 10;
+            else i = Math.round(i);
+        } else {
+            if (i < 10) i = Math.round(i * 100) / 100;
+            else if (i < 100) i = Math.round(i * 10) / 10;
+            else i = Math.round(i);
+        }
         res = "" + i;
     }
     let missing = 4 - res.length;
-    while (missing-- > 0) res = res + " ";
+    if (missing > 0 && res.indexOf(".")==-1) {
+        res = res+".";
+        missing--;
+    }
+    while (missing-- > 0) res = res+"0";
     return res;
 }
 
@@ -733,7 +742,7 @@ class StaleHolder {
         ConkW.data.cachedValues[this.cacheKey] = "--not-a-valid-value--";
     }
     update(data) {
-        let stale = isStale(this.valueExpr, data);
+        let stale = ConkW.isStale(this.valueExpr, data);
         if (ConkW.data.cachedValues[this.cacheKey] != stale) {
             ConkW.data.cachedValues[this.cacheKey] = stale;
             if (stale) {
