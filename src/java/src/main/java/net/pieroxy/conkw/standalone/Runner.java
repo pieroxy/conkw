@@ -40,6 +40,8 @@ public class Runner {
             tomcat.addServlet(contextPath, "default", new DefaultServlet());
             ctx.addServletMappingDecoded("/", "default");
 
+            ctx.addMimeMapping("svg", "image/svg+xml");
+
             ctx.addApplicationLifecycleListener(new Listener());
 
             tomcat.start();
