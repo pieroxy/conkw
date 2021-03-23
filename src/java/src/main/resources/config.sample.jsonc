@@ -58,8 +58,8 @@
       "extract":"min,hour,day",
       "parameters": {
         "token":"your api token here",
-        "lat":"48.8817625",
-        "lon":"2.0925783"
+        "lat":"48.8534",
+        "lon":"2.3488"
       }
     }
   ],
