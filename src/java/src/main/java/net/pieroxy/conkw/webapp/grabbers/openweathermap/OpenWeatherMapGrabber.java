@@ -76,7 +76,7 @@ public class OpenWeatherMapGrabber extends TimeThrottledGrabber {
         res.addMetric("hourly_dt_"+i, f.getDt());
         res.addMetric("hourly_temp_"+i, f.getTemp());
         res.addMetric("hourly_temp_feels_"+i, f.getFeels_like());
-        res.addMetric("hourly_wind_speed_"+i, f.getWind_speed());
+        res.addMetric("hourly_wind_speed_"+i, f.getWind_speed()*3.6); // m/s by default -> km/h
         res.addMetric("hourly_wind_speed_icon_"+i, getWindIcon(f.getWind_speed()));
         res.addMetric("hourly_wind_speed_beaufort_"+i, (double)getBeaufortScale(f.getWind_speed()));
         res.addMetric("hourly_pressure_"+i, f.getPressure());
@@ -101,7 +101,7 @@ public class OpenWeatherMapGrabber extends TimeThrottledGrabber {
         res.addMetric("daily_dt_"+i, f.getDt());
         res.addMetric("daily_temp_max_"+i, f.getTemp().getMax());
         res.addMetric("daily_temp_min_"+i, f.getTemp().getMin());
-        res.addMetric("daily_wind_speed_"+i, f.getWind_speed());
+        res.addMetric("daily_wind_speed_"+i, f.getWind_speed()*3.6);// m/s by default -> km/h
         res.addMetric("daily_wind_speed_icon_"+i, getWindIcon(f.getWind_speed()));
         res.addMetric("daily_wind_speed_beaufort_"+i, (double)getBeaufortScale(f.getWind_speed()));
         res.addMetric("daily_pressure_"+i, f.getPressure());

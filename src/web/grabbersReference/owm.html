@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover"/>
+        <meta charset="utf-8">
+        <meta name="format-detection" content="telephone=no">
+        <title>ConkW - Grabbers reference - Open Weather Map</title>
+        <link href="../css/fonts.css" rel="stylesheet">
+        <link href="../css/conkw-common.css" rel="stylesheet">
+        <link href="../css/conkw.css" rel="stylesheet">
+        <script src="/js/polyfills.js"></script>
+        <script src="/js/date.js"></script>
+        <script src="/js/index.js"></script>
+        <link rel="icon" type="image/png" sizes="256x256" href="/icon.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="manifest" href="/site.webmanifest">
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000066">
+        <meta name="msapplication-TileColor" content="#000066">
+        <meta name="theme-color" content="#ffffff">
+    </head>
+    <body onload="ConkW.init()" grabbers="owm">
+        <pagetitle><inlinelogo></inlinelogo><a href="/">CONKW</a> - Reference UI for <code>OpenWeatherMapGrabber</code></pagetitle>
+        <columncontainer>
+            <label>  Status : </label><cw-label style="max-width:200px;display:inline-block" id="cw-status"></cw-label><BR/>
+            <label>   Delay : </label><label id="cw-delay"></label><BR/>
+            <div id="clockanddate" class="cw-block" style="text-align:center;font-size:16px;">
+                <br/>
+                <cw-date cw-id="dayoftheweek"></cw-date>
+                <cw-date cw-id="month"></cw-date> <cw-date cw-id="dayofmonth"></cw-date>
+                <cw-date cw-id="year"></cw-date>
+                <br/>
+                <br/>
+                <clock style="width:240px;height:240px;overflow: hidden;padding-top:3px;margin:auto" onclick="ConkW.dates.rotateClockFace(event, this)"></clock>
+            </div>
+            
+            <div>
+            <heading>INDEX</heading>
+            <a href="/grabbersReference/">Go to the grabbers index</a><br/>
+            </div>
+
+            <div id="current" class="cw-block">
+                <heading>CURRENT WEATHER</heading>
+                <img style="width:50px" cw-ns="owm" cw-prop-src="m:str::current_icon">
+                <br><label>   Description : </label><cw-label cw-ns="owm" cw-value="m:str::current_desc"></cw-label>
+                <br><label>        Clouds : </label><cw-label cw-ns="owm" cw-value="m:num::current_clouds"></cw-label>%
+                <br><label>          Temp : </label><cw-label cw-ns="owm" cw-value="m:num::current_temp"></cw-label>°C
+                <br><label>         Feels : </label><cw-label cw-ns="owm" cw-value="m:num::current_feels"></cw-label>°C
+                <br><label>      Humidity : </label><cw-label cw-ns="owm" cw-value="m:num::current_humidity"></cw-label>%
+                <br><label>      Pressure : </label><cw-label cw-ns="owm" cw-value="m:num::current_pressure"></cw-label>hPa
+                <br><label>       Sunrise : </label><cw-label cw-ns="owm" cw-value="m:num:tsstohhmm:current_sunrise"></cw-label>
+                <br><label>        Sunset : </label><cw-label cw-ns="owm" cw-value="m:num:tsstohhmm:current_sunset"></cw-label>
+                <br><label>    Visibility : </label><cw-label cw-ns="owm" cw-value="m:num:si:current_visibility"></cw-label>m
+                <br><label>Wind direction : </label><cw-label cw-ns="owm" cw-value="m:num::current_wind_deg"></cw-label>°
+                <br><label>    Wind speed : </label><cw-label cw-ns="owm" cw-value="m:num:si:current_wind_speed"></cw-label>km/h <img style="vertical-align: text-top;width:30px" cw-ns="owm" cw-prop-src="m:str::current_wind_speed_icon">
+            </div>
+            <div id="hour" class="cw-block">
+                <heading>RAIN IN THE NEXT HOUR</heading>
+                <hgauge class="w3" cw-multinode-from="l:num::0" cw-multinode-to="l:num::59" cw-multinode-pattern="^" style="height:2em;width:180px" cw-ns="owm" cw-stale="m:num:olderThan.30m:emi_MacPierreCharging" cw-min="l:num::0" cw-max="l:num::1">
+                    <div cw-ns="owm" class="ch" cw-prop-title="m:num:fixeddec.2:minutely_pim_^"><div cw-ns="owm" cw-style-height="e:str::${(50*Math.log10(1+Math.min(100,Math.max(0, num.minutely_pim_^*50)))+Math.min(100,Math.max(0, num.minutely_pim_^*50)))/2}%" style="bottom: 0; background-color: #aaf;"></div></div>
+                </hgauge>
+            </div>
+            <div id="daily" class="cw-block">
+                <heading>DAILY FORECAST</heading>
+                <div cw-ns="owm" cw-multinode-from="l:num::0" cw-multinode-to="l:num::7" cw-multinode-pattern="#">
+                    <IMG style="height:2.9em;float:left;" cw-ns="owm" cw-prop-src="m:str::daily_icon_#">
+                    <cw-label style="width:100px" cw-ns="owm" cw-value="m:num:tsstodow:daily_dt_#"></cw-label>
+                    <cw-label style="width:100px;font-size:10px" cw-ns="owm" cw-value="m:str::daily_desc_#" cw-prop-title="m:str::daily_desc_#"></cw-label>
+                    <br>
+                    <cw-label title="Min Temp" cw-ns="owm" cw-value="m:num::daily_temp_min_#"></cw-label>°C
+                    <cw-label title="Max Temp" cw-ns="owm" cw-value="m:num::daily_temp_max_#"></cw-label>°C
+                    &nbsp;&nbsp;<cw-label title="Wind Speed" cw-ns="owm" cw-value="m:num::daily_wind_speed_#"></cw-label>km/h
+                    <cw-label title="Wind Speed (beaufort)" cw-ns="owm" cw-value="m:num::daily_wind_speed_beaufort_#"></cw-label>
+                    <br>
+                    <cw-label title="Humidity" cw-ns="owm" cw-value="m:num::daily_humidity_#"></cw-label>%
+                    &nbsp;&nbsp;<cw-label title="Probability of precipitation" cw-ns="owm" cw-value="m:num:prc01:daily_pop_#"></cw-label>
+                    &nbsp;&nbsp;<cw-label title="Rain intensity" cw-ns="owm" cw-value="m:num::daily_rain_#"></cw-label>mm
+                    <cw-label title="Snow intensity" cw-ns="owm" cw-value="m:num::daily_snow_#"></cw-label>mm
+                    <br clear="both">
+                    <br>
+                </div>
+            </div>
+
+            <heading>HOURLY FORECAST 48h</heading>
+            <div cw-ns="owm" cw-multinode-from="l:num::0" cw-multinode-to="l:num::47" cw-multinode-pattern="$">
+                <div style="display:inline-block;" cw-ns="owm" cw-prop-title="m:str::hourly_desc_$" >
+                    <IMG style="height:3em;float:left" cw-ns="owm" cw-prop-src="m:str::hourly_icon_$" cw-prop-title="m:str::hourly_desc_$"/>
+                    <cw-label style="width:100px" cw-ns="owm" cw-value="m:num:tsstodow:hourly_dt_$"></cw-label>
+                    <cw-label style="font-weight:900;width:30px" cw-ns="owm" cw-value="m:num:tsstoh:hourly_dt_$"></cw-label>
+                    <cw-label title="Temp" cw-ns="owm" cw-value="m:num::hourly_temp_$"></cw-label>°C
+                    <cw-label title="Feel" cw-ns="owm" cw-value="m:num::hourly_temp_feels_$"></cw-label>°C
+                    <br>
+                    <cw-label title="Humidity" cw-ns="owm" cw-value="m:num:prc:hourly_humidity_$"></cw-label>
+                    <cw-label title="Probability of precipitation" cw-ns="owm" cw-value="m:num:prc01:hourly_pop_$"></cw-label>
+                    <cw-label title="Rain" cw-ns="owm" cw-value="m:num::hourly_rain_$"></cw-label>mm
+                    <cw-label title="Snow" cw-ns="owm" cw-value="m:num::hourly_snow_$"></cw-label>mm
+                    <br>
+                    <cw-label title="Pressure" cw-ns="owm" cw-value="m:num::hourly_pressure_$"></cw-label>hPa
+                    &nbsp;&nbsp;&nbsp;<cw-label title="Visibility" cw-ns="owm" cw-value="m:num:si:hourly_visibility_$"></cw-label>m
+                    <cw-label title="Wind" cw-ns="owm" cw-value="m:num:si:hourly_wind_speed_$"></cw-label>km/h
+                    <cw-label title="Wind (Beaufort)" cw-ns="owm" cw-value="m:num:rawint:hourly_wind_speed_beaufort_$"></cw-label>
+                    <br clear="both">
+                    <br>
+                </div>
+            </div>
+
+    
+        </columncontainer>
+    </body>
+</html>
