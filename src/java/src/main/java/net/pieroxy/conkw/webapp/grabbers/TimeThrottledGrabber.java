@@ -65,7 +65,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber {
   public ResponseData grabSync() {
     if (lastRun==-1) {
       ResponseData data = loadCacheFile();
-      if (data!=null) {
+      if (data!=null && data.getErrors().isEmpty()) {
         log(Level.INFO, "Loading from cache " + getCacheFile().getAbsolutePath());
         lastRun = data.getTimestamp();
         return data;
