@@ -6,7 +6,7 @@ ConkW.data = ConkW.data || {};
 window.onerror = function(message, file, lineNumber) {
     ConkW.handleError(message + " " + file + ":" + lineNumber);
 }
-setInterval(ConkW.updateStatus, 1000);
+setInterval(() => ConkW.updateStatus(), 1000);
 
 ConkW.initStatic = function() {
     ConkW.showMetricGap = false;
@@ -131,7 +131,7 @@ ConkW.displayErrors = function() {
 ConkW.updateStatus = function() {
     let e = document.getElementById("cw-status");
     if (e) {
-        if (!e.onclick) e.onclick = displayErrors;
+        if (!e.onclick) e.onclick = () => ConkW.displayErrors();
         let count = 0;
         if (ConkW.data.jsError) count++;
         if (ConkW.data.apiErrors && ConkW.data.apiErrors.length) count += ConkW.data.apiErrors.length;
