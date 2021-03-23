@@ -55,7 +55,7 @@
     {
       // OpenWeatherMap grabber. Extracts weather forecast (minutely, hourly, daily) from https://openweathermap.org/
       "implementation":"net.pieroxy.conkw.webapp.grabbers.openweathermap.OpenWeatherMapGrabber",
-      "extract":"min,hour,day",
+      "extract":"min,hour,day,current",
       "parameters": {
         "token":"your api token here",
         "lat":"48.8534",

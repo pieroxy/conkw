@@ -37,7 +37,13 @@ public class OpenWeatherMapGrabber extends TimeThrottledGrabber {
   }
 
   @Override
-  protected void load(ResponseData res) {
+  protected void load(ResponseData responseData) {
+    if (token.equals("your api token here") || token.isEmpty()) {
+      responseData.addError("Open Weather Map is not properly configured.");
+      return;
+    }
+
+
     try {
       URL url = new URL("https://api.openweathermap.org/data/2.5/onecall?lat="+lat+"&lon="+lon+"&units=metric&appid="+token);
       URLConnection con = url.openConnection();
@@ -51,73 +57,84 @@ public class OpenWeatherMapGrabber extends TimeThrottledGrabber {
         is = http.getInputStream();
       }
 
-
       OneCallResponse response = JsonHelper.getJson().deserialize(OneCallResponse.class, is);
-      res.addMetric("current_desc", response.getCurrent().getWeather()[0].getDescription());
-      res.addMetric("current_icon", getFullIcon((int)response.getCurrent().getWeather()[0].getId()));
-      res.addMetric("current_temp", response.getCurrent().getTemp());
-      res.addMetric("current_feels", response.getCurrent().getFeels_like());
-      res.addMetric("current_pressure", response.getCurrent().getPressure());
-      res.addMetric("current_humidity", response.getCurrent().getHumidity());
-      res.addMetric("current_visibility", response.getCurrent().getVisibility());
-      res.addMetric("current_wind_speed", response.getCurrent().getWind_speed()*3.6); // m/s by default -> km/h
-      res.addMetric("current_wind_speed_icon", getWindIcon(response.getCurrent().getWind_speed()));
-      res.addMetric("current_wind_deg", response.getCurrent().getWind_deg());
-      res.addMetric("current_clouds", response.getCurrent().getClouds());
-      res.addMetric("current_sunrise", response.getCurrent().getSunrise());
-      res.addMetric("current_sunset", response.getCurrent().getSunset());
-      int i=0;
-      if (response.getMinutely()!=null)
-        for (MinutelyForecast f : response.getMinutely()) {
-          res.addMetric("minutely_pim_"+i++, f.getPrecipitation());
+
+      extract(responseData, "current", (res) -> {
+        res.addMetric("current_desc", response.getCurrent().getWeather()[0].getDescription());
+        res.addMetric("current_icon", getFullIcon((int)response.getCurrent().getWeather()[0].getId()));
+        res.addMetric("current_temp", response.getCurrent().getTemp());
+        res.addMetric("current_feels", response.getCurrent().getFeels_like());
+        res.addMetric("current_pressure", response.getCurrent().getPressure());
+        res.addMetric("current_humidity", response.getCurrent().getHumidity());
+        res.addMetric("current_visibility", response.getCurrent().getVisibility());
+        res.addMetric("current_wind_speed", response.getCurrent().getWind_speed()*3.6); // m/s by default -> km/h
+        res.addMetric("current_wind_speed_icon", getWindIcon(response.getCurrent().getWind_speed()));
+        res.addMetric("current_wind_deg", response.getCurrent().getWind_deg());
+        res.addMetric("current_clouds", response.getCurrent().getClouds());
+        res.addMetric("current_sunrise", response.getCurrent().getSunrise());
+        res.addMetric("current_sunset", response.getCurrent().getSunset());
+      }, Duration.ZERO);
+
+      extract(responseData, "minute", (res) -> {
+        int i=0;
+        if (response.getMinutely()!=null) {
+          for (MinutelyForecast f : response.getMinutely()) {
+            res.addMetric("minutely_pim_" + i++, f.getPrecipitation());
+          }
         }
-      i=0;
-      for (HourlyForecast f : response.getHourly()) {
-        res.addMetric("hourly_dt_"+i, f.getDt());
-        res.addMetric("hourly_temp_"+i, f.getTemp());
-        res.addMetric("hourly_temp_feels_"+i, f.getFeels_like());
-        res.addMetric("hourly_wind_speed_"+i, f.getWind_speed()*3.6); // m/s by default -> km/h
-        res.addMetric("hourly_wind_speed_icon_"+i, getWindIcon(f.getWind_speed()));
-        res.addMetric("hourly_wind_speed_beaufort_"+i, (double)getBeaufortScale(f.getWind_speed()));
-        res.addMetric("hourly_pressure_"+i, f.getPressure());
-        res.addMetric("hourly_humidity_"+i, f.getHumidity());
-        res.addMetric("hourly_visibility_"+i, f.getVisibility());
-        res.addMetric("hourly_desc_"+i, f.getWeather()[0].getDescription());
-        res.addMetric("hourly_icon_"+i, getFullIcon((int)f.getWeather()[0].getId()));
-        res.addMetric("hourly_pop_"+i, f.getPop());
-        if (f.getRain()!=null)
-          res.addMetric("hourly_rain_"+i, f.getRain().getOneh());
-        else
-          res.addMetric("hourly_rain_"+i, 0.);
-        if (f.getSnow()!=null)
-          res.addMetric("hourly_snow_"+i, f.getSnow().getOneh());
-        else
-          res.addMetric("hourly_snow_"+i, 0.);
+      }, Duration.ZERO);
 
-        i++;
-      }
-      i=0;
-      for (DailyForecast f : response.getDaily()) {
-        res.addMetric("daily_dt_"+i, f.getDt());
-        res.addMetric("daily_temp_max_"+i, f.getTemp().getMax());
-        res.addMetric("daily_temp_min_"+i, f.getTemp().getMin());
-        res.addMetric("daily_wind_speed_"+i, f.getWind_speed()*3.6);// m/s by default -> km/h
-        res.addMetric("daily_wind_speed_icon_"+i, getWindIcon(f.getWind_speed()));
-        res.addMetric("daily_wind_speed_beaufort_"+i, (double)getBeaufortScale(f.getWind_speed()));
-        res.addMetric("daily_pressure_"+i, f.getPressure());
-        res.addMetric("daily_humidity_"+i, f.getHumidity());
-        res.addMetric("daily_desc_"+i, f.getWeather()[0].getDescription());
-        res.addMetric("daily_icon_"+i, getFullIcon((int)f.getWeather()[0].getId()));
-        res.addMetric("daily_rain_"+i, f.getRain());
-        res.addMetric("daily_snow_"+i, f.getSnow());
-        res.addMetric("daily_pop_"+i, f.getPop());
+      extract(responseData, "hour", (res) -> {
+        int i=0;
+        for (HourlyForecast f : response.getHourly()) {
+          res.addMetric("hourly_dt_"+i, f.getDt());
+          res.addMetric("hourly_temp_"+i, f.getTemp());
+          res.addMetric("hourly_temp_feels_"+i, f.getFeels_like());
+          res.addMetric("hourly_wind_speed_"+i, f.getWind_speed()*3.6); // m/s by default -> km/h
+          res.addMetric("hourly_wind_speed_icon_"+i, getWindIcon(f.getWind_speed()));
+          res.addMetric("hourly_wind_speed_beaufort_"+i, (double)getBeaufortScale(f.getWind_speed()));
+          res.addMetric("hourly_pressure_"+i, f.getPressure());
+          res.addMetric("hourly_humidity_"+i, f.getHumidity());
+          res.addMetric("hourly_visibility_"+i, f.getVisibility());
+          res.addMetric("hourly_desc_"+i, f.getWeather()[0].getDescription());
+          res.addMetric("hourly_icon_"+i, getFullIcon((int)f.getWeather()[0].getId()));
+          res.addMetric("hourly_pop_"+i, f.getPop());
+          if (f.getRain()!=null)
+            res.addMetric("hourly_rain_"+i, f.getRain().getOneh());
+          else
+            res.addMetric("hourly_rain_"+i, 0.);
+          if (f.getSnow()!=null)
+            res.addMetric("hourly_snow_"+i, f.getSnow().getOneh());
+          else
+            res.addMetric("hourly_snow_"+i, 0.);
 
-        i++;
-      }
-      return;
+          i++;
+        }
+      }, Duration.ZERO);
+
+      extract(responseData, "day", (res) -> {
+        int i=0;
+        for (DailyForecast f : response.getDaily()) {
+          res.addMetric("daily_dt_"+i, f.getDt());
+          res.addMetric("daily_temp_max_"+i, f.getTemp().getMax());
+          res.addMetric("daily_temp_min_"+i, f.getTemp().getMin());
+          res.addMetric("daily_wind_speed_"+i, f.getWind_speed()*3.6);// m/s by default -> km/h
+          res.addMetric("daily_wind_speed_icon_"+i, getWindIcon(f.getWind_speed()));
+          res.addMetric("daily_wind_speed_beaufort_"+i, (double)getBeaufortScale(f.getWind_speed()));
+          res.addMetric("daily_pressure_"+i, f.getPressure());
+          res.addMetric("daily_humidity_"+i, f.getHumidity());
+          res.addMetric("daily_desc_"+i, f.getWeather()[0].getDescription());
+          res.addMetric("daily_icon_"+i, getFullIcon((int)f.getWeather()[0].getId()));
+          res.addMetric("daily_rain_"+i, f.getRain());
+          res.addMetric("daily_snow_"+i, f.getSnow());
+          res.addMetric("daily_pop_"+i, f.getPop());
+
+          i++;
+        }
+      }, Duration.ZERO);
     } catch (Exception e) {
       e.printStackTrace();
-      res.addError("owm: " + e.getMessage());
+      responseData.addError("owm: " + e.getMessage());
     }
   }
   private String getWindIcon(double windspeedinmps) {
