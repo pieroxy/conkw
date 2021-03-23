@@ -11,6 +11,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.time.Duration;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
 
 public class OpenWeatherMapGrabber extends TimeThrottledGrabber {
   static final Duration CACHE_TTL = Duration.ofMinutes(5); // 5 min
@@ -18,6 +20,7 @@ public class OpenWeatherMapGrabber extends TimeThrottledGrabber {
 
   String token;
   double lat, lon;
+  static Map<String, String> locationNames = new ConcurrentHashMap<>();
 
   @Override
   public String getDefaultName() {
@@ -43,6 +46,8 @@ public class OpenWeatherMapGrabber extends TimeThrottledGrabber {
       return;
     }
 
+    String city = grabCity();
+    log(Level.INFO, "City is " + city);
 
     try {
       URL url = new URL("https://api.openweathermap.org/data/2.5/onecall?lat="+lat+"&lon="+lon+"&units=metric&appid="+token);
@@ -58,6 +63,8 @@ public class OpenWeatherMapGrabber extends TimeThrottledGrabber {
       }
 
       OneCallResponse response = JsonHelper.getJson().deserialize(OneCallResponse.class, is);
+
+      responseData.addMetric("location_name", city);
 
       extract(responseData, "current", (res) -> {
         res.addMetric("current_desc", response.getCurrent().getWeather()[0].getDescription());
@@ -137,6 +144,35 @@ public class OpenWeatherMapGrabber extends TimeThrottledGrabber {
       responseData.addError("owm: " + e.getMessage());
     }
   }
+
+  private String grabCity() {
+    String key = lat+"x"+lon;
+    if (!locationNames.containsKey(key)) {
+      try {
+        URL url = new URL("https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&units=metric&appid=" + token);
+        URLConnection con = url.openConnection();
+        HttpURLConnection http = (HttpURLConnection) con;
+        http.connect();
+
+        InputStream is;
+        if (canLogFine()) {
+          is = DebugTools.debugHttpRequest(http);
+        } else {
+          is = http.getInputStream();
+        }
+
+        WeatherResponse response = JsonHelper.getJson().deserialize(WeatherResponse.class, is);
+        if (response != null) {
+          locationNames.put(key, response.getName());
+        }
+
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+    return locationNames.get(key);
+  }
+
   private String getWindIcon(double windspeedinmps) {
     return "/owm-icons/wi-wind-beaufort-"+getBeaufortScale(windspeedinmps)+".svg";
   }

@@ -14,13 +14,17 @@ In order to use it, you need to:
 
 *Full name:* `net.pieroxy.conkw.webapp.grabbers.openweathermap.OpenWeatherMapGrabber`
 
+Metrics always extracted:
+
+* `str.location_name` The name of the place configured. This is extremely useful to make sure you're viewing the weather conditions from the proper place.
+
+
 Possible extractions:
 
 ## current
 Extracts the current weather. 
 
 Metrics:
-
 
 * `num.current_clouds` The percentage of cloud coverage, between 0 and 1.
 * `num.current_feels` What the temperature feels like, in degree celsius.
