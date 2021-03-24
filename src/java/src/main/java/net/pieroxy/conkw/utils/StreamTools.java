@@ -21,8 +21,8 @@ public class StreamTools {
     }
   }
 
-  public static void copyTextFilePreserveOriginalAndWarnOnStdout(InputStream source, File out, boolean overrideTarget) throws IOException {
-    String nf = copyTextFilePreserveOriginal(source, out, overrideTarget);
+  public static void copyTextFilePreserveOriginalAndWarnOnStdout(InputStream source, File out, boolean overrideTarget, TextReplacer tr) throws IOException {
+    String nf = copyTextFilePreserveOriginal(source, out, overrideTarget, tr);
     if (nf != null) {
       if (overrideTarget)
         System.out.println("WARNING: File " + out.getAbsolutePath() + " existed and was modified. It has been renamed as " + nf + ".");
@@ -39,13 +39,13 @@ public class StreamTools {
    * @return The final name of the new File if it was renamed.
    * @throws IOException
    */
-  public static String copyTextFilePreserveOriginal(InputStream source, File out, boolean overrideTarget) throws IOException {
-    List<String> sourceData = loadTextStream(source);
+  public static String copyTextFilePreserveOriginal(InputStream source, File out, boolean overrideTarget, TextReplacer tr) throws IOException {
+    List<String> sourceData = loadTextStream(source, tr);
     if (isConflict(out)) {
       File newfile = findNewFilename(out);
       if (overrideTarget) {
-        writeTextFile(loadTextStream(new FileInputStream(out)), newfile);
-        writeTextFile(loadTextStream(new FileInputStream(getHiddenFile(out))), getHiddenFile(newfile));
+        writeTextFile(loadTextStream(new FileInputStream(out),null), newfile);
+        writeTextFile(loadTextStream(new FileInputStream(getHiddenFile(out)),null), getHiddenFile(newfile));
         writeTextFiles(sourceData, out);
       } else {
         writeTextFiles(sourceData, newfile);
@@ -113,11 +113,11 @@ public class StreamTools {
   public static List<String> loadTextFile(Path input) throws IOException {
     return Files.readAllLines(input);
   }
-  public static List<String> loadTextStream(InputStream input) throws IOException {
+  public static List<String> loadTextStream(InputStream input, TextReplacer tr) throws IOException {
     List<String> res = new ArrayList<>();
     BufferedReader br = new BufferedReader(new InputStreamReader(input));
     while (true) {
-      String line = br.readLine();
+      String line = tr == null ? br.readLine() : tr.replace(br.readLine());
       if (line == null) {
         return res;
       }

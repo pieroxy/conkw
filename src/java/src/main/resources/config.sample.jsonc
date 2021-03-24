@@ -26,7 +26,7 @@
         /* "name":"oshi" */
         // In seconds, the delay between refreshes of the data deemed "static". Defaults to one day.
         /* "staticDataDelay":"", */
-        // In seconds, the delay between refreshes of the data deemed "detailed" which is more expensice to extract.
+        // In seconds, the delay between refreshes of the data deemed "detailed" which is more expensive to extract.
         // Defaults to one minute.
         /* "detailedDataDelay":"", */
       },
@@ -60,6 +60,14 @@
         "token":"your api token here",
         "lat":"48.8534",
         "lon":"2.3488"
+      }
+    },
+    {
+      // File grabber. Extracts data from flat files.
+      "implementation":"net.pieroxy.conkw.webapp.grabbers.FileGrabber",
+      "name":"samplefile",
+      "parameters": {
+        "file":"$FGSF"
       }
     }
   ],

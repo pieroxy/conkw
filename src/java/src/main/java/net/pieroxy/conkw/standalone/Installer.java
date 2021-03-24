@@ -3,6 +3,7 @@ package net.pieroxy.conkw.standalone;
 import net.pieroxy.conkw.config.ConfigReader;
 import net.pieroxy.conkw.utils.OsCheck;
 import net.pieroxy.conkw.utils.StreamTools;
+import net.pieroxy.conkw.utils.TextReplacer;
 import net.pieroxy.conkw.utils.ZipUtil;
 
 import java.io.*;
@@ -58,14 +59,19 @@ public class Installer {
     private void doInstall() throws Exception {
         String java = System.getProperty("java.home");
         Files.createDirectories(ConfigReader.getConfDir().toPath());
+        File sampleFG = new File(ConfigReader.getConfDir(), "example.properties");
         StreamTools.copyTextFilePreserveOriginalAndWarnOnStdout(
-                getClass().getClassLoader().getResourceAsStream("config.sample.jsonc"),
-                ConfigReader.getConfigFile(),
-                overrideConfig);
+            getClass().getClassLoader().getResourceAsStream("config.sample.jsonc"),
+            ConfigReader.getConfigFile(),
+            overrideConfig,
+            new TextReplacer().add("$FGSF", sampleFG.getAbsolutePath()));
+        StreamTools.copyTextFilePreserveOriginalAndWarnOnStdout(
+            getClass().getClassLoader().getResourceAsStream("example.properties"),
+            sampleFG,overrideConfig,new TextReplacer().add("$FGSF", sampleFG.getAbsolutePath()));
         StreamTools.copyTextFilePreserveOriginalAndWarnOnStdout(
                 getClass().getClassLoader().getResourceAsStream("logging.properties"),
                 ConfigReader.getLoggingConfigFile(),
-                overrideConfig);
+                overrideConfig, null);
         Files.createDirectories(ConfigReader.getDataDir().toPath());
         Files.createDirectories(ConfigReader.getTmpDir().toPath());
         Files.createDirectories(ConfigReader.getBinDir().toPath());
