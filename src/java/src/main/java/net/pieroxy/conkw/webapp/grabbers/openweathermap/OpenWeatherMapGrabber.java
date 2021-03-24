@@ -145,6 +145,11 @@ public class OpenWeatherMapGrabber extends TimeThrottledGrabber {
     }
   }
 
+  @Override
+  protected String getCacheKey() {
+    return lat + "x" + lon;
+  }
+
   private String grabCity() {
     String key = lat+"x"+lon;
     if (!locationNames.containsKey(key)) {

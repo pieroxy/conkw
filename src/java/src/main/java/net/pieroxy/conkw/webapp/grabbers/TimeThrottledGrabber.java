@@ -17,6 +17,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber {
 
   protected abstract Duration getTtl();
   protected abstract void load(ResponseData res);
+  protected abstract String getCacheKey();
 
   private long lastRun=-1;
   private File storage;
@@ -29,22 +30,34 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber {
   }
 
   ResponseData loadCacheFile() {
-    try (FileInputStream fis = new FileInputStream(getCacheFile())) {
-      ResponseData data = JsonHelper.getJson().deserialize(ResponseData.class, fis);
-      return data;
-    } catch (Exception e) {
-      log(Level.SEVERE, "Could not load cached data file.", e);
+    File cacheFile = getCacheFile();
+    if (!cacheFile.exists()) {
+      log(Level.INFO, "Cache file not found, might be the first run.");
       return null;
     }
+    try (FileInputStream fis = new FileInputStream(cacheFile)) {
+      CachedData data = JsonHelper.getJson().deserialize(CachedData.class, fis);
+      if (data.getCacheKey().equals(getCacheKey())) {
+        return data.getData();
+      } else {
+        log(Level.INFO, "Configuration has changed, discarding cached data.");
+      }
+    } catch (Exception e) {
+      log(Level.SEVERE, "Could not load cached data file.", e);
+    }
+    return null;
   }
 
   void writeCacheFile(ResponseData data) {
+    CachedData cdata = new CachedData();
+    cdata.setCacheKey(getCacheKey());
+    cdata.setData(data);
     JsonWriter w = JsonHelper.getWriter();
     DslJson<Object> json = JsonHelper.getJson();
     synchronized (w) {
       try (OutputStream os = new FileOutputStream(getCacheFile())) {
         w.reset(os);
-        json.serialize(w, data);
+        json.serialize(w, cdata);
         w.flush();
       } catch (Exception e) {
         log(Level.SEVERE, e.getMessage());
@@ -80,6 +93,27 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber {
     } catch (Exception e) {
       log(Level.SEVERE, "Grabbing " + getName(), e);
       return new ResponseData(this, System.currentTimeMillis());
+    }
+  }
+
+  public static class CachedData {
+    private ResponseData data;
+    private String cacheKey;
+
+    public ResponseData getData() {
+      return data;
+    }
+
+    public void setData(ResponseData data) {
+      this.data = data;
+    }
+
+    public String getCacheKey() {
+      return cacheKey;
+    }
+
+    public void setCacheKey(String cacheKey) {
+      this.cacheKey = cacheKey;
     }
   }
 }
