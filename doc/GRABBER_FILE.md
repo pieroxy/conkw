@@ -38,15 +38,15 @@ str_displaystate: on
 
 This file fed to FileGrabber will result in the following metrics:
 
-* `num.temp_CPU`: 35.0
-* `num.temp_core0`: 33.0
-* `num.temp_core1`: 33.0
+* `num.temp_CPU`: 35
+* `num.temp_core0`: 33
+* `num.temp_core1`: 33
 * `num.temp_mobo_cpu`: 15.5
-* `num.rpm_fan1_input`: 851.0
-* `num.rpm_fan2_input`: 335.0
-* `num.rpm_fan4_input`: 770.0
-* `num.temp_hdd_home` : 32
-* `num.temp_hdd_home2` : 31
+* `num.rpm_fan1_input`: 851
+* `num.rpm_fan2_input`: 335
+* `num.rpm_fan4_input`: 770
+* `num.temp_hdd_home`: 32
+* `num.temp_hdd_home2`: 31
 * `str.displaystate`: "on"
 
 ## Performance and refresh rate
