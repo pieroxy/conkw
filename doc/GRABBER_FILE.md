@@ -49,7 +49,7 @@ This file fed to FileGrabber will result in the following metrics:
 * `num.temp_hdd_home2` : 31
 * `str.displaystate`: "on"
 
-* Performance and refresh rate
+## Performance and refresh rate
 The files are parsed at program startup, then each second, if their last modified time changed, they will be parsed again, otherwise the cached version will be used.
 
 Note: You can use several instances of this grabber in order to grab more than one file. Do that by making it appear several times in the config file, with a different filename each time. You will have to choose a different name for each instance.
