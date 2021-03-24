@@ -69,6 +69,9 @@ heading {
     color: #447;
 }
 
+.cw-stale {
+    color: #888;
+}
 
 
 /* Gauge elements */
