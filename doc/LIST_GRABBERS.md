@@ -7,3 +7,4 @@ Here are the grabbers included in conkw:
 * [OshiGrabber](GRABBER_OSHI.md)
 * [OpenWeatherMapGrabber](GRABBER_OWM.md)
 * [FileGrabber](GRABBER_FILE.md)
+* [SpotifyGrabber](GRABBER_SPOTIFY.md)
