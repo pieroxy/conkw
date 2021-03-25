@@ -2,17 +2,14 @@
 Here are the things we have in mind for conkw. This is kind of my TODO list.
 
 ## UI
-* Explode default UI on the server side to allow easy cloning - IN PROGRESS
 * Allow to override UI elements - today you need to mess with files that are going to be overriden at the next update.
-* Design gauges so that they don't need a maximum. Sometimes you don't know the max.
 
 ## Grabbers
 
 Those existing that need to be ported to conkw (so, expect them soon)
 * *External Metrics Ingestion*: allow an external system to push metrics
 * *News* Grab news headlines, details being configurable.
-* *OpenWeatherMap* Grab weather forecasts.
-* *Spotify* Grab the music currently playing.
+* *Stock* Grab stock levels for your preferred companies. Also cryptocurrencies.
 
 Those planned (so expect them later)
 * lm-sensors - to get temperatures, voltages and fan speeds on linux.
@@ -29,8 +26,6 @@ Those planned (so expect them later)
 
 ## Misc
 * https support with live reload of the certificates.
-* Authenticate calls with a private shared token.
+* Authenticate API calls with a private shared token.
 * Most of this stuff needs to be tested.
 
-## Documentation
-* Write it.
