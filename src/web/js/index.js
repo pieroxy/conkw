@@ -6,7 +6,7 @@ ConkW.data = ConkW.data || {};
 window.onerror = function(message, file, lineNumber) {
     ConkW.handleError(message + " " + file + ":" + lineNumber);
 }
-setInterval(() => ConkW.updateStatus(), 1000);
+setInterval(function() { ConkW.updateStatus() }, 1000);
 
 ConkW.initStatic = function() {
     ConkW.showMetricGap = false;
@@ -26,7 +26,7 @@ ConkW.init = function() {
     var checkScreenFlag = options.indexOf("noresize")==-1;
     this.initDomCache();
     this.scheduleLoad();
-    if (checkScreenFlag) window.onresize = () => {zis.checkScreen()};
+    if (checkScreenFlag) window.onresize = function() {zis.checkScreen()};
     this.dates.initClocks();
     if (checkScreenFlag) this.checkScreen();
     this.initDocumentation();
@@ -134,7 +134,7 @@ ConkW.displayErrors = function() {
     var html = "";
     if (ConkW.data.jsError) html += ConkW.data.jsError + "<hr>";
     if (ConkW.data.apiErrors) {
-        ConkW.data.apiErrors.forEach(e => { html += e + "<hr>"; });
+        ConkW.data.apiErrors.forEach(function (e) { html += e + "<hr>"; });
     }
     e.innerHTML = html;
     document.body.appendChild(e);
@@ -143,7 +143,7 @@ ConkW.displayErrors = function() {
 ConkW.updateStatus = function() {
     var e = document.getElementById("cw-status");
     if (e) {
-        if (!e.onclick) e.onclick = () => ConkW.displayErrors();
+        if (!e.onclick) e.onclick = function() {ConkW.displayErrors();}
         var count = 0;
         if (ConkW.data.jsError) count++;
         if (ConkW.data.apiErrors && ConkW.data.apiErrors.length) count += ConkW.data.apiErrors.length;
@@ -905,9 +905,9 @@ class HistoryGaugeHolder {
             this.maxValue = max;
             //console.log("Recomputing heights, max has changed.");
             // Max has changed, we need to recompute height of all elements.
-            e.childNodes.forEach(container => {
+            e.childNodes.forEach(function (container) {
                 var bottom=0;
-                container.childNodes.forEach(bar => {
+                container.childNodes.forEach(function (bar) {
                     if (bar.className === "hgauge") {
                         var posprc = ConkW.getPercent(parseFloat(bar.getAttribute("value")), min, max, this.log);
                         bar.style.height = posprc + "%";
