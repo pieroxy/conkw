@@ -3,6 +3,7 @@ Here are the things we have in mind for conkw. This is kind of my TODO list.
 
 ## UI
 * Allow to override UI elements - today you need to mess with files that are going to be overriden at the next update.
+* Find a proper way to describe number formatting. This endless list of keywords isn't really nice.
 
 ## Grabbers
 
