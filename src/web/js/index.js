@@ -861,6 +861,7 @@ class HistoryGaugeHolder {
         }
     }
     update(data) {
+        var zis = this;
         var e = this.element;
         var min = ConkW.extractTypedValue(this.min, data);
         var max = ConkW.extractTypedValue(this.max, data);
@@ -909,7 +910,7 @@ class HistoryGaugeHolder {
                 var bottom=0;
                 container.childNodes.forEach(function (bar) {
                     if (bar.className === "hgauge") {
-                        var posprc = ConkW.getPercent(parseFloat(bar.getAttribute("value")), min, max, this.log);
+                        var posprc = ConkW.getPercent(parseFloat(bar.getAttribute("value")), min, max, zis.log);
                         bar.style.height = posprc + "%";
                         bar.style.bottom = bottom + "%";
                         bottom += posprc;
