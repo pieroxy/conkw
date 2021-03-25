@@ -16,8 +16,15 @@ In order to use it, you need to:
   * Note that this URL does not need to be accessible through the internet, but it will need to be accessible from the browser that will first connect conkw with your Spotify account. 
   * You can easily hardcode your internal IP address, your host name or anything else in there.
 * In your configuration, add the **same** URL, down to the last character.
-* Now, you can open the reference UI for the SpotifyGrabber.
 
+This is all you have to do on the spotify website. Now:
+
+* Now, you can open the reference UI for the SpotifyGrabber.
+* You will notice one error, in red. Click on it.
+* Click on the `please login` link.
+* You then need to login to Spotify, if your browser is not already logged in.
+* Click on Accept to authorize your instance of conkw to access your spotify account.
+* You should be back to the spotify default UI. If you are playing music you will see it. If not, just hit play on spotify and watch.
 
 
 Note: Here is below the default config portion for the SpotifyGrabber:
