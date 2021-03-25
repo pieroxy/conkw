@@ -21,9 +21,9 @@ ConkW.initStatic = function() {
 ConkW.initStatic();
 
 ConkW.init = function() {
-    let zis = this;
-    let options = document.body.getAttribute("cw-options") || "";
-    let checkScreenFlag = options.indexOf("noresize")==-1;
+    var zis = this;
+    var options = document.body.getAttribute("cw-options") || "";
+    var checkScreenFlag = options.indexOf("noresize")==-1;
     this.initDomCache();
     this.scheduleLoad();
     if (checkScreenFlag) window.onresize = () => {zis.checkScreen()};
@@ -33,10 +33,10 @@ ConkW.init = function() {
 }
 
 ConkW.initDocumentation = function() {
-    let fbc = document.body.children[0];
+    var fbc = document.body.children[0];
     if (fbc && fbc.tagName=="MD") {
         console.log("MD detected");
-        let fmdc = fbc.children[0];
+        var fmdc = fbc.children[0];
         if (fmdc && fmdc.tagName=="H1") {
             fmdc.innerHTML = '<inlinelogo></inlinelogo><a href="/">' + fmdc.innerHTML + "</a>";
         }
@@ -75,7 +75,7 @@ ConkW.scheduleLoad = function() {
     if (ConkW.data.lastResponseJitter === undefined) {
         setTimeout(ConkW.scheduleLoad, 1000);
     } else {
-        let ttw = 1000 + (50 - ConkW.data.lastResponseJitter) / 5;
+        var ttw = 1000 + (50 - ConkW.data.lastResponseJitter) / 5;
         if (ttw < 0) ttw += 1000;
         //console.log("w"+ttw+" " + (ttt2-ttt));
         setTimeout(ConkW.scheduleLoad, ttw);
@@ -83,7 +83,7 @@ ConkW.scheduleLoad = function() {
 }
 
 ConkW.sendActionToServer = function() {
-    let url = location.href;
+    var url = location.href;
     var xmlhttp = new XMLHttpRequest();
     console.log(url);
     var pos = url.indexOf("%3BgrabberAction%3D")+19;
@@ -96,7 +96,7 @@ ConkW.sendActionToServer = function() {
 }
 
 ConkW.load = function() {
-    let grabbers = document.body.getAttribute("grabbers");
+    var grabbers = document.body.getAttribute("grabbers");
     if (grabbers) {
         this.updateDelay();
         if (location.href.indexOf("?") > 0) {
@@ -113,8 +113,8 @@ ConkW.load = function() {
 }
 
 ConkW.updateDelay = function() {
-    let e = document.getElementById("cw-delay");
-    let v = (new Date().getTime() - ConkW.data.lastupdate) / 1000
+    var e = document.getElementById("cw-delay");
+    var v = (new Date().getTime() - ConkW.data.lastupdate) / 1000
     if (v > 4) ConkW.showMetricGap = true;
     if (e) {
         if (ConkW.data.lastupdate) {
@@ -131,7 +131,7 @@ ConkW.displayErrors = function() {
     e = document.createElement("div");
     e.id = "errorDiv";
     e.onclick = function() { document.body.removeChild(e); }
-    let html = "";
+    var html = "";
     if (ConkW.data.jsError) html += ConkW.data.jsError + "<hr>";
     if (ConkW.data.apiErrors) {
         ConkW.data.apiErrors.forEach(e => { html += e + "<hr>"; });
@@ -141,14 +141,14 @@ ConkW.displayErrors = function() {
 }
 
 ConkW.updateStatus = function() {
-    let e = document.getElementById("cw-status");
+    var e = document.getElementById("cw-status");
     if (e) {
         if (!e.onclick) e.onclick = () => ConkW.displayErrors();
-        let count = 0;
+        var count = 0;
         if (ConkW.data.jsError) count++;
         if (ConkW.data.apiErrors && ConkW.data.apiErrors.length) count += ConkW.data.apiErrors.length;
 
-        let value = (count) ? (count + " errors") : "ok";
+        var value = (count) ? (count + " errors") : "ok";
         this.updateField(e, "innerHTML", "cw-status", value, value != "ok" ? "yes" : "no")
     }
 }
@@ -170,7 +170,7 @@ ConkW.forceScreenRefresh = function() {
 ConkW.checkScreen = function() {
     if (ConkW.data.geometry != this.getGeometry()) {
         this.zoom(100);
-        let ctz = 100;
+        var ctz = 100;
         while (true) {
             ConkW.data.geometry = this.getGeometry()
             var zv = window.innerHeight * (100) / window.document.body.scrollHeight;
@@ -190,13 +190,13 @@ ConkW.loaded = function(req) {
         if (req.readyState == 4) {
             var res = req.responseText + "";
             if (res.charAt(0) == '{') {
-                let before = Date.now();
+                var before = Date.now();
                 res = JSON.parse(res);
                 ConkW.data.lastResponseJitter = res.responseJitter;
                 //console.log(res.responseJitter);
                 ConkW.refresh(res);
                 ConkW.data.apiErrors = res.errors;
-                let after = Date.now();
+                var after = Date.now();
                 ConkW.data.debug = after - before;
             }
             ConkW.showMetricGap = false;
@@ -207,7 +207,7 @@ ConkW.loaded = function(req) {
 }
 
 ConkW.setStatus = function(msg) {
-    let status = document.getElementById("str_status");
+    var status = document.getElementById("str_status");
     if (status) {
         status.innerHTML = msg;
         status.title = msg;
@@ -234,7 +234,7 @@ ConkW.refresh = function(data) {
 }
 
 ConkW.getPercent = function(value, min, max, log) {
-    let posprc = (value - min) * 100 / (max - min);
+    var posprc = (value - min) * 100 / (max - min);
     if (posprc < 0) posprc = 0;
     if (posprc > 100) posprc = 100;
     if (log) {
@@ -317,15 +317,15 @@ ConkW.getProperLabel = function(key, value) {
 }
 
 ConkW.getStockChange = function(value) {
-    let res = Number(value).toFixed(2);
+    var res = Number(value).toFixed(2);
     if (value > 0) res = "+" + res;
-    /*while (res.length < 8) res = " " + res;
-    while (res.length > 8) res = res.substring(0,res.length-1);*/
+    //while (res.length < 8) res = " " + res;
+    //while (res.length > 8) res = res.substring(0,res.length-1);
     return res;
 }
 
 ConkW.formatCurrency = function(value) {
-    let mult = " ";
+    var mult = " ";
     if (value > 1000) {
         value /= 1000;
         mult = "k";
@@ -338,7 +338,7 @@ ConkW.formatCurrency = function(value) {
         value /= 1000;
         mult = "B";
     }
-    let res = Number(value).toFixed(2) + mult;
+    var res = Number(value).toFixed(2) + mult;
     while (res.length < 8) res = " " + res;
     return res;
 }
@@ -353,13 +353,13 @@ ConkW.getHHMMLabel = function(value) {
 }
 
 ConkW.getRpmLabel = function(value) {
-    let res = "" + Math.round(value);
+    var res = "" + Math.round(value);
     while (res.length < 4) res = " " + res;
     return res + " rpm";
 }
 
 ConkW.getLoadLabel = function(i) {
-    let res = "" + i;
+    var res = "" + i;
     if (res.includes(".")) {
         if (i < 10) i = Math.round(i * 1000) / 1000;
         else if (i < 100) i = Math.round(i * 100) / 100;
@@ -367,13 +367,13 @@ ConkW.getLoadLabel = function(i) {
         else i = Math.round(i);
         res = "" + i;
     }
-    let missing = 5 - res.length;
+    var missing = 5 - res.length;
     while (missing-- > 0) res = res + " ";
     return res;
 }
 
 ConkW.getTimeLabel = function(value) {
-    let res = "";
+    var res = "";
     value = Math.round(value);
     res = (value % 60) + 's';
     value = Math.floor(value / 60);
@@ -433,7 +433,7 @@ ConkW.getSI = function(i) {
 }
 
 ConkW.getPrecision = function(i) {
-    let res = "" + i;
+    var res = "" + i;
     if (res.includes(".")) {
         if (i<0) {
             if (i < 10) i = Math.round(i * 10) / 10;
@@ -445,7 +445,7 @@ ConkW.getPrecision = function(i) {
         }
         res = "" + i;
     }
-    let missing = 4 - res.length;
+    var missing = 4 - res.length;
     if (missing > 0 && res.indexOf(".")==-1) {
         res = res+".";
         missing--;
@@ -461,12 +461,12 @@ ConkW.initDomCache = function() {
 }
 
 ConkW.loadDom = function(e, holders) {
-    let ns = e.getAttribute("cw-ns");
-    let processChildren = true;
+    var ns = e.getAttribute("cw-ns");
+    var processChildren = true;
 
     if (ns) {
-        let names = e.getAttributeNames();
-        for (let i = 0; i < names.length; i++) {
+        var names = e.getAttributeNames();
+        for (var i = 0; i < names.length; i++) {
             if (names[i].startsWith("cw-prop-")) {
                 holders.push(new PropertyHolder(e, e.getAttribute("cw-ns"), e.getAttribute(names[i]), names[i].split("-")[2]));
             }
@@ -507,13 +507,13 @@ ConkW.loadDom = function(e, holders) {
 }
 
 ConkW.loadChildren = function(e, holders) {
-  for (let i = 0; i < e.childElementCount; i++)
+  for (var i = 0; i < e.childElementCount; i++)
   this.loadDom(e.children[i], holders);
 }
 
 ConkW.expandNode = function(e) {
     if (e.getAttribute("cw-fill")) {
-        let fill = e.getAttribute("cw-fill");
+        var fill = e.getAttribute("cw-fill");
         if (fill.indexOf("grabberDefault:") == 0) {
             this.fillNode(e, fill.substring(15));
         }
@@ -535,9 +535,9 @@ ConkW.fillNode = function(element, name) {
 }
 
 ConkW.refreshNew = function(data) {
-    let todo = ConkW.data.holders;
-    for (let i = 0; i < todo.length; i++) {
-        let e = todo[i];
+    var todo = ConkW.data.holders;
+    for (var i = 0; i < todo.length; i++) {
+        var e = todo[i];
         e.update(data.metrics[e.ns]);
     }
 }
@@ -548,9 +548,9 @@ ConkW.parseValueExpression = function(id) {
             invalid: true
         }
     }
-    let c1 = id.indexOf(":");
-    let c2 = id.indexOf(":", c1 + 1);
-    let c3 = id.indexOf(":", c2 + 1);
+    var c1 = id.indexOf(":");
+    var c2 = id.indexOf(":", c1 + 1);
+    var c3 = id.indexOf(":", c2 + 1);
 
     return {
         valuetype: id.substring(0, c1),
@@ -561,11 +561,11 @@ ConkW.parseValueExpression = function(id) {
 }
 
 ConkW.extractMetricDelay = function(valueexpr, data) {
-    let now = Date.now() / 1000;
+    var now = Date.now() / 1000;
     if (!data) return undefined;
     switch (valueexpr.valuetype) {
         case "m":
-            let mlv = data.num["ts:" + valueexpr.expression];
+            var mlv = data.num["ts:" + valueexpr.expression];
             if (mlv === undefined) mlv = data.timestamp;
             if (mlv === undefined) return now;
             return now - mlv / 1000;
@@ -577,7 +577,7 @@ ConkW.extractRawValue = function(valueexpr, data) {
     if (!data) return undefined;
     switch (valueexpr.valuetype) {
         case "m":
-            let ns = data[valueexpr.datatype];
+            var ns = data[valueexpr.datatype];
             return ns ? ns[valueexpr.expression] : undefined;
         case "e":
             return fillTemplate(valueexpr.expression, data);
@@ -588,7 +588,7 @@ ConkW.extractRawValue = function(valueexpr, data) {
 }
 
 ConkW.parseDelayInSeconds = function(string) {
-    let mult = 1;
+    var mult = 1;
     if (string.endsWith("m")) mult = 60;
     if (string.endsWith("h")) mult = 3600;
     if (string.endsWith("d")) mult = 86400;
@@ -596,7 +596,7 @@ ConkW.parseDelayInSeconds = function(string) {
 }
 
 ConkW.extractTypedValue = function(valueexpr, data) {
-    let value = this.extractRawValue(valueexpr, data);
+    var value = this.extractRawValue(valueexpr, data);
     if (value === undefined) return;
     switch (valueexpr.datatype) {
         case "str":
@@ -609,7 +609,7 @@ ConkW.extractTypedValue = function(valueexpr, data) {
 }
 
 ConkW.extractFormattedValue = function(valueexpr, data) {
-    let value = this.extractTypedValue(valueexpr, data);
+    var value = this.extractTypedValue(valueexpr, data);
     if (value === undefined) return;
     switch (valueexpr.datatype) {
         case "str":
@@ -632,7 +632,7 @@ ConkW.toFixedLength = function(value, chars) {
 
 ConkW.updateField = function(field, property, cacheKey, value, warning) {
     if (ConkW.data.cachedValues[cacheKey] !== value) {
-        let oldvalue = ConkW.data.cachedValues[cacheKey];
+        var oldvalue = ConkW.data.cachedValues[cacheKey];
         ConkW.data.cachedValues[cacheKey] = value;
         if (value === undefined && field.classList) {
             field.classList.add("cw-stale");
@@ -653,8 +653,8 @@ ConkW.updateField = function(field, property, cacheKey, value, warning) {
 
 ConkW.isWarning = function(vExpr, wExpr, data) {
     if (wExpr && !wExpr.invalid) {
-        let vv = vExpr ? this.extractRawValue(vExpr, data) : null;
-        let vw = this.extractRawValue(wExpr, data);
+        var vv = vExpr ? this.extractRawValue(vExpr, data) : null;
+        var vw = this.extractRawValue(wExpr, data);
         switch (wExpr.format) {
             case "ifnot":
                 return vv != vw ? "yes" : "no";
@@ -673,7 +673,7 @@ ConkW.isWarning = function(vExpr, wExpr, data) {
 
 ConkW.isStandaloneWarning = function(wExpr, data) {
     if (wExpr && !wExpr.invalid) {
-        let vw = this.extractRawValue(wExpr, data);
+        var vw = this.extractRawValue(wExpr, data);
         switch (wExpr.format) {
             case "notzero":
                 return vw!==0 ? "yes" : "no";
@@ -686,7 +686,7 @@ ConkW.isStandaloneWarning = function(wExpr, data) {
 
 ConkW.isStale = function(vExpr, data) {
     if (vExpr && !vExpr.invalid) {
-        let f = vExpr.format;
+        var f = vExpr.format;
         if (f.startsWith("olderThan.")) {
             return this.extractMetricDelay(vExpr, data) > this.parseDelayInSeconds(f.substring(10));
         }
@@ -705,7 +705,7 @@ class PropertyHolder {
         ConkW.data.cachedValues[this.cacheKey] = "--not-a-valid-value--";
     }
     update(data) {
-        let v = ConkW.extractFormattedValue(this.valueExpr, data);
+        var v = ConkW.extractFormattedValue(this.valueExpr, data);
         ConkW.updateField(this.element, this.propertyName, this.cacheKey, v, false);
     }
 }
@@ -737,7 +737,7 @@ class ValueHolder {
         ConkW.data.cachedValues[this.cacheKey] = "--not-a-valid-value--";
     }
     update(data) {
-        let v = ConkW.extractFormattedValue(this.valueExpr, data);
+        var v = ConkW.extractFormattedValue(this.valueExpr, data);
         ConkW.updateField(this.element, "innerHTML", this.cacheKey, v, ConkW.isWarning(this.valueExpr, this.warn, data));
     }
 }
@@ -751,7 +751,7 @@ class StaleHolder {
         ConkW.data.cachedValues[this.cacheKey] = "--not-a-valid-value--";
     }
     update(data) {
-        let stale = ConkW.isStale(this.valueExpr, data);
+        var stale = ConkW.isStale(this.valueExpr, data);
         if (ConkW.data.cachedValues[this.cacheKey] != stale) {
             ConkW.data.cachedValues[this.cacheKey] = stale;
             if (stale) {
@@ -772,24 +772,24 @@ class GaugeHolder {
         this.warn = ConkW.parseValueExpression(e.getAttribute("cw-value-warn"));
         this.wmax = this.warn.format === "valuebelow";
 
-        let green = document.createElement("div");
+        var green = document.createElement("div");
         green.className = "red" + (this.wmax ? "left" : "right");
         e.appendChild(green);
 
         this.valueExprs = [];
-        let ck = "";
-        let i = 0;
+        var ck = "";
+        var i = 0;
         while (true) {
-            let fv = e.getAttribute("cw-gauge" + i);
+            var fv = e.getAttribute("cw-gauge" + i);
             if (!fv) break;
-            let idx = fv.indexOf(":");
-            let v = fv.substring(idx + 1);
+            var idx = fv.indexOf(":");
+            var v = fv.substring(idx + 1);
             ck += v + "/"
             this.valueExprs.push(ConkW.parseValueExpression(v));
 
-            let gauge = document.createElement("div");
+            var gauge = document.createElement("div");
             gauge.className = "gauge";
-            let col = fv.substring(0, idx);
+            var col = fv.substring(0, idx);
             if (col !== "default") gauge.style.backgroundColor = col;
             e.appendChild(gauge);
             i++;
@@ -798,31 +798,31 @@ class GaugeHolder {
         ConkW.data.cachedValues[this.cacheKey] = "--not-a-valid-value--";
     }
     update(data) {
-        let min = ConkW.extractTypedValue(this.min, data);
-        let max = ConkW.extractTypedValue(this.max, data);
-        let warn = this.warn.invalid ? null : ConkW.extractTypedValue(this.warn, data);
+        var min = ConkW.extractTypedValue(this.min, data);
+        var max = ConkW.extractTypedValue(this.max, data);
+        var warn = this.warn.invalid ? null : ConkW.extractTypedValue(this.warn, data);
 
-        let greenWidth = warn ? (this.wmax ? ((warn - min) * 100 / (max - min)) + "%" : (100 - ((warn - min) * 100 / (max - min)) + "%")) : "0";
-        let cacheValue = greenWidth + "/";
-        let gw = [];
-        let gcn = [];
-        for (let i = 0; i < this.valueExprs.length; i++) {
-            let value = ConkW.extractTypedValue(this.valueExprs[i], data);
-            let wn = ((value - min) * 100 / (max - min));
+        var greenWidth = warn ? (this.wmax ? ((warn - min) * 100 / (max - min)) + "%" : (100 - ((warn - min) * 100 / (max - min)) + "%")) : "0";
+        var cacheValue = greenWidth + "/";
+        var gw = [];
+        var gcn = [];
+        for (var i = 0; i < this.valueExprs.length; i++) {
+            var value = ConkW.extractTypedValue(this.valueExprs[i], data);
+            var wn = ((value - min) * 100 / (max - min));
             gw[i] = wn;
-            let w = warn ? (this.wmax ? value < warn : value > warn) : false;
-            let gaugeCN = w ? "gaugewarning" : "gauge";
+            var w = warn ? (this.wmax ? value < warn : value > warn) : false;
+            var gaugeCN = w ? "gaugewarning" : "gauge";
             gcn[i] = gaugeCN;
             cacheValue = cacheValue + "/" + gw;
         }
 
         if (cacheValue !== ConkW.data.cachedValues[this.cacheKey]) {
             ConkW.data.cachedValues[this.cacheKey] = cacheValue;
-            let green = this.element.children[0];
+            var green = this.element.children[0];
             green.style.width = greenWidth;
-            let left = 0;
-            for (let i = 0; i < this.valueExprs.length; i++) {
-                let gauge = this.element.children[i + 1];
+            var left = 0;
+            for (var i = 0; i < this.valueExprs.length; i++) {
+                var gauge = this.element.children[i + 1];
                 gauge.style.width = gw[i] + "%";
                 gauge.style.left = left + "%";
                 left += gw[i];
@@ -849,39 +849,39 @@ class HistoryGaugeHolder {
 
         this.colors = [];
         this.valueExprs = [];
-        let i = 0;
+        var i = 0;
         while (true) {
-            let fv = e.getAttribute("cw-hgauge" + i);
+            var fv = e.getAttribute("cw-hgauge" + i);
             if (!fv) break;
-            let idx = fv.indexOf(":");
-            let v = fv.substring(idx + 1);
+            var idx = fv.indexOf(":");
+            var v = fv.substring(idx + 1);
             this.colors.push(fv.substring(0, idx));
             this.valueExprs.push(ConkW.parseValueExpression(v));
             i++;
         }
     }
     update(data) {
-        let e = this.element;
-        let min = ConkW.extractTypedValue(this.min, data);
-        let max = ConkW.extractTypedValue(this.max, data);
+        var e = this.element;
+        var min = ConkW.extractTypedValue(this.min, data);
+        var max = ConkW.extractTypedValue(this.max, data);
 
-        let bottom = 0;
+        var bottom = 0;
 
         if (ConkW.showMetricGap) {
-            let container = document.createElement("div");
+            var container = document.createElement("div");
             container.className = "ch error";
             e.appendChild(container);
         }
 
-        let container = document.createElement("div");
+        var container = document.createElement("div");
         container.className = "ch";
-        for (let i = 0; i < this.colors.length; i++) {
-            let value = ConkW.extractTypedValue(this.valueExprs[i], data);
-            let color = this.colors[i];
-            let bar = document.createElement("div");
+        for (var i = 0; i < this.colors.length; i++) {
+            var value = ConkW.extractTypedValue(this.valueExprs[i], data);
+            var color = this.colors[i];
+            var bar = document.createElement("div");
             bar.setAttribute("value", value);
             bar.className = "hgauge";
-            let posprc = ConkW.getPercent(value, min, max, this.log);
+            var posprc = ConkW.getPercent(value, min, max, this.log);
             bar.style.height = posprc + "%";
             bar.style.bottom = bottom + "%";
             bottom += posprc;
@@ -889,7 +889,7 @@ class HistoryGaugeHolder {
             container.appendChild(bar);
         }
         if (bottom<100) {
-            let bar = document.createElement("div");
+            var bar = document.createElement("div");
             bar.className = "hgaugebg";
             bar.style.height = (100-bottom) + "%";
             bar.style.bottom = bottom + "%";
@@ -906,10 +906,10 @@ class HistoryGaugeHolder {
             //console.log("Recomputing heights, max has changed.");
             // Max has changed, we need to recompute height of all elements.
             e.childNodes.forEach(container => {
-                let bottom=0;
+                var bottom=0;
                 container.childNodes.forEach(bar => {
                     if (bar.className === "hgauge") {
-                        let posprc = ConkW.getPercent(parseFloat(bar.getAttribute("value")), min, max, this.log);
+                        var posprc = ConkW.getPercent(parseFloat(bar.getAttribute("value")), min, max, this.log);
                         bar.style.height = posprc + "%";
                         bar.style.bottom = bottom + "%";
                         bottom += posprc;
@@ -938,17 +938,17 @@ class MultivalueHolder {
     }
     update(data) {
         if (this.in.invalid) { // In a list of values
-            let from = ConkW.extractTypedValue(this.from, data);
-            let to = ConkW.extractTypedValue(this.to, data);
+            var from = ConkW.extractTypedValue(this.from, data);
+            var to = ConkW.extractTypedValue(this.to, data);
             if (typeof from === "number" && typeof to === "number") {
-                let cacheValue = from + "/" + to;
+                var cacheValue = from + "/" + to;
                 if (ConkW.data.cachedValues[this.cacheKey] !== cacheValue) {
                     ConkW.forceScreenRefresh();
                     console.log("Redrawing " + cacheValue + " !== " + ConkW.data.cachedValues[this.cacheKey]);
                     ConkW.data.cachedValues[this.cacheKey] = cacheValue;
                     this.childHolders = [];
-                    let html = "";
-                    for (let i = from; i < to; i++) {
+                    var html = "";
+                    for (var i = from; i < to; i++) {
                         html += this.content.replaceAll(this.pattern, i+"");
                     }
                     this.element.innerHTML = html;
@@ -962,22 +962,22 @@ class MultivalueHolder {
                 }
             }
         } else { // numeric from -> to
-            let invalues = ConkW.extractFormattedValue(this.in, data);
+            var invalues = ConkW.extractFormattedValue(this.in, data);
             if (invalues && ConkW.data.cachedValues[this.cacheKey] !== invalues) {
                 console.log("Redrawing " + invalues + " !== " + ConkW.data.cachedValues[this.cacheKey]);
                 ConkW.forceScreenRefresh();
                 ConkW.data.cachedValues[this.cacheKey] = invalues;
                 this.childHolders = [];
-                let values = invalues.split(",");
-                let html = "";
-                for (let i = 0; i < values.length; i++) {
+                var values = invalues.split(",");
+                var html = "";
+                for (var i = 0; i < values.length; i++) {
                     html += this.content.replaceAll(this.pattern, values[i]);
                 }
                 this.element.innerHTML = html;
                 ConkW.loadChildren(this.element, this.childHolders);
             } // Else nothing changed.
         }
-        for (let i=0 ; i<this.childHolders.length ; i++) {
+        for (var i=0 ; i<this.childHolders.length ; i++) {
             this.childHolders[i].update(data);
         }
     }
