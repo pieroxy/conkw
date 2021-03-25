@@ -381,12 +381,12 @@ ConkW.clockFaces = [
 ]
 
 ConkW.dates.initClocks = function() {
-  let cs = document.getElementsByTagName("clock");
+  var cs = document.getElementsByTagName("clock");
   if (cs && cs.length) this.initClock(cs[0]);
 }
 
 ConkW.dates.initClock = function(e) {
-  let clock = {
+  var clock = {
     root: e,
     face: document.createElement("DIV"),
   };
@@ -397,7 +397,7 @@ ConkW.dates.initClock = function(e) {
 
   ConkW.data.cwClock = clock;
 
-  let cf = localStorage["conkw.clockFaceIndex"];
+  var cf = localStorage["conkw.clockFaceIndex"];
   if (!cf || cf > ConkW.clockFaces.length) cf = 0;
 
   this.setClockFace(ConkW.clockFaces[cf]);
@@ -427,18 +427,18 @@ ConkW.dates.updateClock = function(forceUpdate) {
 
   ConkW.dates.setShadow = function(element, faceElement, handangle) {
     if (faceElement.shadowColor) {
-      let size = ConkW.currentClockFace.offsetWidth;
-      let spread = 0.01;
-      let distance = 0.01;
-      let radius = 0.01;
-      let angle = 225;
+      var size = ConkW.currentClockFace.offsetWidth;
+      var spread = 0.01;
+      var distance = 0.01;
+      var radius = 0.01;
+      var angle = 225;
       if (faceElement.shadowSpread !== undefined) spread = faceElement.shadowSpread;
       if (faceElement.shadowOffset !== undefined) distance = faceElement.shadowOffset;
       if (faceElement.shadowRadius !== undefined) radius = faceElement.shadowRadius;
       if (faceElement.shadowAngle  !== undefined) angle = faceElement.shadowAngle;
 
-      let x = 0;
-      let y = 0;
+      var x = 0;
+      var y = 0;
       if (distance) {
         x = this.sin(angle+handangle-180) * distance * size;
         y = this.cos(angle+handangle-180) * distance * size;
@@ -458,7 +458,7 @@ ConkW.dates.updateClock = function(forceUpdate) {
   const secondsDegree = (((seconds / 60) * 360) + 90);
   if (ConkW.data.cwClock.s) {
     ConkW.data.cwClock.s.style.transform = `rotate(${secondsDegree}deg)`
-    let sec = ConkW.currentClockFace.second;
+    var sec = ConkW.currentClockFace.second;
     this.setShadow(ConkW.data.cwClock.s, ConkW.currentClockFace.second, secondsDegree);
   }
 
@@ -485,7 +485,7 @@ ConkW.dates.updateClock = function(forceUpdate) {
 
 ConkW.dates.setClockFace = function(face) {
   ConkW.currentClockFace = face;
-  let clock = ConkW.data.cwClock;
+  var clock = ConkW.data.cwClock;
   if (clock.s) clock.face.removeChild(clock.s);
   if (clock.m) clock.face.removeChild(clock.m);
   if (clock.h) clock.face.removeChild(clock.h);
@@ -493,7 +493,7 @@ ConkW.dates.setClockFace = function(face) {
   if (face.minute.div || face.minute.img) clock.face.appendChild(clock.m = document.createElement(face.minute.div ? "DIV" : "IMG"));
   if (face.second.div || face.second.img) clock.face.appendChild(clock.s = document.createElement(face.second.div ? "DIV" : "IMG"));
   else clock.s = null;
-  let size = clock.face.offsetWidth;
+  var size = clock.face.offsetWidth;
   ConkW.currentClockFace.offsetWidth = size;
 
   function setProps(style, element, faceElement) {
@@ -507,7 +507,7 @@ ConkW.dates.setClockFace = function(face) {
       style.backgroundColor = faceElement.div.color;
       style.borderRadius = faceElement.div.radius ? faceElement.div.radius : "0";
       if (faceElement.div.clip) {
-        let clipped = document.createElement("DIV");
+        var clipped = document.createElement("DIV");
         element.appendChild(clipped);
         clipped.style.backgroundColor = style.backgroundColor;
         clipped.style.height = style.height;
@@ -520,8 +520,8 @@ ConkW.dates.setClockFace = function(face) {
     if (faceElement.img) {
       element.src=faceElement.img.src;
 
-      let ratio = faceElement.img.width / faceElement.img.height;
-      let width = faceElement.img.scale*size;
+      var ratio = faceElement.img.width / faceElement.img.height;
+      var width = faceElement.img.scale*size;
 
       style.width = width + "px";
       style.height = width/ratio + "px";
@@ -543,11 +543,11 @@ ConkW.dates.setClockFace = function(face) {
 
 
 ConkW.dates.rotateClockFace = function(event, date) {
-  let e = event.target;
+  var e = event.target;
   while (e && e.tagName != "CLOCK") e = e.parentElement;
   if (e.tagName != "CLOCK") return;
 
-  let cf = localStorage["conkw.clockFaceIndex"];
+  var cf = localStorage["conkw.clockFaceIndex"];
   if (!cf) cf = "0";
   cf = (cf - 0 + 1) % ConkW.clockFaces.length;
   localStorage["conkw.clockFaceIndex"] = cf;
@@ -558,12 +558,12 @@ ConkW.dates.updateDates = function(now) {
   if (!ConkW.data.wmDates) {
     ConkW.data.wmDates = document.getElementsByTagName("cw-date");
   }
-  let todo = ConkW.data.wmDates;
-  for (let i = 0; i < todo.length; i++) {
-    let cacheKey;
-    let e = todo[i];
-    let value = null;
-    let id = e.getAttribute("cw-id");
+  var todo = ConkW.data.wmDates;
+  for (var i = 0; i < todo.length; i++) {
+    var cacheKey;
+    var e = todo[i];
+    var value = null;
+    var id = e.getAttribute("cw-id");
     if (id) {
       switch (id) {
         case "dayoftheweek":
@@ -621,18 +621,18 @@ ConkW.dates.getDom = function(date) {
 }
 
 ConkW.dates.formatTime = function(ts) {
-  let date = new Date(ts);
-  let h = date.getHours();
-  let m = date.getMinutes();
+  var date = new Date(ts);
+  var h = date.getHours();
+  var m = date.getMinutes();
   if (h < 10) h = "0" + h;
   if (m < 10) m = "0" + m;
   return h + ":" + m;
 }
 ConkW.dates.formatTimeSecs = function(ts) {
-  let date = new Date(ts);
-  let h = date.getHours();
-  let m = date.getMinutes();
-  let s = date.getSeconds();
+  var date = new Date(ts);
+  var h = date.getHours();
+  var m = date.getMinutes();
+  var s = date.getSeconds();
   if (h < 10) h = "0" + h;
   if (m < 10) m = "0" + m;
   if (s < 10) s = "0" + s;
@@ -640,8 +640,8 @@ ConkW.dates.formatTimeSecs = function(ts) {
 }
 
 ConkW.dates.formatHour = function(ts) {
-  let date = new Date(ts);
-  let h = date.getHours();
+  var date = new Date(ts);
+  var h = date.getHours();
   return h + "h";
 }
 
@@ -650,10 +650,11 @@ ConkW.dates.formatDow = function(ts) {
 }
 
 ConkW.dates.formatDate = function(ts) {
-  let date = new Date(ts);
+  var date = new Date(ts);
   return date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate();
 }
 
 ConkW.dates.formatDatetime = function(ts) {
   return this.formatDate(ts) + " " + this.formatTime(ts);
 }
+ 
