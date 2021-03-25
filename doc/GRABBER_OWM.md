@@ -2,6 +2,9 @@
 
 This is the weather grabber. It relies on the [one call api](https://openweathermap.org/api/one-call-api) of the [open weather map website](https://openweathermap.org/).
 
+*Full name:* `net.pieroxy.conkw.webapp.grabbers.openweathermap.OpenWeatherMapGrabber`
+
+## Usage
 In order to use it, you need to:
 
 * Create an account on their website
@@ -12,16 +15,15 @@ In order to use it, you need to:
 * Copy and paste the latitude and longitude in the config file.
 
 
-*Full name:* `net.pieroxy.conkw.webapp.grabbers.openweathermap.OpenWeatherMapGrabber`
 
-Metrics always extracted:
+## Metrics always extracted:
 
 * `str.location_name` The name of the place configured. This is extremely useful to make sure you're viewing the weather conditions from the proper place.
 
 
-Possible extractions:
+## Possible extractions:
 
-## current
+### current
 Extracts the current weather. 
 
 Metrics:
@@ -40,14 +42,14 @@ Metrics:
 * `str.current_icon` The icon of the current weather condition, to be used as the `src` property of an `img` tag.
 * `str.current_wind_speed_icon` The icon of the current wind speed, to be used as the `src` property of an `img` tag.
 
-## minute
+### minute
 Extracts weather forecast on the next hour, mostly precipitations.
 
 Metric, where `<i>` goes from `0` to `59`:
 
 * `num.minutely_pim_<i>` precipitation volume in mm.
 
-## hour
+### hour
 Extracts weather forecast on the next 48 hours, by the hour.
 
 Metrics, where `<i>` goes from `0` to `47`:
@@ -68,7 +70,7 @@ Metrics, where `<i>` goes from `0` to `47`:
 * `str.hourly_wind_speed_icon_<i>` The icon of the wind speed, to be used as the `src` property of an `img` tag.
 
 
-## day
+### day
 Extracts weather forecast on the next 7 days, by the day.
 
 Metrics, where `i` goes from `0` to `7`:
@@ -88,8 +90,8 @@ Metrics, where `i` goes from `0` to `7`:
 * `str.daily_wind_speed_icon_<i>` The icon of the wind speed, to be used as the `src` property of an `img` tag.
 
 
-## notes
+### Final notes
 
-There are a few metrics in the APi that are not extracted, such as UV, dew point, wind gust, ... 
+There are a few metrics in the API that are not extracted, such as UV, dew point, wind gust, ... 
 
 If you need them, please provide a pull request or just open an issue. For reference, [here is the documentation for the api](https://openweathermap.org/api/one-call-api).
