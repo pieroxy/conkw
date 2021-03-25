@@ -249,3 +249,68 @@ clock #clock-minute {
     margin-top: 0.5em;
     margin-left: 2em;
 }
+
+/* LCD panel for music */
+.lcd gauge {
+    background-color: #709181
+}
+
+.lcd gauge>div.gauge {
+    background-color: #283830;
+}
+
+.lcd.cw-stale,
+.lcd.cw-stale *,
+.cw-stale .lcd,
+.cw-stale .lcd * {
+    color: #709181;
+    text-shadow: 0.1em 0.1em #779989;
+}
+
+.cw-stale.lcd gauge,
+.cw-stale .lcd gauge {
+    background-color: #779989;
+}
+
+.cw-stale.lcd gauge>div.gauge,
+.cw-stale .lcd gauge>div.gauge {
+    background-color: #709181;
+}
+
+.steelborder {
+    padding: 8px;
+    background-image: url(/backgrounds/stainless2.jpg);
+    box-shadow: inset -3px -3px 3px -3px black, inset 3px 3px 3px -3px white;
+    background-size: 100%;
+    background-position: top;
+}
+
+.steelborder img {
+    height: 35px;
+    padding-top: 10px;
+    filter: drop-shadow(0px 0px 1px rgba(0, 0, 0, 1));
+}
+
+
+.lcd {
+    background-color: #7da190;
+    box-shadow: inset 1px 1px 10px black;
+    font-family: LCDVARA, monospace;
+    font-size: 15px;
+    color: #283830;
+    padding: 10px;
+    text-shadow: 0.1em 0.1em #709181;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.lcd>div {
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    background-color: #799c8c;
+}
+
+.lcd>div * {
+    padding-bottom: 0.2em;
+}

@@ -30,10 +30,9 @@ public abstract class Grabber {
 
   Map<String, ResponseData> cachedResponses = new HashMap<>();
 
-  public String processAction(Map parameterMap) {
+  public String processAction(Map<String, String[]> parameterMap) {
     return "";
   }
-  public abstract void processHttp(HttpServletRequest req);
   public abstract ResponseData grab();
   public abstract void dispose();
   public abstract String getDefaultName();
@@ -66,11 +65,11 @@ public abstract class Grabber {
   protected abstract void setConfig(Map<String, String> config);
 
   public void initConfig(File homeDir, Map<String, String> config) throws IOException {
-    setConfig(config);
     storageFolder = new File(homeDir, "data");
     tmpFolder = new File(homeDir, "tmp");
-    if (name == null) setName(getDefaultName());
     if (maxComputer == null) maxComputer = new MaxComputer(getStorage());
+    if (name == null) setName(getDefaultName());
+    setConfig(config);
   }
 
   public void setLogLevel(Level l) {

@@ -1,10 +1,7 @@
 package net.pieroxy.conkw.standalone;
 
 import net.pieroxy.conkw.config.ConfigReader;
-import net.pieroxy.conkw.utils.OsCheck;
-import net.pieroxy.conkw.utils.StreamTools;
-import net.pieroxy.conkw.utils.TextReplacer;
-import net.pieroxy.conkw.utils.ZipUtil;
+import net.pieroxy.conkw.utils.*;
 
 import java.io.*;
 import java.net.URI;
@@ -64,7 +61,8 @@ public class Installer {
             getClass().getClassLoader().getResourceAsStream("config.sample.jsonc"),
             ConfigReader.getConfigFile(),
             overrideConfig,
-            new TextReplacer().add("$FGSF", sampleFG.getAbsolutePath()));
+            new TextReplacer()
+                .add("$FGSF", sampleFG.getAbsolutePath()));
         StreamTools.copyTextFilePreserveOriginalAndWarnOnStdout(
             getClass().getClassLoader().getResourceAsStream("example.properties"),
             sampleFG,overrideConfig,new TextReplacer().add("$FGSF", sampleFG.getAbsolutePath()));

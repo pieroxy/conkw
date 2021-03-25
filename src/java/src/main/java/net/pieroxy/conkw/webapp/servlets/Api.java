@@ -53,7 +53,7 @@ public class Api extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     long now = lastGet =  System.currentTimeMillis();
-    final String action = req.getParameter("_grabber_");
+    final String action = req.getParameter("grabberAction");
     if (action!=null) {
       allGrabbers.forEach((g) -> {
         if (g.getName().equals(action)) {
@@ -66,8 +66,6 @@ public class Api extends HttpServlet {
         }
       });
     } else {
-      // TODO: Remove this old crap. Messages should go through the process up there (action).
-      for (Grabber g : allGrabbers) g.processHttp(req);
       String grabbers = req.getParameter("grabbers");
       if (grabbers == null) {
         writeResponse(resp, Response.getError("Grabbers were not specified"));

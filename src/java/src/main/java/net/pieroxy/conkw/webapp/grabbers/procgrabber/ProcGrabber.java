@@ -167,10 +167,6 @@ public class ProcGrabber extends AsyncGrabber {
   };
 
   @Override
-  public void processHttp(HttpServletRequest req) {
-  }
-
-  @Override
   public String getDefaultName() {
     return NAME;
   }

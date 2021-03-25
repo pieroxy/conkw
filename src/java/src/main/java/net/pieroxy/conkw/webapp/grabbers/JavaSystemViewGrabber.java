@@ -132,10 +132,6 @@ public class JavaSystemViewGrabber extends AsyncGrabber {
   }
 
   @Override
-  public void processHttp(HttpServletRequest req) {
-  }
-
-  @Override
   public void setConfig(Map<String, String> config) {
     String mpstr = config.get("mountPoints");
     if (mpstr == null) {

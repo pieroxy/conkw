@@ -16,10 +16,6 @@ public class FileGrabber extends AsyncGrabber {
   long lastTimestamp = 0;
 
   @Override
-  public void processHttp(HttpServletRequest req) {
-  }
-
-  @Override
   public boolean changed() {
     try {
       return Files.getLastModifiedTime(path).toMillis() != lastTimestamp;
@@ -62,7 +58,7 @@ public class FileGrabber extends AsyncGrabber {
 
   @Override
   public void setConfig(Map<String, String> config){
-    this.log(Level.INFO, "FileGrabber Name is " + config.get("name"));
+    this.log(Level.INFO, "FileGrabber Name is " + getName());
     this.file = new File((String)config.get("file"));
     this.path = this.file.toPath();
   }

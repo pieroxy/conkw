@@ -222,3 +222,8 @@
   src: url('/fonts/AlegreyaSans-Thin.woff') format('woff');
   font-weight: 100;
 }
+
+@font-face {
+  font-family: 'LCDVARA';
+  src: url('/fonts/pixelmix-custom.woff') format('woff');
+}

@@ -69,6 +69,15 @@
       "parameters": {
         "file":"$FGSF"
       }
+    },
+    {
+      // Spotify grabber. Extracts currently playing stuff from your spotify account.
+      "implementation":"net.pieroxy.conkw.webapp.grabbers.spotify.SpotifyGrabber",
+      "parameters": {
+        "clientId":"Your client id",
+        "clientSecret":"Your client secret",
+        "redirectUri":"Your redirect URI"
+      }
     }
   ],
   // This is the port the web server will listen to. Note that values below 1024 are discouraged as they require

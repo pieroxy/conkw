@@ -66,10 +66,6 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber {
   }
 
   @Override
-  public void processHttp(HttpServletRequest req) {
-  }
-
-  @Override
   public boolean changed() {
     return System.currentTimeMillis() - lastRun > getTtl().toMillis();
   }

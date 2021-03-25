@@ -30,7 +30,7 @@ public class Runner {
 
             LOGGER.info("Configuring app with basedir: " + webappDirLocation.getAbsolutePath());
 
-            String contextPath = "/";
+            String contextPath = "";
             StandardContext ctx = (StandardContext) tomcat.addContext(contextPath, webappDirLocation.getAbsolutePath());
             ctx.addWelcomeFile("index.html");
 

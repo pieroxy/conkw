@@ -82,20 +82,32 @@ ConkW.scheduleLoad = function() {
     }
 }
 
+ConkW.sendActionToServer = function() {
+    let url = location.href;
+    var xmlhttp = new XMLHttpRequest();
+    console.log(url);
+    var pos = url.indexOf("%3BgrabberAction%3D")+19;
+    var grabber = url.substring(pos, url.indexOf("%3B", pos));
+    var targeturl = "/api?grabberAction="+grabber;
+    targeturl += "&" + url.substring(url.indexOf("?")+1);
+    xmlhttp.open("GET", targeturl, true); // false = synchronous
+    xmlhttp.onreadystatechange = function() { location.href = url.substring(0, url.indexOf("?")) }
+    xmlhttp.send();
+}
+
 ConkW.load = function() {
     let grabbers = document.body.getAttribute("grabbers");
     if (grabbers) {
         this.updateDelay();
-        var xmlhttp = new XMLHttpRequest();
-        var url = "/api?grabbers=" + grabbers;
-        var removeQS = false;
         if (location.href.indexOf("?") > 0) {
-            url += location.href.substring(location.href.indexOf("?"));
-            removeQS = true;
+            ConkW.sendActionToServer();
+        } else {
+            var xmlhttp = new XMLHttpRequest();
+            var url = "/api?grabbers=" + grabbers;
+            xmlhttp.open("GET", url, true); // false = synchronous
+            xmlhttp.onreadystatechange = function() { ConkW.loaded(xmlhttp); }
+            xmlhttp.send();
         }
-        xmlhttp.open("GET", url, true); // false = synchronous
-        xmlhttp.onreadystatechange = function() { ConkW.loaded(xmlhttp, removeQS); }
-        xmlhttp.send();
     }
     this.dates.updateClock();
 }
@@ -173,7 +185,7 @@ ConkW.checkScreen = function() {
     }
 }
 
-ConkW.loaded = function(req, removeQS) {
+ConkW.loaded = function(req) {
     try {
         if (req.readyState == 4) {
             var res = req.responseText + "";
@@ -184,9 +196,6 @@ ConkW.loaded = function(req, removeQS) {
                 //console.log(res.responseJitter);
                 ConkW.refresh(res);
                 ConkW.data.apiErrors = res.errors;
-                if (removeQS && location.href.indexOf("?") > 0) {
-                    location.href = '/';
-                }
                 let after = Date.now();
                 ConkW.data.debug = after - before;
             }
@@ -269,7 +278,7 @@ ConkW.getProperLabel = function(key, value) {
         case "rawint":
             return "" + Math.round(value);
         case "hhmm":
-            return this.dates.getHHMMLabel(value);
+            return this.getHHMMLabel(value);
         case "tstohhmmss":
             return this.dates.formatTimeSecs(value);
         case "tstohhmm":

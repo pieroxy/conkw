@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover"/>
+        <meta charset="utf-8">
+        <meta name="format-detection" content="telephone=no">
+        <title>ConkW - Grabbers reference - Spotify</title>
+        <link href="../css/fonts.css" rel="stylesheet">
+        <link href="../css/conkw-common.css" rel="stylesheet">
+        <link href="../css/conkw.css" rel="stylesheet">
+        <script src="/js/polyfills.js"></script>
+        <script src="/js/date.js"></script>
+        <script src="/js/index.js"></script>
+        <link rel="icon" type="image/png" sizes="256x256" href="/icon.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="manifest" href="/site.webmanifest">
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000066">
+        <meta name="msapplication-TileColor" content="#000066">
+        <meta name="theme-color" content="#ffffff">
+        <script>
+          function md(e) {
+              if (e.src.indexOf("pushed")==-1) e.src = e.src.replace(".png", "-pushed.png");
+          }
+          function mu(e) {
+              setTimeout(function() { e.src = e.src.replace("-pushed.png", ".png"); }, 200);
+          }
+        </script>
+        <style>
+          #spotify {
+            width: 340px;
+            clear: both;
+            overflow: hidden;
+            display: inline-block;
+            text-align: left;
+          }
+        </style>
+    </head>
+    <body onload="ConkW.init()" grabbers="spotify">
+        <pagetitle><inlinelogo></inlinelogo><a href="/">CONKW</a> - Reference UI for <code>SpotifyGrabber</code></pagetitle>
+        
+        <div style="margin:0 25%">
+          <div class="hblock" style="width:300px">
+            <label>  Status : </label><cw-label style="max-width:200px;display:inline-block" id="cw-status"></cw-label><BR/>
+            <label>   Delay : </label><label id="cw-delay"></label><BR/>
+          </div>
+            
+        </div>
+        <br><br><br>
+        <div style="text-align: center;">
+          <div id="spotify">
+            <heading>SPOTIFY<cw-label style="float:right" cw-ns="spotify" cw-value="m:str::status"></cw-label></heading><BR/>
+            <img src="/icons/nosound.png" cw-ns="spotify" cw-prop-src="m:str::album_art" style="box-shadow:1px 1px 20px rgba(0,0,0,0.5);margin-left:45px;width:250px;height:250px;"></img><BR/><BR/>
+            <div class="steelborder" style="text-align: left;">
+                <div class="lcd"  cw-ns="spotify" cw-stale="m:str:!exists:album_name"><div>
+                    <cw-label style="text-align: right;display:block; min-height:1em" cw-ns="spotify" cw-value="m:str::album_artist">Artist</cw-label>
+                    <cw-label cw-prop-title="m:str::album_date" cw-ns="spotify" cw-value="m:str::album_name">Album</cw-label> (<cw-label cw-ns="spotify" cw-value="m:str::album_date">Release date</cw-label>)<BR/>
+                    <cw-label cw-ns="spotify" cw-value="m:str::tracknum">00</cw-label>/<cw-label cw-ns="spotify" cw-value="m:str::album_tracks">XX</cw-label> <cw-label cw-ns="spotify" cw-value="m:str::trackname">Track</cw-label><BR/>
+                    <cw-label cw-ns="spotify" cw-value="m:num:hhmm:pos">00:00</cw-label>/<cw-label cw-ns="spotify" cw-value="m:num:hhmm:len">00:00</cw-label><gauge 
+                    cw-ns="spotify" cw-gauge0="default:m:num::pos" cw-min="l:num::0" cw-max="m:num::len"
+                    style="width: 150px"></gauge><BR/>
+                </div></div>
+                <img onmousedown="md(this)" onmouseup="mu(this)" src="/mmedia/plastic-button-prev.png" onclick="ConkW.callApi('grabberAction=spotify&prev=true')">
+                <img onmousedown="md(this)" onmouseup="mu(this)" src="/mmedia/plastic-button-pause.png" onclick="ConkW.callApi('grabberAction=spotify&pause=true')">
+                <img onmousedown="md(this)" onmouseup="mu(this)" src="/mmedia/plastic-button-play.png" onclick="ConkW.callApi('grabberAction=spotify&play=true')">
+                <img onmousedown="md(this)" onmouseup="mu(this)" src="/mmedia/plastic-button-next.png" onclick="ConkW.callApi('grabberAction=spotify&next=true')">
+                <img cw-ns="spotify" cw-prop-src="e:str::${str.status=='Playing'?'/backgrounds/green-led-on.png':'/backgrounds/green-led-off.png'}" src="" style="float: right;">
+                <BR>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>
