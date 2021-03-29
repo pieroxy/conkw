@@ -113,9 +113,9 @@ ConkW.clockFaces = [
         color: "#2c2c2e",
         radius: "0"
       },
-      shadowOffset: 0.005,
+      shadowOffset: 0.01,
       shadowSpread: 0.0002,
-      shadowRadius: 0.01,
+      shadowRadius: 0.005,
       shadowAngle: 225,
       shadowColor: "rgba(0, 0, 0, 0.25)"
     },
@@ -127,9 +127,9 @@ ConkW.clockFaces = [
         color: "#2c2c2e",
         radius: "0"
       },
-      shadowOffset: 0.01,
+      shadowOffset: 0.02,
       shadowSpread: 0.0005,
-      shadowRadius: 0.01,
+      shadowRadius: 0.005,
       shadowAngle: 225,
       shadowColor: "rgba(0, 0, 0, 0.25)"
     },
@@ -141,9 +141,9 @@ ConkW.clockFaces = [
         color: "#fd773a",
         radius: "0"
       },
-      shadowOffset: 0.02,
+      shadowOffset: 0.03,
       shadowSpread: 0.0001,
-      shadowRadius: 0.02,
+      shadowRadius: 0.005,
       shadowAngle: 225,
       shadowColor: "rgba(0, 0, 0, 0.25)"
     }
