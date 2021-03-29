@@ -294,7 +294,7 @@ clock #clock-minute {
 
 .lcd {
     background-color: #7da190;
-    box-shadow: inset 1px 1px 10px #000a;
+    box-shadow: inset 1px 1px 10px rgba(0, 0, 0, 0.67);
     font-family: LCDVARA, monospace;
     font-size: 15px;
     color: #283830;

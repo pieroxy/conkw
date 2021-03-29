@@ -18,7 +18,7 @@ ConkW.clockFaces = [
       shadowSpread: 0.001,
       shadowRadius: 0.003,
       shadowAngle: 90,
-      shadowColor: "#00000060"
+      shadowColor: "rgba(0, 0, 0, 0.38)"
     },
     minute: {
       div: {
@@ -33,7 +33,7 @@ ConkW.clockFaces = [
       shadowSpread: 0.001,
       shadowRadius: 0.004,
       shadowAngle: 90,
-      shadowColor: "#00000060"
+      shadowColor: "rgba(0, 0, 0, 0.38)"
     },
     second: {
       img: {
@@ -46,7 +46,7 @@ ConkW.clockFaces = [
       shadowOffset: 0.03,
       shadowRadius: 0.005,
       shadowAngle: 90,
-      shadowColor: "#00000060"
+      shadowColor: "rgba(0, 0, 0, 0.38)"
     }
   },
   {
@@ -117,7 +117,7 @@ ConkW.clockFaces = [
       shadowSpread: 0.0002,
       shadowRadius: 0.01,
       shadowAngle: 225,
-      shadowColor: "#00000040"
+      shadowColor: "rgba(0, 0, 0, 0.25)"
     },
     minute: {
       div: {
@@ -131,7 +131,7 @@ ConkW.clockFaces = [
       shadowSpread: 0.0005,
       shadowRadius: 0.01,
       shadowAngle: 225,
-      shadowColor: "#00000040"
+      shadowColor: "rgba(0, 0, 0, 0.25)"
     },
     second: {
       div: {
@@ -145,7 +145,7 @@ ConkW.clockFaces = [
       shadowSpread: 0.0001,
       shadowRadius: 0.02,
       shadowAngle: 225,
-      shadowColor: "#00000040"
+      shadowColor: "rgba(0, 0, 0, 0.25)"
     }
   },
   {
@@ -162,7 +162,7 @@ ConkW.clockFaces = [
       shadowSpread: 0.00001,
       shadowRadius: 0.01,
       shadowAngle: 0,
-      shadowColor: "#00000050"
+      shadowColor: "rgba(0, 0, 0, 0.31)"
     },
     minute: {
       img: {
@@ -176,7 +176,7 @@ ConkW.clockFaces = [
       shadowSpread: 0.00001,
       shadowRadius: 0.01,
       shadowAngle: 0,
-      shadowColor: "#00000050"
+      shadowColor: "rgba(0, 0, 0, 0.31)"
     },
     second: {
       div: {
@@ -190,7 +190,7 @@ ConkW.clockFaces = [
       shadowSpread: 0,
       shadowRadius: 0.015,
       shadowAngle: 0,
-      shadowColor: "#00000040"
+      shadowColor: "rgba(0, 0, 0, 0.31)"
     }
   },
   {
@@ -203,7 +203,7 @@ ConkW.clockFaces = [
         color: "#5b4e4d",
         radius: "0"
       },
-      shadowColor: "#0004",
+      shadowColor: "rgba(0, 0, 0, 0.27)",
       shadowOffset: 0.005,
       shadowSpread: 0.0,
       shadowAngle: 45,
@@ -221,7 +221,7 @@ ConkW.clockFaces = [
       shadowSpread: 0,
       shadowRadius: 0.005,
       shadowAngle: 45,
-      shadowColor: "#00000040"
+      shadowColor: "rgba(0, 0, 0, 0.27)"
     },
     second: {
       img: {
@@ -235,7 +235,7 @@ ConkW.clockFaces = [
       shadowSpread: 0,
       shadowRadius: 0.005,
       shadowAngle: 45,
-      shadowColor: "#00000040"
+      shadowColor: "rgba(0, 0, 0, 0.27)"
     }
   },
   {
@@ -252,7 +252,7 @@ ConkW.clockFaces = [
       shadowSpread: 0,
       shadowRadius: 0.005,
       shadowAngle: 225,
-      shadowColor: "#00000060"
+      shadowColor: "rgba(0, 0, 0, 0.38)"
     },
     minute: {
       div: {
@@ -266,7 +266,7 @@ ConkW.clockFaces = [
       shadowSpread: 0,
       shadowRadius: 0.01,
       shadowAngle: 225,
-      shadowColor: "#00000040"
+      shadowColor: "rgba(0, 0, 0, 0.38)"
     },
     second: {}
   },
@@ -284,7 +284,7 @@ ConkW.clockFaces = [
       shadowSpread: 0,
       shadowRadius: 0.005,
       shadowAngle: 270,
-      shadowColor: "#00000060"
+      shadowColor: "rgba(0, 0, 0, 0.38)"
     },
     minute: {
       div: {
@@ -298,7 +298,7 @@ ConkW.clockFaces = [
       shadowSpread: 0,
       shadowRadius: 0.01,
       shadowAngle: 270,
-      shadowColor: "#00000060"
+      shadowColor: "rgba(0, 0, 0, 0.38)"
     },
     second: {}
   },
@@ -316,7 +316,7 @@ ConkW.clockFaces = [
       shadowSpread: 0,
       shadowRadius: 0.01,
       shadowAngle: 180,
-      shadowColor: "#00000060"
+      shadowColor: "rgba(0, 0, 0, 0.38)"
     },
     minute: {
       div: {
@@ -330,7 +330,7 @@ ConkW.clockFaces = [
       shadowSpread: 0,
       shadowRadius: 0.01,
       shadowAngle: 180,
-      shadowColor: "#00000060"
+      shadowColor: "rgba(0, 0, 0, 0.38)"
     },
     second: {
       img: {
@@ -343,7 +343,7 @@ ConkW.clockFaces = [
       shadowOffset: 0.03,
       shadowRadius: 0.005,
       shadowAngle: 180,
-      shadowColor: "#00000060"
+      shadowColor: "rgba(0, 0, 0, 0.38)"
 
     }
   },
@@ -360,7 +360,7 @@ ConkW.clockFaces = [
       shadowOffset: 0.015,
       shadowRadius: 0.005,
       shadowAngle: 270,
-      shadowColor: "#00000088"
+      shadowColor: "rgba(0, 0, 0, 0.53)"
 
     },
     minute: {
@@ -374,7 +374,7 @@ ConkW.clockFaces = [
       shadowOffset: 0.02, 
       shadowRadius: 0.005,
       shadowAngle: 270,
-      shadowColor: "#00000088"
+      shadowColor: "rgba(0, 0, 0, 0.53)"
     },
     second: {}
   }
