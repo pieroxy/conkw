@@ -1,6 +1,6 @@
 window.ConkW = window.ConkW || {};
 ConkW.formatters = ConkW.formatters || {};
-ConkW.data = ConkW.data || {};
+ConkW.data = ConkW.data || {funcs:{}};
 
 
 window.onerror = function(message, file, lineNumber) {
@@ -217,15 +217,44 @@ ConkW.setStatus = function(msg) {
     }
 }
 
-const fillTemplate = function(templateString, templateVars) {
-    try {
-        var func = new Function(...Object.keys(templateVars), "return `" + templateString + "`;")
-        return func(...Object.values(templateVars));
-    } catch (e) {
-        console.log("Template " + templateString + " failed: " + e + " on model " + JSON.stringify(templateVars));
-        ConkW.setStatus("Template " + templateString + " failed: " + e + " on model " + JSON.stringify(templateVars));
-    }
+try {
+    ConkW.fillTemplate = eval('function(templateString, templateVars) {\n'+
+    '    try {\n'+
+    '        var func = ConkW.data.funcs[templateString];\n'+
+    '        if (!func) {\n'+
+    '            console.log("creating " + templateString);\n'+
+    '            ConkW.data.funcs[templateString] = func = new Function(...Object.keys(templateVars), "return `" + templateString + "`;");\n'+
+    '        }\n'+
+    '    \n'+
+    '        return func(...Object.values(templateVars));\n'+
+    '    } catch (e) {\n'+
+    '        console.log("Template " + templateString + " failed: " + e + " on model " + JSON.stringify(templateVars));\n'+
+    '        ConkW.setStatus("Template " + templateString + " failed: " + e + " on model " + JSON.stringify(templateVars));\n'+
+    '    }\n'+
+    '}');
+} catch (e) {
+    console.log("Using legacy template parsing.");
 }
+
+if (!ConkW.fillTemplate) { // Old browsers that cannot parse the above code.
+    ConkW.getFFT = function(path, obj) {
+        var f = ConkW.data.funcs[path];
+        if (!f) {
+            console.log("creating " + path);
+            ConkW.data.funcs[path] = f = Function("num", "str", "timestamp", "return " + path);
+        }
+        var res = f(obj.num, obj.str, obj.timestamp);
+        return res;
+    }
+    
+    ConkW.fillTemplate = function(template, map) {
+        var res = template.replace(/\$\{.+?}/g, function(match) {
+            const path = match.substr(2, match.length - 3).trim();
+            return ConkW.getFFT(path, map);
+        });
+        return res;
+    }
+}  
 
 ConkW.refresh = function(data) {
     ConkW.data.lastupdate = new Date().getTime();
@@ -580,7 +609,7 @@ ConkW.extractRawValue = function(valueexpr, data) {
             var ns = data[valueexpr.datatype];
             return ns ? ns[valueexpr.expression] : undefined;
         case "e":
-            return fillTemplate(valueexpr.expression, data);
+            return this.fillTemplate(valueexpr.expression, data);
         case "l":
             return valueexpr.expression;
     }

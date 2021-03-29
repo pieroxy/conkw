@@ -1,5 +1,5 @@
 window.ConkW = window.ConkW || {};
-ConkW.data = ConkW.data || {};
+ConkW.data = ConkW.data || {funcs:{}};
 ConkW.dates = ConkW.dates || {};
 
 ConkW.clockFaces = [
