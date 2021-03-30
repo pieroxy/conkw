@@ -22,7 +22,7 @@ Conkw was spawned out of a simple idea: We all have an old laptop or tablet lyin
 * More tests in progress.
 
 ## Back-end support
-* Any OS where you can install java 8 or greater. According to [Oracle](https://www.oracle.com/java/technologies/javase/products-doc-jdk8-jre8-certconfig.html) you need something as recent as:
+* Any OS where you can install java 8 or greater. According to [Oracle](https://www.oracle.com/java/technologies/javase/products-doc-jdk8-jre8-certconfig.html) you need something at least as recent as:
   * Windows Vista SP2 (2007)
   * Windows Server 2008 R2 (2009)
   * Ubuntu Linux 12.04 LTS - both ARM and x86 (2012)
@@ -32,7 +32,7 @@ Conkw was spawned out of a simple idea: We all have an old laptop or tablet lyin
 
 * Notes:
   * More OS can run Java8, such as Windows XP, MaxOS 10.6 and Ubuntu 10.04 but not from the official download pages. You will need to fiddle a bit and find the proper download.
-  * The system grabbers might start misbehaving on very old systems. You will then have to rely on scripts in your crontab to extract the desired data and combine them with the FileGrabber.
+  * The system grabbers might start to fail extracting some class of data on very old systems. You may have to rely on scripts in your crontab to extract the desired data and combine them with the FileGrabber.
 
 ## Project status
 This project is being imported from a dirty local repository, so hang in there for a few days and something usable should pop up soon.
