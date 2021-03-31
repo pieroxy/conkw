@@ -22,14 +22,14 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber {
   private long lastRun=-1;
   private File storage;
 
-  File getCacheFile() {
+  private File getCacheFile() {
     if (storage==null) {
       storage = new File(getStorage(), getName()+".cache.json");
     }
     return storage;
   }
 
-  ResponseData loadCacheFile() {
+  private ResponseData loadCacheFile() {
     File cacheFile = getCacheFile();
     if (!cacheFile.exists()) {
       log(Level.INFO, "Cache file not found, might be the first run.");
@@ -48,7 +48,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber {
     return null;
   }
 
-  void writeCacheFile(ResponseData data) {
+  private void writeCacheFile(ResponseData data) {
     CachedData cdata = new CachedData();
     cdata.setCacheKey(getCacheKey());
     cdata.setData(data);
@@ -66,12 +66,12 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber {
   }
 
   @Override
-  public boolean changed() {
+  public final boolean changed() {
     return System.currentTimeMillis() - lastRun > getTtl().toMillis();
   }
 
   @Override
-  public ResponseData grabSync() {
+  public final ResponseData grabSync() {
     if (lastRun==-1) {
       ResponseData data = loadCacheFile();
       if (data!=null && data.getErrors().isEmpty()) {

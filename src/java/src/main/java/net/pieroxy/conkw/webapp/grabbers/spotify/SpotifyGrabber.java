@@ -4,6 +4,7 @@ import net.pieroxy.conkw.utils.DebugTools;
 import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.utils.RandomHelper;
 import net.pieroxy.conkw.webapp.grabbers.AsyncGrabber;
+import net.pieroxy.conkw.webapp.grabbers.TimeThrottledGrabber;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.io.*;
@@ -13,11 +14,12 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
-public class SpotifyGrabber extends AsyncGrabber {
+public class SpotifyGrabber extends TimeThrottledGrabber {
 
   static final String NAME = "spotify";
   private File DATAFILE = null;
@@ -122,11 +124,6 @@ public class SpotifyGrabber extends AsyncGrabber {
     }
   }
 
-  @Override
-  public boolean changed() {
-    return true;
-  }
-
   public SpotifyGrabber() {
   }
 
@@ -137,8 +134,12 @@ public class SpotifyGrabber extends AsyncGrabber {
 
 
   @Override
-  public ResponseData grabSync() {
-    ResponseData sr = new ResponseData(this, System.currentTimeMillis());
+  protected Duration getTtl() {
+    return Duration.ofSeconds(3);
+  }
+
+  @Override
+  protected void load(ResponseData sr) {
     try {
       loadSpotify(sr);
     } catch (Exception e) {
@@ -146,7 +147,11 @@ public class SpotifyGrabber extends AsyncGrabber {
       e.printStackTrace();
       sr.addError("spotify-error: " + e.getMessage());
     }
-    return sr;
+  }
+
+  @Override
+  protected String getCacheKey() {
+    return clientId;
   }
 
   private void loadSpotify(ResponseData r) throws IOException {
