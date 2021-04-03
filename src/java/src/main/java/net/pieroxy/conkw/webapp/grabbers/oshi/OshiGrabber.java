@@ -9,8 +9,6 @@ import oshi.software.os.OSService;
 import oshi.software.os.OSSession;
 import oshi.util.EdidUtil;
 
-import javax.servlet.http.HttpServletRequest;
-
 import java.time.Duration;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -31,7 +29,6 @@ public class OshiGrabber extends AsyncGrabber {
   Map<String, IOStats> netStats;
 
   private long lastGrabSync = -1;
-  private boolean computeMax = false;
 
   private class IOStats {
     long reads;
@@ -46,7 +43,6 @@ public class OshiGrabber extends AsyncGrabber {
   @Override
   public ResponseData grabSync() {
     long now = System.currentTimeMillis();
-    computeMax = now-lastGrabSync < 1050; // Max should only be computed on the regular runs, not after a wake from sleep.
     lastGrabSync = now;
 
     // Garbage generated and time elapsed are measured on my computer. They give an order of magnitude.
@@ -353,12 +349,8 @@ public class OshiGrabber extends AsyncGrabber {
       long in = nic.getBytesRecv() - stats.reads;
       long out = nic.getBytesSent() - stats.writes;
       if (extract) {
-        if (computeMax) {
-          res.addMetric("max$netbw_in_"+i, computeAutoMax("netbw_in_"+i, in));
-          res.addMetric("max$netbw_out_"+i, computeAutoMax("netbw_out_"+i, out));
-        }
-        res.addMetric("netbw_in_"+i, in);
-        res.addMetric("netbw_out_"+i, out);
+        computeAutoMaxPerSecond(res, "netbw_in_"+i, in);
+        computeAutoMaxPerSecond(res, "netbw_out_"+i, out);
         res.addMetric("netbw_speed_"+i, nic.getSpeed()/8);
       }
       totalin+=in;
@@ -370,12 +362,8 @@ public class OshiGrabber extends AsyncGrabber {
     }
     res.addMetric("netbw_count", i);
     if (globalextract) {
-      if (computeMax) {
-        res.addMetric("max$netbw_in", computeAutoMax("netbw_in", totalin));
-        res.addMetric("max$netbw_out", computeAutoMax("netbw_out", totalout));
-      }
-      res.addMetric("netbw_in", totalin);
-      res.addMetric("netbw_out", totalout);
+      computeAutoMaxPerSecond(res, "netbw_in", totalin);
+      computeAutoMaxPerSecond(res, "netbw_out", totalout);
       res.addMetric("netbw_speed", totalspeed);
     }
   }
@@ -394,7 +382,7 @@ public class OshiGrabber extends AsyncGrabber {
 
   private void extractDisksIo(ResponseData res) {
     if (disksStats == null) disksStats =  new HashMap<>();
-    long tr=0,tw=0;
+    double tr=0,tw=0;
     StringBuilder allnames = new StringBuilder();
     for (HWDiskStore d : extractor.getDisks()) {
       String name = d.getName();
@@ -405,12 +393,8 @@ public class OshiGrabber extends AsyncGrabber {
       } else {
         long r=d.getReadBytes()-ds.reads;
         long w=d.getWriteBytes()-ds.writes;
-        res.addMetric("diskios_read_bytes_"+name, r);
-        res.addMetric("diskios_write_bytes_"+name, w);
-        if (computeMax) {
-          res.addMetric("max$diskios_read_bytes_"+name, computeAutoMax("diskios_read_bytes_"+name, r));
-          res.addMetric("max$diskios_write_bytes_"+name, computeAutoMax("diskios_write_bytes_"+name, w));
-        }
+        computeAutoMaxPerSecond(res, "diskios_read_bytes_"+name, r);
+        computeAutoMaxPerSecond(res, "diskios_write_bytes_"+name, w);
         tr+=r;
         tw+=w;
         if (allnames.length()>0) allnames.append(',');
@@ -418,14 +402,10 @@ public class OshiGrabber extends AsyncGrabber {
       }
       ds.reads = d.getReadBytes();
       ds.writes = d.getWriteBytes();
-      if (computeMax) {
-        res.addMetric("max$diskios_read_bytes", computeAutoMax("diskios_read_bytes", tr));
-        res.addMetric("max$diskios_write_bytes", computeAutoMax("diskios_write_bytes", tw));
-      }
-      res.addMetric("diskios_read_bytes", tr);
-      res.addMetric("diskios_write_bytes", tw);
-      res.addMetric("diskios_disks", allnames.toString());
     }
+    computeAutoMaxPerSecond(res, "diskios_read_bytes", tr);
+    computeAutoMaxPerSecond(res, "diskios_write_bytes", tw);
+    res.addMetric("diskios_disks", allnames.toString());
   }
 
   private void extractDisks(ResponseData res) {

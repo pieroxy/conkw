@@ -1,5 +1,6 @@
 package net.pieroxy.conkw.webapp.grabbers;
 
+import net.pieroxy.conkw.utils.LongHolder;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +30,7 @@ public abstract class Grabber {
   private static volatile MaxComputer maxComputer = null;
 
   Map<String, ResponseData> cachedResponses = new HashMap<>();
+  Map<String, LongHolder> maxValues = new HashMap<>();
 
   public String processAction(Map<String, String[]> parameterMap) {
     return "";
@@ -132,10 +134,23 @@ public abstract class Grabber {
     return l;
   }
 
-  protected double computeAutoMax(String metricName, double value) {
-    return maxComputer.getMax(this, metricName, value);
+  protected void computeAutoMaxPerSecond(ResponseData res, String metricName, double value) {
+    res.addMetric(metricName, value);
+    LongHolder lh = maxValues.get(metricName);
+    if (lh == null) {
+      maxValues.put(metricName, new LongHolder(System.currentTimeMillis()));
+    } else {
+      double ratio = (System.currentTimeMillis() - lh.value)/1000.;
+      if (ratio>0.50) { // Below 0.5s things might get out of whack
+        double mv = maxComputer.getMax(this, metricName, value/ratio);
+        log(Level.INFO, "ratio is " + ratio + " for metric " + metricName + " value " + value + " fv " + value/ratio + " mv " + mv);
+        res.addMetric("max$" + metricName, mv);
+      } else {
+        log(Level.INFO, "Ignoring value of " +value + " for metric " + metricName + " because ratio is "  + ratio);
+      }
+      lh.value = System.currentTimeMillis();
+    }
   }
-
 
   @Override
   public String toString() {

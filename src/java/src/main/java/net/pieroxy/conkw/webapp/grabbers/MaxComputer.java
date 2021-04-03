@@ -3,9 +3,7 @@ package net.pieroxy.conkw.webapp.grabbers;
 import com.dslplatform.json.DslJson;
 import com.dslplatform.json.JsonWriter;
 import com.dslplatform.json.runtime.Settings;
-import net.pieroxy.conkw.config.Config;
 import net.pieroxy.conkw.utils.JsonHelper;
-import net.pieroxy.conkw.utils.RemoveJsonCommentsInputStream;
 
 import java.io.*;
 import java.util.HashMap;
