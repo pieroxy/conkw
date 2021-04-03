@@ -457,7 +457,7 @@ ConkW.dates.updateClock = function(forceUpdate) {
   const seconds = now.getSeconds();
   const secondsDegree = (((seconds / 60) * 360) + 90);
   if (ConkW.data.cwClock.s) {
-    ConkW.data.cwClock.s.style.transform = `rotate(${secondsDegree}deg)`
+    ConkW.data.cwClock.s.style.transform = "rotate("+secondsDegree+"deg)";
     var sec = ConkW.currentClockFace.second;
     this.setShadow(ConkW.data.cwClock.s, ConkW.currentClockFace.second, secondsDegree);
   }
@@ -465,7 +465,7 @@ ConkW.dates.updateClock = function(forceUpdate) {
   if (seconds%5==0 || forceUpdate) {
     const minutes = now.getMinutes() + seconds / 60;
     const minutesDegree = (((minutes / 60) * 360) + 90);
-    ConkW.data.cwClock.m.style.transform = `rotate(${minutesDegree}deg)`
+    ConkW.data.cwClock.m.style.transform = "rotate("+minutesDegree+"deg)";
 
     if (seconds==0 || forceUpdate) {
       if (ConkW.currentClockFace.minute.shadowColor) {
@@ -474,7 +474,7 @@ ConkW.dates.updateClock = function(forceUpdate) {
 
       const hours = now.getHours() + minutes / 60;
       const hoursDegree = (((hours / 12) * 360) + 90);
-      ConkW.data.cwClock.h.style.transform = `rotate(${hoursDegree}deg)`
+      ConkW.data.cwClock.h.style.transform = "rotate("+hoursDegree+"deg)"
       if (ConkW.currentClockFace.hour.shadowColor) {
         this.setShadow(ConkW.data.cwClock.h, ConkW.currentClockFace.hour, hoursDegree);
       }
