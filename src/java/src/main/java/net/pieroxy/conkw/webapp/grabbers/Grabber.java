@@ -143,7 +143,6 @@ public abstract class Grabber {
       double ratio = (System.currentTimeMillis() - lh.value)/1000.;
       if (ratio>0.50) { // Below 0.5s things might get out of whack
         double mv = maxComputer.getMax(this, metricName, value/ratio);
-        log(Level.INFO, "ratio is " + ratio + " for metric " + metricName + " value " + value + " fv " + value/ratio + " mv " + mv);
         res.addMetric("max$" + metricName, mv);
       } else {
         log(Level.INFO, "Ignoring value of " +value + " for metric " + metricName + " because ratio is "  + ratio);
