@@ -5,9 +5,7 @@ import net.pieroxy.conkw.utils.PerformanceTools;
 import net.pieroxy.conkw.webapp.grabbers.AsyncGrabber;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.*;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -50,6 +48,9 @@ public class ProcGrabber extends AsyncGrabber {
   private ExternalBinaryRunner blockDeviceDetector;
   private boolean autoDetectBlockDevices;
 
+  private int nbCores;
+  private int nbThreads;
+
   private long lastGrabSync = -1;
   private boolean computeMax = false;
 
@@ -60,6 +61,8 @@ public class ProcGrabber extends AsyncGrabber {
 
   @Override
   public void setConfig(Map<String, String> config){
+
+    computeNbCpus();
 
     if (!new File("/proc/").exists() && !new File("/sys/").exists()) {
       disabled = true;
@@ -81,6 +84,26 @@ public class ProcGrabber extends AsyncGrabber {
       mdstatFile = new File(MDSTAT_FILE);
     }
 
+  }
+
+  private void computeNbCpus() {
+    if (nbCores == 0) {
+      try (Stream<String> stream = Files.lines( Paths.get("/proc/cpuinfo"), StandardCharsets.UTF_8)) {
+        stream.forEach((s) -> {
+          try {
+            if (s.startsWith("processor\t")) nbThreads++;
+            if (s.startsWith("core id\t"))
+              nbCores = Math.max(nbCores, Integer.parseInt(s.substring(s.lastIndexOf(' ') + 1)) + 1);
+          } catch (Exception e) {
+            log(Level.SEVERE, "Parsing /proc/cpuinfo, line: " + s, e);
+          }
+        });
+        if (nbCores==0) nbCores=-1;
+        if (nbThreads==0) nbThreads=-1;
+      } catch (IOException e) {
+        log(Level.SEVERE, "Grabbing /proc/cpuinfo", e);
+      }
+    }
   }
 
   private void extractBlockDevices() {
@@ -184,6 +207,7 @@ public class ProcGrabber extends AsyncGrabber {
     extract(r,"processes", this::grabProcesses, Duration.ZERO);
     extract(r,"uptime", this::grabUptimeAndLoad, Duration.ZERO);
     extract(r,"cpu", this::grabCpuUsage, Duration.ZERO);
+    extract(r,"nbcpu", this::grabCpuNum, Duration.ZERO);
     extract(r,"mem", this::grabMemUsage, Duration.ZERO);
     extract(r,"bdio", this::grabBlockDeviceIo, Duration.ZERO);
     extract(r,"net", this::getNetStats, Duration.ZERO);
@@ -203,6 +227,11 @@ public class ProcGrabber extends AsyncGrabber {
     }
 
     return r;
+  }
+
+  private void grabCpuNum(ResponseData responseData) {
+    responseData.addMetric("cpunum_cores", nbCores);
+    responseData.addMetric("cpunum_threads", nbThreads);
   }
 
   private void grabMdstat(ResponseData r) {
