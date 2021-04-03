@@ -230,8 +230,8 @@ public class ProcGrabber extends AsyncGrabber {
   }
 
   private void grabCpuNum(ResponseData responseData) {
-    responseData.addMetric("cpunum_cores", nbCores);
-    responseData.addMetric("cpunum_threads", nbThreads);
+    responseData.addMetric("nbcpu_cores", nbCores);
+    responseData.addMetric("nbcpu_threads", nbThreads);
   }
 
   private void grabMdstat(ResponseData r) {

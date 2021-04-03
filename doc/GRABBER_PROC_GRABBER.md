@@ -33,6 +33,15 @@ Metrics:
 * `num.loadavg2` The load average (5mn).
 * `num.loadavg3` The load average (15mn).
 
+## nbcpu
+Extracts the number of cores and threads on the system, as viewed in `/proc/cpuinfo`. Note that these metrics are extracted at startup time and never updated throughout the lifetime of the conkw instance.
+
+Metrics:
+
+* `num.nbcpu_cores` The number of cores.
+* `num.nbcpu_threads` The number of logical processors viewed by the system, including hyperthreaded cores.
+
+
 ## cpu
 Extracts CPU activity over the last second, as viewed in `/proc/stat`. 
 

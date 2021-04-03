@@ -175,15 +175,15 @@
                 <heading>LOAD AVG</heading>
                 <label>        1mn: </label>
                 <cw-label cw-value-warn="l:num:valueabove:16" cw-ns="proc" cw-value="m:num::loadavg1"></cw-label>
-                <gauge cw-ns="proc" cw-gauge0="default:m:num::loadavg1" cw-min="l:num::0" cw-max="l:num::16" cw-value-warn="l:num::15.9"></gauge>
+                <gauge cw-ns="proc" cw-gauge0="default:m:num::loadavg1" cw-min="l:num::0" cw-max="e:num::${num.nbcpu_threads*2}" cw-value-warn="m:num::nbcpu_threads"></gauge>
                 <BR/>
                 <label>        5mn: </label>
                 <cw-label cw-ns="proc" cw-value="m:num::loadavg2"></cw-label>
-                <gauge cw-ns="proc" cw-gauge0="default:m:num::loadavg2" cw-min="l:num::0" cw-max="l:num::16" cw-value-warn="l:num::15.9"></gauge>
+                <gauge cw-ns="proc" cw-gauge0="default:m:num::loadavg2" cw-min="l:num::0" cw-max="e:num::${num.nbcpu_threads*2}" cw-value-warn="m:num::nbcpu_threads"></gauge>
                 <BR/>
                 <label>       15mn: </label>
                 <cw-label cw-ns="proc" cw-value="m:num::loadavg3"></cw-label>
-                <gauge cw-ns="proc" cw-gauge0="default:m:num::loadavg3" cw-min="l:num::0" cw-max="l:num::16" cw-value-warn="l:num::15.9"></gauge>
+                <gauge cw-ns="proc" cw-gauge0="default:m:num::loadavg3" cw-min="l:num::0" cw-max="e:num::${num.nbcpu_threads*2}" cw-value-warn="m:num::nbcpu_threads"></gauge>
                 <BR/>
             </div>
 
