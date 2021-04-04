@@ -81,11 +81,15 @@ Metrics extracted for every device, here for `/dev/sda`:
 
 * `num.read_bytes_sda` The number of bytes read in the last second.
 * `num.write_bytes_sda` The number of bytes written in the last second.
+* Auto max: `num.max$read_bytes_sda` The maximum number observed for this value.
+* Auto max: `num.max$write_bytes_sda` The maximum number observed for this value.
 
 Global metrics:
 
 * `num.read_bytes_all` The sum of all reads on all monitored devices.
 * `num.write_bytes_all`  The sum of all writes on all monitored devices.
+* Auto max: `num.max$read_bytes_all` The maximum number observed for this value.
+* Auto max: `num.max$write_bytes_all` The maximum number observed for this value.
 * `str.allbd` The comma separated list of monitored devices, for example: `sda,sdb,sdc,nvme0n1`
 
 
@@ -96,6 +100,11 @@ Metrics:
 
 * `num.netp_in` The number of bytes in since the last second.
 * `num.netp_out` The number of bytes out since the last second.
+
+These two metrics have an auto maximum value computed:
+
+* `num.max$netp_in` The maximum number observed for this value.
+* `num.max$netp_out` The maximum number observed for this value.
 
 
 ## battery

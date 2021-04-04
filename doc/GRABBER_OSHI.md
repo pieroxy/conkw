@@ -136,12 +136,16 @@ Metrics:
 
 * `num.diskios_read_bytes` The number of bytes read during the last second on all disks, in bytes.
 * `num.diskios_write_bytes` The number of bytes written during the last second on all disks, in bytes.
+* Auto max: `num.max$diskios_read_bytes` The maximum number observed for this value.
+* Auto max: `num.max$diskios_write_bytes` The maximum number observed for this value.
 * `num.diskios_disks` The list of disks being monitored. For example: `/dev/sdd,/dev/nvme0n1`
 
 For each one of the disks *d* :
 
 * `num.diskios_read_bytes_d` The number of bytes read during the last second, in bytes.
 * `num.diskios_write_bytes_d` The number of bytes written during the last second, in bytes.
+* Auto max: `num.max$diskios_read_bytes_d` The maximum number observed for this value.
+* Auto max: `num.max$diskios_write_bytes_d` The maximum number observed for this value.
 
 
 ## disksinfos
@@ -199,12 +203,16 @@ Metrics:
 * `num.netbw_count` The number of network interfaces.
 * `num.netbw_in` The total bytes in since the last second.
 * `num.netbw_out` The total bytes out since the last second.
+* Auto max: `num.max$netbw_in` The maximum number observed for this value.
+* Auto max: `num.max$netbw_out` The maximum number observed for this value.
 * `num.netbw_speed` The sum of all interfaces speed. 
 
 For each one of those interfaces *i*, starting at zero:
 
 * `num.netbw_in_i` The total bytes in since the last second.
 * `num.netbw_out_i` The total bytes out since the last second.
+* Auto max: `num.max$netbw_in_i` The maximum number observed for this value.
+* Auto max: `num.max$netbw_out_i` The maximum number observed for this value.
 * `num.netbw_speed_i` The speed of the interface, in bytes per second, or -1 if not available.
 
 ## battery
