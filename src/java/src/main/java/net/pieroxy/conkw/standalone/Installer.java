@@ -16,9 +16,11 @@ import static net.pieroxy.conkw.utils.StreamTools.copyStreamAndClose;
 public class Installer {
 
     private final boolean overrideConfig;
+    private final boolean overrideUI;
 
-    public Installer(boolean overrideConfig) {
+    public Installer(boolean overrideConfig, boolean overrideUI) {
         this.overrideConfig = overrideConfig;
+        this.overrideUI = overrideUI;
     }
 
     public void run() throws Exception {
@@ -55,7 +57,17 @@ public class Installer {
 
     private void doInstall() throws Exception {
         String java = System.getProperty("java.home");
+
+        // Creating directory structure
         Files.createDirectories(ConfigReader.getConfDir().toPath());
+        Files.createDirectories(ConfigReader.getDataDir().toPath());
+        Files.createDirectories(ConfigReader.getTmpDir().toPath());
+        Files.createDirectories(ConfigReader.getBinDir().toPath());
+        Files.createDirectories(ConfigReader.getLogDir().toPath());
+        Files.createDirectories(ConfigReader.getUiDir().toPath());
+        Files.createDirectories(ConfigReader.getWebappDir().toPath());
+
+        // Initializing config directory
         File sampleFG = new File(ConfigReader.getConfDir(), "example.properties");
         StreamTools.copyTextFilePreserveOriginalAndWarnOnStdout(
             getClass().getClassLoader().getResourceAsStream("config.sample.jsonc"),
@@ -70,13 +82,11 @@ public class Installer {
                 getClass().getClassLoader().getResourceAsStream("logging.properties"),
                 ConfigReader.getLoggingConfigFile(),
                 overrideConfig, null);
-        Files.createDirectories(ConfigReader.getDataDir().toPath());
-        Files.createDirectories(ConfigReader.getTmpDir().toPath());
-        Files.createDirectories(ConfigReader.getBinDir().toPath());
-        Files.createDirectories(ConfigReader.getLogDir().toPath());
-        Files.createDirectories(ConfigReader.getUiDir().toPath());
-        Files.createDirectories(ConfigReader.getWebappDir().toPath());
+
+        // Deploying webapp
         initWebapp();
+
+        // Deploying binaries and startup script.
         Files.copy(
                 new File(getClass().getProtectionDomain().getCodeSource().getLocation().toURI()).toPath(),
                 new File(ConfigReader.getBinDir(), "conkw.jar").toPath(),
@@ -84,6 +94,22 @@ public class Installer {
         FileOutputStream script = new FileOutputStream(new File(ConfigReader.getBinDir(), getFilename()));
         script.write(("\"" + java + "/bin/java\" -verbose:gc \"-Djava.util.logging.config.file="+ConfigReader.getLoggingConfigFile().getAbsolutePath()+"\" -Xms50m -jar \"" + ConfigReader.getBinDir() + File.separator + "conkw.jar\" --run-server >> \"" + ConfigReader.getLogDir() + "/system.log\" 2>&1\n").getBytes());
         script.close();
+
+        // Install default UI
+        switch (OsCheck.getOperatingSystemType()) {
+            case Linux:
+                StreamTools.copyTextFilePreserveOriginalAndWarnOnStdout(
+                    getClass().getClassLoader().getResourceAsStream("default-linux.html"),
+                    new File(ConfigReader.getUiDir(), "index.html"),
+                    overrideUI, null);
+                break;
+            default:
+                StreamTools.copyTextFilePreserveOriginalAndWarnOnStdout(
+                    getClass().getClassLoader().getResourceAsStream("default-nonlinux.html"),
+                    new File(ConfigReader.getUiDir(), "index.html"),
+                    overrideUI, null);
+                break;
+        }
     }
 
     private String getFilename() {

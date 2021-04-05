@@ -1,0 +1,162 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover"/>
+        <meta charset="utf-8">
+        <meta name="format-detection" content="telephone=no">
+        <title>ConkW</title>
+        <link href="../css/fonts.css" rel="stylesheet">
+        <link href="../css/conkw-common.css" rel="stylesheet">
+        <link href="../css/conkw.css" rel="stylesheet">
+        <script src="/js/polyfills.js"></script>
+        <script src="/js/date.js"></script>
+        <script src="/js/index.js"></script>
+        <link rel="icon" type="image/png" sizes="256x256" href="/icon.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="manifest" href="/site.webmanifest">
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000066">
+        <meta name="msapplication-TileColor" content="#000066">
+        <meta name="theme-color" content="#ffffff">
+        <style>
+          cw-label {
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        </style>
+    </head>
+    <body onload="ConkW.init()" grabbers="oshi,sys,spotify">
+        <pagetitle><inlinelogo></inlinelogo><a href="/">CONKW</a></pagetitle>
+        <columncontainer>
+            <label>  Status : </label><cw-label style="max-width:200px;display:inline-block" id="cw-status"></cw-label><BR/>
+            <label>   Delay : </label><label id="cw-delay"></label><BR/>
+            <div id="clockanddate" class="cw-block" style="text-align:center;font-size:16px;">
+                <br/>
+                <cw-date cw-id="dayoftheweek"></cw-date>
+                <cw-date cw-id="month"></cw-date> <cw-date cw-id="dayofmonth"></cw-date>
+                <cw-date cw-id="year"></cw-date>
+                <br/>
+                <br/>
+                <clock style="width:240px;height:240px;overflow: hidden;padding-top:3px;margin:auto" onclick="ConkW.dates.rotateClockFace(event, this)"></clock>
+            </div>
+            
+            <div cw-ns="oshi" cw-ifextracted="memory" class="cw-block">
+              <heading>MEMORY</heading>
+              <label>     Total : </label><cw-label cw-ns="oshi" cw-value="m:num:size:memory_total"></cw-label>
+              <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::memory_total" cw-value-warn="e:num:valueabove:${num.memory_total*0.8}" cw-gauge0="default:m:num::memory_in_use"></gauge>
+              <br/>
+              <label> available : </label><cw-label cw-ns="oshi" cw-value="m:num:size:memory_available"></cw-label>
+              <hgauge style="height:3em" cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::memory_total" cw-hgauge0="#208020:m:num::memory_in_use"></hgauge>
+              <br/>
+              <label>    in use : </label><cw-label cw-ns="oshi" cw-value="m:num:size:memory_in_use"></cw-label>
+              <br/>
+              <label> page size : </label><cw-label cw-ns="oshi" cw-value="m:num:size:memory_page_size"></cw-label>
+              <br/>
+              <label>Swap Total : </label><cw-label cw-ns="oshi" cw-value="m:num:size:virtualmemory_swap_total"></cw-label>
+              <br/>
+              <label> Swap Used : </label><cw-label cw-ns="oshi" cw-value="m:num:size:virtualmemory_swap_used"></cw-label>
+              <gauge cw-ns="oshi" cw-min="l:num::0" log="true" cw-max="m:num::virtualmemory_swap_total" cw-value-warn="e:num::${num.virtualmemory_swap_total*0.5}" cw-gauge0="#208020:m:num::virtualmemory_swap_used"></gauge>
+              <br/>
+            </div>
+        
+            <div cw-ns="oshi" cw-ifextracted="cpu" class="cw-block">
+              <heading>CPU</heading>
+              <label>   CPU usage : </label><cw-label cw-ns="oshi" cw-value="m:num:prc01:cpu_load"></cw-label>
+              <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="l:num::1" cw-value-warn="l:num::0.8" cw-gauge0="default:m:num::cpu_load"></gauge>
+              <br/>
+              <label>  Phy Pkg Ct : </label><cw-label cw-ns="oshi" cw-value="m:num::cpu_physical_package_count"></cw-label>
+              <hgauge style="height:3em" cw-ns="oshi" cw-min="l:num::0" cw-max="l:num::1" cw-hgauge0="default:m:num::cpu_load"></hgauge>
+              <br/>
+              <label> Phy Proc Ct : </label><cw-label cw-ns="oshi" cw-value="m:num::cpu_physical_processor_count"></cw-label>
+              <br/>
+              <label> Log Proc Ct : </label><cw-label cw-ns="oshi" cw-value="m:num::cpu_logical_processor_count"></cw-label>
+              <br/>
+              <label>    load 1mn : </label><cw-label cw-ns="oshi" cw-value="m:num:load:cpu_load_1"></cw-label>
+              <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::cpu_logical_processor_count" cw-value-warn="e:num:valueabove:${num.cpu_logical_processor_count*0.8}" cw-gauge0="default:m:num::cpu_load_1"></gauge>
+              <br/>
+              <label>    load 5mn : </label><cw-label cw-ns="oshi" cw-value="m:num:load:cpu_load_2"></cw-label>
+              <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::cpu_logical_processor_count" cw-value-warn="e:num:valueabove:${num.cpu_logical_processor_count*0.8}" cw-gauge0="default:m:num::cpu_load_2"></gauge>
+              <br/>
+              <label>   load 15mn : </label><cw-label cw-ns="oshi" cw-value="m:num:load:cpu_load_3"></cw-label>
+              <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::cpu_logical_processor_count" cw-value-warn="e:num:valueabove:${num.cpu_logical_processor_count*0.8}" cw-gauge0="default:m:num::cpu_load_3"></gauge>
+              <br/>
+            </div>
+        
+            <div cw-ns="oshi" cw-ifextracted="diskios" class="cw-block">
+              <heading>DISK IOs</heading>
+              <br/>
+              <label>    Read : </label><cw-label cw-ns="oshi" cw-value="m:num:size:diskios_read_bytes"></cw-label>
+              <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::max$diskios_read_bytes" cw-value-warn="e:num::m:num::${num.max$diskios_read_bytes*0.9}" cw-gauge0="default:m:num::diskios_read_bytes"></gauge>
+              <label class="softlabel">     Max : <cw-label cw-ns="oshi" cw-value="m:num:size:max$diskios_read_bytes"></cw-label></label>
+              <hgauge cw-ns="oshi" cw-min="l:num::0" log="true" cw-max="m:num::max$diskios_read_bytes" cw-hgauge0="#208020:m:num::diskios_read_bytes"></hgauge>
+              <br/>
+              <label>    Wrt. : </label><cw-label cw-ns="oshi" cw-value="m:num:size:diskios_write_bytes"></cw-label>
+              <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::max$diskios_write_bytes" cw-value-warn="e:num::m:num::${num.max$diskios_write_bytes*0.9}" cw-gauge0="default:m:num::diskios_write_bytes"></gauge>
+              <label class="softlabel">     Max : <cw-label cw-ns="oshi" cw-value="m:num:size:max$diskios_write_bytes"></cw-label></label>
+              <hgauge cw-ns="oshi" cw-min="l:num::0" log="true" cw-max="m:num::max$diskios_write_bytes" cw-hgauge0="#208020:m:num::diskios_write_bytes"></hgauge>
+              <br/>
+            </div>
+  
+            <div cw-ns="oshi" cw-ifextracted="netbw" class="cw-block">
+              <heading>NET BW</heading>
+              <br/>
+              <label>All Down : </label><cw-label cw-ns="oshi" cw-value="m:num:size:netbw_in"></cw-label>
+              <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::netbw_speed" cw-value-warn="e:num::${num.netbw_speed*0.9}" cw-gauge0="default:m:num::netbw_in"></gauge>
+              <label class="softlabel" >     Max : <cw-label cw-ns="oshi" cw-value="m:num:size:max$netbw_in"></cw-label></label>
+              <hgauge cw-ns="oshi" cw-min="l:num::0" log="true" cw-max="m:num::netbw_speed" cw-hgauge0="#208020:m:num::netbw_in"></hgauge>
+              <br clear="both"/>
+              <label>All Up   : </label><cw-label cw-ns="oshi" cw-value="m:num:size:netbw_out"></cw-label>
+              <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::netbw_speed" cw-value-warn="e:num::${num.netbw_speed*0.9}" cw-gauge0="default:m:num::netbw_out"></gauge>
+              <label class="softlabel" >     Max : <cw-label class="softlabel" cw-ns="oshi" cw-value="m:num:size:max$netbw_out"></cw-label></label>
+              <hgauge cw-ns="oshi" cw-min="l:num::0" log="true" cw-max="m:num::netbw_speed" cw-hgauge0="#208020:m:num::netbw_out"></hgauge>
+              <br/>
+              <br/>
+            </div>
+  
+            <div cw-ns="oshi" cw-ifextracted="battery" class="cw-block">
+              <heading>BATTERY</heading>
+              <div cw-ns="oshi" cw-style-display="e:str::${num.battery_remaining_prc===undefined?'':'none'}">No battery detected</div>
+              <div cw-ns="oshi" cw-style-display="e:str::${num.battery_remaining_prc===undefined?'none':''}">
+                <cw-label style="margin-top:0.5em" cw-value-warn="l:num:valuebelow:0.2" cw-ns="oshi" cw-value="m:num:prc01:battery_remaining_prc"></cw-label>
+                <div class="battery"><img src="/battery/batt_left.png"><span class="battery_middle"><img cw-ns="oshi" cw-style-display="e:str::${num.battery_plugged==1?'':'none'}" src="/battery/batt_plugged.png"><gauge cw-ns="oshi" cw-gauge0="default:m:num::battery_remaining_prc" cw-min="l:num::0" cw-max="l:num::1" cw-value-warn="l:num:valuebelow:0.25"></gauge></span><img src="/battery/batt_right.png"></div>
+              </div>
+            </div>
+  
+            <div id="hdd" class="cw-block">
+                <heading>HDD USAGE</heading>
+                size&nbsp;&nbsp;&nbsp;used&nbsp;&nbsp;&nbsp;free<span style="float:right;">name</span>
+                <BR/><HR/>
+                <div cw-ns="sys" cw-multinode-in="m:str::freespace_mountpoints" cw-multinode-pattern="#">
+                  <label cw-ns="sys" cw-value="l:str::#" style="display:block;text-align:right"></label>
+                  <cw-label cw-ns="sys" cw-value="m:num:size:freespace_total_#"></cw-label>&nbsp;<cw-label cw-ns="sys" cw-value="m:num:size:freespace_used_#"></cw-label>&nbsp;<cw-label cw-ns="sys" cw-value="m:num:size:freespace_usable_#"></cw-label><gauge cw-ns="sys" cw-gauge0="default:m:num::freespace_used_#" cw-min="l:num::0" cw-max="m:num::freespace_total_#"></gauge><BR/>
+                </div>
+            </div>
+
+            <div id="spotify">
+              <heading>SPOTIFY<cw-label style="float:right" cw-ns="spotify" cw-value="m:str::status"></cw-label></heading><BR/>
+              <img src="/icons/nosound.png" cw-ns="spotify" cw-prop-src="m:str::album_art" style="box-shadow:1px 1px 20px rgba(0,0,0,0.5);margin-left:45px;width:250px;height:250px;"></img><BR/><BR/>
+              <div class="steelborder" style="text-align: left;">
+                  <div class="lcd"  cw-ns="spotify" cw-stale="m:str:!exists:album_name"><div>
+                      <cw-label style="text-align: right;display:block; min-height:1em" cw-ns="spotify" cw-value="m:str::album_artist">Artist</cw-label>
+                      <cw-label cw-prop-title="m:str::album_date" cw-ns="spotify" cw-value="m:str::album_name">Album</cw-label> (<cw-label cw-ns="spotify" cw-value="m:str::album_date">Release date</cw-label>)<BR/>
+                      <cw-label cw-ns="spotify" cw-value="m:str::tracknum">00</cw-label>/<cw-label cw-ns="spotify" cw-value="m:str::album_tracks">XX</cw-label> <cw-label cw-ns="spotify" cw-value="m:str::trackname">Track</cw-label><BR/>
+                      <cw-label cw-ns="spotify" cw-value="m:num:hhmm:pos">00:00</cw-label>/<cw-label cw-ns="spotify" cw-value="m:num:hhmm:len">00:00</cw-label><gauge 
+                      cw-ns="spotify" cw-gauge0="default:m:num::pos" cw-min="l:num::0" cw-max="m:num::len"
+                      style="width: 150px"></gauge><BR/>
+                  </div></div>
+                  <img onmousedown="md(this)" onmouseup="mu(this)" src="/mmedia/plastic-button-prev.png" onclick="ConkW.callApi('grabberAction=spotify&prev=true')">
+                  <img onmousedown="md(this)" onmouseup="mu(this)" src="/mmedia/plastic-button-pause.png" onclick="ConkW.callApi('grabberAction=spotify&pause=true')">
+                  <img onmousedown="md(this)" onmouseup="mu(this)" src="/mmedia/plastic-button-play.png" onclick="ConkW.callApi('grabberAction=spotify&play=true')">
+                  <img onmousedown="md(this)" onmouseup="mu(this)" src="/mmedia/plastic-button-next.png" onclick="ConkW.callApi('grabberAction=spotify&next=true')">
+                  <img cw-ns="spotify" cw-prop-src="e:str::${str.status=='Playing'?'/backgrounds/green-led-on.png':'/backgrounds/green-led-off.png'}" src="" style="float: right;">
+                  <BR>
+              </div>
+            </div>
+  
+
+
+          </columncontainer>
+    </body>
+</html>
