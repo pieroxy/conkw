@@ -283,6 +283,7 @@ clock #clock-minute {
     box-shadow: inset -3px -3px 3px -3px black, inset 3px 3px 3px -3px white;
     background-size: 100%;
     background-position: top;
+    display: inline-block;
 }
 
 .steelborder img {
