@@ -282,7 +282,8 @@ public class OshiGrabber extends AsyncGrabber {
 
   private void extractBattery(ResponseData res) {
     for (PowerSource psu : extractor.getPowerSources()) {
-      res.addMetric("battery_remaining_prc", psu.getRemainingCapacityPercent());
+      double d = psu.getRemainingCapacityPercent();
+      if (d >= 0) res.addMetric("battery_remaining_prc", d);
       res.addMetric("battery_plugged", (psu.isPowerOnLine() || psu.isCharging() || !psu.isDischarging())?1:0);
     }
   }
