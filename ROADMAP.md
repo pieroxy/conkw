@@ -21,7 +21,6 @@ Those planned (so expect them later)
 * Mail Google - to get latest mails
 * Mail Outlook - to get latest mails
 * Freebox - to get internet status on this home router
-* https cert expiration date - to make sure your https certs are not about to expire.
 * Fetch another instance on the network and ingest all or part of its metrics
 * Push metrics to another instance on the network through Emi (See above)
 
