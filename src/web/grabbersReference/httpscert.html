@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover"/>
+        <meta charset="utf-8">
+        <meta name="format-detection" content="telephone=no">
+        <title>ConkW - Grabbers reference - File</title>
+        <link href="../css/fonts.css" rel="stylesheet">
+        <link href="../css/conkw-common.css" rel="stylesheet">
+        <link href="../css/conkw.css" rel="stylesheet">
+        <script src="/js/polyfills.js"></script>
+        <script src="/js/date.js"></script>
+        <script src="/js/index.js"></script>
+        <link rel="icon" type="image/png" sizes="256x256" href="/icon.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="manifest" href="/site.webmanifest">
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000066">
+        <meta name="msapplication-TileColor" content="#000066">
+        <meta name="theme-color" content="#ffffff">
+        <style>
+        </style>
+    </head>
+    <body onload="ConkW.init()" grabbers="httpscert">
+        <pagetitle><inlinelogo></inlinelogo><a href="/">CONKW</a> - Reference UI for <code>FileGrabber</code></pagetitle>
+        
+        <div style="margin:0 25%">
+          <div>
+            <heading>INDEX</heading>
+            <a href="/grabbersReference/">Go to the grabbers index</a><br/>
+            <a href="/doc/GRABBER_HTTPS_CERT.html">Documentation</a>
+            <br><br><br>
+          </div>
+
+
+          <div class="hblock" style="width:300px">
+            <label>  Status : </label><cw-label style="max-width:200px;display:inline-block" id="cw-status"></cw-label><BR/>
+            <label>   Delay : </label><label id="cw-delay"></label>
+            <BR/><BR/><BR/>
+          </div>
+        </div>
+        <br><br><br>
+        <div style="text-align: center;">
+          <div style="text-align: left;display: inline-block;" cw-ns="httpscert" cw-multinode-in="m:str::alldomains" cw-multinode-pattern="@">
+            <label style="width:160px; text-align: right; overflow: hidden; text-overflow: ellipsis;">@: </label><gauge cw-ns="httpscert" cw-min="l:num::0" cw-max="l:num::30" cw-value-warn="l:num:valuebelow:15" cw-gauge0="default:m:num::days_@"></gauge><br>
+            <cw-label cw-ns="httpscert" cw-value="m:num:time_ms:ts_@"></cw-label>
+            <cw-label style="float:right" cw-ns="httpscert" cw-value="m:num:tstodatetime:date_@"></cw-label>
+            <br>
+          </div>
+        </div>
+    </body>
+</html>

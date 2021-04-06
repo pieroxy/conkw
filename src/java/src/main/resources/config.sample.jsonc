@@ -79,6 +79,13 @@
         "clientSecret":"Your client secret",
         "redirectUri":"Your redirect URI"
       }
+    },
+    {
+      // Https cert grabber. Extracts expiration date of an https cert.
+      "implementation":"net.pieroxy.conkw.utils.HttpsCertGrabber",
+      "parameters": {
+        "names":"google.com,facebook.com,apple.com"
+      }
     }
   ],
   // This is the port the web server will listen to. Note that values below 1024 are discouraged as they require

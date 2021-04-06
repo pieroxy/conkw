@@ -8,3 +8,5 @@ Here are the grabbers included in conkw:
 * [OpenWeatherMapGrabber](GRABBER_OWM.md)
 * [FileGrabber](GRABBER_FILE.md)
 * [SpotifyGrabber](GRABBER_SPOTIFY.md)
+* [HttpsCertGrabber](GRABBER_HTTPS_CERT.md)
+
