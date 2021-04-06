@@ -651,10 +651,14 @@ ConkW.dates.formatDow = function(ts) {
 
 ConkW.dates.formatDate = function(ts) {
   var date = new Date(ts);
-  return date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate();
+  return date.getFullYear() + "-" + ConkW.dates.patTwoNumbers(date.getMonth()+1) + "-" + ConkW.dates.patTwoNumbers(date.getDate());
 }
 
 ConkW.dates.formatDatetime = function(ts) {
   return this.formatDate(ts) + " " + this.formatTime(ts);
+}
+ 
+ConkW.dates.patTwoNumbers = function(num) {
+  return num<10 ? ("0"+num) : (""+num);
 }
  
