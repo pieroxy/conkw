@@ -345,6 +345,15 @@ ConkW.getProperLabel = function(key, value) {
     return "" + this.getPrecision(value);
 }
 
+ConkW.buttonPushed = function (e) {
+    if (e.src.indexOf("pushed")==-1) e.src = e.src.replace(".png", "-pushed.png");
+}
+ConkW.buttonReleased = function (e) {
+    setTimeout(function() { e.src = e.src.replace("-pushed.png", ".png"); }, 200);
+}
+
+
+
 ConkW.getStockChange = function(value) {
     var res = Number(value).toFixed(2);
     if (value > 0) res = "+" + res;

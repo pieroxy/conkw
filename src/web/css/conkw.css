@@ -283,7 +283,10 @@ clock #clock-minute {
     box-shadow: inset -3px -3px 3px -3px black, inset 3px 3px 3px -3px white;
     background-size: 100%;
     background-position: top;
+}
+.steelborderout {
     display: inline-block;
+    width:100%;
 }
 
 .steelborder img {
@@ -292,6 +295,9 @@ clock #clock-minute {
     filter: drop-shadow(0px 0px 1px rgba(0, 0, 0, 1));
 }
 
+.steelborder cw-label {
+    max-width: none;
+}
 
 .lcd {
     background-color: #7da190;
