@@ -12,14 +12,14 @@
 ## Conkw?
 Conkw was spawned out of a simple idea: We all have an old laptop or tablet lying around, gathering dust. Why not using this otherwise wasted screen real estate to display my much cherished data I used to have on my old Conky setup?
 
-* The easiest client-server setup is a web server and a browser.
+* The easiest client-server setup today is a web server and a browser.
 * All tablets and laptops have browsers.
 * Every reasonably modern computer can host a web server.
 
 ## UI Support
 
 * The UI supports iOS Safari down to iOS 9.3.5, hence supporting the iPad 2 and iPhone 4S, both released in 2011 as well as the iPod touch 5th gen released in 2012.
-* More tests in progress.
+* More tests and support in progress.
 
 ## Back-end support
 * Any OS where you can install java 8 or greater. According to [Oracle](https://www.oracle.com/java/technologies/javase/products-doc-jdk8-jre8-certconfig.html) you need something at least as recent as:
@@ -31,13 +31,13 @@ Conkw was spawned out of a simple idea: We all have an old laptop or tablet lyin
   * Mac OS 10.8.3
 
 * Notes:
-  * More OS can run Java8, such as Windows XP, MaxOS 10.6 and Ubuntu 10.04 but not from the official download pages. You will need to fiddle a bit and find the proper download.
+  * More OS than those listed above can run Java 8, such as Windows XP, MaxOS 10.6 and Ubuntu 10.04 but not from the official download pages. You will need to fiddle a bit and find the proper download.
   * The system grabbers might start to fail extracting some class of data on very old systems. You may have to rely on scripts in your crontab to extract the desired data and combine them with the FileGrabber.
 
 ## Project status
-This project is being imported from a dirty local repository, so hang in there for a few days and something usable should pop up soon.
+This project is being setup and is not yet considered as stable. While the product works and can already bring a lot of value, I don't feel it is mature yet. So for now, breaking changes are going to be frequent and without any warning, so be aware.
 
-For now, breaking changes are going to be frequent and without any warning, so be aware.
+If you want to try it out and use it, please, by all means do. I'm not going to break *everything* on a daily basis. But if you want to deploy this on your infrastructure and really invest in it, please drop an issue so I can guide you through what is stable and what is not at this stage.
 
 ## Documentation
 [Getting started here](doc/INDEX.md)
