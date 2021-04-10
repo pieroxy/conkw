@@ -37,7 +37,7 @@ Conkw was spawned out of a simple idea: We all have an old laptop or tablet lyin
 ## Project status
 This project is being setup and is not yet considered as stable. While the product works and can already bring a lot of value, I don't feel it is mature yet. So for now, breaking changes are going to be frequent and without any warning, so be aware.
 
-If you want to try it out and use it, please, by all means do. I'm not going to break *everything* on a daily basis. But if you want to deploy this on your infrastructure and really invest in it, please drop an issue so I can guide you through what is stable and what is not at this stage.
+If you want to try it out and use it, please, by all means do. I'm not going to break *everything* on a daily basis. But if you want to deploy this on your infrastructure and really invest in it, please start a discussion so I can guide you through what is stable and what is not at this stage. Good news is, most is stable.
 
 ## Documentation
 [Getting started here](doc/INDEX.md)
