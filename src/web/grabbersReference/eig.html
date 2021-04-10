@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover"/>
+        <meta charset="utf-8">
+        <meta name="format-detection" content="telephone=no">
+        <title>ConkW - Grabbers reference - Eig</title>
+        <link href="../css/fonts.css" rel="stylesheet">
+        <link href="../css/conkw-common.css" rel="stylesheet">
+        <link href="../css/conkw.css" rel="stylesheet">
+        <script src="/js/polyfills.js"></script>
+        <script src="/js/date.js"></script>
+        <script src="/js/index.js"></script>
+        <link rel="icon" type="image/png" sizes="256x256" href="/icon.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="manifest" href="/site.webmanifest">
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000066">
+        <meta name="msapplication-TileColor" content="#000066">
+        <meta name="theme-color" content="#ffffff">
+        <style>
+        </style>
+    </head>
+    <body onload="ConkW.init()" grabbers="test_eig">
+        <pagetitle><inlinelogo></inlinelogo><a href="/">CONKW</a> - Reference UI for <code>ExternalInstanceGrabber</code></pagetitle>
+        
+        <div style="margin:0 25%">
+          <div>
+            <heading>INDEX</heading>
+            <a href="/grabbersReference/">Go to the grabbers index</a><br/>
+            <a href="/doc/GRABBER_EIG.html">Documentation</a>
+            <br><br><br>
+          </div>
+
+
+          <div class="hblock" style="width:300px">
+            <label>  Status : </label><cw-label style="max-width:200px;display:inline-block" id="cw-status"></cw-label><BR/>
+            <label>   Delay : </label><label id="cw-delay"></label>
+            <BR/><BR/><BR/>
+          </div>
+            This is a sample ExternalInstanceGrabber named "test_eig". It grabs this very instance of conkw for
+            the sys grabber. Of course, there is absolutely no point in doing so, but it demonstrate how grabbing
+            a piece of data from a conkw running on another machine might be done.
+            <p>Have a look at the default configuration file to see this example. Or look at the <a href="/doc/GRABBER_EIG.html">documentation</a>.
+        </div>
+        <br><br><br>
+        <div style="text-align: center;">
+          <div style="text-align: left;display: inline-block;">
+
+
+
+            <div id="system general" class="cw-block">
+              <heading>SYSTEM</heading>
+              <label>      user : </label>
+              <cw-label cw-ns="test_eig" cw-value="m:str::sys_user"></cw-label>
+              <br/>
+              <label>  hostname : </label>
+              <cw-label cw-ns="test_eig" cw-value="m:str::sys_hostname"></cw-label>
+              <br/>
+              <label>  cpu arch : </label>
+              <cw-label cw-ns="test_eig" cw-value="m:str::sys_arch"></cw-label>
+              <br/>
+              <label>        OS : </label>
+              <cw-label cw-ns="test_eig" cw-value="m:str::sys_osname"></cw-label>
+              <br/>
+              <label>OS version : </label>
+              <cw-label cw-ns="test_eig" cw-value="m:str::sys_osversion"></cw-label>
+              <br/>
+              <label>    nb cpu : </label>
+              <cw-label cw-ns="test_eig" cw-value="m:num::sys_nbcpu"></cw-label>
+              <BR/>
+              <label>  load avg : </label>
+              <cw-label cw-ns="test_eig" cw-value="m:num::sys_systemloadavg"></cw-label>
+              <gauge cw-ns="test_eig" cw-gauge0="default:m:num::sys_systemloadavg" cw-min="l:num::0" cw-max="e:num::${num.sys_nbcpu*2}" cw-value-warn="m:num::sys_nbcpu"></gauge>
+          </div>
+  
+          <div id="system mem" class="cw-block">
+              <heading>MEMORY USAGE </heading>
+              <label>    Total: </label>
+              <cw-label cw-ns="test_eig" cw-value="m:num:size:sys_ramTotal"></cw-label>
+              <gauge cw-ns="test_eig" cw-min="l:num::0" cw-max="m:num::sys_ramTotal" cw-gauge0="#474:m:num::sys_ramUsed"></gauge>
+              <BR/>
+              <label>     Used: </label>
+              <cw-label cw-ns="test_eig" cw-value="m:num:size:sys_ramUsed"></cw-label>
+              <hgauge cw-bgcolor="#202040" cw-ns="test_eig" cw-hgauge0="#474:m:num::sys_ramUsed" cw-min="l:num::0" cw-max="m:num::sys_ramTotal" style="height:2em;"></hgauge>
+              <BR/>
+              <label>Available: </label>
+              <cw-label cw-ns="test_eig" cw-value="m:num:size:sys_ramAvailable"></cw-label>
+              <BR/>
+          
+              <heading>SWAP USAGE</heading>
+              <label>  </label>
+              <cw-label cw-value-warn="e:num:valueabove:${num.sys_swapTotal*0.5}" cw-ns="test_eig" cw-value="m:num:size:sys_swapUsed"></cw-label> /
+              <cw-label cw-ns="test_eig" cw-value="m:num:size:sys_swapTotal"></cw-label>
+              <gauge cw-ns="test_eig" cw-min="l:num::0" cw-max="m:num::sys_swapTotal" cw-value-warn="e:num::${num.sys_swapTotal*0.5}" cw-gauge0="default:m:num::sys_swapUsed"></gauge>
+          </div>
+  
+          <div id="system cpu" class="cw-block">
+              <heading>CPU </heading>
+              <label>     Usage: </label>
+              <cw-label cw-ns="test_eig" cw-value-warn="l:num:valueabove:0.8" cw-value="m:num:prc01:sys_totalCpuUsage"></cw-label>
+              <gauge cw-ns="test_eig" cw-min="l:num::0" cw-value-warn="l:num::0.8" cw-max="l:num::1" cw-gauge0="#474:m:num::sys_totalCpuUsage"></gauge>
+              <BR/>
+              <hgauge cw-bgcolor="#202040" cw-ns="test_eig" cw-hgauge0="#474:m:num::sys_totalCpuUsage" cw-min="l:num::0" cw-max="l:num::1" style="height:2em;width:300px"></hgauge>
+              <BR/>
+              <label>     conkw: </label>
+              <cw-label cw-ns="test_eig" cw-value="m:num:prc01:sys_processCpuUsage"></cw-label>
+              <gauge cw-ns="test_eig" cw-min="l:num::0" cw-max="l:num::1" cw-gauge0="#474:m:num::sys_processCpuUsage"></gauge>
+              <BR/>
+          </div>
+  
+          <div id="hdd" class="cw-block">
+              <heading>HDD USAGE</heading>
+              size&nbsp;&nbsp;&nbsp;used&nbsp;&nbsp;&nbsp;free<span style="float:right;">name</span>
+              <BR/><HR/>
+              <div cw-ns="test_eig" cw-multinode-in="m:str::sys_freespace_mountpoints" cw-multinode-pattern="#">
+                <label cw-ns="test_eig" cw-value="l:str::#" style="display:block;text-align:right"></label>
+                <cw-label cw-ns="test_eig" cw-value="m:num:size:sys_freespace_total_#"></cw-label>&nbsp;<cw-label cw-ns="test_eig" cw-value="m:num:size:sys_freespace_used_#"></cw-label>&nbsp;<cw-label cw-ns="test_eig" cw-value="m:num:size:sys_freespace_usable_#"></cw-label><gauge cw-ns="test_eig" cw-gauge0="default:m:num::sys_freespace_used_#" cw-min="l:num::0" cw-max="m:num::sys_freespace_total_#"></gauge><BR/>
+              </div>
+          </div>
+
+
+
+
+
+
+          </div>
+        </div>
+    </body>
+</html>

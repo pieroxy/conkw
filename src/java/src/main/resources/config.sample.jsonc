@@ -1,6 +1,7 @@
 {
   // This is the list of Grabbers. Grabbers are things conkw will be able to fetch infos from.
   "grabbers":[
+    //PROC
     {
       // This is the system grabber for Linux OS.
       "implementation":"net.pieroxy.conkw.webapp.grabbers.procgrabber.ProcGrabber",
@@ -10,6 +11,7 @@
         /* "blockDevices":"sda" */
       }
     },
+    //SYS
     {
       // Some CPU usage view, filesystem space monitoring, working on all platforms
       "implementation":"net.pieroxy.conkw.webapp.grabbers.JavaSystemViewGrabber",
@@ -19,6 +21,7 @@
         /* "mountPoints":"/" */
       }
     },
+    //OSHI
     {
       // OSHI/JNA view of the system, detailed, works on most platforms, much slower and accurate than Proc on Linux
       "implementation":"net.pieroxy.conkw.webapp.grabbers.oshi.OshiGrabber",
@@ -35,6 +38,7 @@
       "extract":"sensors,memory,physicalmemory,virtualmemory,computer,baseboard,firmware,cpu,cpubycore,cpuident,displays,disksio,disksinfos,graphicscards,nics,netbw,battery,psus,soundcards,usb,os,filestores,tcpv4,tcpv6,udpv4,udpv6,sessions,shortsessions,netp",
       "logLevel":"INFO"
     },
+    //OSHI-PROCS
     {
       // OSHI/JNA view of the system. This one extracts only the processes.
       "implementation":"net.pieroxy.conkw.webapp.grabbers.oshi.OshiGrabber",
@@ -44,6 +48,7 @@
         "detailedDataDelay":"5"
       }
     },
+    //OSHI-SERVICES
     {
       // OSHI/JNA view of the system. This one extracts only the services.
       "implementation":"net.pieroxy.conkw.webapp.grabbers.oshi.OshiGrabber",
@@ -53,6 +58,7 @@
         "detailedDataDelay":"5"
       }
     },
+    //OWM
     {
       // OpenWeatherMap grabber. Extracts weather forecast (minutely, hourly, daily) from https://openweathermap.org/
       "implementation":"net.pieroxy.conkw.webapp.grabbers.openweathermap.OpenWeatherMapGrabber",
@@ -63,6 +69,7 @@
         "lon":"2.3488"
       }
     },
+    //FILE
     {
       // File grabber. Extracts data from flat files.
       "implementation":"net.pieroxy.conkw.webapp.grabbers.FileGrabber",
@@ -71,6 +78,7 @@
         "file":"$FGSF"
       }
     },
+    //SPOTIFY
     {
       // Spotify grabber. Extracts currently playing stuff from your spotify account.
       "implementation":"net.pieroxy.conkw.webapp.grabbers.spotify.SpotifyGrabber",
@@ -80,6 +88,7 @@
         "redirectUri":"Your redirect URI"
       }
     },
+    //HTTPS
     {
       // Https cert grabber. Extracts expiration date of an https cert.
       "implementation":"net.pieroxy.conkw.utils.HttpsCertGrabber",
@@ -87,11 +96,21 @@
         "names":"google.com,facebook.com,apple.com"
       }
     },
+    //EMG
     {
       // External metric grabber. Exposes metrics injected through the /emi endpoint.
       "implementation":"net.pieroxy.conkw.webapp.grabbers.ExternalMetricsGrabber",
       "name":"test_emi",
       "parameters": {
+      }
+    },
+    //EIG
+    {
+      // External instance grabber. Grabs metrics from another live instance of conkw.
+      "implementation":"net.pieroxy.conkw.webapp.grabbers.ExternalInstanceGrabber",
+      "name":"test_eig",
+      "parameters": {
+        "url":"http://localhost:12789/api?grabbers=sys"
       }
     }
   ],
