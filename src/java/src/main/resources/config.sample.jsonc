@@ -86,6 +86,13 @@
       "parameters": {
         "names":"google.com,facebook.com,apple.com"
       }
+    },
+    {
+      // External metric grabber. Exposes metrics injected through the /emi endpoint.
+      "implementation":"net.pieroxy.conkw.webapp.grabbers.ExternalMetricsGrabber",
+      "name":"test_emi",
+      "parameters": {
+      }
     }
   ],
   // This is the port the web server will listen to. Note that values below 1024 are discouraged as they require

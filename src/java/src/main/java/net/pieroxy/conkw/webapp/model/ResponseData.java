@@ -12,14 +12,13 @@ import java.util.logging.Logger;
 public class ResponseData {
   private final static Logger LOGGER = Logger.getLogger(ResponseData.class.getName());
 
-  public static final String TIMESTAMP_PREFIX="ts:";
-
   private long timestamp;
   private long elapsedToGrab;
   private Collection<String> errors=new LinkedList<>();
   private String name,extractor;
   private Map<String, Double> num = new HashMap<>();
   private Map<String, String> str = new HashMap<>();
+  private Map<String, Long> timestamps = new HashMap<>();
   private Set<String> extracted   = new HashSet<>();
 
   public ResponseData() {
@@ -57,35 +56,46 @@ public class ResponseData {
   }
 
   public synchronized void atomicAddMetricWithTimestamp(String name, Double value) {
-    String tsName = TIMESTAMP_PREFIX + name;
-    if (!num.containsKey(name) || !num.containsKey(tsName)) {
+    String tsName = "num." + name;
+    if (!num.containsKey(name)) {
       // Change the map structurally, needs to do it atomically.
       Map<String, Double> nnum = new HashMap<>();
       nnum.putAll(num);
       nnum.put(name, value);
-      nnum.put(tsName, (double)System.currentTimeMillis());
       num = nnum;
     } else {
       num.put(name, value);
-      num.put(tsName, (double)System.currentTimeMillis());
+    }
+    if (!timestamps.containsKey(tsName)) {
+      // Change the map structurally, needs to do it atomically.
+      Map<String, Long> nts = new HashMap<>();
+      nts.putAll(timestamps);
+      nts.put(tsName, System.currentTimeMillis());
+      timestamps = nts;
+    } else {
+      timestamps.put(tsName, System.currentTimeMillis());
     }
   }
 
   public synchronized void atomicAddMetricWithTimestamp(String name, String value) {
-    String tsName = TIMESTAMP_PREFIX + name;
-    if (!str.containsKey(name) || !num.containsKey(tsName)) {
+    String tsName = "str." + name;
+    if (!str.containsKey(name)) {
       // Change the map structurally, needs to do it atomically.
       Map<String, String> nstr = new HashMap<>();
       nstr.putAll(str);
       nstr.put(name, value);
       str = nstr;
-      Map<String, Double> nnum = new HashMap<>();
-      nnum.putAll(num);
-      nnum.put(tsName, (double)System.currentTimeMillis());
-      num = nnum;
     } else {
       str.put(name, value);
-      num.put(tsName, (double)System.currentTimeMillis());
+    }
+    if (!timestamps.containsKey(tsName)) {
+      // Change the map structurally, needs to do it atomically.
+      Map<String, Long> nts = new HashMap<>();
+      nts.putAll(timestamps);
+      nts.put(tsName, System.currentTimeMillis());
+      timestamps = nts;
+    } else {
+      timestamps.put(tsName, System.currentTimeMillis());
     }
   }
 
@@ -101,39 +111,42 @@ public class ResponseData {
     nstr.putAll(str);
     Map<String, Double> nnum = new HashMap<>();
     nnum.putAll(num);
+    Map<String, Long> nts = new HashMap<>();
+    nts.putAll(timestamps);
 
     HashSet<String> keys = new HashSet<>();
     keys.addAll(nstr.keySet());
-    for (String gstrKey : keys) {
-      String tsKey = TIMESTAMP_PREFIX + gstrKey;
-      Double d = nnum.get(tsKey);
+    for (String key : keys) {
+      String tsKey = "str." + key;
+      Long d = nts.get(tsKey);
       if (d!=null) {
         if (now - d > timespan.toMillis()) {
-          nstr.remove(gstrKey);
-          nnum.remove(tsKey);
+          nstr.remove(key);
+          nts.remove(tsKey);
           changed = true;
+          LOGGER.info("PURGED " + key);
         }
       }
     }
 
     keys = new HashSet<>();
     keys.addAll(nnum.keySet());
-    for (String gstrKey : keys) {
-      if (gstrKey.startsWith(TIMESTAMP_PREFIX)) continue;
-      String tsKey = TIMESTAMP_PREFIX + gstrKey;
-      Double d = nnum.get(tsKey);
+    for (String key : keys) {
+      String tsKey = "num." + key;
+      Long d = nts.get(tsKey);
       if (d!=null) {
         if (now - d > timespan.toMillis()) {
-          nnum.remove(gstrKey);
-          nnum.remove(tsKey);
+          nnum.remove(key);
+          nts.remove(tsKey);
           changed = true;
-          LOGGER.info("PURGED " + gstrKey);
+          LOGGER.info("PURGED " + key);
         }
       }
     }
     if (changed) {
       num = nnum;
       str = nstr;
+      timestamps = nts;
     }
     return changed;
   }
@@ -208,5 +221,13 @@ public class ResponseData {
 
   public void setErrors(Collection<String> errors) {
     this.errors = errors;
+  }
+
+  public Map<String, Long> getTimestamps() {
+    return timestamps;
+  }
+
+  public void setTimestamps(Map<String, Long> timestamps) {
+    this.timestamps = timestamps;
   }
 }

@@ -47,4 +47,5 @@ md code {
 md pre code {
   display: block;
   padding: 10px 10px;
+  overflow-y: auto;
 }

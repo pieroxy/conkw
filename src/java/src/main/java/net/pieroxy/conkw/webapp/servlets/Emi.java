@@ -1,0 +1,83 @@
+package net.pieroxy.conkw.webapp.servlets;
+
+import net.pieroxy.conkw.webapp.grabbers.ExternalMetricsGrabber;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * The external metrics ingestion endpoint
+ */
+public class Emi extends HttpServlet {
+
+  static Map<String, ExternalMetricsGrabber> allData = new HashMap<>();
+
+  public static synchronized void addOrUpdateGrabber(ExternalMetricsGrabber externalMetricsGrabber) {
+    Map<String, ExternalMetricsGrabber> td = new HashMap<>();
+    td.putAll(allData);
+    td.put(externalMetricsGrabber.getName(), externalMetricsGrabber);
+    allData = td;
+  }
+
+  @Override
+  protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
+    String ns = req.getParameter("ns");
+    if (ns == null) {
+      respond(resp, 400, "No namespace provided.");
+      return;
+    }
+    ExternalMetricsGrabber mg = allData.get(ns);
+    if (mg == null) {
+      respond(resp, 400, "Provided namespace doesn't exist.");
+      return;
+    }
+    String name = req.getParameter("name");
+    String value = req.getParameter("value");
+    String type = req.getParameter("type");
+    if (name == null) {
+      respond(resp, 400, "No name provided.");
+      return;
+    }
+    if (value == null) {
+      respond(resp, 400, "No value provided.");
+      return;
+    }
+    if (type == null) {
+      respond(resp, 400, "No type provided.");
+      return;
+    }
+    switch (type) {
+      case "str":
+        mg.addMetric(name, value);
+        break;
+      case "num":
+        double d;
+        try {
+          d = Double.parseDouble(value);
+        } catch (Exception e) {
+          respond(resp, 400, "Unparseable numeric value provided.");
+          return;
+        }
+        mg.addMetric(name, d);
+        break;
+      default:
+        respond(resp, 400, "Unknown type provided.");
+        return;
+    }
+  }
+
+  private void respond(HttpServletResponse resp, int i, String s) {
+    resp.setStatus(i);
+    try {
+      resp.setContentType("text/plain");
+      resp.getWriter().println(s);
+    } catch (IOException e) {
+      // Do we need to log anything if we cannot write the response back ?
+    }
+  }
+}
+
