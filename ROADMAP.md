@@ -19,7 +19,7 @@ Those planned (so expect them later)
 * Mail Google - to get latest mails
 * Mail Outlook - to get latest mails
 * Freebox - to get internet status on this home router
-* Push metrics to another instance on the network through Emi (And allow EMI to import more than one metric per call.)
+* Push metrics to another instance on the network through Emi
 
 ## Misc
 * https support with live reload of the certificates.

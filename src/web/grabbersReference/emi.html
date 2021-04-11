@@ -20,6 +20,14 @@
         <meta name="msapplication-TileColor" content="#000066">
         <meta name="theme-color" content="#ffffff">
         <style>
+          div > code {
+            margin: 15px;
+            border: 1px solid #336;
+            padding: 10px 5px;
+            display: block;
+            overflow: auto;
+            white-space: nowrap;
+          }
         </style>
     </head>
     <body onload="ConkW.init()" grabbers="test_emi">
@@ -39,11 +47,16 @@
             <label>   Delay : </label><label id="cw-delay"></label>
             <BR/><BR/><BR/>
           </div>
-            This is a sample ExternalMetricsGrabber named "test_emi". In order to ingest data to it, just execute this simple 
-            curl request: 
-            <br><br><code style="margin: 15px;border: 1px solid #336;padding: 5px;">curl 'http://localhost:12789/emi?ns=test_emi&name=metric1&value=2&type=num' -X POST</code>
+            This is a sample ExternalMetricsGrabber named "test_emi". In order to ingest data to it, just execute this
+            simple curl request: 
+            <br><br><code>curl 'http://localhost:12789/emi?ns=test_emi&name=metric1&value=2&type=num' -X POST</code>
             <br><br>
-            and watch as this page update itself. Now you can try and populate the other three metrics.
+            and watch as this page update itself. Now you can try and populate the other three metrics. In order to 
+            be able to ingest more than one metric with a single http call, you can also use the JSON ingestion method 
+            with the following:
+
+            <br><br><code>curl 'http://localhost:12789/emi?ns=test_emi' -X POST -H "Content-Type: application/json" -d '{"num":{"metric1":12},"str":{"metric4":"I did it!"}}'</code>
+
         </div>
         <br><br><br>
         <div style="text-align: center;">

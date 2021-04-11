@@ -1,6 +1,9 @@
 package net.pieroxy.conkw.webapp.servlets;
 
+import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.webapp.grabbers.ExternalMetricsGrabber;
+import net.pieroxy.conkw.webapp.model.EmiInput;
+import net.pieroxy.conkw.webapp.model.Response;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -35,6 +38,26 @@ public class Emi extends HttpServlet {
       respond(resp, 400, "Provided namespace doesn't exist.");
       return;
     }
+
+    String ct = req.getContentType();
+    if (ct==null) ct="";
+    if (ct.equals("application/json"))
+      parseJsonInput(req, resp, mg);
+    else
+      parseSingleInput(req, resp, mg);
+  }
+
+  private void parseJsonInput(HttpServletRequest req, HttpServletResponse resp, ExternalMetricsGrabber mg) {
+    try {
+      EmiInput data = JsonHelper.getJson().deserialize(EmiInput.class, req.getInputStream());
+      data.getNum().entrySet().forEach(e -> mg.addMetric(e.getKey(), e.getValue()));
+      data.getStr().entrySet().forEach(e -> mg.addMetric(e.getKey(), e.getValue()));
+    } catch (IOException e) {
+      respond(resp, 500, "Error while reading the JSON: " + e.getMessage());
+    }
+  }
+
+  private void parseSingleInput(HttpServletRequest req, HttpServletResponse resp, ExternalMetricsGrabber mg) {
     String name = req.getParameter("name");
     String value = req.getParameter("value");
     String type = req.getParameter("type");
