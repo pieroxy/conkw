@@ -6,6 +6,8 @@ import com.dslplatform.json.CompiledJson;
 public class Config {
   private GrabberConfig[]grabbers;
   private int httpPort;
+  private boolean disableDefaultUI;
+  private boolean disableCustomUI;
 
   public GrabberConfig[] getGrabbers() {
     return grabbers;
@@ -21,5 +23,21 @@ public class Config {
 
   public void setGrabbers(GrabberConfig[] grabbers) {
     this.grabbers = grabbers;
+  }
+
+  public boolean isDisableDefaultUI() {
+    return disableDefaultUI;
+  }
+
+  public void setDisableDefaultUI(boolean disableDefaultUI) {
+    this.disableDefaultUI = disableDefaultUI;
+  }
+
+  public boolean isDisableCustomUI() {
+    return disableCustomUI;
+  }
+
+  public void setDisableCustomUI(boolean disableCustomUI) {
+    this.disableCustomUI = disableCustomUI;
   }
 }

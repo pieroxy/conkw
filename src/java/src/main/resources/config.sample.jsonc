@@ -114,6 +114,10 @@
       }
     }
   ],
+  // Use the flags below to disable UI and only leave the /api and /emi endpoints open.
+  // "disableDefaultUI": true,
+  // "disableCustomUI": true,
+
   // This is the port the web server will listen to. Note that values below 1024 are discouraged as they require
   // the process to be launched as root.
   "httpPort": 12789

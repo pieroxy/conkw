@@ -20,10 +20,9 @@ public class Runner {
         if (has(args, "--run-server")) {
             Config config = ConfigReader.getConfig();
 
-            int webPort = config.getHttpPort();
-            if (webPort <= 0) throw new Exception("httpPort configured to an invalid value of " + webPort);
+            if (config.getHttpPort() <= 0) throw new Exception("httpPort configured to an invalid value of " + config.getHttpPort());
 
-            Tomcat tomcat = buildTomcat(ConfigReader.getWebappDir(), ConfigReader.getUiDir(), webPort);
+            Tomcat tomcat = buildTomcat(ConfigReader.getWebappDir(), ConfigReader.getUiDir(), config);
 
             tomcat.start();
             tomcat.getServer().await();
@@ -45,33 +44,35 @@ public class Runner {
         }
     }
 
-    private static Tomcat buildTomcat(File webappDir, File uiDir, int webPort) {
+    private static Tomcat buildTomcat(File webappDir, File uiDir, Config config) {
         Tomcat tomcat = new Tomcat();
 
         Connector ctr = new Connector();
-        ctr.setPort(webPort);
+        ctr.setPort(config.getHttpPort());
         tomcat.setConnector(ctr);
 
         LOGGER.info("Configuring app with basedir: " + webappDir.getAbsolutePath());
 
-        addMainContext(webappDir, tomcat);
-        addUiContext(uiDir, tomcat);
+        addMainContext(webappDir, tomcat, config);
+        addUiContext(uiDir, tomcat, config);
         return tomcat;
     }
 
-    private static void addUiContext(File uiDir, Tomcat tomcat) {
-        String contextPath = "/ui";
-        StandardContext ctx = (StandardContext) tomcat.addContext(contextPath, uiDir.getAbsolutePath());
-        ctx.addWelcomeFile("index.html");
-        tomcat.addServlet(contextPath, "default", new DefaultServlet());
-        ctx.addServletMappingDecoded("/", "default");
-        ctx.addMimeMapping("svg", "image/svg+xml");
+    private static void addUiContext(File uiDir, Tomcat tomcat, Config config) {
+        if (!config.isDisableCustomUI()) {
+            LOGGER.info("Registering custom UI");
+            String contextPath = "/ui";
+            StandardContext ctx = (StandardContext) tomcat.addContext(contextPath, uiDir.getAbsolutePath());
+            ctx.addWelcomeFile("index.html");
+            tomcat.addServlet(contextPath, "default", new DefaultServlet());
+            ctx.addServletMappingDecoded("/", "default");
+            ctx.addMimeMapping("svg", "image/svg+xml");
+        }
     }
 
-    private static void addMainContext(File webappDirLocation, Tomcat tomcat) {
+    private static void addMainContext(File webappDirLocation, Tomcat tomcat, Config config) {
         String contextPath = "";
         StandardContext ctx = (StandardContext) tomcat.addContext(contextPath, webappDirLocation.getAbsolutePath());
-        ctx.addWelcomeFile("index.html");
 
         tomcat.addServlet(contextPath, "api", new Api());
         ctx.addServletMappingDecoded("/api", "api");
@@ -79,10 +80,14 @@ public class Runner {
         tomcat.addServlet(contextPath, "emi", new Emi());
         ctx.addServletMappingDecoded("/emi", "emi");
 
-        tomcat.addServlet(contextPath, "default", new DefaultServlet());
-        ctx.addServletMappingDecoded("/", "default");
+        if (!config.isDisableDefaultUI()) {
+            LOGGER.info("Registering default UI");
+            ctx.addWelcomeFile("index.html");
+            tomcat.addServlet(contextPath, "default", new DefaultServlet());
+            ctx.addServletMappingDecoded("/", "default");
 
-        ctx.addMimeMapping("svg", "image/svg+xml");
+            ctx.addMimeMapping("svg", "image/svg+xml");
+        }
 
         ctx.addApplicationLifecycleListener(new Listener());
     }
