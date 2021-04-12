@@ -17,7 +17,7 @@ public class ConfigReader {
     public static Config getConfig() {
         Config config = null;
         try (InputStream is = new FileInputStream(getConfigFile())) {
-            config =  new DslJson<>(Settings.withRuntime()).deserialize(Config.class, new RemoveJsonCommentsInputStream(is, getConfigFile().getAbsolutePath()));
+            config =  new DslJson<>().deserialize(Config.class, new RemoveJsonCommentsInputStream(is, getConfigFile().getAbsolutePath()));
         } catch (Exception e) {
             throw new RuntimeException("Unable to parse config file " + getConfigFile().getAbsolutePath() + ": " + e.getMessage());
         }
