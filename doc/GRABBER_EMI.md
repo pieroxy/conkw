@@ -54,4 +54,84 @@ curl 'http://localhost:12789/emi?ns=test_emi' -X POST -H "Content-Type: applicat
 ```
 
 ## Configuration
-You will need to know the name of the grabber configured in order to be able to ingest data into it. You can have several grabbers like this configured in your system.
+
+You will need to know the name of the grabber configured in order to be able to ingest data into it through the `ns` parameter. You can have several grabbers like this configured in your system.
+
+Example:
+
+```json
+    {
+      "implementation":"net.pieroxy.conkw.webapp.grabbers.ExternalMetricsGrabber",
+      "name":"laptop_batteries",
+      "parameters": {
+      }
+    },
+    {
+      "implementation":"net.pieroxy.conkw.webapp.grabbers.ExternalMetricsGrabber",
+      "name":"online_server",
+      "parameters": {
+      }
+    },
+```
+
+## Real world use-case
+
+Here is a script I run on all of my macbooks to monitor their battery charge level:
+
+```sh
+#!/bin/bash 
+
+BL=$(pmset -g batt | grep -Eo "\d+%" | cut -d% -f1 )
+CC=$(pmset -g batt | grep -Eo "discharging" )
+echo $BL $CC > /tmp/bstmp.log
+
+touch /tmp/bs.log
+DIFF=$(diff /tmp/bstmp.log /tmp/bs.log)
+
+if [ "$DIFF" != "" ]
+then
+  curl "http://1.2.3.4:12789/emi?ns=batteries&name=MacAirLevel&type=num&value=$BL" -X POST -H "Content-Type:text/plain"
+  curl "http://1.2.3.4:12789/emi?ns=batteries&name=MacAirCharging&type=str&value=$CC" -X POST -H "Content-Type:text/plain"
+  echo changed
+fi
+
+echo $BL $CC > /tmp/bs.log
+```
+
+And here is the related section of the crontab on these machines:
+
+```
+* * * * * /Users/MyUser/bin/reportBatt.sh
+*/15 * * * * rm /tmp/bs.log
+```
+
+This way, every minute the charging status and level of the battery is extracted and sent to the remote conkw instance if any change happened. Every 15 minutes, the status will be sent even with no change. This allow me to set a stale time on the battery status of 20 minutes and detect when the computer is in sleep mode or off. 
+
+Here are the same scripts on my Linux laptop:
+
+```sh
+#!/bin/bash
+
+AC=$(cat /sys/class/power_supply/AC/online)
+let BP=($(cat /sys/class/power_supply/BAT0/charge_now)*100)/$(cat /sys/class/power_supply/BAT0/charge_full)
+
+echo $AC $BP > /tmp/hwtmp.log
+touch /tmp/hw.log
+
+DIFF=$(diff /tmp/hwtmp.log /tmp/hw.log)
+
+if [ "$DIFF" != "" ]
+then
+  curl "http://1.2.3.4:12789/emi?ns=batteries&name=LinuxLaptopLevel&type=num&value=$BP" -X POST -H "Content-Type:text/plain"
+  curl "http://1.2.3.4:12789/emi?ns=batteries&name=LinuxLaptopCharging&type=num&value=$AC" -X POST -H "Content-Type:text/plain"
+fi
+
+echo $AC $BP > /tmp/hw.log
+```
+
+And here is the related section of the crontab on that machine:
+
+```
+* * * * * /bin/bash /home/MyUser/bin/hwMon.sh
+*/15 * * * * rm /tmp/hw.log
+```
