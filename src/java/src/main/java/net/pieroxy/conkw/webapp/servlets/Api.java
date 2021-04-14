@@ -26,7 +26,6 @@ public class Api extends HttpServlet {
   static Response loadedResponse;
   static Thread thread;
   static boolean stopped;
-  static long lastGet =  System.currentTimeMillis();
   static Map<String, Long> lastRequestPerGrabber = new HashMap<>();
 
   public static synchronized void setAllGrabbers(Collection<Grabber>g) {
@@ -52,7 +51,7 @@ public class Api extends HttpServlet {
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-    long now = lastGet =  System.currentTimeMillis();
+    long now = System.currentTimeMillis();
     final String action = req.getParameter("grabberAction");
     if (action!=null) {
       allGrabbers.forEach((g) -> {
@@ -70,11 +69,17 @@ public class Api extends HttpServlet {
       if (grabbers == null) {
         writeResponse(resp, Response.getError("Grabbers were not specified"));
       } else {
-        String[] grabbersRequested = grabbers.split(",");
-        markGrabbersRequested(grabbersRequested, now);
-        buildAndWriteResponse(resp, grabbersRequested);
+        Response r = buildResponse(now, grabbers);
+        writeResponse(resp, r);
       }
     }
+  }
+
+  private Response buildResponse(long now, String grabbers) {
+    String[] grabbersRequested = grabbers.split(",");
+    markGrabbersRequested(grabbersRequested, now);
+    Response r = new Response(loadedResponse, (int)(System.currentTimeMillis()%1000), grabbersRequested);
+    return r;
   }
 
   private void markGrabbersRequested(String[]grabbersRequested, long ts) {
@@ -90,13 +95,8 @@ public class Api extends HttpServlet {
     }
   }
 
-  private void buildAndWriteResponse(HttpServletResponse resp, String[] grabbersRequested) throws IOException {
-    resp.setContentType("application/json;charset=utf-8");
-    Response r = new Response(loadedResponse, (int)(System.currentTimeMillis()%1000), grabbersRequested);
-    writeResponse(resp, r);
-  }
-
   private void writeResponse(HttpServletResponse resp, Response r) throws IOException {
+    resp.setContentType("application/json;charset=utf-8");
     DslJson<Object> json = JsonHelper.getJson();
     JsonWriter w = JsonHelper.getWriter();
     synchronized (w) {
