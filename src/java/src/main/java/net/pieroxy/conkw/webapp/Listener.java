@@ -5,9 +5,11 @@ import net.pieroxy.conkw.config.ConfigReader;
 import net.pieroxy.conkw.config.GrabberConfig;
 import net.pieroxy.conkw.webapp.grabbers.*;
 import net.pieroxy.conkw.webapp.servlets.Api;
+import net.pieroxy.conkw.webapp.servlets.ApiManager;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.swing.*;
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
@@ -21,6 +23,7 @@ public class Listener implements ServletContextListener {
 
   private List<Grabber> grabbers;
   private WatchService watchService;
+  private ApiManager apiManager;
   private boolean toDestroy = false;
 
   public void loadConfig() {
@@ -79,7 +82,8 @@ public class Listener implements ServletContextListener {
       //   GC shrinks it back closer to whatever is needed.
       System.gc();
 
-      Api.setAllGrabbers(grabbers);
+      if (apiManager!=null) apiManager.close();
+      Api.setApiManager(apiManager=new ApiManager(grabbers));
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -107,7 +111,7 @@ public class Listener implements ServletContextListener {
   public void contextDestroyed(ServletContextEvent servletContextEvent) {
     toDestroy = true;
     try {
-      Api.close();
+      apiManager.close();
     } catch (Exception e) {
       LOGGER.log(Level.FINE, "", e);
     }
