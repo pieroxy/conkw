@@ -135,3 +135,12 @@ And here is the related section of the crontab on that machine:
 * * * * * /bin/bash /home/MyUser/bin/hwMon.sh
 */15 * * * * rm /tmp/hw.log
 ```
+
+## Note on performance
+Those metrics are kept in memory and dumped in full on the hard drive in `$CONKW_HOME/data` every 10s at best. So it is clearly not meant to handle millions of metrics.
+
+Moreover, it is optimized to work on a fixed set of metrics. Adding a few metrics from time to time is fine, but adding a bunch of metrics every second is not where this grabber will perform best.
+
+Metrics that have not been updated in 30 days will be removed automatically.
+
+As always, test your use case and if something's not right, drop a message in GitHub.
