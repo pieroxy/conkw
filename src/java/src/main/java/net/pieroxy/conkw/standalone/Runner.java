@@ -22,10 +22,17 @@ public class Runner {
 
             if (config.getHttpPort() <= 0) throw new Exception("httpPort configured to an invalid value of " + config.getHttpPort());
 
-            Tomcat tomcat = buildTomcat(ConfigReader.getWebappDir(), ConfigReader.getUiDir(), config);
-
-            tomcat.start();
-            tomcat.getServer().await();
+            if (config.disableTomcat()) {
+                Listener listener = new Listener();
+                listener.contextInitialized(null);
+                synchronized (Runner.class) {
+                    Runner.class.wait();
+                }
+            } else {
+                Tomcat tomcat = buildTomcat(ConfigReader.getWebappDir(), ConfigReader.getUiDir(), config);
+                tomcat.start();
+                tomcat.getServer().await();
+            }
         } else {
             if (!ConfigReader.exists() || has(args,"--force-install")) {
                 new Installer(has(args,"--override-config-files"), has(args,"--override-default-ui")).run();
@@ -74,11 +81,15 @@ public class Runner {
         String contextPath = "";
         StandardContext ctx = (StandardContext) tomcat.addContext(contextPath, webappDirLocation.getAbsolutePath());
 
-        tomcat.addServlet(contextPath, "api", new Api());
-        ctx.addServletMappingDecoded("/api", "api");
+        if (!config.isDisableApi()) {
+            tomcat.addServlet(contextPath, "api", new Api());
+            ctx.addServletMappingDecoded("/api", "api");
+        }
 
-        tomcat.addServlet(contextPath, "emi", new Emi());
-        ctx.addServletMappingDecoded("/emi", "emi");
+        if (!config.isDisableEmi()) {
+            tomcat.addServlet(contextPath, "emi", new Emi());
+            ctx.addServletMappingDecoded("/emi", "emi");
+        }
 
         if (!config.isDisableDefaultUI()) {
             LOGGER.info("Registering default UI");

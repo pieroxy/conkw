@@ -8,6 +8,13 @@ public class Config {
   private int httpPort;
   private boolean disableDefaultUI;
   private boolean disableCustomUI;
+  private boolean disableApi;
+  private boolean disableEmi;
+
+  public boolean disableTomcat() {
+    return isDisableApi() && isDisableEmi() && isDisableDefaultUI() && isDisableCustomUI();
+  }
+
 
   public GrabberConfig[] getGrabbers() {
     return grabbers;
@@ -39,5 +46,21 @@ public class Config {
 
   public void setDisableCustomUI(boolean disableCustomUI) {
     this.disableCustomUI = disableCustomUI;
+  }
+
+  public boolean isDisableApi() {
+    return disableApi;
+  }
+
+  public void setDisableApi(boolean disableApi) {
+    this.disableApi = disableApi;
+  }
+
+  public boolean isDisableEmi() {
+    return disableEmi;
+  }
+
+  public void setDisableEmi(boolean disableEmi) {
+    this.disableEmi = disableEmi;
   }
 }
