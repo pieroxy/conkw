@@ -104,6 +104,7 @@ public class ExternalMetricsGrabber extends Grabber {
       data = JsonHelper.getJson().deserialize(ResponseData.class, fis);
     } catch (FileNotFoundException e) {
       log(Level.WARNING, "Could not load cached data file: " + getStorageFile());
+      data = new ResponseData(this, System.currentTimeMillis());
     } catch (Exception e) {
       log(Level.SEVERE, "Could not load cached data file.", e);
       data = new ResponseData(this, System.currentTimeMillis());
