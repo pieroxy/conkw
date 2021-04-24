@@ -9,7 +9,6 @@ import net.pieroxy.conkw.webapp.servlets.ApiManager;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import javax.swing.*;
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
@@ -54,13 +53,26 @@ public class Listener implements ServletContextListener {
         }
         g.initConfig(ConfigReader.getHomeDir(), gc.getParameters());
 
-        if (newgnames.contains(g.getName())) {
-          throw new IllegalArgumentException("At least two grabbers share the same name: " + g.getName());
+        if (g.getName()==null) {
+          throw new IllegalArgumentException("Grabber name must be defined for grabber " + g.getClass().getName());
         } else {
-          newg.add(g);
-          newgnames.add(g.getName());
+          if (newgnames.contains(g.getName())) {
+            throw new IllegalArgumentException("At least two grabbers share the same name: " + g.getName());
+          } else {
+            newg.add(g);
+            newgnames.add(g.getName());
+          }
         }
       }
+
+      newg.forEach((gr) -> {
+        if (gr instanceof GrabberListener) {
+          ((GrabberListener) gr).setGrabberList(new ArrayList<>(newg));
+          if (LOGGER.isLoggable(Level.FINE)) LOGGER.log(Level.FINE, "Setting grabbers to class "+ gr.getClass().getName());
+        } else {
+          if (LOGGER.isLoggable(Level.FINE)) LOGGER.log(Level.INFO, "NOT Setting grabbers to class "+ gr.getClass().getName());
+        }
+      });
 
       Collection<Grabber> old= grabbers;
       if (old!=null) {
@@ -72,7 +84,6 @@ public class Listener implements ServletContextListener {
         grabbers = newg;
         // Recycle the old grabbers.
         old.forEach((gr) -> gr.dispose());
-        old = null;
       } else {
         grabbers = newg;
       }
@@ -85,7 +96,7 @@ public class Listener implements ServletContextListener {
       if (apiManager!=null) apiManager.close();
       Api.setApiManager(apiManager=new ApiManager(grabbers));
     } catch (Exception e) {
-      throw new RuntimeException(e);
+      LOGGER.log(Level.SEVERE, "Error loading and applying configuration.", e);
     }
   }
 
