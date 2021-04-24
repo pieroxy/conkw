@@ -114,11 +114,18 @@
       }
     }
   ],
-  // Use the flags below to disable UI and only leave the /api and /emi endpoints open.
-  // "disableDefaultUI": true,
-  // "disableCustomUI": true,
 
   // This is the port the web server will listen to. Note that values below 1024 are discouraged as they require
   // the process to be launched as root.
-  "httpPort": 12789
+  "httpPort": 12789,
+
+  // If true, the default UI answering at / will not be run. This includes reference UI for grabbers, documentation and js, css and image files.
+  "disableDefaultUI":false,
+  // If true, the custom UI answering at /ui will not be run. This includes every file under $CONKW_HOME/ui
+  "disableCustomUI":false,
+  // If true, the API answering at /api will not be run. No UI will work against this instance because no metrics can be served.
+  "disableApi":false,
+  // If true, the EMI answering at /emi will not be run. If no EMG grabbers are configured it makes sense.
+  "disableEmi":false
+  // NOTE: If all four flags above are set to true, no web server will be run along with conkw.
 }
