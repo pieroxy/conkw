@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +17,8 @@ import java.util.Map;
  * The external metrics ingestion endpoint
  */
 public class Emi extends HttpServlet {
+
+  public static final String CONTENT_TYPE="application/json";
 
   static Map<String, ExternalMetricsGrabber> allData = new HashMap<>();
 
@@ -41,10 +44,12 @@ public class Emi extends HttpServlet {
 
     String ct = req.getContentType();
     if (ct==null) ct="";
-    if (ct.equals("application/json"))
+    if (ct.equals(CONTENT_TYPE))
       parseJsonInput(req, resp, mg);
     else
       parseSingleInput(req, resp, mg);
+
+    respond(resp, 200, "OK\n");
   }
 
   private void parseJsonInput(HttpServletRequest req, HttpServletResponse resp, ExternalMetricsGrabber mg) {
@@ -100,6 +105,7 @@ public class Emi extends HttpServlet {
       resp.getWriter().println(s);
     } catch (IOException e) {
       // Do we need to log anything if we cannot write the response back ?
+      // It usually means the client has already disconnected, not really our problem.
     }
   }
 }
