@@ -86,7 +86,7 @@ public abstract class Grabber {
     }
   }
 
-  private boolean shouldExtract(String value) {
+  protected boolean shouldExtract(String value) {
     return extract.isEmpty() || extract.contains(value);
   }
 
