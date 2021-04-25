@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 
 public class PushToEmiGrabber extends Grabber implements GrabberListener, Runnable {
 
+  private String prefix;
   private URL url;
   private Thread runner;
   private List<Grabber> grabbers;
@@ -53,6 +54,7 @@ public class PushToEmiGrabber extends Grabber implements GrabberListener, Runnab
     } catch (MalformedURLException e) {
       throw new RuntimeException(e);
     }
+    prefix = config.get("prefix");
     runner = new Thread(this);
     runner.start();
   }
@@ -96,8 +98,8 @@ public class PushToEmiGrabber extends Grabber implements GrabberListener, Runnab
       if (shouldExtract(g.getName())) {
         ResponseData data = g.grab();
         if (data!=null) {
-          data.getNum().forEach((k, v) -> num.put(g.getName() + "_" + k, v));
-          data.getStr().forEach((k, v) -> str.put(g.getName() + "_" + k, v));
+          data.getNum().forEach((k, v) -> num.put(prefix+"_"+g.getName() + "_" + k, v));
+          data.getStr().forEach((k, v) -> str.put(prefix+"_"+g.getName() + "_" + k, v));
           data.getErrors().forEach(s -> log(Level.WARNING, s));
         }
       }
