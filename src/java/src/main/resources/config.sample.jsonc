@@ -112,7 +112,18 @@
       "parameters": {
         "url":"http://localhost:12789/api?grabbers=sys"
       }
+    },
+    //PEMIG
+    {
+      "implementation":"net.pieroxy.conkw.webapp.grabbers.PushToEmiGrabber",
+      "extract":"sys",
+      "name":"p2emi",
+      "parameters": {
+        "url":"http://localhost:12789/emi?ns=test_emi",
+        "prefix":"testpush"
+      }
     }
+    //END OF GRABBERS
   ],
 
   // This is the port the web server will listen to. Note that values below 1024 are discouraged as they require
