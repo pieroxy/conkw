@@ -108,24 +108,28 @@ public class PushToEmiGrabber extends Grabber implements GrabberListener, Runnab
   }
 
   private void sendData(EmiInput input) throws IOException {
-    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-    conn.setRequestMethod("POST");
-    conn.setRequestProperty("Content-Type", Emi.CONTENT_TYPE);
-    conn.setDoOutput(true);
-    try (OutputStream os = conn.getOutputStream()) {
-      DslJson<Object> json = JsonHelper.getJson();
-      JsonWriter w = JsonHelper.getWriter();
-      synchronized (w) {
-        w.reset(os);
-        json.serialize(w, input);
-        w.flush();
-      }
+    try {
+      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+      conn.setRequestMethod("POST");
+      conn.setRequestProperty("Content-Type", Emi.CONTENT_TYPE);
+      conn.setDoOutput(true);
+      try (OutputStream os = conn.getOutputStream()) {
+        DslJson<Object> json = JsonHelper.getJson();
+        JsonWriter w = JsonHelper.getWriter();
+        synchronized (w) {
+          w.reset(os);
+          json.serialize(w, input);
+          w.flush();
+        }
 
-      int rc = conn.getResponseCode();
-      if (rc != 200) {
-        String text = new BufferedReader(new InputStreamReader(conn.getErrorStream(), StandardCharsets.UTF_8)).lines().collect(Collectors.joining("\n"));
-        log(Level.WARNING, "Emi responded with code " + rc + "\n" + text);
+        int rc = conn.getResponseCode();
+        if (rc != 200) {
+          String text = new BufferedReader(new InputStreamReader(conn.getErrorStream(), StandardCharsets.UTF_8)).lines().collect(Collectors.joining("\n"));
+          log(Level.WARNING, "Emi responded with code " + rc + "\n" + text);
+        }
       }
+    } catch (Exception e) {
+      log(Level.SEVERE, "Could not send data to " + url, e);
     }
   }
 
