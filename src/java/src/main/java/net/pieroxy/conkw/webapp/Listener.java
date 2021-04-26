@@ -6,6 +6,7 @@ import net.pieroxy.conkw.config.GrabberConfig;
 import net.pieroxy.conkw.webapp.grabbers.*;
 import net.pieroxy.conkw.webapp.servlets.Api;
 import net.pieroxy.conkw.webapp.servlets.ApiManager;
+import net.pieroxy.conkw.webapp.servlets.Emi;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -30,6 +31,7 @@ public class Listener implements ServletContextListener {
     try {
       List<Grabber> newg = new ArrayList<>();
       Set<String> newgnames = new HashSet<>();
+      Emi.clearGrabbers();
       for (GrabberConfig gc : config.getGrabbers()) {
         Grabber g = (Grabber) Class.forName(gc.getImplementation()).newInstance();
 

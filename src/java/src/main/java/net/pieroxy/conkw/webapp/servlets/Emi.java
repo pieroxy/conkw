@@ -12,11 +12,14 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * The external metrics ingestion endpoint
  */
 public class Emi extends HttpServlet {
+  private final static Logger LOGGER = Logger.getLogger(Emi.class.getName());
 
   public static final String CONTENT_TYPE="application/json";
 
@@ -25,8 +28,14 @@ public class Emi extends HttpServlet {
   public static synchronized void addOrUpdateGrabber(ExternalMetricsGrabber externalMetricsGrabber) {
     Map<String, ExternalMetricsGrabber> td = new HashMap<>();
     td.putAll(allData);
-    td.put(externalMetricsGrabber.getName(), externalMetricsGrabber);
+    String name = externalMetricsGrabber.getName();
+    td.put(name, externalMetricsGrabber);
+    LOGGER.log(Level.INFO, "Registered EIG " + name);
     allData = td;
+  }
+
+  public static synchronized void clearGrabbers() {
+    allData = new HashMap<>();
   }
 
   @Override
@@ -38,7 +47,7 @@ public class Emi extends HttpServlet {
     }
     ExternalMetricsGrabber mg = allData.get(ns);
     if (mg == null) {
-      respond(resp, 400, "Provided namespace doesn't exist.");
+      respond(resp, 400, "Provided namespace ("+ns+") doesn't exist.");
       return;
     }
 
