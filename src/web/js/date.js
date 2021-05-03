@@ -4,6 +4,48 @@ ConkW.dates = ConkW.dates || {};
 
 ConkW.clockFaces = [
   {
+    background: "/clocks/thin.png",
+    hour: {
+      div: {
+        forwardLength: 0.6,
+        backLength: 0.18,
+        width: 0.008,
+        color: "black"
+      },
+      shadowOffset: 0.02,
+      shadowSpread: 0.00,
+      shadowRadius: 0.02,
+      shadowAngle: 220,
+      shadowColor: "rgba(0, 0, 0, 0.3)"
+    },
+    minute: {
+      div: {
+        forwardLength: 0.76,
+        backLength: 0.18,
+        width: 0.008,
+        color: "black"
+      },
+      shadowOffset: 0.025,
+      shadowSpread: 0.00,
+      shadowRadius: 0.03,
+      shadowAngle: 220,
+      shadowColor: "rgba(0, 0, 0, 0.3)"
+    },
+    second: {
+      img: {
+        width: 420,
+        height: 7,
+        centerPosition: 350,
+        scale: 0.5,
+        src: "/clocks/thin-seconds.png"
+      },
+      shadowOffset: 0.03,
+      shadowRadius: 0.04,
+      shadowAngle: 220,
+      shadowColor: "rgba(0, 0, 0, 0.3)"
+    }
+  },
+  {
     background: "/clocks/arabic.png",
     hour: {
       div: {
