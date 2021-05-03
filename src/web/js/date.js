@@ -10,7 +10,7 @@ ConkW.clockFaces = [
         forwardLength: 0.6,
         backLength: 0.18,
         width: 0.008,
-        color: "black"
+        color: "#25272b"
       },
       shadowOffset: 0.02,
       shadowSpread: 0.00,
@@ -23,7 +23,7 @@ ConkW.clockFaces = [
         forwardLength: 0.76,
         backLength: 0.18,
         width: 0.008,
-        color: "black"
+        color: "#25272b"
       },
       shadowOffset: 0.025,
       shadowSpread: 0.00,
