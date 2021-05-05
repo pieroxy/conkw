@@ -25,7 +25,7 @@ ConkW.init = function() {
     var options = document.body.getAttribute("cw-options") || "";
     var checkScreenFlag = options.indexOf("noresize")==-1;
     this.initDomCache();
-    this.scheduleLoad();
+    this.scheduleLoad(true);
     if (checkScreenFlag) window.onresize = function() {zis.checkScreen()};
     this.dates.initClocks();
     if (checkScreenFlag) this.checkScreen();
@@ -65,21 +65,24 @@ ConkW.callApi = function(qs) {
     xmlhttp.send();
 }
 
-ConkW.scheduleLoad = function() {
+ConkW.scheduleLoad = function(forcenow) {
+    var nowb = Date.now();
+    var jnow = nowb%1000;
+    if (jnow>150 && !forcenow) {
+        setTimeout(ConkW.scheduleLoad, Math.round(1050 - jnow));
+        return;
+    }
     try {
         ConkW.load();
     } catch (e) {
         ConkW.handleError(e);
     }
 
-    if (ConkW.data.lastResponseJitter === undefined) {
-        setTimeout(ConkW.scheduleLoad, 1000);
-    } else {
-        var ttw = 1000 + (50 - ConkW.data.lastResponseJitter) / 5;
-        if (ttw < 0) ttw += 1000;
-        //console.log("w"+ttw+" " + (ttt2-ttt));
-        setTimeout(ConkW.scheduleLoad, ttw);
-    }
+    var now = Date.now();
+    var ttw = Math.round(1000 + 50 - now%1000);
+    if (ttw < 0) ttw += 1000;
+    //console.log("w"+ttw+" " + (ttt2-ttt));
+    setTimeout(ConkW.scheduleLoad, ttw);
 }
 
 ConkW.sendActionToServer = function() {
@@ -102,10 +105,11 @@ ConkW.load = function() {
         if (location.href.indexOf("?") > 0) {
             ConkW.sendActionToServer();
         } else {
+            var requestTime = Date.now();
             var xmlhttp = new XMLHttpRequest();
             var url = "/api?grabbers=" + grabbers;
             xmlhttp.open("GET", url, true); // false = synchronous
-            xmlhttp.onreadystatechange = function() { ConkW.loaded(xmlhttp); }
+            xmlhttp.onreadystatechange = function() { ConkW.loaded(xmlhttp, requestTime); }
             xmlhttp.send();
         }
     }
@@ -114,11 +118,11 @@ ConkW.load = function() {
 
 ConkW.updateDelay = function() {
     var e = document.getElementById("cw-delay");
-    var v = (new Date().getTime() - ConkW.data.lastupdate) / 1000
+    var v = (Date.now() - ConkW.data.lastupdate) / 1000
     if (v > 4) ConkW.showMetricGap = true;
     if (e) {
         if (ConkW.data.lastupdate) {
-            e.innerText = this.getTimeLabel(v) + "/" + ConkW.data.lastResponseJitter + "ms/" + ConkW.data.debug + "ms";
+            e.innerHTML = v + "/" + ConkW.data.lastResponseJitter + "/" + ConkW.data.debug;
             e.className = v > 4 ? "error" : "";
         } else {
             e.innerText = "Starting";
@@ -185,19 +189,24 @@ ConkW.checkScreen = function() {
     }
 }
 
-ConkW.loaded = function(req) {
+ConkW.loaded = function(req, requestTime) {
     try {
         if (req.readyState == 4) {
             var res = req.responseText + "";
             if (res.charAt(0) == '{') {
                 var before = Date.now();
+                var loadTime = before - requestTime;
                 res = JSON.parse(res);
                 ConkW.data.lastResponseJitter = res.responseJitter;
                 //console.log(res.responseJitter);
                 ConkW.refresh(res);
                 ConkW.data.apiErrors = res.errors;
+                // The following forces a synchronous redraw
+                // No performance hit since a redraw needs to happen
+                // but allows monitoring of the drawing time.
+                document.body.offsetHeight; 
                 var after = Date.now();
-                ConkW.data.debug = after - before;
+                ConkW.data.debug = loadTime + "|" + (after - before);
             }
             ConkW.showMetricGap = false;
         }
@@ -257,7 +266,7 @@ if (!ConkW.fillTemplate) { // Old browsers that cannot parse the above code.
 }  
 
 ConkW.refresh = function(data) {
-    ConkW.data.lastupdate = new Date().getTime();
+    ConkW.data.lastupdate = Date.now();
     this.refreshNew(data);
     this.checkScreen();
 }
