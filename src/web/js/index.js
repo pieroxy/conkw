@@ -227,7 +227,7 @@ ConkW.setStatus = function(msg) {
 }
 
 try {
-    ConkW.fillTemplate = eval('function(templateString, templateVars) {\n'+
+    eval('ConkW.fillTemplate = function (templateString, templateVars) {\n'+
     '    try {\n'+
     '        var func = ConkW.data.funcs[templateString];\n'+
     '        if (!func) {\n'+
