@@ -534,7 +534,7 @@ ConkW.loadDom = function(e, holders) {
                     holders.push(new GaugeHolder(e, e.getAttribute(names[i])));
                     break;
                 case "cw-hgauge0":
-                    holders.push(new HistoryGaugeHolder(e, e.getAttribute(names[i])));
+                    holders.push(new HistoryGaugeHolderCanvas(e, e.getAttribute(names[i])));
                     break;
                 case "cw-multinode-pattern":
                     holders.push(new MultivalueHolder(e));
@@ -880,7 +880,7 @@ class GaugeHolder {
 }
 
 
-class HistoryGaugeHolder {
+class HistoryGaugeHolderFloat {
     constructor(e, fv) {
         this.element = e;
         this.elementWidth = e.scrollWidth;
@@ -951,7 +951,6 @@ class HistoryGaugeHolder {
 
         if (max != this.maxValue) {
             this.maxValue = max;
-            //console.log("Recomputing heights, max has changed.");
             // Max has changed, we need to recompute height of all elements.
             e.childNodes.forEach(function (container) {
                 var bottom=0;
@@ -1027,6 +1026,84 @@ class MultivalueHolder {
         }
         for (var i=0 ; i<this.childHolders.length ; i++) {
             this.childHolders[i].update(data);
+        }
+    }
+}
+
+
+class HistoryGaugeHolderCanvas {
+    constructor(e, fv) {
+        this.element = e;
+        this.ns = e.getAttribute("cw-ns");
+        this.bgcolor = e.getAttribute("cw-bgcolor");
+        this.log = e.getAttribute("log") == "true";
+        this.min = ConkW.parseValueExpression(e.getAttribute("cw-min"));
+        this.max = ConkW.parseValueExpression(e.getAttribute("cw-max"));
+        this.maxValue = -1;
+        this.warn = ConkW.parseValueExpression(e.getAttribute("cw-value-warn"));
+        this.wmax = this.warn.format === "valuebelow";
+        e.style.backgroundColor = this.bgcolor;
+
+        this.colors = [];
+        this.valueExprs = [];
+        var i = 0;
+        while (true) {
+            var fv = e.getAttribute("cw-hgauge" + i);
+            if (!fv) break;
+            var idx = fv.indexOf(":");
+            var v = fv.substring(idx + 1);
+            this.colors.push(fv.substring(0, idx));
+            this.valueExprs.push(ConkW.parseValueExpression(v));
+            i++;
+        }
+
+        var canvas = document.createElement("canvas");
+        canvas.setAttribute("width", this.w=e.scrollWidth);
+        canvas.setAttribute("height", this.h=e.scrollHeight);
+        e.appendChild(canvas);
+        this.canvas = canvas;
+    }
+    scroll() {
+        var ctx = this.canvas.getContext('2d');
+        ctx.save();
+        ctx.translate(-1, 0);
+        ctx.drawImage(this.canvas, 0, 0);
+        ctx.restore();
+    }
+    update(data) {
+        var ctx = this.canvas.getContext('2d');
+
+        this.scroll();
+
+        var min = ConkW.extractTypedValue(this.min, data);
+        var max = ConkW.extractTypedValue(this.max, data);
+
+        var bottom = 0;
+        var bgColor = this.bgcolor;
+
+        if (ConkW.showMetricGap) {
+            bgColor = "red";
+        }
+
+        ctx.fillStyle = bgColor;
+        ctx.fillRect(this.w-1, 0, 1, this.h);
+
+        for (var i = 0; i < this.colors.length; i++) {
+            var value = ConkW.extractTypedValue(this.valueExprs[i], data);
+            ctx.fillStyle = this.colors[i];
+            var posprc = ConkW.getPercent(value, min, max, this.log);
+            var hpx = posprc*this.h/100;
+
+            ctx.fillRect(this.w-1, this.h-hpx-bottom, 1, hpx);
+            bottom += hpx;
+            console.log(hpx);
+        }
+
+        if (max != this.maxValue && this.maxValue!=-1) {
+            this.scroll();
+            ctx.fillStyle = "orange";
+            ctx.fillRect(this.w-1, 0, 1, this.h);
+            this.maxValue = max;
         }
     }
 }
