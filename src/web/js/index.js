@@ -118,8 +118,8 @@ ConkW.load = function() {
 
 ConkW.updateDelay = function() {
     var e = document.getElementById("cw-delay");
-    var v = (Date.now() - ConkW.data.lastupdate) / 1000
-    if (v > 4) ConkW.showMetricGap = true;
+    var v = Math.round(Date.now() - ConkW.data.lastupdate)
+    if (v > 5000) ConkW.showMetricGap = true;
     if (e) {
         if (ConkW.data.lastupdate) {
             e.innerHTML = v + "/" + ConkW.data.lastResponseJitter + "/" + ConkW.data.debug;
@@ -183,7 +183,7 @@ ConkW.checkScreen = function() {
             if (tz < 100) tz *= 0.99;
             if (tz >= ctz) break;
 
-            ConkW.data.zoomlevel = ctz = ctz*0.9;
+            ConkW.data.zoomlevel = ctz = ctz*0.95;
             this.zoom(ctz);
         }
     }
@@ -1096,7 +1096,7 @@ class HistoryGaugeHolderCanvas {
 
             ctx.fillRect(this.w-1, this.h-hpx-bottom, 1, hpx);
             bottom += hpx;
-            console.log(hpx);
+            //console.log(hpx);
         }
 
         if (max != this.maxValue && this.maxValue!=-1) {
