@@ -165,6 +165,7 @@ ConkW.forceScreenRefresh = function() {
 
 ConkW.checkScreen = function() {
     if (ConkW.data.geometry != this.getGeometry()) {
+        var zd = document.getElementById("cw-zoom");
         this.zoom(100);
         var ctz = 100;
         while (true) {
@@ -173,7 +174,10 @@ ConkW.checkScreen = function() {
             var zh = window.innerWidth * (10000/ctz) / window.document.body.scrollWidth;
             var tz = Math.min(100, zv, zh);
             if (tz < 100) tz *= 0.99;
-            if (tz >= ctz) break;
+            if (tz >= ctz) {
+                if (zd) zd.innerText = Math.round(ctz)+'%';
+                break;
+            }
 
             ConkW.data.zoomlevel = ctz = ctz*0.95;
             this.zoom(ctz);
