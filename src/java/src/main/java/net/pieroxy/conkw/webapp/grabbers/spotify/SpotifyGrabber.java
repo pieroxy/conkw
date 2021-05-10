@@ -28,6 +28,7 @@ public class SpotifyGrabber extends TimeThrottledGrabber {
   private String clientId;
   private String clientSecret;
   private String redirectUri;
+  private boolean isPlaying = true;
   private static String stateToken = RandomHelper.getSequence()+";grabberAction=spotify;";
 
   public String processAction(Map<String, String[]> parameterMap) {
@@ -135,7 +136,7 @@ public class SpotifyGrabber extends TimeThrottledGrabber {
 
   @Override
   protected Duration getTtl() {
-    return Duration.ofSeconds(3);
+    return Duration.ofSeconds(isPlaying ? 0 : 3);
   }
 
   @Override
@@ -208,6 +209,7 @@ public class SpotifyGrabber extends TimeThrottledGrabber {
         r.addError("spotify-error: " + response.error.getMessage());
         return;
       }
+      isPlaying = response.is_playing;
       r.addMetric("status", response.is_playing ? "Playing": "Paused");
       CurrentlyPlayingResponseItem item = response.item;
       if (item != null) {
