@@ -321,3 +321,24 @@ clock #clock-minute {
 .lcd>div * {
     padding-bottom: 0.2em;
 }
+
+
+#loginDiv {
+    display: inline-block;
+    margin-top: 100px;
+    background-color: darkred;
+    padding: 50px;
+
+}
+
+#dialogVeil {
+    text-align:center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 110%;
+    padding: 0;
+    margin: 0;
+    background-color: rgba(50,0,0,0.5);
+}

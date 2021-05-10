@@ -21,6 +21,7 @@ ConkW.initStatic = function() {
 ConkW.initStatic();
 
 ConkW.init = function() {
+    ConkW.data.sid = localStorage.getItem("sid");
     var zis = this;
     var options = document.body.getAttribute("cw-options") || "";
     var checkScreenFlag = options.indexOf("noresize")==-1;
@@ -46,23 +47,6 @@ ConkW.initDocumentation = function() {
 ConkW.handleError = function(e) {
     console.log(e);
     ConkW.data.jsError = e;
-}
-
-ConkW.callApi = function(qs) {
-    var xmlhttp = new XMLHttpRequest();
-    var url = "/api?" + qs;
-    xmlhttp.open("GET", url, true); // false = synchronous
-    xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == 4) {
-            var res = xmlhttp.responseText + "";
-            if (res.charAt(0) == '{') {
-                res = JSON.parse(res);
-                console.log(res);
-            }
-        }
-    }
-
-    xmlhttp.send();
 }
 
 ConkW.scheduleLoad = function(forcenow) {
@@ -91,11 +75,19 @@ ConkW.sendActionToServer = function() {
     console.log(url);
     var pos = url.indexOf("%3BgrabberAction%3D")+19;
     var grabber = url.substring(pos, url.indexOf("%3B", pos));
-    var targeturl = "/api?grabberAction="+grabber;
+    var targeturl = "/api?grabberAction="+grabber + ConkW.getAuthToAppendToUrl();
     targeturl += "&" + url.substring(url.indexOf("?")+1);
     xmlhttp.open("GET", targeturl, true); // false = synchronous
     xmlhttp.onreadystatechange = function() { location.href = url.substring(0, url.indexOf("?")) }
     xmlhttp.send();
+}
+
+ConkW.getAuthToAppendToUrl = function() {
+    var appendToUrl = "";
+    if (ConkW.data.sid) {
+        appendToUrl = "&__SID__=" + ConkW.data.sid;
+    }
+    return appendToUrl;
 }
 
 ConkW.load = function() {
@@ -107,7 +99,7 @@ ConkW.load = function() {
         } else {
             var requestTime = Date.now();
             var xmlhttp = new XMLHttpRequest();
-            var url = "/api?grabbers=" + grabbers;
+            var url = "/api?grabbers=" + grabbers + ConkW.getAuthToAppendToUrl();
             xmlhttp.open("GET", url, true); // false = synchronous
             xmlhttp.onreadystatechange = function() { ConkW.loaded(xmlhttp, requestTime); }
             xmlhttp.send();
@@ -189,6 +181,65 @@ ConkW.checkScreen = function() {
     }
 }
 
+ConkW.displayLogin = function() {
+    if (document.getElementById("loginDiv")) return;
+
+    var s = document.createElement("script");
+    s.src="/js/sha1.js";
+    document.body.appendChild(s);
+
+    var e = document.createElement("div");
+    e.id = "dialogVeil";
+    var html = '<div id="loginDiv">Authentication Needed<br><br><table><tr><td>Login: <td><input autocapitalize="none" id="loginfield" type="text"><tr><td>Password: <td><input id="passwordfield" type="password"><tr><td><td><input type="button" value="ok" onclick="ConkW.doLogin()"></table></div>';
+    e.innerHTML = html;
+    document.body.appendChild(e);
+    document.getElementById("loginfield").focus();
+}
+
+ConkW.doLogin = function() {
+    var loginfield = document.getElementById("loginfield");
+    var passwordfield = document.getElementById("passwordfield");
+    if (loginfield && passwordfield) {
+        var xmlhttp = new XMLHttpRequest();
+        var url = "/api?__U__=" + encodeURIComponent(loginfield.value);
+        xmlhttp.open("GET", url, true);
+        xmlhttp.onreadystatechange = function() { 
+            if (xmlhttp.readyState == 4) {
+                var res = xmlhttp.responseText + "";
+                if (res.charAt(0) == '{') {
+                    res = JSON.parse(res);
+                    ConkW.doSendPassword(res.saltForPassword);
+                }
+            }
+        }
+        xmlhttp.send();
+    }
+}
+
+ConkW.doSendPassword = function(salt) {
+    var passwordfield = document.getElementById("passwordfield");
+    var xmlhttp = new XMLHttpRequest();
+    var url = "/api?__U__=" + encodeURIComponent(loginfield.value) + "&__P__=" + SHA1.get().update(salt + passwordfield.value).hex();
+    xmlhttp.open("GET", url, true);
+    xmlhttp.onreadystatechange = function() { 
+        if (xmlhttp.readyState == 4) {
+            var res = xmlhttp.responseText + "";
+            if (res.charAt(0) == '{') {
+                res = JSON.parse(res);
+                if (res.sessionToken) {
+                    localStorage.setItem("sid", res.sessionToken);
+                    ConkW.data.sid = res.sessionToken;
+                    document.body.removeChild(document.getElementById("dialogVeil"));
+                }
+                if (res.errorMessage) {
+                    alert(res.errorMessage);
+                }
+            }
+        }
+}
+    xmlhttp.send();
+}
+
 ConkW.loaded = function(req, requestTime) {
     try {
         if (req.readyState == 4) {
@@ -197,16 +248,20 @@ ConkW.loaded = function(req, requestTime) {
                 var before = Date.now();
                 var loadTime = before - requestTime;
                 res = JSON.parse(res);
-                ConkW.data.lastResponseJitter = res.responseJitter;
-                //console.log(res.responseJitter);
-                ConkW.refresh(res);
-                ConkW.data.apiErrors = res.errors;
-                // The following forces a synchronous redraw
-                // No performance hit since a redraw needs to happen
-                // but allows monitoring of the drawing time.
-                document.body.offsetHeight; 
-                var after = Date.now();
-                ConkW.data.debug = loadTime + "|" + (after - before);
+                if (res.needsAuthentication) {
+                    ConkW.displayLogin();
+                } else {
+                    ConkW.data.lastResponseJitter = res.responseJitter;
+                    //console.log(res.responseJitter);
+                    ConkW.refresh(res);
+                    ConkW.data.apiErrors = res.errors;
+                    // The following forces a synchronous redraw
+                    // No performance hit since a redraw needs to happen
+                    // but allows monitoring of the drawing time.
+                    document.body.offsetHeight; 
+                    var after = Date.now();
+                    ConkW.data.debug = loadTime + "|" + (after - before);
+                }
             }
             ConkW.showMetricGap = false;
         }

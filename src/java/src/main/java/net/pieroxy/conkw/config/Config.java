@@ -5,6 +5,7 @@ import com.dslplatform.json.CompiledJson;
 @CompiledJson(onUnknown = CompiledJson.Behavior.FAIL)
 public class Config {
   private GrabberConfig[]grabbers;
+  private ApiAuth auth;
   private int httpPort;
   private boolean disableDefaultUI;
   private boolean disableCustomUI;
@@ -62,5 +63,13 @@ public class Config {
 
   public void setDisableEmi(boolean disableEmi) {
     this.disableEmi = disableEmi;
+  }
+
+  public ApiAuth getAuth() {
+    return auth;
+  }
+
+  public void setAuth(ApiAuth auth) {
+    this.auth = auth;
   }
 }

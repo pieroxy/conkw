@@ -96,7 +96,7 @@ public class Listener implements ServletContextListener {
       System.gc();
 
       if (apiManager!=null) apiManager.close();
-      Api.setApiManager(apiManager=new ApiManager(grabbers));
+      Api.setContext(apiManager=new ApiManager(grabbers), config.getAuth());
     } catch (Exception e) {
       LOGGER.log(Level.SEVERE, "Error loading and applying configuration.", e);
     }

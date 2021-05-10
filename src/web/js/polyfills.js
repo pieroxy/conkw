@@ -1,14 +1,14 @@
 if (!String.prototype.replaceAll) {
-	String.prototype.replaceAll = function(str, newStr){
+  String.prototype.replaceAll = function (str, newStr) {
 
-		// If a regex pattern
-		if (Object.prototype.toString.call(str).toLowerCase() === '[object regexp]') {
-			return this.replace(str, newStr);
-		}
+    // If a regex pattern
+    if (Object.prototype.toString.call(str).toLowerCase() === '[object regexp]') {
+      return this.replace(str, newStr);
+    }
 
-		// If a string
-		return this.replace(new RegExp(str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'g'), newStr);
-	};
+    // If a string
+    return this.replace(new RegExp(str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'), 'g'), newStr);
+  };
 }
 
 if (Element.prototype.getAttributeNames == undefined) {
@@ -24,5 +24,6 @@ if (Element.prototype.getAttributeNames == undefined) {
 }
 
 if (NodeList.prototype.forEach === undefined) {
-	NodeList.prototype.forEach = Array.prototype.forEach;
+  NodeList.prototype.forEach = Array.prototype.forEach;
 }
+
