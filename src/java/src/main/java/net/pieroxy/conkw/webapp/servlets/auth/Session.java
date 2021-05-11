@@ -21,7 +21,8 @@ public class Session {
 
   public boolean expired() {
     long now = System.currentTimeMillis();
-    return now-lastAccessed > Duration.ofSeconds(60).toMillis();
+    return now-lastAccessed > Duration.ofHours(24).toMillis() ||
+        now-created > Duration.ofDays(60).toMillis();
   }
 
   public long getCreated() {
