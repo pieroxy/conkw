@@ -4,7 +4,7 @@ import com.dslplatform.json.CompiledJson;
 
 import java.util.*;
 
-@CompiledJson(onUnknown = CompiledJson.Behavior.FAIL)
+@CompiledJson(onUnknown = CompiledJson.Behavior.IGNORE)
 public class Response {
   private Map<String, ResponseData> metrics = new HashMap<>();
   private long timestamp;
