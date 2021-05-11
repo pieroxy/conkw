@@ -23,7 +23,7 @@
     },
     //OSHI
     {
-      // OSHI/JNA view of the system, detailed, works on most platforms, much slower and accurate than Proc on Linux
+      // OSHI/JNA view of the system, detailed, works on most platforms, much slower and detailed than Proc on Linux
       "implementation":"net.pieroxy.conkw.webapp.grabbers.oshi.OshiGrabber",
       "parameters": {
         // Default name is "oshi"
@@ -64,6 +64,8 @@
       "implementation":"net.pieroxy.conkw.webapp.grabbers.openweathermap.OpenWeatherMapGrabber",
       "extract":"min,hour,day,current",
       "parameters": {
+        // Default name is "owm"
+        /* "name":"paris_weather" */
         "token":"your api token here",
         "lat":"48.8534",
         "lon":"2.3488"
@@ -125,6 +127,17 @@
     }
     //END OF GRABBERS
   ],
+  "apiAuth":{
+    "auth":false, // Set to true to activate API authentication 
+    "sessionLifetime":"1y", // Delay after which every session expires.
+    "sessionInactivityTimeout":"30d", // Delay after which every unused session expires.
+    "users":[ // You can define here many users.
+      {
+        "login":"testuser", 
+        "password":"foobar"
+      }
+    ]
+  },
 
   // This is the port the web server will listen to. Note that values below 1024 are discouraged as they require
   // the process to be launched as root.
