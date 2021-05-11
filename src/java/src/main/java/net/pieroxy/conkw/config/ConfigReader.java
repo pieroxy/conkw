@@ -19,7 +19,7 @@ public class ConfigReader {
         try (InputStream is = new FileInputStream(getConfigFile())) {
             config =  new DslJson<>().deserialize(Config.class, new RemoveJsonCommentsInputStream(is, getConfigFile().getAbsolutePath()));
         } catch (Exception e) {
-            throw new RuntimeException("Unable to parse config file " + getConfigFile().getAbsolutePath() + ": " + e.getMessage());
+            throw new RuntimeException("Unable to parse config file " + getConfigFile().getAbsolutePath() + ": " + e.getMessage(), e);
         }
 
         return config;
