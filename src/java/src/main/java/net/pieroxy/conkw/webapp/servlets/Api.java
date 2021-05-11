@@ -91,7 +91,7 @@ public class Api extends HttpServlet {
         if (validatedCr!=null) {
           LOGGER.fine("Valid CR found");
           String random = HashTools.getRandomSequence(8);
-          addSession(new Session(random, validatedCr.getUser()));
+          addSession(new Session(random, validatedCr.getUser(), authConfig));
           response.setSessionToken(random);
         } else {
           LOGGER.fine("No valid CR found");

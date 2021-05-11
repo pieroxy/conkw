@@ -1,18 +1,28 @@
 package net.pieroxy.conkw.webapp.servlets.auth;
 
+import net.pieroxy.conkw.config.ApiAuth;
 import net.pieroxy.conkw.config.User;
+import net.pieroxy.conkw.utils.duration.CDuration;
+import net.pieroxy.conkw.utils.duration.CDurationParser;
 
 import java.time.Duration;
 
 public class Session {
   long created = System.currentTimeMillis();
   long lastAccessed = System.currentTimeMillis();
+  CDuration sessionLifetime;
+  CDuration sessionInactiveTimeout;
   String key;
   User user;
 
-  public Session(String key, User user) {
+  public Session(String key, User user, ApiAuth config)
+  {
     this.key = key;
     this.user = user;
+    if (config!=null) {
+      sessionLifetime = CDurationParser.getOrDefault(config.getSessionLifetime(), "1y");
+      sessionInactiveTimeout = CDurationParser.getOrDefault(config.getSessionInactivityTimeout(), "7d");
+    }
   }
 
   public void use() {
@@ -21,8 +31,8 @@ public class Session {
 
   public boolean expired() {
     long now = System.currentTimeMillis();
-    return now-lastAccessed > Duration.ofHours(24).toMillis() ||
-        now-created > Duration.ofDays(60).toMillis();
+    return sessionInactiveTimeout.isExpired(lastAccessed, now) ||
+        sessionLifetime.isExpired(created, now);
   }
 
   public long getCreated() {
