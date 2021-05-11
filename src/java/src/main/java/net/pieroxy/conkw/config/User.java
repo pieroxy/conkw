@@ -34,4 +34,11 @@ public class User {
   public int hashCode() {
     return Objects.hash(login, password);
   }
+
+  public User clearPassword() {
+    User res = new User();
+    res.setLogin(getLogin());
+    res.setPassword("");
+    return res;
+  }
 }

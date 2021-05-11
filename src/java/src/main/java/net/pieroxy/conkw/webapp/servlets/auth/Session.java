@@ -1,19 +1,22 @@
 package net.pieroxy.conkw.webapp.servlets.auth;
 
+import com.dslplatform.json.CompiledJson;
 import net.pieroxy.conkw.config.ApiAuth;
 import net.pieroxy.conkw.config.User;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.duration.CDurationParser;
 
-import java.time.Duration;
-
+@CompiledJson(onUnknown = CompiledJson.Behavior.FAIL)
 public class Session {
-  long created = System.currentTimeMillis();
-  long lastAccessed = System.currentTimeMillis();
-  CDuration sessionLifetime;
-  CDuration sessionInactiveTimeout;
-  String key;
-  User user;
+  private long created = System.currentTimeMillis();
+  private long lastAccessed = System.currentTimeMillis();
+  private transient CDuration sessionLifetime;
+  private transient CDuration sessionInactiveTimeout;
+  private String key;
+  private User user;
+
+  public Session() {
+  }
 
   public Session(String key, User user, ApiAuth config)
   {
