@@ -33,7 +33,33 @@ public class Api extends HttpServlet {
 
   public static void setContext(ApiManager api, ApiAuth auth) {
     Api.api = api;
-    Api.authConfig = auth == null ? new ApiAuth() : auth;
+    ApiAuth newAuth = auth == null ? new ApiAuth() : auth;
+    updateAuthConfig(newAuth);
+  }
+
+  private static void updateAuthConfig(ApiAuth newAuth) {
+    Map<String, Session> newsessions = new HashMap<>();
+    List<ChallengeResponse> newchallenges = new ArrayList<>();
+    Map<String, User> allUsersToKeep = new HashMap<>();
+    if (authConfig!=null) {
+      Arrays.stream(authConfig.getUsers()).forEach(u -> allUsersToKeep.put(u.getLogin(), u));
+    }
+    Arrays.stream(newAuth.getUsers()).forEach(u -> {
+      User current = allUsersToKeep.get(u.getLogin());
+      if (current != null && !current.equals(u)) {
+        allUsersToKeep.remove(u.getLogin());
+      }
+    });
+    sessions.values().forEach(s -> {
+      if (!s.expired() && allUsersToKeep.containsKey(s.getUser().getLogin())) {
+        newsessions.put(s.getKey(), s);
+        s.applyConfig(newAuth);
+      }});
+    challenges.forEach(c -> {if (!c.expired() && allUsersToKeep.containsKey(c.getUser().getLogin())) newchallenges.add(c);});
+
+    Api.authConfig = newAuth;
+    sessions = newsessions;
+    challenges = newchallenges;
   }
 
 

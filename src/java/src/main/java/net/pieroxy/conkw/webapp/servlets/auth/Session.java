@@ -19,10 +19,13 @@ public class Session {
   {
     this.key = key;
     this.user = user;
-    if (config!=null) {
-      sessionLifetime = CDurationParser.getOrDefault(config.getSessionLifetime(), "1y");
-      sessionInactiveTimeout = CDurationParser.getOrDefault(config.getSessionInactivityTimeout(), "7d");
-    }
+    applyConfig(config);
+  }
+
+  public void applyConfig(ApiAuth config) {
+    if (config == null) config = new ApiAuth();
+    sessionLifetime = CDurationParser.getOrDefault(config.getSessionLifetime(), "1y");
+    sessionInactiveTimeout = CDurationParser.getOrDefault(config.getSessionInactivityTimeout(), "7d");
   }
 
   public void use() {
