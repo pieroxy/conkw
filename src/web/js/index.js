@@ -49,6 +49,23 @@ ConkW.handleError = function(e) {
     ConkW.data.jsError = e;
 }
 
+ConkW.callApi = function(qs) {
+    var xmlhttp = new XMLHttpRequest();
+    var url = "/api?" + qs + ConkW.getAuthToAppendToUrl();
+    xmlhttp.open("GET", url, true); // false = synchronous
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == 4) {
+            var res = xmlhttp.responseText + "";
+            if (res.charAt(0) == '{') {
+                res = JSON.parse(res);
+                console.log(res);
+            }
+        }
+    }
+
+    xmlhttp.send();
+}
+
 ConkW.scheduleLoad = function(forcenow) {
     var nowb = Date.now();
     var jnow = nowb%1000;
