@@ -62,7 +62,7 @@
     {
       // OpenWeatherMap grabber. Extracts weather forecast (minutely, hourly, daily) from https://openweathermap.org/
       "implementation":"net.pieroxy.conkw.webapp.grabbers.openweathermap.OpenWeatherMapGrabber",
-      "extract":"min,hour,day,current",
+      "extract":"minute,hour,day,current",
       "parameters": {
         // Default name is "owm"
         /* "name":"paris_weather" */
