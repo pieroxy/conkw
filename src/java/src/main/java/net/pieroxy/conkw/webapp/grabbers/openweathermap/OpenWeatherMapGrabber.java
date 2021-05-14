@@ -47,7 +47,6 @@ public class OpenWeatherMapGrabber extends TimeThrottledGrabber {
     }
 
     String city = grabCity();
-    log(Level.INFO, "City is " + city);
 
     try {
       URL url = new URL("https://api.openweathermap.org/data/2.5/onecall?lat="+lat+"&lon="+lon+"&units=metric&appid="+token);
@@ -169,6 +168,7 @@ public class OpenWeatherMapGrabber extends TimeThrottledGrabber {
         WeatherResponse response = JsonHelper.getJson().deserialize(WeatherResponse.class, is);
         if (response != null) {
           locationNames.put(key, response.getName());
+          log(Level.INFO, "City is " + response.getName());
         }
 
       } catch (Exception e) {
