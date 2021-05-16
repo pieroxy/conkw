@@ -11,19 +11,19 @@ public final class CDuration {
     return seconds<0 || (nowInMilliseconds-sinceInMilliseconds)/1000 > seconds;
   }
 
-  long asSeconds() {
+  public long asSeconds() {
     return seconds;
   }
-  long asMinutes() {
+  public long asMinutes() {
     return seconds/60;
   }
-  long asHours() {
+  public long asHours() {
     return seconds/3600;
   }
-  long asDays() {
+  public long asDays() {
     return seconds/86400;
   }
-  long asYears() {
+  public long asYears() {
     return seconds/31536000;
   }
 }

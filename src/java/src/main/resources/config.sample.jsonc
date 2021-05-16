@@ -63,21 +63,12 @@
       // OpenWeatherMap grabber. Extracts weather forecast (minutely, hourly, daily) from https://openweathermap.org/
       "implementation":"net.pieroxy.conkw.webapp.grabbers.openweathermap.OpenWeatherMapGrabber",
       "extract":"minute,hour,day,current",
+      // Default name is "owm"
+      /* "name":"paris_weather" */
       "parameters": {
-        // Default name is "owm"
-        /* "name":"paris_weather" */
         "token":"your api token here",
         "lat":"48.8534",
         "lon":"2.3488"
-      }
-    },
-    //FILE
-    {
-      // File grabber. Extracts data from flat files.
-      "implementation":"net.pieroxy.conkw.webapp.grabbers.FileGrabber",
-      "name":"samplefile",
-      "parameters": {
-        "file":"$FGSF"
       }
     },
     //SPOTIFY
@@ -90,12 +81,33 @@
         "redirectUri":"Your redirect URI"
       }
     },
+    //YAHOO FINANCE
+    {
+      // Yahoo finance grabber. Extracts all sorts of metrics for a stock value, cryptocurrency, etc, here the Apple stock.
+      "implementation":"net.pieroxy.conkw.webapp.grabbers.yahooFinance.YahooFinanceGrabber",
+      "name":"apple",
+      "parameters": {
+        "ttl":"5h", // The time between two refreshes. 
+        "symbol":"AAPL",
+        "region":"US",
+        "key":"your yahoo finance rapidapi key here"
+      }
+    },
     //HTTPS
     {
       // Https cert grabber. Extracts expiration date of an https cert.
       "implementation":"net.pieroxy.conkw.utils.HttpsCertGrabber",
       "parameters": {
         "names":"google.com,facebook.com,apple.com"
+      }
+    },
+    //FILE
+    {
+      // File grabber. Extracts data from flat files.
+      "implementation":"net.pieroxy.conkw.webapp.grabbers.FileGrabber",
+      "name":"samplefile",
+      "parameters": {
+        "file":"$FGSF"
       }
     },
     //EMG
