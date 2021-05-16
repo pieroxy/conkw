@@ -84,6 +84,7 @@ public class OpenWeatherMapGrabber extends TimeThrottledGrabber {
       extract(responseData, "minute", (res) -> {
         int i=0;
         if (response.getMinutely()!=null) {
+          if (canLogFine()) log(Level.FINE, "Minute extraction, number of elements: " + response.getMinutely().length);
           for (MinutelyForecast f : response.getMinutely()) {
             res.addMetric("minutely_pim_" + i++, f.getPrecipitation());
           }
