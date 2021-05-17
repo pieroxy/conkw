@@ -8,7 +8,6 @@ Here are the things we have in mind for conkw. This is kind of my TODO list.
 
 Those existing that need to be ported to conkw (so, expect them soon)
 * *News* Grab news headlines, details being configurable.
-* *Stock* Grab stock levels for your preferred companies. Also cryptocurrencies.
 
 Those planned (so expect them later)
 * lm-sensors - to get temperatures, voltages and fan speeds on linux.
@@ -19,7 +18,6 @@ Those planned (so expect them later)
 * Mail Google - to get latest mails
 * Mail Outlook - to get latest mails
 * Freebox - to get internet status on this home router
-* Push metrics to another instance on the network through Emi
 
 ## Misc
 * https support with live reload of the certificates.
