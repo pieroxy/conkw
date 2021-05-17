@@ -25,7 +25,7 @@ Note that the basic plan is limited to 500 requests per month, which amounts rou
 * `num.change`: The daily change, in local currency.
 * `num.changeprc`: The daily change in %.
 
-* `str.marketCapFmt`: The total market valuation for the sumbol, formatted.
+* `str.marketCapFmt`: The total market valuation for the symbol, formatted.
 * `str.name`: The human readable name for the symbol.
 * `str.currencySymbol`: The symbol of the local currency (used for price and changes).
 * `str.currency`: The currency used for price and changes.
