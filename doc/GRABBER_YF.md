@@ -33,7 +33,7 @@ Note that the basic plan is limited to 500 requests per month, which amounts rou
 ## Configuration
 
 Here is the sample config portion:
-```json
+```jsonc
     {
       "implementation": "net.pieroxy.conkw.webapp.grabbers.yahooFinance.YahooFinanceGrabber",
       "name":"apple",
