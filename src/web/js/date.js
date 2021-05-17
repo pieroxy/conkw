@@ -46,6 +46,38 @@ ConkW.clockFaces = [
     }
   },
   {
+    background: "/clocks/darkclock.png",
+    hour: {
+      img: {
+        width: 549,
+        height: 50,
+        centerPosition: 420,
+        scale: 0.4,
+        src: "/clocks/darkclock-hours.png"
+      },
+      shadowOffset: 0.02,
+      shadowSpread: 0.00,
+      shadowRadius: 0.012,
+      shadowAngle: 220,
+      shadowColor: "rgba(0, 0, 0, 0.5)"
+    },
+    minute: {
+      img: {
+        width: 671,
+        height: 43,
+        centerPosition: 536,
+        scale: 0.5,
+        src: "/clocks/darkclock-minutes.png"
+      },
+      shadowOffset: 0.025,
+      shadowSpread: 0.00,
+      shadowRadius: 0.015,
+      shadowAngle: 220,
+      shadowColor: "rgba(0, 0, 0, 0.6)"
+    },
+    second:{}
+  },
+  {
     background: "/clocks/arabic.png",
     hour: {
       div: {
