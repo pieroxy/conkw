@@ -8,7 +8,7 @@ public final class CDuration {
   }
 
   public boolean isExpired(long sinceInMilliseconds, long nowInMilliseconds) {
-    return seconds<0 || (nowInMilliseconds-sinceInMilliseconds)/1000 > seconds;
+    return seconds<=0 || (nowInMilliseconds-sinceInMilliseconds)/1000 > seconds;
   }
 
   public long asSeconds() {

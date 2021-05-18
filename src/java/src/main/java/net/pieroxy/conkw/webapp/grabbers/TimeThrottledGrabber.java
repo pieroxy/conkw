@@ -3,6 +3,7 @@ package net.pieroxy.conkw.webapp.grabbers;
 import com.dslplatform.json.DslJson;
 import com.dslplatform.json.JsonWriter;
 import net.pieroxy.conkw.utils.JsonHelper;
+import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +16,7 @@ import java.util.logging.Level;
 
 public abstract class TimeThrottledGrabber extends AsyncGrabber {
 
-  protected abstract Duration getTtl();
+  protected abstract CDuration getTtl();
   protected abstract void load(ResponseData res);
   protected abstract String getCacheKey();
 
@@ -67,7 +68,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber {
 
   @Override
   public final boolean changed() {
-    return System.currentTimeMillis() - lastRun > getTtl().toMillis();
+    return getTtl().isExpired(lastRun, System.currentTimeMillis());
   }
 
   @Override

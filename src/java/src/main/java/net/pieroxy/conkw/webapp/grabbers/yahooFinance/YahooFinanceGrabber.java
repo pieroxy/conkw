@@ -39,8 +39,8 @@ public class YahooFinanceGrabber extends TimeThrottledGrabber {
   }
 
   @Override
-  protected Duration getTtl() {
-    return Duration.ofSeconds(CACHE_TTL.asSeconds());
+  protected CDuration getTtl() {
+    return CACHE_TTL;
   }
 
   @Override

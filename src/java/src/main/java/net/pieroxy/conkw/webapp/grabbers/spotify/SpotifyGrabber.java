@@ -3,7 +3,8 @@ package net.pieroxy.conkw.webapp.grabbers.spotify;
 import net.pieroxy.conkw.utils.DebugTools;
 import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.utils.RandomHelper;
-import net.pieroxy.conkw.webapp.grabbers.AsyncGrabber;
+import net.pieroxy.conkw.utils.duration.CDuration;
+import net.pieroxy.conkw.utils.duration.CDurationParser;
 import net.pieroxy.conkw.webapp.grabbers.TimeThrottledGrabber;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
@@ -20,6 +21,9 @@ import java.util.Map;
 import java.util.logging.Level;
 
 public class SpotifyGrabber extends TimeThrottledGrabber {
+
+  private CDuration RUNNING_TTL = CDurationParser.parse("0m");
+  private CDuration IDLE_TTL = CDurationParser.parse("3s");
 
   static final String NAME = "spotify";
   private File DATAFILE = null;
@@ -135,8 +139,8 @@ public class SpotifyGrabber extends TimeThrottledGrabber {
 
 
   @Override
-  protected Duration getTtl() {
-    return Duration.ofSeconds(isPlaying ? 0 : 3);
+  protected CDuration getTtl() {
+    return isPlaying ? RUNNING_TTL : IDLE_TTL;
   }
 
   @Override

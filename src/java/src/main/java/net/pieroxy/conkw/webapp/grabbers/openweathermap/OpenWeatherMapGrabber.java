@@ -2,6 +2,8 @@ package net.pieroxy.conkw.webapp.grabbers.openweathermap;
 
 import net.pieroxy.conkw.utils.DebugTools;
 import net.pieroxy.conkw.utils.JsonHelper;
+import net.pieroxy.conkw.utils.duration.CDuration;
+import net.pieroxy.conkw.utils.duration.CDurationParser;
 import net.pieroxy.conkw.webapp.grabbers.TimeThrottledGrabber;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
@@ -15,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 public class OpenWeatherMapGrabber extends TimeThrottledGrabber {
-  static final Duration CACHE_TTL = Duration.ofMinutes(5); // 5 min
+  static final CDuration CACHE_TTL = CDurationParser.parse("5m"); // 5 min
   static final String NAME = "owm";
 
   String token;
@@ -35,7 +37,7 @@ public class OpenWeatherMapGrabber extends TimeThrottledGrabber {
   }
 
   @Override
-  protected Duration getTtl() {
+  protected CDuration getTtl() {
     return CACHE_TTL;
   }
 

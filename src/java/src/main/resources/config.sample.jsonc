@@ -96,7 +96,7 @@
     //HTTPS
     {
       // Https cert grabber. Extracts expiration date of an https cert.
-      "implementation":"net.pieroxy.conkw.utils.HttpsCertGrabber",
+      "implementation":"net.pieroxy.conkw.webapp.grabbers.HttpsCertGrabber",
       "parameters": {
         "names":"google.com,facebook.com,apple.com"
       }

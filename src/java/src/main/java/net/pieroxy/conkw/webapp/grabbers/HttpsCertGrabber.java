@@ -1,6 +1,7 @@
-package net.pieroxy.conkw.utils;
+package net.pieroxy.conkw.webapp.grabbers;
 
-import net.pieroxy.conkw.webapp.grabbers.TimeThrottledGrabber;
+import net.pieroxy.conkw.utils.duration.CDuration;
+import net.pieroxy.conkw.utils.duration.CDurationParser;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.io.IOException;
@@ -19,6 +20,7 @@ import javax.net.ssl.X509TrustManager;
 
 // Bluntly copy pasted from https://gist.github.com/sureshpai/8c762603969e78dc2c68
 public class HttpsCertGrabber extends TimeThrottledGrabber {
+  private CDuration CACHE_TTL = CDurationParser.parse("3h");
 
   private String names;
 
@@ -124,8 +126,8 @@ public class HttpsCertGrabber extends TimeThrottledGrabber {
   }
 
   @Override
-  protected Duration getTtl() {
-    return Duration.ofHours(3);
+  protected CDuration getTtl() {
+    return CACHE_TTL;
   }
 
   @Override
