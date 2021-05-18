@@ -1,4 +1,4 @@
-# conkw documentation - OpenWeatherMapGrabber
+# conkw documentation - YahooFinanceGrabber
 
 This is the finance grabber. It relies on the [rapid api](https://rapidapi.com/apidojo/api/yahoo-finance1) call.
 

@@ -2,6 +2,7 @@ package net.pieroxy.conkw.webapp.grabbers.yahooFinance;
 
 import net.pieroxy.conkw.utils.DebugTools;
 import net.pieroxy.conkw.utils.JsonHelper;
+import net.pieroxy.conkw.utils.StringUtil;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.duration.CDurationParser;
 import net.pieroxy.conkw.webapp.grabbers.TimeThrottledGrabber;
@@ -46,6 +47,11 @@ public class YahooFinanceGrabber extends TimeThrottledGrabber {
   @Override
   protected void load(ResponseData res) {
     try {
+      if (!StringUtil.isValidApiKey(key)) {
+        res.addError("YahooFinanceGrabber not properly configured.");
+        return;
+      }
+
       log(Level.FINE, "Loading data for symbol " + symbol);
 
       URL url = new URL("https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-summary?symbol="+symbol+"&region="+region);
