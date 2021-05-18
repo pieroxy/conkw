@@ -3,6 +3,7 @@ package net.pieroxy.conkw.webapp.grabbers.spotify;
 import net.pieroxy.conkw.utils.DebugTools;
 import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.utils.RandomHelper;
+import net.pieroxy.conkw.utils.StringUtil;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.duration.CDurationParser;
 import net.pieroxy.conkw.webapp.grabbers.TimeThrottledGrabber;
@@ -15,7 +16,6 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -105,14 +105,8 @@ public class SpotifyGrabber extends TimeThrottledGrabber {
   @Override
   public void setConfig(Map<String, String> config){
     clientId = config.get("clientId");
-    if (clientId!=null && clientId.equals("Your client id"))
-      clientId=null;
     clientSecret = config.get("clientSecret");
-    if (clientSecret!=null && clientSecret.equals("Your client secret"))
-      clientSecret=null;
     redirectUri = config.get("redirectUri");
-    if (redirectUri!=null && redirectUri.equals("Your redirect URI"))
-      redirectUri=null;
 
     try {
       DATAFILE = getTmp("spotifyTokens.txt");
@@ -145,12 +139,18 @@ public class SpotifyGrabber extends TimeThrottledGrabber {
 
   @Override
   protected void load(ResponseData sr) {
-    try {
-      loadSpotify(sr);
-    } catch (Exception e) {
-      this.log(Level.SEVERE, "Loading spotify failed miserably");
-      e.printStackTrace();
-      sr.addError("spotify-error: " + e.getMessage());
+    if (!StringUtil.isValidApiKey(clientId) ||
+        !StringUtil.isValidApiKey(clientSecret) ||
+        !StringUtil.isValidUrl(redirectUri)) {
+      sr.addError("SpotifyGrabber is not properly configured");
+    } else {
+      try {
+        loadSpotify(sr);
+      } catch (Exception e) {
+        this.log(Level.SEVERE, "Loading spotify failed miserably");
+        e.printStackTrace();
+        sr.addError("spotify-error: " + e.getMessage());
+      }
     }
   }
 

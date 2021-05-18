@@ -2,6 +2,7 @@ package net.pieroxy.conkw.webapp.grabbers.openweathermap;
 
 import net.pieroxy.conkw.utils.DebugTools;
 import net.pieroxy.conkw.utils.JsonHelper;
+import net.pieroxy.conkw.utils.StringUtil;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.duration.CDurationParser;
 import net.pieroxy.conkw.webapp.grabbers.TimeThrottledGrabber;
@@ -43,7 +44,7 @@ public class OpenWeatherMapGrabber extends TimeThrottledGrabber {
 
   @Override
   protected void load(ResponseData responseData) {
-    if (token.equals("your api token here") || token.isEmpty()) {
+    if (!StringUtil.isValidApiKey(token)) {
       responseData.addError("Open Weather Map is not properly configured.");
       return;
     }

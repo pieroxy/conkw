@@ -7,6 +7,15 @@ public class StringUtil {
     return cs == null || cs.length() == 0;
   }
 
+  public static boolean isValidApiKey(String value) {
+    // Based on the premise that API keys are hexadecimal or base64 representations, while default values in config files have space in them.
+    return value!=null && value.indexOf(' ')==-1;
+  }
+
+  public static boolean isValidUrl(String value) {
+    return value!=null && value.indexOf("http")==0 && value.indexOf("://")>-1;
+  }
+
   public static int countMatches(final String str, final String sub) {
     if (isEmpty(str) || isEmpty(sub)) {
       return 0;
