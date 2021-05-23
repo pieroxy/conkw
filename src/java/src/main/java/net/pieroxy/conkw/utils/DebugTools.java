@@ -18,9 +18,9 @@ public class DebugTools {
 
   public static InputStream debugHttpRequest(HttpURLConnection conn) throws IOException {
     String s = isToString(conn.getInputStream());
-    LOGGER.fine("RC:"+conn.getResponseCode());
-    LOGGER.fine("CL:"+conn.getContentLength());
-    LOGGER.fine("Content:"+s);
+    LOGGER.info("RC:"+conn.getResponseCode());
+    LOGGER.info("CL:"+conn.getContentLength());
+    LOGGER.info("Content:"+s);
     return new ByteArrayInputStream(s.getBytes(StandardCharsets.UTF_8));
   }
 
