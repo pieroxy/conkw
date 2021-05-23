@@ -16,6 +16,12 @@ public class StringUtil {
     return value!=null && value.indexOf("http")==0 && value.indexOf("://")>-1;
   }
 
+  public static boolean isNullOrEmptyTrimmed(String s) {
+    if (s == null) return true;
+    if (s.trim().length() == 0) return true;
+    return false;
+  }
+
   public static int countMatches(final String str, final String sub) {
     if (isEmpty(str) || isEmpty(sub)) {
       return 0;

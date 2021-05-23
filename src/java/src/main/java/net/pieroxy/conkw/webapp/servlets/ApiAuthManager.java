@@ -19,9 +19,9 @@ import java.util.logging.Logger;
 
 public class ApiAuthManager {
   private final static Logger LOGGER = Logger.getLogger(ApiAuthManager.class.getName());
-  private final static String USER_FIELD = "__U__";
-  private final static String PASS_FIELD = "__P__";
-  private final static String SID_FIELD = "__SID__";
+  public final static String USER_FIELD = "__U__";
+  public final static String PASS_FIELD = "__P__";
+  public final static String SID_FIELD = "__SID__";
 
   private ApiAuth authConfig;
   private Sessions sessions = new Sessions();

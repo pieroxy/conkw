@@ -9,6 +9,7 @@ public class Response {
   private Map<String, ResponseData> metrics = new HashMap<>();
   private long timestamp;
   private int responseJitter;
+  private boolean needsAuthentication;
   private Collection<String> errors = new LinkedList<>();
 
   public Response() {
@@ -77,6 +78,14 @@ public class Response {
 
   public void setResponseJitter(int responseJitter) {
     this.responseJitter = responseJitter;
+  }
+
+  public boolean isNeedsAuthentication() {
+    return needsAuthentication;
+  }
+
+  public void setNeedsAuthentication(boolean needsAuthentication) {
+    this.needsAuthentication = needsAuthentication;
   }
 }
 

@@ -3,10 +3,8 @@ package net.pieroxy.conkw.webapp.grabbers;
 import net.pieroxy.conkw.utils.LongHolder;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
-import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.HashMap;

@@ -124,7 +124,10 @@
       "implementation":"net.pieroxy.conkw.webapp.grabbers.ExternalInstanceGrabber",
       "name":"test_eig",
       "parameters": {
-        "url":"http://localhost:12789/api?grabbers=sys"
+        "url":"http://localhost:12789/api?grabbers=sys",
+        // The following fields are used if the remote endpoint is authenticated
+        "login":"Remote api login here",
+        "password":"Remote api password here"
       }
     },
     //PEMIG
