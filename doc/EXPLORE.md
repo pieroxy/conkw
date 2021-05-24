@@ -26,3 +26,7 @@ A link to the github of conkw. Issues, community and source code, a precious res
 ## The custom UI
 
 This is where you will customize your UI to your needs and tastes !
+
+## An analog clock
+
+On the left of the page, there is a clock. Click on it and you will change the clock face. There are a few available, we hope you'll get to like at least one.
