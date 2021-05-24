@@ -1,6 +1,7 @@
 package net.pieroxy.conkw.webapp.model;
 
 import com.dslplatform.json.CompiledJson;
+import com.dslplatform.json.JsonAttribute;
 import net.pieroxy.conkw.webapp.Listener;
 import net.pieroxy.conkw.webapp.grabbers.Grabber;
 
@@ -14,6 +15,7 @@ public class ResponseData {
 
   private long timestamp;
   private long elapsedToGrab;
+  @JsonAttribute(ignore = true)
   private Collection<String> errors=new LinkedList<>();
   private String name,extractor;
   private Map<String, Double> num = new HashMap<>();
