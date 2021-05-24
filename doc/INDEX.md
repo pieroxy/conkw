@@ -1,12 +1,20 @@
 # conkw documentation
 
-## Index
+## Getting started
 
 * [Installation](INSTALL.md)
+* [Start exploring your conkw](EXPLORE.md)
+* [What is a grabber?](GRABBERS_ITRODUCTION.md)
+* [Configure your newly installed conkw](CONFIGURE.md)
+* [Customize the UI](UI.md)
+
+## Grasping what can be monitored by the default install
 * [What can you monitor with conkw?](MONITOR.md)
-* [List of all built-in grabbers](LIST_GRABBERS.md)
-* [What is a grabber?](GRABBERS_INFO.md)
 * [Monitor other stuff](EXTERNAL_MONITORING.md)
-* [Customize the UI](CUSTOMIZE_UI.md)
+* Reference: [The grabbers](LIST_GRABBERS.md)
+
+## Advanced topics
+* [The emi endpoint in details](EMI.md)
+* [The API in details](API.md)
 * Advanced: [Write your own grabber](WRITE_A_GRABBER.md)
 * Advanced: [Write your own clock face](WRITE_A_CLOCK_FACE.md)
