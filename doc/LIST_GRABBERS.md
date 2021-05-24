@@ -15,6 +15,7 @@ They grab data from external sources. Weather, music, stock price, etc.
 * [SpotifyGrabber](GRABBER_SPOTIFY.md)
 * [OpenWeatherMapGrabber](GRABBER_OWM.md)
 * [YahooFinanceGrabber](GRABBER_YF.md)
+* [BingNewsGrabber](GRABBER_BN.md)
 * [HttpsCertGrabber](GRABBER_HTTPS_CERT.md)
 
 ## The external grabbers 

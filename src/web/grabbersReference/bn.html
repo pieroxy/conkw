@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover"/>
+        <meta charset="utf-8">
+        <meta name="format-detection" content="telephone=no">
+        <title>ConkW - Grabbers reference - BingNewsGrabber</title>
+        <link href="../css/fonts.css" rel="stylesheet">
+        <link href="../css/conkw-common.css" rel="stylesheet">
+        <link href="../css/conkw.css" rel="stylesheet">
+        <script src="/js/polyfills.js"></script>
+        <script src="/js/date.js"></script>
+        <script src="/js/index.js"></script>
+        <link rel="icon" type="image/png" sizes="256x256" href="/icon.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="manifest" href="/site.webmanifest">
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000066">
+        <meta name="msapplication-TileColor" content="#000066">
+        <meta name="theme-color" content="#ffffff">
+        <style>
+        </style>
+    </head>
+    <body onload="ConkW.init()" grabbers="bingnews">
+        <pagetitle><inlinelogo></inlinelogo><a href="/">CONKW</a> - Reference UI for <code>BingNewsGrabber</code></pagetitle>
+        
+        <div style="margin:0 25%">
+          <div>
+            <heading>INDEX</heading>
+            <a href="/grabbersReference/">Go to the grabbers index</a><br/>
+            <a href="/doc/GRABBER_BN.html">Documentation</a>
+            <br><br><br>
+          </div>
+
+
+          <div class="hblock" style="width:300px">
+            <label>  Status : </label><cw-label style="max-width:200px;display:inline-block" id="cw-status"></cw-label><BR/>
+            <label>   Delay : </label><label id="cw-delay"></label>
+            <BR/><BR/><BR/>
+            <div 
+              cw-ns="bingnews" 
+              cw-multinode-from="l:num::0" 
+              cw-multinode-to="m:num::news_size" 
+              cw-multinode-pattern="^" 
+              style="display:block;height:330px;overflow-y:scroll;border: 5px solid #448;padding: 5px;width: 300px;">
+              <div cw-stale="m:str:olderThan.1h:news_name_0" cw-ns="bingnews">
+                <a cw-ns="bingnews" target="_blank" cw-prop-href="m:str::news_url_^" style="float:left">
+                  <img cw-ns="bingnews" cw-prop-src="m:str::news_providerimageurl_^" style="background: white;width:50px;height:50px;margin-right:5px;">
+                  <img cw-ns="bingnews" cw-prop-src="m:str::news_imageurl_^" style="background: white;width:50px;height:50px;margin-right:5px;"></a>
+                <cw-label 
+                      cw-ns="bingnews" 
+                      cw-value="m:str::news_name_^" 
+                      style="white-space: normal;font-family: Ubuntu, Arial, sans-serif;display:inline"></cw-label>
+                  <br clear="left">
+                  <br>
+              </div>
+            </div>
+          </div>
+        </div>
+        <br><br><br>
+    </body>
+</html>
