@@ -4,11 +4,11 @@
 
 * [Installation](INSTALL.md)
 * [Start exploring your conkw](EXPLORE.md)
-* [What is a grabber?](GRABBERS_ITRODUCTION.md)
 * [Configure your newly installed conkw](CONFIGURE.md)
 * [Customize the UI](UI.md)
 
 ## Grasping what can be monitored by the default install
+
 * [What can you monitor with conkw?](MONITOR.md)
 * [Monitor other stuff](EXTERNAL_MONITORING.md)
 * Reference: [The grabbers](LIST_GRABBERS.md)
