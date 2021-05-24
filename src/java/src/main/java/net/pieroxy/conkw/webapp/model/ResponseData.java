@@ -9,7 +9,7 @@ import java.time.Duration;
 import java.util.*;
 import java.util.logging.Logger;
 
-@CompiledJson(onUnknown = CompiledJson.Behavior.FAIL)
+@CompiledJson(onUnknown = CompiledJson.Behavior.IGNORE)
 public class ResponseData {
   private final static Logger LOGGER = Logger.getLogger(ResponseData.class.getName());
 
