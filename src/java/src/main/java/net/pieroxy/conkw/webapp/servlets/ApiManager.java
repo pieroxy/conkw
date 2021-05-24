@@ -4,11 +4,6 @@ import net.pieroxy.conkw.webapp.grabbers.Grabber;
 import net.pieroxy.conkw.webapp.grabbers.TriggerableGrabber;
 import net.pieroxy.conkw.webapp.model.Response;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
