@@ -93,6 +93,16 @@
         "key":"your yahoo finance rapidapi key here"
       }
     },
+    //BING NEWS
+    {
+      // Bing News grabber. Extracts a few news headlines.
+      "implementation":"net.pieroxy.conkw.webapp.grabbers.bingnews.BingNewsGrabber",
+      "parameters": {
+        "ttl":"1h", // The time between two refreshes. 
+        "countrycode":"fr", // To get French news.
+        "key":"your bing news rapidapi key here"
+      }
+    },
     //HTTPS
     {
       // Https cert grabber. Extracts expiration date of an https cert.
