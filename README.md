@@ -49,9 +49,10 @@ The easiest client-server setup today is a web server and a browser. That's grea
 * Backend
   * CPU performance for basic metrics extraction (CPU, memory, etc) is fairly good. For reference here are a few numbers for configurations monitoring cpu, RAM, HDD and Net throughputs as well as available free space on all drives:
     * An install on a Raspberry Pi 1 B+, the process consumes less than 1.5% of CPU.
-    * An install on an Atom N270 (A low power processor dating back to 2008) is consuming less than 1.5% CPU.
-    * An install on an old i5 760 (2010) consumes less than 1% CPU.
-    * On a modern CPU, such as a core i7-10700K, the CPU consumption is not measurable in top.
+    * An install on an Atom N270 (A low power processor dating back to 2008) is consuming less than 0.75% CPU.
+    * An install on an old i5 760 (2010) consumes less than 0.1% CPU.
+    * On a modern CPU, such as a core i7-10700K, the CPU consumption is around 0.01%.
+  * RAM consumption is around 170MB for a simple instance. There is probably little one can do to make that less, with ~100MB overhead from the JVM . On a more loaded instance, monitoring 8 external computers, with news, stocks, weather, spotify and lots of stuff, the memory usage climbs to 195MB.
 
 ## Project status
 
