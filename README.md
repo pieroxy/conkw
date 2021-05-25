@@ -54,6 +54,8 @@ The easiest client-server setup today is a web server and a browser. That's grea
     * On a modern CPU, such as a core i7-10700K, the CPU consumption is around 0.01%.
   * RAM consumption is around 170MB for a simple instance. There is probably little one can do to make that less, with ~100MB overhead from the JVM . On a more loaded instance, monitoring 8 external computers, with news, stocks, weather, spotify and lots of stuff, the memory usage climbs to 195MB.
 
+Note: You should treat these numbers as orders of magnitude, not precise measurements.
+
 ## Project status
 
 This project is being setup and is not yet considered as stable. While the product works and can already bring a lot of value, I don't feel it is mature yet. So for now, breaking changes are going to be frequent and without any warning, so be aware.
