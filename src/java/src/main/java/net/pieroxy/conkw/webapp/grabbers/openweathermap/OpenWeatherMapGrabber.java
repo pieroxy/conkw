@@ -68,9 +68,13 @@ public class OpenWeatherMapGrabber extends TimeThrottledGrabber {
 
       responseData.addMetric("location_name", city);
 
+      double sunrise = response.getCurrent().getSunrise();
+      double sunset = response.getCurrent().getSunset();
+
+
       extract(responseData, "current", (res) -> {
         res.addMetric("current_desc", response.getCurrent().getWeather()[0].getDescription());
-        res.addMetric("current_icon", getFullIcon((int)response.getCurrent().getWeather()[0].getId()));
+        res.addMetric("current_icon", getFullIcon((int)response.getCurrent().getWeather()[0].getId(), sunset, sunrise, response.getCurrent().getDt()));
         res.addMetric("current_temp", response.getCurrent().getTemp());
         res.addMetric("current_feels", response.getCurrent().getFeels_like());
         res.addMetric("current_pressure", response.getCurrent().getPressure());
@@ -107,7 +111,7 @@ public class OpenWeatherMapGrabber extends TimeThrottledGrabber {
           res.addMetric("hourly_humidity_"+i, f.getHumidity());
           res.addMetric("hourly_visibility_"+i, f.getVisibility());
           res.addMetric("hourly_desc_"+i, f.getWeather()[0].getDescription());
-          res.addMetric("hourly_icon_"+i, getFullIcon((int)f.getWeather()[0].getId()));
+          res.addMetric("hourly_icon_"+i, getFullIcon((int)f.getWeather()[0].getId(), sunset, sunrise, f.getDt()));
           res.addMetric("hourly_pop_"+i, f.getPop());
           if (f.getRain()!=null)
             res.addMetric("hourly_rain_"+i, f.getRain().getOneh());
@@ -134,7 +138,7 @@ public class OpenWeatherMapGrabber extends TimeThrottledGrabber {
           res.addMetric("daily_pressure_"+i, f.getPressure());
           res.addMetric("daily_humidity_"+i, f.getHumidity());
           res.addMetric("daily_desc_"+i, f.getWeather()[0].getDescription());
-          res.addMetric("daily_icon_"+i, getFullIcon((int)f.getWeather()[0].getId()));
+          res.addMetric("daily_icon_"+i, getFullIcon((int)f.getWeather()[0].getId(), 0, 0, 0));
           res.addMetric("daily_rain_"+i, f.getRain());
           res.addMetric("daily_snow_"+i, f.getSnow());
           res.addMetric("daily_pop_"+i, f.getPop());
@@ -202,13 +206,20 @@ public class OpenWeatherMapGrabber extends TimeThrottledGrabber {
     return 12;
   }
 
-  private String getFullIcon(int num) {
-    return "/owm-icons/wi-" + getIcon(num) + ".svg";
+  private String getFullIcon(int num, double sunset, double sunrise, double ts) {
+    return "/owm-icons/wi-" + getIcon(num, getTod(sunset, sunrise, ts)) + ".svg";
   }
-  private String getIcon(int num) {
+
+  private int getTod(double sunset, double sunrise, double ts) {
+    if (sunset == 0 || sunrise == 0) return 0;
+    if (ts%86400 < sunrise%86400) return 2;
+    if (ts%86400 > sunset%86400) return 2;
+    return 1;
+  }
+
+  private String getIcon(int num, int tod /* 0=neutral, 1=day, 2=night */) {
     // Uses https://erikflowers.github.io/weather-icons/
     // Also available at https://github.com/erikflowers/weather-icons
-    int tod = 0; // 0=neutral, 1=day, 2=night
     switch (tod) {
       case 0:
         switch (num) {
