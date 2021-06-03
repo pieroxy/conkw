@@ -2,7 +2,8 @@
 
 This is the system grabber written in pure Java. It doesn't rely on anything else than the JDK, and thus should work on all systems. 
 
-*Full name:* `net.pieroxy.conkw.webapp.grabbers.JavaSystemViewGrabber`
+* *Full name:* `net.pieroxy.conkw.webapp.grabbers.JavaSystemViewGrabber`
+* *Default instance name:* `sys`
 
 Possible extractions:
 

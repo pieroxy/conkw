@@ -2,20 +2,22 @@
 
 This is the PushToEmiGrabber grabber. It is used to push all or part of the configured grabbers data to another conkw instance, through the `/emi` endpoint. It is used to to send metrics from one to another conkw instance.
 
-*Full name:* `net.pieroxy.conkw.webapp.grabbers.PushToEmiGrabber`
+* *Full name:* `net.pieroxy.conkw.webapp.grabbers.PushToEmiGrabber`
+* *Default instance name:* None. You have to provide a name in the config file.
+
 
 ## Configuration
 
 ```json
-    {
-      "implementation":"net.pieroxy.conkw.webapp.grabbers.PushToEmiGrabber",
-      "extract":"sys",
-      "name":"p2emi",
-      "parameters": {
-        "url":"http://localhost:12789/emi?ns=test_emi",
-        "prefix":"mygrabber"
-      }
-    }
+{
+  "implementation":"net.pieroxy.conkw.webapp.grabbers.PushToEmiGrabber",
+  "extract":"sys",
+  "name":"p2emi",
+  "parameters": {
+    "url":"http://localhost:12789/emi?ns=test_emi",
+    "prefix":"mygrabber"
+  }
+}
 ```
 
 * `extract` this is the list of extractors to extract and send away. All metrics from every extractor will be prefixed by the extractor name.

@@ -4,7 +4,8 @@ This is the system grabber using the OSHI API. This API is built on top of JNA a
 
 This documentation will not drill down on OSHI and its system representation. For more details on that, please refer to [the OSHI documentation](https://github.com/oshi/oshi).
 
-*Full name:* `net.pieroxy.conkw.webapp.grabbers.oshi.OshiGrabber`
+* *Full name:* `net.pieroxy.conkw.webapp.grabbers.oshi.OshiGrabber`
+* *Default instance name:* `oshi`
 
 Possible extractions:
 

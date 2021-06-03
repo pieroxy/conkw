@@ -2,7 +2,8 @@
 
 This is the Spotify grabber. It relies on the spotify APIs to gather the currently playing song and album to report on the Conkw UI. You also can perform basic actions, such as play/pause/next/prev right from the UI.
 
-*Full name:* `net.pieroxy.conkw.webapp.grabbers.spotify.SpotifyGrabber`
+* *Full name:* `net.pieroxy.conkw.webapp.grabbers.spotify.SpotifyGrabber`
+* *Default instance name:* `spotify`
 
 ## Usage
 In order to use it, you need to:

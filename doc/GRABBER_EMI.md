@@ -3,7 +3,8 @@
 This is the EMI grabber, or external metrics ingestion grabber. Just like the [FileGrabber](GRABBER_FILE.md), it allows you to ingest metrics grabbed outside of conkw, but here you need to call conkw with an http request in order to feed it a metric. The advantage, of course, is that the ingestion can be done through the network.
 
 
-*Full name:* `net.pieroxy.conkw.webapp.grabbers.ExternalMetricsGrabber`
+* *Full name:* `net.pieroxy.conkw.webapp.grabbers.ExternalMetricsGrabber`
+* *Default instance name:* `emi`
 
 ## HTTP dialect for single metric ingestion
 

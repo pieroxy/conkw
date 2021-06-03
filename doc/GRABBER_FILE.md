@@ -2,9 +2,8 @@
 
 This is the file grabber. The way it works is that it reads a file and expose the metrics it found in the file through the API. In other words, it's up to you to write scripts and programs that write data to file(s) and then automatically you can use those metrics in conkw.
 
-
-
-*Full name:* `net.pieroxy.conkw.webapp.grabbers.FileGrabber`
+* *Full name:* `net.pieroxy.conkw.webapp.grabbers.FileGrabber`
+* *Default instance name:* `file`
 
 ## File format
 

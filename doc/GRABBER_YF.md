@@ -2,7 +2,8 @@
 
 This is the finance grabber. It relies on the [rapid api](https://rapidapi.com/apidojo/api/yahoo-finance1) call.
 
-*Full name:* `net.pieroxy.conkw.webapp.grabbers.yahooFinance.YahooFinanceGrabber`
+* *Full name:* `net.pieroxy.conkw.webapp.grabbers.yahooFinance.YahooFinanceGrabber`
+* *Default instance name:* `yahoof`
 
 ## Usage
 In order to use it, you need to:

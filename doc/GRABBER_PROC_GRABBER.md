@@ -2,7 +2,8 @@
 
 This is the system grabber for Linux. It relies heavily on `/proc` and `/sys` filesystems. 
 
-*Full name:* `net.pieroxy.conkw.webapp.grabbers.procgrabber.ProcGrabber`
+* *Full name:* `net.pieroxy.conkw.webapp.grabbers.procgrabber.ProcGrabber`
+* *Default instance name:* `proc`
 
 Possible extractions:
 

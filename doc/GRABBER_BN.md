@@ -2,7 +2,8 @@
 
 This is the news grabber. It relies on the [rapid api bing news call](https://rapidapi.com/microsoft-azure-org-microsoft-cognitive-services/api/bing-news-search1).
 
-*Full name:* `net.pieroxy.conkw.webapp.grabbers.bingnews.BingNewsGrabber`
+* *Full name:* `net.pieroxy.conkw.webapp.grabbers.bingnews.BingNewsGrabber`
+* *Default instance name:* `bingnews`
 
 ## Usage
 In order to use it, you need to:

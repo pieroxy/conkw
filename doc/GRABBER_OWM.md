@@ -2,7 +2,8 @@
 
 This is the weather grabber. It relies on the [one call api](https://openweathermap.org/api/one-call-api) of the [open weather map website](https://openweathermap.org/).
 
-*Full name:* `net.pieroxy.conkw.webapp.grabbers.openweathermap.OpenWeatherMapGrabber`
+* *Full name:* `net.pieroxy.conkw.webapp.grabbers.openweathermap.OpenWeatherMapGrabber`
+* *Default instance name:* `owm`
 
 ## Usage
 In order to use it, you need to:
@@ -14,12 +15,9 @@ In order to use it, you need to:
 * Search for your favorite city on their website.
 * Copy and paste the latitude and longitude in the config file.
 
-
-
 ## Metrics always extracted:
 
 * `str.location_name` The name of the place configured. This is extremely useful to make sure you're viewing the weather conditions from the proper place.
-
 
 ## Possible extractions:
 

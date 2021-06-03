@@ -4,7 +4,9 @@ This is the https cert grabber. It will probe the domain names provided through 
 
 
 
-*Full name:* `net.pieroxy.conkw.webapp.grabbers.HttpsCertGrabber`
+* *Full name:* `net.pieroxy.conkw.webapp.grabbers.HttpsCertGrabber`
+* *Default instance name:* `httpscert`
+
 
 ## Configuration
 The configuration property is `names`. It contains a comma separated list of domain names.

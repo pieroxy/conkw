@@ -2,8 +2,8 @@
 
 This is the EIG grabber, or external instance grabber. It will fetch metrics from other instances of conkw, and can even fetch metric from the current instance of conkw. One of the application is to have instances of conkw running on all your machines and one central instance producing a dashboard grouping all machines.
 
-
-*Full name:* `net.pieroxy.conkw.webapp.grabbers.ExternalInstanceGrabber`
+* *Full name:* `net.pieroxy.conkw.webapp.grabbers.ExternalInstanceGrabber`
+* *Default instance name:* `ext`
 
 ## Operation
 
