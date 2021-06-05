@@ -12,7 +12,7 @@ If you intend to write your own client however, here are the details:
 
 The API listens to http requests on the `/api` path of your server. It responds a JSON response with the specified data. It can accept two parameters, mutually exclusive:
 
-* `grabbers` contains the list of grabbers you want data from. This is a comma separated list of strings. The grabbers names are either their default name or the name defined in the config file for the grabber.
+* `grabbers` contains the list of grabbers instances you want data from. This is a comma separated list of strings. The grabbers instance names are either their default name or the name defined in the config file for the instance.
 * `grabberAction` Defines the request as an action to be passed to a specific grabber. The request will be passed to all grabbers until one declares that the request is his and processes it. Whatever the grabber returns will be the output of this call. Note that in the built-in grabbers only the `SpotifyGrabber` handles this function. It serves both for the return from the authentication as well as for the commands (play, pause, etc)
 
 
