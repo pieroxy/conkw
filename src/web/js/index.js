@@ -803,8 +803,11 @@ ConkW.isStandaloneWarning = function(wExpr, data) {
             case "zero":
                 return vw===0 ? "yes" : "no";
         }
+        if (wExpr.format.indexOf("isnot.") == 0) {
+            return vw===wExpr.format.substring(6) ? "no" : "yes";   
+        }
     }
-    return false;
+    return "no";
 }
 
 ConkW.isStale = function(vExpr, data) {
