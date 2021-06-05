@@ -2,6 +2,7 @@
 
 This is the EMI grabber, or external metrics ingestion grabber. Just like the [FileGrabber](GRABBER_FILE.md), it allows you to ingest metrics grabbed outside of conkw, but here you need to call conkw with an http request in order to feed it a metric. The advantage, of course, is that the ingestion can be done through the network.
 
+The metrics ingested will be served by one or more `ExternalMetricsGrabber` instance defined in your config file. Each one of those isd associated to a "namespace" so use more than one to segment the metrics you want to ingest.
 
 * *Full name:* `net.pieroxy.conkw.webapp.grabbers.ExternalMetricsGrabber`
 * *Default instance name:* `emi`
@@ -12,7 +13,7 @@ The endpoint you should call is `/emi`, with a POST request.
 
 It takes a number of parameters, either in the url or in the body of the POST message if using the content type `application/x-www-form-urlencoded`:
 
-* `ns`: The namespace, ie: the name of the grabber this value should be injected into.
+* `ns`: The namespace, ie: the name of the grabber instance this value should be injected into.
 * `name`: The name of the metric to ingest
 * `value`: The value of the metric.
 * `type`: The type of the value, either `num` or `str`
@@ -138,7 +139,7 @@ And here is the related section of the crontab on that machine:
 ```
 
 ## Note on performance
-Those metrics are kept in memory and dumped in full on the hard drive in `$CONKW_HOME/data` every 10s at best. So it is clearly not meant to handle millions of metrics.
+Those metrics are kept in memory and dumped in full on the hard drive in `$CONKW_HOME/data` every 10s at most. So it is clearly not meant to handle millions of metrics.
 
 Moreover, it is optimized to work on a fixed set of metrics. Adding a few metrics from time to time is fine, but adding a bunch of metrics every second is not where this grabber will perform best.
 
