@@ -49,3 +49,7 @@ md pre code {
   padding: 10px 10px;
   overflow-y: auto;
 }
+
+img {
+  border: 5px solid white;
+}
