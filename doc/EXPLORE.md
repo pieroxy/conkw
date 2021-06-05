@@ -6,7 +6,7 @@ There you will find a few things:
 
 ## The grabber reference
 
-This is the list of the grabbers available to you in conkw. Each of them has a default UI that will show you what you can do with them. You can basically classify the grabbers in three category:
+This is the list of the grabbers available to you in conkw. Each of them has a default UI that will show you what you can do with them. You can basically classify the grabbers in three categories:
 
 * The system grabbers. Extracting hdd, network, cpu, ram information and more.
 * The external services grabbers. They extract stuff from available APIs on the internet. Spotify, weather, stock, news, etc. They almost all need some level of configuration to work, such as an API token. The exception is the HttpsCertGrabber which extracts the https cert expiration date of a given domain name. No need of an API key for this one.
