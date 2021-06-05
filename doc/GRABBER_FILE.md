@@ -160,7 +160,7 @@ Then you can now put an element like the one below in your page:
 
 ```html
   <label><a target="_blank" href="https://status.slack.com/">Slack</a> : </label>
-  <cw-label cw-ns="min" cw-value="m:str::slack_status" cw-warn="m:str:isnot.ok:slack_status"></cw-label>
+  <cw-label cw-ns="webservices" cw-value="m:str::slack_status" cw-warn="m:str:isnot.ok:slack_status"></cw-label>
 ```
 
 Where:
