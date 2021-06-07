@@ -52,4 +52,5 @@ md pre code {
 
 img {
   border: 5px solid white;
+  max-width:100%;
 }
