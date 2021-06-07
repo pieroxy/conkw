@@ -62,6 +62,13 @@ This project is being setup and is not yet considered as stable. While the produ
 
 If you want to try it out and use it, please, by all means do. I'm not going to break *everything* on a daily basis. But if you want to deploy this on your infrastructure and really invest in it, please start a discussion so I can guide you through what is stable and what is not at this stage. Good news is, most is stable.
 
+## What does it look like?
+
+Ok, enough talks about the theory. How does it look?
+
+Here is my current setup below. And here is [a link to a page detailing everything that you see](doc/MY_SETUP.md).
+![](https://pieroxy.net/conkw/screenshots-doc/conkw_setup_raw.png)
+
 ## Documentation
 
 [Getting started here](doc/INDEX.md)
