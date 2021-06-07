@@ -671,14 +671,45 @@ ConkW.parseValueExpression = function(id) {
             invalid: true
         }
     }
+
     var c1 = id.indexOf(":");
     var c2 = id.indexOf(":", c1 + 1);
-    var c3 = id.indexOf(":", c2 + 1);
+
+    var format="";
+    var c3 = 0;
+    var state=0;
+    for (var i=c2+1 ; i<id.length ; i++) {
+        var c = id.charAt(i);
+        switch (state) {
+            case 0: {
+                if (c === '\\') {
+                    state=1;
+                    break;
+                }
+                if (c === ':') {
+                    state=2;
+                    c3 = i;
+                    break;
+                }
+                format += c;
+                break;
+            }
+            case 1: {
+                format += c;
+                state=0;
+                break;
+
+            }
+        }
+        if (state==2) break;
+    }
+
+
 
     return {
         valuetype: id.substring(0, c1),
         datatype: id.substring(c1 + 1, c2),
-        format: id.substring(c2 + 1, c3),
+        format: format,
         expression: id.substring(c3 + 1)
     }
 }
