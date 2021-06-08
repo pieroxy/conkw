@@ -6,6 +6,7 @@
 * [Start exploring your conkw](EXPLORE.md)
 * [Configure your newly installed conkw](CONFIGURE.md)
 * [Customize the UI](UI.md)
+* [Have a look at my personal setup](MY_SETUP.md)
 
 ## Grasping what can be monitored
 

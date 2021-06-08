@@ -68,7 +68,7 @@ The load average on my system, over the last minute, 5 minutes and 15 minutes.
 ### 6 ![](https://pieroxy.net/conkw/screenshots-doc/conkw_setup_freespace.png)
 The HDD usage percentage. This is all the mount points on my system, so not only local filesystems can be monitored. As usual, my NAS is almost full.
 
-### 7
+### 7 ![](https://pieroxy.net/conkw/screenshots-doc/conkw_setup_remote.png)
 External computers monitoring
 
 This section includes monitoring for 8 different computers. You can see 6 hgauges for each machine:
@@ -83,38 +83,38 @@ That's software raid, in case you don't know.
 You can see a "summary string" for the arrays. 
 If it ever deviates from this value, il will be displayed in red.
 
-### 8
+### 8 ![](https://pieroxy.net/conkw/screenshots-doc/conkw_setup_https.png)
 This section monitors all of the https certs I am handling. 
 It expresses the number of days of validity. Gets red below 20 days. 
 Those https certs are renewed by themselves, but you gotta monitor this process.
 
-### 9
+### 9 ![](https://pieroxy.net/conkw/screenshots-doc/conkw_setup_billing.png)
 My billing section. The green square shows which custromer I am currently billing.
+Here, I am billing customer "D".
 As I am a contractor, I have to keep track of this. I wrote a small tool to do this,
 but I consistently forgot to open or close my billing. This way I have the data right
-in front of my eyes.
+in front of my eyes. That's the whole point of a monitoring board.
 
-
-### 10
+### 10 ![](https://pieroxy.net/conkw/screenshots-doc/conkw_setup_sun.png)
 This portion shows the sunrise and sunset time for the current day.
 
-### 11
+### 11 ![](https://pieroxy.net/conkw/screenshots-doc/conkw_setup_weather_current.png)
 This one shows the current weather at my place:
 
 * The picture
 * The description of the weather
 * The location of the weather I'm looking at
-* The temperature (and felt temperatuer)
+* The temperature (and felt temperature)
 * The wind speed in beaufort scale.
 
-### 12
+### 12 ![](https://pieroxy.net/conkw/screenshots-doc/conkw_setup_clock.png)
 The clock showing time and the date above.
 
-### 13
+### 13 ![](https://pieroxy.net/conkw/screenshots-doc/conkw_setup_spotify.png)
 The current playing song with the default conkw UI. 
 See the [SpotifyGrabber](GRABBER_SPOTIFY.md) to see more.
 
-### 14
+### 14 ![](https://pieroxy.net/conkw/screenshots-doc/conkw_setup_weather_daily.png)
 This one shows the weather forecast for the next 7 days.
 
 For each day I have:
@@ -130,19 +130,19 @@ For each day I have:
 ![](https://pieroxy.net/conkw/screenshots-doc/weather_daily_tooltip_1.png)
 ![](https://pieroxy.net/conkw/screenshots-doc/weather_daily_tooltip_2.png)
 
-### 15
+### 15 ![](https://pieroxy.net/conkw/screenshots-doc/conkw_setup_weather_minutely.png)
 This histogram represents the amount of rain (again, my own computation) 
 over the next hour, minute by minute.
 
-### 16
+### 16 ![](https://pieroxy.net/conkw/screenshots-doc/conkw_setup_stock.png)
 The stock market. I only monitor bitcoin for now.
 Have a look at the [YahooFinanceGrabber](GRABBER_YF.md) to see more.
 
-### 17
+### 17 ![](https://pieroxy.net/conkw/screenshots-doc/conkw_setup_news.png)
 The news. I show global headlines for France in here.
 Have a look at the [BingNewsGrabber](GRABBER_BN.md) to see more.
 
-### 18
+### 18 ![](https://pieroxy.net/conkw/screenshots-doc/conkw_setup_weather_hourly.png)
 This is the weather forecast hour by hour over the next 48 hours.
 
 * The time
