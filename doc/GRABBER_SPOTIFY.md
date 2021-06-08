@@ -51,3 +51,16 @@ Note: Here is below the default config portion for the SpotifyGrabber:
 * `str.status`: The status of the player. Known statuses are `"Playing"`, `"Paused"` and not present if nothing is playing.
 * `str.trackname`: The name of the track currently playing or paused.
 * `str.tracknum`: The number of the track playing in relation to the album.
+
+## Default UI
+
+Here is how the default UI looks like:
+
+![](https://pieroxy.net/conkw/screenshots-doc/sample_spotify.png)
+
+Of course, the four buttons are operational. You can go next, previous, pause
+and restart the music directly from the UI.
+
+While this is the default style, you can imagine anything you want really. 
+The world is your oyster. If you know a bit of HTML, JavaScript and CSS, you
+can make the UI looks exactly as you want.
