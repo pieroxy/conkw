@@ -27,7 +27,7 @@
           }
         </style>
     </head>
-    <body onload="ConkW.init()" grabbers="oshi">
+    <body onload="ConkW.init()" cw-grabbers="oshi">
       <pagetitle><inlinelogo></inlinelogo><a href="/">CONKW</a> - Reference UI for <code>OshiGrabber</code></pagetitle>
       <pagetitle>The summary view</pagetitle>
 
@@ -93,7 +93,7 @@
             <label>Swap Total : </label><cw-label cw-ns="oshi" cw-value="m:num:size:virtualmemory_swap_total"></cw-label>
             <br/>
             <label> Swap Used : </label><cw-label cw-ns="oshi" cw-value="m:num:size:virtualmemory_swap_used"></cw-label>
-            <gauge cw-ns="oshi" cw-min="l:num::0" log="true" cw-max="m:num::virtualmemory_swap_total" cw-value-warn="e:num::${num.virtualmemory_swap_total*0.5}" cw-gauge0="#208020:m:num::virtualmemory_swap_used"></gauge>
+            <gauge cw-ns="oshi" cw-min="l:num::0" cw-log="true" cw-max="m:num::virtualmemory_swap_total" cw-value-warn="e:num::${num.virtualmemory_swap_total*0.5}" cw-gauge0="#208020:m:num::virtualmemory_swap_used"></gauge>
             <br/>
           </div>
 
@@ -153,12 +153,12 @@
             <label>All Read : </label><cw-label cw-ns="oshi" cw-value="m:num:size:diskios_read_bytes"></cw-label>
             <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::max$diskios_read_bytes" cw-value-warn="e:num::m:num::${num.max$diskios_read_bytes*0.9}" cw-gauge0="#208020:m:num::diskios_read_bytes"></gauge>
             <label class="softlabel">     Max : <cw-label cw-ns="oshi" cw-value="m:num:size:max$diskios_read_bytes"></cw-label></label>
-            <hgauge cw-bgcolor="#202040" cw-ns="oshi" cw-min="l:num::0" log="true" cw-max="m:num::max$diskios_read_bytes" cw-hgauge0="#208020:m:num::diskios_read_bytes"></hgauge>
+            <hgauge cw-bgcolor="#202040" cw-ns="oshi" cw-min="l:num::0" cw-log="true" cw-max="m:num::max$diskios_read_bytes" cw-hgauge0="#208020:m:num::diskios_read_bytes"></hgauge>
             <br/>
             <label>All Wrt. : </label><cw-label cw-ns="oshi" cw-value="m:num:size:diskios_write_bytes"></cw-label>
             <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::max$diskios_write_bytes" cw-value-warn="e:num::m:num::${num.max$diskios_write_bytes*0.9}" cw-gauge0="#208020:m:num::diskios_write_bytes"></gauge>
             <label class="softlabel">     Max : <cw-label cw-ns="oshi" cw-value="m:num:size:max$diskios_write_bytes"></cw-label></label>
-            <hgauge cw-bgcolor="#202040" cw-ns="oshi" cw-min="l:num::0" log="true" cw-max="m:num::max$diskios_write_bytes" cw-hgauge0="#208020:m:num::diskios_write_bytes"></hgauge>
+            <hgauge cw-bgcolor="#202040" cw-ns="oshi" cw-min="l:num::0" cw-log="true" cw-max="m:num::max$diskios_write_bytes" cw-hgauge0="#208020:m:num::diskios_write_bytes"></hgauge>
             <br/>
           </div>
 
@@ -180,12 +180,12 @@
             <label>All Down : </label><cw-label cw-ns="oshi" cw-value="m:num:size:netbw_in"></cw-label>
             <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::max$netbw_in" cw-value-warn="e:num::${num.max$netbw_in*0.9}" cw-gauge0="#208020:m:num::netbw_in"></gauge>
             <label class="softlabel" >     Max : <cw-label cw-ns="oshi" cw-value="m:num:size:max$netbw_in"></cw-label></label>
-            <hgauge cw-bgcolor="#202040" cw-ns="oshi" cw-min="l:num::0" log="true" cw-max="m:num::max$netbw_in" cw-hgauge0="#208020:m:num::netbw_in"></hgauge>
+            <hgauge cw-bgcolor="#202040" cw-ns="oshi" cw-min="l:num::0" cw-log="true" cw-max="m:num::max$netbw_in" cw-hgauge0="#208020:m:num::netbw_in"></hgauge>
             <br clear="both"/>
             <label>All Up   : </label><cw-label cw-ns="oshi" cw-value="m:num:size:netbw_out"></cw-label>
             <gauge cw-ns="oshi" cw-min="l:num::0" cw-max="m:num::max$netbw_out" cw-value-warn="e:num::${num.max$netbw_out*0.9}" cw-gauge0="#208020:m:num::netbw_out"></gauge>
             <label class="softlabel" >     Max : <cw-label class="softlabel" cw-ns="oshi" cw-value="m:num:size:max$netbw_out"></cw-label></label>
-            <hgauge cw-bgcolor="#202040" cw-ns="oshi" cw-min="l:num::0" log="true" cw-max="m:num::max$netbw_out" cw-hgauge0="#208020:m:num::netbw_out"></hgauge>
+            <hgauge cw-bgcolor="#202040" cw-ns="oshi" cw-min="l:num::0" cw-log="true" cw-max="m:num::max$netbw_out" cw-hgauge0="#208020:m:num::netbw_out"></hgauge>
             <br/>
             <br/>
           </div>

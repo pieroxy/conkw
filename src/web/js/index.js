@@ -108,7 +108,7 @@ ConkW.getAuthToAppendToUrl = function() {
 }
 
 ConkW.load = function() {
-    var grabbers = document.body.getAttribute("grabbers");
+    var grabbers = document.body.getAttribute("cw-grabbers");
     if (grabbers) {
         this.updateDelay();
         if (location.href.indexOf("?") > 0) {
@@ -996,7 +996,7 @@ class HistoryGaugeHolderFloat {
         this.elementWidth = e.scrollWidth;
         this.ns = e.getAttribute("cw-ns");
         this.bgcolor = e.getAttribute("cw-bgcolor");
-        this.log = e.getAttribute("log") == "true";
+        this.log = e.getAttribute("cw-log") == "true";
         this.min = ConkW.parseValueExpression(e.getAttribute("cw-min"));
         this.max = ConkW.parseValueExpression(e.getAttribute("cw-max"));
         this.maxValue = 0;
@@ -1037,7 +1037,7 @@ class HistoryGaugeHolderFloat {
             var value = ConkW.extractTypedValue(this.valueExprs[i], data);
             var color = this.colors[i];
             var bar = document.createElement("div");
-            bar.setAttribute("value", value);
+            bar.setAttribute("cw-value", value);
             bar.className = "hgauge";
             var posprc = ConkW.getPercent(value, min, max, this.log);
             bar.style.height = posprc + "%";
@@ -1066,7 +1066,7 @@ class HistoryGaugeHolderFloat {
                 var bottom=0;
                 container.childNodes.forEach(function (bar) {
                     if (bar.className === "hgauge") {
-                        var posprc = ConkW.getPercent(parseFloat(bar.getAttribute("value")), min, max, zis.log);
+                        var posprc = ConkW.getPercent(parseFloat(bar.getAttribute("cw-value")), min, max, zis.log);
                         bar.style.height = posprc + "%";
                         bar.style.bottom = bottom + "%";
                         bottom += posprc;
@@ -1146,7 +1146,7 @@ class HistoryGaugeHolderCanvas {
         this.element = e;
         this.ns = e.getAttribute("cw-ns");
         this.bgcolor = e.getAttribute("cw-bgcolor");
-        this.log = e.getAttribute("log") == "true";
+        this.log = e.getAttribute("cw-log") == "true";
         this.min = ConkW.parseValueExpression(e.getAttribute("cw-min"));
         this.max = ConkW.parseValueExpression(e.getAttribute("cw-max"));
         this.maxValue = -1;
@@ -1206,7 +1206,6 @@ class HistoryGaugeHolderCanvas {
 
             ctx.fillRect(this.w-1, this.h-hpx-bottom, 1, hpx);
             bottom += hpx;
-            //console.log(hpx);
         }
 
         if (max != this.maxValue && this.maxValue!=-1) {

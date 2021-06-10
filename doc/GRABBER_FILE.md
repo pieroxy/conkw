@@ -153,7 +153,7 @@ And you're all set! As soon as slack will experience an issue, the value of the 
 First of all, make sure the "webservices" grabber is required by your web page:
 
 ```html
-<body onload="ConkW.init()" grabbers="...,webservices,...">
+<body onload="ConkW.init()" cw-grabbers="...,webservices,...">
 ```
 
 Then you can now put an element like the one below in your page:
