@@ -455,7 +455,7 @@ ConkW.clockFaces = [
 ]
 
 ConkW.dates.initClocks = function() {
-  var cs = document.getElementsByTagName("clock");
+  var cs = document.getElementsByTagName("cw-clock");
   if (cs && cs.length) this.initClock(cs[0]);
 }
 
@@ -618,8 +618,8 @@ ConkW.dates.setClockFace = function(face) {
 
 ConkW.dates.rotateClockFace = function(event, date) {
   var e = event.target;
-  while (e && e.tagName != "CLOCK") e = e.parentElement;
-  if (e.tagName != "CLOCK") return;
+  while (e && e.tagName != "CW-CLOCK") e = e.parentElement;
+  if (e.tagName != "CW-CLOCK") return;
 
   var cf = localStorage["conkw.clockFaceIndex"];
   if (!cf) cf = "0";
