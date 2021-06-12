@@ -167,4 +167,4 @@ In there, the `style` attribute is the regular html one, and all the other attri
 
 ## UI Reference
 
-To see all available atrtributes and their meaning, hop on to the [UI Reference](UI_REFERENCE.md)
+To see all available attributes and their meaning, hop on to the [UI Reference](UI_REFERENCE.md)
