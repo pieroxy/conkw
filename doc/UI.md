@@ -1,5 +1,9 @@
 # conkw documentation - Customize the UI
 
+This document exposes basic context in which the ConkW UI operates.
+
+If you're already familiar with all this, hop on to the [UI Reference](UI_REFERENCE.md)
+
 ## Global principles
 
 The conkw UI is a set of JavaScript and CSS files that can help you display dashboards in HTML. Any knowledge of these three technologies will help you tremendously in order to play with the UI.
@@ -160,4 +164,7 @@ For example, let's have a look at the following `hgauge` element:
 
 In there, the `style` attribute is the regular html one, and all the other attributes are metadata for conkw rendering engine.
 
-TO BE CONTINUED
+
+## UI Reference
+
+To see all available atrtributes and their meaning, hop on to the [UI Reference](UI_REFERENCE.md)
