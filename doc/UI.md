@@ -10,7 +10,7 @@ The conkw UI is a set of JavaScript and CSS files that can help you display dash
 
 One of the easiest way to build a UI is to look at the default UI of the grabbers and copy/paste it away in your own file. You can mostly do that with little knowledge of HTML, CSS or JavaScript.
 
-Have a look at your conkw installation directory, that we will call `$CONKW_HOME` in this document:
+Have a look at your conkw installation directory, that we will call `$CONKW_HOME` in these documents:
 
 ```shell
 $ ls $CONKW_HOME
@@ -21,7 +21,7 @@ The two directories that are of interest to us are:
 * `ui` This is the place to build your own UI. There is already a file in there `index.html`, and it is here for you to play with it. Hack it away, there is nothing in there you won't find back in the default grabbers UI. Updates of conkw will not replace anything you put in there.
 * `webapp` This is the place for everything else you see: Documentation and default UI. Note that a reinstallation or an upgrade of conkw will override any change you will make here. You still might want to update the `$CONKW_HOME/webapp/ROOT/index.html` file which is the global index of your instance.
 
-Of course, there is a lot of other ways to build a UI for conkw. After all, there is a REST api (`/api`) that you can call and you might want to write your own UI from scratch, using any technology you want. This document focuses on using the default UI for conkw.
+Of course, there is a lot of other ways to build a UI for conkw. After all, there is a REST api (`/api`) that you can call and you might want to write your own UI from scratch, using any technology you want. This documentation focuses on using the default UI for conkw.
 
 ## Basic HTML structure
 
