@@ -5,7 +5,7 @@
 * [Installation](INSTALL.md)
 * [Start exploring your conkw](EXPLORE.md)
 * [Configure your newly installed conkw](CONFIGURE.md)
-* [Customize the UI](UI.md) or have a look at the [UI Reference](UI_REFERENCE.md)
+* [Have a look at the UI Guide to customize and master your dashboard](UI.md)
 * [Have a look at my personal setup](MY_SETUP.md)
 
 ## Grasping what can be monitored

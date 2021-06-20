@@ -1,4 +1,4 @@
-# conkw documentation - UI Reference
+# conkw documentation - Built-in UI reference
 
 ## Specific elements
 
@@ -35,7 +35,7 @@ The analog clock is displayed inside a tag that reads `cw-clock`. All is needed 
 
 Where the style is your own choice and the onclick is here to rotate the clockface when the user clicks on it. From there, ConkW will handle everything to have your clock displayed.
 
-## Generic UI - the grabbed metrics
+## Generic UI - Displaying the grabbed metrics
 
 ### Namespace
 
@@ -191,3 +191,28 @@ Note that the expression for the `cw-value-warn` is a literal, and uses the dire
 
 This html tag will display the summary string of the mdadm arrays in the system. It will be displayed on a red background if it contains the character `<`. Per the documentation, this happens when the mdadm array is being reconstructed. As the performance of the array is greatly reduced during that time, it's best the user is aware of it.
 
+
+
+### Properties based elements
+
+TO BE DONE
+
+### Style based elements
+
+TO BE DONE
+
+### Stale properties
+
+TO BE DONE
+
+### Gauges
+
+TO BE DONE
+
+### Gauges with history
+
+TO BE DONE
+
+### Multi-values holders
+
+TO BE DONE
