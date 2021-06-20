@@ -195,11 +195,42 @@ This html tag will display the summary string of the mdadm arrays in the system.
 
 ### Properties based elements
 
-TO BE DONE
+Identified by the attribute `cw-prop-anything`. It will replace the html property `anything` with the value of the expression.
+
+*Note* `cw-prop-innerHTML` is similar to `cw-value` seen above.
+
+Apart from `innerHTML`, any html property can be set by ConkW. The two most useful that come to mind are `title` to define a tooltip, and `src` for images tags to define which image to go fetch. But any property is available. For `style` property, see the section right below.
+
+Here is an example in the default UI for OpenWeatherMap:
+
+```html
+<IMG cw-ns="owm" cw-prop-src="m:str::hourly_icon_1" cw-prop-title="m:str::hourly_desc_1"/>
+```
+
+ConkW will set both the `title` and `src` property with whatever the owm grabber returns.
 
 ### Style based elements
 
-TO BE DONE
+Identified by the attribute `cw-style-anything`. It will replace the style property `anything` with the value of the expression.
+
+Most used style properties are:
+
+* `display` that allows to hide or show stuff depending on the expression provided.
+* `width` that allows to set an element width, such as a gauge.
+* `height` that allows to set an element height, such as a gauge.
+
+Example with the ProcGrabber default UI:
+
+```html
+<div cw-ns="proc" cw-style-display="e:str::${num.bat_exists==1?'none':''}">
+  No battery detected
+</div>
+<div cw-ns="proc" cw-style-display="e:str::${num.bat_exists!=1?'none':''}">
+  Some stuff here irrelevant to the example.
+</div>
+```
+
+So, depending if the `num.battery_remaining_prc` is defined in the oshi grabber
 
 ### Stale properties
 
