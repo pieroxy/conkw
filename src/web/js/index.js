@@ -798,9 +798,9 @@ ConkW.updateField = function(field, property, cacheKey, value, warning) {
         field[property] = value;
         if (warning && field.classList) {
             if (warning == "yes")
-                field.classList.add("error");
+                field.classList.add("cw-error");
             else
-                field.classList.remove("error");
+                field.classList.remove("cw-error");
         }
     }
 }
@@ -810,9 +810,9 @@ ConkW.isWarning = function(vExpr, wExpr, data) {
         var vv = vExpr ? this.extractRawValue(vExpr, data) : null;
         var vw = this.extractRawValue(wExpr, data);
         switch (wExpr.format) {
-            case "ifnot":
+            case "isnot":
                 return vv != vw ? "yes" : "no";
-            case "if":
+            case "is":
                 return vv == vw ? "yes" : "no";
             case "valuecontains":
                 return (vv+"").indexOf(vw)!=-1 ? "yes" : "no";

@@ -144,12 +144,50 @@ As an illustration, here is one expression I use to compute the "amount of rain"
 
 ### Value
 
-Identified by the attribute `cw-value`. It will replace the content of the node through the `innerHTML` property.
+Identified by the attribute `cw-value`. It will replace the content of the node through the `innerHTML` property, meaning:
 
-For example:
+* This will effectively wipe whatever was in the `div` originally
+* Any HTML in the string will be rendered accordingly by the browser.
+
+Let's look at an example:
 
 ```html
 <div cw-ns="spotify" cw-value="m:str::album_artist"></div>
 ```
 
-TO BE CONTINUED
+This empty DIV will be filled with the `album_artist` value of the strings extracted by the `spotify` grabber. After interpolation from the UI, it will look like:
+
+```html
+<div cw-ns="spotify" cw-value="m:str::album_artist">AC/DC</div>
+```
+
+### Value Warning
+
+Any html tag with the `cw-value` attribute can have a `cw-value-warn` attribute. 
+
+Its directive will be a condition upon which the html tag will be added the class `cw-error`, which renders in a red background in the default CSS. This is used to alert whoever is watching the dashboard of an abnormal condition. 
+
+Here are the exhaustive list of directives one can use in a `cw-value-warn` expression:
+
+* `isnot` will be red if the value is not equal to the expression resolution.
+* `is` will be red if the value is equal to the expression resolution.
+* `valuecontains` will be red if the value contains the expression resolution.
+* `valueabove` will be red if the value is above the expression resolution.
+* `valuebelow` will be red if the value is below the expression resolution.
+
+Let's look at some examples in the default UIs provided:
+
+```html
+<cw-label cw-value-warn="l:num:valuebelow:20" cw-ns="proc" cw-value="m:num:prc:bat_prc"></cw-label>
+```
+
+This html tag will display the percentage of battery remaining in your laptop. It will be displayed on a red background if below 20%.
+
+Note that the expression for the `cw-value-warn` is a literal, and uses the directive `valuebelow`.
+
+```html
+<cw-label cw-ns="proc" cw-value-warn="l:str:valuecontains:&lt;" cw-value="m:str::mdstatSummary"></cw-label>
+```
+
+This html tag will display the summary string of the mdadm arrays in the system. It will be displayed on a red background if it contains the character `<`. Per the documentation, this happens when the mdadm array is being reconstructed. As the performance of the array is greatly reduced during that time, it's best the user is aware of it.
+
