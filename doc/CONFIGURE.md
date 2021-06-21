@@ -78,12 +78,4 @@ This section of the configuration file allows you to setup authentication for th
 
 ## Duration format
 
-Here and there in the config file, you will have to configure durations or delays. They can be expressed in seconds, minutes, hours, days or years. Here are a few examples:
-
-* `30s` 30 seconds
-* `5m` 5 minutes
-* `1h` one hour
-* `3d` three days
-* `1y` one year
-
-Note that a year is defined as being 365 days.
+[Have a look at the duration concept here](CONCEPTS.md)

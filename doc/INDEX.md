@@ -4,6 +4,7 @@
 
 * [Installation](INSTALL.md)
 * [Start exploring your conkw](EXPLORE.md)
+* [Get familiar with key concepts](CONCEPTS.md)
 * [Configure your newly installed conkw](CONFIGURE.md)
 * [Have a look at the UI Guide to customize and master your dashboard](UI.md)
 * [Have a look at my personal setup](MY_SETUP.md)

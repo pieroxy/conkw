@@ -149,6 +149,8 @@ Identified by the attribute `cw-value`. It will replace the content of the node 
 * This will effectively wipe whatever was in the `div` originally
 * Any HTML in the string will be rendered accordingly by the browser.
 
+*Note* that if the value resolves as `undefined`, (for a metric expression, if the metric is actually not there,) the element will be added the css class `cw-stale`. The text will be rendered as dark gray to indicate the value is not present. The last value will be kept to show what it was before it vanished.
+
 Let's look at an example:
 
 ```html
@@ -230,15 +232,74 @@ Example with the ProcGrabber default UI:
 </div>
 ```
 
-So, depending if the `num.battery_remaining_prc` is defined in the oshi grabber
+So, depending on the value of `num.bat_exists` in the `ProcGrabber` output, two different things will be displayed. Note that this could have been handled by a `cw-value` with a ternary expression. Except that the content of the second div is a bunch of HTML hard to stuff in a `cw-value` expression.
 
 ### Stale properties
 
-TO BE DONE
+Identified by the attribute `cw-stale`. Will add the `cw-stale` css class to the element when the referenced metric is older than the specified delay. Only works with metrics expressions.
+
+Let's have a look at the example from the `BingNewsGrabber` default UI: 
+
+```html
+<div cw-stale="m:str:olderThan.1h:news_name_0" cw-ns="bingnews">
+```
+
+This instructs conkw to add the `cw-stale` css class when the metric `str.news_name_0` is older than one hour. As the default refresh rate for this grabber is once every hour, the user will be informed if the grabber failed to grab the latest news.
+
+See the [concepts page](CONCEPTS.md) for the duration format.
 
 ### Gauges
 
-TO BE DONE
+Identified by the attribute `cw-gauge0`. It allows to have a simple gauge such as the examples below:
+
+![](https://pieroxy.net/conkw/screenshots-doc/gauge-ex-1.png) 
+![](https://pieroxy.net/conkw/screenshots-doc/gauge-ex-2.png) 
+
+Attributes:
+
+* `cw-gauge<n>`: These are multiple attributes where n starts at `0` and can end up where you see fit. These are the values you will see in the gauge. The format is `color:expression` where:
+    * `color` is a CSS color (`#abc` or `#f3f3f3` or `rgb(10,20,30)`) or the word `default` to use the default gauge color.
+    * `expression` is the expression defining the value.
+* `cw-min`: The expression defining the level zero of the gauge. Any value below that will be discarded. The expression must be numeric and any directive will be ignored.
+* `cw-max`: The expression defining the maximum value. Any value above that will be rendered as the gauge full. The expression must be numeric and any directive will be ignored.
+* `cw-value-warn`: The expression defining the threshold above which the value is considered in error (and the gauge changes color to red). The expression must be numeric. A directive equal to `valuebelow` defines it as a minimum instead of a maximum. 
+
+Let's have a look at some examples from `ProcGrabber` default UI:
+
+* The CPU gauge
+
+```html
+<heading>CPU /proc</heading>
+<label>      used: </label>
+<cw-label cw-value-warn="l:num:valueabove:80" cw-ns="proc" cw-value="m:num:cpu:cpu_usg_used"></cw-label>
+<gauge cw-ns="proc" cw-min="l:num::0" cw-max="l:num::100" cw-gauge0="#5b5:m:num::cpu_usg_sys" cw-gauge1="#474:m:num::cpu_usg_user" cw-gauge2="#252:m:num::cpu_usg_nice" cw-gauge3="#252:m:num::cpu_usg_wait"></gauge>
+```
+![](https://pieroxy.net/conkw/screenshots-doc/gauge-ex-4.png) 
+
+The gauge goes from 0 to 100, that's easy. It overlaps the `sys`, `user`, `nice` and `wait` time with four different colors. As I don't want to discard the different colors even when above 80%, I decided to make the label turn red. 
+
+* The load average gauges - only showing the first one.
+
+```html
+<cw-label cw-value-warn="m:num:valueabove:nbcpu_threads" cw-ns="proc" cw-value="m:num::loadavg1"></cw-label>
+<gauge cw-ns="proc" cw-gauge0="default:m:num::loadavg1" cw-min="l:num::0" cw-max="e:num::${num.nbcpu_threads*2}" cw-value-warn="m:num::nbcpu_threads"></gauge>
+```
+
+![](https://pieroxy.net/conkw/screenshots-doc/gauge-ex-3.png) 
+
+Both the label and the gauge have a maximum set. As I have 8 cores hyperthreaded on my computer, the limit is set at 16 for the warning.
+
+Note as the red value limit shows in the background of the gauges that did not reach it yet.
+
+* A last example with my personal setup
+
+```html
+<label cw-ns="httpscert" cw-prop-title="m:num:time_ms:ts_pieroxy.net" style="width:160px; text-align: right; overflow: hidden; text-overflow: ellipsis;">pieroxy.net: </label><gauge cw-prop-title="m:num:tstodatetime:date_pieroxy.net" cw-ns="httpscert" cw-min="l:num::0" cw-max="l:num::90" cw-value-warn="l:num:valuebelow:20" cw-gauge0="default:m:num::days_pieroxy.net"></gauge><br>
+```
+
+![](https://pieroxy.net/conkw/screenshots-doc/gauge-ex-2.png) 
+
+Here the limit for the warning is expressed by a tiny black vertical bar in the green gauge element, since it is a minimum and not a maximum. Below that value the gauge element will be red.
 
 ### Gauges with history
 
