@@ -1146,6 +1146,9 @@ class HistoryGaugeHolderCanvas {
         this.element = e;
         this.ns = e.getAttribute("cw-ns");
         this.bgcolor = e.getAttribute("cw-bgcolor");
+        if (!this.bgcolor) {
+            this.bgcolor = "#202040";
+        }
         this.log = e.getAttribute("cw-log") == "true";
         this.min = ConkW.parseValueExpression(e.getAttribute("cw-min"));
         this.max = ConkW.parseValueExpression(e.getAttribute("cw-max"));
