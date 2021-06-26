@@ -303,7 +303,59 @@ Here the limit for the warning is expressed by a tiny black vertical bar in the 
 
 ### Gauges with history
 
-TO BE DONE
+Identified by the attribute `cw-hgauge0`. It allows to have gauges with history such as the examples below:
+
+![](https://pieroxy.net/conkw/screenshots-doc/hgauge-ex-1.png) 
+![](https://pieroxy.net/conkw/screenshots-doc/hgauge-ex-2.png) 
+
+
+Attributes:
+
+* `cw-hgauge<n>` These are multiple attributes where n starts atr `0` and end at the number of metrics you see fit. These are the values of the different metrics in the hgauge. Same as for the gauge elements, the format is `color:expression` where:
+    * `color` is a CSS color (`#abc` or `#f3f3f3` or `rgb(10,20,30)`) or the word `default` to use the default gauge color.
+    * `expression` is the expression defining the value.
+* `cw-min`: The expression defining the level zero of the gauge. Any value below that will be discarded. The expression must be numeric and any directive will be ignored.
+* `cw-max`: The expression defining the maximum value. Any value above that will be rendered as the gauge full. The expression must be numeric and any directive will be ignored.
+* `cw-log`: if set to the string `true`, will draw the values on a log10 scale. This is particularly useful for network of hdd bandwidth gauges where the "normal activity" is 1000 times below the peak value. If you do not set the log scale, most of the activity will be squashed down to zero. In the first screenshot above, the NET IN graph would be empty and the HDD REA values would be squashed down to one pixel if not set with `cw-log="true"`.
+* `cw-bgcolor`: Set to a valid CSS color (`#abc` or `#f3f3f3` or `rgb(10,20,30)`) defines the background color. Javascript needs this value as the gauge is drawn on a canvas and the stroke needs to be set to the bg color. If not set, the background color will be set to the default value of `#202040`.
+
+Note that hgauges can display a red vertical bar, as you can see below: 
+
+![](https://pieroxy.net/conkw/screenshots-doc/hgauge-ex-3.png) 
+
+This means the gathering of data stopped for a while and started again, so there is a time gap from the left side of the bar to the right side of the bar greater than 5 seconds.
+
+Also note that the heartbeat of conkw is once every second. This means there will be a new datapoint every second. So a 60px wide hgauge will display 1 minute of data, and a 120px gauge two minutes.
+
+Let's have a look as some examples.
+
+* The CPU gauge from `ProcGrabber`:
+
+```html
+<hgauge cw-bgcolor="#202040" style="height:4em;" cw-ns="proc"
+        cw-hgauge0="#5b5:m:num::cpu_usg_sys" 
+        cw-hgauge1="#474:m:num::cpu_usg_user" 
+        cw-hgauge2="#252:m:num::cpu_usg_nice" 
+        cw-hgauge3="#252:m:num::cpu_usg_wait"
+        cw-min="l:num::0" cw-max="l:num::100"></hgauge>
+```
+![](https://pieroxy.net/conkw/screenshots-doc/hgauge-ex-2.png) 
+
+There are four values being displayed, as you can see with the four `cw-hgauge<n>` elements. It goes from `0` to `100` and the `cw-bgcolor` is set to the default value, so it could be removed.
+
+* The Network activity gauge from `ProcGrabber`:
+
+```html
+<hgauge cw-bgcolor="#202040" cw-ns="proc" style="height:2em" cw-log="true"
+        cw-hgauge0="#208020:m:num::netp_in" 
+        cw-min="l:num::0" cw-max="m:num::max$netp_in"></hgauge>
+<hgauge cw-bgcolor="#202040" cw-ns="proc" style="height:2em" cw-log="true"
+        cw-hgauge0="#208020:m:num::netp_out"
+        cw-min="l:num::0" cw-max="m:num::max$netp_out"></hgauge>
+```
+![](https://pieroxy.net/conkw/screenshots-doc/hgauge-ex-3.png) 
+
+There is a gauge for inbound traffic and one for outbound traffic. The gauges are set to a logarithmic scale otherwise you would see an empty gauge most of the time. Note that the maximum is set to the auto computed value so that conkw automatically determines the maximum throughput of your network interface to what it observes.
 
 ### Multi-values holders
 
