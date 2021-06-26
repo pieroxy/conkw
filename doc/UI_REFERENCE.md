@@ -359,4 +359,62 @@ There is a gauge for inbound traffic and one for outbound traffic. The gauges ar
 
 ### Multi-values holders
 
-TO BE DONE
+Identified by the attribute `cw-multinode-pattern`. It allows generation of multiple nodes like a for loop in a template. The example below would take 576 lines, but with a multivalue tag, it only takes 12.
+
+![](https://pieroxy.net/conkw/screenshots-doc/multinode-ex1.png) 
+
+Attributes:
+
+* `cw-multinode-in` There are two ways to define the repetition. Either `cw-multinode-in` which specifies a comma separated list of values conkw should iterate over, of the two below. 
+* `cw-multinode-from` The first numeric value Conkw should iterate from.
+* `cw-multinode-to` The end of the numeric sequence Conkw should iterate over.
+* `cw-multinode-pattern` The pattern that should be replaced by the variable.
+
+#### Let's take a simple example:
+
+```html
+<img cw-ns="owm" cw-prop-src="m:str::hourly_icon_0" cw-prop-title="m:str::hourly_desc_0">
+```
+
+The line above will display an image that will display the icon for the first forecasted hour. If you want the forecast for the next 48 hours, you will have to define 48 lines like this, only changing the `0` with the hour you want:
+
+```html
+<img cw-ns="owm" cw-prop-src="m:str::hourly_icon_0" cw-prop-title="m:str::hourly_desc_0">
+<img cw-ns="owm" cw-prop-src="m:str::hourly_icon_1" cw-prop-title="m:str::hourly_desc_1">
+<img cw-ns="owm" cw-prop-src="m:str::hourly_icon_2" cw-prop-title="m:str::hourly_desc_2">
+...
+<img cw-ns="owm" cw-prop-src="m:str::hourly_icon_47" cw-prop-title="m:str::hourly_desc_47">
+```
+
+This is not optimal, because whenever you will have an update you want, such as adding a style attribute or changing the tooltip, you will have to propagate the update to all of the 48 lines.
+
+Instead, you can use a multivalue tag, like this:
+
+```html
+<div cw-ns="owm" cw-multinode-from="l:num::0" cw-multinode-to="l:num::47" cw-multinode-pattern="$">
+  <img cw-ns="owm" cw-prop-src="m:str::hourly_icon_$" cw-prop-title="m:str::hourly_desc_$">
+</div>
+```
+
+When seeing this, ConkW will duplicate the content of the `div` 48 times, replacing the `$` with the actual value from `0` to `47`.
+
+Note that both `from` and `to` use an expression that is here a literal but may be computed.
+
+#### Let's have a look at another example with the `in` directive, from the `OshiGrabber` default UI:
+
+We want to display the read throughput of every block devices that are attached. And there are a few.
+
+```html
+<heading>DISK IOs</heading>
+<span cw-ns="oshi" cw-multinode-in="m:str::diskios_disks" cw-multinode-pattern="#">
+  <label>R </label><cw-label cw-ns="oshi" cw-value="m:num:size:diskios_read_bytes_#"></cw-label>/s
+  <label class="softlabel"><cw-label cw-ns="oshi" cw-value="m:num:size:max$diskios_read_bytes_#"></cw-label>/s</label>
+  <label style="font-weight:bold"><cw-label>#</cw-label></label>
+  <br/>
+</span>
+```
+![](https://pieroxy.net/conkw/screenshots-doc/multinode-ex2.png) 
+
+As you can see here, the multinode is defined with `cw-multinode-in="m:str::diskios_disks"`. If you inspect closely the output of the API, `diskios_disks` has the value `/dev/sdd,/dev/sda,/dev/sdb,/dev/sdc,/dev/nvme0n1` on my system, a comma separated list of the names of the block devices.
+
+Hence, ConkW will duplicate thecontent of the divs for each one ot those block devices, replacing all instances of the pattern `#` with the name of the block device.
