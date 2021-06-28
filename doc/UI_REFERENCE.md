@@ -75,6 +75,7 @@ All basic expressions are built on four values, separated by colons `:`.
     * `tstohhmmss` Will format the timestamp in an hour-minute-second string. For example `1624091231836` (the time of this writing) will result in `10:27:11`.
     * Note that some directives can contain the `:` character. The `:` needs to be written as `\:`, and conversely if you want the `\` character you will write it `\\`.
     * An empty directive will output whatever value untouched.
+    * Hom in to the [concepts](CONCEPTS.md) page for an exhaustive list.
 * **The value**. The last parameter can contain any character, it ends at the end of the string. Its value will be interpreted according to the **class** of the expression:
     * `l`. The value will be a literal. For numbers `2` or `3e8` for example. For strings, it can literaly be anything.
     * `m`. The value is the name of a metric in the proper datatype of the grabber whose namespace has been specified. See `Namespaces` above. More details below.
