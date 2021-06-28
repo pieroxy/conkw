@@ -409,8 +409,6 @@ ConkW.getProperLabel = function(key, value) {
             return this.dates.formatDate(value * 1000);
         case "tstodate":
             return this.dates.formatDate(value);
-        case "tsstodate":
-            return this.dates.formatDate(value * 1000);
         case "tstodatetime":
             return this.dates.formatDatetime(value);
         case "tsstodatetime":
@@ -418,7 +416,7 @@ ConkW.getProperLabel = function(key, value) {
         case "si":
             return this.getSI(value);
         case "tsstodow3":
-            return this.formatDow(value * 1000).substring(0, 3);
+            return this.dates.formatDow(value * 1000).substring(0, 3);
         case "currencyBig":
             return this.formatCurrency(value);
         case "yesno":
