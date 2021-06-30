@@ -194,7 +194,23 @@ Note that the expression for the `cw-value-warn` is a literal, and uses the dire
 
 This html tag will display the summary string of the mdadm arrays in the system. It will be displayed on a red background if it contains the character `<`. Per the documentation, this happens when the mdadm array is being reconstructed. As the performance of the array is greatly reduced during that time, it's best the user is aware of it.
 
+### Standalone Warning
 
+Identified by the attribute `cw-warn`. Any html tag with the `cw-warn` must have a `cw-warn-value` attribute. 
+
+It will act like the couple `cw-value` and `cw-value-warn` seen above.
+
+Let's look at some examples in the default UIs provided:
+
+```html
+<div cw-ns="proc" cw-style-display="e:str::${num.mdstatNbDevices==0?'none':''}" cw-warn="l:num:isnot:0" cw-warn-value="m:num::mdstatFailed">
+  blah blah blah some UI elements here
+</div>
+```
+
+First of all, this div will only be displayed if the number of mdstat devices is not zero. 
+
+Then, it will have the CSS class `cw-error` if the metric `num.mdstatFailed` is not zero, presumably there are drives failures in the mdstat array.
 
 ### Properties based elements
 

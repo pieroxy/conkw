@@ -823,22 +823,6 @@ ConkW.isWarning = function(vExpr, wExpr, data) {
     return false;
 }
 
-ConkW.isStandaloneWarning = function(wExpr, data) {
-    if (wExpr && !wExpr.invalid) {
-        var vw = this.extractRawValue(wExpr, data);
-        switch (wExpr.format) {
-            case "notzero":
-                return vw!==0 ? "yes" : "no";
-            case "zero":
-                return vw===0 ? "yes" : "no";
-        }
-        if (wExpr.format.indexOf("isnot.") == 0) {
-            return vw===wExpr.format.substring(6) ? "no" : "yes";   
-        }
-    }
-    return "no";
-}
-
 ConkW.isStale = function(vExpr, data) {
     if (vExpr && !vExpr.invalid) {
         var f = vExpr.format;
@@ -869,12 +853,13 @@ class WarnHolder {
     constructor(e, v) {
         this.element = e;
         this.valueExpr = ConkW.parseValueExpression(v);
+        this.valueReference = ConkW.parseValueExpression(e.getAttribute("cw-warn-value"));
         this.ns = e.getAttribute("cw-ns");
         this.cacheKey = "warn." + this.ns + "." + v;
         ConkW.data.cachedValues[this.cacheKey] = "--not-a-valid-value--";
     }
     update(data) {
-        if (ConkW.isStandaloneWarning(this.valueExpr, data)==='yes')
+        if (ConkW.isWarning(this.valueReference, this.valueExpr, data)==='yes')
             this.element.classList.add("cw-error");
         else
             this.element.classList.remove("cw-error");

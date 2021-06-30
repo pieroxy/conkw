@@ -207,7 +207,7 @@
             <div id="mdstat" class="cw-block">
                 <heading>MDADM Status</heading>
                 <div cw-ns="proc" cw-style-display="e:str::${num.mdstatNbDevices!=0?'none':''}">No mdadm device found</div>
-                <div cw-ns="proc" cw-style-display="e:str::${num.mdstatNbDevices==0?'none':''}" cw-warn="m:num:notzero:mdstatFailed">
+                <div cw-ns="proc" cw-style-display="e:str::${num.mdstatNbDevices==0?'none':''}" cw-warn="l:num:isnot:0" cw-warn-value="m:num::mdstatFailed">
                     <cw-label cw-ns="proc" cw-value-warn="l:str:valuecontains:&lt;" cw-value="m:str::mdstatSummary"></cw-label> dev:<cw-label cw-ns="proc" cw-value="m:num:num:mdstatNbDevices"></cw-label> fail:<cw-label cw-ns="proc" cw-value="m:num:num:mdstatFailed"></cw-label>
                     <BR/>
                 </div>
