@@ -166,6 +166,10 @@ gauge>div.gaugewarning {
     background-color: #800000 ! important;
 }
 
+gauge>div.gaugestale {
+    background-color: #888 ! important;
+}
+
 
 
 /* Clock elements */

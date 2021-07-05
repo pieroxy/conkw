@@ -951,7 +951,7 @@ class GaugeHolder {
             var wn = ((value - min) * 100 / (max - min));
             gw[i] = wn;
             var w = warn ? (this.wmax ? value < warn : value > warn) : false;
-            var gaugeCN = w ? "gaugewarning" : "gauge";
+            var gaugeCN = value === undefined ? "gaugestale" : (w ? "gaugewarning" : "gauge");
             gcn[i] = gaugeCN;
             cacheValue = cacheValue + "/" + gw;
         }
