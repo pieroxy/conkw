@@ -24,6 +24,8 @@ As an example:
 * `i.fr` is a stale metric.
 * The `i.fr` gauge is a gauge in the stale state. Its color is grey.
 
+You might want to include your own CSS in your UI files and override one or many of these default styles. If you do, make sure the error and stale states are still easy to identify for the user looking at the dashboard. Looking at a UI that has no data anymore doesn't have a lot of value. The stale state if here to make sure you are aware some values are not present. The error state is also important for the user to be able to witness and detect.
+
 ## Fixed Layout
 
 The default UI is meant to have a layout that fit the entire screen. 
