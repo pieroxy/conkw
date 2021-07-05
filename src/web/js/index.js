@@ -132,7 +132,7 @@ ConkW.updateDelay = function() {
     if (e) {
         if (ConkW.data.lastupdate) {
             e.innerHTML = v + "/" + ConkW.data.lastResponseJitter + "/" + ConkW.data.debug;
-            e.className = v > 4 ? "error" : "";
+            e.className = v > 5000 ? "cw-error" : "";
         } else {
             e.innerText = "Starting";
         }
@@ -296,7 +296,7 @@ ConkW.setStatus = function(msg) {
     if (status) {
         status.innerHTML = msg;
         status.title = msg;
-        status.className = "error";
+        status.className = "cw-error";
     } else {
         console.log("Failed to set status to " + msg);
     }
