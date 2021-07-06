@@ -15,7 +15,7 @@ The default conkw UI uses a set of colors that is dark. Whether it's daytime of 
 
 As an example:
 
-![](https://pieroxy.net/conkw/screenshots-doc/conkw_setup_colors.png) 
+![](https://pieroxy.net/conkw/screenshots-doc/conkw_setup_colors.png?) 
 
 * `pieroxy.net` is a regular label
 * The `pieroxy.net` gauge is a regular gauge. Its color (the default color) is green.
