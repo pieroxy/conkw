@@ -269,8 +269,8 @@ See the [concepts page](CONCEPTS.md) for the duration format.
 
 Identified by the attribute `cw-gauge0`. It allows to have a simple gauge such as the examples below:
 
-![](https://pieroxy.net/conkw/screenshots-doc/gauge-ex-1.png) 
-![](https://pieroxy.net/conkw/screenshots-doc/gauge-ex-2.png) 
+![](https://pieroxy.net/conkw/screenshots-doc/gauge-ex-1.png?) 
+![](https://pieroxy.net/conkw/screenshots-doc/gauge-ex-2.png?) 
 
 Attributes:
 
@@ -314,7 +314,7 @@ Note as the red value limit shows in the background of the gauges that did not r
 <label cw-ns="httpscert" cw-prop-title="m:num:time_ms:ts_pieroxy.net" style="width:160px; text-align: right; overflow: hidden; text-overflow: ellipsis;">pieroxy.net: </label><gauge cw-prop-title="m:num:tstodatetime:date_pieroxy.net" cw-ns="httpscert" cw-min="l:num::0" cw-max="l:num::90" cw-value-warn="l:num:valuebelow:20" cw-gauge0="default:m:num::days_pieroxy.net"></gauge><br>
 ```
 
-![](https://pieroxy.net/conkw/screenshots-doc/gauge-ex-2.png) 
+![](https://pieroxy.net/conkw/screenshots-doc/gauge-ex-2.png?) 
 
 Here the limit for the warning is expressed by a tiny black vertical bar in the green gauge element, since it is a minimum and not a maximum. Below that value the gauge element will be red.
 

@@ -2,7 +2,7 @@
 
 Here is my current setup:
 
-![](https://pieroxy.net/conkw/screenshots-doc/conkw_setup_raw.png)
+![](https://pieroxy.net/conkw/screenshots-doc/conkw_setup_raw.png?)
 
 ## Explanations of the regions
 
@@ -14,7 +14,7 @@ Here is my current setup:
 
 ## Detailed explanation
 
-![](https://pieroxy.net/conkw/screenshots-doc/conkw_setup_numbered.png)
+![](https://pieroxy.net/conkw/screenshots-doc/conkw_setup_numbered.png?)
 
 ### 0 ![](https://pieroxy.net/conkw/screenshots-doc/conkw_setup_topleft.png)
 * The first line represents the global conkw status and the zoom level of the UI.
@@ -24,7 +24,7 @@ Here is my current setup:
 
 
 
-### 1 ![](https://pieroxy.net/conkw/screenshots-doc/conkw_setup_mem.png)
+### 1 ![](https://pieroxy.net/conkw/screenshots-doc/conkw_setup_mem.png?)
 
 This is the RAM usage of my machine. 
 
@@ -83,7 +83,7 @@ That's software raid, in case you don't know.
 You can see a "summary string" for the arrays. 
 If it ever deviates from this value, il will be displayed in red.
 
-### 8 ![](https://pieroxy.net/conkw/screenshots-doc/conkw_setup_https.png)
+### 8 ![](https://pieroxy.net/conkw/screenshots-doc/conkw_setup_https.png?)
 This section monitors all of the https certs I am handling. 
 It expresses the number of days of validity. Gets red below 20 days. 
 Those https certs are renewed by themselves, but you gotta monitor this process.

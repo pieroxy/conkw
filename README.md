@@ -67,7 +67,7 @@ If you want to try it out and use it, please, by all means do. I'm not going to 
 Ok, enough talks about the theory. How does it look?
 
 Here is my current setup below. And here is [a link to a page detailing everything that you see](doc/MY_SETUP.md).
-![](https://pieroxy.net/conkw/screenshots-doc/conkw_setup_raw.png)
+![](https://pieroxy.net/conkw/screenshots-doc/conkw_setup_raw.png?)
 
 ## Documentation
 
