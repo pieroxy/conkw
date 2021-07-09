@@ -54,6 +54,11 @@ public class Runner {
     private static Tomcat buildTomcat(File webappDir, File uiDir, Config config) {
         Tomcat tomcat = new Tomcat();
 
+        String tempDir = System.getProperty("java.io.tmpdir");
+        if (tempDir!=null) {
+            tomcat.setBaseDir(tempDir + File.separator + "conkwTomcat");
+        }
+
         Connector ctr = new Connector();
         ctr.setPort(config.getHttpPort());
         tomcat.setConnector(ctr);
