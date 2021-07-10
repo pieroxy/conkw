@@ -27,6 +27,8 @@ A link to the github of conkw. Issues, community and source code, a precious res
 
 This is where you will customize your UI to your needs and tastes !
 
+There is already something in there, that was build at installation time. You can keep it on the side or override it. Any conkw update will leave this space untouched, save from recreating `index.html` if it doesn't exist.
+
 ## An analog clock
 
 On the left of the page, there is a clock. Click on it and you will change the clock face. There are a few available, we hope you'll get to like at least one. Otherwise, you can [write your own](WRITE_A_CLOCK_FACE.md)
