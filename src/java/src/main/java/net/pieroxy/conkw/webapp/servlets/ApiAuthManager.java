@@ -225,7 +225,7 @@ public class ApiAuthManager {
 
   public void close() {
     saveThread = null;
-    synchronized (Api.class) {
+    synchronized (this) {
       this.notify();
     }
   }
