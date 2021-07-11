@@ -13,12 +13,14 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class PushToEmiGrabber extends Grabber implements GrabberListener, Runnable {
@@ -35,6 +37,7 @@ public class PushToEmiGrabber extends Grabber implements GrabberListener, Runnab
 
   @Override
   public void dispose() {
+    log(Level.INFO, "Stopping PushToEmiGrabber");
     Thread old = runner;
     runner = null;
     synchronized (old) {
@@ -55,7 +58,7 @@ public class PushToEmiGrabber extends Grabber implements GrabberListener, Runnab
       throw new RuntimeException(e);
     }
     prefix = config.get("prefix");
-    runner = new Thread(this);
+    runner = new Thread(this, "PushToEmiGrabber");
     runner.start();
   }
 
@@ -68,17 +71,20 @@ public class PushToEmiGrabber extends Grabber implements GrabberListener, Runnab
   public void run() {
     while (true) {
       Thread t = runner;
-      if (t == null) break;
+      if (runner == null) break;
       try {
         synchronized (t) {
           t.wait(getSleepTime());
         }
+        if (runner == null) break;
         if (grabbers == null || grabbers.isEmpty()) {
           log(Level.WARNING, "Grabbers not yet initialized");
           continue;
         }
+        if (runner == null) break;
 
         EmiInput data = grabData();
+        if (runner == null) break;
 
         sendData(data);
 
@@ -110,6 +116,8 @@ public class PushToEmiGrabber extends Grabber implements GrabberListener, Runnab
   private void sendData(EmiInput input) throws IOException {
     try {
       HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+      conn.setConnectTimeout(200);
+      conn.setReadTimeout(200);
       conn.setRequestMethod("POST");
       conn.setRequestProperty("Content-Type", Emi.CONTENT_TYPE);
       conn.setDoOutput(true);
@@ -121,13 +129,14 @@ public class PushToEmiGrabber extends Grabber implements GrabberListener, Runnab
           json.serialize(w, input);
           w.flush();
         }
-
         int rc = conn.getResponseCode();
         if (rc != 200) {
           String text = new BufferedReader(new InputStreamReader(conn.getErrorStream(), StandardCharsets.UTF_8)).lines().collect(Collectors.joining("\n"));
           log(Level.WARNING, "Emi responded with code " + rc + "\n" + text);
         }
       }
+    } catch (SocketTimeoutException e) {
+      log(Level.SEVERE, "Timed out sending data to " + url);
     } catch (Exception e) {
       log(Level.SEVERE, "Could not send data to " + url, e);
     }

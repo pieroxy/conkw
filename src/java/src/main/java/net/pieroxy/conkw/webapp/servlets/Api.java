@@ -5,6 +5,7 @@ import com.dslplatform.json.JsonWriter;
 import net.pieroxy.conkw.config.ApiAuth;
 import net.pieroxy.conkw.config.Config;
 import net.pieroxy.conkw.config.User;
+import net.pieroxy.conkw.standalone.InstanceId;
 import net.pieroxy.conkw.utils.HashTools;
 import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.webapp.model.NeedsAuthResponse;
@@ -26,9 +27,12 @@ import java.util.logging.Logger;
 
 public class Api extends HttpServlet {
   private final static Logger LOGGER = Logger.getLogger(Api.class.getName());
+  public static final String SHUTDOWN_PARAMETER = "shutdown";
 
   private static ApiManager api;
   private static ApiAuthManager auth;
+  private static InstanceId instanceId;
+  private static Runnable shutdown;
 
   public static void setContext(ApiManager api, ApiAuth authConfig, File dataDir) {
     Api.api = api;
@@ -42,8 +46,27 @@ public class Api extends HttpServlet {
     auth.close();
   }
 
+  public static void configureShutdownHook(InstanceId iid, Runnable shutdown) {
+    instanceId = iid;
+    Api.shutdown = shutdown;
+  }
+
+  private boolean shouldShutdown(HttpServletRequest req) {
+    return req.getParameterMap().size() == 1 && req.getParameter(SHUTDOWN_PARAMETER)!=null && instanceId.getKey().equals(req.getParameter(SHUTDOWN_PARAMETER));
+  }
+
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    if (shouldShutdown(req)) {
+      writeResponse(resp, "OK");
+      new Timer().schedule(new TimerTask() {
+        @Override
+        public void run() {
+          shutdown.run();
+        }
+      }, 500L);;
+      return;
+    }
     if (!auth.isAuthOk(req)) {
       writeResponse(resp, auth.performAuthentication(req));
       return;

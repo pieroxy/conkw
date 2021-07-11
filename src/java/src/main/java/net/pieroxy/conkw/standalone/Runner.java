@@ -2,22 +2,32 @@ package net.pieroxy.conkw.standalone;
 
 import net.pieroxy.conkw.config.Config;
 import net.pieroxy.conkw.config.ConfigReader;
+import net.pieroxy.conkw.utils.HashTools;
+import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.webapp.Listener;
 import net.pieroxy.conkw.webapp.servlets.Api;
 import net.pieroxy.conkw.webapp.servlets.Emi;
+import org.apache.catalina.LifecycleException;
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.core.StandardContext;
 import org.apache.catalina.servlets.DefaultServlet;
 import org.apache.catalina.startup.Tomcat;
 
 import java.io.File;
+import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Runner {
     private final static Logger LOGGER = Logger.getLogger(Runner.class.getName());
 
+    private static Tomcat tomcat;
+
     public static void main(String[] args) throws Exception {
         if (has(args, "--run-server")) {
+            saveInstanceId();
+
             Config config = ConfigReader.getConfig();
 
             if (config.getHttpPort() <= 0) throw new Exception("httpPort configured to an invalid value of " + config.getHttpPort());
@@ -29,7 +39,7 @@ public class Runner {
                     Runner.class.wait();
                 }
             } else {
-                Tomcat tomcat = buildTomcat(ConfigReader.getWebappDir(), ConfigReader.getUiDir(), config);
+                tomcat = buildTomcat(ConfigReader.getWebappDir(), ConfigReader.getUiDir(), config);
                 tomcat.start();
                 tomcat.getServer().await();
             }
@@ -48,6 +58,34 @@ public class Runner {
                 System.out.println("as the actual config, or as the backup config if --override-config-files");
                 System.out.println("is used. Same for the default UI.");
             }
+        }
+    }
+
+    private static void saveInstanceId() {
+        String key = HashTools.getRandomSequence(10);
+        String pid = ManagementFactory.getRuntimeMXBean().getName();
+        InstanceId iid = new InstanceId(pid, key);
+        Api.configureShutdownHook(iid, () -> shutdown());
+        File out = new File(ConfigReader.getConfDir(), "instanceid.json");
+        try {
+            out.setWritable(true, true);
+            JsonHelper.writeToFile(iid, out);
+            out.setExecutable(false, false);
+            out.setWritable(false, false);
+            out.setReadable(false, false);
+            out.setReadable(true, true);
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "Could not serialize the instance id", e);
+        }
+    }
+
+    private static void shutdown() {
+        try {
+            LOGGER.log(Level.INFO, "Shutting Down.");
+            tomcat.stop();
+            tomcat.destroy();
+        } catch (LifecycleException e) {
+            LOGGER.log(Level.SEVERE, "Stopping Tomcat", e);
         }
     }
 
