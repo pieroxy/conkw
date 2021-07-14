@@ -60,7 +60,7 @@ public class JsonHelper {
   public static <T> T readFromFile(Class<T> type, File f) throws IOException {
     if (f.exists()) {
       try (InputStream is = new FileInputStream(f)) {
-        return new DslJson<>(Settings.withRuntime()).deserialize(type, is);
+        return getJson().deserialize(type, is);
       }
     }
     return null;
