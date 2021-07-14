@@ -5,12 +5,11 @@ import com.dslplatform.json.JsonWriter;
 import com.dslplatform.json.runtime.Settings;
 import net.pieroxy.conkw.webapp.grabbers.spotify.CurrentlyPlayingResponse;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 
 public class JsonHelper {
@@ -31,6 +30,12 @@ public class JsonHelper {
     return writer;
   }
 
+  /**
+   * Serialize the object provided into the file provided.
+   * @param o
+   * @param f
+   * @throws IOException
+   */
   public static void writeToFile(Object o, File f) throws IOException {
     try (FileOutputStream fos = new FileOutputStream(f)) {
       DslJson<Object> json = JsonHelper.getJson();
@@ -42,6 +47,23 @@ public class JsonHelper {
         w.flush();
       }
     }
+  }
+
+  /**
+   *
+   * @param type
+   * @param f
+   * @param <T>
+   * @return null if the file could not be found
+   * @throws IOException
+   */
+  public static <T> T readFromFile(Class<T> type, File f) throws IOException {
+    if (f.exists()) {
+      try (InputStream is = new FileInputStream(f)) {
+        return new DslJson<>(Settings.withRuntime()).deserialize(type, is);
+      }
+    }
+    return null;
   }
 
 

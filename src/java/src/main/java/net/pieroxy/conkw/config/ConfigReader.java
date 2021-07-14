@@ -83,4 +83,8 @@ public class ConfigReader {
                 getWebappDir().exists() && getWebappDir().isDirectory() &&
                 getUiDir().exists() && getUiDir().isDirectory();
     }
+
+    public static void defineHomeDirectory(String home) {
+        ConfigReader.home = new File(home);
+    }
 }
