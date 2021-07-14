@@ -18,7 +18,6 @@ public class Installer {
     }
 
     public void run() throws Exception {
-        System.out.println("** INSTALLING CONKW **");
         System.out.println("Installing conkw in " + ConfigReader.getHomeDir());
         doInstall();
         printInstructions();

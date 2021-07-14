@@ -37,7 +37,7 @@ public class CmdLineOptions {
                 case "--home":
                     home = args.pop();
                     break;
-                case "--stopCurrentInstance":
+                case "--stop-current-instance":
                     stopCurrentInstance = true;
                     break;
                 default:

@@ -16,11 +16,18 @@ import org.apache.catalina.startup.Tomcat;
 import java.io.File;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
+import java.net.ConnectException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Runner {
     private final static Logger LOGGER = Logger.getLogger(Runner.class.getName());
+    private final static int STOP_COMPLETE  = 1;
+    private final static int STOP_NOOP  = 2;
+    private final static int STOP_FAILED  = 3;
 
     private static Tomcat tomcat;
 
@@ -33,7 +40,7 @@ public class Runner {
                 run(options);
                 break;
             case CmdLineOptions.ACTION_STOP:
-                stop(options);
+                stop();
                 break;
             case CmdLineOptions.ACTION_INSTALL:
                 install(options);
@@ -45,7 +52,7 @@ public class Runner {
                 System.out.println("ACTION start");
                 System.out.println("    Starts conkw service.");
                 System.out.println("    Options:");
-                System.out.println("      --stopCurrentInstance");
+                System.out.println("      --stop-current-instance");
                 System.out.println("          Conkw will stop the current instance if any is running and start a new");
                 System.out.println("          one. SOON.");
                 System.out.println("");
@@ -74,14 +81,86 @@ public class Runner {
             System.out.println("Please run with --upgrade to install anyway.");
             return;
         }
+        if (!stop()) {
+            return; // Cannot install if the process is actually running - files are locked.
+        }
         new Installer(options.isOverrideConfig(), options.isOverrideUi()).run();
     }
 
-    private static void stop(CmdLineOptions options) throws IOException {
-        System.out.println("stop command is not implemented yet.");
+    /**
+     *
+     * @return true if the existing process is stopped, false if it failed.
+     * @throws IOException
+     */
+    private static boolean stop() throws IOException {
+        InstanceId iid = JsonHelper.readFromFile(InstanceId.class, getInstanceIdFile());
+        Config conf = ConfigReader.getConfig();
+        switch (stopLoop(conf, iid)) {
+            case STOP_COMPLETE:
+                LOGGER.info("Current instance was successfully stopped.");
+                return true;
+            case STOP_NOOP:
+                LOGGER.info("No current instance could be detected.");
+                return true;
+            case STOP_FAILED:
+                LOGGER.severe("Current instance could not be stopped.");
+                return false;
+            default:
+                LOGGER.severe("Something went bonkers.");
+                return false;
+        }
+    }
+
+    private static int stopLoop(Config conf, InstanceId iid) throws IOException {
+        int loopNumber = 0;
+
+        while (loopNumber < 20) {
+            if (portAlreadyTaken(conf)) {
+            } else {
+                return loopNumber == 0 ? STOP_NOOP : STOP_COMPLETE;
+            }
+            if (loopNumber == 0) {
+                URL u = new URL("http://localhost:" + conf.getHttpPort() + "/api?shutdown=" + iid.key);
+                HttpURLConnection c = (HttpURLConnection) u.openConnection();
+                try {
+                    c.connect();
+                    int rc = c.getResponseCode();
+                } catch (Exception e) {
+                }
+            } else {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                }
+            }
+
+            loopNumber++;
+        }
+        return STOP_FAILED;
+    }
+
+    private static boolean portAlreadyTaken(Config conf) throws IOException {
+        URL u = new URL("http://localhost:" + conf.getHttpPort() + "/");
+        HttpURLConnection c = (HttpURLConnection)u.openConnection();
+        try {
+            c.connect();
+        } catch (ConnectException e) {
+            return false;
+        } catch (Exception e) {
+        }
+        return true;
     }
 
     private static void run(CmdLineOptions options) throws Exception {
+        if (options.isStopCurrentInstance()) {
+            if (!stop()) {
+                return;
+            }
+        }
+        if (portAlreadyTaken(ConfigReader.getConfig())) {
+            System.out.println("The port " + ConfigReader.getConfig().getHttpPort() + " is already taken. Run with --stop-current-instance to stop the current instance first.");
+            return;
+        }
         saveInstanceId();
         Config config = ConfigReader.getConfig();
 
