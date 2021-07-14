@@ -52,7 +52,18 @@ public class Api extends HttpServlet {
   }
 
   private boolean shouldShutdown(HttpServletRequest req) {
-    return req.getParameterMap().size() == 1 && req.getParameter(SHUTDOWN_PARAMETER)!=null && instanceId.getKey().equals(req.getParameter(SHUTDOWN_PARAMETER));
+    int rs = req.getParameterMap().size();
+    if (rs!=1) return false;
+    boolean sp = req.getParameter(SHUTDOWN_PARAMETER)==null;
+    if (sp) return false;
+    boolean ss = instanceId.getKey().equals(req.getParameter(SHUTDOWN_PARAMETER));
+    if (ss) {
+      LOGGER.warning("Shutdown sequence requested.");
+      return true;
+    } else {
+      LOGGER.warning("Shutdown sequence requested with the wrong key.");
+      return false;
+    }
   }
 
   @Override
