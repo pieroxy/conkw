@@ -28,10 +28,10 @@ mvn package
 ### 3. Run the program
 
 ```sh
-java -jar target/conkw.jar
+java -jar target/conkw.jar install
 ```
 
-This last step will ask you if you want to install the program in `~/.conkw`. If you want it installed somewhere else just define a `CONKW_HOME` environment variable and launch the program again. Just remember that at this stage, the program keeps all it needs in one place: Binaries, configuration, temp files, etc...
+This last step will install the program in `~/.conkw`. If you want it installed somewhere else just specify where with the `--home` option. Just remember that at this stage, the program keeps all it needs in one place: Binaries, configuration, temp files, etc...
 
 The installation program will give you instructions as to how to run the program.
 
@@ -41,6 +41,6 @@ Hint: Click on the clock to see the different clock faces available.
 
 ### 4. Upgrade or reinstall the program
 
-The step 3 above will not do anything if conkw is already installed. To force installation to happen again, use the `--force-install` flag. If you edited and changed files in the `conf` directory, they will be kept and the new configuration will be installed as `config.jsonc.1` and/or `logging.properties.1` respectively.
+The step 3 above will not do anything if conkw is already installed. To force installation to happen again, use the `--upgrade` flag. If you edited and changed files in the `config` and/or `ui` directories, they will be kept and the new files will be installed as `whatever.file.1`.
 
-If you want to reset the configuration to the new install configuration, use the `--override-config-modifications` flag. This way, both files will be reset, and if you made changes to them, your version will be saved as `config.jsonc.1` and/or `logging.properties.1` respectively.
+If you want to reset the configuration to the new install configuration, use the `--override-config-files` flag. This way, both files will be reset, and if you made changes to them, your version will be saved as `whatever.file.1`, so nothing is really lost there. Same for the UI files with the `--override-default-ui` flag.
