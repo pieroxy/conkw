@@ -115,7 +115,7 @@ As a last note, be aware that some of these formattings output a space padded st
 * `tstodate` Same as above with a timestamp in milliseconds
     * `1624784665944` (The result of `Date.now()` in my browser at the time of this writing) -> `2021-06-27`
     * `1612032547850` -> `2021-01-30`
-* `tsstodatetime` Extract the date and time part of a timestamp in seconds, in the format YYY-MM-DD HH:MM
+* `tsstodatetime` Extract the date and time part of a timestamp in seconds, in the format YYYY-MM-DD HH:MM
     * `1624784665` -> `2021-06-27 11:04`
     * `1612032547` -> `2021-01-30 19:49`
 * `tstodatetime` Same as above with a timestamp in milliseconds
@@ -137,7 +137,7 @@ As a last note, be aware that some of these formattings output a space padded st
 
 ## Error metric
 
-TBD
+A Metric is deemed to be in an error state if it respect some rule that has been defined in the ``
 
 ## Stale metric
 
