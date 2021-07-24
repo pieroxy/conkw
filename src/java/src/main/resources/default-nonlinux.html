@@ -135,29 +135,6 @@
                 </div>
             </div>
 
-            <div id="spotify">
-              <heading>SPOTIFY<cw-label style="float:right" cw-ns="spotify" cw-value="m:str::status"></cw-label></heading><BR/>
-              <img src="/icons/nosound.png" cw-ns="spotify" cw-prop-src="m:str::album_art" style="box-shadow:1px 1px 20px rgba(0,0,0,0.5);margin-left:45px;width:250px;height:250px;"></img><BR/><BR/>
-              <div class="steelborderout"><div class="steelborder" style="text-align: left;">
-                  <div class="lcd"  cw-ns="spotify" cw-stale="m:str:!exists:album_name"><div>
-                      <cw-label style="text-align: right;display:block; min-height:1em" cw-ns="spotify" cw-value="m:str::album_artist">Artist</cw-label>
-                      <cw-label cw-prop-title="m:str::album_date" cw-ns="spotify" cw-value="m:str::album_name">Album</cw-label> (<cw-label cw-ns="spotify" cw-value="m:str::album_date">Release date</cw-label>)<BR/>
-                      <cw-label cw-ns="spotify" cw-value="m:str::tracknum">00</cw-label>/<cw-label cw-ns="spotify" cw-value="m:str::album_tracks">XX</cw-label> <cw-label cw-ns="spotify" cw-value="m:str::trackname">Track</cw-label><BR/>
-                      <cw-label cw-ns="spotify" cw-value="m:num:hhmm:pos">00:00</cw-label>/<cw-label cw-ns="spotify" cw-value="m:num:hhmm:len">00:00</cw-label><gauge 
-                      cw-ns="spotify" cw-gauge0="default:m:num::pos" cw-min="l:num::0" cw-max="m:num::len"
-                      style="width: 150px"></gauge><BR/>
-                  </div></div>
-                  <img onmousedown="ConkW.buttonPushed(this)" onmouseup="ConkW.buttonReleased(this)" src="/mmedia/plastic-button-prev.png" onclick="ConkW.callApi('grabberAction=spotify&prev=true')">
-                  <img onmousedown="ConkW.buttonPushed(this)" onmouseup="ConkW.buttonReleased(this)" src="/mmedia/plastic-button-pause.png" onclick="ConkW.callApi('grabberAction=spotify&pause=true')">
-                  <img onmousedown="ConkW.buttonPushed(this)" onmouseup="ConkW.buttonReleased(this)" src="/mmedia/plastic-button-play.png" onclick="ConkW.callApi('grabberAction=spotify&play=true')">
-                  <img onmousedown="ConkW.buttonPushed(this)" onmouseup="ConkW.buttonReleased(this)" src="/mmedia/plastic-button-next.png" onclick="ConkW.callApi('grabberAction=spotify&next=true')">
-                  <img cw-ns="spotify" cw-prop-src="e:str::${str.status=='Playing'?'/backgrounds/green-led-on.png':'/backgrounds/green-led-off.png'}" src="" style="float: right;">
-                  <BR>
-              </div></div>
-            </div>
-  
-
-
           </columncontainer>
     </body>
 </html>
