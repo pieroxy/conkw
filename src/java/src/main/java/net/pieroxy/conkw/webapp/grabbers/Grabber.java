@@ -149,6 +149,32 @@ public abstract class Grabber {
     }
   }
 
+  protected void computeAutoMaxMinAbsolute(ResponseData res, String metricName, double value) {
+    res.addMetric(metricName, value);
+    {
+      LongHolder lh = maxValues.get(metricName);
+      if (lh == null) {
+        maxValues.put(metricName, new LongHolder(System.currentTimeMillis()));
+      } else {
+        double mv = maxComputer.getMax(this, metricName, value);
+        res.addMetric("max$" + metricName, mv);
+        lh.value = System.currentTimeMillis();
+      }
+    }
+    {
+      metricName = "min$" + metricName;
+      value = -value;
+      LongHolder lh = maxValues.get(metricName);
+      if (lh == null) {
+        maxValues.put(metricName, new LongHolder(System.currentTimeMillis()));
+      } else {
+        double mv = maxComputer.getMax(this, metricName, value);
+        res.addMetric(metricName, -mv);
+        lh.value = System.currentTimeMillis();
+      }
+    }
+  }
+
   @Override
   public String toString() {
     return getClass().getName() + "/" + getName();

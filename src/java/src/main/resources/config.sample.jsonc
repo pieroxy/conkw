@@ -149,6 +149,13 @@
         "url":"http://localhost:12789/emi?ns=test_emi",
         "prefix":"testpush"
       }
+    },
+    //lm-sensors
+    {
+      "implementation":"net.pieroxy.conkw.webapp.grabbers.LmSensorsGrabber",
+      "name":"lmsensors",
+      "parameters": {
+      }
     }
     //END OF GRABBERS
   ],

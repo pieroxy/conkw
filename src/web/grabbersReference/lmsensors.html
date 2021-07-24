@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover"/>
+        <meta charset="utf-8">
+        <meta name="format-detection" content="telephone=no">
+        <title>ConkW - Grabbers reference - lm-sensors</title>
+        <link href="../css/fonts.css" rel="stylesheet">
+        <link href="../css/conkw-common.css" rel="stylesheet">
+        <link href="../css/conkw.css" rel="stylesheet">
+        <script src="/js/polyfills.js"></script>
+        <script src="/js/date.js"></script>
+        <script src="/js/index.js"></script>
+        <link rel="icon" type="image/png" sizes="256x256" href="/icon.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="manifest" href="/site.webmanifest">
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000066">
+        <meta name="msapplication-TileColor" content="#000066">
+        <meta name="theme-color" content="#ffffff">
+        <style>
+          cw-label {
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        </style>
+    </head>
+    <body onload="ConkW.init()" cw-grabbers="lmsensors">
+        <pagetitle><inlinelogo></inlinelogo><a href="/">CONKW</a> - Reference UI for <code>LmSensorsGrabber</code></pagetitle>
+        <columncontainer>
+            <label>  Status : </label><cw-label style="max-width:200px;display:inline-block" id="cw-status"></cw-label><BR/>
+            <label>   Delay : </label><label id="cw-delay"></label><BR/>
+            <div id="clockanddate" class="cw-block" style="text-align:center;font-size:16px;">
+                <br/>
+                <cw-date cw-id="dayoftheweek"></cw-date>
+                <cw-date cw-id="month"></cw-date> <cw-date cw-id="dayofmonth"></cw-date>
+                <cw-date cw-id="year"></cw-date>
+                <br/>
+                <br/>
+                <cw-clock style="width:240px;height:240px;overflow: hidden;padding-top:3px;margin:auto" onclick="ConkW.dates.rotateClockFace(event, this)"></cw-clock>
+            </div>
+            
+            <div>
+                <heading>INDEX</heading>
+                <a href="/grabbersReference/">Go to the grabbers index</a><br/>
+                <a href="/doc/GRABBER_LM_SENSORS_GRABBER.html">Documentation</a>
+            </div>
+
+
+            </div>
+            
+                <ul>
+                    <li>
+                        Note that this grabber only works on Linux and other systems where the 
+                        <code>lm-sensors</code> program is available.</li>
+                    <li>
+                        This UI shows a small sample of the metrics available through the 
+                        <code>lm-sensors</code> command-line program. </li>
+                    <li>
+                        If you don't see anything here, look in the <code>system.log</code> file 
+                        for an error message. It is likely you need to install the program on your system.
+                        On Ubuntu it can be done with <code>sudo apt install lm-sensors</code></li>
+                    <li>
+                        There are a <b>lot</b> more metrics available that this UI
+                        doesn't show.</li>
+                    <li>
+                        If the list of metrics below looks like a mess it's because it is.
+                        <code>lm-sensors</code> output metrics as it discovers them. ConkW
+                        just grabs them and exposes them through the API. </li>
+                    <li>
+                        Look at the <a href="/doc/GRABBER_LM_SENSORS_GRABBER.html">documentation</a> for an 
+                        explanation of the naming convention used for the metrics.
+                    </li>
+                </ul>
+            
+            </div>
+
+
+            <div id="temp" class="cw-block">
+                <heading>Temperatures</heading>
+                <div cw-ns="lmsensors" cw-multinode-in="m:str::temp_input" cw-multinode-pattern="#">
+                    <br><cw-label style="width:100px" cw-ns="lmsensors" title="#" cw-value="m:str::shortname_#"></cw-label> </cw-label><cw-label cw-ns="lmsensors" cw-value="m:num:temp:#"></cw-label> <label title="min" class="softlabel"><cw-label cw-ns="lmsensors" cw-value="m:num:temp:min$#"></cw-label> </label> <label title="max" class="softlabel"><cw-label cw-ns="lmsensors" cw-value="m:num:temp:max$#"></cw-label> </label>
+                    <br><gauge cw-ns="lmsensors" cw-gauge0="default:m:num::#" cw-min="m:num::min$#" cw-max="m:num::max$#"></gauge>
+                </div>
+            </div>
+            
+            <div id="temp" class="cw-block">
+                <heading>Fans</heading>
+                <div cw-ns="lmsensors" cw-multinode-in="m:str::fan_input" cw-multinode-pattern="#">
+                    <br><cw-label style="width:100px" cw-ns="lmsensors" title="#" cw-value="m:str::shortname_#"></cw-label> </cw-label><cw-label cw-ns="lmsensors" cw-value="m:num:rpm:#"></cw-label> <label title="min" class="softlabel"><cw-label cw-ns="lmsensors" cw-value="m:num:rpm:min$#"></cw-label> </label> <label title="max" class="softlabel"><cw-label cw-ns="lmsensors" cw-value="m:num:rpm:max$#"></cw-label> </label>
+                    <br><gauge cw-ns="lmsensors" cw-gauge0="default:m:num::#" cw-min="m:num::min$#" cw-max="m:num::max$#"></gauge>
+                </div>
+            </div>
+            
+            <div id="temp" class="cw-block">
+                <heading>Voltages</heading>
+                <div cw-ns="lmsensors" cw-multinode-in="m:str::in_input" cw-multinode-pattern="#">
+                    <br><cw-label style="width:100px" cw-ns="lmsensors" title="#" cw-value="m:str::shortname_#"></cw-label> </cw-label><cw-label cw-ns="lmsensors" cw-value="m:num:si:#"></cw-label>V <label title="min" class="softlabel"><cw-label cw-ns="lmsensors" cw-value="m:num:si:min$#"></cw-label>V </label> <label title="max" class="softlabel"><cw-label cw-ns="lmsensors" cw-value="m:num:si:max$#"></cw-label>V </label>
+                    <br><gauge cw-ns="lmsensors" cw-gauge0="default:m:num::#" cw-min="m:num::min$#" cw-max="m:num::max$#"></gauge>
+                </div>
+            </div>
+            
+        </columncontainer>
+    </body>
+</html>
