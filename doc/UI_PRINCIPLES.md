@@ -37,14 +37,7 @@ Any file using conkw UI follows the same structure:
         <script src="/js/polyfills.js"></script>
         <script src="/js/date.js"></script>
         <script src="/js/index.js"></script>
-        <link rel="icon" type="image/png" sizes="256x256" href="/icon.png">
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-        <link rel="manifest" href="/site.webmanifest">
-        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000066">
-        <meta name="msapplication-TileColor" content="#000066">
-        <meta name="theme-color" content="#ffffff">
+        <script src="/js/favicon.js"></script>
         <style>
           cw-label {
             max-width: 200px;
@@ -107,14 +100,7 @@ This file includes a few polyfills. Only useful if you plan on using ConkW on an
 This includes the conkw UI javascript part.
 
 ```html
-<link rel="icon" type="image/png" sizes="256x256" href="/icon.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000066">
-<meta name="msapplication-TileColor" content="#000066">
-<meta name="theme-color" content="#ffffff">
+<script src="/js/favicon.js"></script>
 ```
 
 This is the app icon, for multiple different devices.

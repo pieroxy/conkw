@@ -22,7 +22,7 @@ md h1 a, md h1 a:visited {
 }
 
 inlinelogo {
-  background-image: url("/android-chrome-256x256.png");
+  background-image: url("/android-chrome-512x512.png");
   background-size: cover;
   height:1em; 
   width:1em; 
