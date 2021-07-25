@@ -7,7 +7,6 @@ Here are the things we have in mind for conkw. This is kind of my TODO list.
 
 ## Grabbers
 
-* lm-sensors - to get temperatures, voltages and fan speeds on linux.
 * smartctl - to get metrics out of hdd, specifically their health status.
 * MPRIS2 - to get music playing for most Linux players.
 * Calendar Google - to get next meetings
