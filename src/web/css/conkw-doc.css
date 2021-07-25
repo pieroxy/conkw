@@ -5,6 +5,7 @@ body {
   background-color: #300a24;
   color: lightgray;
   padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  overflow-y: scroll;
 }
 
 
