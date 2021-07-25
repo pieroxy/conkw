@@ -1,7 +1,9 @@
 # conkw
 
 
-![](src/web/favicon-16x16.png) Web-based conky-like monitoring platform.
+![](src/web/images/logo-black-400.png) 
+
+Web-based conky-like monitoring platform.
 
 ## Conky?
 
