@@ -66,7 +66,7 @@ public abstract class AsyncGrabber extends Grabber implements Runnable {
       if (delay<=0) delay = 1000;
       if (canLogFiner()) log(Level.FINER, System.currentTimeMillis() + "::"+getName() + " waiting for " + delay);
       synchronized (this) {
-        if (canLogFine()) this.log(Level.FINE, "Waiting " + (delay));
+        if (canLogFiner()) this.log(Level.FINER, "Waiting " + (delay));
         this.wait(delay);
       }
       if (canLogFiner()) log(Level.FINER, System.currentTimeMillis() + "::"+getName() + " up");
@@ -77,7 +77,7 @@ public abstract class AsyncGrabber extends Grabber implements Runnable {
             now = System.currentTimeMillis();
             cached = grabSync();
             long eor = System.currentTimeMillis();
-            cached.setElapsedToGrab(eor - now);
+            if (cached.getElapsedToGrab()==0) cached.setElapsedToGrab(eor - now);
             time += eor - now;
             count++;
             time *= 0.9; // 0.9 factor to forget old values over time.

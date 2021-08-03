@@ -1,6 +1,8 @@
 package net.pieroxy.conkw.webapp.grabbers;
 
 import net.pieroxy.conkw.utils.LongHolder;
+import net.pieroxy.conkw.utils.duration.CDuration;
+import net.pieroxy.conkw.utils.duration.CDurationParser;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.io.File;
@@ -117,6 +119,23 @@ public abstract class Grabber {
 
   public final String getName() {
     return name;
+  }
+
+  int getIntProperty(String propertyName, Map<String, String> config, int defaultValue) {
+    String propValue = config.get(propertyName);
+    if (propValue != null) {
+      return Integer.parseInt(propValue);
+    }
+    return defaultValue;
+  }
+
+  CDuration getDurationProperty(String propertyName, Map<String, String> config, CDuration defaultValue) {
+    String propValue = config.get(propertyName);
+    if (propValue != null) {
+      return CDurationParser.parse(propValue);
+    }
+
+    return defaultValue;
   }
 
   public void setName(String name) {

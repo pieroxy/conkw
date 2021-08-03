@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover"/>
+        <meta charset="utf-8">
+        <meta name="format-detection" content="telephone=no">
+        <title>ConkW - Grabbers reference - latest unread emails</title>
+        <link href="../css/fonts.css" rel="stylesheet">
+        <link href="../css/conkw-common.css" rel="stylesheet">
+        <link href="../css/conkw.css" rel="stylesheet">
+        <script src="/js/polyfills.js"></script>
+        <script src="/js/date.js"></script>
+        <script src="/js/index.js"></script>
+        <script src="/js/favicon.js"></script>
+        <style>
+          cw-label {
+            max-width: 350px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        </style>
+    </head>
+    <body onload="ConkW.init()" cw-grabbers="mails">
+        <pagetitle><inlinelogo></inlinelogo><a href="/">CONKW</a> - Reference UI for <code>LatestUnreadMailsGrabber</code></pagetitle>
+        <columncontainer>
+            <label>  Status : </label><cw-label style="max-width:200px;display:inline-block" id="cw-status"></cw-label><BR/>
+            <label>   Delay : </label><label id="cw-delay"></label><BR/>
+            <div id="clockanddate" class="cw-block" style="text-align:center;font-size:16px;">
+                <br/>
+                <cw-date cw-id="dayoftheweek"></cw-date>
+                <cw-date cw-id="month"></cw-date> <cw-date cw-id="dayofmonth"></cw-date>
+                <cw-date cw-id="year"></cw-date>
+                <br/>
+                <br/>
+                <cw-clock style="width:240px;height:240px;overflow: hidden;padding-top:3px;margin:auto" onclick="ConkW.dates.rotateClockFace(event, this)"></cw-clock>
+            </div>
+            
+            <div>
+                <heading>INDEX</heading>
+                <a href="/grabbersReference/">Go to the grabbers index</a><br/>
+                <a href="/doc/GRABBER_LATEST_EMAILS.html">Documentation</a>
+            </div>
+
+            </div>
+                <ul>
+                    <li>Until you have configured an account in the config.jsonc 
+                        file, you won't see anything in there. </li>
+                    <li>The configuration is pretty simple: add a property called 
+                        imapConf0 and as a value "server:port:login:password"</li>
+                    <li>Be aware that depending on the number of unread emails you have, 
+                        the first fetch can take a while (one or more minutes)</li>
+                    <li>If you configure several accounts, all the emails will be merged. 
+                        If you want them separate, use several instances of this grabber 
+                        in the config file.</li>
+                </ul>
+            </div>
+
+            <br>Status: <cw-label style="width:unset" cw-ns="mails" cw-value="m:str::status"></cw-label>
+            <br>Number of unread emails: <cw-label style="width:50px" cw-ns="mails" cw-value="m:num:si:mails_unread_total"></cw-label>
+            <div cw-ns="mails" cw-multinode-from="l:num::0" cw-multinode-to="m:num::mails_len" cw-multinode-pattern="#">
+                <div class="cw-block">
+                    <hr><cw-label style="width:unset" cw-ns="mails" cw-value="m:num:tstodate:mail_#_date"></cw-label> <cw-label style="width:unset;display:inline-block" cw-ns="mails" cw-value="m:num:tstohhmm:mail_#_date"></cw-label> <cw-label cw-ns="mails" cw-value="m:str::mail_#_account"></cw-label>
+                    <br><cw-label cw-ns="mails" cw-value="m:str::mail_#_from"></cw-label>
+                    <br><cw-label cw-ns="mails" cw-value="m:str::mail_#_subject"></cw-label>
+                </div>
+            </div>
+     
+        </columncontainer>
+    </body>
+</html>

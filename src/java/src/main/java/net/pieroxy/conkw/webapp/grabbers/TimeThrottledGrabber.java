@@ -22,6 +22,9 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber {
 
   private long lastRun=-1;
   private File storage;
+  private Thread asyncLoad = null;
+  private ResponseData asyncResult = null;
+  long timeToExtract;
 
   private File getCacheFile() {
     if (storage==null) {
@@ -68,29 +71,63 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber {
 
   @Override
   public final boolean changed() {
-    return getTtl().isExpired(lastRun, System.currentTimeMillis());
+    return asyncLoad!=null || getTtl().isExpired(lastRun, System.currentTimeMillis());
   }
 
   @Override
   public final ResponseData grabSync() {
+    log(Level.FINE, "grabSync() :: begin");
     if (lastRun==-1) {
       ResponseData data = loadCacheFile();
       if (data!=null && data.getErrors().isEmpty()) {
         log(Level.INFO, "Loading from cache " + getCacheFile().getAbsolutePath());
         lastRun = data.getTimestamp();
+        log(Level.FINE, "grabSync() :: loaded from cache");
         return data;
       }
     }
-    try {
+    if (asyncLoad == null) {
+      asyncLoad = new Thread(() -> {
+        try {
+          timeToExtract = System.currentTimeMillis();
+          ResponseData r = new ResponseData(this, System.currentTimeMillis());
+          load(r);
+          lastRun = System.currentTimeMillis();
+          writeCacheFile(r);
+          long ttg = System.currentTimeMillis() - timeToExtract;
+          r.setElapsedToGrab(ttg);
+          asyncResult = r;
+        } catch (Exception e) {
+          log(Level.SEVERE, "Grabbing " + getName(), e);
+          asyncResult = new ResponseData(this, System.currentTimeMillis());
+        }
+      }, getClass().getSimpleName() + ".loadingThread");
+      asyncLoad.start();
+      log(Level.FINE, "grabSync() :: Launched loading thread");
+
       ResponseData r = new ResponseData(this, System.currentTimeMillis());
-      load(r);
-      lastRun = System.currentTimeMillis();
-      writeCacheFile(r);
+      r.addMetric("status", "Loading.");
       return r;
-    } catch (Exception e) {
-      log(Level.SEVERE, "Grabbing " + getName(), e);
-      return new ResponseData(this, System.currentTimeMillis());
+    } else {
+      ResponseData r = asyncResult;
+      if (r == null) {
+        log(Level.FINE, "grabSync() :: waiting for loading thread");
+        r = new ResponseData(this, System.currentTimeMillis());
+        r.addMetric("status", getLoadingString());
+      } else {
+        log(Level.FINE, "grabSync() :: loading thread finished");
+        r.addMetric("status", "Loaded.");
+        asyncLoad = null;
+        asyncResult = null;
+      }
+      return r;
     }
+  }
+
+  private String getLoadingString() {
+    long s = System.currentTimeMillis()/1000;
+    int i = (int)s%4;
+    return "Loading" + ((i==0) ? "" : (i==1) ? "." : (i==2)?"..":"...");
   }
 
   public static class CachedData {

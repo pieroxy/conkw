@@ -156,8 +156,20 @@
       "name":"lmsensors",
       "parameters": {
       }
+    },
+    //LATEST EMAILS
+    {
+      // This is the email grabber.
+      "implementation":"net.pieroxy.conkw.webapp.grabbers.LatestUnreadMailsGrabber",
+      "name":"mails",
+      "parameters": {
+        /* "ttl":"5m" */ // Default value
+        /* "maxMessages":"10" */ // Default value
+        /* "imapConf0":"gmail!!:imap.googlemail.com:993:my_email@gmail.com:mypassword" */
+        /* "imapConf1":"ms:outlook.office365.com:993:my_email@hotmail.com:mypassword" */
+      }
     }
-    //END OF GRABBERS
+   //END OF GRABBERS
   ],
   "apiAuth":{
     "auth":false, // Set to true to activate API authentication 
@@ -165,7 +177,7 @@
     "sessionInactivityTimeout":"30d", // Delay after which every unused session expires.
     "users":[ // You can define here many users.
       {
-        "login":"testuser", 
+        "login":"testuser",
         "password":"foobar"
       }
     ]
