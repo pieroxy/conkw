@@ -82,7 +82,10 @@ public class Runner {
             return;
         }
         if (!stop()) {
-            return; // Cannot install if the process is actually running - files are locked.
+            System.out.println("Running instance takes longer than expected to stop. Press Ctrl-C to abort this.");
+            if (!stop() && !stop()) {
+                return; // Cannot install if the process is actually running - files are locked.
+            }
         }
         new Installer(options.isOverrideConfig(), options.isOverrideUi()).run();
     }
