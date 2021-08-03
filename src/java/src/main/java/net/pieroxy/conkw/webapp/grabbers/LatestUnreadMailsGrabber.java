@@ -45,9 +45,16 @@ public class LatestUnreadMailsGrabber extends TimeThrottledGrabber {
         });
 
         for ( Message message : messages ) {
+            long uid = -1;
+            Folder f = message.getFolder();
+            if (f instanceof UIDFolder) {
+                UIDFolder uf = (UIDFolder) f;
+                uid = uf.getUID(message);
+            }
             System.out.println(
                     "sendDate: " + message.getSentDate()
-                  + "from: " + getFrom(message)
+                            + " uid: " + uid
+                            + " from: " + getFrom(message)
                   + " subject:" + message.getSubject() );
         }
     }
