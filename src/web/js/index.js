@@ -848,12 +848,13 @@ class ValueHolder {
         this.valueExpr = ConkW.parseValueExpression(v);
         this.ns = e.getAttribute("cw-ns");
         this.cacheKey = "value." + this.ns + "." + v;
+        this.escapeHtml = e.getAttribute("cw-escapeHtml");
         this.warn = ConkW.parseValueExpression(e.getAttribute("cw-value-warn"));
         ConkW.data.cachedValues[this.cacheKey] = "--not-a-valid-value--";
     }
     update(data) {
         var v = ConkW.extractFormattedValue(this.valueExpr, data);
-        ConkW.updateField(this.element, "innerHTML", this.cacheKey, v, ConkW.isWarning(this.valueExpr, this.warn, data));
+        ConkW.updateField(this.element, this.escapeHtml === "yes" ? "innerText":"innerHTML", this.cacheKey, v, ConkW.isWarning(this.valueExpr, this.warn, data));
     }
 }
 

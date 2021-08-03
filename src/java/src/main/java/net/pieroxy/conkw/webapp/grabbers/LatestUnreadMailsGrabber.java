@@ -79,7 +79,7 @@ public class LatestUnreadMailsGrabber extends TimeThrottledGrabber {
     private static String getNiceMailAddress(Address address) throws MessagingException {
         if (address instanceof InternetAddress) {
             InternetAddress ia = (InternetAddress) address;
-            return ia.getPersonal() + " &lt;" + ia.getAddress() + "&gt;";
+            return ia.getPersonal() + " <" + ia.getAddress() + ">";
         } else {
             return address.toString();
         }
