@@ -5,6 +5,8 @@ import net.pieroxy.conkw.webapp.model.ResponseData;
 import java.util.logging.Level;
 
 public abstract class AsyncGrabber extends Grabber implements Runnable {
+  public static final String LOAD_STATUS = "grabStatus";
+
   private ResponseData cached;
 
   abstract public boolean changed();
@@ -16,6 +18,7 @@ public abstract class AsyncGrabber extends Grabber implements Runnable {
   private boolean shouldStop;
   private boolean running;
   private long lastGrab;
+  private boolean grabbingRightNow;
 
   private double time=100, count=1;
 
@@ -42,8 +45,15 @@ public abstract class AsyncGrabber extends Grabber implements Runnable {
       thread = new Thread(this, this.getClass().getSimpleName() + "/" + getName());
       this.log(Level.INFO, "Starts " + getName());
       thread.start();
+      if (cached == null) {
+        cached = new ResponseData(this, System.currentTimeMillis());
+      }
+      cached.addMetric(LOAD_STATUS, "Initializing");
+    } else if (grabbingRightNow) {
+      cached.addMetric(LOAD_STATUS, getLoadingString());
+    } else {
+      cached.addMetric(LOAD_STATUS, "Loaded");
     }
-
     return cached;
   }
 
@@ -53,6 +63,12 @@ public abstract class AsyncGrabber extends Grabber implements Runnable {
     }
     this.log(Level.INFO, "Dispose " + getName());
     running = false;
+  }
+
+  private String getLoadingString() {
+    long s = System.currentTimeMillis()/1000;
+    int i = (int)s%4;
+    return "Loading" + ((i==0) ? "" : (i==1) ? "." : (i==2)?"..":"...");
   }
 
   private void runEverySecond() {
@@ -75,7 +91,12 @@ public abstract class AsyncGrabber extends Grabber implements Runnable {
           if (changed()) {
             if (canLogFiner()) log(Level.FINER, System.currentTimeMillis() + "::" + getName() + " grab");
             now = System.currentTimeMillis();
-            cached = grabSync();
+            grabbingRightNow=true;
+            try {
+              cached = grabSync();
+            } finally {
+              grabbingRightNow = false;
+            }
             long eor = System.currentTimeMillis();
             if (cached.getElapsedToGrab()==0) cached.setElapsedToGrab(eor - now);
             time += eor - now;
