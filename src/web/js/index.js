@@ -622,37 +622,12 @@ ConkW.loadDom = function(e, holders) {
         }
     }
 
-    this.expandNode(e);
-
     if (processChildren) this.loadChildren(e, holders);
 }
 
 ConkW.loadChildren = function(e, holders) {
   for (var i = 0; i < e.childElementCount; i++)
   this.loadDom(e.children[i], holders);
-}
-
-ConkW.expandNode = function(e) {
-    if (e.getAttribute("cw-fill")) {
-        var fill = e.getAttribute("cw-fill");
-        if (fill.indexOf("grabberDefault:") == 0) {
-            this.fillNode(e, fill.substring(15));
-        }
-    }
-}
-
-ConkW.fillNode = function(element, name) {
-    var xmlhttp = new XMLHttpRequest();
-    var url = "/htmlTemplates?name=" + name;
-    xmlhttp.open("GET", url, false);
-    xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == 4) {
-            var res = xmlhttp.responseText + "";
-            element.innerHTML = res;
-            element.removeAttribute("cw-fill");
-        }
-    }
-    xmlhttp.send();
 }
 
 ConkW.refreshNew = function(data) {
