@@ -135,8 +135,11 @@ public class LatestUnreadMailsGrabber extends TimeThrottledGrabber {
         for (ImapConfig c : configurations) {
             try {
                 Message[]ms = getMessages(c, this.canLogFiner());
+                if (shutdownRequested()) return;
+
                 for (Message m : ms) {
                     allMails.add(new MailData(c, m));
+                    if (shutdownRequested()) return;
                 }
             } catch (MessagingException e) {
                 res.addError("Unable to fetch mail for " + c.login + ": " + e.getMessage());

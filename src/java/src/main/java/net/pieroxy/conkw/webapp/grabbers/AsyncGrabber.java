@@ -22,6 +22,10 @@ public abstract class AsyncGrabber extends Grabber implements Runnable {
 
   private double time=100, count=1;
 
+  boolean shutdownRequested() {
+    return shouldStop;
+  }
+
   @Override
   public final void dispose() {
     shouldStop=true;
@@ -97,6 +101,7 @@ public abstract class AsyncGrabber extends Grabber implements Runnable {
             } finally {
               grabbingRightNow = false;
             }
+            if (shutdownRequested()) return;
             long eor = System.currentTimeMillis();
             if (cached.getElapsedToGrab()==0) {
               cached.setElapsedToGrab(eor - now);
