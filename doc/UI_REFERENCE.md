@@ -145,11 +145,11 @@ As an illustration, here is one expression I use to compute the "amount of rain"
 
 ### Value
 
-Identified by the attribute `cw-value`. It will replace the content of the node through the `innerHTML` property, meaning:
+Identified by the attribute `cw-value`. It will replace the content of the node through the `innerHTML` or `innerText` property, meaning:
 
 * This will effectively wipe whatever was in the `div` originally
-* Any HTML in the string will be rendered accordingly by the browser.
-* If the attribute `cw-escapeHtml="yes"` is present, `innerText` is used instead of `innerHTML`. This will avoid special characters in the grabber response to be mangled by the browser.
+* If the attribute `cw-escapeHtml="yes"` is present, `innerText` is used instead of `innerHTML`. This will avoid special characters (Such as `<` or `&`) in the grabber response to be mangled by the browser.
+* If not, any HTML in the string will be rendered accordingly by the browser.
 
 *Note* that if the value resolves as `undefined`, (for a metric expression, if the metric is actually not there,) the element will be added the css class `cw-stale`. The text will be rendered as dark gray to indicate the value is not present. The last value will be kept to show what it was before it vanished.
 
