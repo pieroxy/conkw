@@ -87,12 +87,16 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber {
       ResponseData r = new ResponseData(this, System.currentTimeMillis());
       load(r);
       lastRun = System.currentTimeMillis();
-      writeCacheFile(r);
       return r;
     } catch (Exception e) {
       log(Level.SEVERE, "Grabbing " + getName(), e);
       return new ResponseData(this, System.currentTimeMillis());
     }
+  }
+
+  @Override
+  public void saveData(ResponseData r) {
+    writeCacheFile(r);
   }
 
   public static class CachedData {

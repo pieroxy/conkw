@@ -98,7 +98,10 @@ public abstract class AsyncGrabber extends Grabber implements Runnable {
               grabbingRightNow = false;
             }
             long eor = System.currentTimeMillis();
-            if (cached.getElapsedToGrab()==0) cached.setElapsedToGrab(eor - now);
+            if (cached.getElapsedToGrab()==0) {
+              cached.setElapsedToGrab(eor - now);
+            }
+            saveData(cached);
             time += eor - now;
             count++;
             time *= 0.9; // 0.9 factor to forget old values over time.
@@ -116,5 +119,9 @@ public abstract class AsyncGrabber extends Grabber implements Runnable {
     } catch (Exception e) {
       log(Level.SEVERE, "Grabbing " + getName(), e);
     }
+  }
+
+  public void saveData(ResponseData r) {
+
   }
 }
