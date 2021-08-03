@@ -13,7 +13,7 @@ This is the latest unread emails grabber. It fetches your unread emails from one
     "parameters": {
         "ttl":"5m",
         "imapConf0":"gmail:imap.googlemail.com:993:my_account@gmail.com:mypassword",
-        "imapConf1":"hotmail:outlook.office365.com:993:my_email@hotmail.com:mypassword" 
+        "imapConf1":"Hotmail:outlook.office365.com:993:my_email@hotmail.com:mypassword" 
     }
 }
 ```
