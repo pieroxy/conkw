@@ -53,6 +53,15 @@ public class ApiManager implements MetaGrabber {
     for (String gname : grabbersRequested) {
       Long l = lastRequestPerGrabber.get(gname);
       if (l==null) {
+        boolean found = false;
+        for (Grabber g : allGrabbers) {
+          if (g.getName().equalsIgnoreCase(gname)) {
+            found = true;
+            break;
+          }
+        }
+        if (!found) throw new RuntimeException("Grabber " + gname + " not found.");
+
         Map<String, Long> newmap = new HashMap<>(lastRequestPerGrabber);
         newmap.put(gname, ts);
         lastRequestPerGrabber = newmap;
