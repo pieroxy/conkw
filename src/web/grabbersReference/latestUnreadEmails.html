@@ -56,7 +56,7 @@
                 </ul>
             </div>
 
-            <br>Status: <cw-label style="width:unset" cw-ns="mails" cw-value="m:str::grabStatus"></cw-label>
+            <br>Status: <cw-label style="width:unset" cw-ns="mails" cw-value="m:str::grab_status"></cw-label>
             <br>Number of unread emails: <cw-label style="width:50px" cw-ns="mails" cw-value="m:num:si:mails_unread_total"></cw-label>
             <br>Last fetch: <cw-label style="width:unset" cw-ns="mails" cw-value="e:num:time_ms:${Date.now()-timestamp}"></cw-label>
             <br>Last fetch duration: <cw-label style="width:unset" cw-ns="mails" cw-value="e:num:time_ms:${elapsedToGrab}"></cw-label>

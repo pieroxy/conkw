@@ -42,7 +42,7 @@ Here are the metrics this grabber outputs:
 
 * `num.mails_len` The number of emails returned. Will be betwen zero and `maxMessages-1`.
 * `num.mails_unread_total` The total number of unread emails in the accounts configured.
-* `str.grabStatus` As grabbing can be slow, this grabber exposes its status. It can be `Loaded`, `Initializing` or `Loading...`. It is not recommended to use these values in a switch as those are labels subject to change or localization. Moreover, the `Loading` status will vary having zero to 3 dots at the end to mimic an animation.
+* `str.grab_status` As grabbing can be slow, this grabber exposes its status. It can be `Loaded`, `Initializing` or `Loading...`. It is not recommended to use these values in a switch as those are labels subject to change or localization. Moreover, the `Loading` status will vary having zero to 3 dots at the end to mimic an animation.
 
 For each email returned, the following metrics are exposed (Here for the 1st email, `0`):
 
