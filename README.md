@@ -21,6 +21,17 @@ The easiest client-server setup today is a web server and a browser. That's grea
 * All tablets and laptops have browsers.
 * Every reasonably modern computer can host a web server.
 
+## Use cases
+
+Here are some typical use cases for conkw:
+
+* Have a monitoring dashboard with your personal data:
+    * Latest emails, stock prices, weather forecast, news
+    * The current playing song on your system
+    * Technical metrics from your machine: CPU, HDD space, HDD activity, network activity, battery charge, software raid status, temperatures...
+* Have a monitoring dashboard summarizing several machines status (Windows, Mac or Linux):
+    * Technical metrics: CPU, HDD space, HDD activity, network activity, battery charge, software raid status...
+
 ## UI Support
 
 * The UI supports iOS Safari down to iOS 9.3.5, hence supporting the iPad 2 and iPhone 4S, both released in 2011 as well as the iPod touch 5th gen released in 2012.
