@@ -2,6 +2,7 @@ package net.pieroxy.conkw.standalone;
 
 import net.pieroxy.conkw.config.Config;
 import net.pieroxy.conkw.config.ConfigReader;
+import net.pieroxy.conkw.utils.FileTools;
 import net.pieroxy.conkw.utils.HashTools;
 import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.webapp.Listener;
@@ -189,12 +190,9 @@ public class Runner {
         Api.configureShutdownHook(iid, () -> shutdown());
         File out = getInstanceIdFile();
         try {
-            out.setWritable(true, true);
+            FileTools.makeFileWritableForUser(out);
             JsonHelper.writeToFile(iid, out);
-            out.setExecutable(false, false);
-            out.setWritable(false, false);
-            out.setReadable(false, false);
-            out.setReadable(true, true);
+            FileTools.makeFileReadonlyForUser(out);
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Could not serialize the instance id", e);
         }

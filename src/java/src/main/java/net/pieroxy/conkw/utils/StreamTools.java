@@ -50,9 +50,15 @@ public class StreamTools {
       } else {
         writeTextFiles(sourceData, newfile);
       }
+      FileTools.makeFileReadonlyForUser(newfile);
+      FileTools.makeFileReadonlyForUser(getHiddenFile(newfile));
+      FileTools.makeFileReadonlyForUser(out);
+      FileTools.makeFileReadonlyForUser(getHiddenFile(out));
       return newfile.getName();
     } else {
       writeTextFiles(sourceData, out);
+      FileTools.makeFileReadonlyForUser(out);
+      FileTools.makeFileReadonlyForUser(getHiddenFile(out));
     }
     return null;
   }
@@ -92,6 +98,7 @@ public class StreamTools {
   }
 
   public static void writeTextFile(List<String> data, File out) throws IOException {
+    FileTools.makeFileWritableForUser(out);
     Writer w = new FileWriter(out);
     for (String s : data) {
       w.write(s);
