@@ -5,6 +5,11 @@ This is the file grabber. The way it works is that it reads a file and expose th
 * *Full name:* `net.pieroxy.conkw.webapp.grabbers.FileGrabber`
 * *Default instance name:* `file`
 
+## Use cases
+
+* You want to let external programs / computers push their metrics into a file that your instance will monitor.
+* You have a program in your crontab that writes metrics to a file and you want to monitor them.
+
 ## File format
 
 * The files imported must abide by the properties format.

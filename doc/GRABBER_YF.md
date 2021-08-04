@@ -5,6 +5,10 @@ This is the finance grabber. It relies on the [rapid api](https://rapidapi.com/a
 * *Full name:* `net.pieroxy.conkw.webapp.grabbers.yahooFinance.YahooFinanceGrabber`
 * *Default instance name:* `yahoof`
 
+## Use cases
+
+* You want to monitor the stock price of a symbol, somewhere, available on Yahoo Finance.
+
 ## Usage
 In order to use it, you need to:
 
@@ -18,18 +22,6 @@ In order to use it, you need to:
 Note that if you want to extract more stock prices, you need to create one instance of this extractor per stock price you want.
 
 Note that the basic plan is limited to 500 requests per month, which amounts roughly to 1 request every two hours. Note again that if you use several grabbers with the same token, they will all count against the same 500rq/month quota. Hence, the default refresh rate has been set to once every 5 hours. Adjust this value as you see fit.
-
-## Metrics:
-
-* `num.priceAvg50Days`: The average price in the last 50 days.
-* `num.price`: The current price.
-* `num.change`: The daily change, in local currency.
-* `num.changeprc`: The daily change in %.
-
-* `str.marketCapFmt`: The total market valuation for the symbol, formatted.
-* `str.name`: The human readable name for the symbol.
-* `str.currencySymbol`: The symbol of the local currency (used for price and changes).
-* `str.currency`: The currency used for price and changes.
 
 ## Configuration
 
@@ -46,6 +38,18 @@ Here is the sample config portion:
       }
     },
 ```
+
+## Metrics:
+
+* `num.priceAvg50Days`: The average price in the last 50 days.
+* `num.price`: The current price.
+* `num.change`: The daily change, in local currency.
+* `num.changeprc`: The daily change in %.
+
+* `str.marketCapFmt`: The total market valuation for the symbol, formatted.
+* `str.name`: The human readable name for the symbol.
+* `str.currencySymbol`: The symbol of the local currency (used for price and changes).
+* `str.currency`: The currency used for price and changes.
 
 ## Final notes
 

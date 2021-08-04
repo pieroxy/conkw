@@ -5,9 +5,27 @@ This is the system grabber written in pure Java. It doesn't rely on anything els
 * *Full name:* `net.pieroxy.conkw.webapp.grabbers.JavaSystemViewGrabber`
 * *Default instance name:* `sys`
 
-Possible extractions:
+## Use cases
 
-## sys
+* You want to monitor system metrics out of your Linux, Windows or Mac machine. That's CPU, HDD, SSD, Network, battery, etc.
+
+## Configuration
+```json
+{
+  "implementation":"net.pieroxy.conkw.webapp.grabbers.JavaSystemViewGrabber",
+  "extract":"sys,cpu,freespace",
+  "parameters": {
+    "mountPoints":"/"
+  }
+},
+```
+
+* Allows to extract only part of the metrics it can gather, for optimal performances
+* `mountPoints` Allows to specify the mountpoints you want monitored for free space. If not present, the mount points will be inferred automatically. See `freespace` below for more information.
+
+## Possible extractions:
+
+### sys
 Extracts a few static informations about the system:
 
 * `str.arch` The CPU architecture. For example `amd64` or `x86 64`.
@@ -17,7 +35,7 @@ Extracts a few static informations about the system:
 * `str.user` The user under which conkw is running.
 * `str.hostname` The name of the computer on the network.
 
-## cpu
+### cpu
 Extracts a few metrics about CPU usage.
 
 Metrics:
@@ -27,15 +45,14 @@ Metrics:
 * `num.ProcessCpuTime` The CPU time usage of the conkw process, in nanoseconds.
 * `num.totalCpuUsage` The CPU usage of the system, between 0 and 1.
 
-## mem
+### mem
 Extracts memory usage metrics:
 
 * `num.ramAvailable` The amount of RAM not allocated, in bytes.
 * `num.ramTotal` The total RAM available to the system, in bytes.
 * `num.ramUsed` computed as `ramTotal-ramAvailable`.
 
-
-## freespace
+### freespace
 Extracts metrics about filesystems, such as total capacity and available space.
 
 The list of filesystems monitored can come from two sources:

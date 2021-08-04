@@ -5,6 +5,10 @@ This is the news grabber. It relies on the [rapid api bing news call](https://ra
 * *Full name:* `net.pieroxy.conkw.webapp.grabbers.bingnews.BingNewsGrabber`
 * *Default instance name:* `bingnews`
 
+## Use cases
+
+* You want to display the lates news headlines in some part of the world.
+
 ## Usage
 In order to use it, you need to:
 

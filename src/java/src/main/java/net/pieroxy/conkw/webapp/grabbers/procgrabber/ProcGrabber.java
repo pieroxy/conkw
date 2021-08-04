@@ -82,7 +82,6 @@ public class ProcGrabber extends AsyncGrabber {
     } else {
       mdstatFile = new File(MDSTAT_FILE);
     }
-
   }
 
   private void computeNbCpus() {
@@ -161,7 +160,7 @@ public class ProcGrabber extends AsyncGrabber {
         }
       }
     } else {
-      log(Level.WARNING, "Could not find lsblk, skippind block devices detection.");
+      log(Level.WARNING, "Could not find lsblk, skipping block devices detection.");
       blockDevices = new ArrayList<>();
       blockDevices.add("sda");
       autoDetectBlockDevices = false;

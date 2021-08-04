@@ -7,6 +7,10 @@ The metrics ingested will be served by one or more `ExternalMetricsGrabber` inst
 * *Full name:* `net.pieroxy.conkw.webapp.grabbers.ExternalMetricsGrabber`
 * *Default instance name:* `emi`
 
+## Use cases
+
+* You want to let external programs / computers push their metrics into your instance.
+
 ## HTTP dialect for single metric ingestion
 
 The endpoint you should call is `/emi`, with a POST request.

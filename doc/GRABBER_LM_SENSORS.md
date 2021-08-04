@@ -4,11 +4,12 @@ This is the lm-sensors grabber. It will execute `sensors -u` every second and ex
 
 As a result, it only works on Linux and other OSes where this program exists.
 
-
-
 * *Full name:* `net.pieroxy.conkw.webapp.grabbers.LmSensorsGrabber`
 * *Default instance name:* `lmsensors`
 
+## Use cases
+
+* You want to monitor the fan speeds, voltages and temperatures of the computer.
 
 ## Configuration
 There is nothing to configure for this grabber as of now.

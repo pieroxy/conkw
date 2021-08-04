@@ -5,6 +5,9 @@ This is the PushToEmiGrabber grabber. It is used to push all or part of the conf
 * *Full name:* `net.pieroxy.conkw.webapp.grabbers.PushToEmiGrabber`
 * *Default instance name:* None. You have to provide a name in the config file.
 
+## Use cases
+
+* You want some metrics to be pushed to another instance of conkw, somewhere on your machine or accessible through the network.
 
 ## Configuration
 

@@ -5,6 +5,10 @@ This is the Spotify grabber. It relies on the spotify APIs to gather the current
 * *Full name:* `net.pieroxy.conkw.webapp.grabbers.spotify.SpotifyGrabber`
 * *Default instance name:* `spotify`
 
+## Use cases
+
+* You want details of the current running song on your dashboard (artist, time, cover art, track name, etc)
+
 ## Usage
 In order to use it, you need to:
 

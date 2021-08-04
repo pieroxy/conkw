@@ -5,9 +5,29 @@ This is the system grabber for Linux. It relies heavily on `/proc` and `/sys` fi
 * *Full name:* `net.pieroxy.conkw.webapp.grabbers.procgrabber.ProcGrabber`
 * *Default instance name:* `proc`
 
-Possible extractions:
+## Use cases
 
-## processes
+* You want to monitor system metrics out of your Linux machine. That's CPU, HDD, SSD, Network, battery, etc.
+
+## Configuration
+```json
+{
+  "implementation":"net.pieroxy.conkw.webapp.grabbers.procgrabber.ProcGrabber",
+  "extract":"processes,uptime,bdio",
+  "parameters": {
+    "blockDevices":"sda",
+    "mdstatFile":"/proc/mdstat"
+  }
+},
+```
+
+* Allows to extract only part of the metrics it can gather, for optimal performances
+* `mdstatFile` allows to specify the location and name of the mdstat file. If not present, the default is `/proc/mdstat`.
+* `blockDevices` Allows to specify the block devices you want to monitor. If not present, an attempt will be made to autodetect them, see `bdio` below for more details.
+
+## Possible extractions:
+
+### processes
 Extracts the top 3 processes in terms of CPU and Memory usage. This data is extracted from the various `/proc/<pid>/stat` files for every process in the system.
 
 For CPU usage, the percentage used is in regards to the total CPU used. So if during the last second there was only 7.3% total CPU used on the system, the `prc_top1cpu` can very well indicate 100%, meaning 100% of the 7.3% CPU was consumed by this process.
@@ -24,7 +44,7 @@ For memory usage:
 * `str.pid_top1mem` the process ID of the process #1
 * And so on with 2 and 3.
 
-## uptime
+### uptime
 Extracts hostname and load average, as viewed in `/proc/uptime` and `/proc/loadavg`.
 
 Metrics:
@@ -34,7 +54,7 @@ Metrics:
 * `num.loadavg2` The load average (5mn).
 * `num.loadavg3` The load average (15mn).
 
-## nbcpu
+### nbcpu
 Extracts the number of cores and threads on the system, as viewed in `/proc/cpuinfo`. Note that these metrics are extracted at startup time and never updated throughout the lifetime of the conkw instance.
 
 Metrics:
@@ -43,7 +63,7 @@ Metrics:
 * `num.nbcpu_threads` The number of logical processors viewed by the system, including hyperthreaded cores.
 
 
-## cpu
+### cpu
 Extracts CPU activity over the last second, as viewed in `/proc/stat`. 
 
 Metrics (percentages between 0 and 100):
@@ -56,7 +76,7 @@ Metrics (percentages between 0 and 100):
 * `num.cpu_usg_wait` Various other states (sum entries 4, 5 and 6 in `/proc/stat`)
 
 
-## mem
+### mem
 Extracts metrics about memory usage of the system, as viewed in `/proc/meminfo`.
 
 Metrics, in bytes:
@@ -69,7 +89,7 @@ Metrics, in bytes:
 * `num.swapUsed` Computed as `total-free`.
 * `num.swapFree` The free space available in the swap space.
 
-## bdio
+### bdio
 Extracts the bytes read and written from and to block devices, as read in `/sys/block/<device>/stat`.
 
 The list of devices monitored can come from three sources:
@@ -94,7 +114,7 @@ Global metrics:
 * `str.allbd` The comma separated list of monitored devices, for example: `sda,sdb,sdc,nvme0n1`
 
 
-## net
+### net
 Extracts the network activity as parsed from `/proc/net/netstat` second `IpExt` line.
 
 Metrics:
@@ -108,7 +128,7 @@ These two metrics have an auto maximum value computed:
 * `num.max$netp_out` The maximum number observed for this value.
 
 
-## battery
+### battery
 Extracts battery metrics from three files: `/sys/class/power_supply/BAT0/charge_full`, `/sys/class/power_supply/BAT0/charge_now` and `/sys/class/power_supply/AC[0]/online`.
 
 The following metrics extracted and refreshed every 10 runs:
@@ -117,7 +137,7 @@ The following metrics extracted and refreshed every 10 runs:
 * `num.bat_prc` The percentage of charge of the battery, between 0 and 100. 
 * `num.bat_plugged` Is `0` if the battery is not plugged in, `1` otherwise.
 
-## mdstat
+### mdstat
 Extracts data from `/proc/mdstat` regarding the status of mdadm arrays.
 
 Overall metrics:
@@ -131,5 +151,5 @@ For each device:
 * `str.mdstatByArray<n>` The summary string for this array, where `n` goes from 0 to `mdstatNbDevices-1`, for example `mdstatByArray0`.
 
 
-## hostname
+### hostname
 This grabber exposes the content of `/etc/hostname` in the metric `hostname`.

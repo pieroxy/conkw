@@ -5,6 +5,10 @@ This is the weather grabber. It relies on the [one call api](https://openweather
 * *Full name:* `net.pieroxy.conkw.webapp.grabbers.openweathermap.OpenWeatherMapGrabber`
 * *Default instance name:* `owm`
 
+## Use cases
+
+* You want to monitor the weather conditions and forecast of a given place on earth.
+
 ## Usage
 In order to use it, you need to:
 
@@ -14,6 +18,25 @@ In order to use it, you need to:
 * Use that api key in the config file.
 * Search for your favorite city on their website.
 * Copy and paste the latitude and longitude in the config file.
+
+## Configuration
+```json
+{
+  "implementation":"net.pieroxy.conkw.webapp.grabbers.openweathermap.OpenWeatherMapGrabber",
+  "extract":"minute,hour,day,current",
+  "name":"paris_weather",
+  "parameters": {
+    "token":"your api token here",
+    "lat":"48.8534",
+    "lon":"2.3488"
+  }
+},
+```
+
+* You can choose to extract all or part of the metrics.
+* `token` Your API token
+* `lat` The latitude of the place for which you want the weather forecast
+* `lon` The longitude of the place for which you want the weather forecast
 
 ## Metrics always extracted:
 

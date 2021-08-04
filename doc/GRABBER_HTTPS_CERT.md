@@ -7,6 +7,10 @@ This is the https cert grabber. It will probe the domain names provided through 
 * *Full name:* `net.pieroxy.conkw.webapp.grabbers.HttpsCertGrabber`
 * *Default instance name:* `httpscert`
 
+## Use cases
+
+* You want to monitor the expiration dates of some https certificates.
+* You want a way to make sure your Let's Encrypt certs auto-renewal scripts work.
 
 ## Configuration
 The configuration property is `names`. It contains a comma separated list of domain names.

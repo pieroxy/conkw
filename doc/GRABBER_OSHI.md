@@ -7,9 +7,33 @@ This documentation will not drill down on OSHI and its system representation. Fo
 * *Full name:* `net.pieroxy.conkw.webapp.grabbers.oshi.OshiGrabber`
 * *Default instance name:* `oshi`
 
-Possible extractions:
+## Use cases
 
-## sensors
+* You want to monitor system metrics out of your Mac, Linux or Windows machine. That's CPU, HDD, SSD, Network, battery, etc.
+
+## Configuration
+
+```json
+{
+  "implementation":"net.pieroxy.conkw.webapp.grabbers.oshi.OshiGrabber",
+  "name":"oshi-processes",
+  "extract":"processes",
+  "parameters": {
+    "detailedDataDelay":"5",
+    "staticDataDelay":"86400"
+  }
+}
+```
+
+* You can specify a class of data to extract with the `extract` parameter. This will considerably improve performance if you don't need some of the most expensive extractions on all the time (See `processes` and `services` below)
+* `detailedDataDelay` The delay in seconds at which the most expensive data is extracted, instead of once every second. That applies to `processes` and `services` below. Default is 5 seconds.
+* `staticDataDelay` The delay in seconds at which the "static" data is extracted. This is serial numbers, makes and models of various pieces of hardware on your computer. Default is one day.
+
+The default configuration includes three of these grabbers, one configured for processes, one for services and one for the rest. Note how having three instances allows to benefit from the whole range of metrics while only consuming resources for the ones you actually have a dashboard opened of. 
+
+## Possible extractions
+
+### sensors
 Metrics:
 
 * `num.sensors_fan_speed_*` The fan speed in RPM for the fan number `*`.
@@ -17,7 +41,7 @@ Metrics:
 * `num.sensors_cputemp` The CPU temperature in degree Celsuis.
 * `num.sensors_cpuvolt` The CPu input coltage, in Volts.
 
-## memory
+### memory
 Metrics, in bytes:
 
 * `num.memory_available` The total memory available.
@@ -25,7 +49,7 @@ Metrics, in bytes:
 * `num.memory_in_use` The memory in use of the system.
 * `num.memory_page_size` The page size.
 
-## physicalmemory
+### physicalmemory
 Metrics:
 
 * `num.physicalmemory_nb` The number of physical memory modules.
@@ -38,7 +62,7 @@ For each module number *i* (starting at zero):
 * `num.physicalmemory_clock_i` The clock rate of the memory module, in Hz.
 * `str.physicalmemory_manufacturer_i` The manufacturer of the module.
 
-## virtualmemory
+### virtualmemory
 Metrics:
 
 * `num.virtualmemory_max` The max total virtual memory, in bytes.
@@ -48,7 +72,7 @@ Metrics:
 * `num.virtualmemory_swap_total` The total swap space, in bytes.
 * `num.virtualmemory_swap_used` The used swap space, in bytes.
 
-## computer
+### computer
 Metrics:
 
 * `str.computer_manufacturer` The computer manufacturer.
@@ -57,7 +81,7 @@ Metrics:
 * `str.computer_serial_number` The computer serial number.
 
 
-## baseboard
+### baseboard
 Metrics:
 
 * `str.baseboard_manufacturer` The baseboard manufacturer.
@@ -66,7 +90,7 @@ Metrics:
 * `str.baseboard_version` The baseboard version.
 
 
-## firmware
+### firmware
 Metrics:
 
 * `str.firmware_manufacturer` The firmware manufacturer.
@@ -76,7 +100,7 @@ Metrics:
 * `str.firmware_release_date` The firmware release date.
 
 
-## cpu
+### cpu
 Metrics:
 
 * `num.cpu_context_switches` The number of context switches that have occured.
@@ -91,7 +115,7 @@ Metrics:
 * `num.cpu_load` The cpu usage over the last second, in percentage between 0 and 1.
 
 
-## cpubycore
+### cpubycore
 Metrics:
 
 * `num.cpubycore_count` The number of cores, to iterate over the following metrics:
@@ -101,7 +125,7 @@ For each core *i* :
 * `num.cpubycore_load_i` The usage of this core over the last second, in percentage between 0 and 1.
 
 
-## cpuident
+### cpuident
 Metrics:
 
 * `str.cpuident_identifier` Name of the processor.
@@ -116,7 +140,7 @@ Metrics:
 * `num.cpuident_64bits` 1 if yes, 0 if not.
 
 
-## displays
+### displays
 Metrics:
 
 * `num.displays_count` The number of displays, to iterate over the following metrics:
@@ -131,8 +155,7 @@ For each display *i* (from 0 to `num.displays_count`-1):
 * `num.displays_week_i` The display release week.
 * `num.displays_year_i` The display release year.
 
-
-## disksio
+### disksio
 Metrics:
 
 * `num.diskios_read_bytes` The number of bytes read during the last second on all disks, in bytes.
@@ -149,7 +172,7 @@ For each one of the disks *d* :
 * Auto max: `num.max$diskios_write_bytes_d` The maximum number observed for this value.
 
 
-## disksinfos
+### disksinfos
 Metrics:
 
 * `num.diskinfos_names` The list of disks being monitored. For example: `/dev/sdd,/dev/nvme0n1`
@@ -167,7 +190,7 @@ For each one of the disks *d* :
 * `num.diskinfos_write_bytes_d` The number of bytes written.
 * `num.diskinfos_writes_d` The number of writes.
 
-## graphicscards
+### graphicscards
 Metrics:
 
 * `num.graphicscards_count` The number of graphics cards.
@@ -180,7 +203,7 @@ For each one of those graphics card *i*, starting at zero:
 * `graphicscards_version_i` The version.
 
 
-## nics
+### nics
 Metrics:
 
 * `num.nics_count` The number of NICs
@@ -198,7 +221,7 @@ For each one of those nics *i*, starting at zero:
 * `str.nics_ipv6_i` The list of ipv6 addresses.
 * `str.nics_subnet_mask_i` The list of subnet masks.
 
-## netbw
+### netbw
 Metrics:
 
 * `num.netbw_count` The number of network interfaces.
@@ -216,14 +239,13 @@ For each one of those interfaces *i*, starting at zero:
 * Auto max: `num.max$netbw_out_i` The maximum number observed for this value.
 * `num.netbw_speed_i` The speed of the interface, in bytes per second, or -1 if not available.
 
-## battery
+### battery
 Metrics are extracted for the first battery only:
 
 * `num.battery_remaining_prc` PErcentage left in the battery, between 0 and 1.
 * `num.battery_plugged` 1 if the battery is plugged in, otherwise 0.
 
-
-## psus
+### psus
 Metrics:
 
 * `num.psus_count` the number of PSUs in the system.
@@ -252,7 +274,7 @@ For each one PSU *i* :
 * `num.psus_power_online_i` 1 if in online, or 0 if not.
 
 
-## soundcards
+### soundcards
 Metrics:
 
 * `num.soundcards_count` The number of soundcards
@@ -263,7 +285,7 @@ For each one soundcard *i* :
 * `str.soundcards_codec_i`
 * `str.soundcards_driver_version_i`
 
-## usb
+### usb
 List all USB devices in the system. Metrics:
 
 * `num.usb_count` The number of USB devices.
@@ -277,7 +299,7 @@ For each one device *i* :
 * `str.usb_product_id_i`
 * `str.usb_unique_device_id_i`
 
-## os
+### os
 Metrics:
 
 * `str.os_manufacturer`
@@ -295,7 +317,7 @@ Metrics:
 * `num.os_open_file_descriptors` The number of opened file descriptors.
 
 
-## filestores
+### filestores
 Metrics:
 
 * `num.filestores_count` The number of filestores.
@@ -316,7 +338,7 @@ For each filestore *i* :
 * `num.filestores_usable_space_i` The usable space on the device, in bytes.
 
 
-## tcpv4
+### tcpv4
 Metrics:
 
 * `num.tcpv4_connection_failures` 
@@ -331,7 +353,7 @@ Metrics:
 * `num.tcpv4_segments_sent` 
 
 
-## tcpv6
+### tcpv6
 Metrics:
 
 * `num.tcpv6_connection_failures` 
@@ -346,7 +368,7 @@ Metrics:
 * `num.tcpv6_segments_sent` 
 
 
-## udpv4
+### udpv4
 Metrics:
 
 * `num.udpv4_datagrams_no_port`
@@ -355,7 +377,7 @@ Metrics:
 * `num.udpv4_datagrams_received_errors`
 
 
-## udpv6
+### udpv6
 Metrics:
 
 * `num.udpv6_datagrams_no_port`
@@ -363,7 +385,7 @@ Metrics:
 * `num.udpv6_datagrams_sent`
 * `num.udpv6_datagrams_received_errors`
 
-## sessions
+### sessions
 Metrics:
 
 * `num.sessions_count` The number of user sessions
@@ -376,7 +398,7 @@ For each session *i* :
 * `str.sessions_terminal_device_i`
 
 
-## shortsessions
+### shortsessions
 A summarized view of the sessions by user. Metrics:
 
 * `num.shortsessions_count` The number of users having a session.
@@ -386,7 +408,7 @@ For each item *i* :
 * `str.shortsessions_name_i` The username.
 * `num.shortsessions_nbs_i` The number of sessions opened.
 
-## netp
+### netp
 The network parameters. Metrics:
 
 * `str.netp_domain_name` 
@@ -396,7 +418,7 @@ The network parameters. Metrics:
 * `str.netp_dns` The list of DNS defined.
 
 
-## processes
+### processes
 *Note* This extraction is particularly expensive on the host system. You may not want to leave it running for long periods of time.
 
 Metrics:
@@ -434,7 +456,7 @@ For each process *p*:
 * `num.processes_virtual_size_p`
 * `str.processes_state_p`
 
-## services
+### services
 *Note* This extraction is particularly expensive on the host system. You may not want to leave it running for long periods of time.
 
 Metrics:
