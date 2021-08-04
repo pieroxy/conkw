@@ -121,7 +121,7 @@ public abstract class Grabber {
     return name;
   }
 
-  int getIntProperty(String propertyName, Map<String, String> config, int defaultValue) {
+  protected int getIntProperty(String propertyName, Map<String, String> config, int defaultValue) {
     String propValue = config.get(propertyName);
     if (propValue != null) {
       return Integer.parseInt(propValue);
@@ -129,7 +129,7 @@ public abstract class Grabber {
     return defaultValue;
   }
 
-  CDuration getDurationProperty(String propertyName, Map<String, String> config, CDuration defaultValue) {
+  protected CDuration getDurationProperty(String propertyName, Map<String, String> config, CDuration defaultValue) {
     String propValue = config.get(propertyName);
     if (propValue != null) {
       return CDurationParser.parse(propValue);

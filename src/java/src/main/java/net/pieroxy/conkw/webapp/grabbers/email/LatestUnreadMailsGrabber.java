@@ -1,8 +1,9 @@
-package net.pieroxy.conkw.webapp.grabbers;
+package net.pieroxy.conkw.webapp.grabbers.email;
 
 import net.pieroxy.conkw.utils.HashTools;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.duration.CDurationParser;
+import net.pieroxy.conkw.webapp.grabbers.TimeThrottledGrabber;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.nio.charset.StandardCharsets;
@@ -10,7 +11,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Properties;
 import javax.mail.*;
-import javax.mail.internet.InternetAddress;
 import javax.mail.search.FlagTerm;
 import java.util.*;
 import java.util.logging.Level;
@@ -28,10 +28,15 @@ public class LatestUnreadMailsGrabber extends TimeThrottledGrabber {
 
         ImapConfig conf = new ImapConfig();
 
-        System.out.println("IMAP Server " + (conf.server = args[0]));
-        System.out.println("Server port " + (conf.port=Integer.parseInt(args[1])));
-        System.out.println("User name   " + (conf.login=args[2]));
-        System.out.println("Password    " + (conf.password=args[3]));
+        conf.setServer(args[0]);
+        conf.setPort(Integer.parseInt(args[1]));
+        conf.setLogin(args[2]);
+        conf.setPassword(args[3]);
+
+        System.out.println("IMAP Server " + conf.getServer());
+        System.out.println("Server port " + conf.getPort());
+        System.out.println("User name   " + conf.getLogin());
+        System.out.println("Password    " + conf.getPassword());
 
         Message[] messages = getMessages(conf, true);
 
@@ -54,7 +59,7 @@ public class LatestUnreadMailsGrabber extends TimeThrottledGrabber {
             System.out.println(
                     "sendDate: " + message.getSentDate()
                             + " uid: " + uid
-                            + " from: " + getFrom(message)
+                            + " from: " + MailTools.getFrom(message)
                   + " subject:" + message.getSubject() );
         }
     }
@@ -63,7 +68,7 @@ public class LatestUnreadMailsGrabber extends TimeThrottledGrabber {
         Session session = Session.getDefaultInstance(new Properties());
         session.setDebug(debug);
         Store store = session.getStore("imaps");
-        store.connect(conf.server, conf.port, conf.login, conf.password);
+        store.connect(conf.getServer(), conf.getPort(), conf.getLogin(), conf.getPassword());
         Folder inbox = store.getFolder( "INBOX" );
         inbox.open( Folder.READ_ONLY );
 
@@ -73,24 +78,6 @@ public class LatestUnreadMailsGrabber extends TimeThrottledGrabber {
         return messages;
     }
 
-    private static String getFrom(Message message) throws MessagingException {
-        Address[] from = message.getFrom();
-        StringBuilder sb = new StringBuilder();
-        for (Address a : from) {
-            if (sb.length()>1) sb.append(" ");
-            sb.append(getNiceMailAddress(a));
-        }
-        return sb.toString();
-    }
-
-    private static String getNiceMailAddress(Address address) throws MessagingException {
-        if (address instanceof InternetAddress) {
-            InternetAddress ia = (InternetAddress) address;
-            return ia.getPersonal() + " <" + ia.getAddress() + ">";
-        } else {
-            return address.toString();
-        }
-    }
 
     @Override
     public String getDefaultName() {
@@ -119,11 +106,11 @@ public class LatestUnreadMailsGrabber extends TimeThrottledGrabber {
             int p3 = conf.indexOf(':', p2+1);
             int p4 = conf.indexOf(':', p3+1);
             ImapConfig c = new ImapConfig();
-            c.name = conf.substring(0, p1);
-            c.server = conf.substring(p1+1, p2);
-            c.port = Integer.parseInt(conf.substring(p2+1, p3));
-            c.login = conf.substring(p3+1, p4);
-            c.password = conf.substring(p4+1);
+            c.setName(conf.substring(0, p1));
+            c.setServer(conf.substring(p1 + 1, p2));
+            c.setPort(Integer.parseInt(conf.substring(p2 + 1, p3)));
+            c.setLogin(conf.substring(p3 + 1, p4));
+            c.setPassword(conf.substring(p4 + 1));
             configurations.add(c);
         }
         cackeKey = HashTools.byteArrayToHexString(md.digest());
@@ -149,18 +136,18 @@ public class LatestUnreadMailsGrabber extends TimeThrottledGrabber {
                     if (shutdownRequested()) return;
                 }
             } catch (MessagingException e) {
-                res.addError("Unable to fetch mail for " + c.login + ": " + e.getMessage());
+                res.addError("Unable to fetch mail for " + c.getLogin() + ": " + e.getMessage());
                 log(Level.SEVERE, "", e);
             }
         }
-        Collections.sort(allMails, Comparator.comparingLong(m -> -m.date));
+        Collections.sort(allMails, Comparator.comparingLong(m -> -m.getDate()));
 
         int i=0;
         for (MailData m : allMails) {
-            res.addMetric("mail_" + i + "_subject", m.subject);
-            res.addMetric("mail_" + i + "_date", m.date);
-            res.addMetric("mail_" + i + "_account", m.account);
-            res.addMetric("mail_" + i + "_from", m.from);
+            res.addMetric("mail_" + i + "_subject", m.getSubject());
+            res.addMetric("mail_" + i + "_date", m.getDate());
+            res.addMetric("mail_" + i + "_account", m.getAccount());
+            res.addMetric("mail_" + i + "_from", m.getFrom());
             i++;
             if (i>=maxMessages) break;
         }
@@ -174,23 +161,4 @@ public class LatestUnreadMailsGrabber extends TimeThrottledGrabber {
         return cackeKey;
     }
 
-    private static class ImapConfig {
-        private String name;
-        private String server;
-        private int port;
-        private String login;
-        private String password;
-    }
-    private static class MailData {
-        public MailData(ImapConfig conf, Message m) throws MessagingException {
-            this.account = conf.name;
-            date = m.getSentDate().getTime();
-            from = getFrom(m);
-            subject = m.getSubject();
-        }
-        private String account;
-        private long date;
-        private String from;
-        private String subject;
-    }
 }

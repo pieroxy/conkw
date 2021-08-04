@@ -22,7 +22,7 @@ public abstract class AsyncGrabber extends Grabber implements Runnable {
 
   private double time=100, count=1;
 
-  boolean shutdownRequested() {
+  protected boolean shutdownRequested() {
     return shouldStop;
   }
 
