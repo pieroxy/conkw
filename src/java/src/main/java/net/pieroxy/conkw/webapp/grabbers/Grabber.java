@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 public abstract class Grabber {
   private Logger LOGGER = createLogger();
@@ -129,6 +130,14 @@ public abstract class Grabber {
     return defaultValue;
   }
 
+  protected String getStringProperty(String propertyName, Map<String, String> config, String defaultValue) {
+    String propValue = config.get(propertyName);
+    if (propValue != null) {
+      return propValue;
+    }
+    return defaultValue;
+  }
+
   protected CDuration getDurationProperty(String propertyName, Map<String, String> config, CDuration defaultValue) {
     String propValue = config.get(propertyName);
     if (propValue != null) {
@@ -136,6 +145,14 @@ public abstract class Grabber {
     }
 
     return defaultValue;
+  }
+
+  protected Pattern getRegexpProperty(String propertyName, Map<String, String> config, int flags) {
+    String propValue = config.get(propertyName);
+    if (propValue != null) {
+      return Pattern.compile(propValue, flags);
+    }
+    return null;
   }
 
   public void setName(String name) {
