@@ -12,6 +12,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 
 public abstract class TimeThrottledGrabber extends AsyncGrabber {
@@ -22,6 +24,24 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber {
 
   private long lastRun=-1;
   private File storage;
+  private Map<String, String> privateData = new HashMap<>();
+
+  /**
+   * Should be overriden by subclasses that are interested to read data from the cache when
+   * the instance starts and loads its data from a cache. This implementation does nothing.
+   * @param data
+   * @param privateData
+   */
+  protected void cacheLoaded(ResponseData data, Map<String, String> privateData) {
+  }
+
+  /**
+   * Allows subclasses to store data in the cache that is not exposed through the API.
+   * @param privateData
+   */
+  protected void setPrivateData(Map<String, String> privateData) {
+    this.privateData = privateData;
+  }
 
   private File getCacheFile() {
     if (storage==null) {
@@ -39,6 +59,9 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber {
     try (FileInputStream fis = new FileInputStream(cacheFile)) {
       CachedData data = JsonHelper.getJson().deserialize(CachedData.class, fis);
       if (data.getCacheKey().equals(getCacheKey())) {
+        privateData = data.getPrivateData();
+        if (privateData == null) privateData = new HashMap<>();
+        cacheLoaded(data.getData(), data.getPrivateData());
         return data.getData();
       } else {
         log(Level.INFO, "Configuration has changed, discarding cached data.");
@@ -53,6 +76,11 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber {
     CachedData cdata = new CachedData();
     cdata.setCacheKey(getCacheKey());
     cdata.setData(data);
+    Map<String, String> pd = privateData;
+    if (pd!=null && pd.size()>0) {
+      cdata.setPrivateData(new HashMap<>());
+      cdata.getPrivateData().putAll(pd);
+    }
     JsonWriter w = JsonHelper.getWriter();
     DslJson<Object> json = JsonHelper.getJson();
     synchronized (w) {
@@ -102,6 +130,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber {
   public static class CachedData {
     private ResponseData data;
     private String cacheKey;
+    private Map<String, String> privateData;
 
     public ResponseData getData() {
       return data;
@@ -114,6 +143,14 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber {
     }
     public void setCacheKey(String cacheKey) {
       this.cacheKey = cacheKey;
+    }
+
+    public Map<String, String> getPrivateData() {
+      return privateData;
+    }
+
+    public void setPrivateData(Map<String, String> privateData) {
+      this.privateData = privateData;
     }
   }
 }

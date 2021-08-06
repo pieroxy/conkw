@@ -14,14 +14,17 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
 
 
-public class SpecificEmailCheckGrabber  extends TimeThrottledGrabber {
+public class SpecificEmailCheckGrabber extends TimeThrottledGrabber {
     static final String NAME = "specificmail";
+    private static final String LAST_SEEN = "last_seen";
+    private static final String NEXT_UID = "next_uid";
     private CDuration ttl = CDurationParser.parse("5m");
     private String cackeKey = "nothing";
 
@@ -30,12 +33,22 @@ public class SpecificEmailCheckGrabber  extends TimeThrottledGrabber {
     private Pattern senderRegexp;
     private Pattern bodyRegexp;
     private ImapConfig imapConf;
-    private Long lastUID;
+    private Long nextUID;
     private long lastSeen = 0;
 
     @Override
     public String getDefaultName() {
         return NAME;
+    }
+
+    @Override
+    protected void cacheLoaded(ResponseData data, Map<String, String> privateData) {
+        Double d = data.getNumMetric(LAST_SEEN);
+        if (d!=null) lastSeen = (long)(double)d;
+        if (privateData != null) {
+            String nuid = privateData.get(NEXT_UID);
+            if (nuid!=null) nextUID = Long.parseLong(nuid);
+        }
     }
 
     @Override
@@ -65,7 +78,6 @@ public class SpecificEmailCheckGrabber  extends TimeThrottledGrabber {
 
     @Override
     protected void load(ResponseData res) {
-
         try {
             Message[] messages = getMessages();
             if (messages!=null && messages.length>0) {
@@ -73,15 +85,23 @@ public class SpecificEmailCheckGrabber  extends TimeThrottledGrabber {
                 if (error!=null) res.addError(error);
                 storeNextUid(messages);
             }
-            res.addMetric("last_seen", lastSeen);
+            res.addMetric(LAST_SEEN, lastSeen);
+            setPrivateData();
         } catch (Exception e) {
             log(Level.SEVERE, "", e);
             res.addError(e.getMessage());
         }
     }
 
+    private void setPrivateData() {
+        if (nextUID == null) return;
+        Map<String, String> pd = new HashMap<>();
+        pd.put(NEXT_UID, nextUID +"");
+        setPrivateData(pd);
+    }
+
     private void storeNextUid(Message[] messages) throws MessagingException {
-        lastUID = MailTools.getNextUid(messages[0]);
+        nextUID = MailTools.getNextUid(messages[0]);
     }
 
     private String searchForMessage(Message[] messages) {
@@ -125,15 +145,16 @@ public class SpecificEmailCheckGrabber  extends TimeThrottledGrabber {
         store.connect(imapConf.getServer(), imapConf.getPort(), imapConf.getLogin(), imapConf.getPassword());
         Folder inbox = store.getFolder(folder);
         inbox.open(Folder.READ_ONLY);
+        if (canLogFine()) log(Level.FINE, "lastUID: " + nextUID);
 
-        if (lastUID != null) {
-            Message[] messages = ((IMAPFolder)inbox).getMessagesByUID(lastUID, UIDFolder.MAXUID);
-            if (canLogFine()) log(Level.INFO, "From UID: " + messages.length);
+        if (nextUID != null) {
+            Message[] messages = ((IMAPFolder)inbox).getMessagesByUID(nextUID, UIDFolder.MAXUID);
+            if (canLogFine()) log(Level.FINE, "From UID: " + messages.length);
             return messages;
         } else {
-            Date d = new Date(System.currentTimeMillis() - CDurationParser.parse("1d").asMilliseconds());
+            Date d = new Date(System.currentTimeMillis() - CDurationParser.parse("2d").asMilliseconds());
             Message[] messages = inbox.search(new ReceivedDateTerm(ComparisonTerm.GT, d));
-            if (canLogFine()) log(Level.INFO, "From date: " + messages.length);
+            if (canLogFine()) log(Level.FINE, "From date: " + messages.length);
             return messages;
         }
     }
