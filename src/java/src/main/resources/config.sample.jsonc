@@ -160,7 +160,7 @@
     //LATEST EMAILS
     {
       // This is the email grabber.
-      "implementation":"net.pieroxy.conkw.webapp.grabbers.LatestUnreadMailsGrabber",
+      "implementation":"net.pieroxy.conkw.webapp.grabbers.email.LatestUnreadMailsGrabber",
       "name":"mails",
       "parameters": {
         /* "ttl":"5m" */ // Default value

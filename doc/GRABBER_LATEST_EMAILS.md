@@ -2,7 +2,7 @@
 
 This is the latest unread emails grabber. It fetches your unread emails from one or more IMAP sources and selects the most recent.
 
-* *Full name:* `net.pieroxy.conkw.webapp.grabbers.LatestUnreadMailsGrabber`
+* *Full name:* `net.pieroxy.conkw.webapp.grabbers.email.LatestUnreadMailsGrabber`
 * *Default instance name:* `mails`
 
 ## Use cases
@@ -13,7 +13,7 @@ This is the latest unread emails grabber. It fetches your unread emails from one
 
 ```json
 {
-    "implementation":"net.pieroxy.conkw.webapp.grabbers.LatestUnreadMailsGrabber",
+    "implementation":"net.pieroxy.conkw.webapp.grabbers.email.LatestUnreadMailsGrabber",
     "parameters": {
         "ttl":"5m",
         "maxMessages":"10",
