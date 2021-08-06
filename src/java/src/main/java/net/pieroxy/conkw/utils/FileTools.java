@@ -13,4 +13,9 @@ public class FileTools {
     public static void makeFileWritableForUser(File out) {
         out.setWritable(true, true);
     }
+
+    public static void makeFileReadWriteForUser(File newfile) {
+        makeFileReadonlyForUser(newfile);
+        newfile.setWritable(true, true);
+    }
 }

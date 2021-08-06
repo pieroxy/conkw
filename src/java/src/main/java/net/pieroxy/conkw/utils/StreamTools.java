@@ -50,14 +50,14 @@ public class StreamTools {
       } else {
         writeTextFiles(sourceData, newfile);
       }
-      FileTools.makeFileReadonlyForUser(newfile);
+      FileTools.makeFileReadWriteForUser(newfile);
       FileTools.makeFileReadonlyForUser(getHiddenFile(newfile));
-      FileTools.makeFileReadonlyForUser(out);
+      FileTools.makeFileReadWriteForUser(out);
       FileTools.makeFileReadonlyForUser(getHiddenFile(out));
       return newfile.getName();
     } else {
       writeTextFiles(sourceData, out);
-      FileTools.makeFileReadonlyForUser(out);
+      FileTools.makeFileReadWriteForUser(out);
       FileTools.makeFileReadonlyForUser(getHiddenFile(out));
     }
     return null;
