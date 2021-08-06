@@ -14,6 +14,9 @@ public final class CDuration {
   public long asSeconds() {
     return seconds;
   }
+  public long asMilliseconds() {
+    return seconds*1000;
+  }
   public long asMinutes() {
     return seconds/60;
   }
