@@ -19,6 +19,7 @@ They grab data from external sources. Weather, music, stock price, etc.
 * [BingNewsGrabber](GRABBER_BN.md)
 * [HttpsCertGrabber](GRABBER_HTTPS_CERT.md)
 * [LatestUnreadMailsGrabber](GRABBER_LATEST_EMAILS.md)
+* [SpecificEmailCheckGrabber](GRABBER_SPECIFIC_EMAIL.md)
 
 ## The external grabbers 
 They allow your conkw to monitor other data that you will grab yourself. Push that data directly in your conkw, or write it to a file for conkw to parse.

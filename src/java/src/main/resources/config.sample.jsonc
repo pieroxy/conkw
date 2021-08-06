@@ -159,7 +159,7 @@
     },
     //LATEST EMAILS
     {
-      // This is the email grabber.
+      // This is the latest email grabber.
       "implementation":"net.pieroxy.conkw.webapp.grabbers.email.LatestUnreadMailsGrabber",
       "name":"mails",
       "parameters": {
@@ -167,6 +167,19 @@
         /* "maxMessages":"10" */ // Default value
         /* "imapConf0":"gmail!!:imap.googlemail.com:993:my_email@gmail.com:mypassword" */
         /* "imapConf1":"ms:outlook.office365.com:993:my_email@hotmail.com:mypassword" */
+      }
+    },
+    //SPECIFIC EMAIL
+    {
+      // This is the specific email grabber.
+      "implementation":"net.pieroxy.conkw.webapp.grabbers.email.SpecificEmailCheckGrabber",
+      "parameters": {
+        /* "ttl":"5m" */
+        "folder":"YourImapFolder",
+        "subjectRegexp":"Specify the subject regexp",
+        "senderRegexp":"specify the sender email",
+        "bodyRegexp":"Specify the body regexp",
+        "imapConf" :"MyEmailAccount!!:imap.googlemail.com:993:my_email@gmail.com:mypassword"
       }
     }
    //END OF GRABBERS
