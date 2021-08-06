@@ -24,14 +24,9 @@ public class LatestUnreadMailsGrabber extends TimeThrottledGrabber {
     private List<ImapConfig> configurations = new ArrayList<>();
 
     public static void main( String[] args ) throws Exception {
-        System.out.println("Usage: LatestMailsGrabber imapserver user password");
+        System.out.println("Usage: LatestMailsGrabber imapserver:port:user:password");
 
-        ImapConfig conf = new ImapConfig();
-
-        conf.setServer(args[0]);
-        conf.setPort(Integer.parseInt(args[1]));
-        conf.setLogin(args[2]);
-        conf.setPassword(args[3]);
+        ImapConfig conf = new ImapConfig(args[0]);
 
         System.out.println("IMAP Server " + conf.getServer());
         System.out.println("Server port " + conf.getPort());
@@ -101,17 +96,8 @@ public class LatestUnreadMailsGrabber extends TimeThrottledGrabber {
             String conf = config.get("imapConf" + i);
             if (conf == null) break;
             md.update(conf.getBytes(StandardCharsets.UTF_8));
-            int p1 = conf.indexOf(':');
-            int p2 = conf.indexOf(':', p1+1);
-            int p3 = conf.indexOf(':', p2+1);
-            int p4 = conf.indexOf(':', p3+1);
-            ImapConfig c = new ImapConfig();
-            c.setName(conf.substring(0, p1));
-            c.setServer(conf.substring(p1 + 1, p2));
-            c.setPort(Integer.parseInt(conf.substring(p2 + 1, p3)));
-            c.setLogin(conf.substring(p3 + 1, p4));
-            c.setPassword(conf.substring(p4 + 1));
-            configurations.add(c);
+
+            configurations.add(new ImapConfig(conf));
         }
         cackeKey = HashTools.byteArrayToHexString(md.digest());
     }

@@ -7,6 +7,18 @@ public class ImapConfig {
     private String login;
     private String password;
 
+    public ImapConfig(String conf) {
+        int p1 = conf.indexOf(':');
+        int p2 = conf.indexOf(':', p1+1);
+        int p3 = conf.indexOf(':', p2+1);
+        int p4 = conf.indexOf(':', p3+1);
+        setName(conf.substring(0, p1));
+        setServer(conf.substring(p1 + 1, p2));
+        setPort(Integer.parseInt(conf.substring(p2 + 1, p3)));
+        setLogin(conf.substring(p3 + 1, p4));
+        setPassword(conf.substring(p4 + 1));
+    }
+
     public String getName() {
         return name;
     }
