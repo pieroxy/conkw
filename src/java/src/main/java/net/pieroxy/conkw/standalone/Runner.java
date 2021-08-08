@@ -5,6 +5,7 @@ import net.pieroxy.conkw.config.ConfigReader;
 import net.pieroxy.conkw.utils.FileTools;
 import net.pieroxy.conkw.utils.HashTools;
 import net.pieroxy.conkw.utils.JsonHelper;
+import net.pieroxy.conkw.utils.logging.LoggingPrintStream;
 import net.pieroxy.conkw.webapp.Listener;
 import net.pieroxy.conkw.webapp.servlets.Api;
 import net.pieroxy.conkw.webapp.servlets.Emi;
@@ -16,6 +17,7 @@ import org.apache.catalina.startup.Tomcat;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.lang.management.ManagementFactory;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
@@ -156,6 +158,8 @@ public class Runner {
     }
 
     private static void run(CmdLineOptions options) throws Exception {
+        System.setOut(new LoggingPrintStream("stdout"));
+        System.setErr(new LoggingPrintStream("stderr"));
         if (options.isStopCurrentInstance()) {
             if (!stop()) {
                 return;
