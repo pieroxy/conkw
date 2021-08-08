@@ -165,8 +165,23 @@
       "parameters": {
         /* "ttl":"5m" */ // Default value
         /* "maxMessages":"10" */ // Default value
-        /* "imapConf0":"gmail!!:imap.googlemail.com:993:my_email@gmail.com:mypassword" */
-        /* "imapConf1":"ms:outlook.office365.com:993:my_email@hotmail.com:mypassword" */
+      },
+      "namedParameters": {
+        // Sample configuration for gmail
+        /*"my gmail account": {
+          "server":"imap.googlemail.com",
+          "port":"993",
+          "login":"my_account@gmail.com",
+          "password":"mypassword"
+        }*/
+        // Sample configuration for outlook365
+        /*
+        "hotmail!!": {
+          "server":"outlook.office365.com",
+          "port":"993",
+          "login":"my_email@hotmail.com",
+          "password":"mypassword!"
+        }*/
       }
     },
     //SPECIFIC EMAIL

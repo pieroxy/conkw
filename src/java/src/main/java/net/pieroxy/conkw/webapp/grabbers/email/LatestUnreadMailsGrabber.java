@@ -14,6 +14,7 @@ import javax.mail.*;
 import javax.mail.search.FlagTerm;
 import java.util.*;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 public class LatestUnreadMailsGrabber extends TimeThrottledGrabber {
     static final String NAME = "mails";
@@ -22,42 +23,6 @@ public class LatestUnreadMailsGrabber extends TimeThrottledGrabber {
     private int maxMessages = 10;
     private String cackeKey = "nothing";
     private List<ImapConfig> configurations = new ArrayList<>();
-
-    public static void main( String[] args ) throws Exception {
-        System.out.println("Usage: LatestMailsGrabber imapserver:port:user:password");
-
-        ImapConfig conf = new ImapConfig(args[0]);
-
-        System.out.println("IMAP Server " + conf.getServer());
-        System.out.println("Server port " + conf.getPort());
-        System.out.println("User name   " + conf.getLogin());
-        System.out.println("Password    " + conf.getPassword());
-
-        Message[] messages = getMessages(conf, true);
-
-        // Sort messages from recent to oldest
-        Arrays.sort( messages, ( m1, m2 ) -> {
-            try {
-                return m2.getSentDate().compareTo( m1.getSentDate() );
-            } catch ( MessagingException e ) {
-                throw new RuntimeException( e );
-            }
-        });
-
-        for ( Message message : messages ) {
-            long uid = -1;
-            Folder f = message.getFolder();
-            if (f instanceof UIDFolder) {
-                UIDFolder uf = (UIDFolder) f;
-                uid = uf.getUID(message);
-            }
-            System.out.println(
-                    "sendDate: " + message.getSentDate()
-                            + " uid: " + uid
-                            + " from: " + MailTools.getFrom(message)
-                  + " subject:" + message.getSubject() );
-        }
-    }
 
     private static Message[] getMessages(ImapConfig conf, boolean debug) throws MessagingException {
         Session session = Session.getDefaultInstance(new Properties());
@@ -80,7 +45,7 @@ public class LatestUnreadMailsGrabber extends TimeThrottledGrabber {
     }
 
     @Override
-    protected void setConfig(Map<String, String> config) {
+    protected void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
         ttl = getDurationProperty("ttl", config, ttl);
         maxMessages = getIntProperty("maxMessages", config, maxMessages);
         configurations = new ArrayList<>();
@@ -92,12 +57,11 @@ public class LatestUnreadMailsGrabber extends TimeThrottledGrabber {
             return;
         }
         md.update(String.valueOf(maxMessages).getBytes(StandardCharsets.UTF_8));
-        for (int i=0 ; true ; i++) {
-            String conf = config.get("imapConf" + i);
-            if (conf == null) break;
-            md.update(conf.getBytes(StandardCharsets.UTF_8));
 
-            configurations.add(new ImapConfig(conf));
+        for (String name : configs.keySet().stream().sorted().collect(Collectors.toList())) {
+            ImapConfig ic = new ImapConfig(name, configs.get(name));
+            configurations.add(ic);
+            md.update(ic.getUniqueContentString().getBytes(StandardCharsets.UTF_8));
         }
         cackeKey = HashTools.byteArrayToHexString(md.digest());
     }

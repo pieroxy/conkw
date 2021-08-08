@@ -65,14 +65,14 @@ public abstract class Grabber {
     }
   }
 
-  protected abstract void setConfig(Map<String, String> config);
+  protected abstract void setConfig(Map<String, String> config, Map<String, Map<String, String>> namedConfigs);
 
-  public void initConfig(File homeDir, Map<String, String> config) throws IOException {
+  public void initConfig(File homeDir, Map<String, String> config, Map<String, Map<String, String>> namedConfigs) {
     storageFolder = new File(homeDir, "data");
     tmpFolder = new File(homeDir, "tmp");
     if (maxComputer == null) maxComputer = new MaxComputer(getStorage());
     if (name == null) setName(getDefaultName());
-    setConfig(config);
+    setConfig(config, namedConfigs);
   }
 
   public void setLogLevel(Level l) {

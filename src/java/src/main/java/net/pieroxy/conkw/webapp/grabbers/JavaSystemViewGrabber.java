@@ -4,12 +4,10 @@ import net.pieroxy.conkw.utils.OsCheck;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import javax.management.*;
-import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
 import java.net.UnknownHostException;
-import java.nio.charset.Charset;
 import java.nio.file.*;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -132,7 +130,7 @@ public class JavaSystemViewGrabber extends AsyncGrabber {
   }
 
   @Override
-  public void setConfig(Map<String, String> config) {
+  public void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
     String mpstr = config.get("mountPoints");
     if (mpstr == null) {
       if (OsCheck.getOperatingSystemType() == OsCheck.OSType.Windows) {

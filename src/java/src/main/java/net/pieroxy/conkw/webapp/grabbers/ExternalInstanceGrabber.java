@@ -83,7 +83,7 @@ public class ExternalInstanceGrabber extends AsyncGrabber {
   }
 
   @Override
-  protected void setConfig(Map<String, String> config) {
+  protected void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
     targetUrl = config.get("url");
     if (targetUrl.indexOf('?')==-1) targetUrl+="?";
     login = config.get("login");

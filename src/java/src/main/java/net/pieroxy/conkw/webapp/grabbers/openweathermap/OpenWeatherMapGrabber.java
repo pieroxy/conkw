@@ -31,7 +31,7 @@ public class OpenWeatherMapGrabber extends TimeThrottledGrabber {
   }
 
   @Override
-  public void setConfig(Map<String, String> config) {
+  public void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
     lon = Double.parseDouble(config.get("lon"));
     lat = Double.parseDouble(config.get("lat"));
     token = String.valueOf(config.get("token"));

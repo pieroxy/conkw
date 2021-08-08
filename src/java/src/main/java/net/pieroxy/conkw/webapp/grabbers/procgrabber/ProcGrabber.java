@@ -59,7 +59,7 @@ public class ProcGrabber extends AsyncGrabber {
   }
 
   @Override
-  public void setConfig(Map<String, String> config){
+  public void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs){
 
     computeNbCpus();
 

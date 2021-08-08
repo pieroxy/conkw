@@ -98,7 +98,7 @@ public class LmSensorsGrabber extends AsyncGrabber {
   }
 
   @Override
-  protected void setConfig(Map<String, String> config) {
+  protected void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
 
   }
 }

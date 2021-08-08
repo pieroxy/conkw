@@ -11,6 +11,7 @@ public class GrabberConfig {
   private String extract;
   private String logLevel;
   private Map<String, String> parameters;
+  private Map<String, Map<String, String>> namedParameters;
 
   public Map<String, String> getParameters() {
     return parameters;
@@ -50,5 +51,13 @@ public class GrabberConfig {
 
   public void setImplementation(String implementation) {
     this.implementation = implementation;
+  }
+
+  public Map<String, Map<String, String>> getNamedParameters() {
+    return namedParameters;
+  }
+
+  public void setNamedParameters(Map<String, Map<String, String>> namedParameters) {
+    this.namedParameters = namedParameters;
   }
 }

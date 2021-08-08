@@ -96,7 +96,7 @@ public class ExternalMetricsGrabber extends Grabber {
 
 
   @Override
-  protected void setConfig(Map<String, String> config) {
+  protected void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
     Emi.addOrUpdateGrabber(this);
 
     try (FileInputStream fis = new FileInputStream(getStorageFile())) {

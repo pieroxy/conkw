@@ -3,11 +3,8 @@ package net.pieroxy.conkw.utils.clitools;
 import net.pieroxy.conkw.utils.StringUtil;
 import net.pieroxy.conkw.webapp.grabbers.oshi.OshiGrabber;
 import net.pieroxy.conkw.webapp.model.ResponseData;
-import oshi.SystemInfo;
-import oshi.util.EdidUtil;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class OSHITester {
 
@@ -18,7 +15,7 @@ public class OSHITester {
 
   public static void main(String[]args) throws InterruptedException {
     OshiGrabber grabber = new OshiGrabber();
-    grabber.setConfig(new HashMap<>());
+    grabber.setConfig(new HashMap<>(), new HashMap<>());
     ResponseData rd = grabber.grabSync();
     Thread.sleep(1000);
     rd = grabber.grabSync();

@@ -12,7 +12,6 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.time.Duration;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -28,7 +27,7 @@ public class YahooFinanceGrabber extends TimeThrottledGrabber {
   }
 
   @Override
-  public void setConfig(Map<String, String> config) {
+  public void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
     symbol = String.valueOf(config.get("symbol"));
     region = String.valueOf(config.get("region"));
     key = String.valueOf(config.get("key"));

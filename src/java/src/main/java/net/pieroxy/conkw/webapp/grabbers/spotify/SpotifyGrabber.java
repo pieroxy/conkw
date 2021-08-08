@@ -103,7 +103,7 @@ public class SpotifyGrabber extends TimeThrottledGrabber {
   }
 
   @Override
-  public void setConfig(Map<String, String> config){
+  public void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs){
     clientId = config.get("clientId");
     clientSecret = config.get("clientSecret");
     redirectUri = config.get("redirectUri");

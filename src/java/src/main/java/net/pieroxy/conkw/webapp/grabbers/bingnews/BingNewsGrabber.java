@@ -25,7 +25,7 @@ public class BingNewsGrabber extends TimeThrottledGrabber {
   }
 
   @Override
-  public void setConfig(Map<String, String> config){
+  public void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs){
     countrycode = String.valueOf(config.get("countrycode"));
     key = String.valueOf(config.get("key"));
   }

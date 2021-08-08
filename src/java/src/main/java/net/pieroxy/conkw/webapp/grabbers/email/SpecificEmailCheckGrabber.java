@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 
 public class SpecificEmailCheckGrabber extends TimeThrottledGrabber {
@@ -52,13 +53,13 @@ public class SpecificEmailCheckGrabber extends TimeThrottledGrabber {
     }
 
     @Override
-    protected void setConfig(Map<String, String> config) {
+    protected void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
         folder = getStringProperty("folder", config, "INBOX");
         subjectRegexp = getRegexpProperty("subjectRegexp", config, 0);
         bodyRegexp = getRegexpProperty("bodyRegexp", config, Pattern.DOTALL);
         senderRegexp = getRegexpProperty("senderRegexp", config, 0);
         ttl = getDurationProperty("ttl", config, ttl);
-        imapConf = new ImapConfig(config.get("imapConf"));
+        imapConf = new ImapConfig("imap", configs.get("imapConf"));
 
         MessageDigest md;
         try {

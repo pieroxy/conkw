@@ -2,7 +2,6 @@ package net.pieroxy.conkw.webapp.grabbers;
 
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -57,7 +56,7 @@ public class FileGrabber extends AsyncGrabber {
   }
 
   @Override
-  public void setConfig(Map<String, String> config){
+  public void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs){
     this.log(Level.INFO, "FileGrabber Name is " + getName());
     this.file = new File((String)config.get("file"));
     this.path = this.file.toPath();

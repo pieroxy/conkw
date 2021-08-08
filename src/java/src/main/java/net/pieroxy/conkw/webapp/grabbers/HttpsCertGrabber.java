@@ -10,7 +10,6 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
-import java.time.Duration;
 import java.util.*;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -121,7 +120,7 @@ public class HttpsCertGrabber extends TimeThrottledGrabber {
   }
 
   @Override
-  protected void setConfig(Map<String, String> config) {
+  protected void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
     names = config.get("names");
   }
 

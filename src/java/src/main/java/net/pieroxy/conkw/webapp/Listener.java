@@ -53,7 +53,7 @@ public class Listener implements ServletContextListener {
         if (gc.getName() != null) {
           g.setName(gc.getName());
         }
-        g.initConfig(ConfigReader.getHomeDir(), gc.getParameters());
+        g.initConfig(ConfigReader.getHomeDir(), gc.getParameters(), gc.getNamedParameters());
 
         if (g.getName()==null) {
           throw new IllegalArgumentException("Grabber name must be defined for grabber " + g.getClass().getName());

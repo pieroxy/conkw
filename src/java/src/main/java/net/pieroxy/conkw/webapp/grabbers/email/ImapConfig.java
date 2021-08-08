@@ -1,22 +1,21 @@
 package net.pieroxy.conkw.webapp.grabbers.email;
 
-public class ImapConfig {
-    private String name;
-    private String server;
-    private int port;
-    private String login;
-    private String password;
+import java.util.Map;
 
-    public ImapConfig(String conf) {
-        int p1 = conf.indexOf(':');
-        int p2 = conf.indexOf(':', p1+1);
-        int p3 = conf.indexOf(':', p2+1);
-        int p4 = conf.indexOf(':', p3+1);
-        setName(conf.substring(0, p1));
-        setServer(conf.substring(p1 + 1, p2));
-        setPort(Integer.parseInt(conf.substring(p2 + 1, p3)));
-        setLogin(conf.substring(p3 + 1, p4));
-        setPassword(conf.substring(p4 + 1));
+public class ImapConfig {
+    private String server,login,password,name;
+    private int port;
+
+    public ImapConfig(String name, Map<String, String> conf) {
+        setName(name);
+        setServer(conf.get("server"));
+        setPort(Integer.parseInt(conf.get("port")));
+        setLogin(conf.get("login"));
+        setPassword(conf.get("password"));
+    }
+
+    public String getUniqueContentString() {
+        return name + server + port + login + password;
     }
 
     public String getName() {
@@ -58,4 +57,5 @@ public class ImapConfig {
     public void setPassword(String password) {
         this.password = password;
     }
+
 }

@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class PushToEmiGrabber extends Grabber implements GrabberListener, Runnable {
@@ -51,7 +50,7 @@ public class PushToEmiGrabber extends Grabber implements GrabberListener, Runnab
   }
 
   @Override
-  protected void setConfig(Map<String, String> config) {
+  protected void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
     try {
       url = new URL(config.get("url"));
     } catch (MalformedURLException e) {

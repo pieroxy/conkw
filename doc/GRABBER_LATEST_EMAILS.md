@@ -16,9 +16,21 @@ This is the latest unread emails grabber. It fetches your unread emails from one
     "implementation":"net.pieroxy.conkw.webapp.grabbers.email.LatestUnreadMailsGrabber",
     "parameters": {
         "ttl":"5m",
-        "maxMessages":"10",
-        "imapConf0":"gmail:imap.googlemail.com:993:my_account@gmail.com:mypassword",
-        "imapConf1":"Hotmail:outlook.office365.com:993:my_email@hotmail.com:mypassword" 
+        "maxMessages":"10"
+      },
+      "namedParameters": {
+        "my gmail account": {
+          "server":"imap.googlemail.com",
+          "port":"993",
+          "login":"my_account@gmail.com",
+          "password":"mypassword"
+        },
+        "hotmail !!": {
+          "server":"outlook.office365.com",
+          "port":"993",
+          "login":"my_email@hotmail.com",
+          "password":"mypassword"
+        }
     }
 }
 ```
