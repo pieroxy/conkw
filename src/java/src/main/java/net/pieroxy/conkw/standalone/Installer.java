@@ -81,7 +81,7 @@ public class Installer {
                 StandardCopyOption.REPLACE_EXISTING);
         File shellFile = new File(ConfigReader.getBinDir(), getFilename());
         FileOutputStream script = new FileOutputStream(shellFile);
-        script.write(("\"" + java + "/bin/java\" -verbose:gc \"-Djava.util.logging.config.file="+ConfigReader.getLoggingConfigFile().getAbsolutePath()+"\" -Xms50m -jar \"" + ConfigReader.getBinDir() + File.separator + "conkw.jar\" start --stop-current-instance --home "+ConfigReader.getHomeDir()+" >> \"" + ConfigReader.getLogDir() + "/system.log\" 2>&1\n").getBytes());
+        script.write(("\"" + java + "/bin/java\" \"-Djava.util.logging.config.file="+ConfigReader.getLoggingConfigFile().getAbsolutePath()+"\" -Xms50m -jar \"" + ConfigReader.getBinDir() + File.separator + "conkw.jar\" start --stop-current-instance --home "+ConfigReader.getHomeDir()+"\n").getBytes());
         script.close();
         shellFile.setExecutable(true);
 

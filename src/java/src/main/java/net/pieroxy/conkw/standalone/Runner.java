@@ -5,6 +5,7 @@ import net.pieroxy.conkw.config.ConfigReader;
 import net.pieroxy.conkw.utils.FileTools;
 import net.pieroxy.conkw.utils.HashTools;
 import net.pieroxy.conkw.utils.JsonHelper;
+import net.pieroxy.conkw.utils.logging.GcLogging;
 import net.pieroxy.conkw.utils.logging.LoggingPrintStream;
 import net.pieroxy.conkw.webapp.Listener;
 import net.pieroxy.conkw.webapp.servlets.Api;
@@ -160,6 +161,7 @@ public class Runner {
     private static void run(CmdLineOptions options) throws Exception {
         System.setOut(new LoggingPrintStream("stdout", Level.INFO));
         System.setErr(new LoggingPrintStream("stderr", Level.SEVERE));
+        GcLogging.installGCMonitoring();
         if (options.isStopCurrentInstance()) {
             if (!stop()) {
                 return;
