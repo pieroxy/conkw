@@ -158,8 +158,8 @@ public class Runner {
     }
 
     private static void run(CmdLineOptions options) throws Exception {
-        System.setOut(new LoggingPrintStream("stdout"));
-        System.setErr(new LoggingPrintStream("stderr"));
+        System.setOut(new LoggingPrintStream("stdout", Level.INFO));
+        System.setErr(new LoggingPrintStream("stderr", Level.SEVERE));
         if (options.isStopCurrentInstance()) {
             if (!stop()) {
                 return;
