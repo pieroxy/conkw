@@ -54,18 +54,22 @@ public class Installer {
         // Initializing config directory
         File sampleFG = new File(ConfigReader.getConfDir(), "example.properties");
         StreamTools.copyTextFilePreserveOriginalAndWarnOnStdout(
-            getClass().getClassLoader().getResourceAsStream("config.sample.jsonc"),
-            ConfigReader.getConfigFile(),
-            overrideConfig,
-            new TextReplacer()
-                .add("$FGSF", sampleFG.getAbsolutePath()));
+                getClass().getClassLoader().getResourceAsStream("config.sample.jsonc"),
+                ConfigReader.getConfigFile(),
+                overrideConfig,
+                new TextReplacer()
+                        .add("$FGSF", sampleFG.getAbsolutePath()));
         StreamTools.copyTextFilePreserveOriginalAndWarnOnStdout(
-            getClass().getClassLoader().getResourceAsStream("example.properties"),
-            sampleFG,overrideConfig,new TextReplacer().add("$FGSF", sampleFG.getAbsolutePath()));
+                getClass().getClassLoader().getResourceAsStream("example.properties"),
+                sampleFG,
+                overrideConfig,
+                new TextReplacer().add("$FGSF", sampleFG.getAbsolutePath()));
         StreamTools.copyTextFilePreserveOriginalAndWarnOnStdout(
                 getClass().getClassLoader().getResourceAsStream("logging.properties"),
                 ConfigReader.getLoggingConfigFile(),
-                overrideConfig, null);
+                overrideConfig,
+                new TextReplacer()
+                        .add("$LOGFILE", new File(ConfigReader.getLogDir(), "conkw.log").getAbsolutePath()));
 
         // Deploying webapp
         initWebapp();

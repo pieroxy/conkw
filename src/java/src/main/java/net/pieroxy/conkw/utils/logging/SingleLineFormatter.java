@@ -1,4 +1,6 @@
-package net.pieroxy.conkw.utils;
+package net.pieroxy.conkw.utils.logging;
+
+import net.pieroxy.conkw.utils.StringUtil;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
