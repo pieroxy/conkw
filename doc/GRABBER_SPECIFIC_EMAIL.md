@@ -76,7 +76,7 @@ Here is my configuration for the SpecificEmailCheckGrabber:
 }
 ```
 
-* `ttl:1h` No need to be too agressive. Plus, a run might emmit a warning because a file was locked and it couldn't read it, so we'll se the threshold to 8 hours before assuming there is an issue.
+* `ttl:1h` No need to be too agressive. Plus, a run might emmit a warning because a file was locked and it couldn't read it, so we'll set the threshold to 8 hours before assuming there is an issue.
 * `folder:technicalStuff/Backups` This is where my gmail filter puts all emails sent by the backup script.
 * `subjectRegexp:Backups .*` We wil only consider emails whose subject start with `Backups `.
 * `senderRegexp:email@sending-address` I hardcoded the email of the sender.
