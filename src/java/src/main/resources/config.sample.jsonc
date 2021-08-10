@@ -193,8 +193,15 @@
         "folder":"YourImapFolder",
         "subjectRegexp":"Specify the subject regexp",
         "senderRegexp":"specify the sender email",
-        "bodyRegexp":"Specify the body regexp",
-        "imapConf" :"MyEmailAccount!!:imap.googlemail.com:993:my_email@gmail.com:mypassword"
+        "bodyRegexp":"Specify the body regexp"
+      },
+      "namedParameters": {
+        "imapConf": {
+          "server":"imap.googlemail.com",
+          "port":"993",
+          "login":"my_account@gmail.com",
+          "password":""
+        }
       }
     }
    //END OF GRABBERS

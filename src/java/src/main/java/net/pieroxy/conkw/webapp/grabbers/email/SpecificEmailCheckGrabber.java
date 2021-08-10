@@ -2,6 +2,7 @@ package net.pieroxy.conkw.webapp.grabbers.email;
 
 import com.sun.mail.imap.IMAPFolder;
 import net.pieroxy.conkw.utils.HashTools;
+import net.pieroxy.conkw.utils.StringUtil;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.duration.CDurationParser;
 import net.pieroxy.conkw.webapp.grabbers.TimeThrottledGrabber;
@@ -55,6 +56,9 @@ public class SpecificEmailCheckGrabber extends TimeThrottledGrabber {
     @Override
     protected void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
         if (config==null || configs==null) return;
+        if (configs.get("imapConf")==null) return;
+        if (StringUtil.isNullOrEmptyTrimmed(configs.get("imapConf").get("password"))) return;
+        
         folder = getStringProperty("folder", config, "INBOX");
         subjectRegexp = getRegexpProperty("subjectRegexp", config, 0);
         bodyRegexp = getRegexpProperty("bodyRegexp", config, Pattern.DOTALL);
