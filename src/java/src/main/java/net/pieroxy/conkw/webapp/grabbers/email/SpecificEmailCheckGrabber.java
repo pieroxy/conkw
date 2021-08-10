@@ -54,6 +54,7 @@ public class SpecificEmailCheckGrabber extends TimeThrottledGrabber {
 
     @Override
     protected void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
+        if (config==null || configs==null) return;
         folder = getStringProperty("folder", config, "INBOX");
         subjectRegexp = getRegexpProperty("subjectRegexp", config, 0);
         bodyRegexp = getRegexpProperty("bodyRegexp", config, Pattern.DOTALL);
