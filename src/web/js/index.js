@@ -707,8 +707,11 @@ ConkW.extractRawValue = function(valueexpr, data) {
             var ns = data[valueexpr.datatype];
             return ns ? ns[valueexpr.expression] : undefined;
         case "e":
-            return this.fillTemplate(valueexpr.expression, data);
+            var res = this.fillTemplate(valueexpr.expression, data);
+            if (valueexpr.datatype == "num") return parseFloat(res);
+            return res;
         case "l":
+            if (valueexpr.datatype == "num") return parseFloat(valueexpr.expression);
             return valueexpr.expression;
     }
     return null;
@@ -727,7 +730,6 @@ ConkW.extractTypedValue = function(valueexpr, data) {
     if (value === undefined) return;
     switch (valueexpr.datatype) {
         case "str":
-
             return "" + value;
         case "num":
             return value - 0;
