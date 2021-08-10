@@ -14,6 +14,7 @@ import java.util.logging.Level;
 public class LmSensorsGrabber extends AsyncGrabber {
   static final String NAME = "lmsensors";
 
+  ExternalBinaryRunner runner;
 
   @Override
   public boolean changed() {
@@ -22,7 +23,7 @@ public class LmSensorsGrabber extends AsyncGrabber {
 
   @Override
   public ResponseData grabSync() {
-    ExternalBinaryRunner runner = new ExternalBinaryRunner(new String[] {"sensors", "-u"});
+    if (runner == null) runner = new ExternalBinaryRunner(new String[] {"sensors", "-u"});
     runner.exec();
     return parse(runner.getBuffer());
   }
