@@ -126,7 +126,7 @@ public class SpecificEmailCheckGrabber extends TimeThrottledGrabber {
 
     private boolean matches(Message m) throws Exception {
         if (subjectRegexp!=null) {
-            if (canLogFine()) log(Level.FINE, "Checking subject for message " + m.getSubject());
+            if (canLogFine()) log(Level.FINE, "Checking re " + subjectRegexp + " in subject for message " + m.getSubject());
             if (!subjectRegexp.matcher(m.getSubject()).matches()) return false;
         }
         if (senderRegexp!=null) {
@@ -158,7 +158,7 @@ public class SpecificEmailCheckGrabber extends TimeThrottledGrabber {
             if (canLogFine()) log(Level.FINE, "From UID: " + messages.length);
             return messages;
         } else {
-            Date d = new Date(System.currentTimeMillis() - CDurationParser.parse("2d").asMilliseconds());
+            Date d = new Date(System.currentTimeMillis() - CDurationParser.parse("5d").asMilliseconds());
             Message[] messages = inbox.search(new ReceivedDateTerm(ComparisonTerm.GT, d));
             if (canLogFine()) log(Level.FINE, "From date: " + messages.length);
             return messages;
