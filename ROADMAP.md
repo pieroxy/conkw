@@ -11,9 +11,8 @@ Here are the things we have in mind for conkw. This is kind of my TODO list.
 * MPRIS2 - to get music playing for most Linux players.
 * Calendar Google - to get next meetings
 * Calendar Outlook - to get next meetings
-* Mail Google - to get latest mails
-* Mail Outlook - to get latest mails
 * Freebox - to get internet status on this home router
+* Tail a log file - define a generic model. One value, several dimensions.
 
 ## Misc
 
@@ -21,3 +20,15 @@ Here are the things we have in mind for conkw. This is kind of my TODO list.
 * Authenticate EMI calls with a private shared token.
 * Most of this stuff needs to be tested.
 
+## Features
+
+* Build aggregators grabbers so that metrics can be extracted on a different scale as "per second" - such as average on the last minute.
+* Extract metrics to influxDB/Grafana
+* Define alerts. Thresholds, etc. Send them by mail in step #1
+* Build an app to monitor battery level of device and receive alerts.
+* Build alert management
+
+## Path to world dominaion
+
+* Make it scale
+* World domination !
