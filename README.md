@@ -84,4 +84,4 @@ Here is my current setup below. And here is [a link to a page detailing everythi
 
 ## Documentation
 
-[Getting started here](doc/INDEX.md)
+[Getting started here](doc/README.md)

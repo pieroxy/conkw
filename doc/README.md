@@ -17,6 +17,7 @@
 
 ## Advanced topics
 
+* [Troubleshooting](TROUBLESHOOT.md)
 * [The emi endpoint in details](EMI.md)
 * [The API in details](API.md)
 * Advanced: [Write your own grabber](WRITE_A_GRABBER.md)
