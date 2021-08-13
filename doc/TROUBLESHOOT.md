@@ -41,7 +41,7 @@ Log levels can be, in order of increasing verbosity:
 
 ## $CONKW_HOME/config/logging.properties
 
-This file defines how the logger works:
+This file defines how the logger works. This is the standard config file for `java.util.logging`.
 
 ```INI
 handlers= net.pieroxy.conkw.utils.logging.FileHandler
