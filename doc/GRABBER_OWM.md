@@ -38,6 +38,8 @@ In order to use it, you need to:
 * `lat` The latitude of the place for which you want the weather forecast
 * `lon` The longitude of the place for which you want the weather forecast
 
+As this is a `TimeThrottledGrabber`, you can define `ttl` and `errorTtl`. [See here for more details](CONFIGURE.md). The default ttl is 5 minutes.
+
 ## Metrics always extracted:
 
 * `str.location_name` The name of the place configured. This is extremely useful to make sure you're viewing the weather conditions from the proper place.

@@ -18,9 +18,32 @@ import java.util.logging.Level;
 
 public abstract class TimeThrottledGrabber extends AsyncGrabber {
 
-  protected abstract CDuration getTtl();
+  protected abstract CDuration getDefaultTtl();
   protected abstract void load(ResponseData res);
   protected abstract String getCacheKey();
+  protected abstract void applyConfig(Map<String, String> config, Map<String, Map<String, String>> configs);
+
+  private CDuration ttl;
+  private CDuration errorTtl;
+  private boolean lastGrabHadErrors = false;
+
+  public boolean isLastGrabHadErrors() {
+    return lastGrabHadErrors;
+  }
+
+  protected final void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
+    ttl = getDefaultTtl();
+    errorTtl = new CDuration(Math.max(1, Math.min(60, getDefaultTtl().asSeconds() / 10)));
+
+    ttl = getDurationProperty("ttl", config, ttl);
+    errorTtl = getDurationProperty("errorTtl", config, errorTtl);
+
+    applyConfig(config, configs);
+  }
+
+  protected CDuration getTtl() {
+    return lastGrabHadErrors ? errorTtl : ttl;
+  }
 
   private long lastRun=-1;
   private File storage;
@@ -101,6 +124,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber {
 
   @Override
   public final ResponseData grabSync() {
+    lastGrabHadErrors = true;
     log(Level.FINE, "grabSync() :: begin");
     if (lastRun==-1) {
       ResponseData data = loadCacheFile();
@@ -108,6 +132,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber {
         log(Level.INFO, "Loading from cache " + getCacheFile().getAbsolutePath());
         lastRun = data.getTimestamp();
         log(Level.FINE, "grabSync() :: loaded from cache");
+        lastGrabHadErrors = false;
         return data;
       }
     }
@@ -115,6 +140,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber {
       ResponseData r = new ResponseData(this, System.currentTimeMillis());
       load(r);
       lastRun = System.currentTimeMillis();
+      lastGrabHadErrors = !r.getErrors().isEmpty();
       return r;
     } catch (Exception e) {
       log(Level.SEVERE, "Grabbing " + getName(), e);

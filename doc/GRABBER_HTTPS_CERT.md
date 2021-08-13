@@ -1,6 +1,6 @@
 # conkw documentation - HttpsCertGrabber
 
-This is the https cert grabber. It will probe the domain names provided through http, grab the certificate and extract the expiration date. This allows monitoring of your https certs expiration date. It refreshes its values every three hours.
+This is the https cert grabber. It will probe the domain names provided through http, grab the certificate and extract the expiration date. This allows monitoring of your https certs expiration date. It refreshes its values every three hours by default.
 
 
 
@@ -14,6 +14,8 @@ This is the https cert grabber. It will probe the domain names provided through 
 
 ## Configuration
 The configuration property is `names`. It contains a comma separated list of domain names.
+
+As this is a `TimeThrottledGrabber`, you can define `ttl` and `errorTtl`. [See here for more details](CONFIGURE.md). The default ttl is 3 hours.
 
 ## Metrics
 

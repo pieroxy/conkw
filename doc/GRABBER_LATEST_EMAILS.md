@@ -35,7 +35,7 @@ This is the latest unread emails grabber. It fetches your unread emails from one
 }
 ```
 
-* `ttl` is the time between two runs. Note that as this grabber grabs *every* unread email each time. So if you have lots (like, hundreds) unread emails, every fetch could be quite long. So, the default ttl is set to 5 minutes.
+* As this is a `TimeThrottledGrabber`, you can define `ttl` and `errorTtl`. [See here for more details](CONFIGURE.md). The default ttl is 5 minutes.
 * `maxMessages` is the maximum number of messages you want to return for the UI.
 * `imapConfN` is the list of email configurations.
     * `N` starts at zero.

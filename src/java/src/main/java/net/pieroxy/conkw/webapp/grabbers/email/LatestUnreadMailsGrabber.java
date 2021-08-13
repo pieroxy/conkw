@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 public class LatestUnreadMailsGrabber extends TimeThrottledGrabber {
     static final String NAME = "mails";
 
-    private CDuration ttl = CDurationParser.parse("5m");
     private int maxMessages = 10;
     private String cackeKey = "nothing";
     private List<ImapConfig> configurations = new ArrayList<>();
@@ -45,8 +44,7 @@ public class LatestUnreadMailsGrabber extends TimeThrottledGrabber {
     }
 
     @Override
-    protected void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
-        ttl = getDurationProperty("ttl", config, ttl);
+    protected void applyConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
         maxMessages = getIntProperty("maxMessages", config, maxMessages);
         configurations = new ArrayList<>();
         MessageDigest md;
@@ -67,8 +65,8 @@ public class LatestUnreadMailsGrabber extends TimeThrottledGrabber {
     }
 
     @Override
-    protected CDuration getTtl() {
-        return ttl;
+    protected CDuration getDefaultTtl() {
+        return CDurationParser.parse("5m");
     }
 
     @Override

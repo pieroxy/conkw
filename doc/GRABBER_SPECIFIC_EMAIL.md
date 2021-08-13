@@ -26,7 +26,7 @@ This is the specific email check grabber. It fetches an IMAP folder and look for
 }
 ```
 
-* `ttl` is the time between two runs. Default is `5m`.
+* As this is a `TimeThrottledGrabber`, you can define `ttl` and `errorTtl`. [See here for more details](CONFIGURE.md). The default ttl is 5 minutes.
 * `folder` is the IMAP folder in which you look for an email
 * `subjectRegexp` is the regexp used to check against the mail subject. May be ommited.
 * `senderRegexp` is the regexp used to check against the mail sender address. May be ommited.

@@ -20,14 +20,12 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 
 public class SpecificEmailCheckGrabber extends TimeThrottledGrabber {
     static final String NAME = "specificmail";
     private static final String LAST_SEEN = "last_seen";
     private static final String NEXT_UID = "next_uid";
-    private CDuration ttl = CDurationParser.parse("5m");
     private String cackeKey = "nothing";
 
     private String folder;
@@ -54,7 +52,7 @@ public class SpecificEmailCheckGrabber extends TimeThrottledGrabber {
     }
 
     @Override
-    protected void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
+    protected void applyConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
         if (config==null || configs==null) return;
         if (configs.get("imapConf")==null) return;
         if (StringUtil.isNullOrEmptyTrimmed(configs.get("imapConf").get("password"))) return;
@@ -63,7 +61,6 @@ public class SpecificEmailCheckGrabber extends TimeThrottledGrabber {
         subjectRegexp = getRegexpProperty("subjectRegexp", config, 0);
         bodyRegexp = getRegexpProperty("bodyRegexp", config, Pattern.DOTALL);
         senderRegexp = getRegexpProperty("senderRegexp", config, 0);
-        ttl = getDurationProperty("ttl", config, ttl);
         imapConf = new ImapConfig("imap", configs.get("imapConf"));
 
         MessageDigest md;
@@ -78,8 +75,8 @@ public class SpecificEmailCheckGrabber extends TimeThrottledGrabber {
     }
 
     @Override
-    protected CDuration getTtl() {
-        return ttl;
+    protected CDuration getDefaultTtl() {
+        return CDurationParser.parse("5m");
     }
 
     @Override

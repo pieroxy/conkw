@@ -18,7 +18,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
 public class OpenWeatherMapGrabber extends TimeThrottledGrabber {
-  static final CDuration CACHE_TTL = CDurationParser.parse("5m"); // 5 min
   static final String NAME = "owm";
 
   String token;
@@ -31,15 +30,15 @@ public class OpenWeatherMapGrabber extends TimeThrottledGrabber {
   }
 
   @Override
-  public void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
+  public void applyConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
     lon = Double.parseDouble(config.get("lon"));
     lat = Double.parseDouble(config.get("lat"));
     token = String.valueOf(config.get("token"));
   }
 
   @Override
-  protected CDuration getTtl() {
-    return CACHE_TTL;
+  protected CDuration getDefaultTtl() {
+    return CDurationParser.parse("5m");
   }
 
   @Override

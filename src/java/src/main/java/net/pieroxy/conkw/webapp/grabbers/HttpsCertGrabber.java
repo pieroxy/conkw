@@ -19,8 +19,6 @@ import javax.net.ssl.X509TrustManager;
 
 // Bluntly copy pasted from https://gist.github.com/sureshpai/8c762603969e78dc2c68
 public class HttpsCertGrabber extends TimeThrottledGrabber {
-  private CDuration CACHE_TTL = CDurationParser.parse("3h");
-
   private String names;
 
   // usage : SSLCertExpiry host <cn>
@@ -120,13 +118,13 @@ public class HttpsCertGrabber extends TimeThrottledGrabber {
   }
 
   @Override
-  protected void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
+  protected void applyConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
     names = config.get("names");
   }
 
   @Override
-  protected CDuration getTtl() {
-    return CACHE_TTL;
+  protected CDuration getDefaultTtl() {
+    return CDurationParser.parse("3h");
   }
 
   @Override

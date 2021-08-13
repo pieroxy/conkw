@@ -21,7 +21,7 @@ In order to use it, you need to:
 
 Note that if you want to extract more stock prices, you need to create one instance of this extractor per stock price you want.
 
-Note that the basic plan is limited to 500 requests per month, which amounts roughly to 1 request every two hours. Note again that if you use several grabbers with the same token, they will all count against the same 500rq/month quota. Hence, the default refresh rate has been set to once every 5 hours. Adjust this value as you see fit.
+Note that the basic plan is limited to 500 requests per month, which amounts roughly to 1 request every two hours. Note again that if you use several grabbers with the same token, they will all count against the same 500rq/month quota. Hence, the default refresh rate has been set to once every 4 hours. Adjust this value as you see fit.
 
 ## Configuration
 
@@ -38,6 +38,8 @@ Here is the sample config portion:
       }
     },
 ```
+
+As this is a `TimeThrottledGrabber`, you can define `ttl` and `errorTtl`. [See here for more details](CONFIGURE.md). The default ttl is 4 hours.
 
 ## Metrics:
 

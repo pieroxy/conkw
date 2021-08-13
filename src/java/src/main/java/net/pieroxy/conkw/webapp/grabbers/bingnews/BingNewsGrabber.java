@@ -14,7 +14,6 @@ import java.net.URLConnection;
 import java.util.Map;
 
 public class BingNewsGrabber extends TimeThrottledGrabber {
-  static final CDuration CACHE_TTL = CDurationParser.parse("1h");
   static final String NAME = "bingnews";
 
   String countrycode,key;
@@ -25,14 +24,14 @@ public class BingNewsGrabber extends TimeThrottledGrabber {
   }
 
   @Override
-  public void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs){
+  public void applyConfig(Map<String, String> config, Map<String, Map<String, String>> configs){
     countrycode = String.valueOf(config.get("countrycode"));
     key = String.valueOf(config.get("key"));
   }
 
   @Override
-  protected CDuration getTtl() {
-    return CACHE_TTL;
+  protected CDuration getDefaultTtl() {
+    return CDurationParser.parse("1h");
   }
 
   @Override

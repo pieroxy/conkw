@@ -49,6 +49,8 @@ Here is the sample config portion:
     },
 ```
 
+As this is a `TimeThrottledGrabber`, you can define `ttl` and `errorTtl`. [See here for more details](CONFIGURE.md). The default ttl is 1 hour.
+
 ## Final notes
 
 

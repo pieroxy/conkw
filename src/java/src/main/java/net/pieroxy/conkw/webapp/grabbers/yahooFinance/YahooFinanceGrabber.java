@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.logging.Level;
 
 public class YahooFinanceGrabber extends TimeThrottledGrabber {
-  private CDuration CACHE_TTL = CDurationParser.parse("4h");
   private static final String NAME = "yahoof";
 
   String symbol,region,key;
@@ -27,20 +26,16 @@ public class YahooFinanceGrabber extends TimeThrottledGrabber {
   }
 
   @Override
-  public void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
+  public void applyConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
     symbol = String.valueOf(config.get("symbol"));
     region = String.valueOf(config.get("region"));
     key = String.valueOf(config.get("key"));
-    String ttl = String.valueOf(config.get("ttl"));
-    if (ttl!=null) {
-      CACHE_TTL = CDurationParser.parse(ttl);
-    }
-    log(Level.FINE, "Initializing with symbol " + symbol);
+    if (canLogFine()) log(Level.FINE, "Initializing with symbol " + symbol);
   }
 
   @Override
-  protected CDuration getTtl() {
-    return CACHE_TTL;
+  protected CDuration getDefaultTtl() {
+    return CDurationParser.parse("4h");
   }
 
   @Override

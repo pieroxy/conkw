@@ -103,7 +103,7 @@ public class SpotifyGrabber extends TimeThrottledGrabber {
   }
 
   @Override
-  public void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs){
+  public void applyConfig(Map<String, String> config, Map<String, Map<String, String>> configs){
     clientId = config.get("clientId");
     clientSecret = config.get("clientSecret");
     redirectUri = config.get("redirectUri");
@@ -135,6 +135,11 @@ public class SpotifyGrabber extends TimeThrottledGrabber {
   @Override
   protected CDuration getTtl() {
     return isPlaying ? RUNNING_TTL : IDLE_TTL;
+  }
+
+  @Override
+  protected CDuration getDefaultTtl() {
+    return IDLE_TTL;
   }
 
   @Override

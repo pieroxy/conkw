@@ -3,7 +3,7 @@ package net.pieroxy.conkw.utils.duration;
 public final class CDuration {
   private final long seconds;
 
-  protected CDuration(long numberOfSeconds) {
+  public CDuration(long numberOfSeconds) {
     this.seconds = numberOfSeconds;
   }
 
