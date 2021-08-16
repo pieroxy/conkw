@@ -182,4 +182,10 @@ public class PerformanceTools {
       return null;
     }
   }
+
+    public static String readAllAsString(File name) throws IOException {
+      try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(name)))) {
+        return br.readLine();
+      }
+    }
 }

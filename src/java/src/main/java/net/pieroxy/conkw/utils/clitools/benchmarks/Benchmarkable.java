@@ -1,5 +1,5 @@
 package net.pieroxy.conkw.utils.clitools.benchmarks;
 
-interface Benchmarkable {
+public interface Benchmarkable {
   int run();
 }
