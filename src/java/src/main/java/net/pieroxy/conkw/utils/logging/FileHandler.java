@@ -5,8 +5,6 @@ import net.jpountz.lz4.LZ4FrameOutputStream;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.logging.*;
 
 public class FileHandler extends StreamHandler {
@@ -348,18 +346,7 @@ public class FileHandler extends StreamHandler {
         super.publish(record);
         flush();
         if (limit > 0 && meter.written >= limit && !compression) {
-            // We performed access checks in the "init" method to make sure
-            // we are only initialized from trusted code.  So we assume
-            // it is OK to write the target files, even if we are
-            // currently being called from untrusted code.
-            // So it is safe to raise privilege here.
-            AccessController.doPrivileged(new PrivilegedAction<Object>() {
-                @Override
-                public Object run() {
-                    rotate();
-                    return null;
-                }
-            });
+          rotate();
         }
     }
 }
