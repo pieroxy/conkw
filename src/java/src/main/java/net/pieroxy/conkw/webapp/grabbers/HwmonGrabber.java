@@ -11,11 +11,10 @@ import java.util.regex.Pattern;
 public class HwmonGrabber extends AsyncGrabber {
     static final String NAME = "hwmon";
 
-    private static FileObject root = null;;
-    private static final byte[]buffer = new byte[100];
+    private FileObject root = null;;
+    private final byte[]buffer = new byte[100];
     private Set<Pattern> include;
     private Map<String, StringBuilder> categories;
-
 
     @Override
     public boolean changed() {
