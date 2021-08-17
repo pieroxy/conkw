@@ -58,7 +58,7 @@
           }
        </style>
     </head>
-    <body onload="ConkW.init();">
+    <body onload="ConkW.init();" cw-options="noresize">
         <pagetitle><inlinelogo></inlinelogo><a href="/">CONKW</a> - The default grabbers</pagetitle>
         <div id="clockanddate" class="cw-block" style="text-align:center;font-size:16px;float:left;margin:20px;">
             <br/>
@@ -100,6 +100,12 @@
               <img src="../icons/sensors.png">
               Linux only! This grabber gather its data from the <code>lm-sensors</code> utility program. 
               <a href="/doc/GRABBER_LM_SENSORS.html">Documentation</a>.
+            </block>
+            <block>
+              <a class="title" href="/grabbersReference/hwmon.html">Hwmon Grabber</a>
+              <img src="../icons/sensors.png">
+              Linux only! This grabber gather its data from the <code>/sys/class/hwmon</code> sysfs. 
+              <a href="/doc/GRABBER_HWMON.html">Documentation</a>.
             </block>
 
             <block>

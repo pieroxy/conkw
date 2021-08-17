@@ -9,6 +9,7 @@ Those are grabbing memory, CPU, network, hdd activity and more
 * [SysGrabber](GRABBER_SYS.md)
 * [OshiGrabber](GRABBER_OSHI.md)
 * [LmSensorsGrabber](GRABBER_LM_SENSORS.md)
+* [HwmonGrabber](GRABBER_HWMON.md)
 
 ## The services built-in grabbers
 They grab data from external sources. Weather, music, stock price, etc.

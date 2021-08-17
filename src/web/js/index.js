@@ -31,6 +31,7 @@ ConkW.init = function() {
     this.dates.initClocks();
     if (checkScreenFlag) this.checkScreen();
     this.initDocumentation();
+    if (!checkScreenFlag) document.body.style.overflow = "unset";
 }
 
 ConkW.initDocumentation = function() {

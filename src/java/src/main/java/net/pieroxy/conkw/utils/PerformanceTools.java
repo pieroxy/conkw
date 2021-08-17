@@ -3,6 +3,7 @@ package net.pieroxy.conkw.utils;
 import net.pieroxy.conkw.webapp.grabbers.procgrabber.ProcessStat;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 public class PerformanceTools {
 
@@ -183,9 +184,10 @@ public class PerformanceTools {
     }
   }
 
-    public static String readAllAsString(File name) throws IOException {
-      try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(name)))) {
-        return br.readLine();
-      }
+    public static String readAllAsString(File name, byte[]buffer) throws IOException {
+      FileInputStream fis = new FileInputStream(name);
+      int i = fis.read(buffer);
+      if (i>0) return new String(buffer, 0, i, StandardCharsets.UTF_8);
+      return "";
     }
 }

@@ -157,6 +157,13 @@
       "parameters": {
       }
     },
+    //hwmon
+    {
+      "implementation":"net.pieroxy.conkw.webapp.grabbers.HwmonGrabber",
+      "name":"hwmon",
+      "parameters": {
+      }
+    },
     //LATEST EMAILS
     {
       // This is the latest email grabber.

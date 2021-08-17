@@ -8,6 +8,7 @@ import net.pieroxy.conkw.utils.JsonHelper;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -77,6 +78,7 @@ public class MaxComputer {
       try (InputStream is = new FileInputStream(store)) {
         database = new DslJson<>(Settings.withRuntime()).deserialize(Map.class, is);
       } catch (Exception e) {
+        database = new HashMap<>();
         LOGGER.log(Level.SEVERE, "Unable to parse " + store.getAbsolutePath(), e);
       }
     } else {

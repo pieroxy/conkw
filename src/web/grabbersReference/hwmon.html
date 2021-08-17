@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover"/>
+        <meta charset="utf-8">
+        <meta name="format-detection" content="telephone=no">
+        <title>ConkW - Grabbers reference - HWmon</title>
+        <link href="../css/fonts.css" rel="stylesheet">
+        <link href="../css/conkw-common.css" rel="stylesheet">
+        <link href="../css/conkw.css" rel="stylesheet">
+        <script src="/js/polyfills.js"></script>
+        <script src="/js/date.js"></script>
+        <script src="/js/index.js"></script>
+        <script src="/js/favicon.js"></script>
+        <style>
+          cw-label {
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        </style>
+    </head>
+    <body onload="ConkW.init()" cw-grabbers="hwmon">
+        <pagetitle><inlinelogo></inlinelogo><a href="/">CONKW</a> - Reference UI for <code>HwmonGrabber</code></pagetitle>
+        <columncontainer>
+            <label>  Status : </label><cw-label style="max-width:200px;display:inline-block" id="cw-status"></cw-label><BR/>
+            <label>   Delay : </label><label id="cw-delay"></label><BR/>
+            <div id="clockanddate" class="cw-block" style="text-align:center;font-size:16px;">
+                <br/>
+                <cw-date cw-id="dayoftheweek"></cw-date>
+                <cw-date cw-id="month"></cw-date> <cw-date cw-id="dayofmonth"></cw-date>
+                <cw-date cw-id="year"></cw-date>
+                <br/>
+                <br/>
+                <cw-clock style="width:240px;height:240px;overflow: hidden;padding-top:3px;margin:auto" onclick="ConkW.dates.rotateClockFace(event, this)"></cw-clock>
+            </div>
+            
+            <div>
+                <heading>INDEX</heading>
+                <a href="/grabbersReference/">Go to the grabbers index</a><br/>
+                <a href="/doc/GRABBER_HWMON.html">Documentation</a>
+            </div>
+
+
+            </div>
+            
+                <ul>
+                    <li>
+                        Note that this grabber only works on Linux and other systems where the 
+                        <code>/sys/class/hwmon</code> filesystem exists.</li>
+                    <li>
+                        This UI shows a small sample of the metrics available</li>
+                    <li>
+                        You can add hdd temperatures easily with the drivetemp module. Just load it with "sudo modprobe drivetemp".
+                    <li>
+                        There are a <b>lot</b> more metrics available that this UI
+                        doesn't show.</li>
+                    <li>
+                        If the list of metrics below looks like a mess it's because it is.</li>
+                    <li>
+                        Look at the <a href="/doc/GRABBER_HWMON.html">documentation</a> for an 
+                        explanation of the naming convention used for the metrics.
+                    </li>
+                </ul>
+            
+            </div>
+
+
+            <div id="temp" class="cw-block">
+                <heading>Temperatures</heading>
+                <div cw-ns="hwmon" cw-multinode-in="m:str::temp_input" cw-multinode-pattern="#">
+                    <br><cw-label style="max-width:350px"><span cw-ns="hwmon" cw-value="e:str::${'#'.replaceAll('_input', '')}"></span> <span cw-ns="hwmon" cw-value="e:str::${str['#'.replaceAll('_input', '_label')]||''}"></span></cw-label> 
+                    <br><cw-label cw-ns="hwmon" cw-value="m:num:temp:#"></cw-label> <label title="min" class="softlabel"><cw-label cw-ns="hwmon" cw-value="m:num:temp:min$#"></cw-label> </label> <label title="max" class="softlabel"><cw-label cw-ns="hwmon" cw-value="m:num:temp:max$#"></cw-label> </label>
+                    <gauge cw-ns="hwmon" cw-gauge0="default:m:num::#" cw-min="m:num::min$#" cw-max="m:num::max$#"></gauge>
+                </div>
+            </div>
+            
+            <div id="temp" class="cw-block">
+                <heading>Fans</heading>
+                <div cw-ns="hwmon" cw-multinode-in="m:str::fan_input" cw-multinode-pattern="#">
+                    <br><cw-label style="max-width:350px"># <span cw-ns="hwmon" cw-value="e:str::${str['#'.replaceAll('_input', '_label')]||''}"></span></cw-label>
+                    <br><cw-label cw-ns="hwmon" cw-value="m:num:rpm:#"></cw-label> <label title="min" class="softlabel"><cw-label cw-ns="hwmon" cw-value="m:num:rpm:min$#"></cw-label> </label> <label title="max" class="softlabel"><cw-label cw-ns="hwmon" cw-value="m:num:rpm:max$#"></cw-label> </label>
+                    <gauge cw-ns="hwmon" cw-gauge0="default:m:num::#" cw-min="m:num::min$#" cw-max="m:num::max$#"></gauge>
+                </div>
+            </div>
+            
+            <div id="temp" class="cw-block">
+                <heading>Voltages</heading>
+                <div cw-ns="hwmon" cw-multinode-in="m:str::in_input" cw-multinode-pattern="#">
+                    <br><cw-label style="max-width:350px"># <span cw-ns="hwmon" cw-value="e:str::${str['#'.replaceAll('_input', '_label')]||''}"></span></cw-label> 
+                    <br><cw-label cw-ns="hwmon" cw-value="m:num:si:#"></cw-label>V <label title="min" class="softlabel"><cw-label cw-ns="hwmon" cw-value="m:num:si:min$#"></cw-label>V </label> <label title="max" class="softlabel"><cw-label cw-ns="hwmon" cw-value="m:num:si:max$#"></cw-label>V </label>
+                    <gauge cw-ns="hwmon" cw-gauge0="default:m:num::#" cw-min="m:num::min$#" cw-max="m:num::max$#"></gauge>
+                </div>
+            </div>
+            
+            <div id="temp" class="cw-block">
+                <heading>Currents</heading>
+                <div cw-ns="hwmon" cw-multinode-in="m:str::curr_input" cw-multinode-pattern="#">
+                    <br><cw-label style="max-width:350px"># <span cw-ns="hwmon" cw-value="e:str::${str['#'.replaceAll('_input', '_label')]||''}"></span></cw-label> 
+                    <br><cw-label cw-ns="hwmon" cw-value="m:num:si:#"></cw-label>A <label title="min" class="softlabel"><cw-label cw-ns="hwmon" cw-value="m:num:si:min$#"></cw-label>A </label> <label title="max" class="softlabel"><cw-label cw-ns="hwmon" cw-value="m:num:si:max$#"></cw-label>A </label>
+                    <gauge cw-ns="hwmon" cw-gauge0="default:m:num::#" cw-min="m:num::min$#" cw-max="m:num::max$#"></gauge>
+                </div>
+            </div>
+            
+        </columncontainer>
+    </body>
+</html>

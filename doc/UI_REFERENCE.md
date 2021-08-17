@@ -7,7 +7,7 @@
 The `body` tag contains global flags for the entire page. It can take a few attributes:
 
 * `cw-options` This attribute contains a comma separated list of options for the UI. 
-    * `noresize` Prevent the zoom option making sure your UI fit to your screen with no scrollbars.
+    * `noresize` Prevent the zoom option making sure your UI fit to your screen with no scrollbars. Hence, the zoom will stay at 100% and the body html tag will have scrollbars.
 * `cw-grabbers` This attribute represents a comma separated list of grabbers instance names. [See the configuration guide for more info.](CONFIGURE.md) 
 
 ### Specialized tags
