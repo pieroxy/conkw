@@ -95,3 +95,18 @@ Here is my configuration for the SpecificEmailCheckGrabber:
     * Conkw failed to get the emails, because I changed my gmail password.
 
 These conditions all need some attention on my part, so it's good I get an alert.
+
+### This is insane! There are alternatives!
+
+Yes it is. Yes there are. This example just showcases *a* workflow. That said, it's not as bad as it looks.
+
+You could very well just call the `/emi` endpoint on backup completion in the borg script. That would directly ingest the date of the last completed backup into your conkw. That would be more direct, but:
+
+* This would be synchronous. This implies that your conkw *must* be on at all times. If it is down for a few seconds, right when the backup script tries to call it, you're out of luck and an alarm will ring. Whereas your email sending program has retries of different sort, so your email is much more likely to reach your inbox than a simple network call to reach the conkw instance you're reaching for.
+* Your backup server needs direct network access to your conkw server. This might be the case, or not, but it's still a constraint.
+* I would still send my reports to my email address because than I can investigate backup issues (to a point) directly from my smartphone by reading the backup reports.
+
+You could have a local instance of conkw that would look inside the log file for a pattern and report back to the central instance. Yes. But both last bullets points above still hold true. And the [GrabberFilePattern](GRABBER_FILE_PATTERN.md) is still not released.
+
+To sum it up, there is no good or bad workflow. A workflow that is stable, reliable and don't produce false positives is a workflow that works. That's what you need. A workflow that works.
+
