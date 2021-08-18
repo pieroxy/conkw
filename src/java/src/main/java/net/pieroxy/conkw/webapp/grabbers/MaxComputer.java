@@ -13,25 +13,26 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class MaxComputer {
-  public static Logger LOGGER = Logger.getLogger(MaxComputer.class.getName());
-  public static String FILENAME = "autoMax.json";
+  public static String FILENAME = ".autoMax.json";
 
-  public File store;
+  private File store;
+  private Grabber grabber;
   Map<String, Map<String, Double>> database;
 
-  public MaxComputer(File storageDir) {
-    store = new File(storageDir, FILENAME);
-    LOGGER.info("MaxComputer store is " + store.getAbsolutePath());
+  public MaxComputer(Grabber g) {
+    store = new File(g.getStorage(), g.getName() + FILENAME);
+    grabber = g;
+    grabber.log(Level.INFO, "maxComputer: MaxComputer store is " + store.getAbsolutePath());
     load();
   }
 
   public double getMax(Grabber grabber, String metricName, double currentValue) {
 
-    if (LOGGER.isLoggable(Level.FINE)) LOGGER.fine("Getting data for " + grabber.getName() + " " + metricName + " " + currentValue);
+    if (grabber.canLogFiner()) grabber.log(Level.FINER, "maxComputer: Getting data for " + grabber.getName() + " " + metricName + " " + currentValue);
     String cn = grabber.getClass().getName();
     Map<String, Double> grabberDb = database.get(cn);
     if (grabberDb == null) {
-      if (LOGGER.isLoggable(Level.FINE)) LOGGER.fine("creating grabber db for " + cn);
+      if (grabber.canLogFiner()) grabber.log(Level.FINER, "maxComputer: creating grabber db for " + cn);
       Map<String, Map<String, Double>> newdb = new HashMap<>(database);
       newdb.put(cn, grabberDb = new HashMap<>());
       grabberDb.put(metricName, currentValue);
@@ -41,7 +42,7 @@ public class MaxComputer {
     }
     Object maxO = grabberDb.get(metricName);
     if (maxO == null) {
-      if (LOGGER.isLoggable(Level.FINE)) LOGGER.fine("creating metric " + cn + " -- " + metricName);
+      if (grabber.canLogFiner()) grabber.log(Level.FINER, "maxComputer: creating metric " + cn + " -- " + metricName);
       Map<String, Double> newGrabberDb = new HashMap<>(grabberDb);
       newGrabberDb.put(metricName, currentValue);
       database.put(cn, newGrabberDb);
@@ -50,7 +51,7 @@ public class MaxComputer {
     }
     double max = ((Number)maxO).doubleValue();
     if (max < currentValue) {
-      if (LOGGER.isLoggable(Level.FINE)) LOGGER.fine("Updating max for " + cn + " -- " + metricName);
+      if (grabber.canLogFiner()) grabber.log(Level.FINER, "maxComputer: Updating max for " + cn + " -- " + metricName);
       grabberDb.put(metricName, max=currentValue);
       save();
     }
@@ -69,7 +70,7 @@ public class MaxComputer {
         w.flush();
       }
     } catch (IOException e) {
-      LOGGER.log(Level.SEVERE, "Unable to save " + store.getAbsolutePath(), e);
+      grabber.log(Level.SEVERE, "maxComputer: Unable to save " + store.getAbsolutePath(), e);
     }
   }
 
@@ -79,7 +80,7 @@ public class MaxComputer {
         database = new DslJson<>(Settings.withRuntime()).deserialize(Map.class, is);
       } catch (Exception e) {
         database = new HashMap<>();
-        LOGGER.log(Level.SEVERE, "Unable to parse " + store.getAbsolutePath(), e);
+        grabber.log(Level.SEVERE, "maxComputer: Unable to parse " + store.getAbsolutePath(), e);
       }
     } else {
       database = new HashMap<>();

@@ -28,7 +28,7 @@ public abstract class Grabber {
   private String name;
   private Level logLevel = Level.INFO;
 
-  private static volatile MaxComputer maxComputer = null;
+  private volatile MaxComputer _maxComputer = null;
 
   Map<String, ResponseData> cachedResponses = new HashMap<>();
   Map<String, LongHolder> maxValues = new HashMap<>();
@@ -39,6 +39,11 @@ public abstract class Grabber {
   public abstract ResponseData grab();
   public abstract void dispose();
   public abstract String getDefaultName();
+
+  private MaxComputer getMaxComputer() {
+    if (_maxComputer == null) _maxComputer = new MaxComputer(this);
+    return _maxComputer;
+  }
 
   public void extract(ResponseData toFill, String extractName, ExtractMethod method, java.time.Duration delay) {
     if (shouldExtract(extractName)) {
@@ -70,7 +75,6 @@ public abstract class Grabber {
   public void initConfig(File homeDir, Map<String, String> config, Map<String, Map<String, String>> namedConfigs) {
     storageFolder = new File(homeDir, "data");
     tmpFolder = new File(homeDir, "tmp");
-    if (maxComputer == null) maxComputer = new MaxComputer(getStorage());
     if (name == null) setName(getDefaultName());
     setConfig(config, namedConfigs);
   }
@@ -176,7 +180,7 @@ public abstract class Grabber {
     } else {
       double ratio = (System.currentTimeMillis() - lh.value)/1000.;
       if (ratio>0.50) { // Below 0.5s things might get out of whack
-        double mv = maxComputer.getMax(this, metricName, value/ratio);
+        double mv = getMaxComputer().getMax(this, metricName, value/ratio);
         res.addMetric("max$" + metricName, mv);
       } else {
         log(Level.INFO, "Ignoring value of " +value + " for metric " + metricName + " because ratio is "  + ratio);
@@ -192,7 +196,7 @@ public abstract class Grabber {
       if (lh == null) {
         maxValues.put(metricName, new LongHolder(System.currentTimeMillis()));
       } else {
-        double mv = maxComputer.getMax(this, metricName, value);
+        double mv = getMaxComputer().getMax(this, metricName, value);
         res.addMetric("max$" + metricName, mv);
         lh.value = System.currentTimeMillis();
       }
@@ -204,7 +208,7 @@ public abstract class Grabber {
       if (lh == null) {
         maxValues.put(metricName, new LongHolder(System.currentTimeMillis()));
       } else {
-        double mv = maxComputer.getMax(this, metricName, value);
+        double mv = getMaxComputer().getMax(this, metricName, value);
         res.addMetric(metricName, -mv);
         lh.value = System.currentTimeMillis();
       }
