@@ -26,6 +26,7 @@ public class HwmonGrabber extends AsyncGrabber {
         long start = System.currentTimeMillis();
         root = new FileObject(new File("/sys/class/hwmon/"));
         String[]mons = root.file.list();
+        Arrays.sort(mons);
         categories = new HashMap<>();
 
 
@@ -40,6 +41,7 @@ public class HwmonGrabber extends AsyncGrabber {
                 }
                 if (canLogFiner()) log(Level.FINER, "Init found " + m + " // " + name);
                 String[]files = actual.file.list();
+                Arrays.sort(files);
                 for (String f : files) {
                     if (canLogFiner()) log(Level.FINE, "Init found data file " + f);
                     if (f.indexOf('_')>0 && shouldExtractMetric(f)) {
