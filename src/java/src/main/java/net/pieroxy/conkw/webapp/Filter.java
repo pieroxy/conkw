@@ -104,9 +104,10 @@ class LogResponseWrapper extends HttpServletResponseWrapper
 }
 
 
-// ------------------------------------------------------
-// Below code to count the number of bytes in the response. Butt ugly.
-
+/**
+ * Below code to count the number of bytes in the response.
+ * Quite ugly but there's really no alternative.
+ */
 class MyServletOutputStream extends ServletOutputStream {
     private long written = 0;
     private ServletOutputStream inner;
