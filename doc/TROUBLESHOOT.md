@@ -51,14 +51,14 @@ http_log.handlers=net.pieroxy.conkw.utils.logging.HttpFileHandler
 http_log.useParentHandlers=false
 http_log.level = FINE
 
-net.pieroxy.conkw.utils.logging.FileHandler.pattern = $LOGFILE
+net.pieroxy.conkw.utils.logging.FileHandler.pattern = /home/myuser/.conkw/log/conkw.log
 net.pieroxy.conkw.utils.logging.FileHandler.limit = 5000000
 net.pieroxy.conkw.utils.logging.FileHandler.count = 10
 net.pieroxy.conkw.utils.logging.FileHandler.level = FINEST
 net.pieroxy.conkw.utils.logging.FileHandler.append = true
 net.pieroxy.conkw.utils.logging.FileHandler.formatter = net.pieroxy.conkw.utils.logging.SingleLineFormatter
 
-net.pieroxy.conkw.utils.logging.HttpFileHandler.pattern = $HTTPLOGFILE
+net.pieroxy.conkw.utils.logging.HttpFileHandler.pattern = /home/myuser/.conkw/log/http.log
 net.pieroxy.conkw.utils.logging.HttpFileHandler.limit = 5000000
 net.pieroxy.conkw.utils.logging.HttpFileHandler.count = 10
 net.pieroxy.conkw.utils.logging.HttpFileHandler.level = FINEST
