@@ -69,7 +69,8 @@ public class Installer {
                 ConfigReader.getLoggingConfigFile(),
                 overrideConfig,
                 new TextReplacer()
-                        .add("$LOGFILE", new File(ConfigReader.getLogDir(), "conkw.log").getAbsolutePath()));
+                        .add("$LOGFILE", new File(ConfigReader.getLogDir(), "conkw.log").getAbsolutePath())
+                        .add("$HTTPLOGFILE", new File(ConfigReader.getLogDir(), "http.log").getAbsolutePath()));
 
         // Deploying webapp
         initWebapp();

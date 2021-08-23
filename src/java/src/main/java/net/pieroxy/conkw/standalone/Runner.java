@@ -7,6 +7,7 @@ import net.pieroxy.conkw.utils.HashTools;
 import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.utils.logging.GcLogging;
 import net.pieroxy.conkw.utils.logging.LoggingPrintStream;
+import net.pieroxy.conkw.webapp.Filter;
 import net.pieroxy.conkw.webapp.Listener;
 import net.pieroxy.conkw.webapp.servlets.Api;
 import net.pieroxy.conkw.webapp.servlets.Emi;
@@ -15,6 +16,8 @@ import org.apache.catalina.connector.Connector;
 import org.apache.catalina.core.StandardContext;
 import org.apache.catalina.servlets.DefaultServlet;
 import org.apache.catalina.startup.Tomcat;
+import org.apache.tomcat.util.descriptor.web.FilterDef;
+import org.apache.tomcat.util.descriptor.web.FilterMap;
 
 import java.io.File;
 import java.io.IOException;
@@ -232,12 +235,20 @@ public class Runner {
 
         LOGGER.info("Configuring app with basedir: " + webappDir.getAbsolutePath());
 
-        addMainContext(webappDir, tomcat, config);
-        addUiContext(uiDir, tomcat, config);
+        FilterDef fd = new FilterDef();
+        fd.setFilter(new Filter());
+        fd.setFilterName("http_log_filter");
+
+        FilterMap fm = new FilterMap();
+        fm.setFilterName("http_log_filter");
+        fm.addURLPattern("/*");
+
+        addMainContext(webappDir, tomcat, config, fd, fm);
+        addUiContext(uiDir, tomcat, config, fd, fm);
         return tomcat;
     }
 
-    private static void addUiContext(File uiDir, Tomcat tomcat, Config config) {
+    private static void addUiContext(File uiDir, Tomcat tomcat, Config config, FilterDef fd, FilterMap fm) {
         if (!config.isDisableCustomUI()) {
             LOGGER.info("Registering custom UI");
             String contextPath = "/ui";
@@ -245,11 +256,26 @@ public class Runner {
             ctx.addWelcomeFile("index.html");
             tomcat.addServlet(contextPath, "default", new DefaultServlet());
             ctx.addServletMappingDecoded("/", "default");
-            ctx.addMimeMapping("svg", "image/svg+xml");
+            addMimeTypes(ctx);
+            ctx.addFilterDef(fd);
+            ctx.addFilterMap(fm);
         }
     }
 
-    private static void addMainContext(File webappDirLocation, Tomcat tomcat, Config config) {
+    private static void addMimeTypes(StandardContext ctx) {
+        ctx.addMimeMapping("js", "application/javascript;charset=utf-8");
+        ctx.addMimeMapping("html", "text/html;charset=utf-8");
+        ctx.addMimeMapping("css", "text/css;charset=utf-8");
+
+        ctx.addMimeMapping("svg", "image/svg+xml");
+        ctx.addMimeMapping("png", "image/png");
+        ctx.addMimeMapping("jpg", "image/jpeg");
+        ctx.addMimeMapping("jpeg", "image/jpeg");
+        ctx.addMimeMapping("gif", "image/gif");
+        ctx.addMimeMapping("ico", "image/x-icon");
+    }
+
+    private static void addMainContext(File webappDirLocation, Tomcat tomcat, Config config, FilterDef fd, FilterMap fm) {
         String contextPath = "";
         StandardContext ctx = (StandardContext) tomcat.addContext(contextPath, webappDirLocation.getAbsolutePath());
 
@@ -269,10 +295,12 @@ public class Runner {
             tomcat.addServlet(contextPath, "default", new DefaultServlet());
             ctx.addServletMappingDecoded("/", "default");
 
-            ctx.addMimeMapping("svg", "image/svg+xml");
+            addMimeTypes(ctx);
         }
 
         ctx.addApplicationLifecycleListener(new Listener());
+        ctx.addFilterDef(fd);
+        ctx.addFilterMap(fm);
     }
 
     private static boolean has(String[] args, String lookFor) {

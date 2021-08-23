@@ -41,23 +41,36 @@ Log levels can be, in order of increasing verbosity:
 
 ## $CONKW_HOME/config/logging.properties
 
-This file defines how the logger works. This is the standard config file for `java.util.logging`.
+This file defines how the logger works. This is the default conkw config file for `java.util.logging`.
 
 ```INI
 handlers= net.pieroxy.conkw.utils.logging.FileHandler
 
 .level= INFO
+http_log.handlers=net.pieroxy.conkw.utils.logging.HttpFileHandler
+http_log.useParentHandlers=false
+http_log.level = FINE
 
 net.pieroxy.conkw.utils.logging.FileHandler.pattern = $LOGFILE
 net.pieroxy.conkw.utils.logging.FileHandler.limit = 5000000
 net.pieroxy.conkw.utils.logging.FileHandler.count = 10
 net.pieroxy.conkw.utils.logging.FileHandler.level = FINEST
+net.pieroxy.conkw.utils.logging.FileHandler.append = true
 net.pieroxy.conkw.utils.logging.FileHandler.formatter = net.pieroxy.conkw.utils.logging.SingleLineFormatter
+
+net.pieroxy.conkw.utils.logging.HttpFileHandler.pattern = $HTTPLOGFILE
+net.pieroxy.conkw.utils.logging.HttpFileHandler.limit = 5000000
+net.pieroxy.conkw.utils.logging.HttpFileHandler.count = 10
+net.pieroxy.conkw.utils.logging.HttpFileHandler.level = FINEST
+net.pieroxy.conkw.utils.logging.HttpFileHandler.append = true
+net.pieroxy.conkw.utils.logging.HttpFileHandler.formatter = net.pieroxy.conkw.utils.logging.SingleLineFormatter
 ```
 
 First, we use our own version of `FileHandler`. The feature in there is that it rotates *and* compress the old log files. 
 
 Then, the default level is INFO. This is where you can change it, although we recommend running with this in production.
+
+The next three lines define a specific logger for `http_log`. We don't want the http log file mixed with the rest of the messages.
 
 Then we configure the `FileHandler`. 
 
@@ -66,6 +79,8 @@ Then we configure the `FileHandler`.
 * `count` Tels the handler to retain 10 old log files.
 * `level` Tells the handler to log everything that's thrown at it.
 * `formatter` This is our own formatter. 
+
+Last, we configure the logger we've defined for `http_log`.
 
 For example, here the log for a shutdown sequence:
 
@@ -102,7 +117,8 @@ And here is what it means:
 ## Cheat sheet
 
 * The JVM GC logs under "JVM GC". Be aware that while those logs look like those of a `-verbose:gc`, they are not the same numbers. So do not try to compare them. Sizes are global, not only the eden and old gen space.
-* stdout and stderr are captured so any stuff that writes on them is logged as INFO (stdout) or WARNING (stderr). The IMAP library comes to mind. If any of the Mail grabbers is set as logging `FINE`, the IMAP library is told to log "debug" and lots of stuff end up on `stdout`.
+* stdout and stderr are captured so any stuff that writes on them is logged as INFO (stdout) or SEVERE (stderr). The IMAP library comes to mind. If any of the Mail grabbers is set as logging `FINE`, the IMAP library is told to log "debug" and lots of stuff end up on `stdout`.
 * Grabbers are logged under the fully qualified name of their implementation ` + / + ` name of the grabber.
 * Log files are rotated and compressed so you don't need to worry about their size. Leaving stuff in `FINE` will just consume more resources as well as flushing the logs more often. But it will not fill up your disk.
+* The http traffic is logged in `$CONKW_HOME/log/http.log`. This log does not use the standard http log file pattern but a structured object serialized in json. You can disable it in the `logging.properties` by setting `http_log.level = INFO`.
 * If you can't get it working even with all that, hop on github and ask a question: [Open an issue](https://github.com/pieroxy/conkw/issues) or [Start a discussion](https://github.com/pieroxy/conkw/discussions)

@@ -8,6 +8,7 @@ import net.pieroxy.conkw.config.User;
 import net.pieroxy.conkw.standalone.InstanceId;
 import net.pieroxy.conkw.utils.HashTools;
 import net.pieroxy.conkw.utils.JsonHelper;
+import net.pieroxy.conkw.webapp.Filter;
 import net.pieroxy.conkw.webapp.model.NeedsAuthResponse;
 import net.pieroxy.conkw.webapp.model.Response;
 import net.pieroxy.conkw.webapp.model.ResponseData;
@@ -69,6 +70,7 @@ public class Api extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
     if (shouldShutdown(req)) {
+      req.setAttribute(Filter.API_VERB, "shutdown");
       writeResponse(resp, "OK");
       new Timer().schedule(new TimerTask() {
         @Override
@@ -86,6 +88,7 @@ public class Api extends HttpServlet {
     long now = System.currentTimeMillis();
     final String action = req.getParameter("grabberAction");
     if (action!=null) {
+      req.setAttribute(Filter.API_VERB, "grabberAction");
       String res = api.notifyGrabberAction(action, req.getParameterMap());
       try {
         resp.getOutputStream().write(res.getBytes(StandardCharsets.UTF_8));
@@ -93,6 +96,7 @@ public class Api extends HttpServlet {
         LOGGER.log(Level.FINE, "Writing response", e);
       }
     } else {
+      req.setAttribute(Filter.API_VERB, "grabbers");
       String grabbers = req.getParameter("grabbers");
       if (grabbers == null) {
         writeResponse(resp, Response.getError("Grabbers were not specified"));
@@ -105,6 +109,7 @@ public class Api extends HttpServlet {
 
   private void writeResponse(HttpServletResponse resp, Object r) throws IOException {
     resp.setContentType("application/json;charset=utf-8");
+    resp.setCharacterEncoding("UTF-8");
     DslJson<Object> json = JsonHelper.getJson();
     JsonWriter w = JsonHelper.getWriter();
     synchronized (w) {

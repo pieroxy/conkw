@@ -1,6 +1,7 @@
 package net.pieroxy.conkw.webapp.servlets;
 
 import net.pieroxy.conkw.utils.JsonHelper;
+import net.pieroxy.conkw.webapp.Filter;
 import net.pieroxy.conkw.webapp.grabbers.ExternalMetricsGrabber;
 import net.pieroxy.conkw.webapp.model.EmiInput;
 import net.pieroxy.conkw.webapp.model.Response;
@@ -40,6 +41,7 @@ public class Emi extends HttpServlet {
 
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
+    req.setAttribute(Filter.API_VERB, "emi");
     String ns = req.getParameter("ns");
     if (ns == null) {
       respond(resp, 400, "No namespace provided.");
@@ -110,7 +112,8 @@ public class Emi extends HttpServlet {
   private void respond(HttpServletResponse resp, int i, String s) {
     resp.setStatus(i);
     try {
-      resp.setContentType("text/plain");
+      resp.setContentType("text/html; charset=UTF-8");
+      resp.setCharacterEncoding("UTF-8");
       resp.getWriter().println(s);
     } catch (IOException e) {
       // Do we need to log anything if we cannot write the response back ?
