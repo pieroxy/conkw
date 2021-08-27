@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover"/>
+        <meta charset="utf-8">
+        <meta name="format-detection" content="telephone=no">
+        <title>ConkW - Grabbers reference - TailLog</title>
+        <link href="../css/fonts.css" rel="stylesheet">
+        <link href="../css/conkw-common.css" rel="stylesheet">
+        <link href="../css/conkw.css" rel="stylesheet">
+        <script src="/js/polyfills.js"></script>
+        <script src="/js/date.js"></script>
+        <script src="/js/index.js"></script>
+        <script src="/js/favicon.js"></script>
+        <style>
+          cw-label {
+            max-width: 195px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        </style>
+    </head>
+    <body onload="ConkW.init()" cw-grabbers="taillog">
+        <pagetitle><inlinelogo></inlinelogo><a href="/">CONKW</a> - Reference UI for <code>TailLogFileGrabber</code></pagetitle>
+        <columncontainer>
+            <label>  Status : </label><cw-label style="max-width:200px;display:inline-block" id="cw-status"></cw-label><BR/>
+            <label>   Delay : </label><label id="cw-delay"></label><BR/>
+            <div id="clockanddate" class="cw-block" style="text-align:center;font-size:16px;">
+                <br/>
+                <cw-date cw-id="dayoftheweek"></cw-date>
+                <cw-date cw-id="month"></cw-date> <cw-date cw-id="dayofmonth"></cw-date>
+                <cw-date cw-id="year"></cw-date>
+                <br/>
+                <br/>
+                <cw-clock style="width:240px;height:240px;overflow: hidden;padding-top:3px;margin:auto" onclick="ConkW.dates.rotateClockFace(event, this)"></cw-clock>
+            </div>
+            
+            <div>
+                <heading>INDEX</heading>
+                <a href="/grabbersReference/">Go to the grabbers index</a><br/>
+                <a href="/doc/GRABBER_TAILLOG.html">Documentation</a>
+            </div>
+
+
+            </div>
+                <ul>
+                    <li>This grabber tails the http.log file, hence monitoring traffic this conkw receives.</li>
+                    <li>There is of course little point. You should monitor log files that matter to you.</li>
+                    <li>Through this process, the log file is used by a process to emmit events, while conkw read those events and exposes them here.</li>
+                    <li>Very soon, you will be able to tell conkw your events file formats.</li>
+                    <li>This layout is extremely static and underwhelming to say the least. There is more to come.</li>
+                    <li>No documentation yet as this is a work in progress and there is a lot more to come.</li>
+                </ul>
+            
+            </div>
+
+            <br>Requests: <cw-label cw-ns="taillog" cw-value="m:num:si:total.event_http.uri.count"></cw-label>
+            <br>Bytes: <cw-label cw-ns="taillog" cw-value="m:num:size:total.event_http.uri.size"></cw-label>
+            <br>Time spent: <cw-label cw-ns="taillog" cw-value="m:num::total.event_http.uri.time"></cw-label>ms
+
+            <div id="uri" class="cw-block">
+                <heading>URI - count</heading>
+                <div cw-ns="taillog" cw-multinode-in="m:str::values.event_http.uri" cw-multinode-pattern="#">
+                    <br><cw-label>#</cw-label><gauge cw-ns="taillog" cw-prop-title="m:num:si:event_http.uri.#.count" cw-gauge0="default:m:num::event_http.uri.#.count" cw-min="l:num::0" cw-max="m:num::total.event_http.uri.count"></gauge>
+                </div>
+            </div>
+            
+            <div id="uri" class="cw-block">
+                <heading>URI - time</heading>
+                <div cw-ns="taillog" cw-multinode-in="m:str::values.event_http.uri" cw-multinode-pattern="#">
+                    <br><cw-label>#</cw-label><gauge cw-ns="taillog" cw-prop-title="m:num:si:event_http.uri.#.time" cw-gauge0="default:m:num::event_http.uri.#.time" cw-min="l:num::0" cw-max="m:num::total.event_http.uri.time"></gauge>
+                </div>
+            </div>
+            
+            <div id="host" class="cw-block">
+                <heading>Content-Type - size</heading>
+                <div cw-ns="taillog" cw-multinode-in="m:str::values.event_http.contentType" cw-multinode-pattern="#">
+                    <br><cw-label>#</cw-label><gauge cw-ns="taillog" cw-prop-title="m:num:size:event_http.contentType.#.size" cw-gauge0="default:m:num::event_http.contentType.#.size" cw-min="l:num::0" cw-max="m:num::total.event_http.contentType.size"></gauge>
+                </div>
+            </div>
+            
+        </columncontainer>
+    </body>
+</html>

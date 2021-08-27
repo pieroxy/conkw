@@ -53,12 +53,14 @@ public class Installer {
 
         // Initializing config directory
         File sampleFG = new File(ConfigReader.getConfDir(), "example.properties");
+        String httpLogFile = new File(ConfigReader.getLogDir(), "http.log").getAbsolutePath();
         StreamTools.copyTextFilePreserveOriginalAndWarnOnStdout(
                 getClass().getClassLoader().getResourceAsStream("config.sample.jsonc"),
                 ConfigReader.getConfigFile(),
                 overrideConfig,
                 new TextReplacer()
-                        .add("$FGSF", sampleFG.getAbsolutePath()));
+                        .add("$FGSF", sampleFG.getAbsolutePath())
+                        .add("$HTTPLOGFILE", httpLogFile));
         StreamTools.copyTextFilePreserveOriginalAndWarnOnStdout(
                 getClass().getClassLoader().getResourceAsStream("example.properties"),
                 sampleFG,
@@ -70,7 +72,7 @@ public class Installer {
                 overrideConfig,
                 new TextReplacer()
                         .add("$LOGFILE", new File(ConfigReader.getLogDir(), "conkw.log").getAbsolutePath())
-                        .add("$HTTPLOGFILE", new File(ConfigReader.getLogDir(), "http.log").getAbsolutePath()));
+                        .add("$HTTPLOGFILE", httpLogFile));
 
         // Deploying webapp
         initWebapp();

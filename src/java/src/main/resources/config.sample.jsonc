@@ -210,6 +210,14 @@
           "password":""
         }
       }
+    },
+    // Log file tail
+    {
+      "implementation":"net.pieroxy.conkw.webapp.grabbers.logfile.TailLogFileGrabber",
+      "parameters": {
+        "filename":"$HTTPLOGFILE",
+        "parserClassName":"net.pieroxy.conkw.webapp.grabbers.logfile.parsers.HttpLogFileParser"
+      }
     }
    //END OF GRABBERS
   ],
