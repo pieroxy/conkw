@@ -50,6 +50,13 @@ ConkW.handleError = function(e) {
     ConkW.data.jsError = e;
 }
 
+ConkW.getUniqueNumber = function() {
+    if (!ConkW.data.uniqueNumberSequence) {
+        ConkW.data.uniqueNumberSequence = 1;
+    }
+    return ConkW.data.uniqueNumberSequence++;
+}
+
 ConkW.callApi = function(qs) {
     var xmlhttp = new XMLHttpRequest();
     var url = "/api?" + qs + ConkW.getAuthToAppendToUrl();
@@ -818,7 +825,7 @@ class PropertyHolder {
         this.propertyName = pn;
         this.valueExpr = ConkW.parseValueExpression(v);
         this.ns = ns;
-        this.cacheKey = pn + "." + this.ns + "." + v;
+        this.cacheKey = ConkW.getUniqueNumber();
         ConkW.data.cachedValues[this.cacheKey] = "--not-a-valid-value--";
     }
     update(data) {
@@ -833,7 +840,7 @@ class WarnHolder {
         this.valueExpr = ConkW.parseValueExpression(v);
         this.valueReference = ConkW.parseValueExpression(e.getAttribute("cw-warn-value"));
         this.ns = e.getAttribute("cw-ns");
-        this.cacheKey = "warn." + this.ns + "." + v;
+        this.cacheKey = ConkW.getUniqueNumber();
         ConkW.data.cachedValues[this.cacheKey] = "--not-a-valid-value--";
     }
     update(data) {
@@ -850,7 +857,7 @@ class ValueHolder {
         this.element = e;
         this.valueExpr = ConkW.parseValueExpression(v);
         this.ns = e.getAttribute("cw-ns");
-        this.cacheKey = "value." + this.ns + "." + v;
+        this.cacheKey = ConkW.getUniqueNumber();
         this.escapeHtml = e.getAttribute("cw-escapeHtml");
         this.warn = ConkW.parseValueExpression(e.getAttribute("cw-value-warn"));
         ConkW.data.cachedValues[this.cacheKey] = "--not-a-valid-value--";
@@ -866,7 +873,7 @@ class StaleHolder {
         this.element = e;
         this.valueExpr = ConkW.parseValueExpression(v);
         this.ns = e.getAttribute("cw-ns");
-        this.cacheKey = "value." + this.ns + "." + v;
+        this.cacheKey = ConkW.getUniqueNumber();
         ConkW.data.cachedValues[this.cacheKey] = "--not-a-valid-value--";
     }
     update(data) {
@@ -896,14 +903,12 @@ class GaugeHolder {
         e.appendChild(green);
 
         this.valueExprs = [];
-        var ck = "";
         var i = 0;
         while (true) {
             var fv = e.getAttribute("cw-gauge" + i);
             if (!fv) break;
             var idx = fv.indexOf(":");
             var v = fv.substring(idx + 1);
-            ck += v + "/"
             this.valueExprs.push(ConkW.parseValueExpression(v));
 
             var gauge = document.createElement("div");
@@ -913,7 +918,7 @@ class GaugeHolder {
             e.appendChild(gauge);
             i++;
         }
-        this.cacheKey = "gauge." + this.ns + "." + ck + e.getAttribute("cw-min") + e.getAttribute("cw-max") + e.getAttribute("cw-value-warn");
+        this.cacheKey = ConkW.getUniqueNumber();
         ConkW.data.cachedValues[this.cacheKey] = "--not-a-valid-value--";
     }
     update(data) {
@@ -1052,7 +1057,7 @@ class MultivalueHolder {
         this.pattern = e.getAttribute("cw-multinode-pattern");
         this.childHolders = [];
         this.content = e.innerHTML;
-        this.cacheKey = "multivalue." + this.ns + "." + JSON.stringify(this.from) + "." + JSON.stringify(this.to) + "." + JSON.stringify(this.in) + "." + JSON.stringify(this.pattern);
+        this.cacheKey = ConkW.getUniqueNumber();
         ConkW.data.cachedValues[this.cacheKey] = "--not-a-valid-value--";
     }
     update(data) {
