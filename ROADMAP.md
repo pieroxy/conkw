@@ -1,6 +1,11 @@
 # Roadmap
 Here are the things we have in mind for conkw. This is kind of my TODO list.
 
+## Next up
+
+* Work with the UI and API to be able to exploit the TailLogFileGrabber data. This will unleash the multi dimensional metrics.
+* This work will dig in the "Features" TODO list below.
+
 ## UI
 
 * Find a proper way to describe number formatting. This endless list of keywords isn't really nice.
@@ -12,7 +17,6 @@ Here are the things we have in mind for conkw. This is kind of my TODO list.
 * Calendar Google - to get next meetings
 * Calendar Outlook - to get next meetings
 * Freebox - to get internet status on this home router
-* Tail a log file - define a generic model. One value, several dimensions.
 
 ## Misc
 
