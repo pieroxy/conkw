@@ -28,7 +28,7 @@ public class FileHandler extends StreamHandler {
         BufferedOutputStream bout = new BufferedOutputStream(fout);
         meter = new MeteredStream(bout, len);
         setOutputStream(meter);
-        System.out.println("Opening file " + fname.getAbsolutePath());
+        System.out.println("Opening file for logging " + fname.getAbsolutePath());
 
     }
 
