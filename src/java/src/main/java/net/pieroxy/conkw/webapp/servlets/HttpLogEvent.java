@@ -3,7 +3,6 @@ package net.pieroxy.conkw.webapp.servlets;
 import com.dslplatform.json.CompiledJson;
 import net.pieroxy.conkw.webapp.grabbers.logfile.LogRecord;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,10 +49,19 @@ public class HttpLogEvent implements LogRecord {
         Map<String, String> dimensions = new HashMap<>();
         dimensions.put(CONTENT_TYPE, getContentType());
         dimensions.put(HOST, getHost());
-        dimensions.put(URI, getUri());
+        dimensions.put(URI, getFirstDepth(getUri()));
         dimensions.put(STATUS, String.valueOf(getStatus()));
         dimensions.put(VERB, getVerb());
         return dimensions;
+    }
+
+    private String getFirstDepth(String host) {
+        if (host == null) return "";
+        int pos1 = host.indexOf('/');
+        if (pos1<0) return host;
+        int pos2 = host.indexOf('/', pos1+1);
+        if (pos2<0) return host;
+        return host.substring(0, pos2);
     }
 
     @Override
