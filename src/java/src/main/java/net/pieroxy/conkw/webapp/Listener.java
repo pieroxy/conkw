@@ -33,37 +33,41 @@ public class Listener implements ServletContextListener {
       Set<String> newgnames = new HashSet<>();
       Emi.clearGrabbers();
       for (GrabberConfig gc : config.getGrabbers()) {
-        Grabber g = (Grabber) Class.forName(gc.getImplementation()).newInstance();
+        try {
+          Grabber g = (Grabber) Class.forName(gc.getImplementation()).newInstance();
 
-        // Extract
-        if (gc.getExtract()!=null && !gc.getExtract().equals("all") && !gc.getExtract().equals("")) {
-          g.setExtractProperties(gc.getExtract().split(","));
-        }
-        // logLevel
-        String llas = gc.getLogLevel();
-        if (llas!=null) {
-          Level logLevel = Level.parse(llas);
-          if (logLevel == null) {
-            logLevel = Level.INFO;
-            LOGGER.severe("Could not parse log level " + llas + ". Using INFO.");
+          // Extract
+          if (gc.getExtract() != null && !gc.getExtract().equals("all") && !gc.getExtract().equals("")) {
+            g.setExtractProperties(gc.getExtract().split(","));
           }
-          g.setLogLevel(logLevel);
-        }
-        // Name
-        if (gc.getName() != null) {
-          g.setName(gc.getName());
-        }
-        g.initConfig(ConfigReader.getHomeDir(), gc.getParameters(), gc.getNamedParameters());
+          // logLevel
+          String llas = gc.getLogLevel();
+          if (llas != null) {
+            Level logLevel = Level.parse(llas);
+            if (logLevel == null) {
+              logLevel = Level.INFO;
+              LOGGER.severe("Could not parse log level " + llas + ". Using INFO.");
+            }
+            g.setLogLevel(logLevel);
+          }
+          // Name
+          if (gc.getName() != null) {
+            g.setName(gc.getName());
+          }
+          g.initConfig(ConfigReader.getHomeDir(), gc.getParameters(), gc.getNamedParameters());
 
-        if (g.getName()==null) {
-          throw new IllegalArgumentException("Grabber name must be defined for grabber " + g.getClass().getName());
-        } else {
-          if (newgnames.contains(g.getName())) {
-            throw new IllegalArgumentException("At least two grabbers share the same name: " + g.getName());
+          if (g.getName() == null) {
+            throw new IllegalArgumentException("Grabber name must be defined for grabber " + g.getClass().getName());
           } else {
-            newg.add(g);
-            newgnames.add(g.getName());
+            if (newgnames.contains(g.getName())) {
+              throw new IllegalArgumentException("At least two grabbers share the same name: " + g.getName());
+            } else {
+              newg.add(g);
+              newgnames.add(g.getName());
+            }
           }
+        } catch (Exception e) {
+          LOGGER.log(Level.SEVERE, "Initializing grabber " + gc.getImplementation() + " with name " + gc.getExtract(), e);
         }
       }
 

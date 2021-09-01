@@ -60,11 +60,13 @@ public class ApiManager implements MetaGrabber {
             break;
           }
         }
-        if (!found) throw new RuntimeException("Grabber " + gname + " not found.");
-
-        Map<String, Long> newmap = new HashMap<>(lastRequestPerGrabber);
-        newmap.put(gname, ts);
-        lastRequestPerGrabber = newmap;
+        if (!found) {
+          LOGGER.log(Level.WARNING, "Grabber " + gname + " not found.");
+        } else {
+          Map<String, Long> newmap = new HashMap<>(lastRequestPerGrabber);
+          newmap.put(gname, ts);
+          lastRequestPerGrabber = newmap;
+        }
       } else {
         lastRequestPerGrabber.put(gname, ts);
       }
