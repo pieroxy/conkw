@@ -45,13 +45,18 @@
             </div>
                 <ul>
                     <li>This grabber tails the http.log file, hence monitoring traffic this conkw receives.</li>
-                    <li>There is of course little point. You should monitor log files that matter to you.</li>
+                    <li>There is of course little point. You should monitor log files that matter to you. This is here to illustrate how the grabber works.</li>
                     <li>Through this process, the log file is used by a process to emmit events, while conkw read those events and exposes them here.</li>
                     <li>Very soon, you will be able to tell conkw your events file formats.</li>
                     <li>This layout is extremely static and underwhelming to say the least. There is more to come.</li>
                     <li>No documentation yet as this is a work in progress and there is a lot more to come.</li>
+                    <li>There is most likely little traffic on your conkw instance. Click on the button below to generate "random" traffic.</li>
                 </ul>
-            
+            </div>
+
+            <div>
+                <button onclick="generateTraffic()">Generate Traffic</button>
+                Status: <span id="gts">No traffic</span>
             </div>
 
             <br>Requests: <cw-label cw-ns="taillog" cw-value="m:num:si:count"></cw-label>
@@ -59,4 +64,45 @@
             <br>Time spent: <cw-label cw-ns="taillog" cw-value="m:num::time.sum"></cw-label>ms
         </columncontainer>
     </body>
+    <script>
+        var trafficStatus = 0;
+        var trafficHandler = -1;
+        function generateTraffic() {
+            switch (trafficStatus) {
+                case 0:
+                    trafficHandler = setInterval(smallTraffic, 1000);
+                    trafficStatus = 1;
+                    document.getElementById("gts").innerText = "Some traffic";
+                    break;
+                case 1:
+                    clearInterval(trafficHandler);
+                    trafficHandler = setInterval(smallTraffic, 100);
+                    trafficStatus = 2;
+                    document.getElementById("gts").innerText = "Heavy traffic";
+                    break;
+                case 2:
+                    clearInterval(trafficHandler);
+                    trafficHandler = -1;
+                    trafficStatus = 0;
+                    document.getElementById("gts").innerText = "No traffic";
+                    break;
+            }
+        }
+        function smallTraffic() {
+            var i;
+
+            for (i=0 ; i<10 ; i++) if (Math.random()>0.9) get("/");
+            for (i=0 ; i<10 ; i++) if (Math.random()>0.9) get("/ui");
+            for (i=0 ; i<10 ; i++) if (Math.random()>0.5) get("/images/medium_logo_transparent_50prc.png");
+            for (i=0 ; i<10 ; i++) if (Math.random()>0.5) get("/js/polyfills.js");
+        }
+
+        function get(uri) {
+            var xmlhttp = new XMLHttpRequest();
+            var url = uri + "?" + Math.random(); // Cache busting
+            xmlhttp.open("GET", url, true);
+            xmlhttp.onreadystatechange = ()=>{}
+            xmlhttp.send();
+        }
+    </script>
 </html>
