@@ -26,6 +26,7 @@ public class RealTimeLogFileReader<T extends LogRecord> extends Thread {
     private boolean shutdownComplete = false;
 
     public RealTimeLogFileReader(String fullFilename, LogListener<T> listener, LogParser<T> parser) {
+        super("RealTimeLogFileReader(" + fullFilename + ")");
         this.fullFilename = fullFilename;
         this.listener = listener;
         this.parser = parser;
@@ -69,7 +70,7 @@ public class RealTimeLogFileReader<T extends LogRecord> extends Thread {
                         }
                         long curLen = f.length();
                         if (currentLength > curLen) {
-                            LOGGER.info("File changed down.");
+                            LOGGER.fine("File changed down, reopening it.");
                             break;
                         } else {
                             currentLength = curLen;

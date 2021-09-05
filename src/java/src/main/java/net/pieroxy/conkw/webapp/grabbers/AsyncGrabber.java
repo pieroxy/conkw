@@ -11,8 +11,7 @@ public abstract class AsyncGrabber extends Grabber implements Runnable {
 
   abstract public boolean changed();
   abstract public ResponseData grabSync();
-
-  void disposeSync() {}
+  protected void disposeSync() {}
 
   public Thread thread;
   private boolean shouldStop;

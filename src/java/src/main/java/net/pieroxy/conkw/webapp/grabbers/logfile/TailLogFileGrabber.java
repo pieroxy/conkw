@@ -21,6 +21,12 @@ public class TailLogFileGrabber extends AsyncGrabber implements LogListener<LogR
     private Map<String, Set<String>> dimValues = new HashMap<>();
     private Accumulator<LogRecord> accumulator;
 
+
+    @Override
+    public void disposeSync() {
+        reader.shutdown();
+    }
+
     @Override
     public boolean changed() {
         return true;
