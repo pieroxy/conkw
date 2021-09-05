@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 /**
  * This class will read new lines from the file provided, parse them with the parser provided and feed them to the
  * listener provided.
- * Note that if the file is seen below its know previous size, the file is reopened as it is assumed to have been
+ * Note that if the file is seen smaller than its know previous size, the file is reopened as it is assumed to have been
  * truncated or deleted.
  * Note that is the file is not found, it will wait until the file exists and start following it.
  * Note that if the file exists, its content up to the execution of the program will be skipped.
@@ -56,10 +56,8 @@ public class RealTimeLogFileReader<T extends LogRecord> extends Thread {
                         line = br.readLine();
                         if (line == null) {
                             // Wait until there is more of the file for us to read
-                            if (currentLength > f.length()) break;
-                            waitFor(100);
+                            waitFor(200);
                         } else {
-                            currentLength = f.length();
                             if (line.length()>0) {
                                 try {
                                     T parsedLine = parser.parse(line);
@@ -68,6 +66,13 @@ public class RealTimeLogFileReader<T extends LogRecord> extends Thread {
                                     LOGGER.log(Level.SEVERE, "Parsing and processing: " + line, e);
                                 }
                             }
+                        }
+                        long curLen = f.length();
+                        if (currentLength > curLen) {
+                            LOGGER.info("File changed down.");
+                            break;
+                        } else {
+                            currentLength = curLen;
                         }
                     }
                 } catch (IOException e) {
@@ -99,6 +104,7 @@ public class RealTimeLogFileReader<T extends LogRecord> extends Thread {
     }
 
     public void shutdown() {
+        LOGGER.info("RealTimeLogFileReader("+fullFilename+") is shutting down");
         shouldShutdown = true;
         synchronized (this) {
             this.notifyAll();
