@@ -216,7 +216,8 @@
       "implementation":"net.pieroxy.conkw.webapp.grabbers.logfile.TailLogFileGrabber",
       "parameters": {
         "filename":"$HTTPLOGFILE",
-        "parserClassName":"net.pieroxy.conkw.webapp.grabbers.logfile.parsers.HttpLogFileParser"
+        "parserClassName":"net.pieroxy.conkw.webapp.grabbers.logfile.parsers.HttpLogFileParser",
+        "accumulators":"multi([sum(size,0),count(),sum(time,0)])"
       }
     }
    //END OF GRABBERS
