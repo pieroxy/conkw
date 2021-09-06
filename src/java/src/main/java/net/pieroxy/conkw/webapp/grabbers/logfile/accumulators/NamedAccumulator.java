@@ -2,7 +2,6 @@ package net.pieroxy.conkw.webapp.grabbers.logfile.accumulators;
 
 import net.pieroxy.conkw.webapp.grabbers.logfile.LogRecord;
 
-import java.io.PrintStream;
 import java.util.Map;
 
 public class NamedAccumulator<T extends LogRecord> implements Accumulator<T> {
@@ -25,13 +24,18 @@ public class NamedAccumulator<T extends LogRecord> implements Accumulator<T> {
   }
 
   @Override
-  public synchronized void add(T line) {
-    accumulator.add(line);
+  public synchronized double add(T line) {
+    return accumulator.add(line);
   }
 
   @Override
-  public synchronized void log(String prefix, Map<String, Double> data) {
-    accumulator.log(AccumulatorUtils.addToMetricName(prefix, rootName), data);
+  public double getTotal() {
+    return accumulator.getTotal();
+  }
+
+  @Override
+  public synchronized void log(String prefix, Map<String, Double> data, Map<String, String> str) {
+    accumulator.log(AccumulatorUtils.addToMetricName(prefix, rootName), data, str);
   }
 
   @Override

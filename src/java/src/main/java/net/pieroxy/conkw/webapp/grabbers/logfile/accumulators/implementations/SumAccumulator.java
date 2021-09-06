@@ -19,14 +19,20 @@ public class SumAccumulator<T extends LogRecord> implements Accumulator<T> {
   }
 
   @Override
-  public void add(T line) {
+  public double add(T line) {
     Double lv = line.getValues().get(valueName);
-    if (lv!=null) value += lv;
-    else value += defaultValue;
+    if (lv==null) lv = defaultValue;
+    value += lv;
+    return lv;
   }
 
   @Override
-  public void log(String prefix, Map<String, Double> data) {
+  public double getTotal() {
+    return value;
+  }
+
+  @Override
+  public void log(String prefix, Map<String, Double> data, Map<String, String> str) {
     data.put(AccumulatorUtils.addToMetricName(prefix, valueName, NAME), value);
   }
 

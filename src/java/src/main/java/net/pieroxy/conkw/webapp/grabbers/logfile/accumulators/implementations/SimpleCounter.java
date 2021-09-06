@@ -4,7 +4,6 @@ import net.pieroxy.conkw.webapp.grabbers.logfile.LogRecord;
 import net.pieroxy.conkw.webapp.grabbers.logfile.accumulators.Accumulator;
 import net.pieroxy.conkw.webapp.grabbers.logfile.accumulators.AccumulatorUtils;
 
-import java.io.PrintStream;
 import java.util.Map;
 
 public class SimpleCounter<T extends LogRecord> implements Accumulator<T> {
@@ -12,13 +11,19 @@ public class SimpleCounter<T extends LogRecord> implements Accumulator<T> {
   int count;
 
   @Override
-  public void add(LogRecord line) {
+  public double add(LogRecord line) {
     count++;
+    return 1d;
   }
 
   @Override
-  public void log(String prefix, Map<String, Double> data) {
+  public void log(String prefix, Map<String, Double> data, Map<String, String> str) {
     data.put(AccumulatorUtils.addToMetricName(prefix, NAME), (double)count);
+  }
+
+  @Override
+  public double getTotal() {
+    return count;
   }
 
   @Override

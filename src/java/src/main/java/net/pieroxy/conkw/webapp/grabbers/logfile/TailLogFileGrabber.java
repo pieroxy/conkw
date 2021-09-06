@@ -44,7 +44,7 @@ public class TailLogFileGrabber extends AsyncGrabber implements LogListener<LogR
         }
         ResponseData data = new ResponseData(this, System.currentTimeMillis());
         synchronized (accumulator) {
-            accumulator.log("", data.getNum());
+            accumulator.log("", data.getNum(), data.getStr());
             accumulator.reset();
         }
         return data;

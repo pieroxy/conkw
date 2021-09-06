@@ -10,7 +10,8 @@ import java.util.Map;
  * and will then be able to log its data on the PrintStream provided.
  */
 public interface Accumulator<T extends LogRecord> {
-  void add(T line);
+  double add(T line);
+  double getTotal();
   void reset();
-  void log(String prefix, Map<String, Double> num);
+  void log(String prefix, Map<String, Double> num, Map<String, String> str);
 }

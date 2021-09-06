@@ -6,6 +6,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class MultiAccumulator<T extends LogRecord> implements Accumulator<T> {
   public static final String NAME = "multi";
@@ -27,8 +28,17 @@ public class MultiAccumulator<T extends LogRecord> implements Accumulator<T> {
   }
 
   @Override
-  public void add(T line) {
-    for (Accumulator<T> acc : accumulators) acc.add(line);
+  public double add(T line) {
+    double d = 0;
+    for (Accumulator<T> acc : accumulators) d+=acc.add(line);
+    return d;
+  }
+
+  @Override
+  public double getTotal() {
+    double d = 0;
+    for (Accumulator<T> acc : accumulators) d+=acc.getTotal();
+    return d;
   }
 
   @Override
@@ -37,7 +47,7 @@ public class MultiAccumulator<T extends LogRecord> implements Accumulator<T> {
   }
 
   @Override
-  public void log(String prefix, Map<String, Double> num) {
-    for (Accumulator<T> acc : accumulators) acc.log(prefix, num);
+  public void log(String prefix, Map<String, Double> num, Map<String, String> str) {
+    for (Accumulator<T> acc : accumulators) acc.log(prefix, num, str);
   }
 }

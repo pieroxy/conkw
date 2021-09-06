@@ -1,13 +1,11 @@
 package net.pieroxy.conkw.webapp.grabbers.logfile.accumulators;
 
-import junit.framework.TestCase;
 import net.pieroxy.conkw.ConkwTestCase;
 import net.pieroxy.conkw.webapp.grabbers.logfile.LogRecord;
 import net.pieroxy.conkw.webapp.grabbers.logfile.accumulators.implementations.SimpleCounter;
 import net.pieroxy.conkw.webapp.grabbers.logfile.accumulators.implementations.StringKeyAccumulator;
 import net.pieroxy.conkw.webapp.grabbers.logfile.accumulators.implementations.SumAccumulator;
 import net.pieroxy.conkw.webapp.grabbers.logfile.parsers.GenericLogRecord;
-import net.pieroxy.conkw.webapp.servlets.HttpLogEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,11 +22,11 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         a.add(lr);
         a.add(lr);
         Map<String, Double> result = new HashMap<>();
-        a.log("", result);
+        a.log("", result, new HashMap<>());
         assertMapContains(result, "aa.sum", 68d);
         lr = new GenericLogRecord("test").addValue("size", 33d).addValue("ab", 34d);
         a.add(lr);
-        a.log("", result);
+        a.log("", result, new HashMap<>());
         assertEquals(1068d, result.get("aa.sum"));
     }
 
@@ -40,7 +38,7 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         LogRecord lr = new GenericLogRecord("test").addValue("size", 33d).addValue("aa", 34d);
         a.add(lr);
         Map<String, Double> result = new HashMap<>();
-        a.log("", result);
+        a.log("", result, new HashMap<>());
         assertEquals(1d, result.get("count"));
     }
 
@@ -60,7 +58,7 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         a.add(lr);
         a.add(lr);
         Map<String, Double> result = new HashMap<>();
-        a.log("", result);
+        a.log("", result, new HashMap<>());
         assertMapContains(result, "toto.count", 4d);
     }
 
@@ -82,7 +80,7 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         a.add(lr);
         a.add(lr);
         Map<String, Double> result = new HashMap<>();
-        a.log("", result);
+        a.log("", result, new HashMap<>());
         assertMapContains(result, "count", 4d);
         assertMapContains(result, "aa.sum", 34*4d);
     }
@@ -104,7 +102,7 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         a.add(lr);
         a.add(lr);
         Map<String, Double> result = new HashMap<>();
-        a.log("", result);
+        a.log("", result, new HashMap<>());
         assertMapContains(result, "null.count", 4d);
         assertMapContains(result, "bleh.count", 2d);
     }

@@ -62,6 +62,13 @@
             <br>Requests: <cw-label cw-ns="taillog" cw-value="m:num:si:count"></cw-label>
             <br>Bytes: <cw-label cw-ns="taillog" cw-value="m:num:size:size.sum"></cw-label>
             <br>Time spent: <cw-label cw-ns="taillog" cw-value="m:num::time.sum"></cw-label>ms
+
+            <div id="uri" class="cw-block">
+                <heading>URI - count</heading>
+                <div cw-ns="taillog" cw-multinode-in="m:str::byuri.values" cw-multinode-pattern="#">
+                    <br><cw-label>#</cw-label><gauge cw-ns="taillog" cw-prop-title="m:num:si:byuri.#.count" cw-gauge0="default:m:num::byuri.#.count" cw-min="l:num::0" cw-max="m:num::byuri.total"></gauge>
+                </div>
+            </div>
         </columncontainer>
     </body>
     <script>
