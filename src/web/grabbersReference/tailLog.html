@@ -66,7 +66,13 @@
             <div id="uri" class="cw-block">
                 <heading>URI - count</heading>
                 <div cw-ns="taillog" cw-multinode-in="m:str::byuri.values" cw-multinode-pattern="#">
-                    <br><cw-label>#</cw-label><gauge cw-ns="taillog" cw-prop-title="m:num:si:byuri.#.count" cw-gauge0="default:m:num::byuri.#.count" cw-min="l:num::0" cw-max="m:num::byuri.total"></gauge>
+                    <br><cw-label cw-prop-title="#" style="width:140px">#</cw-label><cw-label cw-ns="taillog" style="width:50px" cw-value="m:num:si:byuri.#.count"></cw-label><gauge cw-ns="taillog" cw-prop-title="m:num:si:byuri.#.count" cw-gauge0="default:m:num::byuri.#.count" cw-min="l:num::0" cw-max="m:num::byuri.total"></gauge>
+                </div>
+            </div>
+            <div id="ct" class="cw-block">
+                <heading>Content-Type - count</heading>
+                <div cw-ns="taillog" cw-multinode-in="m:str::byct.values" cw-multinode-pattern="#">
+                    <br><cw-label cw-prop-title="#" style="width:140px">#</cw-label><cw-label cw-ns="taillog" style="width:50px" cw-value="m:num:si:byct.#.count"></cw-label><gauge cw-ns="taillog" cw-prop-title="m:num:si:byct.#.count" cw-gauge0="default:m:num::byct.#.count" cw-min="l:num::0" cw-max="m:num::byct.total"></gauge>
                 </div>
             </div>
         </columncontainer>
