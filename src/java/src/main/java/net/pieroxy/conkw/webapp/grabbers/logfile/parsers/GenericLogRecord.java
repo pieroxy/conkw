@@ -39,4 +39,9 @@ public class GenericLogRecord implements LogRecord {
         return this;
     }
 
+    public GenericLogRecord addDimension(String valName, String value) {
+        dims.put(valName,value);
+        return this;
+    }
+
 }

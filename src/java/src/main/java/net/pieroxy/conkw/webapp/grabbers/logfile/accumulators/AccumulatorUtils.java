@@ -12,7 +12,7 @@ public class AccumulatorUtils {
         return res.toString();
     }
 
-    private static String cleanMetricPathElement(String s) {
+    public static String cleanMetricPathElement(String s) {
         if (s == null) return "null";
         return s.replaceAll("\\.", "_")
                 .replaceAll(" ", "_")

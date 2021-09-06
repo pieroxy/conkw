@@ -2,6 +2,7 @@ package net.pieroxy.conkw.webapp.grabbers.logfile.accumulators;
 
 import net.pieroxy.conkw.webapp.grabbers.logfile.LogRecord;
 import net.pieroxy.conkw.webapp.grabbers.logfile.accumulators.implementations.SimpleCounter;
+import net.pieroxy.conkw.webapp.grabbers.logfile.accumulators.implementations.StringKeyAccumulator;
 import net.pieroxy.conkw.webapp.grabbers.logfile.accumulators.implementations.SumAccumulator;
 
 import java.lang.reflect.Constructor;
@@ -12,14 +13,13 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 public class AccumulatorExpressionParser {
-    private final static Logger LOGGER = Logger.getLogger(AccumulatorExpressionParser.class.getName());
     private static final Map<String, Class<? extends Accumulator<? extends LogRecord>>> accumulatorsByName = new HashMap();
 
     public Accumulator<LogRecord> parse(String expr) {
         return parseAccumulator(expr, new int[]{0});
     }
 
-    private Accumulator<LogRecord> parseAccumulator(String expr, int[]index) {
+    private AccumulatorProvider<LogRecord> parseAccumulatorProvider(String expr, int[]index) {
         StringBuilder name = new StringBuilder();
         for (int i=index[0] ; i<expr.length() ; i++) {
             char c = expr.charAt(i);
@@ -36,7 +36,17 @@ public class AccumulatorExpressionParser {
         return buildAccumulator(constructor, expr, index);
     }
 
-    private Accumulator<LogRecord> buildAccumulator(TypedConstructor constructor, String expr, int[]index) {
+    private Accumulator<LogRecord> parseAccumulator(String expr, int[]index) {
+        try {
+            return parseAccumulatorProvider(expr, index).getAccumulator();
+        } catch (ParseException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ParseException("Accumulator threw exception during constructor: " + e.getMessage(), expr, index, e);
+        }
+    }
+
+    private AccumulatorProvider<LogRecord> buildAccumulator(TypedConstructor constructor, String expr, int[]index) {
         if (expr.charAt(index[0])!='(') throw new ParseException("Expected '('", expr, index);
         Object[]params = new Object[constructor.params.size()];
         int paramIndex=0;
@@ -49,7 +59,7 @@ public class AccumulatorExpressionParser {
         if (constructor.params.size()==0) index[0]++;
         index[0]++;
         try {
-            return constructor.c.newInstance(params);
+            return () -> constructor.c.newInstance(params);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -64,6 +74,8 @@ public class AccumulatorExpressionParser {
                 return parseString(expr, idx);
             case ACCUMULATOR:
                 return parseAccumulator(expr, idx);
+            case ACCUMULATOR_PROVIDER:
+                return parseAccumulatorProvider(expr, idx);
             case ARRAY_OF_ACCUMULATORS:
                 return parseArray(ParamType.ACCUMULATOR, expr, idx);
             case ARRAY_OF_NUMBERS:
@@ -182,6 +194,7 @@ public class AccumulatorExpressionParser {
             if (type.equals(Double.TYPE)) return ParamType.NUMBER;
             if (type.equals(String.class)) return ParamType.STRING;
             if (type.equals(Accumulator.class)) return ParamType.ACCUMULATOR;
+            if (type.equals(AccumulatorProvider.class)) return ParamType.ACCUMULATOR_PROVIDER;
         }
         throw new RuntimeException("Unsupported constructor type: " + type.getName());
     }
@@ -201,6 +214,7 @@ public class AccumulatorExpressionParser {
         register(SimpleCounter.class);
         register(MultiAccumulator.class);
         register(NamedAccumulator.class);
+        register(StringKeyAccumulator.class);
     }
 }
 
@@ -208,6 +222,7 @@ enum ParamType {
     STRING,
     NUMBER,
     ACCUMULATOR,
+    ACCUMULATOR_PROVIDER,
     ARRAY_OF_ACCUMULATORS,
     ARRAY_OF_NUMBERS
 }
@@ -218,12 +233,18 @@ class TypedConstructor {
 }
 
 class ParseException extends RuntimeException {
-    private String message;
+    private String originalMessage;
     private int position;
 
     public ParseException(String msg, String expr, int[]index) {
         super(getMessage(msg, expr, index));
-        message = msg;
+        originalMessage = msg;
+        position = index[0];
+    }
+
+    public ParseException(String msg, String expr, int[] index, Exception e) {
+        super(getMessage(msg, expr, index), e);
+        originalMessage = msg;
         position = index[0];
     }
 
@@ -239,9 +260,8 @@ class ParseException extends RuntimeException {
         return sb.append("^").toString();
     }
 
-    @Override
-    public String getMessage() {
-        return message;
+    public String getOriginalMessage() {
+        return originalMessage;
     }
 
     public int getPosition() {

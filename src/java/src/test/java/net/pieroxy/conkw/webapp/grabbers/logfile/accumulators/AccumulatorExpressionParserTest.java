@@ -4,8 +4,10 @@ import junit.framework.TestCase;
 import net.pieroxy.conkw.ConkwTestCase;
 import net.pieroxy.conkw.webapp.grabbers.logfile.LogRecord;
 import net.pieroxy.conkw.webapp.grabbers.logfile.accumulators.implementations.SimpleCounter;
+import net.pieroxy.conkw.webapp.grabbers.logfile.accumulators.implementations.StringKeyAccumulator;
 import net.pieroxy.conkw.webapp.grabbers.logfile.accumulators.implementations.SumAccumulator;
 import net.pieroxy.conkw.webapp.grabbers.logfile.parsers.GenericLogRecord;
+import net.pieroxy.conkw.webapp.servlets.HttpLogEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -83,6 +85,28 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         a.log("", result);
         assertMapContains(result, "count", 4d);
         assertMapContains(result, "aa.sum", 34*4d);
+    }
+
+    public void testStringKey() {
+        Accumulator a = new AccumulatorExpressionParser().parse("skey(uri,count())");
+        assertNotNull(a);
+        assertEquals(StringKeyAccumulator.class, a.getClass());
+
+        StringKeyAccumulator na = (StringKeyAccumulator)a;
+        assertEquals("uri", na.getDimensionName());
+
+        LogRecord lr = new GenericLogRecord("test").addValue("size", 33d).addValue("aa", 34d);
+        a.add(lr);
+        a.add(lr);
+        a.add(lr);
+        a.add(lr);
+        lr = new GenericLogRecord("test").addValue("size", 33d).addValue("aa", 34d).addDimension("uri", "bleh");
+        a.add(lr);
+        a.add(lr);
+        Map<String, Double> result = new HashMap<>();
+        a.log("", result);
+        assertMapContains(result, "null.count", 4d);
+        assertMapContains(result, "bleh.count", 2d);
     }
 
     // TODO Needs some more cases
