@@ -7,7 +7,7 @@ import java.util.Map;
 public abstract class ConkwTestCase extends TestCase {
     public void assertMapContains(Map<?,?> data, Object key, Object value) {
         if (data.containsKey(key)) {
-            assertEquals(value, data.get(key));
+            assertEquals("Looking for key " + key, value, data.get(key));
         } else {
             String msg = "Key '"+key+"' not found. Keys in the map["+data.size()+"]: ";
             for (Object o : data.keySet()) {
