@@ -105,9 +105,9 @@
             var i;
 
             for (i=0 ; i<10 ; i++) if (Math.random()>0.9) get("/");
-            for (i=0 ; i<10 ; i++) if (Math.random()>0.9) get("/ui");
+            for (i=0 ; i<10 ; i++) if (Math.random()>0.8) get("/ui");
             for (i=0 ; i<10 ; i++) if (Math.random()>0.5) get("/images/medium_logo_transparent_50prc.png");
-            for (i=0 ; i<10 ; i++) if (Math.random()>0.5) get("/js/polyfills.js");
+            for (i=0 ; i<10 ; i++) if (Math.random()>0.4) get("/js/polyfills.js");
         }
 
         function get(uri) {
