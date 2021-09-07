@@ -135,6 +135,37 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         assertMapContains(num, "others.count", 3d);
     }
 
+    public void testSimpleLog10Histogram() {
+        Accumulator a = new AccumulatorExpressionParser().parse("log10hist(size,3000)");
+        assertNotNull(a);
+        assertEquals(SimpleLog10Histogram.class, a.getClass());
+
+        SimpleLog10Histogram na = (SimpleLog10Histogram)a;
+        assertEquals(4, na.getThresholds().size());
+        assertEquals("size", na.getValueKey());
+
+        LogRecord lr = new GenericLogRecord("test").addValue("size", 0.5);
+        for (int i=0 ; i<10 ; i++) a.add(lr);
+        lr = new GenericLogRecord("test").addValue("size", 0.7);
+        for (int i=0 ; i<9 ; i++) a.add(lr);
+        lr = new GenericLogRecord("test").addValue("size", 55);
+        for (int i=0 ; i<8 ; i++) a.add(lr);
+        lr = new GenericLogRecord("test").addValue("size", 155);
+        for (int i=0 ; i<7 ; i++) a.add(lr);
+        lr = new GenericLogRecord("test").addValue("size", 1055);
+        for (int i=0 ; i<6 ; i++) a.add(lr);
+        lr = new GenericLogRecord("test").addValue("size", 100);
+        for (int i=0 ; i<4 ; i++) a.add(lr);
+        Map<String, Double> num = new HashMap<>();
+        Map<String, Double> str = new HashMap<>();
+        a.log("", num, str);
+        assertMapContains(num, "1_0.histValue", 19d);
+        assertMapContains(num, "100_0.histValue", 12d);
+        assertMapContains(num, "1000_0.histValue", 7d);
+        assertMapContains(num, "above.histValue", 6d);
+        assertNull(num.get("10_0.histValue"));
+    }
+
     // TODO Needs some more cases
     public void testParsingErrors() {
         assertThrows(
