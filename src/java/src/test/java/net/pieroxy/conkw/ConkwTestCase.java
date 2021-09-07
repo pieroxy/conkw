@@ -9,7 +9,7 @@ public abstract class ConkwTestCase extends TestCase {
         if (data.containsKey(key)) {
             assertEquals(value, data.get(key));
         } else {
-            String msg = "Key '"+key+"' not found. Keys in the map: ";
+            String msg = "Key '"+key+"' not found. Keys in the map["+data.size()+"]: ";
             for (Object o : data.keySet()) {
                 msg += "'" + o + "' ";
             }

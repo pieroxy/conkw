@@ -2,9 +2,7 @@ package net.pieroxy.conkw.webapp.grabbers.logfile.accumulators;
 
 import net.pieroxy.conkw.ConkwTestCase;
 import net.pieroxy.conkw.webapp.grabbers.logfile.LogRecord;
-import net.pieroxy.conkw.webapp.grabbers.logfile.accumulators.implementations.SimpleCounter;
-import net.pieroxy.conkw.webapp.grabbers.logfile.accumulators.implementations.StringKeyAccumulator;
-import net.pieroxy.conkw.webapp.grabbers.logfile.accumulators.implementations.SumAccumulator;
+import net.pieroxy.conkw.webapp.grabbers.logfile.accumulators.implementations.*;
 import net.pieroxy.conkw.webapp.grabbers.logfile.parsers.GenericLogRecord;
 
 import java.util.HashMap;
@@ -86,7 +84,7 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
     }
 
     public void testStringKey() {
-        Accumulator a = new AccumulatorExpressionParser().parse("skey(uri,count())");
+        Accumulator a = new AccumulatorExpressionParser().parse("stringkey(uri,count())");
         assertNotNull(a);
         assertEquals(StringKeyAccumulator.class, a.getClass());
 
@@ -101,10 +99,40 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         lr = new GenericLogRecord("test").addValue("size", 33d).addValue("aa", 34d).addDimension("uri", "bleh");
         a.add(lr);
         a.add(lr);
-        Map<String, Double> result = new HashMap<>();
-        a.log("", result, new HashMap<>());
-        assertMapContains(result, "null.count", 4d);
-        assertMapContains(result, "bleh.count", 2d);
+        Map<String, Double> num = new HashMap<>();
+        Map<String, String> str = new HashMap<>();
+        a.log("", num, str);
+        assertMapContains(num, "null.count", 4d);
+        assertMapContains(num, "bleh.count", 2d);
+        assertMapContains(str, "values", "null,bleh");
+    }
+
+    public void testStableKey() {
+        Accumulator a = new AccumulatorExpressionParser().parse("stablekey(uri,count(),3)");
+        assertNotNull(a);
+        assertEquals(StableKeyAccumulator.class, a.getClass());
+
+        StableKeyAccumulator na = (StableKeyAccumulator)a;
+        assertEquals("uri", na.getDimensionName());
+        assertEquals(3, (int)na.getMaxBuckets());
+
+        LogRecord lr = new GenericLogRecord("test").addDimension("uri", "a");
+        for (int i=0 ; i<10 ; i++) a.add(lr);
+        lr = new GenericLogRecord("test").addDimension("uri", "bleh");
+        for (int i=0 ; i<7 ; i++) a.add(lr);
+        lr = new GenericLogRecord("test").addDimension("uri", "bluh");
+        for (int i=0 ; i<2 ; i++) a.add(lr);
+        lr = new GenericLogRecord("test").addDimension("uri", "blih");
+        for (int i=0 ; i<1 ; i++) a.add(lr);
+        lr = new GenericLogRecord("test").addDimension("uri", "blyh");
+        for (int i=0 ; i<70 ; i++) a.add(lr);
+        Map<String, Double> num = new HashMap<>();
+        Map<String, Double> str = new HashMap<>();
+        a.log("", num, str);
+        assertMapContains(str, "values", "blyh,a,bleh,others");
+        assertMapContains(num, "a.count", 10d);
+        assertMapContains(num, "bleh.count", 7d);
+        assertMapContains(num, "others.count", 3d);
     }
 
     // TODO Needs some more cases

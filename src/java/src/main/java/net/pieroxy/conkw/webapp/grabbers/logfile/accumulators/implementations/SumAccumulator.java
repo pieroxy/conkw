@@ -27,6 +27,11 @@ public class SumAccumulator<T extends LogRecord> implements Accumulator<T> {
   }
 
   @Override
+  public void sumWith(Accumulator acc) {
+    value += ((SumAccumulator)acc).value;
+  }
+
+  @Override
   public double getTotal() {
     return value;
   }

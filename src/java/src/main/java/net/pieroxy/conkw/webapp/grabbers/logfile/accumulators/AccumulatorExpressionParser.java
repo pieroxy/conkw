@@ -1,16 +1,13 @@
 package net.pieroxy.conkw.webapp.grabbers.logfile.accumulators;
 
 import net.pieroxy.conkw.webapp.grabbers.logfile.LogRecord;
-import net.pieroxy.conkw.webapp.grabbers.logfile.accumulators.implementations.SimpleCounter;
-import net.pieroxy.conkw.webapp.grabbers.logfile.accumulators.implementations.StringKeyAccumulator;
-import net.pieroxy.conkw.webapp.grabbers.logfile.accumulators.implementations.SumAccumulator;
+import net.pieroxy.conkw.webapp.grabbers.logfile.accumulators.implementations.*;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 public class AccumulatorExpressionParser {
     private static final Map<String, Class<? extends Accumulator<? extends LogRecord>>> accumulatorsByName = new HashMap();
@@ -215,6 +212,7 @@ public class AccumulatorExpressionParser {
         register(MultiAccumulator.class);
         register(NamedAccumulator.class);
         register(StringKeyAccumulator.class);
+        register(StableKeyAccumulator.class);
     }
 }
 

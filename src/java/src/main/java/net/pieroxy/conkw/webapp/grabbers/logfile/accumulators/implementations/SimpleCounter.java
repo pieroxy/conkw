@@ -22,6 +22,11 @@ public class SimpleCounter<T extends LogRecord> implements Accumulator<T> {
   }
 
   @Override
+  public void sumWith(Accumulator acc) {
+    count += ((SimpleCounter)acc).count;
+  }
+
+  @Override
   public double getTotal() {
     return count;
   }

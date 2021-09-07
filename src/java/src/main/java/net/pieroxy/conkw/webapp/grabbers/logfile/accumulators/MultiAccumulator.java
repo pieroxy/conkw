@@ -35,6 +35,15 @@ public class MultiAccumulator<T extends LogRecord> implements Accumulator<T> {
   }
 
   @Override
+  public void sumWith(Accumulator acc) {
+    MultiAccumulator<T> ma = (MultiAccumulator<T>) acc;
+    if (ma.getLength()!=getLength()) throw new ClassCastException("Trying to sum two different MultiAccumulators");
+    for (int i=0 ; i<getLength() ; i++) {
+      getAccumulator(i).sumWith(ma.getAccumulator(i));
+    };
+  }
+
+  @Override
   public double getTotal() {
     double d = 0;
     for (Accumulator<T> acc : accumulators) d+=acc.getTotal();

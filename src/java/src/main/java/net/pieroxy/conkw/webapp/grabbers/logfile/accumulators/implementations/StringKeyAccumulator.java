@@ -6,8 +6,7 @@ import net.pieroxy.conkw.webapp.grabbers.logfile.accumulators.AccumulatorUtils;
 import net.pieroxy.conkw.webapp.grabbers.logfile.accumulators.KeyAccumulator;
 
 public class StringKeyAccumulator<T extends LogRecord> extends KeyAccumulator<String, T> {
-  public static final String NAME = "skey";
-
+  public static final String NAME = "stringkey";
 
   public interface StringProvider<T> {
     String getValue(T t);

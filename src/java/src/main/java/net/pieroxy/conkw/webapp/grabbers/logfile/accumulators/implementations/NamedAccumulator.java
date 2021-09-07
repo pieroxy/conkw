@@ -1,6 +1,8 @@
-package net.pieroxy.conkw.webapp.grabbers.logfile.accumulators;
+package net.pieroxy.conkw.webapp.grabbers.logfile.accumulators.implementations;
 
 import net.pieroxy.conkw.webapp.grabbers.logfile.LogRecord;
+import net.pieroxy.conkw.webapp.grabbers.logfile.accumulators.Accumulator;
+import net.pieroxy.conkw.webapp.grabbers.logfile.accumulators.AccumulatorUtils;
 
 import java.util.Map;
 
@@ -26,6 +28,11 @@ public class NamedAccumulator<T extends LogRecord> implements Accumulator<T> {
   @Override
   public synchronized double add(T line) {
     return accumulator.add(line);
+  }
+
+  @Override
+  public void sumWith(Accumulator acc) {
+    accumulator.sumWith(((NamedAccumulator)acc).getAccumulator());
   }
 
   @Override
