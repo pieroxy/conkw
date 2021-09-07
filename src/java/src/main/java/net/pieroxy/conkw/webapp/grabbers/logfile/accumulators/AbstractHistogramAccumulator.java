@@ -48,12 +48,14 @@ public abstract class AbstractHistogramAccumulator<T extends LogRecord> implemen
 
     @Override
     public void reset() {
+        if (histogram == null) histogram = new double[getThresholds().size()+1];
         globalSum = globalCount = 0;
         for (int i=0 ; i<histogram.length ; i++) histogram[i]=0;
     }
 
     @Override
     public void log(String prefix, Map<String, Double> num, Map<String, String> str) {
+        if (histogram == null) histogram = new double[getThresholds().size()+1];
         num.put(AccumulatorUtils.addToMetricName(prefix, "total"), globalSum);
         num.put(AccumulatorUtils.addToMetricName(prefix, "count"), globalCount);
 
@@ -61,14 +63,18 @@ public abstract class AbstractHistogramAccumulator<T extends LogRecord> implemen
             num.put(AccumulatorUtils.addToMetricName(prefix, "avg"), globalSum/globalCount);
 
         List<Double> thresholds = getThresholds();
+        StringBuilder dims = new StringBuilder();
         for (int i=0 ; i<histogram.length ; i++) {
             double current = histogram[i];
-            if (current!=0) {
-                if (i==histogram.length-1)
-                    num.put(AccumulatorUtils.addToMetricName(prefix, "above", "histValue"), current);
-                else
-                    num.put(AccumulatorUtils.addToMetricName(prefix, String.valueOf(thresholds.get(i)), "histValue"), current);
+            if (i>0) dims.append(",");
+            if (i==histogram.length-1) {
+                num.put(AccumulatorUtils.addToMetricName(prefix, "above", "histValue"), current);
+                dims.append(AccumulatorUtils.cleanMetricPathElement("above"));
+            } else {
+                num.put(AccumulatorUtils.addToMetricName(prefix, String.valueOf(thresholds.get(i)), "histValue"), current);
+                dims.append(AccumulatorUtils.cleanMetricPathElement(String.valueOf(thresholds.get(i))));
             }
         }
+        str.put(AccumulatorUtils.addToMetricName(prefix, "histValues"), dims.toString());
     }
 }
