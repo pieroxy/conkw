@@ -159,12 +159,12 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         Map<String, Double> num = new HashMap<>();
         Map<String, Double> str = new HashMap<>();
         a.log("", num, str);
-        assertMapContains(num, "1_0.histValue", 19d);
-        assertMapContains(num, "10_0.histValue", 0d);
-        assertMapContains(num, "100_0.histValue", 12d);
-        assertMapContains(num, "1000_0.histValue", 7d);
+        assertMapContains(num, "1_d0.histValue", 19d);
+        assertMapContains(num, "10_d0.histValue", 0d);
+        assertMapContains(num, "100_d0.histValue", 12d);
+        assertMapContains(num, "1000_d0.histValue", 7d);
         assertMapContains(num, "above.histValue", 6d);
-        assertMapContains(str, "histValues", "1_0,10_0,100_0,1000_0,above");
+        assertMapContains(str, "histValues", "1_d0,10_d0,100_d0,1000_d0,above");
     }
 
     // TODO Needs some more cases

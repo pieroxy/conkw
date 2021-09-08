@@ -14,9 +14,9 @@ public class AccumulatorUtils {
 
     public static String cleanMetricPathElement(String s) {
         if (s == null) return "null";
-        return s.replaceAll("\\.", "_")
-                .replaceAll(" ", "_")
-                .replaceAll("=", "-")
-                .replaceAll("\"", "'");
+        return s.replaceAll("_", "__")
+                .replaceAll(",", "_c")
+                .replaceAll("\\.", "_d")
+                ;
     }
 }
