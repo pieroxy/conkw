@@ -59,9 +59,10 @@
                 Status: <span id="gts">No traffic</span>
             </div>
 
-            <br>Requests: <cw-label cw-ns="taillog" cw-value="m:num:si:count"></cw-label>
-            <br>Bytes: <cw-label cw-ns="taillog" cw-value="m:num:size:size.sum"></cw-label>
-            <br>Time spent: <cw-label cw-ns="taillog" cw-value="m:num::time.sum"></cw-label>ms
+            <br>Number of requests: <cw-label cw-ns="taillog" cw-value="m:num:si:count"></cw-label>
+            <br>Total size out: <cw-label cw-ns="taillog" cw-value="m:num:size:size.sum"></cw-label>
+            <br>Average size: <cw-label cw-ns="taillog" cw-value="m:num:size:sizehist.avg"></cw-label>
+            <br>Total time spent: <cw-label cw-ns="taillog" cw-value="m:num::time.sum"></cw-label>ms
 
             <div id="uri" class="cw-block">
                 <heading>URI - count</heading>
