@@ -752,6 +752,9 @@ ConkW.extractFormattedValue = function(valueexpr, data) {
         case "str":
             if (valueexpr.format.startsWith("fixedlen."))
                 return this.toFixedLength(value, valueexpr.format.split(".")[1] - 0);
+            else if (valueexpr.format === "histogramBucket") {
+                return this.toHistogramBucket(value);
+            }
             return "" + value;
         case "num":
             value = value - 0;
@@ -764,6 +767,16 @@ ConkW.toFixedLength = function(value, chars) {
     if (value.length > chars) value = value.substring(0, chars);
     while (value.length < chars) value = " " + value;
     return value;
+}
+
+ConkW.rebuildDimValue = function(value) {
+    return value.replaceAll("__", "_").replaceAll("_d",".").replaceAll("_c",",");
+}
+
+ConkW.toHistogramBucket = function(value) {
+    value = this.rebuildDimValue(value);
+    if (value == "above") return "above";
+    return "&lt; "+this.getSI(value-0);
 }
 
 
