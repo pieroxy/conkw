@@ -213,7 +213,7 @@ public class AccumulatorExpressionParser {
         register(NamedAccumulator.class);
         register(StringKeyAccumulator.class);
         register(StableKeyAccumulator.class);
-        register(SimpleLog10Histogram.class);
+        register(SimpleLogHistogram.class);
     }
 }
 

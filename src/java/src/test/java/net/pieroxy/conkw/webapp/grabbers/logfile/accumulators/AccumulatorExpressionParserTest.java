@@ -136,11 +136,11 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
     }
 
     public void testSimpleLog10Histogram() {
-        Accumulator a = new AccumulatorExpressionParser().parse("log10hist(size,3000)");
+        Accumulator a = new AccumulatorExpressionParser().parse("loghist(size,10,3000)");
         assertNotNull(a);
-        assertEquals(SimpleLog10Histogram.class, a.getClass());
+        assertEquals(SimpleLogHistogram.class, a.getClass());
 
-        SimpleLog10Histogram na = (SimpleLog10Histogram)a;
+        SimpleLogHistogram na = (SimpleLogHistogram)a;
         assertEquals(4, na.getThresholds().size());
         assertEquals("size", na.getValueKey());
 

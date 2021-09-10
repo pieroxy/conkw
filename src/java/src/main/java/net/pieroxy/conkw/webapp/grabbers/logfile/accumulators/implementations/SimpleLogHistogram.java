@@ -8,21 +8,23 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SimpleLog10Histogram extends AbstractHistogramAccumulator {
-    public static final String NAME = "log10hist";
+public class SimpleLogHistogram extends AbstractHistogramAccumulator {
+    public static final String NAME = "loghist";
 
 
     private final List<Double> thresholds;
     private String valueKey;
+    private double base;
 
-    public SimpleLog10Histogram(String valueKey, double max) {
+    public SimpleLogHistogram(String valueKey, double base, double max) {
         this.valueKey = valueKey;
+        this.base = base;
         double t = 1;
         max = Math.abs(max);
         thresholds = new ArrayList<>();
         while (t < max) {
             thresholds.add(t);
-            t*=10;
+            t*=base;
         }
     }
 
