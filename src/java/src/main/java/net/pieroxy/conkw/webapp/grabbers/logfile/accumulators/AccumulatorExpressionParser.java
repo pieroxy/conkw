@@ -214,6 +214,7 @@ public class AccumulatorExpressionParser {
         register(StringKeyAccumulator.class);
         register(StableKeyAccumulator.class);
         register(SimpleLogHistogram.class);
+        register(Simple125Histogram.class);
     }
 }
 

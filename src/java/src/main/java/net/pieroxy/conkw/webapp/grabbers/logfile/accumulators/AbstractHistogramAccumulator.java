@@ -21,7 +21,8 @@ public abstract class AbstractHistogramAccumulator<T extends LogRecord> implemen
     @Override
     public double add(T line) {
         if (histogram == null) histogram = new double[getThresholds().size()+1];
-        double value = getValue(line);
+        Double value = getValue(line);
+        if (value == null) return -1;
 
         globalCount++;
         globalSum += value;

@@ -217,7 +217,7 @@
       "parameters": {
         "filename":"$HTTPLOGFILE",
         "parserClassName":"net.pieroxy.conkw.webapp.grabbers.logfile.parsers.HttpLogFileParser",
-        "accumulators":"multi([name(sizehist,loghist(size,10,1000000)),name(byct,stablekey(contentType,count(),3)),name(byuri,stablekey(uri,count(),3)),sum(size,0),count(),sum(time,0)])"
+        "accumulators":"multi([name(sizehist,log125hist(size,1000,1000000)),name(byct,stablekey(contentType,count(),3)),name(byuri,stablekey(uri,count(),3)),sum(size,0),count(),sum(time,0)])"
       }
     }
    //END OF GRABBERS
