@@ -14,13 +14,10 @@ import java.util.logging.Logger;
 public class TailLogFileGrabber extends AsyncGrabber implements LogListener<LogRecord> {
     private final static Logger LOGGER = Logger.getLogger(TailLogFileGrabber.class.getName());
 
-
     private String filename;
     private String parserClassName;
     private RealTimeLogFileReader reader;
-    private Map<String, Set<String>> dimValues = new HashMap<>();
     private Accumulator<LogRecord> accumulator;
-
 
     @Override
     public void disposeSync() {
