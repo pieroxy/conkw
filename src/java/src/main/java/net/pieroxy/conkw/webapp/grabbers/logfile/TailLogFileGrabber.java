@@ -1,8 +1,8 @@
 package net.pieroxy.conkw.webapp.grabbers.logfile;
 
-import net.pieroxy.conkw.webapp.grabbers.AsyncGrabber;
 import net.pieroxy.conkw.accumulators.Accumulator;
-import net.pieroxy.conkw.accumulators.AccumulatorExpressionParser;
+import net.pieroxy.conkw.accumulators.parser.AccumulatorExpressionParser;
+import net.pieroxy.conkw.webapp.grabbers.AsyncGrabber;
 import net.pieroxy.conkw.webapp.grabbers.logfile.listeners.LogListener;
 import net.pieroxy.conkw.webapp.grabbers.logfile.listeners.LogParser;
 import net.pieroxy.conkw.webapp.model.ResponseData;

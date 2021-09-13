@@ -1,7 +1,8 @@
-package net.pieroxy.conkw.accumulators;
+package net.pieroxy.conkw.accumulators.parser;
 
-import net.pieroxy.conkw.webapp.grabbers.logfile.LogRecord;
+import net.pieroxy.conkw.accumulators.*;
 import net.pieroxy.conkw.accumulators.implementations.*;
+import net.pieroxy.conkw.webapp.grabbers.logfile.LogRecord;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -218,53 +219,3 @@ public class AccumulatorExpressionParser {
     }
 }
 
-enum ParamType {
-    STRING,
-    NUMBER,
-    ACCUMULATOR,
-    ACCUMULATOR_PROVIDER,
-    ARRAY_OF_ACCUMULATORS,
-    ARRAY_OF_NUMBERS
-}
-
-class TypedConstructor {
-    List<ParamType> params;
-    Constructor<Accumulator<LogRecord>> c;
-}
-
-class ParseException extends RuntimeException {
-    private String originalMessage;
-    private int position;
-
-    public ParseException(String msg, String expr, int[]index) {
-        super(getMessage(msg, expr, index));
-        originalMessage = msg;
-        position = index[0];
-    }
-
-    public ParseException(String msg, String expr, int[] index, Exception e) {
-        super(getMessage(msg, expr, index), e);
-        originalMessage = msg;
-        position = index[0];
-    }
-
-    static String getMessage(String msg, String expr, int[]index) {
-        return msg + "\r\n" + expr + "\r\n" + getIndexStr(index[0]) + (index[0]<expr.length() ? ("  : " + expr.charAt(index[0])):"");
-    }
-
-    private static String getIndexStr(int index) {
-        StringBuilder sb = new StringBuilder(index+1);
-        while (index-->0) {
-            sb.append("-");
-        }
-        return sb.append("^").toString();
-    }
-
-    public String getOriginalMessage() {
-        return originalMessage;
-    }
-
-    public int getPosition() {
-        return position;
-    }
-}
