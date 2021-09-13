@@ -169,6 +169,85 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         assertMapContains(str, "histValues", "1_d0,10_d0,100_d0,1000_d0,above");
     }
 
+    public void testSimpleLog2Histogram() {
+        Accumulator a = new AccumulatorExpressionParser().parse("loghist(size,2,3000)");
+        assertNotNull(a);
+        assertEquals(SimpleLogHistogram.class, a.getClass());
+
+        SimpleLogHistogram na = (SimpleLogHistogram)a;
+        assertEquals(12, na.getThresholds().size());
+        assertEquals("size", na.getValueKey());
+
+        LogRecord lr = new GenericLogRecord("test").addValue("size", 0.5);
+        for (int i=0 ; i<10 ; i++) a.add(lr);
+        lr = new GenericLogRecord("test").addValue("size", 0.7);
+        for (int i=0 ; i<9 ; i++) a.add(lr);
+        lr = new GenericLogRecord("test").addValue("size", 55);
+        for (int i=0 ; i<8 ; i++) a.add(lr);
+        lr = new GenericLogRecord("test").addValue("size", 155);
+        for (int i=0 ; i<7 ; i++) a.add(lr);
+        lr = new GenericLogRecord("test").addValue("size", 1055);
+        for (int i=0 ; i<6 ; i++) a.add(lr);
+        lr = new GenericLogRecord("test").addValue("size", 100);
+        for (int i=0 ; i<4 ; i++) a.add(lr);
+        lr = new GenericLogRecord("test").addValue("size", 2500);
+        for (int i=0 ; i<1 ; i++) a.add(lr);
+        Map<String, Double> num = new HashMap<>();
+        Map<String, Double> str = new HashMap<>();
+        a.log("", num, str);
+        assertMapContains(num, "1_d0.histValue", 19d);
+        assertMapContains(num, "2_d0.histValue", 0d);
+        assertMapContains(num, "4_d0.histValue", 0d);
+        assertMapContains(num, "8_d0.histValue", 0d);
+        assertMapContains(num, "16_d0.histValue", 0d);
+        assertMapContains(num, "32_d0.histValue", 0d);
+        assertMapContains(num, "64_d0.histValue", 8d);
+        assertMapContains(num, "128_d0.histValue", 4d);
+        assertMapContains(num, "256_d0.histValue", 7d);
+        assertMapContains(num, "512_d0.histValue", 0d);
+        assertMapContains(num, "1024_d0.histValue", 0d);
+        assertMapContains(num, "2048_d0.histValue", 6d);
+        assertMapContains(num, "above.histValue", 1d);
+        assertMapContains(str, "histValues", "1_d0,2_d0,4_d0,8_d0,16_d0,32_d0,64_d0,128_d0,256_d0,512_d0,1024_d0,2048_d0,above");
+    }
+
+    public void testSimpleLog125Histogram() {
+        Accumulator a = new AccumulatorExpressionParser().parse("log125hist(size,10,500)");
+        assertNotNull(a);
+        assertEquals(Simple125Histogram.class, a.getClass());
+
+        Simple125Histogram na = (Simple125Histogram)a;
+        assertEquals(6, na.getThresholds().size());
+        assertEquals("size", na.getValueKey());
+
+        LogRecord lr = new GenericLogRecord("test").addValue("size", 0.5);
+        for (int i=0 ; i<10 ; i++) a.add(lr);
+        lr = new GenericLogRecord("test").addValue("size", 0.7);
+        for (int i=0 ; i<9 ; i++) a.add(lr);
+        lr = new GenericLogRecord("test").addValue("size", 55);
+        for (int i=0 ; i<8 ; i++) a.add(lr);
+        lr = new GenericLogRecord("test").addValue("size", 155);
+        for (int i=0 ; i<7 ; i++) a.add(lr);
+        lr = new GenericLogRecord("test").addValue("size", 1055);
+        for (int i=0 ; i<6 ; i++) a.add(lr);
+        lr = new GenericLogRecord("test").addValue("size", 100);
+        for (int i=0 ; i<4 ; i++) a.add(lr);
+        Map<String, Double> num = new HashMap<>();
+        Map<String, Double> str = new HashMap<>();
+        a.log("", num, str);
+        assertMapContains(num, "10_d0.histValue", 19d);
+        assertMapContains(num, "20_d0.histValue", 0d);
+        assertMapContains(num, "50_d0.histValue", 0d);
+        assertMapContains(num, "100_d0.histValue", 12d);
+        assertMapContains(num, "200_d0.histValue", 7d);
+        assertMapContains(num, "500_d0.histValue", 0d);
+        assertMapContains(num, "above.histValue", 6d);
+        assertMapContains(num, "count", 44d);
+        assertMapContains(num, "total", 8266.3d);
+        assertMapContains(num, "avg", 8266.3d/44);
+        assertMapContains(str, "histValues", "10_d0,20_d0,50_d0,100_d0,200_d0,500_d0,above");
+    }
+
     // TODO Needs some more cases
     public void testParsingErrors() {
         assertThrows(

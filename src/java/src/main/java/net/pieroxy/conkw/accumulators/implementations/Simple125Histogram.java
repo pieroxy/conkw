@@ -61,4 +61,8 @@ public class Simple125Histogram extends AbstractHistogramAccumulator {
   public void sumWith(Accumulator acc) {
     throw new NotImplementedException();
   }
+
+  public String getValueKey() {
+    return valueKey;
+  }
 }
