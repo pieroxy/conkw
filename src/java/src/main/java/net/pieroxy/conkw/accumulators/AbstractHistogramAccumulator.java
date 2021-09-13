@@ -1,4 +1,4 @@
-package net.pieroxy.conkw.webapp.grabbers.logfile.accumulators;
+package net.pieroxy.conkw.accumulators;
 
 import net.pieroxy.conkw.webapp.grabbers.logfile.LogRecord;
 

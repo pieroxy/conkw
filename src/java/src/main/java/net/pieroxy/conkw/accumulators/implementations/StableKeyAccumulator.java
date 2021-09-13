@@ -1,6 +1,6 @@
-package net.pieroxy.conkw.webapp.grabbers.logfile.accumulators.implementations;
+package net.pieroxy.conkw.accumulators.implementations;
 
-import net.pieroxy.conkw.webapp.grabbers.logfile.accumulators.AccumulatorProvider;
+import net.pieroxy.conkw.accumulators.AccumulatorProvider;
 
 public class StableKeyAccumulator extends StringKeyAccumulator {
     public static final String NAME = "stablekey";

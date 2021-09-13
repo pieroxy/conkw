@@ -1,12 +1,10 @@
-package net.pieroxy.conkw.webapp.grabbers.logfile.accumulators;
+package net.pieroxy.conkw.accumulators;
 
 import net.pieroxy.conkw.webapp.grabbers.logfile.LogRecord;
 
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class MultiAccumulator<T extends LogRecord> implements Accumulator<T> {
   public static final String NAME = "multi";

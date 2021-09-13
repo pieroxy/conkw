@@ -1,8 +1,8 @@
-package net.pieroxy.conkw.webapp.grabbers.logfile.accumulators.implementations;
+package net.pieroxy.conkw.accumulators.implementations;
 
 import net.pieroxy.conkw.webapp.grabbers.logfile.LogRecord;
-import net.pieroxy.conkw.webapp.grabbers.logfile.accumulators.AbstractHistogramAccumulator;
-import net.pieroxy.conkw.webapp.grabbers.logfile.accumulators.Accumulator;
+import net.pieroxy.conkw.accumulators.AbstractHistogramAccumulator;
+import net.pieroxy.conkw.accumulators.Accumulator;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;

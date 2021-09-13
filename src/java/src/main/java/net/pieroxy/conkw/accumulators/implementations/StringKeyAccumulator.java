@@ -1,9 +1,9 @@
-package net.pieroxy.conkw.webapp.grabbers.logfile.accumulators.implementations;
+package net.pieroxy.conkw.accumulators.implementations;
 
 import net.pieroxy.conkw.webapp.grabbers.logfile.LogRecord;
-import net.pieroxy.conkw.webapp.grabbers.logfile.accumulators.AccumulatorProvider;
-import net.pieroxy.conkw.webapp.grabbers.logfile.accumulators.AccumulatorUtils;
-import net.pieroxy.conkw.webapp.grabbers.logfile.accumulators.KeyAccumulator;
+import net.pieroxy.conkw.accumulators.AccumulatorProvider;
+import net.pieroxy.conkw.accumulators.AccumulatorUtils;
+import net.pieroxy.conkw.accumulators.KeyAccumulator;
 
 public class StringKeyAccumulator<T extends LogRecord> extends KeyAccumulator<String, T> {
   public static final String NAME = "stringkey";

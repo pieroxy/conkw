@@ -1,7 +1,7 @@
-package net.pieroxy.conkw.webapp.grabbers.logfile.accumulators;
+package net.pieroxy.conkw.accumulators;
 
 import net.pieroxy.conkw.webapp.grabbers.logfile.LogRecord;
-import net.pieroxy.conkw.webapp.grabbers.logfile.accumulators.implementations.*;
+import net.pieroxy.conkw.accumulators.implementations.*;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
