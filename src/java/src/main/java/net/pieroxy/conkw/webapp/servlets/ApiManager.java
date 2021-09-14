@@ -81,7 +81,7 @@ public class ApiManager implements MetaGrabber {
       for (Grabber g : allGrabbers) {
         try {
           if (isGrabberActive(g, nowms)) {
-            r.add(g.grab());
+            r.add(g.grab(null));
             if (LOGGER.isLoggable(Level.FINE)) LOGGER.fine("Grabbing " + g.getName());
           }
         } catch (Exception e) {

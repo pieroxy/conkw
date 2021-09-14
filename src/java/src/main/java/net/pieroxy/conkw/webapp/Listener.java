@@ -85,7 +85,7 @@ public class Listener implements ServletContextListener {
         LOGGER.info("Reloading configuration.");
         // this is a hot swap :
         // Start threads and all.
-        newg.forEach((gr) -> gr.grab());
+        newg.forEach((gr) -> gr.grab(null));
         // Replace the grabbers.
         grabbers = newg;
         // Recycle the old grabbers.

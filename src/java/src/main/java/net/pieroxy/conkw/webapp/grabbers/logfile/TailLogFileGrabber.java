@@ -2,7 +2,7 @@ package net.pieroxy.conkw.webapp.grabbers.logfile;
 
 import net.pieroxy.conkw.accumulators.Accumulator;
 import net.pieroxy.conkw.accumulators.parser.AccumulatorExpressionParser;
-import net.pieroxy.conkw.webapp.grabbers.AsyncGrabber;
+import net.pieroxy.conkw.webapp.grabbers.Grabber;
 import net.pieroxy.conkw.webapp.grabbers.logfile.listeners.LogListener;
 import net.pieroxy.conkw.webapp.grabbers.logfile.listeners.LogParser;
 import net.pieroxy.conkw.webapp.model.ResponseData;
@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class TailLogFileGrabber extends AsyncGrabber implements LogListener<LogRecord> {
+public class TailLogFileGrabber extends Grabber<Accumulator<? extends LogRecord>> implements LogListener<LogRecord> {
     private final static Logger LOGGER = Logger.getLogger(TailLogFileGrabber.class.getName());
 
     private String filename;
@@ -20,17 +20,12 @@ public class TailLogFileGrabber extends AsyncGrabber implements LogListener<LogR
     private Accumulator<LogRecord> accumulator;
 
     @Override
-    public void disposeSync() {
+    public void dispose() {
         reader.shutdown();
     }
 
     @Override
-    public boolean changed() {
-        return true;
-    }
-
-    @Override
-    public synchronized ResponseData grabSync() {
+    public synchronized ResponseData grab(Accumulator<? extends LogRecord> param) {
         if (reader == null) {
             try {
                 reader = new RealTimeLogFileReader(filename, this, (LogParser<LogRecord>) Class.forName(parserClassName).newInstance());

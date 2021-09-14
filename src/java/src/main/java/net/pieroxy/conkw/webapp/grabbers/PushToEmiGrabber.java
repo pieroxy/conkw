@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
-public class PushToEmiGrabber extends Grabber implements GrabberListener, Runnable {
+public class PushToEmiGrabber extends Grabber<Object> implements GrabberListener, Runnable {
 
   private String prefix;
   private URL url;
@@ -30,7 +30,7 @@ public class PushToEmiGrabber extends Grabber implements GrabberListener, Runnab
   private List<Grabber> grabbers;
 
   @Override
-  public ResponseData grab() {
+  public ResponseData grab(Object params) {
     return null;
   }
 
@@ -101,7 +101,7 @@ public class PushToEmiGrabber extends Grabber implements GrabberListener, Runnab
     input.setStr(str);
     grabbers.forEach(g -> {
       if (shouldExtract(g.getName())) {
-        ResponseData data = g.grab();
+        ResponseData data = g.grab(null); // Static grab cannot be parametrized
         if (data!=null) {
           data.getNum().forEach((k, v) -> num.put(prefix+"_"+g.getName() + "_" + k, v));
           data.getStr().forEach((k, v) -> str.put(prefix+"_"+g.getName() + "_" + k, v));

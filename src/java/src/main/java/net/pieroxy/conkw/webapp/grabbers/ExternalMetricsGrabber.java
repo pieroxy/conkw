@@ -12,14 +12,14 @@ import java.util.Date;
 import java.util.Map;
 import java.util.logging.Level;
 
-public class ExternalMetricsGrabber extends Grabber {
+public class ExternalMetricsGrabber extends Grabber<String> {
 
   private ResponseData data = null;
   private boolean changed;
   private Thread saveThread;
 
   @Override
-  public ResponseData grab() {
+  public ResponseData grab(String p) {
     return data;
   }
 

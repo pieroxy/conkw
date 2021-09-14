@@ -17,7 +17,6 @@ import java.util.Map;
 import java.util.logging.Level;
 
 public abstract class TimeThrottledGrabber extends AsyncGrabber {
-
   protected abstract CDuration getDefaultTtl();
   protected abstract void load(ResponseData res);
   protected abstract String getCacheKey();

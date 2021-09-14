@@ -17,7 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
-public abstract class Grabber {
+public abstract class Grabber<T> {
   private Logger LOGGER = createLogger();
 
   private File storageFolder=null;
@@ -36,9 +36,13 @@ public abstract class Grabber {
   public String processAction(Map<String, String[]> parameterMap) {
     return "";
   }
-  public abstract ResponseData grab();
+  public abstract ResponseData grab(T param);
   public abstract void dispose();
   public abstract String getDefaultName();
+
+  public T parseParam(String param) {
+    throw new RuntimeException("Grabber " + this.getClass().getSimpleName() + " does not take any parameters");
+  }
 
   private MaxComputer getMaxComputer() {
     if (_maxComputer == null) _maxComputer = new MaxComputer(this);
