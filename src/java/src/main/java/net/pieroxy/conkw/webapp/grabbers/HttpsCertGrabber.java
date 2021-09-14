@@ -73,6 +73,11 @@ public class HttpsCertGrabber extends TimeThrottledGrabber {
         }
     };
 
+    String bareCn = cn;
+    if (cn.indexOf(":")>-1) {
+      bareCn = cn.substring(0, cn.indexOf(":"));
+    }
+
     // Install the all-trusting trust manager
     try {
       SSLContext sc = SSLContext.getInstance("SSL");
@@ -105,7 +110,7 @@ public class HttpsCertGrabber extends TimeThrottledGrabber {
             });
         });
 
-      if (dn.contains(cn)){
+      if (dn.contains(bareCn)){
         return xc.getNotAfter();
       }
     }
