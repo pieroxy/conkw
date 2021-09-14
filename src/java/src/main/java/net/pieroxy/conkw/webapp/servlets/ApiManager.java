@@ -4,29 +4,22 @@ import net.pieroxy.conkw.webapp.grabbers.Grabber;
 import net.pieroxy.conkw.webapp.grabbers.TriggerableGrabber;
 import net.pieroxy.conkw.webapp.model.Response;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ApiManager implements MetaGrabber {
   private final static Logger LOGGER = Logger.getLogger(Api.class.getName());
 
-  private Collection<Grabber> allGrabbers;
+  private Map<String, Grabber> allGrabbers;
 
-  Response loadedResponse;
   Thread thread;
   boolean stopped;
   Map<String, Long> lastRequestPerGrabber = new HashMap<>();
 
-  private boolean smartUiGrabSync;
-
   public ApiManager(List<Grabber> grabbers) {
-    allGrabbers = grabbers;
-    thread = new Thread(this::run, "Api Thread");
-    thread.start();
+    allGrabbers = new HashMap<>();
+    grabbers.forEach(g -> {allGrabbers.put(g.getName(), g);});
   }
 
   public void close() {
@@ -45,7 +38,13 @@ public class ApiManager implements MetaGrabber {
   public Response buildResponse(long now, String grabbers) {
     String[] grabbersRequested = grabbers.split(",");
     markGrabbersRequested(grabbersRequested, now);
-    Response r = new Response(loadedResponse, (int)(System.currentTimeMillis()%1000), grabbersRequested);
+    Response r = new Response();
+    Arrays.stream(grabbersRequested).parallel().forEach(
+            s -> {
+              Grabber g = allGrabbers.get(s);
+              r.add(g.grab(null));
+            }
+    );
     return r;
   }
 
@@ -53,14 +52,8 @@ public class ApiManager implements MetaGrabber {
     for (String gname : grabbersRequested) {
       Long l = lastRequestPerGrabber.get(gname);
       if (l==null) {
-        boolean found = false;
-        for (Grabber g : allGrabbers) {
-          if (g.getName().equalsIgnoreCase(gname)) {
-            found = true;
-            break;
-          }
-        }
-        if (!found) {
+        Grabber g = allGrabbers.get(gname);
+        if (g==null) {
           LOGGER.log(Level.WARNING, "Grabber " + gname + " not found.");
         } else {
           Map<String, Long> newmap = new HashMap<>(lastRequestPerGrabber);
@@ -73,70 +66,9 @@ public class ApiManager implements MetaGrabber {
     }
   }
 
-  private void run() {
-    while (thread == Thread.currentThread()) {
-      long nowms= System.currentTimeMillis();
-
-      Response r = new Response();
-      for (Grabber g : allGrabbers) {
-        try {
-          if (isGrabberActive(g, nowms)) {
-            r.add(g.grab(null));
-            if (LOGGER.isLoggable(Level.FINE)) LOGGER.fine("Grabbing " + g.getName());
-          }
-        } catch (Exception e) {
-          LOGGER.log(Level.SEVERE, "Grabber grab failed : " + g.toString(), e);
-        }
-      }
-      loadedResponse = r;
-      for (Grabber g : allGrabbers) {
-        if (g instanceof TriggerableGrabber) {
-          ((TriggerableGrabber) g).trigger(this);
-        }
-      }
-
-      long wait;
-      if (smartUiGrabSync) {
-        long now = System.currentTimeMillis() % 1000;
-        wait = 1000 - now;
-        while (wait < 0) wait += 1000;
-        while (wait > 1000) wait -= 1000;
-        if (wait < 250) wait += 1000;
-      } else {
-        wait = 1000 + getRandomJitter();
-      }
-
-      synchronized (Api.class) {
-        try {
-          Api.class.wait(wait);
-        } catch (InterruptedException e) {
-        }
-      }
-    }
-    LOGGER.info("Api Thread stopped.");
-    stopped = true;
-  }
-
-  private static int getRandomJitter() {
-    return (int)(Math.random()*50-25);
-  }
-
-  private boolean isGrabberActive(Grabber g, long now) {
-    Long lastSeen = lastRequestPerGrabber.get(g.getName());
-    return lastSeen!=null && (now-lastSeen < 3000);
-  }
-
-  public boolean isSmartUiGrabSync() {
-    return smartUiGrabSync;
-  }
-
-  public void setSmartUiGrabSync(boolean smartUiGrabSync) {
-    this.smartUiGrabSync = smartUiGrabSync;
-  }
-
   public String notifyGrabberAction(String action, Map<String, String[]> parameterMap) {
     final StringBuilder res = new StringBuilder();
-    allGrabbers.forEach((g) -> {
+    allGrabbers.values().forEach((g) -> {
       if (g.getName().equals(action)) {
         res.append(g.processAction(parameterMap));
       }

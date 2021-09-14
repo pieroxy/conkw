@@ -38,7 +38,7 @@ public class Response {
     errors.add(e);
   }
 
-  public void add(ResponseData response) {
+  public synchronized void add(ResponseData response) {
     if (response == null) return;
     if (response.getName() == null) {
       throw new NullPointerException("ResponseData has no name.");
