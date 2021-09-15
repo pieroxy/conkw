@@ -101,10 +101,42 @@ public class Api extends HttpServlet {
       if (grabbers == null) {
         writeResponse(resp, Response.getError("Grabbers were not specified"));
       } else {
-        Response r = api.buildResponse(now, grabbers);
+        GrabberInput.InputHolder in = getInput(grabbers, req);
+        Response r = api.buildResponse(now, in.in);
+        if (in.errors!=null) in.errors.stream().forEach(r::addError);
         writeResponse(resp, r);
       }
     }
+  }
+
+  private void addError(GrabberInput.InputHolder h, String error) {
+    if (h.errors == null) h.errors = new ArrayList<>();
+    h.errors.add(error);
+
+  }
+
+  GrabberInput.InputHolder getInput(String grabbers, HttpServletRequest req) {
+    GrabberInput.InputHolder res = new GrabberInput.InputHolder();
+    String[]gnames = grabbers.split(",");
+    res.in = new ArrayList<>(gnames.length);
+    Arrays.stream(gnames).forEach(s -> {
+      try {
+        GrabberInput gin = new GrabberInput(s);
+        if (gin.getParamName() != null) {
+          String pv = req.getParameter(gin.getParamName());
+          if (pv == null) {
+            addError(res,"Parameter '" + gin.getParamName() + "' for grabber '" + gin.getName() + "' not found.");
+          } else {
+            gin.setParamValue(pv);
+          }
+        }
+        res.in.add(gin);
+      } catch (Exception e) {
+        addError(res, "Could not parse grabber name '"+s+"': " + e.getMessage());
+        LOGGER.log(Level.SEVERE, "Could not parse grabber name: " + s, e);
+      }
+    });
+    return res;
   }
 
   private void writeResponse(HttpServletResponse resp, Object r) throws IOException {

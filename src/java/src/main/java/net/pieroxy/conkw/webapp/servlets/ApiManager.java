@@ -13,8 +13,6 @@ public class ApiManager implements MetaGrabber {
 
   private Map<String, Grabber> allGrabbers;
 
-  Thread thread;
-  boolean stopped;
   Map<String, Long> lastRequestPerGrabber = new HashMap<>();
 
   public ApiManager(List<Grabber> grabbers) {
@@ -23,45 +21,38 @@ public class ApiManager implements MetaGrabber {
   }
 
   public void close() {
-    thread = null;
-    synchronized (Api.class) {
-      Api.class.notifyAll();
-    }
-    while(!stopped) {
-      try {
-        Thread.sleep(10);
-      } catch (InterruptedException e) {
-      }
-    }
   }
 
-  public Response buildResponse(long now, String grabbers) {
-    String[] grabbersRequested = grabbers.split(",");
+  public Response buildResponse(long now, Collection<GrabberInput>grabbersRequested) {
     markGrabbersRequested(grabbersRequested, now);
     Response r = new Response();
-    Arrays.stream(grabbersRequested).parallel().forEach(
+    grabbersRequested.stream().parallel().forEach(
             s -> {
-              Grabber g = allGrabbers.get(s);
-              r.add(g.grab(null));
+              Grabber g = allGrabbers.get(s.getName());
+              if (g == null) {
+                r.addError("Grabber '" + s.getName() + "' not found.");
+              } else {
+                r.add(g.grab(s.getParamValue()));
+              }
             }
     );
     return r;
   }
 
-  private void markGrabbersRequested(String[]grabbersRequested, long ts) {
-    for (String gname : grabbersRequested) {
-      Long l = lastRequestPerGrabber.get(gname);
+  private void markGrabbersRequested(Collection<GrabberInput>grabbersRequested, long ts) {
+    for (GrabberInput gin : grabbersRequested) {
+      Long l = lastRequestPerGrabber.get(gin.getName());
       if (l==null) {
-        Grabber g = allGrabbers.get(gname);
+        Grabber g = allGrabbers.get(gin.getName());
         if (g==null) {
-          LOGGER.log(Level.WARNING, "Grabber " + gname + " not found.");
+          LOGGER.log(Level.WARNING, "Grabber " + gin.getName() + " not found.");
         } else {
           Map<String, Long> newmap = new HashMap<>(lastRequestPerGrabber);
-          newmap.put(gname, ts);
+          newmap.put(gin.getName(), ts);
           lastRequestPerGrabber = newmap;
         }
       } else {
-        lastRequestPerGrabber.put(gname, ts);
+        lastRequestPerGrabber.put(gin.getName(), ts);
       }
     }
   }

@@ -34,7 +34,7 @@ public class Response {
     return res;
   }
 
-  public void addError(String e) {
+  public synchronized void addError(String e) {
     errors.add(e);
   }
 
