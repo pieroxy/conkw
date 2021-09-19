@@ -3,7 +3,6 @@ package net.pieroxy.conkw.accumulators.implementations;
 import net.pieroxy.conkw.webapp.grabbers.logfile.LogRecord;
 import net.pieroxy.conkw.accumulators.AbstractHistogramAccumulator;
 import net.pieroxy.conkw.accumulators.Accumulator;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +58,7 @@ public class Simple125Histogram extends AbstractHistogramAccumulator {
 
   @Override
   public void sumWith(Accumulator acc) {
-    throw new NotImplementedException();
+    throw new RuntimeException("Not Implemented");
   }
 
   public String getValueKey() {
