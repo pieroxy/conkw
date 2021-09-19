@@ -1,10 +1,11 @@
 package net.pieroxy.conkw.webapp.grabbers;
 
+import net.pieroxy.conkw.collectors.Collector;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.util.logging.Level;
 
-public abstract class AsyncGrabber extends Grabber<Object> implements Runnable {
+public abstract class AsyncGrabber extends Grabber implements Runnable {
   public static final String LOAD_STATUS = "grab_status";
 
   private ResponseData cached;
@@ -41,7 +42,7 @@ public abstract class AsyncGrabber extends Grabber<Object> implements Runnable {
   }
 
   @Override
-  public final ResponseData grab(Object param) {
+  public final ResponseData grab() {
     lastGrab = System.currentTimeMillis();
 
     if (thread == null) {

@@ -32,7 +32,8 @@ public class ApiManager implements MetaGrabber {
               if (g == null) {
                 r.addError("Grabber '" + s.getName() + "' not found.");
               } else {
-                r.add(g.grab(s.getParamValue()));
+                g.addActiveCollector(s.getParamValue());
+                r.add(g.grab());
               }
             }
     );

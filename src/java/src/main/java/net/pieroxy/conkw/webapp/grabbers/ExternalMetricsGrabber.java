@@ -2,6 +2,7 @@ package net.pieroxy.conkw.webapp.grabbers;
 
 import com.dslplatform.json.DslJson;
 import com.dslplatform.json.JsonWriter;
+import net.pieroxy.conkw.collectors.Collector;
 import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 import net.pieroxy.conkw.webapp.servlets.Emi;
@@ -12,14 +13,14 @@ import java.util.Date;
 import java.util.Map;
 import java.util.logging.Level;
 
-public class ExternalMetricsGrabber extends Grabber<String> {
+public class ExternalMetricsGrabber extends Grabber {
 
   private ResponseData data = null;
   private boolean changed;
   private Thread saveThread;
 
   @Override
-  public ResponseData grab(String p) {
+  public ResponseData grab() {
     return data;
   }
 

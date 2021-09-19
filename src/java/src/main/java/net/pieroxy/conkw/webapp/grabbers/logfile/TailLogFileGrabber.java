@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class TailLogFileGrabber extends Grabber<Accumulator<? extends LogRecord>> implements LogListener<LogRecord> {
+public class TailLogFileGrabber extends Grabber implements LogListener<LogRecord> {
     private final static Logger LOGGER = Logger.getLogger(TailLogFileGrabber.class.getName());
 
     private String filename;
@@ -25,7 +25,7 @@ public class TailLogFileGrabber extends Grabber<Accumulator<? extends LogRecord>
     }
 
     @Override
-    public synchronized ResponseData grab(Accumulator<? extends LogRecord> param) {
+    public synchronized ResponseData grab() {
         if (reader == null) {
             try {
                 reader = new RealTimeLogFileReader(filename, this, (LogParser<LogRecord>) Class.forName(parserClassName).newInstance());

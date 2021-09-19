@@ -1,6 +1,9 @@
 package net.pieroxy.conkw.webapp.grabbers;
 
+import net.pieroxy.conkw.collectors.Collector;
+import net.pieroxy.conkw.collectors.SimpleTransientCollector;
 import net.pieroxy.conkw.utils.LongHolder;
+import net.pieroxy.conkw.utils.TimedData;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.duration.CDurationParser;
 import net.pieroxy.conkw.webapp.model.ResponseData;
@@ -9,22 +12,20 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
-public abstract class Grabber<T> {
+public abstract class Grabber {
   private Logger LOGGER = createLogger();
+  private static final long CONF_EXPIRATION_MS = 10000; // 10s
 
   private File storageFolder=null;
   private File tmpFolder=null;
   private Set<String> extract = new HashSet<>();
 
-  public static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
   private String name;
   private Level logLevel = Level.INFO;
 
@@ -32,16 +33,54 @@ public abstract class Grabber<T> {
 
   Map<String, ResponseData> cachedResponses = new HashMap<>();
   Map<String, LongHolder> maxValues = new HashMap<>();
+  Map<String, TimedData<? extends Collector>> extractedByConfiguration = new HashMap<>();
+  private long lastConfigPurge;
 
   public String processAction(Map<String, String[]> parameterMap) {
     return "";
   }
-  public abstract ResponseData grab(T param);
+  public abstract ResponseData grab();
   public abstract void dispose();
   public abstract String getDefaultName();
 
-  public T parseParam(String param) {
+  private void gcConfigurations() {
+    Map<String,TimedData<? extends Collector>> nm = new HashMap<>(extractedByConfiguration);
+    boolean deleted = false;
+    for (String s : nm.keySet()) {
+      TimedData td = nm.get(s);
+      if (td.getAge() > CONF_EXPIRATION_MS) {
+        nm.remove(s);
+        deleted = true;
+      }
+    }
+
+    if (deleted) extractedByConfiguration = nm;
+    lastConfigPurge = System.currentTimeMillis();
+  }
+
+  public Collection<Collector> getActiveCollectors() {
+    long now = System.currentTimeMillis();
+    if (now-lastConfigPurge > 2000) gcConfigurations();
+    return extractedByConfiguration.values().stream().map(td -> td.getData()).collect(Collectors.toList());
+  }
+
+  public Collector getDefaultCollector() {
+    return new SimpleTransientCollector();
+  }
+
+  public Collector parseCollector(String param) {
     throw new RuntimeException("Grabber " + this.getClass().getSimpleName() + " does not take any parameters");
+  }
+
+  public void addActiveCollector(String param) {
+    if (extractedByConfiguration.containsKey(param)) return;
+    Map<String,TimedData<? extends Collector>> nm = new HashMap<>(extractedByConfiguration);
+    if (param == null) {
+      nm.put(null, new TimedData(getDefaultCollector()));
+    } else {
+      nm.put(param, new TimedData(parseCollector(param)));
+    }
+    extractedByConfiguration = nm;
   }
 
   private MaxComputer getMaxComputer() {
