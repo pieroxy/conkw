@@ -42,6 +42,11 @@ public abstract class AbstractSimpleCollector implements SimpleCollector {
     }
 
     @Override
+    public void setData(SimpleCollector data) {
+        collected = data.getData();
+    }
+
+    @Override
     public void addError(String message) {
         collected.addError(message);
     }

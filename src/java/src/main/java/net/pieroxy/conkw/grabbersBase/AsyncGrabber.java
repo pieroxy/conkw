@@ -4,12 +4,14 @@ import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.collectors.SimplePermanentCollector;
 import net.pieroxy.conkw.grabbersBase.Grabber;
 import net.pieroxy.conkw.grabbersBase.SimpleGrabber;
+import net.pieroxy.conkw.webapp.grabbers.HttpsCertGrabber;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.util.logging.Level;
 
 public abstract class AsyncGrabber extends SimpleGrabber<SimpleCollector> implements Runnable {
   public static final String LOAD_STATUS = "grab_status";
+  public static final int GRAB_INACTIVE_THRESHOLD = 5000;
 
   abstract public boolean changed();
   abstract public void grabSync(SimpleCollector c);
@@ -94,7 +96,7 @@ public abstract class AsyncGrabber extends SimpleGrabber<SimpleCollector> implem
       }
       if (canLogFiner()) log(Level.FINER, System.currentTimeMillis() + "::"+getName() + " up");
       try {
-        if (now - lastGrab < 2100) {
+        if (now - lastGrab < GRAB_INACTIVE_THRESHOLD) {
           if (changed()) {
             if (canLogFiner()) log(Level.FINER, System.currentTimeMillis() + "::" + getName() + " grab");
             now = System.currentTimeMillis();
@@ -118,6 +120,10 @@ public abstract class AsyncGrabber extends SimpleGrabber<SimpleCollector> implem
               count *= 0.9;
               this.log(Level.FINE, getName() + " takes on avg " + (long) (time / count) + " (this time " + (eor - now) + ")");
             }
+          } else { // Not changed. We sill need to fill in the collectors
+            getActiveCollectors().forEach(sc -> {
+              fillCollector(sc);
+            });
           }
         } else {
           // Pause the grabbers after 5s of inactivity.
@@ -131,7 +137,13 @@ public abstract class AsyncGrabber extends SimpleGrabber<SimpleCollector> implem
     }
   }
 
-  public void saveData(ResponseData r) {
+  /**
+   * Override this if you have data you want to fill the collectors with
+   * @param sc
+   */
+  protected void fillCollector(SimpleCollector sc) {
+  }
 
+  public void saveData(ResponseData r) {
   }
 }

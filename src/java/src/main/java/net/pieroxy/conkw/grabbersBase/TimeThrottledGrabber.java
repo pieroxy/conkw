@@ -24,6 +24,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber {
   private CDuration ttl;
   private CDuration errorTtl;
   private boolean lastGrabHadErrors = false;
+  private SimpleCollector collector = getDefaultCollector();
 
   public boolean isLastGrabHadErrors() {
     return lastGrabHadErrors;
@@ -131,19 +132,26 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber {
         lastRun = data.getTimestamp();
         log(Level.FINE, "grabSync() :: loaded from cache");
         lastGrabHadErrors = false;
-        c.setData(data);
+        collector.setData(data);
+        c.setData(collector);
         return;
       }
     }
     try {
-      load(c);
+      load(collector);
       lastRun = System.currentTimeMillis();
-      lastGrabHadErrors = c.hasError();
+      lastGrabHadErrors = collector.hasError();
+      c.setData(collector);
     } catch (Exception e) {
       log(Level.SEVERE, "Grabbing " + getName(), e);
       //return new ResponseData(this, System.currentTimeMillis());
       c.addError("Error while grabbing " + getName() + ": " + e.getMessage());
     }
+  }
+
+  @Override
+  protected void fillCollector(SimpleCollector sc) {
+    sc.setData(collector);
   }
 
   @Override
