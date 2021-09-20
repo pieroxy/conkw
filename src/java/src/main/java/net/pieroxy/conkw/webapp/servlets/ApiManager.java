@@ -25,15 +25,19 @@ public class ApiManager implements MetaGrabber {
   public Response buildResponse(long now, Collection<GrabberInput>grabbersRequested) {
     markGrabbersRequested(grabbersRequested, now);
     Response r = new Response();
-    grabbersRequested.stream()/*.parallel()*/.forEach(
+    grabbersRequested.stream().parallel().forEach(
             s -> {
               Grabber g = allGrabbers.get(s.getName());
               if (g == null) {
-                r.addError("Grabber '" + s.getName() + "' not found.");
+                synchronized (r) {
+                  r.addError("Grabber '" + s.getName() + "' not found.");
+                }
               } else {
                 g.addActiveCollector(s.getParamValue());
                 g.collect();
-                r.add(g.getCollectorToUse(s.getParamValue()).getData());
+                synchronized (r) {
+                  r.add(g.getCollectorToUse(s.getParamValue()).getData());
+                }
               }
             }
     );
