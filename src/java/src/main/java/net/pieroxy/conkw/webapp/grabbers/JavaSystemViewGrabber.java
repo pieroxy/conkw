@@ -42,7 +42,6 @@ public class JavaSystemViewGrabber extends AsyncGrabber {
 
   @Override
   public void grabSync(SimpleCollector c) {
-    ResponseData r = new ResponseData(this, System.currentTimeMillis());
     extract(c, "sys", this::grabSys, CDuration.ONE_MINUTE);
     extract(c, "cpu", this::grabCpu, CDuration.ZERO);
     extract(c, "mem", this::grabMem, CDuration.ZERO);
