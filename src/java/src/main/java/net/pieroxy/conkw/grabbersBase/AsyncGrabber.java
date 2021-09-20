@@ -102,6 +102,7 @@ public abstract class AsyncGrabber extends SimpleGrabber<SimpleCollector> implem
             try {
               getActiveCollectors().forEach(sc -> {
                 long a = System.nanoTime();
+                sc.reset();
                 this.grabSync(sc);
                 sc.setTime(System.nanoTime() - a);
               });
