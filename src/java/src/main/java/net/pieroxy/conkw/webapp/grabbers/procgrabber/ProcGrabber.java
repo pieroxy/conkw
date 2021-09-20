@@ -1,8 +1,10 @@
 package net.pieroxy.conkw.webapp.grabbers.procgrabber;
 
+import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.utils.ExternalBinaryRunner;
 import net.pieroxy.conkw.utils.PerformanceTools;
-import net.pieroxy.conkw.webapp.grabbers.AsyncGrabber;
+import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
+import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.io.*;
@@ -50,8 +52,6 @@ public class ProcGrabber extends AsyncGrabber {
 
   private int nbCores;
   private int nbThreads;
-
-  private long lastGrabSync = -1;
 
   @Override
   public boolean changed() {
@@ -193,24 +193,20 @@ public class ProcGrabber extends AsyncGrabber {
   }
 
   @Override
-  public synchronized ResponseData grabSync() {
-    long now = System.currentTimeMillis();
-    lastGrabSync = now;
-
-    ResponseData r = new ResponseData(this, System.currentTimeMillis());
+  public synchronized void grabSync(SimpleCollector c) {
     if (disabled) {
-      return r;
+      return;
     }
-    extract(r,"processes", this::grabProcesses, Duration.ZERO);
-    extract(r,"uptime", this::grabUptimeAndLoad, Duration.ZERO);
-    extract(r,"cpu", this::grabCpuUsage, Duration.ZERO);
-    extract(r,"nbcpu", this::grabCpuNum, Duration.ZERO);
-    extract(r,"mem", this::grabMemUsage, Duration.ZERO);
-    extract(r,"bdio", this::grabBlockDeviceIo, Duration.ZERO);
-    extract(r,"net", this::getNetStats, Duration.ZERO);
-    extract(r,"battery", this::getBattery, Duration.ofSeconds(5));
-    extract(r,"mdstat", this::grabMdstat, Duration.ofSeconds(10));
-    extract(r,"hostname", this::getHostname, Duration.ofHours(1));
+    extract(c,"processes", this::grabProcesses, CDuration.ZERO);
+    extract(c,"uptime", this::grabUptimeAndLoad, CDuration.ZERO);
+    extract(c,"cpu", this::grabCpuUsage, CDuration.ZERO);
+    extract(c,"nbcpu", this::grabCpuNum, CDuration.ZERO);
+    extract(c,"mem", this::grabMemUsage, CDuration.ZERO);
+    extract(c,"bdio", this::grabBlockDeviceIo, CDuration.ZERO);
+    extract(c,"net", this::getNetStats, CDuration.ZERO);
+    extract(c,"battery", this::getBattery, CDuration.FIVE_SECONDS);
+    extract(c,"mdstat", this::grabMdstat, CDuration.ONE_MINUTE);
+    extract(c,"hostname", this::getHostname, CDuration.ONE_HOUR);
 
     if (canLogFiner()) {
       log(Level.FINER, "ProcGrabber usage: ");
@@ -222,26 +218,24 @@ public class ProcGrabber extends AsyncGrabber {
       log(Level.FINER, "            procStatFile: " + procStatFile.size());
       log(Level.FINER, "            blockDevices: " + blockDevices.size());
     }
-
-    return r;
   }
 
-  private void grabCpuNum(ResponseData responseData) {
-    responseData.addMetric("nbcpu_cores", nbCores);
-    responseData.addMetric("nbcpu_threads", nbThreads);
+  private void grabCpuNum(SimpleCollector c) {
+    c.collect("nbcpu_cores", nbCores);
+    c.collect("nbcpu_threads", nbThreads);
   }
 
-  private void grabMdstat(ResponseData r) {
+  private void grabMdstat(SimpleCollector c) {
     MdstatParser.MdstatResult data = MdstatParser.parseMdstat(mdstatFile);
-    r.addMetric("mdstatFailed", data.getFailedDisks());
-    r.addMetric("mdstatSummary", data.getOneline());
-    r.addMetric("mdstatNbDevices", data.getIndividual().size());
+    c.collect("mdstatFailed", data.getFailedDisks());
+    c.collect("mdstatSummary", data.getOneline());
+    c.collect("mdstatNbDevices", data.getIndividual().size());
     int i=0;
     for (String s : data.getIndividual())
-      r.addMetric("mdstatByArray" + i++, s);
+      c.collect("mdstatByArray" + i++, s);
   }
 
-  private void getBattery(ResponseData r) {
+  private void getBattery(SimpleCollector c) {
     if (BAT_present == null) {
       BAT_FULL = new File("/sys/class/power_supply/BAT0/charge_full");
       BAT_NOW = new File("/sys/class/power_supply/BAT0/charge_now");
@@ -269,28 +263,28 @@ public class ProcGrabber extends AsyncGrabber {
         long full = PerformanceTools.parseLongInFile(BAT_FULL, babuffer1k);
         long now = PerformanceTools.parseLongInFile(BAT_NOW, babuffer1k);
         long plugged = PerformanceTools.parseLongInFile(BAT_AC, babuffer1k);
-        r.addMetric("bat_exists", 1);
-        r.addMetric("bat_prc", BAT_prc = now*100./full);
-        r.addMetric("bat_plugged", BAT_plugged = plugged);
+        c.collect("bat_exists", 1);
+        c.collect("bat_prc", BAT_prc = now*100./full);
+        c.collect("bat_plugged", BAT_plugged = plugged);
       } else {
-        r.addMetric("bat_exists", 1);
-        r.addMetric("bat_prc", BAT_prc);
-        r.addMetric("bat_plugged", BAT_plugged);
+        c.collect("bat_exists", 1);
+        c.collect("bat_prc", BAT_prc);
+        c.collect("bat_plugged", BAT_plugged);
       }
     } else {
-      r.addMetric("bat_exists", 0);
+      c.collect("bat_exists", 0);
     }
   }
 
-  private void getHostname(ResponseData r) {
+  private void getHostname(SimpleCollector c) {
     try (Stream<String> stream = Files.lines( Paths.get("/etc/hostname"), StandardCharsets.UTF_8)) {
-      r.addMetric("hostname", stream.findFirst().get());
+      c.collect("hostname", stream.findFirst().get());
     } catch (IOException e) {
       log(Level.SEVERE, "Grabbing /etc/hostname", e);
     }
   }
 
-  private void getNetStats(ResponseData r) {
+  private void getNetStats(SimpleCollector c) {
     try (Stream<String> stream = Files.lines( Paths.get("/proc/net/netstat"), StandardCharsets.UTF_8)) {
       Iterator<String> it = stream.iterator();
       int status=0;
@@ -317,8 +311,8 @@ public class ProcGrabber extends AsyncGrabber {
         long out = long2buffer[1];
 
         if (lastNin!=0) {
-          computeAutoMaxPerSecond(r, "netp_in", in - lastNin);
-          computeAutoMaxPerSecond(r, "netp_out", out - lastNout);
+          computeAutoMaxPerSecond(c, "netp_in", in - lastNin);
+          computeAutoMaxPerSecond(c, "netp_out", out - lastNout);
         }
         lastNin=in;
         lastNout=out;
@@ -329,7 +323,7 @@ public class ProcGrabber extends AsyncGrabber {
     }
   }
 
-  private void grabBlockDeviceIo(ResponseData r) {
+  private void grabBlockDeviceIo(SimpleCollector c) {
     extractBlockDevices();
     if (blockDevices.isEmpty()) return;
     if (blockDeviceSectorSize.size() != blockDevices.size()) {
@@ -359,32 +353,32 @@ public class ProcGrabber extends AsyncGrabber {
       long lastwrite = lastBlockDeviceWrite.getOrDefault(bd,write);
       allRead += read - lastread;
       allWrite += write - lastwrite;
-      r.addMetric("read_bytes_"+bd, (double)read - lastread);
-      r.addMetric("write_bytes_"+bd, (double)write - lastwrite);
-      computeAutoMaxPerSecond(r, "read_bytes_"+bd,(read - lastread));
-      computeAutoMaxPerSecond(r, "write_bytes_"+bd,(write - lastwrite));
+      c.collect("read_bytes_"+bd, (double)read - lastread);
+      c.collect("write_bytes_"+bd, (double)write - lastwrite);
+      computeAutoMaxPerSecond(c, "read_bytes_"+bd,(read - lastread));
+      computeAutoMaxPerSecond(c, "write_bytes_"+bd,(write - lastwrite));
       lastBlockDeviceRead.put(bd,read);
       lastBlockDeviceWrite.put(bd,write);
     }
-    computeAutoMaxPerSecond(r, "read_bytes_all",allRead);
-    computeAutoMaxPerSecond(r, "write_bytes_all",allWrite);
+    computeAutoMaxPerSecond(c, "read_bytes_all",allRead);
+    computeAutoMaxPerSecond(c, "write_bytes_all",allWrite);
 
-    r.addMetric("read_bytes_all", (double)allRead);
-    r.addMetric("write_bytes_all", (double)allWrite);
-    r.addMetric("allbd", allbd.toString());
+    c.collect("read_bytes_all", (double)allRead);
+    c.collect("write_bytes_all", (double)allWrite);
+    c.collect("allbd", allbd.toString());
   }
 
 
-  private void grabUptimeAndLoad(ResponseData r) {
+  private void grabUptimeAndLoad(SimpleCollector c) {
     PerformanceTools.parseDoubleInFileFirstLine("/proc/uptime", babuffer1k, 1, double3buffer);
-    r.addMetric("uptime", double3buffer[0]);
+    c.collect("uptime", double3buffer[0]);
     PerformanceTools.parseDoubleInFileFirstLine("/proc/loadavg", babuffer1k, 3, double3buffer);
-    r.addMetric("loadavg1", double3buffer[0]);
-    r.addMetric("loadavg2", double3buffer[1]);
-    r.addMetric("loadavg3", double3buffer[2]);
+    c.collect("loadavg1", double3buffer[0]);
+    c.collect("loadavg2", double3buffer[1]);
+    c.collect("loadavg3", double3buffer[2]);
   }
 
-  private void grabMemUsage(ResponseData r) {
+  private void grabMemUsage(SimpleCollector c) {
     try (Stream<String> stream = Files.lines( Paths.get("/proc/meminfo"), StandardCharsets.UTF_8)) {
       double ramTotal=0,ramFree=0,ramCached=0,ramBuffers=0,swapTotal=0,swapFree=0,kReclaimable=0;
       int searchFor = 7;
@@ -401,13 +395,13 @@ public class ProcGrabber extends AsyncGrabber {
         if (searchFor==0) break;
       }
 
-      r.addMetric("ramTotal", ramTotal*1024);
-      r.addMetric("ramFree", ramFree*1024);
-      r.addMetric("ramUsed", (ramTotal-ramFree-ramBuffers-ramCached-kReclaimable)*1024);
-      r.addMetric("ramCached", (ramCached+ramBuffers+kReclaimable)*1024);
-      r.addMetric("swapTotal", swapTotal*1024);
-      r.addMetric("swapUsed", (swapTotal-swapFree)*1024);
-      r.addMetric("swapFree", swapFree*1024);
+      c.collect("ramTotal", ramTotal*1024);
+      c.collect("ramFree", ramFree*1024);
+      c.collect("ramUsed", (ramTotal-ramFree-ramBuffers-ramCached-kReclaimable)*1024);
+      c.collect("ramCached", (ramCached+ramBuffers+kReclaimable)*1024);
+      c.collect("swapTotal", swapTotal*1024);
+      c.collect("swapUsed", (swapTotal-swapFree)*1024);
+      c.collect("swapFree", swapFree*1024);
 
     } catch (IOException e) {
       log(Level.SEVERE, "Grabbing /proc/meminfo", e);
@@ -421,7 +415,7 @@ public class ProcGrabber extends AsyncGrabber {
     return Double.parseDouble(line.substring(0, p));
   }
 
-  private void grabCpuUsage(ResponseData r) {
+  private void grabCpuUsage(SimpleCollector c) {
     try (Stream<String> stream = Files.lines( Paths.get("/proc/stat"), StandardCharsets.UTF_8)) {
       String fl = stream.findFirst().get().replaceAll("[ ]+", " ");
       String[]ss = fl.split(" ");
@@ -435,19 +429,19 @@ public class ProcGrabber extends AsyncGrabber {
         Double.parseDouble(ss[7])
       };
       double allcpu = cpu[0]+cpu[1]+cpu[2]+cpu[3]+cpu[4]+cpu[5]+cpu[6]-lastCpuUsage[0]-lastCpuUsage[1]-lastCpuUsage[2]-lastCpuUsage[3]-lastCpuUsage[4]-lastCpuUsage[5]-lastCpuUsage[6];
-      r.addMetric("cpu_usg_user", (cpu[0]-lastCpuUsage[0])*100/allcpu);
-      r.addMetric("cpu_usg_nice", (cpu[1]-lastCpuUsage[1])*100/allcpu);
-      r.addMetric("cpu_usg_sys", (cpu[2]-lastCpuUsage[2])*100/allcpu);
-      r.addMetric("cpu_usg_idle", (cpu[3]-lastCpuUsage[3])*100/allcpu);
-      r.addMetric("cpu_usg_used", 100-(cpu[3]-lastCpuUsage[3])*100/allcpu);
-      r.addMetric("cpu_usg_wait", (cpu[4]+cpu[5]+cpu[6]-lastCpuUsage[4]-lastCpuUsage[5]-lastCpuUsage[6])*100/allcpu);
+      c.collect("cpu_usg_user", (cpu[0]-lastCpuUsage[0])*100/allcpu);
+      c.collect("cpu_usg_nice", (cpu[1]-lastCpuUsage[1])*100/allcpu);
+      c.collect("cpu_usg_sys", (cpu[2]-lastCpuUsage[2])*100/allcpu);
+      c.collect("cpu_usg_idle", (cpu[3]-lastCpuUsage[3])*100/allcpu);
+      c.collect("cpu_usg_used", 100-(cpu[3]-lastCpuUsage[3])*100/allcpu);
+      c.collect("cpu_usg_wait", (cpu[4]+cpu[5]+cpu[6]-lastCpuUsage[4]-lastCpuUsage[5]-lastCpuUsage[6])*100/allcpu);
       lastCpuUsage = cpu;
     } catch (IOException e) {
       log(Level.SEVERE, "Grabbing /proc/stat", e);
     }
   }
 
-  private void grabProcesses(ResponseData r) {
+  private void grabProcesses(SimpleCollector c) {
     try {
       long curTs = System.currentTimeMillis();
 
@@ -494,25 +488,25 @@ public class ProcGrabber extends AsyncGrabber {
           // Process might be dead since the listing.
         }
       }
-      r.addMetric("prc_top1cpu", top3cpu[2].getTotalCpuDiff()*100. / totalcpu);
-      r.addMetric("prc_top2cpu", top3cpu[1].getTotalCpuDiff()*100. / totalcpu);
-      r.addMetric("prc_top3cpu", top3cpu[0].getTotalCpuDiff()*100. / totalcpu);
-      r.addMetric("top1cpu", top3cpu[2].getName());
-      r.addMetric("top2cpu", top3cpu[1].getName());
-      r.addMetric("top3cpu", top3cpu[0].getName());
-      r.addMetric("pid_top1cpu", ""+top3cpu[2].getPid());
-      r.addMetric("pid_top2cpu", ""+top3cpu[1].getPid());
-      r.addMetric("pid_top3cpu", ""+top3cpu[0].getPid());
+      c.collect("prc_top1cpu", top3cpu[2].getTotalCpuDiff()*100. / totalcpu);
+      c.collect("prc_top2cpu", top3cpu[1].getTotalCpuDiff()*100. / totalcpu);
+      c.collect("prc_top3cpu", top3cpu[0].getTotalCpuDiff()*100. / totalcpu);
+      c.collect("top1cpu", top3cpu[2].getName());
+      c.collect("top2cpu", top3cpu[1].getName());
+      c.collect("top3cpu", top3cpu[0].getName());
+      c.collect("pid_top1cpu", ""+top3cpu[2].getPid());
+      c.collect("pid_top2cpu", ""+top3cpu[1].getPid());
+      c.collect("pid_top3cpu", ""+top3cpu[0].getPid());
 
-      r.addMetric("prc_top1mem", top3mem[2].getMem()*100. / totalmem);
-      r.addMetric("prc_top2mem", top3mem[1].getMem()*100. / totalmem);
-      r.addMetric("prc_top3mem", top3mem[0].getMem()*100. / totalmem);
-      r.addMetric("top1mem", top3mem[2].getName());
-      r.addMetric("top2mem", top3mem[1].getName());
-      r.addMetric("top3mem", top3mem[0].getName());
-      r.addMetric("pid_top1mem", ""+top3mem[2].getPid());
-      r.addMetric("pid_top2mem", ""+top3mem[1].getPid());
-      r.addMetric("pid_top3mem", ""+top3mem[0].getPid());
+      c.collect("prc_top1mem", top3mem[2].getMem()*100. / totalmem);
+      c.collect("prc_top2mem", top3mem[1].getMem()*100. / totalmem);
+      c.collect("prc_top3mem", top3mem[0].getMem()*100. / totalmem);
+      c.collect("top1mem", top3mem[2].getName());
+      c.collect("top2mem", top3mem[1].getName());
+      c.collect("top3mem", top3mem[0].getName());
+      c.collect("pid_top1mem", ""+top3mem[2].getPid());
+      c.collect("pid_top2mem", ""+top3mem[1].getPid());
+      c.collect("pid_top3mem", ""+top3mem[0].getPid());
 
     } finally {
       ProcessStat.releaseAll();

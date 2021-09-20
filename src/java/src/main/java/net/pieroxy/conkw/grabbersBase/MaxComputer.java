@@ -1,16 +1,15 @@
-package net.pieroxy.conkw.webapp.grabbers;
+package net.pieroxy.conkw.grabbersBase;
 
 import com.dslplatform.json.DslJson;
 import com.dslplatform.json.JsonWriter;
 import com.dslplatform.json.runtime.Settings;
+import net.pieroxy.conkw.grabbersBase.Grabber;
 import net.pieroxy.conkw.utils.JsonHelper;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class MaxComputer {
   public static String FILENAME = ".autoMax.json";

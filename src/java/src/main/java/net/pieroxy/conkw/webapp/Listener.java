@@ -3,7 +3,8 @@ package net.pieroxy.conkw.webapp;
 import net.pieroxy.conkw.config.Config;
 import net.pieroxy.conkw.config.ConfigReader;
 import net.pieroxy.conkw.config.GrabberConfig;
-import net.pieroxy.conkw.webapp.grabbers.*;
+import net.pieroxy.conkw.grabbersBase.Grabber;
+import net.pieroxy.conkw.grabbersBase.GrabberListener;
 import net.pieroxy.conkw.webapp.servlets.Api;
 import net.pieroxy.conkw.webapp.servlets.ApiManager;
 import net.pieroxy.conkw.webapp.servlets.Emi;
@@ -85,7 +86,7 @@ public class Listener implements ServletContextListener {
         LOGGER.info("Reloading configuration.");
         // this is a hot swap :
         // Start threads and all.
-        newg.forEach((gr) -> gr.grab());
+        // Stupid? Maybe there is no UI... newg.forEach((gr) -> gr.grab());
         // Replace the grabbers.
         grabbers = newg;
         // Recycle the old grabbers.

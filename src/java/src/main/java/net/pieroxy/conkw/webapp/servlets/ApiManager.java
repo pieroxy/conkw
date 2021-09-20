@@ -1,7 +1,6 @@
 package net.pieroxy.conkw.webapp.servlets;
 
-import net.pieroxy.conkw.webapp.grabbers.Grabber;
-import net.pieroxy.conkw.webapp.grabbers.TriggerableGrabber;
+import net.pieroxy.conkw.grabbersBase.Grabber;
 import net.pieroxy.conkw.webapp.model.Response;
 
 import java.util.*;
@@ -26,14 +25,15 @@ public class ApiManager implements MetaGrabber {
   public Response buildResponse(long now, Collection<GrabberInput>grabbersRequested) {
     markGrabbersRequested(grabbersRequested, now);
     Response r = new Response();
-    grabbersRequested.stream().parallel().forEach(
+    grabbersRequested.stream()/*.parallel()*/.forEach(
             s -> {
               Grabber g = allGrabbers.get(s.getName());
               if (g == null) {
                 r.addError("Grabber '" + s.getName() + "' not found.");
               } else {
                 g.addActiveCollector(s.getParamValue());
-                r.add(g.grab());
+                g.collect();
+                r.add(g.getCollectorToUse(s.getParamValue()).getData());
               }
             }
     );

@@ -1,13 +1,13 @@
 package net.pieroxy.conkw.webapp.grabbers.spotify;
 
+import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.utils.DebugTools;
 import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.utils.RandomHelper;
 import net.pieroxy.conkw.utils.StringUtil;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.duration.CDurationParser;
-import net.pieroxy.conkw.webapp.grabbers.TimeThrottledGrabber;
-import net.pieroxy.conkw.webapp.model.ResponseData;
+import net.pieroxy.conkw.grabbersBase.TimeThrottledGrabber;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -143,7 +143,7 @@ public class SpotifyGrabber extends TimeThrottledGrabber {
   }
 
   @Override
-  protected void load(ResponseData sr) {
+  protected void load(SimpleCollector sr) {
     if (!StringUtil.isValidApiKey(clientId) ||
         !StringUtil.isValidApiKey(clientSecret) ||
         !StringUtil.isValidUrl(redirectUri)) {
@@ -164,7 +164,7 @@ public class SpotifyGrabber extends TimeThrottledGrabber {
     return clientId;
   }
 
-  private void loadSpotify(ResponseData r) throws IOException {
+  private void loadSpotify(SimpleCollector r) throws IOException {
     if (AUTH_CODE == null) {
       r.addError("spotify-error: <a href=\""+getInitUrl()+"\">please login</a>");
       return;
@@ -177,7 +177,7 @@ public class SpotifyGrabber extends TimeThrottledGrabber {
     }
   }
 
-  private void loadSpotifyData(ResponseData r, boolean firstCall) throws IOException {
+  private void loadSpotifyData(SimpleCollector r, boolean firstCall) throws IOException {
     URL url = new URL("https://api.spotify.com/v1/me/player/currently-playing");
     URLConnection con = url.openConnection();
     HttpURLConnection http = (HttpURLConnection)con;
@@ -211,7 +211,7 @@ public class SpotifyGrabber extends TimeThrottledGrabber {
     try {
       CurrentlyPlayingResponse response = JsonHelper.getJson().deserialize(CurrentlyPlayingResponse.class, is);
       if (response == null) { // Not playing
-        r.addMetric("status", "Stopped");
+        r.collect("status", "Stopped");
         return;
       }
       if (response.error!=null) {
@@ -219,32 +219,32 @@ public class SpotifyGrabber extends TimeThrottledGrabber {
         return;
       }
       isPlaying = response.is_playing;
-      r.addMetric("status", response.is_playing ? "Playing": "Paused");
+      r.collect("status", response.is_playing ? "Playing": "Paused");
       CurrentlyPlayingResponseItem item = response.item;
       if (item != null) {
-        r.addMetric("trackname", item.name);
-        r.addMetric("tracknum", item.track_number + "");
-        r.addMetric("islocal", item.is_local + "");
+        r.collect("trackname", item.name);
+        r.collect("tracknum", item.track_number + "");
+        r.collect("islocal", item.is_local + "");
         boolean haveArtist = false;
         if (item.artists!=null && item.artists.length>0) {
-          r.addMetric("album_artist", item.artists[0].name);
+          r.collect("album_artist", item.artists[0].name);
           haveArtist = true;
         }
 
         if (item.album!=null) {
           if (item.album.images!=null && item.album.images.length>0) {
-            r.addMetric("album_art", item.album.images[0].url);
+            r.collect("album_art", item.album.images[0].url);
           }
-          r.addMetric("album_name", item.album.name);
-          r.addMetric("album_date", item.album.release_date);
-          r.addMetric("album_tracks", item.album.total_tracks+"");
+          r.collect("album_name", item.album.name);
+          r.collect("album_date", item.album.release_date);
+          r.collect("album_tracks", item.album.total_tracks+"");
           if (!haveArtist && item.album.artists!=null && item.album.artists.length>0) {
-            r.addMetric("album_artist", item.album.artists[0].name);
+            r.collect("album_artist", item.album.artists[0].name);
           }
         }
-        r.addMetric("len", item.duration_ms/1000.);
+        r.collect("len", item.duration_ms/1000.);
       }
-      r.addMetric("pos", response.progress_ms/1000.);
+      r.collect("pos", response.progress_ms/1000.);
       if (canLogFine()) this.log(Level.FINE, "CurrentlyPlayingResponse: " + JsonHelper.toString(response));
 
     } catch (Exception e) {
@@ -258,7 +258,7 @@ public class SpotifyGrabber extends TimeThrottledGrabber {
 
 
 
-  private void loadAccessToken(ResponseData r) throws IOException {
+  private void loadAccessToken(SimpleCollector r) throws IOException {
     URL url = new URL("https://accounts.spotify.com/api/token");
     URLConnection con = url.openConnection();
     HttpURLConnection http = (HttpURLConnection)con;
@@ -293,7 +293,7 @@ public class SpotifyGrabber extends TimeThrottledGrabber {
 
   }
 
-  private void refreshAccessToken(ResponseData r) throws IOException {
+  private void refreshAccessToken(SimpleCollector r) throws IOException {
     URL url = new URL("https://accounts.spotify.com/api/token");
     URLConnection con = url.openConnection();
     HttpURLConnection http = (HttpURLConnection)con;

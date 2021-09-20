@@ -1,17 +1,18 @@
-package net.pieroxy.conkw.webapp.grabbers;
+package net.pieroxy.conkw.grabbersBase;
 
-import net.pieroxy.conkw.collectors.Collector;
+import net.pieroxy.conkw.collectors.SimpleCollector;
+import net.pieroxy.conkw.collectors.SimplePermanentCollector;
+import net.pieroxy.conkw.grabbersBase.Grabber;
+import net.pieroxy.conkw.grabbersBase.SimpleGrabber;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.util.logging.Level;
 
-public abstract class AsyncGrabber extends Grabber implements Runnable {
+public abstract class AsyncGrabber extends SimpleGrabber<SimpleCollector> implements Runnable {
   public static final String LOAD_STATUS = "grab_status";
 
-  private ResponseData cached;
-
   abstract public boolean changed();
-  abstract public ResponseData grabSync();
+  abstract public void grabSync(SimpleCollector c);
   protected void disposeSync() {}
 
   public Thread thread;
@@ -42,7 +43,12 @@ public abstract class AsyncGrabber extends Grabber implements Runnable {
   }
 
   @Override
-  public final ResponseData grab() {
+  public SimpleCollector getDefaultCollector() {
+    return new SimplePermanentCollector(this);
+  }
+
+  @Override
+  public final void collect(SimpleCollector c) {
     lastGrab = System.currentTimeMillis();
 
     if (thread == null) {
@@ -50,16 +56,12 @@ public abstract class AsyncGrabber extends Grabber implements Runnable {
       thread = new Thread(this, this.getClass().getSimpleName() + "/" + getName());
       this.log(Level.INFO, "Starts " + getName());
       thread.start();
-      if (cached == null) {
-        cached = new ResponseData(this, System.currentTimeMillis());
-      }
-      cached.addMetric(LOAD_STATUS, "Initializing");
+      c.collect(LOAD_STATUS, "Initializing");
     } else if (grabbingRightNow) {
-      cached.addMetric(LOAD_STATUS, getLoadingString());
+      c.collect(LOAD_STATUS, getLoadingString());
     } else {
-      cached.addMetric(LOAD_STATUS, "Loaded");
+      c.collect(LOAD_STATUS, "Loaded");
     }
-    return cached;
   }
 
   public void run() {
@@ -98,22 +100,23 @@ public abstract class AsyncGrabber extends Grabber implements Runnable {
             now = System.currentTimeMillis();
             grabbingRightNow=true;
             try {
-              cached = grabSync();
+              getActiveCollectors().forEach(sc -> {
+                long a = System.nanoTime();
+                this.grabSync(sc);
+                sc.setTime(System.nanoTime() - a);
+              });
             } finally {
               grabbingRightNow = false;
             }
             if (shutdownRequested()) return;
-            long eor = System.currentTimeMillis();
-            if (cached.getElapsedToGrab()==0) {
-              cached.setElapsedToGrab(eor - now);
+            if (canLogFine()) {
+              long eor = System.currentTimeMillis();
+              time += eor - now;
+              count++;
+              time *= 0.9; // 0.9 factor to forget old values over time.
+              count *= 0.9;
+              this.log(Level.FINE, getName() + " takes on avg " + (long) (time / count) + " (this time " + (eor - now) + ")");
             }
-            saveData(cached);
-            time += eor - now;
-            count++;
-            time *= 0.9; // 0.9 factor to forget old values over time.
-            count *= 0.9;
-            if (canLogFine())
-              this.log(Level.FINE, getName() + " takes on avg " + (long) (time / count) + " (this time " + (eor - now)+ ")");
           }
         } else {
           // Pause the grabbers after 5s of inactivity.

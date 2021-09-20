@@ -2,6 +2,10 @@ package net.pieroxy.conkw.utils.duration;
 
 public final class CDuration {
   private final long seconds;
+  public static final CDuration ZERO = CDurationParser.parse("0m");
+  public static final CDuration ONE_MINUTE = CDurationParser.parse("1m");
+  public static final CDuration ONE_HOUR = CDurationParser.parse("1h");
+  public static final CDuration FIVE_SECONDS = CDurationParser.parse("5s");
 
   public CDuration(long numberOfSeconds) {
     this.seconds = numberOfSeconds;

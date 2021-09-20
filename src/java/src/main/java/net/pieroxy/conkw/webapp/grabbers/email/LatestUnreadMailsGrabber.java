@@ -1,10 +1,10 @@
 package net.pieroxy.conkw.webapp.grabbers.email;
 
+import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.utils.HashTools;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.duration.CDurationParser;
-import net.pieroxy.conkw.webapp.grabbers.TimeThrottledGrabber;
-import net.pieroxy.conkw.webapp.model.ResponseData;
+import net.pieroxy.conkw.grabbersBase.TimeThrottledGrabber;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -70,7 +70,7 @@ public class LatestUnreadMailsGrabber extends TimeThrottledGrabber {
     }
 
     @Override
-    protected void load(ResponseData res) {
+    protected void load(SimpleCollector res) {
         long now = System.currentTimeMillis();
         log(Level.FINE, "Starting to grab mails");
         List<MailData> allMails = new ArrayList<>();
@@ -92,15 +92,15 @@ public class LatestUnreadMailsGrabber extends TimeThrottledGrabber {
 
         int i=0;
         for (MailData m : allMails) {
-            res.addMetric("mail_" + i + "_subject", m.getSubject());
-            res.addMetric("mail_" + i + "_date", m.getDate());
-            res.addMetric("mail_" + i + "_account", m.getAccount());
-            res.addMetric("mail_" + i + "_from", m.getFrom());
+            res.collect("mail_" + i + "_subject", m.getSubject());
+            res.collect("mail_" + i + "_date", m.getDate());
+            res.collect("mail_" + i + "_account", m.getAccount());
+            res.collect("mail_" + i + "_from", m.getFrom());
             i++;
             if (i>=maxMessages) break;
         }
-        res.addMetric("mails_len", i);
-        res.addMetric("mails_unread_total", allMails.size());
+        res.collect("mails_len", i);
+        res.collect("mails_unread_total", allMails.size());
         log(Level.FINE, "Done grabbing mails in " + (System.currentTimeMillis() - now) + "ms.");
     }
 

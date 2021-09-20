@@ -2,11 +2,11 @@ package net.pieroxy.conkw.webapp.model;
 
 import com.dslplatform.json.CompiledJson;
 import com.dslplatform.json.JsonAttribute;
-import net.pieroxy.conkw.webapp.Listener;
-import net.pieroxy.conkw.webapp.grabbers.Grabber;
+import net.pieroxy.conkw.grabbersBase.Grabber;
 
 import java.time.Duration;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @CompiledJson(onUnknown = CompiledJson.Behavior.IGNORE)

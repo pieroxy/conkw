@@ -1,11 +1,12 @@
 package net.pieroxy.conkw.webapp.grabbers.yahooFinance;
 
+import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.utils.DebugTools;
 import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.utils.StringUtil;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.duration.CDurationParser;
-import net.pieroxy.conkw.webapp.grabbers.TimeThrottledGrabber;
+import net.pieroxy.conkw.grabbersBase.TimeThrottledGrabber;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.io.InputStream;
@@ -39,10 +40,10 @@ public class YahooFinanceGrabber extends TimeThrottledGrabber {
   }
 
   @Override
-  protected void load(ResponseData res) {
+  protected void load(SimpleCollector c) {
     try {
       if (!StringUtil.isValidApiKey(key)) {
-        res.addError("YahooFinanceGrabber not properly configured.");
+        c.addError("YahooFinanceGrabber not properly configured.");
         return;
       }
 
@@ -63,19 +64,19 @@ public class YahooFinanceGrabber extends TimeThrottledGrabber {
       }
 
       Summary response = JsonHelper.getJson().deserialize(Summary.class, is);
-      res.addMetric("price", response.getPrice().getRegularMarketPrice().getRaw());
-      res.addMetric("priceAvg50Days", response.getSummaryDetail().getFiftyDayAverage().getRaw());
-      res.addMetric("changeprc", response.getPrice().getRegularMarketChangePercent().getRaw());
-      res.addMetric("change", response.getPrice().getRegularMarketChange().getRaw());
-      res.addMetric("name", response.getPrice().getShortName());
-      res.addMetric("currencySymbol", response.getPrice().getCurrencySymbol());
-      res.addMetric("currency", response.getPrice().getCurrency());
-      res.addMetric("marketCapFmt", response.getPrice().getMarketCap().getFmt());
+      c.collect("price", response.getPrice().getRegularMarketPrice().getRaw());
+      c.collect("priceAvg50Days", response.getSummaryDetail().getFiftyDayAverage().getRaw());
+      c.collect("changeprc", response.getPrice().getRegularMarketChangePercent().getRaw());
+      c.collect("change", response.getPrice().getRegularMarketChange().getRaw());
+      c.collect("name", response.getPrice().getShortName());
+      c.collect("currencySymbol", response.getPrice().getCurrencySymbol());
+      c.collect("currency", response.getPrice().getCurrency());
+      c.collect("marketCapFmt", response.getPrice().getMarketCap().getFmt());
 
       return;
     } catch (Exception e) {
       e.printStackTrace();
-      res.addError("yahoof: " + e.getMessage());
+      c.addError("yahoof: " + e.getMessage());
     }
   }
 

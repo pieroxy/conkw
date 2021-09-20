@@ -28,11 +28,11 @@
       "parameters": {
         // Default name is "oshi"
         /* "name":"oshi" */
-        // In seconds, the delay between refreshes of the data deemed "static". Defaults to one day.
-        /* "staticDataDelay":"", */
-        // In seconds, the delay between refreshes of the data deemed "detailed" which is more expensive to extract.
+        // The delay between refreshes of the data deemed "static". Defaults to one day.
+        /* "staticDataDelay":"1d", */
+        // The delay between refreshes of the data deemed "detailed" which is more expensive to extract.
         // Defaults to one minute.
-        /* "detailedDataDelay":"", */
+        /* "detailedDataDelay":"1m", */
       },
       // Do not extract "sessions" and "processes" which are the most expensive.
       "extract":"sensors,memory,physicalmemory,virtualmemory,computer,baseboard,firmware,cpu,cpubycore,cpuident,displays,disksio,disksinfos,graphicscards,nics,netbw,battery,psus,soundcards,usb,os,filestores,tcpv4,tcpv6,udpv4,udpv6,sessions,shortsessions,netp",

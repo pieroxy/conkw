@@ -1,5 +1,7 @@
 package net.pieroxy.conkw.webapp.grabbers;
 
+import net.pieroxy.conkw.collectors.SimpleCollector;
+import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
 import net.pieroxy.conkw.utils.ExternalBinaryRunner;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
@@ -22,14 +24,13 @@ public class LmSensorsGrabber extends AsyncGrabber {
   }
 
   @Override
-  public ResponseData grabSync() {
+  public void grabSync(SimpleCollector c) {
     if (runner == null) runner = new ExternalBinaryRunner(new String[] {"sensors", "-u"});
     runner.exec();
-    return parse(runner.getBuffer());
+    parse(c, runner.getBuffer());
   }
 
-  private ResponseData parse(byte[] buffer) {
-    ResponseData res = new ResponseData(this, System.currentTimeMillis());
+  private void parse(SimpleCollector c, byte[] buffer) {
     BufferedReader br = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(buffer)));
     String line = null;
     String chipid = null;
@@ -51,26 +52,25 @@ public class LmSensorsGrabber extends AsyncGrabber {
           chipid = chipname = chipsensor = null;
         } else if (line.startsWith("  ")) {
           String[]parts = line.split(":");
-          addMetric(res, categories, chipid, chipsensor, parts[0].trim(), Double.parseDouble(parts[1].trim()));
+          addMetric(c, categories, chipid, chipsensor, parts[0].trim(), Double.parseDouble(parts[1].trim()));
         } else {
           chipsensor = line.substring(0, line.length()-1);
         }
       } catch (IOException e) {
         log(Level.SEVERE, "", e);
-        res.addError(e.getMessage());
+        c.addError(e.getMessage());
         break;
       }
     }
     for (Map.Entry<String, StringBuilder> e : categories.entrySet()) {
-      res.addMetric(e.getKey(), e.getValue().toString());
+      c.collect(e.getKey(), e.getValue().toString());
     }
-    return res;
   }
 
-  private void addMetric(ResponseData res, Map<String, StringBuilder> categories, String prefix1, String prefix2, String metricName, double value) {
+  private void addMetric(SimpleCollector c, Map<String, StringBuilder> categories, String prefix1, String prefix2, String metricName, double value) {
     String fullName = (prefix1 + "_" + prefix2 + "_" + metricName).replaceAll(",", ".");
-    computeAutoMaxMinAbsolute(res, fullName, value);
-    res.addMetric("shortname_" + fullName, prefix2);
+    computeAutoMaxMinAbsolute(c, fullName, value);
+    c.collect("shortname_" + fullName, prefix2);
     String cat = getCategory(metricName);
     StringBuilder sbcat = categories.get(cat);
     if (sbcat == null) {

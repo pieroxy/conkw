@@ -1,26 +1,23 @@
-package net.pieroxy.conkw.webapp.grabbers;
+package net.pieroxy.conkw.grabbersBase;
 
 import net.pieroxy.conkw.collectors.Collector;
-import net.pieroxy.conkw.collectors.SimpleTransientCollector;
+import net.pieroxy.conkw.collectors.EmptyCollector;
 import net.pieroxy.conkw.utils.LongHolder;
 import net.pieroxy.conkw.utils.TimedData;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.duration.CDurationParser;
-import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.time.Duration;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public abstract class Grabber {
+public abstract class Grabber<T extends Collector> {
   private Logger LOGGER = createLogger();
   private static final long CONF_EXPIRATION_MS = 10000; // 10s
+  private final Collector EMPTY_COLLECTOR = new EmptyCollector(this);
 
   private File storageFolder=null;
   private File tmpFolder=null;
@@ -29,22 +26,22 @@ public abstract class Grabber {
   private String name;
   private Level logLevel = Level.INFO;
 
-  private volatile MaxComputer _maxComputer = null;
 
-  Map<String, ResponseData> cachedResponses = new HashMap<>();
+  Map<String, T> cachedResponses = new HashMap<>();
   Map<String, LongHolder> maxValues = new HashMap<>();
-  Map<String, TimedData<? extends Collector>> extractedByConfiguration = new HashMap<>();
+  Map<String, TimedData<T>> extractedByConfiguration = new HashMap<>();
   private long lastConfigPurge;
 
   public String processAction(Map<String, String[]> parameterMap) {
     return "";
   }
-  public abstract ResponseData grab();
+  public abstract void collect(T c);
   public abstract void dispose();
   public abstract String getDefaultName();
+  public abstract T getDefaultCollector();
 
   private void gcConfigurations() {
-    Map<String,TimedData<? extends Collector>> nm = new HashMap<>(extractedByConfiguration);
+    Map<String,TimedData<T>> nm = new HashMap<>(extractedByConfiguration);
     boolean deleted = false;
     for (String s : nm.keySet()) {
       TimedData td = nm.get(s);
@@ -58,59 +55,36 @@ public abstract class Grabber {
     lastConfigPurge = System.currentTimeMillis();
   }
 
-  public Collection<Collector> getActiveCollectors() {
+  public final void collect() {
+    getActiveCollectors().forEach(this::collect);
+  }
+
+  public Collection<T> getActiveCollectors() {
     long now = System.currentTimeMillis();
-    if (now-lastConfigPurge > 2000) gcConfigurations();
+    if (now-lastConfigPurge > CONF_EXPIRATION_MS) gcConfigurations();
     return extractedByConfiguration.values().stream().map(td -> td.getData()).collect(Collectors.toList());
   }
 
-  public Collector getDefaultCollector() {
-    return new SimpleTransientCollector();
+  public Collector getCollectorToUse(String config) {
+    TimedData<? extends Collector> res = extractedByConfiguration.get(config);
+    if (res==null) return EMPTY_COLLECTOR; // First call might encounter this situation.
+    res.useNow();
+    return res.getData();
   }
 
-  public Collector parseCollector(String param) {
+  public T parseCollector(String param) {
     throw new RuntimeException("Grabber " + this.getClass().getSimpleName() + " does not take any parameters");
   }
 
   public void addActiveCollector(String param) {
     if (extractedByConfiguration.containsKey(param)) return;
-    Map<String,TimedData<? extends Collector>> nm = new HashMap<>(extractedByConfiguration);
+    Map<String,TimedData<T>> nm = new HashMap<>(extractedByConfiguration);
     if (param == null) {
       nm.put(null, new TimedData(getDefaultCollector()));
     } else {
       nm.put(param, new TimedData(parseCollector(param)));
     }
     extractedByConfiguration = nm;
-  }
-
-  private MaxComputer getMaxComputer() {
-    if (_maxComputer == null) _maxComputer = new MaxComputer(this);
-    return _maxComputer;
-  }
-
-  public void extract(ResponseData toFill, String extractName, ExtractMethod method, java.time.Duration delay) {
-    if (shouldExtract(extractName)) {
-      if (delay.equals(Duration.ZERO)) {
-        method.extract(toFill);
-        return;
-      }
-      long now = System.currentTimeMillis();
-      ResponseData cached = cachedResponses.get(extractName);
-      if (cached==null || (now-cached.getTimestamp() > delay.toMillis())) {
-        if (canLogFiner()) {
-          if (cached == null)
-            log(Level.FINER,now +  " Grabbing " + extractName + " cached on null with delay " + delay.toMillis());
-          else
-            log(Level.FINER,now + " Grabbing " + extractName + " cached on " + cached.getTimestamp() + " with delay " + delay.toMillis());
-        }
-        cached = new ResponseData(null, now);
-        method.extract(cached);
-        cachedResponses.put(extractName, cached);
-      }
-      toFill.getNum().putAll(cached.getNum());
-      toFill.getStr().putAll(cached.getStr());
-      toFill.addExtracted(extractName);
-    }
   }
 
   protected abstract void setConfig(Map<String, String> config, Map<String, Map<String, String>> namedConfigs);
@@ -213,49 +187,6 @@ public abstract class Grabber {
     Logger l = Logger.getLogger(this.getClass().getName() + "/" + n);
     l.setLevel(logLevel);
     return l;
-  }
-
-  protected void computeAutoMaxPerSecond(ResponseData res, String metricName, double value) {
-    res.addMetric(metricName, value);
-    LongHolder lh = maxValues.get(metricName);
-    if (lh == null) {
-      maxValues.put(metricName, new LongHolder(System.currentTimeMillis()));
-    } else {
-      double ratio = (System.currentTimeMillis() - lh.value)/1000.;
-      if (ratio>0.50) { // Below 0.5s things might get out of whack
-        double mv = getMaxComputer().getMax(this, metricName, value/ratio);
-        res.addMetric("max$" + metricName, mv);
-      } else {
-        log(Level.INFO, "Ignoring value of " +value + " for metric " + metricName + " because ratio is "  + ratio);
-      }
-      lh.value = System.currentTimeMillis();
-    }
-  }
-
-  protected void computeAutoMaxMinAbsolute(ResponseData res, String metricName, double value) {
-    res.addMetric(metricName, value);
-    {
-      LongHolder lh = maxValues.get(metricName);
-      if (lh == null) {
-        maxValues.put(metricName, new LongHolder(System.currentTimeMillis()));
-      } else {
-        double mv = getMaxComputer().getMax(this, metricName, value);
-        res.addMetric("max$" + metricName, mv);
-        lh.value = System.currentTimeMillis();
-      }
-    }
-    {
-      metricName = "min$" + metricName;
-      value = -value;
-      LongHolder lh = maxValues.get(metricName);
-      if (lh == null) {
-        maxValues.put(metricName, new LongHolder(System.currentTimeMillis()));
-      } else {
-        double mv = getMaxComputer().getMax(this, metricName, value);
-        res.addMetric(metricName, -mv);
-        lh.value = System.currentTimeMillis();
-      }
-    }
   }
 
   @Override

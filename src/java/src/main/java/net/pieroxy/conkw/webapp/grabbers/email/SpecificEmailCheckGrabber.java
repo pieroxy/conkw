@@ -1,11 +1,12 @@
 package net.pieroxy.conkw.webapp.grabbers.email;
 
 import com.sun.mail.imap.IMAPFolder;
+import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.utils.HashTools;
 import net.pieroxy.conkw.utils.StringUtil;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.duration.CDurationParser;
-import net.pieroxy.conkw.webapp.grabbers.TimeThrottledGrabber;
+import net.pieroxy.conkw.grabbersBase.TimeThrottledGrabber;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import javax.mail.*;
@@ -80,7 +81,7 @@ public class SpecificEmailCheckGrabber extends TimeThrottledGrabber {
     }
 
     @Override
-    protected void load(ResponseData res) {
+    protected void load(SimpleCollector res) {
         try {
             Message[] messages = getMessages();
             if (messages!=null && messages.length>0) {
@@ -88,7 +89,7 @@ public class SpecificEmailCheckGrabber extends TimeThrottledGrabber {
                 if (error!=null) res.addError(error);
                 storeNextUid(messages);
             }
-            res.addMetric(LAST_SEEN, lastSeen);
+            res.collect(LAST_SEEN, lastSeen);
             setPrivateData();
         } catch (Exception e) {
             log(Level.SEVERE, "", e);

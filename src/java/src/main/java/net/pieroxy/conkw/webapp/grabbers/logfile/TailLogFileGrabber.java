@@ -1,8 +1,10 @@
 package net.pieroxy.conkw.webapp.grabbers.logfile;
 
 import net.pieroxy.conkw.accumulators.Accumulator;
+import net.pieroxy.conkw.accumulators.AccumulatorCollector;
 import net.pieroxy.conkw.accumulators.parser.AccumulatorExpressionParser;
-import net.pieroxy.conkw.webapp.grabbers.Grabber;
+import net.pieroxy.conkw.collectors.Collector;
+import net.pieroxy.conkw.grabbersBase.Grabber;
 import net.pieroxy.conkw.webapp.grabbers.logfile.listeners.LogListener;
 import net.pieroxy.conkw.webapp.grabbers.logfile.listeners.LogParser;
 import net.pieroxy.conkw.webapp.model.ResponseData;
@@ -11,7 +13,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class TailLogFileGrabber extends Grabber implements LogListener<LogRecord> {
+public class TailLogFileGrabber extends Grabber<AccumulatorCollector> implements LogListener<LogRecord> {
     private final static Logger LOGGER = Logger.getLogger(TailLogFileGrabber.class.getName());
 
     private String filename;
@@ -25,7 +27,7 @@ public class TailLogFileGrabber extends Grabber implements LogListener<LogRecord
     }
 
     @Override
-    public synchronized ResponseData grab() {
+    public synchronized void collect(AccumulatorCollector c) {
         if (reader == null) {
             try {
                 reader = new RealTimeLogFileReader(filename, this, (LogParser<LogRecord>) Class.forName(parserClassName).newInstance());
@@ -34,17 +36,16 @@ public class TailLogFileGrabber extends Grabber implements LogListener<LogRecord
             }
             reader.start();
         }
-        ResponseData data = new ResponseData(this, System.currentTimeMillis());
-        synchronized (accumulator) {
-            accumulator.log("", data.getNum(), data.getStr());
-            accumulator.reset();
-        }
-        return data;
     }
 
     @Override
     public String getDefaultName() {
         return "taillog";
+    }
+
+    @Override
+    public AccumulatorCollector getDefaultCollector() {
+        return new AccumulatorCollector(this, "default", accumulator);
     }
 
     @Override

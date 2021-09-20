@@ -1,24 +1,23 @@
-package net.pieroxy.conkw.webapp.grabbers;
+package net.pieroxy.conkw.grabbersBase;
 
 import com.dslplatform.json.DslJson;
 import com.dslplatform.json.JsonWriter;
+import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
 public abstract class TimeThrottledGrabber extends AsyncGrabber {
   protected abstract CDuration getDefaultTtl();
-  protected abstract void load(ResponseData res);
+  protected abstract void load(SimpleCollector res);
   protected abstract String getCacheKey();
   protected abstract void applyConfig(Map<String, String> config, Map<String, Map<String, String>> configs);
 
@@ -122,7 +121,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber {
   }
 
   @Override
-  public final ResponseData grabSync() {
+  public final void grabSync(SimpleCollector c) {
     lastGrabHadErrors = true;
     log(Level.FINE, "grabSync() :: begin");
     if (lastRun==-1) {
@@ -132,18 +131,17 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber {
         lastRun = data.getTimestamp();
         log(Level.FINE, "grabSync() :: loaded from cache");
         lastGrabHadErrors = false;
-        return data;
+        c.setData(data);
       }
     }
     try {
-      ResponseData r = new ResponseData(this, System.currentTimeMillis());
-      load(r);
+      load(c);
       lastRun = System.currentTimeMillis();
-      lastGrabHadErrors = !r.getErrors().isEmpty();
-      return r;
+      lastGrabHadErrors = c.hasError();
     } catch (Exception e) {
       log(Level.SEVERE, "Grabbing " + getName(), e);
-      return new ResponseData(this, System.currentTimeMillis());
+      //return new ResponseData(this, System.currentTimeMillis());
+      c.addError("Error while grabbing " + getName() + ": " + e.getMessage());
     }
   }
 

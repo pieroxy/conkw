@@ -2,7 +2,8 @@ package net.pieroxy.conkw.webapp.grabbers;
 
 import com.dslplatform.json.DslJson;
 import com.dslplatform.json.JsonWriter;
-import net.pieroxy.conkw.collectors.Collector;
+import net.pieroxy.conkw.collectors.SimplePermanentCollector;
+import net.pieroxy.conkw.grabbersBase.Grabber;
 import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 import net.pieroxy.conkw.webapp.servlets.Emi;
@@ -13,15 +14,15 @@ import java.util.Date;
 import java.util.Map;
 import java.util.logging.Level;
 
-public class ExternalMetricsGrabber extends Grabber {
+public class ExternalMetricsGrabber extends Grabber<SimplePermanentCollector> {
 
   private ResponseData data = null;
   private boolean changed;
   private Thread saveThread;
 
   @Override
-  public ResponseData grab() {
-    return data;
+  public void collect(SimplePermanentCollector c) {
+    c.setData(data);
   }
 
   @Override
@@ -35,6 +36,11 @@ public class ExternalMetricsGrabber extends Grabber {
   @Override
   public String getDefaultName() {
     return "emi";
+  }
+
+  @Override
+  public SimplePermanentCollector getDefaultCollector() {
+    return new SimplePermanentCollector(this);
   }
 
 

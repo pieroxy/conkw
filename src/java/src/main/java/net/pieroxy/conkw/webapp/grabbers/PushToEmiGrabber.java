@@ -2,6 +2,11 @@ package net.pieroxy.conkw.webapp.grabbers;
 
 import com.dslplatform.json.DslJson;
 import com.dslplatform.json.JsonWriter;
+import net.pieroxy.conkw.collectors.Collector;
+import net.pieroxy.conkw.collectors.SimpleCollector;
+import net.pieroxy.conkw.collectors.SimplePermanentCollector;
+import net.pieroxy.conkw.grabbersBase.Grabber;
+import net.pieroxy.conkw.grabbersBase.GrabberListener;
 import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.webapp.model.EmiInput;
 import net.pieroxy.conkw.webapp.model.ResponseData;
@@ -22,7 +27,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
-public class PushToEmiGrabber extends Grabber implements GrabberListener, Runnable {
+public class PushToEmiGrabber extends Grabber<SimpleCollector> implements GrabberListener, Runnable {
 
   private String prefix;
   private URL url;
@@ -30,8 +35,8 @@ public class PushToEmiGrabber extends Grabber implements GrabberListener, Runnab
   private List<Grabber> grabbers;
 
   @Override
-  public ResponseData grab() {
-    return null;
+  public void collect(SimpleCollector c) {
+
   }
 
   @Override
@@ -47,6 +52,11 @@ public class PushToEmiGrabber extends Grabber implements GrabberListener, Runnab
   @Override
   public String getDefaultName() {
     return null;
+  }
+
+  @Override
+  public SimpleCollector getDefaultCollector() {
+    return new SimplePermanentCollector(this);
   }
 
   @Override
@@ -101,7 +111,7 @@ public class PushToEmiGrabber extends Grabber implements GrabberListener, Runnab
     input.setStr(str);
     grabbers.forEach(g -> {
       if (shouldExtract(g.getName())) {
-        ResponseData data = g.grab(); // Static grab cannot be parametrized
+        ResponseData data = grab(g); // Static grab cannot be parametrized
         if (data!=null) {
           data.getNum().forEach((k, v) -> num.put(prefix+"_"+g.getName() + "_" + k, v));
           data.getStr().forEach((k, v) -> str.put(prefix+"_"+g.getName() + "_" + k, v));
@@ -110,6 +120,12 @@ public class PushToEmiGrabber extends Grabber implements GrabberListener, Runnab
       }
     });
     return input;
+  }
+
+  private ResponseData grab(Grabber g) {
+    Collector c = g.getDefaultCollector();
+    g.collect(c);
+    return c.getData();
   }
 
   private void sendData(EmiInput input) throws IOException {

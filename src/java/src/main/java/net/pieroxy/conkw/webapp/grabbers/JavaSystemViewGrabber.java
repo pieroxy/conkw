@@ -1,6 +1,10 @@
 package net.pieroxy.conkw.webapp.grabbers;
 
+import net.pieroxy.conkw.collectors.SimpleCollector;
+import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
 import net.pieroxy.conkw.utils.OsCheck;
+import net.pieroxy.conkw.utils.duration.CDuration;
+import net.pieroxy.conkw.utils.duration.CDurationParser;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import javax.management.*;
@@ -37,50 +41,49 @@ public class JavaSystemViewGrabber extends AsyncGrabber {
   }
 
   @Override
-  public synchronized ResponseData grabSync() {
+  public void grabSync(SimpleCollector c) {
     ResponseData r = new ResponseData(this, System.currentTimeMillis());
-    extract(r, "sys", this::grabSys, Duration.ofMinutes(1));
-    extract(r, "cpu", this::grabCpu, Duration.ZERO);
-    extract(r, "mem", this::grabMem, Duration.ZERO);
-    extract(r, "freespace", this::getFreeSpace, Duration.ZERO);
-    return r;
+    extract(c, "sys", this::grabSys, CDuration.ONE_MINUTE);
+    extract(c, "cpu", this::grabCpu, CDuration.ZERO);
+    extract(c, "mem", this::grabMem, CDuration.ZERO);
+    extract(c, "freespace", this::getFreeSpace, CDuration.ZERO);
   }
 
-  private void grabSys(ResponseData res) {
-    res.addMetric("arch", osBean.getArch());
-    res.addMetric("nbcpu", osBean.getAvailableProcessors());
-    res.addMetric("osname", osBean.getName());
-    res.addMetric("osversion", osBean.getVersion());
-    res.addMetric("user", System.getProperty("user.name"));
+  private void grabSys(SimpleCollector c) {
+    c.collect("arch", osBean.getArch());
+    c.collect("nbcpu", osBean.getAvailableProcessors());
+    c.collect("osname", osBean.getName());
+    c.collect("osversion", osBean.getVersion());
+    c.collect("user", System.getProperty("user.name"));
     try {
-      res.addMetric("hostname", java.net.InetAddress.getLocalHost().getHostName());
+      c.collect("hostname", java.net.InetAddress.getLocalHost().getHostName());
     } catch (UnknownHostException e) {
       LOGGER.log(Level.SEVERE, "Getting hostname", e);
     }
   }
-  private void grabCpu(ResponseData res) {
-    res.addMetric("systemloadavg", osBean.getSystemLoadAverage());
-    res.addMetric("processCpuUsage", readInternalValueAsDouble("ProcessCpuLoad"));
-    res.addMetric("ProcessCpuTime", readInternalValueAsLong("ProcessCpuTime"));
-    res.addMetric("totalCpuUsage", readInternalValueAsDouble("SystemCpuLoad"));
+  private void grabCpu(SimpleCollector c) {
+    c.collect("systemloadavg", osBean.getSystemLoadAverage());
+    c.collect("processCpuUsage", readInternalValueAsDouble("ProcessCpuLoad"));
+    c.collect("ProcessCpuTime", readInternalValueAsLong("ProcessCpuTime"));
+    c.collect("totalCpuUsage", readInternalValueAsDouble("SystemCpuLoad"));
   }
-  private void grabMem(ResponseData res) {
+  private void grabMem(SimpleCollector c) {
     long availablemem = readInternalValueAsLong("FreePhysicalMemorySize");
-    res.addMetric("ramAvailable", availablemem);
+    c.collect("ramAvailable", availablemem);
     if (cache_totalmem==null) cache_totalmem = readInternalValueAsLong ("TotalPhysicalMemorySize");
 
-    res.addMetric("ramTotal", cache_totalmem);
-    res.addMetric("ramUsed", cache_totalmem - availablemem);
+    c.collect("ramTotal", cache_totalmem);
+    c.collect("ramUsed", cache_totalmem - availablemem);
 
     long swapfree = readInternalValueAsLong("FreeSwapSpaceSize");
     if (cache_totalswp == null) cache_totalswp = readInternalValueAsLong("TotalSwapSpaceSize");
 
-    res.addMetric("swapTotal", cache_totalswp);
-    res.addMetric("swapUsed", cache_totalswp-swapfree);
-    res.addMetric("swapFree", swapfree);
+    c.collect("swapTotal", cache_totalswp);
+    c.collect("swapUsed", cache_totalswp-swapfree);
+    c.collect("swapFree", swapfree);
   }
 
-  private void getFreeSpace(ResponseData r) {
+  private void getFreeSpace(SimpleCollector c) {
     if (mountPoints==null || mountPoints.isEmpty()) return;
     StringBuilder mps = new StringBuilder();
     for (int i=0 ; i<mountPoints.size() ; i++)
@@ -91,15 +94,15 @@ public class JavaSystemViewGrabber extends AsyncGrabber {
         try {
           if (mps.length()>0) mps.append(',');
           mps.append(mp);
-          r.addMetric("freespace_total_" + mp, (double) store.getTotalSpace());
-          r.addMetric("freespace_usable_" + mp, (double) store.getUsableSpace());
-          r.addMetric("freespace_used_" + mp, (double) (store.getTotalSpace() - store.getUsableSpace()));
+          c.collect("freespace_total_" + mp, (double) store.getTotalSpace());
+          c.collect("freespace_usable_" + mp, (double) store.getUsableSpace());
+          c.collect("freespace_used_" + mp, (double) (store.getTotalSpace() - store.getUsableSpace()));
         } catch (IOException e) {
           log(Level.SEVERE, "Grabbing free space for " + mp, e);
         }
       }
     }
-    r.addMetric("freespace_mountpoints", mps.toString());
+    c.collect("freespace_mountpoints", mps.toString());
   }
 
 

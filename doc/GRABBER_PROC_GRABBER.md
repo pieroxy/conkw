@@ -138,18 +138,20 @@ The following metrics extracted and refreshed every 10 runs:
 * `num.bat_plugged` Is `0` if the battery is not plugged in, `1` otherwise.
 
 ### mdstat
-Extracts data from `/proc/mdstat` regarding the status of mdadm arrays.
+Extracts data from `/proc/mdstat` regarding the status of mdadm arrays, every minute.
 
 Overall metrics:
 
 * `num.mdstatFailed` The number of failed drives across all arrays.
 * `str.mdstatSummary` The summary string, in the form of `md1:[2/2] md2:[2/2]<12%> md3:[10/10] md0:[2/2]` where `md2` is being checked / reconstructed and the process is at 12%.
-* `num.mdstatNbDevices` The number of devices.
+* `num.mdstatNbDevices` The number of devices. In the example above there are four: `md0`, `md1`, `md2` and `md3`.
 
 For each device:
 
-* `str.mdstatByArray<n>` The summary string for this array, where `n` goes from 0 to `mdstatNbDevices-1`, for example `mdstatByArray0`.
+* `str.mdstatByArray<n>` The summary string for this array, where `n` goes from 0 to `mdstatNbDevices-1`, for example `mdstatByArray0` with the value `md1:[2/2]`.
 
 
 ### hostname
 This grabber exposes the content of `/etc/hostname` in the metric `hostname`.
+
+Extracted once per hour, so expect the wrong value to stick around for a few minutes if you change it.

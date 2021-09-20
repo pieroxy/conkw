@@ -1,11 +1,11 @@
 package net.pieroxy.conkw.webapp.grabbers.bingnews;
 
+import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.utils.DebugTools;
 import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.duration.CDurationParser;
-import net.pieroxy.conkw.webapp.grabbers.TimeThrottledGrabber;
-import net.pieroxy.conkw.webapp.model.ResponseData;
+import net.pieroxy.conkw.grabbersBase.TimeThrottledGrabber;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -35,7 +35,7 @@ public class BingNewsGrabber extends TimeThrottledGrabber {
   }
 
   @Override
-  protected void load(ResponseData res) {
+  protected void load(SimpleCollector res) {
     try {
 /**
  * curl
@@ -64,16 +64,16 @@ public class BingNewsGrabber extends TimeThrottledGrabber {
       int i=0;
       for (Value v : response.getValue()) {
 
-        res.addMetric("news_name_"+i, v.getName());
-        res.addMetric("news_url_"+i, v.getUrl());
+        res.collect("news_name_"+i, v.getName());
+        res.collect("news_url_"+i, v.getUrl());
         if (v.getImage()!=null && v.getImage().getThumbnail()!=null)
-          res.addMetric("news_imageurl_"+i, v.getImage().getThumbnail().getContentUrl());
+          res.collect("news_imageurl_"+i, v.getImage().getThumbnail().getContentUrl());
         if (v.getProvider()!=null && v.getProvider().size()>0 && v.getProvider().get(0).getImage()!=null && v.getProvider().get(0).getImage().getThumbnail()!=null)
-          res.addMetric("news_providerimageurl_"+i, v.getProvider().get(0).getImage().getThumbnail().getContentUrl());
+          res.collect("news_providerimageurl_"+i, v.getProvider().get(0).getImage().getThumbnail().getContentUrl());
         i++;
       }
 
-      res.addMetric("news_size", i);
+      res.collect("news_size", i);
 
       return;
     } catch (Exception e) {

@@ -1,5 +1,7 @@
 package net.pieroxy.conkw.webapp.grabbers;
 
+import net.pieroxy.conkw.collectors.SimpleCollector;
+import net.pieroxy.conkw.grabbersBase.TimeThrottledGrabber;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.duration.CDurationParser;
 import net.pieroxy.conkw.webapp.model.ResponseData;
@@ -133,21 +135,21 @@ public class HttpsCertGrabber extends TimeThrottledGrabber {
   }
 
   @Override
-  protected void load(ResponseData res) {
+  protected void load(SimpleCollector res) {
     long now = System.currentTimeMillis();
     Arrays.stream(names.split(",")).forEach(s -> {
       try {
         Date exp = getExpirationDate(s);
         if (exp!=null) {
-          res.addMetric("date_" + s, exp.getTime());
-          res.addMetric("days_" + s, (exp.getTime() - now) / (1000 * 60 * 60 * 24));
-          res.addMetric("ts_" + s, exp.getTime() - now);
+          res.collect("date_" + s, exp.getTime());
+          res.collect("days_" + s, (exp.getTime() - now) / (1000 * 60 * 60 * 24));
+          res.collect("ts_" + s, exp.getTime() - now);
         }
       } catch (Exception e) {
         res.addError(e.getMessage());
       }
     });
-    res.addMetric("alldomains", names);
+    res.collect("alldomains", names);
   }
 
   @Override

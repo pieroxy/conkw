@@ -13,10 +13,14 @@ public class TimedData<T> {
     }
 
     public void use() {
-        lastUsed = System.currentTimeMillis();
+
     }
 
     public T getData() {
         return data;
+    }
+
+    public void useNow() {
+        lastUsed = System.currentTimeMillis();
     }
 }

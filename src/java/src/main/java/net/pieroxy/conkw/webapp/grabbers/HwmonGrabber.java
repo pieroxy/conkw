@@ -1,5 +1,7 @@
 package net.pieroxy.conkw.webapp.grabbers;
 
+import net.pieroxy.conkw.collectors.SimpleCollector;
+import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
 import net.pieroxy.conkw.utils.PerformanceTools;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
@@ -68,9 +70,8 @@ public class HwmonGrabber extends AsyncGrabber {
     }
 
     @Override
-    public ResponseData grabSync() {
+    public void grabSync(SimpleCollector c) {
         init();
-        ResponseData res = new ResponseData(this, System.currentTimeMillis());
         try {
             root.children.entrySet().forEach(hwmon -> {
                 if (canLogFiner()) log(Level.FINER, "Starting analysis of  " + hwmon.getKey());
@@ -79,11 +80,11 @@ public class HwmonGrabber extends AsyncGrabber {
                         if (canLogFiner()) log(Level.FINER, "Going for data file " + datafile.getKey());
                         if (datafile.getKey().endsWith("_label")) {
                             String label = PerformanceTools.readAllAsString(datafile.getValue().file, buffer);
-                            res.addMetric(datafile.getValue().metricName, label);
+                            c.collect(datafile.getValue().metricName, label);
                         } else {
                             File data = datafile.getValue().file;
                             long value = PerformanceTools.parseLongInFile(data, buffer);
-                            addMetric(res, datafile.getValue().category, datafile.getValue().metricName, datafile.getKey(), value);
+                            addMetric(c, datafile.getValue().category, datafile.getValue().metricName, datafile.getKey(), value);
                         }
                     } catch (Exception e) {
                         log(Level.INFO, "", e);
@@ -95,9 +96,8 @@ public class HwmonGrabber extends AsyncGrabber {
         }
 
         for (Map.Entry<String, StringBuilder> e : categories.entrySet()) {
-            res.addMetric(e.getKey(), e.getValue().toString());
+            c.collect(e.getKey(), e.getValue().toString());
         }
-        return res;
     }
 
     private boolean shouldExtractMetric(String f) {
@@ -113,9 +113,9 @@ public class HwmonGrabber extends AsyncGrabber {
         return false;
     }
 
-    private void addMetric(ResponseData res, String cat, String fullMetricName, String metricName, double value) {
+    private void addMetric(SimpleCollector c, String cat, String fullMetricName, String metricName, double value) {
         value = applyCatMult(cat, value);
-        computeAutoMaxMinAbsolute(res, fullMetricName, value);
+        computeAutoMaxMinAbsolute(c, fullMetricName, value);
     }
 
     private double applyCatMult(String cat, double value) {

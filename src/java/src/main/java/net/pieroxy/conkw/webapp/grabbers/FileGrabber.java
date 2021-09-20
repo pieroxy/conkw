@@ -1,5 +1,7 @@
 package net.pieroxy.conkw.webapp.grabbers;
 
+import net.pieroxy.conkw.collectors.SimpleCollector;
+import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.io.*;
@@ -25,33 +27,29 @@ public class FileGrabber extends AsyncGrabber {
   }
 
   @Override
-  public ResponseData grabSync() {
+  public void grabSync(SimpleCollector c) {
     try {
       long ts = Files.getLastModifiedTime(path).toMillis();
-      ResponseData r = new ResponseData(this, ts);
       Properties p = new Properties();
       try (Reader reader = new FileReader(file)) {
         p.load(reader);
         for (String pname : p.stringPropertyNames()) {
           if (pname.startsWith("num_")) {
             try {
-              r.addMetric(pname.substring(4), Double.parseDouble(p.getProperty(pname)));
+              c.collect(pname.substring(4), Double.parseDouble(p.getProperty(pname)));
             } catch (Exception e) {
               log(Level.SEVERE, "Error: unparseable property " + pname, e);
             }
           }
           if (pname.startsWith("str_")) {
-            r.addMetric(pname.substring(4), p.getProperty(pname));
+            c.collect(pname.substring(4), p.getProperty(pname));
           }
         }
       }
       lastTimestamp = ts;
-      return r;
     } catch (Exception e) {
       log(Level.SEVERE, "Grabbing " + getName(), e);
-      ResponseData r = new ResponseData(this, System.currentTimeMillis());
-      r.addError(getName()+":"+e.getMessage());
-      return r;
+      c.addError(getName()+":"+e.getMessage());
     }
   }
 

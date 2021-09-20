@@ -1,5 +1,6 @@
 package net.pieroxy.conkw.accumulators;
 
+import net.pieroxy.conkw.collectors.Collector;
 import net.pieroxy.conkw.webapp.grabbers.logfile.LogRecord;
 
 import java.util.Map;

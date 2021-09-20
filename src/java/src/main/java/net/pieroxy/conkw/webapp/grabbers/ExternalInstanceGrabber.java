@@ -1,5 +1,7 @@
 package net.pieroxy.conkw.webapp.grabbers;
 
+import net.pieroxy.conkw.collectors.SimpleCollector;
+import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
 import net.pieroxy.conkw.utils.*;
 import net.pieroxy.conkw.utils.exceptions.DisplayMessageException;
 import net.pieroxy.conkw.webapp.model.NeedsAuthResponse;
@@ -28,7 +30,7 @@ public class ExternalInstanceGrabber extends AsyncGrabber {
   }
 
   @Override
-  public ResponseData grabSync() {
+  public void grabSync(SimpleCollector c) {
     try {
       URL url = new URL(targetUrl + (StringUtil.isNullOrEmptyTrimmed(sessionToken)?"":("&"+ApiAuthManager.SID_FIELD+"="+sessionToken)));
       URLConnection con = url.openConnection();
@@ -49,9 +51,9 @@ public class ExternalInstanceGrabber extends AsyncGrabber {
           authenticate();
         } catch (DisplayMessageException e) {
           res.addError(e.getMessage());
-          return res;
+          c.setData(res);
         }
-        return grabSync();
+        grabSync(c);
       }
       data.getMetrics().entrySet().forEach(e -> {
         ResponseData d = e.getValue();
@@ -60,11 +62,10 @@ public class ExternalInstanceGrabber extends AsyncGrabber {
         d.getStr().entrySet().forEach(de -> res.addMetric(prefix+de.getKey(), de.getValue()));
         d.getErrors().forEach(de -> res.addError(prefix + de));
       });
-      return res;
+      c.setData(res);
     } catch (Exception e) {
       log(Level.SEVERE, "Grabbing " + getName(), e);
     }
-    return new ResponseData(this, System.currentTimeMillis());
   }
 
   private void authenticate() throws Exception {
