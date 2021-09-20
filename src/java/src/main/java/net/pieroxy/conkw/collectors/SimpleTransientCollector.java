@@ -12,5 +12,4 @@ public class SimpleTransientCollector extends AbstractSimpleCollector {
     public synchronized void reset() {
         collected = new ResponseData(grabber, System.currentTimeMillis());
     }
-
 }
