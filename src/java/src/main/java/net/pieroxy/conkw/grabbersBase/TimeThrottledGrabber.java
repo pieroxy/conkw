@@ -132,6 +132,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber {
         log(Level.FINE, "grabSync() :: loaded from cache");
         lastGrabHadErrors = false;
         c.setData(data);
+        return;
       }
     }
     try {
