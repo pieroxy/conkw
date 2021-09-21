@@ -30,6 +30,7 @@ public class ResponseData {
     this.timestamp = timestamp;
     if (grabber!=null) {
       this.name = grabber.getName();
+      if (name == null) throw new RuntimeException("Grabber name cannot be null");
       this.extractor = grabber.getClass().getSimpleName();
     }
   }
