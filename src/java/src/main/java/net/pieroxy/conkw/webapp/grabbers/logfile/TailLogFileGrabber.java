@@ -21,7 +21,7 @@ public class TailLogFileGrabber extends AsyncGrabber<AccumulatorCollector> imple
 
     @Override
     public void disposeSync() {
-        reader.shutdown();
+        if (reader!=null) reader.shutdown();
     }
 
     @Override
