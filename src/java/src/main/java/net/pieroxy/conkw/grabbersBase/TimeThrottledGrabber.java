@@ -6,6 +6,7 @@ import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.collectors.SimplePermanentCollector;
 import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.utils.duration.CDuration;
+import net.pieroxy.conkw.webapp.grabbers.bingnews.BingNewsGrabber;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.io.File;
@@ -147,6 +148,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
     try {
       load(collector);
       lastRun = System.currentTimeMillis();
+      collector.setTimestamp(lastRun);
       lastGrabHadErrors = collector.hasError();
       c.setData(collector);
     } catch (Exception e) {

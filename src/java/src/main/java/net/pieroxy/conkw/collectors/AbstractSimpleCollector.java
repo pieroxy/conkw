@@ -61,4 +61,8 @@ public abstract class AbstractSimpleCollector implements SimpleCollector {
         return collected.getTimestamp();
     }
 
+    @Override
+    public void setTimestamp(long time) {
+        collected.setTimestamp(time);
+    }
 }

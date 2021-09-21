@@ -33,4 +33,30 @@ public final class CDuration {
   public long asYears() {
     return seconds/31536000;
   }
+
+  @Override
+  public String toString() {
+    return "CDuration{" +
+        "seconds=" + seconds +
+        '}';
+  }
+
+  /**
+   * Not really optimized, to state it gently. Use with care and only for debugging.
+   * @param d
+   * @return
+   */
+  public static String formatDurationInMs(long d) {
+    StringBuilder res = new StringBuilder();
+    res.append(d%1000).append("ms");
+    d/=1000;
+    res.insert(0, (d%60) + "s ");
+    d/=60;
+    res.insert(0, (d%60) + "m ");
+    d/=60;
+    res.insert(0, (d%24) + "h ");
+    d/=24;
+    res.insert(0, (d) + "d ");
+    return res.toString();
+  }
 }

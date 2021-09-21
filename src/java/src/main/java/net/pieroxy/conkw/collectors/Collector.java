@@ -19,6 +19,7 @@ public interface Collector {
     void prepareForCollection();
 
     void setTime(long time);
+    void setTimestamp(long time);
 
     long getTime();
 

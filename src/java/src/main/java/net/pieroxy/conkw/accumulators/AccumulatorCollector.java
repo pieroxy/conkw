@@ -17,7 +17,6 @@ public class AccumulatorCollector<T extends LogRecord> implements Collector {
   private final Grabber grabber;
 
   Collection<String> errors = new ArrayList<>();
-  long time;
 
   public AccumulatorCollector(Grabber g, String metricName, Accumulator<T> accumulator) {
     grabber = g;
@@ -33,6 +32,8 @@ public class AccumulatorCollector<T extends LogRecord> implements Collector {
     rd.getNum().entrySet().forEach(entry -> res.addMetric(entry.getKey(), entry.getValue()));
     rd.getStr().entrySet().forEach(entry -> res.addMetric(entry.getKey(), entry.getValue()));
     rd.getErrors().forEach(entry -> res.addError(entry));
+    rd.setTimestamp(sc.getTimestamp());
+    rd.setElapsedToGrab(accumulator.getLastPeriod());
     errors.forEach(res::addError);
     return res;
   }
@@ -45,12 +46,17 @@ public class AccumulatorCollector<T extends LogRecord> implements Collector {
 
   @Override
   public void setTime(long time) {
-    this.time = time;
+    sc.setTime(time);
+  }
+
+  @Override
+  public void setTimestamp(long time) {
+    sc.setTimestamp(time);
   }
 
   @Override
   public long getTime() {
-    return time;
+    return sc.getTime();
   }
 
   @Override

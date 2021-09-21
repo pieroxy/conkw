@@ -24,6 +24,11 @@ public class EmptyCollector implements Collector {
   }
 
   @Override
+  public void setTimestamp(long time) {
+
+  }
+
+  @Override
   public long getTime() {
     return 0;
   }

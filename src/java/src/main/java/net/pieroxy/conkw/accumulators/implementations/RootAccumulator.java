@@ -57,4 +57,8 @@ public class RootAccumulator<T extends LogRecord> implements Accumulator<T> {
     lastPeriod = now - lastResetTime;
     lastResetTime = now;
   }
+
+  public long getLastPeriod() {
+    return lastPeriod;
+  }
 }
