@@ -19,15 +19,16 @@ This documentation will not drill down on OSHI and its system representation. Fo
   "name":"oshi-processes",
   "extract":"processes",
   "parameters": {
-    "detailedDataDelay":"5",
+    "detailedDataDelay":"5s",
     "staticDataDelay":"86400"
   }
 }
 ```
 
 * You can specify a class of data to extract with the `extract` parameter. This will considerably improve performance if you don't need some of the most expensive extractions on all the time (See `processes` and `services` below)
-* `detailedDataDelay` The delay in seconds at which the most expensive data is extracted, instead of once every second. That applies to `processes` and `services` below. Default is 5 seconds.
-* `staticDataDelay` The delay in seconds at which the "static" data is extracted. This is serial numbers, makes and models of various pieces of hardware on your computer. Default is one day.
+* `detailedDataDelay` The delay at which the most expensive data is extracted, instead of once every second. That applies to `processes` and `services` below. Default is 5 seconds.
+* `staticDataDelay` The delay at which the "static" data is extracted. This is serial numbers, makes and models of various pieces of hardware on your computer. Default is one day.
+* [See here for the delay format](CONCEPTS.md)
 
 The default configuration includes three of these grabbers, one configured for processes, one for services and one for the rest. Note how having three instances allows to benefit from the whole range of metrics while only consuming resources for the ones you actually have a dashboard opened of. 
 
