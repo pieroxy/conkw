@@ -3,7 +3,6 @@ package net.pieroxy.conkw.webapp.grabbers.oshi;
 import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.collectors.SimpleTransientCollector;
 import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
-import net.pieroxy.conkw.grabbersBase.SimpleGrabber;
 import net.pieroxy.conkw.utils.StringUtil;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.duration.CDurationParser;
@@ -15,7 +14,6 @@ import oshi.software.os.OSService;
 import oshi.software.os.OSSession;
 import oshi.util.EdidUtil;
 
-import java.time.Duration;
 import java.util.*;
 import java.util.stream.Collectors;
 
