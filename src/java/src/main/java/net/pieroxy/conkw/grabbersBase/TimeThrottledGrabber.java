@@ -25,7 +25,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
   private CDuration ttl;
   private CDuration errorTtl;
   private boolean lastGrabHadErrors = false;
-  private SimpleCollector collector = getDefaultCollector();
+  private SimpleCollector collector = null; // Cannot initialize it here as grabbers don't have their names yet.
 
   public boolean isLastGrabHadErrors() {
     return lastGrabHadErrors;
@@ -44,6 +44,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
     errorTtl = getDurationProperty("errorTtl", config, errorTtl);
 
     applyConfig(config, configs);
+    collector = getDefaultCollector();
   }
 
   protected CDuration getTtl() {
