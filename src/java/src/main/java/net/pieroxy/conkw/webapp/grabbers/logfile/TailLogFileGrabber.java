@@ -3,11 +3,9 @@ package net.pieroxy.conkw.webapp.grabbers.logfile;
 import net.pieroxy.conkw.accumulators.Accumulator;
 import net.pieroxy.conkw.accumulators.AccumulatorCollector;
 import net.pieroxy.conkw.accumulators.parser.AccumulatorExpressionParser;
-import net.pieroxy.conkw.collectors.Collector;
 import net.pieroxy.conkw.grabbersBase.Grabber;
 import net.pieroxy.conkw.webapp.grabbers.logfile.listeners.LogListener;
 import net.pieroxy.conkw.webapp.grabbers.logfile.listeners.LogParser;
-import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -36,6 +34,7 @@ public class TailLogFileGrabber extends Grabber<AccumulatorCollector> implements
             }
             reader.start();
         }
+        c.prepareForCollection(); // This is wrong and causes havoc as soon as there's more than one client. Soon to be removed.
     }
 
     @Override

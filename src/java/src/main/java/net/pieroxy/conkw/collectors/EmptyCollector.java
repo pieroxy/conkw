@@ -16,7 +16,7 @@ public class EmptyCollector implements Collector {
   }
 
   @Override
-  public void reset() {
+  public void prepareForCollection() {
   }
 
   @Override

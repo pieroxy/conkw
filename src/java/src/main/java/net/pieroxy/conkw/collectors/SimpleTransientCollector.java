@@ -9,7 +9,7 @@ public class SimpleTransientCollector extends AbstractSimpleCollector {
     }
 
     @Override
-    public synchronized void reset() {
+    public synchronized void prepareForCollection() {
         collected = new ResponseData(grabber, System.currentTimeMillis());
     }
 }

@@ -6,28 +6,39 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class AbstractHistogramAccumulator<T extends LogRecord> implements Accumulator<T> {
-    private double globalSum;
-    private double globalCount;
-    private double[]histogram = null;
+    Data data;
+    Data lastData;
 
     public abstract List<Double> getThresholds();
     public abstract Double getValue(T line);
 
+    /**
+     * Needs to be called before any operation and after getThresholds is set to return the thresholds.
+     */
+    protected void init() {
+        data = new Data(getThresholds().size()+1);
+        lastData = new Data(getThresholds().size()+1);
+    }
+
+    @Override
+    public void sumWith(Accumulator acc) {
+        throw new RuntimeException("Not Implemented");
+    }
+
     @Override
     public double getTotal() {
-        return globalSum;
+        return lastData.globalSum;
     }
 
     @Override
     public double add(T line) {
-        if (histogram == null) histogram = new double[getThresholds().size()+1];
         Double value = getValue(line);
         if (value == null) return -1;
 
-        globalCount++;
-        globalSum += value;
+        data.globalCount++;
+        data.globalSum += value;
         int histoPos = findHistoPos(value);
-        histogram[histoPos]++;
+        data.histogram[histoPos]++;
         return value;
     }
 
@@ -46,29 +57,27 @@ public abstract class AbstractHistogramAccumulator<T extends LogRecord> implemen
         return (int) (Math.log(x) / Math.log(b));
     }
 
-
     @Override
     public void reset() {
-        if (histogram == null) histogram = new double[getThresholds().size()+1];
-        globalSum = globalCount = 0;
-        for (int i=0 ; i<histogram.length ; i++) histogram[i]=0;
+        lastData.copyFrom(data);
+        data.globalSum = data.globalCount = 0;
+        for (int i=0 ; i<data.histogram.length ; i++) data.histogram[i]=0;
     }
 
     @Override
     public void log(String prefix, Map<String, Double> num, Map<String, String> str) {
-        if (histogram == null) histogram = new double[getThresholds().size()+1];
-        num.put(AccumulatorUtils.addToMetricName(prefix, "total"), globalSum);
-        num.put(AccumulatorUtils.addToMetricName(prefix, "count"), globalCount);
+        num.put(AccumulatorUtils.addToMetricName(prefix, "total"), lastData.globalSum);
+        num.put(AccumulatorUtils.addToMetricName(prefix, "count"), lastData.globalCount);
 
-        if (globalCount>0)
-            num.put(AccumulatorUtils.addToMetricName(prefix, "avg"), globalSum/globalCount);
+        if (lastData.globalCount>0)
+            num.put(AccumulatorUtils.addToMetricName(prefix, "avg"), lastData.globalSum/lastData.globalCount);
 
         List<Double> thresholds = getThresholds();
         StringBuilder dims = new StringBuilder();
-        for (int i=0 ; i<histogram.length ; i++) {
-            double current = histogram[i];
+        for (int i=0 ; i<lastData.histogram.length ; i++) {
+            double current = lastData.histogram[i];
             if (i>0) dims.append(",");
-            if (i==histogram.length-1) {
+            if (i==lastData.histogram.length-1) {
                 num.put(AccumulatorUtils.addToMetricName(prefix, "above", "histValue"), current);
                 dims.append(AccumulatorUtils.cleanMetricPathElement("above"));
             } else {
@@ -77,5 +86,25 @@ public abstract class AbstractHistogramAccumulator<T extends LogRecord> implemen
             }
         }
         str.put(AccumulatorUtils.addToMetricName(prefix, "histValues"), dims.toString());
+    }
+}
+
+class Data {
+    double globalSum;
+    double globalCount;
+    double[]histogram = null;
+
+    void copyFrom(Data d) {
+        if (d == null) {
+            globalCount = globalSum = 0;
+        } else {
+            globalCount = d.globalCount;
+            globalSum = d.globalSum;
+            System.arraycopy(d.histogram, 0, histogram, 0, histogram.length);
+        }
+    }
+
+    public Data(int size) {
+        this.histogram = new double[size];
     }
 }

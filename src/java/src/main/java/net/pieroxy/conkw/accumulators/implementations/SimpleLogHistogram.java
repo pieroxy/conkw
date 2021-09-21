@@ -25,6 +25,7 @@ public class SimpleLogHistogram extends AbstractHistogramAccumulator {
             thresholds.add(t);
             t*=base;
         }
+        super.init();
     }
 
     @Override
@@ -39,10 +40,5 @@ public class SimpleLogHistogram extends AbstractHistogramAccumulator {
     @Override
     public Double getValue(LogRecord line) {
         return line.getValues().get(valueKey);
-    }
-
-    @Override
-    public void sumWith(Accumulator acc) {
-        throw new RuntimeException("Not Implemented");
     }
 }

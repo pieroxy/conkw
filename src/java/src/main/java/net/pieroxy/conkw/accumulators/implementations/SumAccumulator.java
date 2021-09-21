@@ -11,6 +11,7 @@ public class SumAccumulator<T extends LogRecord> implements Accumulator<T> {
   private final String valueName;
   private double defaultValue;
   private double value;
+  private double lastValue = 0;
 
   public SumAccumulator(String valueName, double defaultValue) {
     this.valueName = valueName;
@@ -27,21 +28,22 @@ public class SumAccumulator<T extends LogRecord> implements Accumulator<T> {
 
   @Override
   public void sumWith(Accumulator acc) {
-    value += ((SumAccumulator)acc).value;
+    lastValue += ((SumAccumulator)acc).lastValue;
   }
 
   @Override
   public double getTotal() {
-    return value;
+    return lastValue;
   }
 
   @Override
   public void log(String prefix, Map<String, Double> data, Map<String, String> str) {
-    data.put(AccumulatorUtils.addToMetricName(prefix, valueName, NAME), value);
+    data.put(AccumulatorUtils.addToMetricName(prefix, valueName, NAME), lastValue);
   }
 
   @Override
   public void reset() {
+    lastValue = value;
     value=0;
   }
 

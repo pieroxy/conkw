@@ -2,9 +2,6 @@ package net.pieroxy.conkw.grabbersBase;
 
 import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.collectors.SimplePermanentCollector;
-import net.pieroxy.conkw.grabbersBase.Grabber;
-import net.pieroxy.conkw.grabbersBase.SimpleGrabber;
-import net.pieroxy.conkw.webapp.grabbers.HttpsCertGrabber;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.util.logging.Level;
@@ -104,7 +101,7 @@ public abstract class AsyncGrabber extends SimpleGrabber<SimpleCollector> implem
             try {
               getActiveCollectors().forEach(sc -> {
                 long a = System.nanoTime();
-                sc.reset();
+                sc.prepareForCollection();
                 this.grabSync(sc);
                 sc.setTime(System.nanoTime() - a);
               });

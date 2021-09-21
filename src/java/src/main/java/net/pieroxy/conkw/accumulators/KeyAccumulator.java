@@ -14,8 +14,9 @@ import java.util.stream.Collectors;
 public abstract class KeyAccumulator<A, T extends LogRecord> implements Accumulator<T> {
   private final static Logger LOGGER = Logger.getLogger(KeyAccumulator.class.getName());
   private final AccumulatorProvider<T> provider;
-  private double total;
-  Map<A, Accumulator<T>> data = new HashMap<>();
+
+  KeyAccumulatorData<A,T> current;
+  KeyAccumulatorData<A,T> old;
   Map<A, Double> floatingWeights = new HashMap<>();
 
   abstract public A getKey(T record);
@@ -26,11 +27,13 @@ public abstract class KeyAccumulator<A, T extends LogRecord> implements Accumula
 
   public KeyAccumulator(AccumulatorProvider<T> provider) {
     this.provider = provider;
+    current = new KeyAccumulatorData<>();
+    old = new KeyAccumulatorData<>();
   }
 
   @Override
   public double getTotal() {
-    return total;
+    return old.total;
   }
 
   @Override
@@ -38,26 +41,26 @@ public abstract class KeyAccumulator<A, T extends LogRecord> implements Accumula
     A key = getKey(line);
     if (key == null) return 0;
 
-    Accumulator<T> acc = data.getOrDefault(key, null);
+    Accumulator<T> acc = current.data.getOrDefault(key, null);
     if (acc==null) try {
-      data.put(key, acc = provider.getAccumulator());
+      current.data.put(key, acc = provider.getAccumulator());
     } catch (Exception e) {
       LOGGER.log(Level.SEVERE, "Cannot create accumulator", e);
     }
     double value = acc.add(line);
-    total += value;
+    current.total += value;
     return value;
   }
 
   @Override
   public void sumWith(Accumulator acc) {
     KeyAccumulator<A, T> ka = (KeyAccumulator) acc;
-    ka.data.entrySet().stream().forEach(entry -> {
-      Accumulator a = data.get(entry.getKey());
+    ka.old.data.entrySet().stream().forEach(entry -> {
+      Accumulator a = old.data.get(entry.getKey());
       try {
         if (a == null) {
           a = provider.getAccumulator();
-          data.put(entry.getKey(), a);
+          old.data.put(entry.getKey(), a);
         }
         a.sumWith(entry.getValue());
       } catch (Exception e) {
@@ -68,18 +71,24 @@ public abstract class KeyAccumulator<A, T extends LogRecord> implements Accumula
 
   @Override
   public void reset() {
+    old.data = new HashMap<>(current.data);
+    old.total = current.total;
+
     if (getMaxBuckets()!=null) {
       // Keep all the keys ever seen
-      data.entrySet().forEach(e -> {
+      current.data.entrySet().forEach(e -> {
         Double d = floatingWeights.get(e.getKey());
         if (d==null) d = 0d;
         floatingWeights.put(e.getKey(), 0.9*d+e.getValue().getTotal());
         e.getValue().reset();
       });
     } else {
-      data.clear();
+      current.data.entrySet().forEach(e -> {
+        e.getValue().reset();
+      });
+      current.data.clear();
     }
-    total = 0;
+    current.total = 0;
   }
 
   @Override
@@ -93,7 +102,7 @@ public abstract class KeyAccumulator<A, T extends LogRecord> implements Accumula
   void logStable(String prefix, Map<String, Double> num, Map<String, String> str) {
     try {
       Set<Tuple> tree = new TreeSet<>();
-      data.entrySet().forEach(e -> tree.add(new Tuple(String.valueOf(e.getKey()), floatingWeights.getOrDefault(e.getKey(), 0d) + e.getValue().getTotal(), e.getValue())));
+      old.data.entrySet().forEach(e -> tree.add(new Tuple(String.valueOf(e.getKey()), floatingWeights.getOrDefault(e.getKey(), 0d) + e.getValue().getTotal(), e.getValue())));
       StringBuilder keys = new StringBuilder();
       int detail = getMaxBuckets();
       Accumulator others = null;
@@ -112,7 +121,7 @@ public abstract class KeyAccumulator<A, T extends LogRecord> implements Accumula
         if (keys.length() > 0) keys.append(',');
         keys.append("others");
       }
-      num.put(AccumulatorUtils.addToMetricName(prefix, "total"), total);
+      num.put(AccumulatorUtils.addToMetricName(prefix, "total"), old.total);
       str.put(AccumulatorUtils.addToMetricName(prefix, "values"), keys.toString());
     } catch (Exception e) {
       LOGGER.log(Level.SEVERE, "", e);
@@ -120,15 +129,15 @@ public abstract class KeyAccumulator<A, T extends LogRecord> implements Accumula
   }
 
   public void logSimple(String prefix, Map<String, Double> num, Map<String, String> str) {
-    for (Map.Entry<A, Accumulator<T>> entry : data.entrySet()) {
+    for (Map.Entry<A, Accumulator<T>> entry : old.data.entrySet()) {
       entry.getValue().log(AccumulatorUtils.addToMetricName(prefix, String.valueOf(entry.getKey())), num, str);
     }
-    num.put(AccumulatorUtils.addToMetricName(prefix, "total"), total);
+    num.put(AccumulatorUtils.addToMetricName(prefix, "total"), old.total);
     List<A> values = new ArrayList<>();
-    values.addAll(data.keySet());
+    values.addAll(old.data.keySet());
     str.put(AccumulatorUtils.addToMetricName(prefix, "values"),
             values.stream()
-                    .sorted(Comparator.comparingDouble(a -> -data.get(a).getTotal()))
+                    .sorted(Comparator.comparingDouble(a -> -old.data.get(a).getTotal()))
                     .map(a -> String.valueOf(a))
                     .collect(Collectors.joining(",")));
   }
@@ -149,4 +158,15 @@ public abstract class KeyAccumulator<A, T extends LogRecord> implements Accumula
       return -Double.compare(value, ((Tuple)o).value);
     }
   }
+}
+
+
+class KeyAccumulatorData<A, T extends LogRecord> {
+  public KeyAccumulatorData() {
+    this.data = new HashMap<>();
+  }
+
+  double total;
+  Map<A, Accumulator<T>> data;
+
 }

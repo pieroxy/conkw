@@ -31,8 +31,8 @@ public class AccumulatorCollector<T extends LogRecord> implements Collector {
   }
 
   @Override
-  public void reset() {
-
+  public void prepareForCollection() {
+    accumulator.reset();
   }
 
   @Override

@@ -9,6 +9,15 @@ import java.util.Map;
 public class SimpleCounter<T extends LogRecord> implements Accumulator<T> {
   public static final String NAME = "count";
   int count;
+  int oldCount;
+
+  @Override
+  public String toString() {
+    return "SimpleCounter{" +
+            "count=" + count +
+            ", oldCount=" + oldCount +
+            '}';
+  }
 
   @Override
   public double add(LogRecord line) {
@@ -18,21 +27,22 @@ public class SimpleCounter<T extends LogRecord> implements Accumulator<T> {
 
   @Override
   public void log(String prefix, Map<String, Double> data, Map<String, String> str) {
-    data.put(AccumulatorUtils.addToMetricName(prefix, NAME), (double)count);
+    data.put(AccumulatorUtils.addToMetricName(prefix, NAME), (double)oldCount);
   }
 
   @Override
   public void sumWith(Accumulator acc) {
-    count += ((SimpleCounter)acc).count;
+    oldCount += ((SimpleCounter)acc).oldCount;
   }
 
   @Override
   public double getTotal() {
-    return count;
+    return oldCount;
   }
 
   @Override
   public void reset() {
+    oldCount = count;
     count = 0;
   }
 }

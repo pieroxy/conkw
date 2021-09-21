@@ -9,6 +9,6 @@ public class SimplePermanentCollector extends SimpleTransientCollector {
   }
 
   @Override
-  public void reset() {
+  public void prepareForCollection() {
   }
 }

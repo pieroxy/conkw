@@ -35,6 +35,7 @@ public class Simple125Histogram extends AbstractHistogramAccumulator {
         scale*=10;
       }
     }
+    super.init();
   }
 
   private double getBaseNumber(int rot) {
@@ -54,11 +55,6 @@ public class Simple125Histogram extends AbstractHistogramAccumulator {
   @Override
   public Double getValue(LogRecord line) {
     return line.getValues().get(valueKey);
-  }
-
-  @Override
-  public void sumWith(Accumulator acc) {
-    throw new RuntimeException("Not Implemented");
   }
 
   public String getValueKey() {

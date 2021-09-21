@@ -13,10 +13,10 @@ public interface Collector {
     ResponseData getData();
 
     /**
-     * Reset this collector to its virgin state.
+     * Prepare for the coming of new data. The collector should start a new "session".
      * @return
      */
-    void reset();
+    void prepareForCollection();
 
     void setTime(long time);
 
