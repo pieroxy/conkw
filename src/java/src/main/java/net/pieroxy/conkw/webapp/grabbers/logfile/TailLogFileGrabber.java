@@ -3,7 +3,7 @@ package net.pieroxy.conkw.webapp.grabbers.logfile;
 import net.pieroxy.conkw.accumulators.Accumulator;
 import net.pieroxy.conkw.accumulators.AccumulatorCollector;
 import net.pieroxy.conkw.accumulators.parser.AccumulatorExpressionParser;
-import net.pieroxy.conkw.grabbersBase.Grabber;
+import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
 import net.pieroxy.conkw.webapp.grabbers.logfile.listeners.LogListener;
 import net.pieroxy.conkw.webapp.grabbers.logfile.listeners.LogParser;
 
@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class TailLogFileGrabber extends Grabber<AccumulatorCollector> implements LogListener<LogRecord> {
+public class TailLogFileGrabber extends AsyncGrabber<AccumulatorCollector> implements LogListener<LogRecord> {
     private final static Logger LOGGER = Logger.getLogger(TailLogFileGrabber.class.getName());
 
     private String filename;
@@ -20,12 +20,17 @@ public class TailLogFileGrabber extends Grabber<AccumulatorCollector> implements
     private Accumulator<LogRecord> accumulator;
 
     @Override
-    public void dispose() {
+    public void disposeSync() {
         reader.shutdown();
     }
 
     @Override
-    public synchronized void collect(AccumulatorCollector c) {
+    public boolean changed() {
+        return true;
+    }
+
+    @Override
+    public synchronized void grabSync(AccumulatorCollector c) {
         if (reader == null) {
             try {
                 reader = new RealTimeLogFileReader(filename, this, (LogParser<LogRecord>) Class.forName(parserClassName).newInstance());
@@ -34,7 +39,6 @@ public class TailLogFileGrabber extends Grabber<AccumulatorCollector> implements
             }
             reader.start();
         }
-        c.prepareForCollection(); // This is wrong and causes havoc as soon as there's more than one client. Soon to be removed.
     }
 
     @Override

@@ -41,4 +41,14 @@ public class EmptyCollector implements Collector {
   public long getTimestamp() {
     return 0;
   }
+
+  @Override
+  public void collect(String metric, double value) {
+
+  }
+
+  @Override
+  public void collect(String metric, String value) {
+
+  }
 }

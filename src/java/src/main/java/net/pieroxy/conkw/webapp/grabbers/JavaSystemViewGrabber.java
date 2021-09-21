@@ -1,7 +1,10 @@
 package net.pieroxy.conkw.webapp.grabbers;
 
 import net.pieroxy.conkw.collectors.SimpleCollector;
+import net.pieroxy.conkw.collectors.SimplePermanentCollector;
+import net.pieroxy.conkw.collectors.SimpleTransientCollector;
 import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
+import net.pieroxy.conkw.grabbersBase.SimpleGrabber;
 import net.pieroxy.conkw.utils.OsCheck;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.duration.CDurationParser;
@@ -23,7 +26,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public class JavaSystemViewGrabber extends AsyncGrabber {
+public class JavaSystemViewGrabber extends AsyncGrabber<SimpleCollector> {
   private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
   static final String NAME = "sys";
 
@@ -38,6 +41,10 @@ public class JavaSystemViewGrabber extends AsyncGrabber {
   @Override
   public boolean changed() {
     return true;
+  }
+
+  public SimpleCollector getDefaultCollector() {
+    return new SimpleTransientCollector(this);
   }
 
   @Override

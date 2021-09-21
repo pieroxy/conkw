@@ -3,6 +3,7 @@ package net.pieroxy.conkw.grabbersBase;
 import com.dslplatform.json.DslJson;
 import com.dslplatform.json.JsonWriter;
 import net.pieroxy.conkw.collectors.SimpleCollector;
+import net.pieroxy.conkw.collectors.SimplePermanentCollector;
 import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.webapp.model.ResponseData;
@@ -15,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
-public abstract class TimeThrottledGrabber extends AsyncGrabber {
+public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector> {
   protected abstract CDuration getDefaultTtl();
   protected abstract void load(SimpleCollector res);
   protected abstract String getCacheKey();
@@ -28,6 +29,11 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber {
 
   public boolean isLastGrabHadErrors() {
     return lastGrabHadErrors;
+  }
+
+  @Override
+  public SimpleCollector getDefaultCollector() {
+    return new SimplePermanentCollector(this);
   }
 
   protected final void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {

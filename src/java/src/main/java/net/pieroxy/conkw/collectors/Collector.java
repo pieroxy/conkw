@@ -27,4 +27,8 @@ public interface Collector {
     boolean hasError();
 
     long getTimestamp();
+
+    void collect(String metric, double value);
+    void collect(String metric, String value);
+
 }

@@ -1,6 +1,7 @@
 package net.pieroxy.conkw.webapp.grabbers;
 
 import net.pieroxy.conkw.collectors.SimpleCollector;
+import net.pieroxy.conkw.collectors.SimpleTransientCollector;
 import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
 import net.pieroxy.conkw.utils.*;
 import net.pieroxy.conkw.utils.exceptions.DisplayMessageException;
@@ -17,7 +18,7 @@ import java.net.URLEncoder;
 import java.util.Map;
 import java.util.logging.Level;
 
-public class ExternalInstanceGrabber extends AsyncGrabber {
+public class ExternalInstanceGrabber extends AsyncGrabber<SimpleCollector> {
 
   private String targetUrl;
   private String login;
@@ -27,6 +28,11 @@ public class ExternalInstanceGrabber extends AsyncGrabber {
   @Override
   public boolean changed() {
     return true;
+  }
+
+  @Override
+  public SimpleCollector getDefaultCollector() {
+    return new SimpleTransientCollector(this);
   }
 
   @Override

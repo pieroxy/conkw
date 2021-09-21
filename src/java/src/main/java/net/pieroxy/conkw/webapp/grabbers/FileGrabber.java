@@ -1,8 +1,8 @@
 package net.pieroxy.conkw.webapp.grabbers;
 
 import net.pieroxy.conkw.collectors.SimpleCollector;
+import net.pieroxy.conkw.collectors.SimpleTransientCollector;
 import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
-import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 
-public class FileGrabber extends AsyncGrabber {
+public class FileGrabber extends AsyncGrabber<SimpleCollector> {
   File file;
   Path path;
   long lastTimestamp = 0;
@@ -24,6 +24,10 @@ public class FileGrabber extends AsyncGrabber {
       log(Level.SEVERE, "Grabbing " + getName(), e);
       return false;
     }
+  }
+
+  public SimpleCollector getDefaultCollector() {
+    return new SimpleTransientCollector(this);
   }
 
   @Override

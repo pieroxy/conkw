@@ -1,5 +1,6 @@
 package net.pieroxy.conkw.grabbersBase;
 
+import net.pieroxy.conkw.collectors.Collector;
 import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.utils.LongHolder;
 import net.pieroxy.conkw.utils.duration.CDuration;
@@ -7,7 +8,7 @@ import net.pieroxy.conkw.utils.duration.CDuration;
 import java.time.Duration;
 import java.util.logging.Level;
 
-public abstract class SimpleGrabber<T extends SimpleCollector> extends Grabber<T> {
+public abstract class SimpleGrabber<T extends Collector> extends Grabber<T> {
   private volatile MaxComputer _maxComputer = null;
 
 

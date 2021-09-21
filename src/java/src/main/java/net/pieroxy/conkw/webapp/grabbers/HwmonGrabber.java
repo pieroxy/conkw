@@ -1,22 +1,26 @@
 package net.pieroxy.conkw.webapp.grabbers;
 
 import net.pieroxy.conkw.collectors.SimpleCollector;
+import net.pieroxy.conkw.collectors.SimpleTransientCollector;
 import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
 import net.pieroxy.conkw.utils.PerformanceTools;
-import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.io.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
 
-public class HwmonGrabber extends AsyncGrabber {
+public class HwmonGrabber extends AsyncGrabber<SimpleCollector> {
     static final String NAME = "hwmon";
 
     private FileObject root = null;;
     private final byte[]buffer = new byte[100];
     private Set<Pattern> include;
     private Map<String, StringBuilder> categories;
+
+    public SimpleCollector getDefaultCollector() {
+        return new SimpleTransientCollector(this);
+    }
 
     @Override
     public boolean changed() {

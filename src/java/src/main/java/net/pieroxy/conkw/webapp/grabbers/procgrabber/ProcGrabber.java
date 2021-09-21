@@ -1,6 +1,7 @@
 package net.pieroxy.conkw.webapp.grabbers.procgrabber;
 
 import net.pieroxy.conkw.collectors.SimpleCollector;
+import net.pieroxy.conkw.collectors.SimpleTransientCollector;
 import net.pieroxy.conkw.utils.ExternalBinaryRunner;
 import net.pieroxy.conkw.utils.PerformanceTools;
 import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
@@ -17,7 +18,7 @@ import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ProcGrabber extends AsyncGrabber {
+public class ProcGrabber extends AsyncGrabber<SimpleCollector> {
   static final String MDSTAT_FILE = "/proc/mdstat";
   static final String NAME = "proc";
 
@@ -52,6 +53,10 @@ public class ProcGrabber extends AsyncGrabber {
 
   private int nbCores;
   private int nbThreads;
+
+  public SimpleCollector getDefaultCollector() {
+    return new SimpleTransientCollector(this);
+  }
 
   @Override
   public boolean changed() {

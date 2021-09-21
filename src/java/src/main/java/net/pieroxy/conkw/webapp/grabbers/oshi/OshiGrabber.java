@@ -1,6 +1,7 @@
 package net.pieroxy.conkw.webapp.grabbers.oshi;
 
 import net.pieroxy.conkw.collectors.SimpleCollector;
+import net.pieroxy.conkw.collectors.SimpleTransientCollector;
 import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
 import net.pieroxy.conkw.grabbersBase.SimpleGrabber;
 import net.pieroxy.conkw.utils.duration.CDuration;
@@ -17,7 +18,7 @@ import java.time.Duration;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class OshiGrabber extends AsyncGrabber {
+public class OshiGrabber extends AsyncGrabber<SimpleCollector> {
   static final String NAME = "oshi";
 
   public static final String CONFIG_STATIC_DATA_DELAY="staticDataDelay";
@@ -42,6 +43,11 @@ public class OshiGrabber extends AsyncGrabber {
   @Override
   public boolean changed() {
     return true;
+  }
+
+  @Override
+  public SimpleCollector getDefaultCollector() {
+    return new SimpleTransientCollector(this);
   }
 
   @Override

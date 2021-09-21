@@ -1,17 +1,16 @@
 package net.pieroxy.conkw.grabbersBase;
 
-import net.pieroxy.conkw.collectors.SimpleCollector;
-import net.pieroxy.conkw.collectors.SimplePermanentCollector;
+import net.pieroxy.conkw.collectors.Collector;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.util.logging.Level;
 
-public abstract class AsyncGrabber extends SimpleGrabber<SimpleCollector> implements Runnable {
+public abstract class AsyncGrabber<T extends Collector> extends SimpleGrabber<T> implements Runnable {
   public static final String LOAD_STATUS = "grab_status";
   public static final int GRAB_INACTIVE_THRESHOLD = 5000;
 
   abstract public boolean changed();
-  abstract public void grabSync(SimpleCollector c);
+  abstract public void grabSync(T c);
   protected void disposeSync() {}
 
   public Thread thread;
@@ -42,12 +41,7 @@ public abstract class AsyncGrabber extends SimpleGrabber<SimpleCollector> implem
   }
 
   @Override
-  public SimpleCollector getDefaultCollector() {
-    return new SimplePermanentCollector(this);
-  }
-
-  @Override
-  public final void collect(SimpleCollector c) {
+  public final void collect(T c) {
     lastGrab = System.currentTimeMillis();
 
     if (thread == null) {
@@ -138,7 +132,7 @@ public abstract class AsyncGrabber extends SimpleGrabber<SimpleCollector> implem
    * Override this if you have data you want to fill the collectors with
    * @param sc
    */
-  protected void fillCollector(SimpleCollector sc) {
+  protected void fillCollector(T sc) {
   }
 
   public void saveData(ResponseData r) {
