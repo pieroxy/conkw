@@ -4,6 +4,7 @@ import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.collectors.SimpleTransientCollector;
 import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
 import net.pieroxy.conkw.grabbersBase.SimpleGrabber;
+import net.pieroxy.conkw.utils.StringUtil;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.duration.CDurationParser;
 import net.pieroxy.conkw.webapp.model.ResponseData;
@@ -566,7 +567,7 @@ public class OshiGrabber extends AsyncGrabber<SimpleCollector> {
   @Override
   public void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
     String ddd = config.get(CONFIG_DETAILED_DATA_DELAY);
-    if (ddd!=null) {
+    if (!StringUtil.isNullOrEmptyTrimmed(ddd)) {
       detailedDataDelay = CDurationParser.parse(ddd);
     }
     String sdd = config.get(CONFIG_STATIC_DATA_DELAY);
