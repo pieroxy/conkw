@@ -22,12 +22,12 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         a.add(lr);
         a.add(lr);
         Map<String, Double> result = new HashMap<>();
-        a.reset();
+        a.prepareNewSession();
         a.log("", result, new HashMap<>());
         assertMapContains(result, "aa.sum", 68d);
         lr = new GenericLogRecord("test").addValue("size", 33d).addValue("ab", 34d);
         a.add(lr);
-        a.reset();
+        a.prepareNewSession();
         a.log("", result, new HashMap<>());
         assertEquals(1000d, result.get("aa.sum"));
     }
@@ -40,7 +40,7 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         LogRecord lr = new GenericLogRecord("test").addValue("size", 33d).addValue("aa", 34d);
         a.add(lr);
         Map<String, Double> result = new HashMap<>();
-        a.reset();
+        a.prepareNewSession();
         a.log("", result, new HashMap<>());
         assertEquals(1d, result.get("count"));
     }
@@ -61,7 +61,7 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         a.add(lr);
         a.add(lr);
         Map<String, Double> result = new HashMap<>();
-        a.reset();
+        a.prepareNewSession();
         a.log("", result, new HashMap<>());
         assertMapContains(result, "toto.count", 4d);
     }
@@ -84,7 +84,7 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         a.add(lr);
         a.add(lr);
         Map<String, Double> result = new HashMap<>();
-        a.reset();
+        a.prepareNewSession();
         a.log("", result, new HashMap<>());
         assertMapContains(result, "count", 4d);
         assertMapContains(result, "aa.sum", 34*4d);
@@ -108,7 +108,7 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         a.add(lr);
         Map<String, Double> num = new HashMap<>();
         Map<String, String> str = new HashMap<>();
-        a.reset();
+        a.prepareNewSession();
         a.log("", num, str);
         assertMapContains(num, "null.count", 4d);
         assertMapContains(num, "bleh.count", 2d);
@@ -136,7 +136,7 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         for (int i=0 ; i<70 ; i++) a.add(lr);
         Map<String, Double> num = new HashMap<>();
         Map<String, Double> str = new HashMap<>();
-        a.reset();
+        a.prepareNewSession();
         a.log("", num, str);
         assertMapContains(str, "values", "blyh,a,bleh,others");
         assertMapContains(num, "blyh.count", 70d);
@@ -168,7 +168,7 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         for (int i=0 ; i<4 ; i++) a.add(lr);
         Map<String, Double> num = new HashMap<>();
         Map<String, Double> str = new HashMap<>();
-        a.reset();
+        a.prepareNewSession();
         a.log("", num, str);
         assertMapContains(num, "1_d0.histValue", 19d);
         assertMapContains(num, "10_d0.histValue", 0d);
@@ -203,7 +203,7 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         for (int i=0 ; i<1 ; i++) a.add(lr);
         Map<String, Double> num = new HashMap<>();
         Map<String, Double> str = new HashMap<>();
-        a.reset();
+        a.prepareNewSession();
         a.log("", num, str);
         assertMapContains(num, "1_d0.histValue", 19d);
         assertMapContains(num, "2_d0.histValue", 0d);
@@ -244,7 +244,7 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         for (int i=0 ; i<4 ; i++) a.add(lr);
         Map<String, Double> num = new HashMap<>();
         Map<String, Double> str = new HashMap<>();
-        a.reset();
+        a.prepareNewSession();
         a.log("", num, str);
         assertMapContains(num, "10_d0.histValue", 19d);
         assertMapContains(num, "20_d0.histValue", 0d);

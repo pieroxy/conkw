@@ -51,8 +51,8 @@ public class RootAccumulator<T extends LogRecord> implements Accumulator<T> {
   }
 
   @Override
-  public synchronized void reset() {
-    accumulator.reset();
+  public synchronized void prepareNewSession() {
+    accumulator.prepareNewSession();
     long now = System.currentTimeMillis();
     lastPeriod = now - lastResetTime;
     lastResetTime = now;

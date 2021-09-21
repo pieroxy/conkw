@@ -20,7 +20,7 @@ public interface Accumulator<T extends LogRecord> {
    */
   void sumWith(Accumulator acc);
   double getTotal();
-  void reset();
+  void prepareNewSession();
   void log(String prefix, Map<String, Double> num, Map<String, String> str);
 
 }

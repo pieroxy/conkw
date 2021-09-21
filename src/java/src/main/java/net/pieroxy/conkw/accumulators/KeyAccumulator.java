@@ -70,7 +70,7 @@ public abstract class KeyAccumulator<A, T extends LogRecord> implements Accumula
   }
 
   @Override
-  public void reset() {
+  public void prepareNewSession() {
     old.data = new HashMap<>(current.data);
     old.total = current.total;
 
@@ -80,11 +80,11 @@ public abstract class KeyAccumulator<A, T extends LogRecord> implements Accumula
         Double d = floatingWeights.get(e.getKey());
         if (d==null) d = 0d;
         floatingWeights.put(e.getKey(), 0.9*d+e.getValue().getTotal());
-        e.getValue().reset();
+        e.getValue().prepareNewSession();
       });
     } else {
       current.data.entrySet().forEach(e -> {
-        e.getValue().reset();
+        e.getValue().prepareNewSession();
       });
       current.data.clear();
     }

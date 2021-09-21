@@ -46,7 +46,7 @@ public class NamedAccumulator<T extends LogRecord> implements Accumulator<T> {
   }
 
   @Override
-  public synchronized void reset() {
-    accumulator.reset();
+  public synchronized void prepareNewSession() {
+    accumulator.prepareNewSession();
   }
 }

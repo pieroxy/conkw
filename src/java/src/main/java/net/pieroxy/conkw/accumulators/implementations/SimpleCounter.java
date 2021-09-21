@@ -41,7 +41,7 @@ public class SimpleCounter<T extends LogRecord> implements Accumulator<T> {
   }
 
   @Override
-  public void reset() {
+  public void prepareNewSession() {
     oldCount = count;
     count = 0;
   }

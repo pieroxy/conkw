@@ -42,7 +42,7 @@ public class SumAccumulator<T extends LogRecord> implements Accumulator<T> {
   }
 
   @Override
-  public void reset() {
+  public void prepareNewSession() {
     lastValue = value;
     value=0;
   }

@@ -49,8 +49,8 @@ public class MultiAccumulator<T extends LogRecord> implements Accumulator<T> {
   }
 
   @Override
-  public void reset() {
-    for (Accumulator<T> acc : accumulators) acc.reset();
+  public void prepareNewSession() {
+    for (Accumulator<T> acc : accumulators) acc.prepareNewSession();
   }
 
   @Override

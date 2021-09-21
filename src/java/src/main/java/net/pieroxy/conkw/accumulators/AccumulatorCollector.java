@@ -32,7 +32,7 @@ public class AccumulatorCollector<T extends LogRecord> implements Collector {
 
   @Override
   public void prepareForCollection() {
-    accumulator.reset();
+    accumulator.prepareNewSession();
   }
 
   @Override

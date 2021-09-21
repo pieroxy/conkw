@@ -58,7 +58,7 @@ public abstract class AbstractHistogramAccumulator<T extends LogRecord> implemen
     }
 
     @Override
-    public void reset() {
+    public void prepareNewSession() {
         lastData.copyFrom(data);
         data.globalSum = data.globalCount = 0;
         for (int i=0 ; i<data.histogram.length ; i++) data.histogram[i]=0;
