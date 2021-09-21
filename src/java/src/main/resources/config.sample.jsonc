@@ -45,7 +45,7 @@
       "name":"oshi-processes",
       "extract":"processes",
       "parameters": {
-        "detailedDataDelay":"5"
+        "detailedDataDelay":"5s"
       }
     },
     //OSHI-SERVICES
@@ -55,7 +55,7 @@
       "extract":"services",
       "name":"oshi-services",
       "parameters": {
-        "detailedDataDelay":"5"
+        "detailedDataDelay":"5s"
       }
     },
     //OWM
