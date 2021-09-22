@@ -34,7 +34,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
 
   @Override
   public SimpleCollector getDefaultCollector() {
-    return new SimplePermanentCollector(this);
+    return new SimplePermanentCollector(this, DEFAULT_CONFIG_KEY);
   }
 
   protected final void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {

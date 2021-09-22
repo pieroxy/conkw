@@ -4,8 +4,8 @@ import net.pieroxy.conkw.grabbersBase.Grabber;
 
 public class SimplePermanentCollector extends SimpleTransientCollector {
 
-  public SimplePermanentCollector(Grabber g) {
-    super(g);
+  public SimplePermanentCollector(Grabber g, String configKey) {
+    super(g,configKey);
   }
 
   @Override

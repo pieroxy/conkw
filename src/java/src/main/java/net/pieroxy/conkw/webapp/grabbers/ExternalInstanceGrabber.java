@@ -32,7 +32,7 @@ public class ExternalInstanceGrabber extends AsyncGrabber<SimpleCollector> {
 
   @Override
   public SimpleCollector getDefaultCollector() {
-    return new SimpleTransientCollector(this);
+    return new SimpleTransientCollector(this, DEFAULT_CONFIG_KEY);
   }
 
   @Override

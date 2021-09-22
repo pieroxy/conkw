@@ -18,6 +18,7 @@ public abstract class Grabber<T extends Collector> {
   private Logger LOGGER = createLogger();
   private static final long CONF_EXPIRATION_MS = 10000; // 10s
   private final Collector EMPTY_COLLECTOR = new EmptyCollector(this);
+  public static final String DEFAULT_CONFIG_KEY="default";
 
   private File storageFolder=null;
   private File tmpFolder=null;

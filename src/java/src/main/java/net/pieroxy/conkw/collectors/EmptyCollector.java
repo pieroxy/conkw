@@ -56,4 +56,9 @@ public class EmptyCollector implements Collector {
   public void collect(String metric, String value) {
 
   }
+
+  @Override
+  public String getConfigKey() {
+    return "";
+  }
 }

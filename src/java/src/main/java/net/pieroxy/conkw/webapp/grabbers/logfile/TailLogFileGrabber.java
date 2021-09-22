@@ -48,7 +48,7 @@ public class TailLogFileGrabber extends AsyncGrabber<AccumulatorCollector> imple
 
     @Override
     public AccumulatorCollector getDefaultCollector() {
-        return new AccumulatorCollector(this, "default", accumulator);
+        return new AccumulatorCollector(this, DEFAULT_CONFIG_KEY, "default", accumulator);
     }
 
     @Override

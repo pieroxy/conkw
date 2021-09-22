@@ -56,7 +56,7 @@ public class PushToEmiGrabber extends Grabber<SimpleCollector> implements Grabbe
 
   @Override
   public SimpleCollector getDefaultCollector() {
-    return new SimplePermanentCollector(this);
+    return new SimplePermanentCollector(this, DEFAULT_CONFIG_KEY);
   }
 
   @Override

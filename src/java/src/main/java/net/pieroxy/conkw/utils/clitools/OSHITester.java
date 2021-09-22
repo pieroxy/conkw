@@ -18,7 +18,7 @@ public class OSHITester {
   public static void main(String[]args) throws InterruptedException {
     OshiGrabber grabber = new OshiGrabber();
     grabber.setConfig(new HashMap<>(), new HashMap<>());
-    SimpleCollector sc = new SimplePermanentCollector(grabber);
+    SimpleCollector sc = new SimplePermanentCollector(grabber, "");
     grabber.grabSync(sc);
     Thread.sleep(1000);
     grabber.grabSync(sc);

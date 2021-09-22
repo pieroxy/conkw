@@ -40,7 +40,7 @@ public class ExternalMetricsGrabber extends Grabber<SimplePermanentCollector> {
 
   @Override
   public SimplePermanentCollector getDefaultCollector() {
-    return new SimplePermanentCollector(this);
+    return new SimplePermanentCollector(this, DEFAULT_CONFIG_KEY);
   }
 
 

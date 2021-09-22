@@ -15,13 +15,15 @@ public class AccumulatorCollector<T extends LogRecord> implements Collector {
 
   private final RootAccumulator<T> accumulator;
   private final Grabber grabber;
+  private String configKey;
 
   Collection<String> errors = new ArrayList<>();
 
-  public AccumulatorCollector(Grabber g, String metricName, Accumulator<T> accumulator) {
+  public AccumulatorCollector(Grabber g, String configKey, String metricName, Accumulator<T> accumulator) {
     grabber = g;
+    this.configKey = configKey;
     this.accumulator = new RootAccumulator<T>(metricName, accumulator);
-    this.sc = new SimpleTransientCollector(g);
+    this.sc = new SimpleTransientCollector(g, "");
   }
 
   @Override
@@ -82,5 +84,10 @@ public class AccumulatorCollector<T extends LogRecord> implements Collector {
   @Override
   public void collect(String metric, String value) {
     sc.collect(metric, value);
+  }
+
+  @Override
+  public String getConfigKey() {
+    return configKey;
   }
 }

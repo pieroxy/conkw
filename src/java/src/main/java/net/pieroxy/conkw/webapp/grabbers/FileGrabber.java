@@ -27,7 +27,7 @@ public class FileGrabber extends AsyncGrabber<SimpleCollector> {
   }
 
   public SimpleCollector getDefaultCollector() {
-    return new SimpleTransientCollector(this);
+    return new SimpleTransientCollector(this, DEFAULT_CONFIG_KEY);
   }
 
   @Override

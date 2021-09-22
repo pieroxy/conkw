@@ -5,11 +5,13 @@ import net.pieroxy.conkw.webapp.model.ResponseData;
 
 public abstract class AbstractSimpleCollector implements SimpleCollector {
     protected ResponseData collected;
+    private String configKey;
     protected Grabber grabber;
 
-    public AbstractSimpleCollector(Grabber g) {
+    public AbstractSimpleCollector(Grabber g, String configKey) {
         this.grabber = g;
         this.collected = new ResponseData(g, System.currentTimeMillis());
+        this.configKey = configKey;
     }
 
     @Override
@@ -64,5 +66,10 @@ public abstract class AbstractSimpleCollector implements SimpleCollector {
     @Override
     public void setTimestamp(long time) {
         collected.setTimestamp(time);
+    }
+
+    @Override
+    public String getConfigKey() {
+        return configKey;
     }
 }

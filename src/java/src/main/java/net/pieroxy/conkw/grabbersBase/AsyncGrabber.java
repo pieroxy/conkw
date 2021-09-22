@@ -3,6 +3,7 @@ package net.pieroxy.conkw.grabbersBase;
 import net.pieroxy.conkw.collectors.Collector;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
+import java.util.Collection;
 import java.util.logging.Level;
 
 public abstract class AsyncGrabber<T extends Collector> extends SimpleGrabber<T> implements Runnable {
