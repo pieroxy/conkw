@@ -273,6 +273,7 @@ public class Runner {
         ctx.addMimeMapping("jpeg", "image/jpeg");
         ctx.addMimeMapping("gif", "image/gif");
         ctx.addMimeMapping("ico", "image/x-icon");
+        ctx.addMimeMapping("woff", "font/woff");
     }
 
     private static void addMainContext(File webappDirLocation, Tomcat tomcat, Config config, FilterDef fd, FilterMap fm) {
