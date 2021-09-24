@@ -4,20 +4,24 @@ import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.collectors.SimpleTransientCollector;
 import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
 import net.pieroxy.conkw.utils.ExternalBinaryRunner;
-import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
+import java.util.regex.Pattern;
 
 public class LmSensorsGrabber extends AsyncGrabber<SimpleCollector> {
   static final String NAME = "lmsensors";
 
   ExternalBinaryRunner runner;
+  private Set<Pattern> include;
+  private Map<String, Boolean> extractCache = new HashMap<>();
 
   @Override
   public boolean changed() {
@@ -57,7 +61,9 @@ public class LmSensorsGrabber extends AsyncGrabber<SimpleCollector> {
           chipid = chipname = chipsensor = null;
         } else if (line.startsWith("  ")) {
           String[]parts = line.split(":");
-          addMetric(c, categories, chipid, chipsensor, parts[0].trim(), Double.parseDouble(parts[1].trim()));
+          String mname = parts[0].trim();
+          if (shouldExtractMetric(mname))
+            addMetric(c, categories, chipid, chipsensor, mname, Double.parseDouble(parts[1].trim()));
         } else {
           chipsensor = line.substring(0, line.length()-1);
         }
@@ -103,8 +109,34 @@ public class LmSensorsGrabber extends AsyncGrabber<SimpleCollector> {
     return NAME;
   }
 
+  private boolean shouldExtractMetric(String f) {
+    if (include == null) return true;
+    Boolean cacheValue = extractCache.get(f);
+    if (cacheValue!=null) return cacheValue;
+
+    for (Pattern p : include) {
+      if (p.matcher(f).matches()) {
+        extractCache.put(f, true);
+        if (canLogFiner()) log(Level.FINER, p + " matches " + f);
+        return true;
+      } else {
+        if (canLogFiner()) log(Level.FINER, p + " !matches " + f);
+      }
+    }
+    extractCache.put(f, false);
+    return false;
+  }
+
   @Override
   protected void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
+    String includeString = config.get("include");
+
+    if (includeString != null) {
+      include = new HashSet<>();
+      for (String s : includeString.split(",")) {
+        include.add(Pattern.compile(s));
+      }
+    }
 
   }
 }

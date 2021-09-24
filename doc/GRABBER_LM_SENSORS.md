@@ -12,7 +12,19 @@ As a result, it only works on Linux and other OSes where this program exists.
 * You want to monitor the fan speeds, voltages and temperatures of the computer.
 
 ## Configuration
-There is nothing to configure for this grabber as of now.
+
+```json
+{
+    "implementation":"net.pieroxy.conkw.webapp.grabbers.LmSensorsGrabber",
+    "parameters": {
+      "include":".*_input"
+    },
+    "namedParameters": {
+    }
+}
+```
+
+* `include` is an include list, as a comma separated list of regexps against metric names. LmSensorsGrabber will only extract values from those metrics whose name match one of those regexp. Given that the output can be pretty numerous, this can save considerable bandwidth, cpu and memory, especially given that metrics like `_crit` and `_max` are often not properly filled in and thus report garbage.
 
 ## Metrics
 
