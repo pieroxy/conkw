@@ -3,10 +3,9 @@ package net.pieroxy.conkw.grabbersBase;
 import com.dslplatform.json.DslJson;
 import com.dslplatform.json.JsonWriter;
 import net.pieroxy.conkw.collectors.SimpleCollector;
-import net.pieroxy.conkw.collectors.SimplePermanentCollector;
+import net.pieroxy.conkw.collectors.SimpleTransientCollector;
 import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.utils.duration.CDuration;
-import net.pieroxy.conkw.webapp.grabbers.bingnews.BingNewsGrabber;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.io.File;
@@ -34,7 +33,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
 
   @Override
   public SimpleCollector getDefaultCollector() {
-    return new SimplePermanentCollector(this, DEFAULT_CONFIG_KEY);
+    return new SimpleTransientCollector(this, DEFAULT_CONFIG_KEY);
   }
 
   protected final void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
@@ -141,6 +140,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
         log(Level.FINE, "grabSync() :: loaded from cache");
         lastGrabHadErrors = false;
         collector.setData(data);
+        collector.collectionDone();
         c.setData(collector);
         return;
       }
@@ -150,6 +150,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
       lastRun = System.currentTimeMillis();
       collector.setTimestamp(lastRun);
       lastGrabHadErrors = collector.hasError();
+      collector.collectionDone();
       c.setData(collector);
     } catch (Exception e) {
       log(Level.SEVERE, "Grabbing " + getName(), e);

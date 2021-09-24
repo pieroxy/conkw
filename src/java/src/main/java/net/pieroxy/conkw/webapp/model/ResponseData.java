@@ -233,4 +233,13 @@ public class ResponseData {
   public void setTimestamps(Map<String, Long> timestamps) {
     this.timestamps = timestamps;
   }
+
+  @Override
+  public String toString() {
+    return "ResponseData{" +
+        "errors=" + errors.size() +
+        ", num=" + num.size() +
+        ", str=" + str.size() +
+        '}';
+  }
 }

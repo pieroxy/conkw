@@ -3,6 +3,9 @@ package net.pieroxy.conkw.collectors;
 import net.pieroxy.conkw.grabbersBase.Grabber;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 public class EmptyCollector implements Collector {
   private Grabber grabber;
 
@@ -16,7 +19,16 @@ public class EmptyCollector implements Collector {
   }
 
   @Override
+  public Collection<String> getErrors() {
+    return new ArrayList<>();
+  }
+
+  @Override
   public void prepareForCollection() {
+  }
+
+  @Override
+  public void collectionDone() {
   }
 
   @Override

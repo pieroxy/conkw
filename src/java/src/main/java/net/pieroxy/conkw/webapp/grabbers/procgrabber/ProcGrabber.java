@@ -1,5 +1,6 @@
 package net.pieroxy.conkw.webapp.grabbers.procgrabber;
 
+import net.pieroxy.conkw.collectors.AbstractSimpleCollector;
 import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.collectors.SimpleTransientCollector;
 import net.pieroxy.conkw.utils.ExternalBinaryRunner;

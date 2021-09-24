@@ -4,7 +4,7 @@ import com.dslplatform.json.DslJson;
 import com.dslplatform.json.JsonWriter;
 import net.pieroxy.conkw.collectors.Collector;
 import net.pieroxy.conkw.collectors.SimpleCollector;
-import net.pieroxy.conkw.collectors.SimplePermanentCollector;
+import net.pieroxy.conkw.collectors.SimpleTransientCollector;
 import net.pieroxy.conkw.grabbersBase.Grabber;
 import net.pieroxy.conkw.grabbersBase.GrabberListener;
 import net.pieroxy.conkw.utils.JsonHelper;
@@ -56,7 +56,7 @@ public class PushToEmiGrabber extends Grabber<SimpleCollector> implements Grabbe
 
   @Override
   public SimpleCollector getDefaultCollector() {
-    return new SimplePermanentCollector(this, DEFAULT_CONFIG_KEY);
+    return new SimpleTransientCollector(this, DEFAULT_CONFIG_KEY);
   }
 
   @Override

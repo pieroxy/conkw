@@ -1,7 +1,6 @@
 package net.pieroxy.conkw.grabbersBase;
 
 import net.pieroxy.conkw.collectors.Collector;
-import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.utils.LongHolder;
 import net.pieroxy.conkw.utils.duration.CDuration;
 
@@ -32,8 +31,10 @@ public abstract class SimpleGrabber<T extends Collector> extends Grabber<T> {
         cachedResponses.put(extractName, cached);
       }
 
+      cached.collectionDone();
       cached.getData().getNum().entrySet().forEach(entry -> toFill.collect(entry.getKey(), entry.getValue()));
       cached.getData().getStr().entrySet().forEach(entry -> toFill.collect(entry.getKey(), entry.getValue()));
+      cached.getErrors().forEach(error -> toFill.addError(error));
       toFill.getData().addExtracted(extractName);
     }
   }

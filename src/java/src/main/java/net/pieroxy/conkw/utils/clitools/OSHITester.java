@@ -1,7 +1,7 @@
 package net.pieroxy.conkw.utils.clitools;
 
 import net.pieroxy.conkw.collectors.SimpleCollector;
-import net.pieroxy.conkw.collectors.SimplePermanentCollector;
+import net.pieroxy.conkw.collectors.SimpleTransientCollector;
 import net.pieroxy.conkw.utils.StringUtil;
 import net.pieroxy.conkw.webapp.grabbers.oshi.OshiGrabber;
 import net.pieroxy.conkw.webapp.model.ResponseData;
@@ -18,7 +18,7 @@ public class OSHITester {
   public static void main(String[]args) throws InterruptedException {
     OshiGrabber grabber = new OshiGrabber();
     grabber.setConfig(new HashMap<>(), new HashMap<>());
-    SimpleCollector sc = new SimplePermanentCollector(grabber, "");
+    SimpleCollector sc = new SimpleTransientCollector(grabber, "");
     grabber.grabSync(sc);
     Thread.sleep(1000);
     grabber.grabSync(sc);

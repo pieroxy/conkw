@@ -98,6 +98,7 @@ public abstract class AsyncGrabber<T extends Collector> extends SimpleGrabber<T>
                 long a = System.nanoTime();
                 sc.prepareForCollection();
                 this.grabSync(sc);
+                sc.collectionDone();
                 sc.setTime(System.nanoTime() - a);
               });
             } finally {

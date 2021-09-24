@@ -1,6 +1,7 @@
 package net.pieroxy.conkw.collectors;
 
 import net.pieroxy.conkw.grabbersBase.Grabber;
+import net.pieroxy.conkw.webapp.grabbers.procgrabber.ProcGrabber;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 public class SimpleTransientCollector extends AbstractSimpleCollector {
@@ -10,6 +11,12 @@ public class SimpleTransientCollector extends AbstractSimpleCollector {
 
     @Override
     public synchronized void prepareForCollection() {
-        collected = new ResponseData(grabber, System.currentTimeMillis());
+        completedCollection = collectionInProgress;
+        collectionInProgress = new ResponseData(grabber, System.currentTimeMillis());
+    }
+
+    @Override
+    public void collectionDone() {
+        completedCollection = collectionInProgress;
     }
 }

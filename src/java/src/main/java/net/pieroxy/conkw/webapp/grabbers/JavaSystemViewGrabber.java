@@ -1,14 +1,10 @@
 package net.pieroxy.conkw.webapp.grabbers;
 
 import net.pieroxy.conkw.collectors.SimpleCollector;
-import net.pieroxy.conkw.collectors.SimplePermanentCollector;
 import net.pieroxy.conkw.collectors.SimpleTransientCollector;
 import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
-import net.pieroxy.conkw.grabbersBase.SimpleGrabber;
 import net.pieroxy.conkw.utils.OsCheck;
 import net.pieroxy.conkw.utils.duration.CDuration;
-import net.pieroxy.conkw.utils.duration.CDurationParser;
-import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import javax.management.*;
 import java.io.*;
@@ -16,7 +12,6 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
 import java.net.UnknownHostException;
 import java.nio.file.*;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

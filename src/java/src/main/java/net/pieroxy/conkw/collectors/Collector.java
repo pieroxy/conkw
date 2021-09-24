@@ -2,6 +2,8 @@ package net.pieroxy.conkw.collectors;
 
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
+import java.util.Collection;
+
 public interface Collector {
     String DEFAULT_METRIC_NAME="metric";
     String DEFAULT_METRIC_VALUE="value";
@@ -13,10 +15,23 @@ public interface Collector {
     ResponseData getData();
 
     /**
+     * Returns data collected.
+     * @return
+     */
+    Collection<String> getErrors();
+
+    /**
      * Prepare for the coming of new data. The collector should start a new "session".
      * @return
      */
     void prepareForCollection();
+
+    /**
+     * Notify the grabber that the current collection is done.
+     * @return
+     */
+    void collectionDone();
+
 
     /**
      *
