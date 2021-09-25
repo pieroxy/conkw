@@ -36,7 +36,6 @@ public class PushToEmiGrabber extends Grabber<SimpleCollector> implements Grabbe
 
   @Override
   public void collect(SimpleCollector c) {
-
   }
 
   @Override
@@ -46,6 +45,9 @@ public class PushToEmiGrabber extends Grabber<SimpleCollector> implements Grabbe
     runner = null;
     synchronized (old) {
       old.notifyAll();
+    }
+    while (old.isAlive()) {
+      try{ Thread.sleep(10); } catch (Exception e) {}
     }
   }
 
