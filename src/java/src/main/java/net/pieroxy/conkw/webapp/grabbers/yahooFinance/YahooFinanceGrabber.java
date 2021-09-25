@@ -75,8 +75,7 @@ public class YahooFinanceGrabber extends TimeThrottledGrabber {
 
       return;
     } catch (Exception e) {
-      e.printStackTrace();
-      c.addError("yahoof: " + e.getMessage());
+      log(Level.SEVERE, "", e);
     }
   }
 

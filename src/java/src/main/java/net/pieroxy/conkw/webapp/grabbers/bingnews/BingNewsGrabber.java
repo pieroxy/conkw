@@ -12,6 +12,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Map;
+import java.util.logging.Level;
 
 public class BingNewsGrabber extends TimeThrottledGrabber {
   static final String NAME = "bingnews";
@@ -77,8 +78,7 @@ public class BingNewsGrabber extends TimeThrottledGrabber {
 
       return;
     } catch (Exception e) {
-      e.printStackTrace();
-      res.addError("bing: " + e.getMessage());
+      log(Level.SEVERE, "", e);
     }
   }
 
