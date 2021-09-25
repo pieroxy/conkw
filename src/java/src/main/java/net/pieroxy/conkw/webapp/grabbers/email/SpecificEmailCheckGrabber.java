@@ -43,7 +43,9 @@ public class SpecificEmailCheckGrabber extends TimeThrottledGrabber {
     }
 
     @Override
-    protected void cacheLoaded(ResponseData data, Map<String, String> privateData) {
+    protected void cacheLoaded(Map<String,ResponseData> dataset, Map<String, String> privateData) {
+        ResponseData data = dataset.get(DEFAULT_CONFIG_KEY);
+        if (data == null) return;
         Double d = data.getNumMetric(LAST_SEEN);
         if (d!=null) lastSeen = (long)(double)d;
         if (privateData != null) {

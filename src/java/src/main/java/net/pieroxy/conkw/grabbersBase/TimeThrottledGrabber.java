@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -25,7 +26,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
   private CDuration ttl;
   private CDuration errorTtl;
   private boolean lastGrabHadErrors = false;
-  private SimpleCollector collector = null; // Cannot initialize it here as grabbers don't have their names yet.
+  private Map<String, SimpleCollector> collectors = new HashMap<>();
 
   public boolean isLastGrabHadErrors() {
     return lastGrabHadErrors;
@@ -44,7 +45,6 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
     errorTtl = getDurationProperty("errorTtl", config, errorTtl);
 
     applyConfig(config, configs);
-    collector = getDefaultCollector();
   }
 
   protected CDuration getTtl() {
@@ -61,7 +61,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
    * @param data
    * @param privateData
    */
-  protected void cacheLoaded(ResponseData data, Map<String, String> privateData) {
+  protected void cacheLoaded(Map<String,ResponseData> data, Map<String, String> privateData) {
   }
 
   /**
@@ -79,32 +79,41 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
     return storage;
   }
 
-  private ResponseData loadCacheFile() {
+  private synchronized void loadCacheFile() {
     File cacheFile = getCacheFile();
     if (!cacheFile.exists()) {
       log(Level.INFO, "Cache file not found, might be the first run.");
-      return null;
+      return;
     }
     try (FileInputStream fis = new FileInputStream(cacheFile)) {
       CachedData data = JsonHelper.getJson().deserialize(CachedData.class, fis);
-      if (data.getCacheKey().equals(getCacheKey())) {
-        privateData = data.getPrivateData();
-        if (privateData == null) privateData = new HashMap<>();
-        cacheLoaded(data.getData(), data.getPrivateData());
-        return data.getData();
-      } else {
-        log(Level.INFO, "Configuration has changed, discarding cached data.");
+      privateData = data.getPrivateData();
+      if (privateData == null) privateData = new HashMap<>();
+      cacheLoaded(data.getDatasets(), data.getPrivateData());
+
+      log(Level.INFO, "Loading from cache " + getCacheFile().getAbsolutePath());
+      lastRun = System.currentTimeMillis();
+      lastGrabHadErrors = false;
+      for (Map.Entry<String, ResponseData> entry : data.getDatasets().entrySet()) {
+        String configKey = entry.getKey();
+        ResponseData rd = entry.getValue();
+        lastRun = Math.min(rd.getTimestamp(), lastRun);
+        lastGrabHadErrors = lastGrabHadErrors || rd.getErrors().size()>0;
+        SimpleTransientCollector c = new SimpleTransientCollector(this, configKey);
+        c.setData(rd);
+        collectors.put(configKey, c);
+        c.collectionDone();
       }
+
+
     } catch (Exception e) {
       log(Level.SEVERE, "Could not load cached data file.", e);
     }
-    return null;
   }
 
-  private void writeCacheFile(ResponseData data) {
+  private void writeCacheFile(Collection<SimpleCollector> data) {
     CachedData cdata = new CachedData();
-    cdata.setCacheKey(getCacheKey());
-    cdata.setData(data);
+    data.forEach(c -> cdata.getDatasets().put(c.getConfigKey(), c.getData()));
     Map<String, String> pd = privateData;
     if (pd!=null && pd.size()>0) {
       cdata.setPrivateData(new HashMap<>());
@@ -128,30 +137,32 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
     return getTtl().isExpired(lastRun, System.currentTimeMillis());
   }
 
+  public final boolean changed(SimpleCollector c) {
+    if (canLogFine()) log(Level.FINE, "HasChanged? " + c.getTimestamp() + " : " + getTtl().isExpired(c.getTimestamp(), System.currentTimeMillis()));
+    return getTtl().isExpired(c.getTimestamp(), System.currentTimeMillis());
+  }
+
   @Override
   public final void grabSync(SimpleCollector c) {
     lastGrabHadErrors = true;
     log(Level.FINE, "grabSync() :: begin");
     if (lastRun==-1) {
-      ResponseData data = loadCacheFile();
-      if (data!=null && data.getErrors().isEmpty()) {
-        log(Level.INFO, "Loading from cache " + getCacheFile().getAbsolutePath());
-        lastRun = data.getTimestamp();
-        log(Level.FINE, "grabSync() :: loaded from cache");
-        lastGrabHadErrors = false;
-        collector.setData(data);
-        collector.collectionDone();
-        c.setData(collector);
-        return;
-      }
+      loadCacheFile();
     }
     try {
-      load(collector);
-      lastRun = System.currentTimeMillis();
-      collector.setTimestamp(lastRun);
-      lastGrabHadErrors = collector.hasError();
-      collector.collectionDone();
-      c.setData(collector);
+      SimpleCollector collector = getOrCreateCollector(c);
+      if (changed(collector)) {
+        collector.prepareForCollection();
+        load(collector);
+        log(Level.FINE, "Loaded data.");
+        lastRun = System.currentTimeMillis();
+        collector.setTimestamp(lastRun);
+        lastGrabHadErrors = collector.hasError();
+        collector.collectionDone();
+        c.setData(collector);
+      } else {
+        c.setData(collector);
+      }
     } catch (Exception e) {
       log(Level.SEVERE, "Grabbing " + getName(), e);
       //return new ResponseData(this, System.currentTimeMillis());
@@ -159,33 +170,35 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
     }
   }
 
-  @Override
-  protected void fillCollector(SimpleCollector sc) {
-    sc.setData(collector);
+  private SimpleCollector getOrCreateCollector(SimpleCollector c) {
+    SimpleCollector collector = collectors.get(c.getConfigKey());
+    if (collector == null) {
+      collector = new SimpleTransientCollector(this, c.getConfigKey());
+      collector.setTimestamp(0);
+      collector.prepareForCollection();
+      log(Level.FINE, "Creating collector for config " + c.getConfigKey());
+      Map<String, SimpleCollector> newSCMap = new HashMap<>(collectors);
+      newSCMap.put(c.getConfigKey(), collector);
+      collectors = newSCMap;
+    }
+    return collector;
   }
 
   @Override
-  public void saveData(ResponseData r) {
+  protected void fillCollector(SimpleCollector sc) {
+    SimpleCollector rd = collectors.get(sc.getConfigKey());
+    if (rd!=null) sc.setData(rd);
+  }
+
+  @Override
+  public void saveData(Collection<SimpleCollector> r) {
     writeCacheFile(r);
   }
 
   public static class CachedData {
-    private ResponseData data;
-    private String cacheKey;
+    private Map<String, ResponseData> datasets = new HashMap<>();
     private Map<String, String> privateData;
 
-    public ResponseData getData() {
-      return data;
-    }
-    public void setData(ResponseData data) {
-      this.data = data;
-    }
-    public String getCacheKey() {
-      return cacheKey;
-    }
-    public void setCacheKey(String cacheKey) {
-      this.cacheKey = cacheKey;
-    }
 
     public Map<String, String> getPrivateData() {
       return privateData;
@@ -193,6 +206,14 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
 
     public void setPrivateData(Map<String, String> privateData) {
       this.privateData = privateData;
+    }
+
+    public Map<String, ResponseData> getDatasets() {
+      return datasets;
+    }
+
+    public void setDatasets(Map<String, ResponseData> datasets) {
+      this.datasets = datasets;
     }
   }
 }

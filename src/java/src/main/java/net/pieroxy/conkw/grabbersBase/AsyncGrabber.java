@@ -4,6 +4,8 @@ import net.pieroxy.conkw.collectors.Collector;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Level;
 
 public abstract class AsyncGrabber<T extends Collector> extends SimpleGrabber<T> implements Runnable {
@@ -18,6 +20,7 @@ public abstract class AsyncGrabber<T extends Collector> extends SimpleGrabber<T>
   private boolean shouldStop;
   private boolean running;
   private long lastGrab;
+  private Set<String> lastGrabConf = new HashSet<>();
   private boolean grabbingRightNow;
 
   private double time=100, count=1;
@@ -49,7 +52,13 @@ public abstract class AsyncGrabber<T extends Collector> extends SimpleGrabber<T>
       running = true;
       thread = new Thread(this, this.getClass().getSimpleName() + "/" + getName());
       this.log(Level.INFO, "Starts " + getName());
-      thread.start();
+      try {
+        thread.start();
+      } catch (Exception e) {
+        log(Level.SEVERE, "", e);
+        thread = null;
+        running = false;
+      }
       c.collect(LOAD_STATUS, "Initializing");
     } else if (grabbingRightNow) {
       c.collect(LOAD_STATUS, getLoadingString());
@@ -89,7 +98,8 @@ public abstract class AsyncGrabber<T extends Collector> extends SimpleGrabber<T>
       if (canLogFiner()) log(Level.FINER, System.currentTimeMillis() + "::"+getName() + " up");
       try {
         if (now - lastGrab < GRAB_INACTIVE_THRESHOLD) {
-          if (changed()) {
+          if (mustGrab()) {
+            refillLastGrabConf();
             if (canLogFiner()) log(Level.FINER, System.currentTimeMillis() + "::" + getName() + " grab");
             now = System.currentTimeMillis();
             grabbingRightNow=true;
@@ -105,6 +115,7 @@ public abstract class AsyncGrabber<T extends Collector> extends SimpleGrabber<T>
               grabbingRightNow = false;
             }
             if (shutdownRequested()) return;
+            saveData(getActiveCollectors());
             if (canLogFine()) {
               long eor = System.currentTimeMillis();
               time += eor - now;
@@ -130,6 +141,22 @@ public abstract class AsyncGrabber<T extends Collector> extends SimpleGrabber<T>
     }
   }
 
+  private void refillLastGrabConf() {
+    Set<String> newConfKeys = new HashSet<>();
+    getActiveCollectors().forEach(c -> newConfKeys.add(c.getConfigKey()));
+    lastGrabConf = newConfKeys;
+  }
+
+  protected boolean mustGrab() {
+    if (changed()) return true;
+    Collection<T> collectors = getActiveCollectors();
+    if (collectors.size()!=lastGrabConf.size()) return true;
+    for (T collector : collectors) {
+      if (!lastGrabConf.contains(collector.getConfigKey())) return true;
+    }
+    return false;
+  }
+
   /**
    * Override this if you have data you want to fill the collectors with
    * @param sc
@@ -137,6 +164,6 @@ public abstract class AsyncGrabber<T extends Collector> extends SimpleGrabber<T>
   protected void fillCollector(T sc) {
   }
 
-  public void saveData(ResponseData r) {
+  public void saveData(Collection<T> data) {
   }
 }
