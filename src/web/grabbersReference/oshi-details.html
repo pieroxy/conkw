@@ -99,26 +99,16 @@
 
           <div cw-ns="oshi" cw-ifextracted="cpuident" class="cw-block">
             <heading>CPU IDENT</heading>
-            <label>  Identifier : </label><cw-label cw-ns="oshi" cw-value="m:str::cpuident_identifier"></cw-label>
-            <br/>
-            <label>        Name : </label><cw-label cw-ns="oshi" cw-value="m:str::cpuident_name"></cw-label>
-            <br/>
-            <label>       Model : </label><cw-label cw-ns="oshi" cw-value="m:str::cpuident_model"></cw-label>
-            <br/>
-            <label> ProcessorID : </label><cw-label cw-ns="oshi" cw-value="m:str::cpuident_processor_id"></cw-label>
-            <br/>
-            <label>      Family : </label><cw-label cw-ns="oshi" cw-value="m:str::cpuident_family"></cw-label>
-            <br/>
-            <label>   Microarch : </label><cw-label cw-ns="oshi" cw-value="m:str::cpuident_micro_arch"></cw-label>
-            <br/>
-            <label>      Vendor : </label><cw-label cw-ns="oshi" cw-value="m:str::cpuident_vendor"></cw-label>
-            <br/>
-            <label>  VendorFreq : </label><cw-label cw-ns="oshi" cw-value="m:num:si:cpuident_vendor_freq"></cw-label>Hz
-            <br/>
-            <label>    Stepping : </label><cw-label cw-ns="oshi" cw-value="m:str::cpuident_stepping"></cw-label>
-            <br/>
-            <label>    Cpu64bit : </label><cw-label cw-ns="oshi" cw-value="m:num:yesno:cpuident_64bits"></cw-label>
-            <br/>
+            <label>  Identifier : </label><cw-label cw-ns="oshi" cw-prop-title="m:str::cpuident_identifier" cw-value="m:str::cpuident_identifier"></cw-label><br/>
+            <label>        Name : </label><cw-label cw-ns="oshi" cw-prop-title="m:str::cpuident_name" cw-value="m:str::cpuident_name"></cw-label><br/>
+            <label>       Model : </label><cw-label cw-ns="oshi" cw-prop-title="m:str::cpuident_model" cw-value="m:str::cpuident_model"></cw-label><br/>
+            <label> ProcessorID : </label><cw-label cw-ns="oshi" cw-prop-title="m:str::cpuident_processor_id" cw-value="m:str::cpuident_processor_id"></cw-label><br/>
+            <label>      Family : </label><cw-label cw-ns="oshi" cw-prop-title="m:str::cpuident_family" cw-value="m:str::cpuident_family"></cw-label><br/>
+            <label>   Microarch : </label><cw-label cw-ns="oshi" cw-prop-title="m:str::cpuident_micro_arch" cw-value="m:str::cpuident_micro_arch"></cw-label><br/>
+            <label>      Vendor : </label><cw-label cw-ns="oshi" cw-prop-title="m:str::cpuident_vendor" cw-value="m:str::cpuident_vendor"></cw-label><br/>
+            <label>  VendorFreq : </label><cw-label cw-ns="oshi" cw-prop-title="m:num:si:cpuident_vendor_freq" cw-value="m:num:si:cpuident_vendor_freq"></cw-label>Hz<br/>
+            <label>    Stepping : </label><cw-label cw-ns="oshi" cw-prop-title="m:str::cpuident_stepping" cw-value="m:str::cpuident_stepping"></cw-label><br/>
+            <label>    Cpu64bit : </label><cw-label cw-ns="oshi" cw-prop-title="m:num:yesno:cpuident_64bits" cw-value="m:num:yesno:cpuident_64bits"></cw-label><br/>
           </div>
       
           <div cw-ns="oshi" cw-ifextracted="displays" class="cw-block">
@@ -207,50 +197,52 @@
             </div>
           </div>
       
-          <div cw-ns="oshi" cw-ifextracted="psus" class="cw-block">
+          <div cw-ns="oshi" cw-ifextracted="psus">
             <heading>PSUs</heading>
             <div cw-ns="oshi" cw-multinode-from="l:num::0" cw-multinode-to="m:num::psus_count" cw-multinode-pattern="#">
-              <hr/>
-              <label style="font-weight:bold">         PSU : </label><cw-label cw-ns="oshi" cw-value="m:str::psus_name_#">#</cw-label>
-              <br/>
-              <label>Manufacturer : </label><cw-label cw-ns="oshi" cw-value="m:str::psus_manufacturer_#"></cw-label>
-              <br/>
-              <label> Serial Num. : </label><cw-label cw-ns="oshi" cw-value="m:str::psus_serial_number_#"></cw-label>
-              <br/>
-              <label>   Chemistry : </label><cw-label cw-ns="oshi" cw-value="m:str::psus_chemistry_#"></cw-label>
-              <br/>
-              <label>  Deice Name : </label><cw-label cw-ns="oshi" cw-value="m:str::psus_device_name_#"></cw-label>
-              <br/>
-              <label>    Amperage : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_amperage_#"></cw-label>
-              <br/>
-              <label>  Cap. Units : </label><cw-label cw-ns="oshi" cw-value="m:str::psus_capacity_units_#"></cw-label>
-              <br/>
-              <label>Current Cap. : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_current_capacity_#"></cw-label>
-              <br/>
-              <label> Cycle count : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_cycle_count_#"></cw-label>
-              <br/>
-              <label> Design Cap. : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_design_capacity_#"></cw-label>
-              <br/>
-              <label> Manuf. Date : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_manufacture_date_#"></cw-label>
-              <br/>
-              <label>Pwr Usg Rate : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_power_usage_rate_#"></cw-label>
-              <br/>
-              <label>Remain Cap. %: </label><cw-label cw-ns="oshi" cw-value="m:num::psus_remaining_capacity_percent_#"></cw-label>
-              <br/>
-              <label> Temperature : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_temperature_#"></cw-label>
-              <br/>
-              <label>Time Rem Est : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_time_remaining_estimated_#"></cw-label>
-              <br/>
-              <label>     Voltage : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_voltage_#"></cw-label>
-              <br/>
-              <label>Time Rem Inst: </label><cw-label cw-ns="oshi" cw-value="m:num::psus_time_remaining_instant_#"></cw-label>
-              <br/>
-              <label>   In Charge : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_in_charge_#"></cw-label>
-              <br/>
-              <label>In Discharge : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_in_discharge_#"></cw-label>
-              <br/>
-              <label>  Pwr Online : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_power_online_#"></cw-label>
-              <br/>
+              <div class="cw-block">
+                <hr/>
+                <label style="font-weight:bold">         PSU : </label><cw-label cw-ns="oshi" cw-value="m:str::psus_name_#">#</cw-label>
+                <br/>
+                <label>Manufacturer : </label><cw-label cw-ns="oshi" cw-value="m:str::psus_manufacturer_#"></cw-label>
+                <br/>
+                <label> Serial Num. : </label><cw-label cw-ns="oshi" cw-value="m:str::psus_serial_number_#"></cw-label>
+                <br/>
+                <label>   Chemistry : </label><cw-label cw-ns="oshi" cw-value="m:str::psus_chemistry_#"></cw-label>
+                <br/>
+                <label>  Deice Name : </label><cw-label cw-ns="oshi" cw-value="m:str::psus_device_name_#"></cw-label>
+                <br/>
+                <label>    Amperage : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_amperage_#"></cw-label>
+                <br/>
+                <label>  Cap. Units : </label><cw-label cw-ns="oshi" cw-value="m:str::psus_capacity_units_#"></cw-label>
+                <br/>
+                <label>Current Cap. : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_current_capacity_#"></cw-label>
+                <br/>
+                <label> Cycle count : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_cycle_count_#"></cw-label>
+                <br/>
+                <label> Design Cap. : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_design_capacity_#"></cw-label>
+                <br/>
+                <label> Manuf. Date : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_manufacture_date_#"></cw-label>
+                <br/>
+                <label>Pwr Usg Rate : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_power_usage_rate_#"></cw-label>
+                <br/>
+                <label>Remain Cap. %: </label><cw-label cw-ns="oshi" cw-value="m:num::psus_remaining_capacity_percent_#"></cw-label>
+                <br/>
+                <label> Temperature : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_temperature_#"></cw-label>
+                <br/>
+                <label>Time Rem Est : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_time_remaining_estimated_#"></cw-label>
+                <br/>
+                <label>     Voltage : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_voltage_#"></cw-label>
+                <br/>
+                <label>Time Rem Inst: </label><cw-label cw-ns="oshi" cw-value="m:num::psus_time_remaining_instant_#"></cw-label>
+                <br/>
+                <label>   In Charge : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_in_charge_#"></cw-label>
+                <br/>
+                <label>In Discharge : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_in_discharge_#"></cw-label>
+                <br/>
+                <label>  Pwr Online : </label><cw-label cw-ns="oshi" cw-value="m:num::psus_power_online_#"></cw-label>
+                <br/>
+              </div>
             </div>
           </div>
       
