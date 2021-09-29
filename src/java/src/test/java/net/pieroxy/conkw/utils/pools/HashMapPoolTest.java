@@ -42,13 +42,13 @@ public class HashMapPoolTest extends TestCase {
     }
     public void testDebugNotRecycledObjects() {
         ObjectPool<Map> pool = new HashMapPool(ObjectPoolBehavior.TRACK_NOT_DISPOSED);
-        Map m;
+        Map m=null;
         for (int i=0 ; i<10 ; i++) {
             m = pool.getNew();
         }
-        m = null;
+        pool.dispose(m);
         System.gc();
         ObjectPoolInspectorReport report = pool.getReport();
-        assertEquals(10, report.getViolations().size());
+        assertEquals(9, report.getViolations().size());
     }
 }
