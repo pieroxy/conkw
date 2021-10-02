@@ -5,8 +5,13 @@ import net.pieroxy.conkw.utils.pools.inspectors.ObjectPoolInspectorReport;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public abstract class ObjectPool<T> {
+    private final static Logger LOGGER = Logger.getLogger(ObjectPool.class.getName());
+    private final static boolean DEBUG = true;
+
     private final ObjectPoolInspector<T> inspector;
     private final Queue<T> pool = new LinkedList<>();
     private long requested, created, recycled, wronglyRecycled;
@@ -21,6 +26,9 @@ public abstract class ObjectPool<T> {
     public synchronized T getNew() {
         T result = pool.poll();
         requested++;
+        if (DEBUG && requested%100 == 0) {
+            LOGGER.log(Level.INFO, getDebugString());
+        }
         if (result == null) {
             created++;
             result = createNewInstance();
@@ -54,11 +62,19 @@ public abstract class ObjectPool<T> {
         return wronglyRecycled;
     }
 
+    public long getPoolCurrentSize() {
+        return pool.size();
+    }
+
     public ObjectPoolInspectorReport getReport() {
         return inspector.getReport();
     }
 
     public ObjectPoolInspector<T> getInspector() {
         return inspector;
+    }
+
+    public String getDebugString() {
+        return "ObjectPool report :: requested:" + getRequested() + " created:" + getCreated() + " recycled:" + getRecycled() + " wrongRecycled:" + getWronglyRecycled() + " currentSize:" + getPoolCurrentSize();
     }
 }
