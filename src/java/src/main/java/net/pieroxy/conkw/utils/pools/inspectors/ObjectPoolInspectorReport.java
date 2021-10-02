@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 public class ObjectPoolInspectorReport {
     private Collection<ObjectPoolInspectorReportItem> violations;
+    private String globalStatus;
 
     public ObjectPoolInspectorReport() {
         this.violations = new LinkedList<>();
@@ -16,5 +17,13 @@ public class ObjectPoolInspectorReport {
 
     public Collection<ObjectPoolInspectorReportItem> getViolations() {
         return violations;
+    }
+
+    public String getGlobalStatus() {
+        return globalStatus;
+    }
+
+    public void setGlobalStatus(String globalStatus) {
+        this.globalStatus = globalStatus;
     }
 }

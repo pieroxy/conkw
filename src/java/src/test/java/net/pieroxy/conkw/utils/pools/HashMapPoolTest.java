@@ -3,7 +3,9 @@ package net.pieroxy.conkw.utils.pools;
 import junit.framework.TestCase;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 import net.pieroxy.conkw.utils.pools.inspectors.ObjectPoolInspectorReport;
+import net.pieroxy.conkw.utils.pools.inspectors.UndisposedObjectsInspector;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -46,10 +48,25 @@ public class HashMapPoolTest extends TestCase {
         for (int i=0 ; i<10 ; i++) {
             m = pool.getNew();
         }
-        pool.dispose(m);
+        for (int i=0 ; i<10 ; i++) {
+            m = pool.getNew();
+            pool.dispose(m);
+        }
+        pool.dispose(new TreeMap());
+        pool.dispose(new HashMap());
+        pool.dispose(new HashMap());
+        pool.dispose(new HashMap());
+
         System.gc();
+        UndisposedObjectsInspector inspector = (UndisposedObjectsInspector) pool.getInspector();
+        assertEquals(3, inspector.getNotfound());
+        assertEquals(1, pool.getWronglyRecycled());
+        assertEquals(20, pool.getRequested());
+        assertEquals(13, pool.getRecycled());
+        assertEquals(11, pool.getCreated());
         ObjectPoolInspectorReport report = pool.getReport();
         assertEquals(1, report.getViolations().size());
-        assertEquals(9, report.getViolations().iterator().next().getInstances());
+        assertEquals(10, report.getViolations().iterator().next().getInstances());
+
     }
 }

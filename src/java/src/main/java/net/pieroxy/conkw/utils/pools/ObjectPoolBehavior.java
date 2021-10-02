@@ -4,9 +4,9 @@ import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.pools.inspectors.*;
 
 public enum ObjectPoolBehavior {
-    PROD(()->new NoopInspector()),
-    TRACK_NOT_DISPOSED(()-> new UndisposedObjectsInspector()),
-    TRACK_NOT_DISPOSED_LIVE(()-> new RegularReportInspector(new UndisposedObjectsInspector(), CDuration.ONE_MINUTE));
+    PROD((op)->new NoopInspector()),
+    TRACK_NOT_DISPOSED((op)-> new UndisposedObjectsInspector()),
+    TRACK_NOT_DISPOSED_LIVE((op)-> new RegularReportInspector(new UndisposedObjectsInspector(), CDuration.FIVE_SECONDS, op));
 
     private final InspectorProvider provider;
 
@@ -14,7 +14,7 @@ public enum ObjectPoolBehavior {
         provider = ip;
     }
 
-    public ObjectPoolInspector getInspector() {
-        return provider.get();
+    public ObjectPoolInspector getInspector(ObjectPool op) {
+        return provider.get(op);
     }
 }

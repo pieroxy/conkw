@@ -15,7 +15,7 @@ public abstract class ObjectPool<T> {
     protected abstract T getInstanceToRecycle(T instance);
 
     protected ObjectPool(ObjectPoolBehavior behavior) {
-       this.inspector = behavior.getInspector();
+       this.inspector = behavior.getInspector(this);
     }
 
     public synchronized T getNew() {
@@ -56,5 +56,9 @@ public abstract class ObjectPool<T> {
 
     public ObjectPoolInspectorReport getReport() {
         return inspector.getReport();
+    }
+
+    public ObjectPoolInspector<T> getInspector() {
+        return inspector;
     }
 }

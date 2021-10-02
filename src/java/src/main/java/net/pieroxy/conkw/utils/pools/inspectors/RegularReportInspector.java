@@ -1,8 +1,8 @@
 package net.pieroxy.conkw.utils.pools.inspectors;
 
 import net.pieroxy.conkw.utils.duration.CDuration;
+import net.pieroxy.conkw.utils.pools.ObjectPool;
 
-import java.io.Closeable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -11,11 +11,13 @@ public class RegularReportInspector<T> implements ObjectPoolInspector<T> {
 
   private final ObjectPoolInspector<T> inspector;
   private final CDuration interval;
+  private final ObjectPool pool;
   private long lastReport;
 
-  public RegularReportInspector(ObjectPoolInspector<T> inspector, CDuration interval) {
+  public RegularReportInspector(ObjectPoolInspector<T> inspector, CDuration interval, ObjectPool pool) {
     this.inspector = inspector;
     this.interval = interval;
+    this.pool = pool;
     this.lastReport = System.currentTimeMillis();
   }
 
@@ -28,7 +30,10 @@ public class RegularReportInspector<T> implements ObjectPoolInspector<T> {
   private void check() {
     if (interval.isExpired(lastReport, System.currentTimeMillis())) {
       lastReport = System.currentTimeMillis();
-      getReport().getViolations().forEach(v -> v.log(LOGGER, Level.WARNING));
+      ObjectPoolInspectorReport report = getReport();
+      LOGGER.log(Level.WARNING, "ObjectPool report: created:" + pool.getCreated() + " requested:" + pool.getRequested() + " recycled:" + pool.getRecycled() + " wrongRecycled:" + pool.getWronglyRecycled());
+      LOGGER.log(Level.WARNING, report.getGlobalStatus());
+      report.getViolations().forEach(v -> v.log(LOGGER, Level.WARNING));
     }
   }
 

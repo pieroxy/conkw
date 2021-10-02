@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class UndisposedObjectsInspector<T> implements ObjectPoolInspector<T> {
     Collection<ObjectWithContext<T>> instances = new LinkedList<>();
-
+    int notfound = 0;
 
     @Override
     public synchronized T giveOutInstance(T result) {
@@ -21,15 +21,20 @@ public class UndisposedObjectsInspector<T> implements ObjectPoolInspector<T> {
         for (ObjectWithContext<T> elem : instances) {
             if (elem.getInstance() == instanceToRecycle) {
                 instances.remove(elem);
-                break;
+                return instanceToRecycle;
             }
         }
+        notfound++;
         return instanceToRecycle;
     }
 
     @Override
     public synchronized ObjectPoolInspectorReport getReport() {
+        System.gc();
+        try { Thread.sleep(20); } catch (Exception e) {} // This is just so that the gc log gets flushed before the report gets logged.
         ObjectPoolInspectorReport res = new ObjectPoolInspectorReport();
+        res.setGlobalStatus("inspected objects: " + instances.size() + ", Returned instances not found: " + notfound);
+        notfound = 0;
         Collection<ObjectWithContext<T>> newinstances = new LinkedList<>();
         Map<ThreadStack, Integer> stackTraceCount = new HashMap<>();
         for (ObjectWithContext<T> c : instances) {
@@ -44,5 +49,9 @@ public class UndisposedObjectsInspector<T> implements ObjectPoolInspector<T> {
         });
         instances = newinstances;
         return res;
+    }
+
+    public int getNotfound() {
+        return notfound;
     }
 }
