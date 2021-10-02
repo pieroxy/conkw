@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HashMapPool extends ObjectPool<Map> {
-    static HashMapPool instance = new HashMapPool(ObjectPoolBehavior.TRACK_NOT_DISPOSED_LIVE);
+    static HashMapPool instance = new HashMapPool(ObjectPoolBehavior.PROD);
 
     public HashMapPool(ObjectPoolBehavior behavior) {
         super(behavior);
