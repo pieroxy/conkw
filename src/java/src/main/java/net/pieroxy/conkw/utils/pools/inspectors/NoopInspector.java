@@ -1,6 +1,6 @@
 package net.pieroxy.conkw.utils.pools.inspectors;
 
-public class NoopInspector<T> implements ObjectPoolInspector<T> {
+public final class NoopInspector<T> implements ObjectPoolInspector<T> {
     @Override
     public T giveOutInstance(T result) {
         return result;
