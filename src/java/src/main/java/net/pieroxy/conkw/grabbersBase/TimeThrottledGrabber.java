@@ -104,8 +104,6 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
         collectors.put(configKey, c);
         c.collectionDone();
       }
-
-
     } catch (Exception e) {
       log(Level.SEVERE, "Could not load cached data file.", e);
     }
