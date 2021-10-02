@@ -1,12 +1,11 @@
 package net.pieroxy.conkw.utils.pools.hashmap;
 
-import net.pieroxy.conkw.utils.pools.Disposable;
-
+import java.io.Closeable;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
-public class InstrumentedHashMap<K, V> implements Map<K, V>, Disposable {
+public class InstrumentedHashMap<K, V> implements Map<K, V>, Closeable {
 
     private Map<K, V> instance;
     private boolean accessed;
@@ -83,7 +82,7 @@ public class InstrumentedHashMap<K, V> implements Map<K, V>, Disposable {
     }
 
     @Override
-    public void dispose() {
+    public void close() {
         Map<K, V> oi = instance;
         instance = null;
         HashMapPool.getInstance().dispose(oi);
