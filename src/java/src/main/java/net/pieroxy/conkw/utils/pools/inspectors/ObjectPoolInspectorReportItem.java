@@ -17,6 +17,18 @@ public class ObjectPoolInspectorReportItem {
     }
 
     public void log(Logger logger, Level level) {
-        // TO BE IMPLEMENTED
+        logger.log(level, message);
+        if (creation!=null && !creation.isEmpty()) {
+            logger.log(level, "Creation:");
+            for (StackTraceElement e : creation.getStack()) {
+                logger.log(level, "  -> " + e);
+            }
+        }
+        if (violation!=null && !violation.isEmpty()) {
+            logger.log(level, "Violation:");
+            for (StackTraceElement e : violation.getStack()) {
+                logger.log(level, "  -> " + e);
+            }
+        }
     }
 }
