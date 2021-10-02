@@ -21,4 +21,16 @@ public class ThreadStack {
     public int hashCode() {
         return Arrays.hashCode(stack);
     }
+
+    public void truncate(int depth) {
+        if (stack.length > depth) {
+            StackTraceElement[] truncated = new StackTraceElement[depth];
+            System.arraycopy(stack, stack.length-depth, truncated, 0, depth);
+            stack = truncated;
+        }
+    }
+
+    public StackTraceElement[] getStack() {
+        return stack;
+    }
 }
