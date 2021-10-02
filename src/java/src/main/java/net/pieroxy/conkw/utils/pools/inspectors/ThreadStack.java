@@ -33,4 +33,8 @@ public class ThreadStack {
     public StackTraceElement[] getStack() {
         return stack;
     }
+
+    public boolean isEmpty() {
+        return stack==null || stack.length==0;
+    }
 }
