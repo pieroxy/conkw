@@ -24,8 +24,8 @@ public class HashMapPool extends ObjectPool<Map> {
 
     @Override
     protected Map getInstanceToRecycle(Map instance) {
-
         if (instance!=null && (instance instanceof HashMap || instance instanceof InstrumentedHashMap)) {
+            instance.clear();
             return instance;
         }
         return null;

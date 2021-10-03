@@ -69,4 +69,16 @@ public class HashMapPoolTest extends TestCase {
         assertEquals(10, report.getViolations().iterator().next().getInstances());
 
     }
+
+    public void testClearReturnedObjects() {
+        ObjectPool<Map> pool = new HashMapPool(ObjectPoolBehavior.PROD);
+        Map m = pool.borrow();
+        assertEquals(0, m.size());
+        m.put("a", "b");
+        pool.giveBack(m);
+        for (int i=0 ; i<10 ; i++) {
+            m = pool.borrow();
+            assertEquals(0, m.size());
+        }
+    }
 }
