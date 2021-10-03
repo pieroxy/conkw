@@ -1,11 +1,11 @@
 package net.pieroxy.conkw.utils.pools.hashmap;
 
 import net.pieroxy.conkw.utils.pools.ObjectPool;
-import net.pieroxy.conkw.utils.pools.inspectors.InspectorProvider;
-import net.pieroxy.conkw.utils.pools.inspectors.NoopInspector;
+import net.pieroxy.conkw.utils.pools.inspectors.*;
 
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class HashMapPool extends ObjectPool<Map> {
     static HashMapPool instance = new HashMapPool((op) -> new NoopInspector());
@@ -14,7 +14,7 @@ public class HashMapPool extends ObjectPool<Map> {
         super(inspector);
     }
 
-    public final static ObjectPool<Map> getInstance() {
+    public final static HashMapPool getInstance() {
         return instance;
     }
 
@@ -30,5 +30,11 @@ public class HashMapPool extends ObjectPool<Map> {
             return instance;
         }
         return null;
+    }
+
+    public <K, V> Map<K, V> borrow(Map<K, V> database) {
+        Map<K, V> map = (Map<K, V>) borrow();
+        map.putAll(database);
+        return map;
     }
 }
