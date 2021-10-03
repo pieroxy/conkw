@@ -26,7 +26,7 @@ public abstract class ObjectPool<T> {
        this.inspector = behavior.getInspector(this);
     }
 
-    public synchronized T getNew() {
+    public synchronized T borrow() {
         T result = pool.poll();
         requested++;
         if (LOGGER.isLoggable(Level.FINE) && requested%100 == 0) {
@@ -43,7 +43,7 @@ public abstract class ObjectPool<T> {
         return inspector.giveOutInstance(result);
     }
 
-    public synchronized void dispose(T instance) {
+    public synchronized void giveBack(T instance) {
         instance = inspector.recycle(getInstanceToRecycle(instance));
         if (instance!=null) {
             if (pool.size() > targetSize) {
