@@ -102,9 +102,10 @@ public class Api extends HttpServlet {
         writeResponse(resp, Response.getError("Grabbers were not specified"));
       } else {
         GrabberInput.InputHolder in = getInput(grabbers, req);
-        Response r = api.buildResponse(now, in.in);
-        if (in.errors!=null) in.errors.stream().forEach(r::addError);
-        writeResponse(resp, r);
+        try (Response r = api.buildResponse(now, in.in)) {
+          if (in.errors != null) in.errors.stream().forEach(r::addError);
+          writeResponse(resp, r);
+        }
       }
     }
   }

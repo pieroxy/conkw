@@ -1,12 +1,14 @@
 package net.pieroxy.conkw.webapp.model;
 
 import com.dslplatform.json.CompiledJson;
+import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 
+import java.io.Closeable;
 import java.util.*;
 
 @CompiledJson(onUnknown = CompiledJson.Behavior.IGNORE)
-public class Response {
-  private Map<String, ResponseData> metrics = new HashMap<>();
+public class Response implements Closeable {
+  private Map<String, ResponseData> metrics;
   private long timestamp;
   private int responseJitter;
   private boolean needsAuthentication;
@@ -14,6 +16,7 @@ public class Response {
 
   public Response() {
     this.timestamp = System.currentTimeMillis();
+    metrics = HashMapPool.getInstance().borrow();
   }
   public Response(Response r, int jitter, String[]grabbers) {
     this.timestamp = r.timestamp;
@@ -65,7 +68,9 @@ public class Response {
   }
 
   public void setMetrics(Map<String, ResponseData> metrics) {
+    Map m = this.metrics;
     this.metrics = metrics;
+    HashMapPool.getInstance().giveBack(m);
   }
 
   public void setTimestamp(long timestamp) {
@@ -86,6 +91,12 @@ public class Response {
 
   public void setNeedsAuthentication(boolean needsAuthentication) {
     this.needsAuthentication = needsAuthentication;
+  }
+
+  @Override
+  public void close() {
+    HashMapPool.getInstance().giveBack(metrics);
+    metrics = null;
   }
 }
 
