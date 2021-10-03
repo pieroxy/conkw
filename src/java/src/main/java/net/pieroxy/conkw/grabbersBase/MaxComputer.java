@@ -5,12 +5,16 @@ import com.dslplatform.json.JsonWriter;
 import com.dslplatform.json.runtime.Settings;
 import net.pieroxy.conkw.grabbersBase.Grabber;
 import net.pieroxy.conkw.utils.JsonHelper;
+import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
+/**
+ * This class doesn't need the HashMapPool because it produces HashMaps only the first time it is used, it is stable over time.
+ */
 public class MaxComputer {
   public static String FILENAME = ".autoMax.json";
 
@@ -26,7 +30,6 @@ public class MaxComputer {
   }
 
   public double getMax(Grabber grabber, String metricName, double currentValue) {
-
     if (grabber.canLogFiner()) grabber.log(Level.FINER, "maxComputer: Getting data for " + grabber.getName() + " " + metricName + " " + currentValue);
     String cn = grabber.getClass().getName();
     Map<String, Double> grabberDb = database.get(cn);
@@ -75,8 +78,8 @@ public class MaxComputer {
 
   private void load() {
     if (store.exists()) {
-      try (InputStream is = new FileInputStream(store)) {
-        database = new DslJson<>(Settings.withRuntime()).deserialize(Map.class, is);
+      try {
+        database = JsonHelper.readFromFile(Map.class, store);
       } catch (Exception e) {
         database = new HashMap<>();
         grabber.log(Level.SEVERE, "maxComputer: Unable to parse " + store.getAbsolutePath(), e);
