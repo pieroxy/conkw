@@ -22,7 +22,7 @@ public class Response implements Closeable {
     this.timestamp = r.timestamp;
     this.responseJitter = jitter;
     this.errors = r.errors;
-    this.metrics = new HashMap<>(grabbers.length*2);
+    this.metrics = HashMapPool.getInstance().borrow(); // No handling of capacity yet: grabbers.length elements planned.
     for (String s : grabbers) {
       ResponseData rd = r.metrics.get(s);
       if (rd!=null) {
