@@ -1,7 +1,10 @@
 package net.pieroxy.conkw.accumulators;
 
+import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 import net.pieroxy.conkw.webapp.grabbers.logfile.LogRecord;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,9 +44,9 @@ public abstract class KeyAccumulator<A, T extends LogRecord> implements Accumula
     A key = getKey(line);
     if (key == null) return 0;
 
-    Accumulator<T> acc = current.data.getOrDefault(key, null);
+    Accumulator<T> acc = current.getData().getOrDefault(key, null);
     if (acc==null) try {
-      current.data.put(key, acc = provider.getAccumulator());
+      current.getData().put(key, acc = provider.getAccumulator());
     } catch (Exception e) {
       LOGGER.log(Level.SEVERE, "Cannot create accumulator", e);
     }
@@ -55,12 +58,12 @@ public abstract class KeyAccumulator<A, T extends LogRecord> implements Accumula
   @Override
   public void sumWith(Accumulator acc) {
     KeyAccumulator<A, T> ka = (KeyAccumulator) acc;
-    ka.old.data.entrySet().stream().forEach(entry -> {
-      Accumulator a = old.data.get(entry.getKey());
+    ka.old.getData().entrySet().stream().forEach(entry -> {
+      Accumulator a = old.getData().get(entry.getKey());
       try {
         if (a == null) {
           a = provider.getAccumulator();
-          old.data.put(entry.getKey(), a);
+          old.getData().put(entry.getKey(), a);
         }
         a.sumWith(entry.getValue());
       } catch (Exception e) {
@@ -71,22 +74,22 @@ public abstract class KeyAccumulator<A, T extends LogRecord> implements Accumula
 
   @Override
   public void prepareNewSession() {
-    old.data = new HashMap<>(current.data);
+    old.replaceData(current.getData());
     old.total = current.total;
 
     if (getMaxBuckets()!=null) {
       // Keep all the keys ever seen
-      current.data.entrySet().forEach(e -> {
+      current.getData().entrySet().forEach(e -> {
         Double d = floatingWeights.get(e.getKey());
         if (d==null) d = 0d;
         floatingWeights.put(e.getKey(), 0.9*d+e.getValue().getTotal());
         e.getValue().prepareNewSession();
       });
     } else {
-      current.data.entrySet().forEach(e -> {
+      current.getData().entrySet().forEach(e -> {
         e.getValue().prepareNewSession();
       });
-      current.data.clear();
+      current.getData().clear();
     }
     current.total = 0;
   }
@@ -102,7 +105,7 @@ public abstract class KeyAccumulator<A, T extends LogRecord> implements Accumula
   void logStable(String prefix, Map<String, Double> num, Map<String, String> str) {
     try {
       Set<Tuple> tree = new TreeSet<>();
-      old.data.entrySet().forEach(e -> tree.add(new Tuple(String.valueOf(e.getKey()), floatingWeights.getOrDefault(e.getKey(), 0d) + e.getValue().getTotal(), e.getValue())));
+      old.getData().entrySet().forEach(e -> tree.add(new Tuple(String.valueOf(e.getKey()), floatingWeights.getOrDefault(e.getKey(), 0d) + e.getValue().getTotal(), e.getValue())));
       StringBuilder keys = new StringBuilder();
       int detail = getMaxBuckets();
       Accumulator others = null;
@@ -129,15 +132,15 @@ public abstract class KeyAccumulator<A, T extends LogRecord> implements Accumula
   }
 
   public void logSimple(String prefix, Map<String, Double> num, Map<String, String> str) {
-    for (Map.Entry<A, Accumulator<T>> entry : old.data.entrySet()) {
+    for (Map.Entry<A, Accumulator<T>> entry : old.getData().entrySet()) {
       entry.getValue().log(AccumulatorUtils.addToMetricName(prefix, String.valueOf(entry.getKey())), num, str);
     }
     num.put(AccumulatorUtils.addToMetricName(prefix, "total"), old.total);
     List<A> values = new ArrayList<>();
-    values.addAll(old.data.keySet());
+    values.addAll(old.getData().keySet());
     str.put(AccumulatorUtils.addToMetricName(prefix, "values"),
             values.stream()
-                    .sorted(Comparator.comparingDouble(a -> -old.data.get(a).getTotal()))
+                    .sorted(Comparator.comparingDouble(a -> -old.getData().get(a).getTotal()))
                     .map(a -> String.valueOf(a))
                     .collect(Collectors.joining(",")));
   }
@@ -161,12 +164,28 @@ public abstract class KeyAccumulator<A, T extends LogRecord> implements Accumula
 }
 
 
-class KeyAccumulatorData<A, T extends LogRecord> {
+class KeyAccumulatorData<A, T extends LogRecord> implements Closeable {
   public KeyAccumulatorData() {
-    this.data = new HashMap<>();
+    this.data = HashMapPool.getInstance().borrow();
   }
 
   double total;
-  Map<A, Accumulator<T>> data;
+  private Map<A, Accumulator<T>> data;
 
+  @Override
+  public void close() throws IOException {
+    Map m = data;
+    data = null;
+    HashMapPool.getInstance().giveBack(m);
+  }
+
+  public Map<A, Accumulator<T>> getData() {
+    return data;
+  }
+
+  public void replaceData(Map<A, Accumulator<T>> data) {
+    Map old = this.data;
+    this.data = HashMapPool.getInstance().borrow(data);
+    HashMapPool.getInstance().giveBack(old);
+  }
 }
