@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 import net.pieroxy.conkw.utils.pools.inspectors.NoopInspector;
 import net.pieroxy.conkw.utils.pools.inspectors.ObjectPoolInspectorReport;
+import net.pieroxy.conkw.utils.pools.inspectors.ReusedRecycledObjectInspector;
 import net.pieroxy.conkw.utils.pools.inspectors.UndisposedObjectsInspector;
 
 import java.util.HashMap;
@@ -81,5 +82,16 @@ public class HashMapPoolTest extends TestCase {
             m = pool.borrow();
             assertEquals(0, m.size());
         }
+    }
+
+    public void testAccessToGivenBackInstances() {
+        ObjectPool<Map> pool = new HashMapPool((op) -> new ReusedRecycledObjectInspector());
+        Map m = pool.borrow();
+        pool.giveBack(m);
+        ObjectPoolInspectorReport report = pool.getInspector().getReport();
+        assertEquals(0, report.getViolations().size());
+        m.size();
+        report = pool.getInspector().getReport();
+        assertEquals(1, report.getViolations().size());
     }
 }

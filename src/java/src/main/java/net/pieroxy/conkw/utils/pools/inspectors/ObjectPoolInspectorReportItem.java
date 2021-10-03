@@ -1,5 +1,6 @@
 package net.pieroxy.conkw.utils.pools.inspectors;
 
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -8,11 +9,19 @@ public class ObjectPoolInspectorReportItem {
     private final ThreadStack violation;
     private final String message;
     private final String instanceDebugString;
-    private final int instances;
+    private int instances;
 
     public ObjectPoolInspectorReportItem(StackTraceElement[] creation, StackTraceElement[] violation, String message, String instanceDebugString, int instances) {
         this.creation = new ThreadStack(creation);
         this.violation = violation == null ? null : new ThreadStack(violation);
+        this.message = message;
+        this.instanceDebugString = instanceDebugString;
+        this.instances = instances;
+    }
+
+    public ObjectPoolInspectorReportItem(ThreadStack creation, ThreadStack violation, String message, String instanceDebugString, int instances) {
+        this.creation = creation;
+        this.violation = violation;
         this.message = message;
         this.instanceDebugString = instanceDebugString;
         this.instances = instances;
@@ -36,5 +45,23 @@ public class ObjectPoolInspectorReportItem {
 
     public int getInstances() {
         return instances;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ObjectPoolInspectorReportItem that = (ObjectPoolInspectorReportItem) o;
+        return Objects.equals(creation, that.creation) && Objects.equals(violation, that.violation) && Objects.equals(message, that.message);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(creation, violation, message);
+    }
+
+    public ObjectPoolInspectorReportItem addOneInstance() {
+        instances++;
+        return this;
     }
 }

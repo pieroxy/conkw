@@ -1,6 +1,7 @@
 package net.pieroxy.conkw.utils.pools.hashmap;
 
 import net.pieroxy.conkw.utils.pools.ObservableObject;
+import net.pieroxy.conkw.utils.pools.inspectors.ThreadStack;
 
 import java.io.Closeable;
 import java.util.Collection;
@@ -11,7 +12,8 @@ import java.util.Set;
 public class InstrumentedHashMap<K, V> implements Map<K, V>, ObservableObject {
 
     private Map<K, V> instance;
-    private boolean accessed;
+    private boolean accessed = true;
+    ThreadStack violation;
 
     public InstrumentedHashMap() {
         instance = new HashMap<>();
@@ -21,77 +23,87 @@ public class InstrumentedHashMap<K, V> implements Map<K, V>, ObservableObject {
         this.instance = instance;
     }
 
+    private void access() {
+        if (accessed) return;
+        accessed = true;
+        violation = new ThreadStack(Thread.currentThread().getStackTrace());
+    }
+
+    // Map implementation below
+
     @Override
     public int size() {
-        accessed = true;
+        access();
         return instance.size();
     }
 
     @Override
     public boolean isEmpty() {
-        accessed = true;
+        access();
         return instance.isEmpty();
     }
 
     @Override
     public boolean containsKey(Object key) {
-        accessed = true;
+        access();
         return instance.containsKey(key);
     }
 
     @Override
     public boolean containsValue(Object value) {
-        accessed = true;
+        access();
         return instance.containsValue(value);
     }
 
     @Override
     public V get(Object key) {
-        accessed = true;
+        access();
         return instance.get(key);
     }
 
     @Override
     public V put(K key, V value) {
-        accessed = true;
+        access();
         return instance.put(key, value);
     }
 
     @Override
     public V remove(Object key) {
-        accessed = true;
+        access();
         return instance.remove(key);
     }
 
     @Override
     public void putAll(Map<? extends K, ? extends V> m) {
-        accessed = true;
+        access();
         instance.putAll(m);
     }
 
     @Override
     public void clear() {
-        accessed = true;
+        access();
         instance.clear();
     }
 
     @Override
     public Set<K> keySet() {
-        accessed = true;
+        access();
         return instance.keySet();
     }
 
     @Override
     public Collection<V> values() {
-        accessed = true;
+        access();
         return instance.values();
     }
 
     @Override
     public Set<Entry<K, V>> entrySet() {
-        accessed = true;
+        access();
         return instance.entrySet();
     }
+
+    // End of Map implementation
 
     public Map<K, V> getInstance() {
         return instance;
@@ -108,6 +120,11 @@ public class InstrumentedHashMap<K, V> implements Map<K, V>, ObservableObject {
 
     @Override
     public void resetAccessedValue() {
+        accessed = false;
+    }
 
+    @Override
+    public ThreadStack getAccessedStack() {
+        return violation;
     }
 }

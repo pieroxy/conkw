@@ -31,8 +31,9 @@ public class RegularReportInspector<T> implements ObjectPoolInspector<T> {
     if (interval.isExpired(lastReport, System.currentTimeMillis())) {
       lastReport = System.currentTimeMillis();
       ObjectPoolInspectorReport report = getReport();
-      LOGGER.log(Level.WARNING, pool.getDebugString());
-      LOGGER.log(Level.WARNING, report.getGlobalStatus());
+      LOGGER.log(Level.WARNING, "Debug String  : " + pool.getDebugString());
+      LOGGER.log(Level.WARNING, "Global Status : " + report.getGlobalStatus());
+      LOGGER.log(Level.WARNING, "Violations    : " + report.getViolations().size());
       report.getViolations().forEach(v -> v.log(LOGGER, Level.WARNING));
     }
   }
