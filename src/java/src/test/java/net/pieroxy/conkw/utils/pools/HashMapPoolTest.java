@@ -2,6 +2,7 @@ package net.pieroxy.conkw.utils.pools;
 
 import junit.framework.TestCase;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
+import net.pieroxy.conkw.utils.pools.inspectors.NoopInspector;
 import net.pieroxy.conkw.utils.pools.inspectors.ObjectPoolInspectorReport;
 import net.pieroxy.conkw.utils.pools.inspectors.UndisposedObjectsInspector;
 
@@ -12,7 +13,7 @@ import java.util.TreeMap;
 public class HashMapPoolTest extends TestCase {
     public void testCreation() {
         Map<?,?> map = null;
-        ObjectPool<Map> pool = new HashMapPool(ObjectPoolBehavior.PROD);
+        ObjectPool<Map> pool = new HashMapPool((op) -> new NoopInspector());
         for (int i=0 ; i<100 ; i++) {
             map = pool.borrow();
         }
@@ -23,7 +24,7 @@ public class HashMapPoolTest extends TestCase {
     }
     public void testReuse() {
         Map<?,?> map = null;
-        ObjectPool<Map> pool = new HashMapPool(ObjectPoolBehavior.PROD);
+        ObjectPool<Map> pool = new HashMapPool((op) -> new NoopInspector());
         for (int i=0 ; i<100 ; i++) {
             pool.giveBack(map);
             map = pool.borrow();
@@ -34,7 +35,7 @@ public class HashMapPoolTest extends TestCase {
         assertEquals(1, pool.getCreated());
     }
     public void testWrongRecycle() {
-        ObjectPool<Map> pool = new HashMapPool(ObjectPoolBehavior.PROD);
+        ObjectPool<Map> pool = new HashMapPool((op) -> new NoopInspector());
         pool.giveBack(new TreeMap());
         pool.giveBack(null);
         assertEquals(2, pool.getWronglyRecycled());
@@ -43,7 +44,7 @@ public class HashMapPoolTest extends TestCase {
         assertEquals(0, pool.getCreated());
     }
     public void testDebugNotRecycledObjects() {
-        ObjectPool<Map> pool = new HashMapPool(ObjectPoolBehavior.TRACK_NOT_DISPOSED);
+        ObjectPool<Map> pool = new HashMapPool((op) -> new UndisposedObjectsInspector());
         Map m=null;
         for (int i=0 ; i<10 ; i++) {
             m = pool.borrow();
@@ -71,7 +72,7 @@ public class HashMapPoolTest extends TestCase {
     }
 
     public void testClearReturnedObjects() {
-        ObjectPool<Map> pool = new HashMapPool(ObjectPoolBehavior.PROD);
+        ObjectPool<Map> pool = new HashMapPool((op) -> new NoopInspector());
         Map m = pool.borrow();
         assertEquals(0, m.size());
         m.put("a", "b");

@@ -1,16 +1,17 @@
 package net.pieroxy.conkw.utils.pools.hashmap;
 
 import net.pieroxy.conkw.utils.pools.ObjectPool;
-import net.pieroxy.conkw.utils.pools.ObjectPoolBehavior;
+import net.pieroxy.conkw.utils.pools.inspectors.InspectorProvider;
+import net.pieroxy.conkw.utils.pools.inspectors.NoopInspector;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class HashMapPool extends ObjectPool<Map> {
-    static HashMapPool instance = new HashMapPool(ObjectPoolBehavior.PROD);
+    static HashMapPool instance = new HashMapPool((op) -> new NoopInspector());
 
-    public HashMapPool(ObjectPoolBehavior behavior) {
-        super(behavior);
+    public HashMapPool(InspectorProvider inspector) {
+        super(inspector);
     }
 
     public final static ObjectPool<Map> getInstance() {

@@ -1,5 +1,6 @@
 package net.pieroxy.conkw.utils.pools;
 
+import net.pieroxy.conkw.utils.pools.inspectors.InspectorProvider;
 import net.pieroxy.conkw.utils.pools.inspectors.ObjectPoolInspector;
 import net.pieroxy.conkw.utils.pools.inspectors.ObjectPoolInspectorReport;
 
@@ -22,8 +23,8 @@ public abstract class ObjectPool<T> {
     protected abstract T createNewInstance();
     protected abstract T getInstanceToRecycle(T instance);
 
-    protected ObjectPool(ObjectPoolBehavior behavior) {
-       this.inspector = behavior.getInspector(this);
+    protected ObjectPool(InspectorProvider behavior) {
+       this.inspector = behavior.get(this);
     }
 
     public synchronized T borrow() {
