@@ -22,11 +22,17 @@ public class ThreadStack {
         return Arrays.hashCode(stack);
     }
 
-    public void truncate(int depth) {
+    public void truncate(int discard, int depth) {
         if (stack.length > depth) {
-            StackTraceElement[] truncated = new StackTraceElement[depth];
-            System.arraycopy(stack, stack.length-depth, truncated, 0, depth);
-            stack = truncated;
+            if (stack.length > depth + discard) {
+                StackTraceElement[] truncated = new StackTraceElement[depth];
+                System.arraycopy(stack, discard, truncated, 0, depth);
+                stack = truncated;
+            } else {
+                StackTraceElement[] truncated = new StackTraceElement[depth];
+                System.arraycopy(stack, stack.length-depth, truncated, 0, depth);
+                stack = truncated;
+            }
         }
     }
 

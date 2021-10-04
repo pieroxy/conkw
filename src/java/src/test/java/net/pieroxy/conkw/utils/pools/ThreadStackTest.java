@@ -21,7 +21,7 @@ public class ThreadStackTest extends ConkwTestCase {
 
     public void testTruncate() {
         ThreadStack ts = getStack();
-        ts.truncate(1);
+        ts.truncate(0,1);
         assertEquals(1, ts.getStack().length);
         assertNotContainsStack(ts.getStack(), new StackTraceElement(this.getClass().getName(), "testTruncate", "ThreadStackTest.java", 23), 2);
         assertContainsStack(getStack().getStack(), new StackTraceElement(this.getClass().getName(), "getStack", "ThreadStackTest.java", 15), 2);

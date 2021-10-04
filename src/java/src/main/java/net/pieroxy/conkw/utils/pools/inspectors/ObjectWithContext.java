@@ -11,6 +11,11 @@ public class ObjectWithContext<T> {
         this.timestamp = System.currentTimeMillis();
     }
 
+    public ObjectWithContext(T instance, int stackElementsToDiscard, int stackElementsToKeep) {
+        this(instance);
+        callStack.truncate(stackElementsToDiscard, stackElementsToKeep);
+    }
+
     T getInstance() {
         return instance;
     }
