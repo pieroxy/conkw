@@ -3,14 +3,17 @@ package net.pieroxy.conkw.webapp.model;
 import com.dslplatform.json.CompiledJson;
 import com.dslplatform.json.JsonAttribute;
 import net.pieroxy.conkw.grabbersBase.Grabber;
+import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.time.Duration;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @CompiledJson(onUnknown = CompiledJson.Behavior.IGNORE)
-public class ResponseData {
+public class ResponseData implements Closeable {
   private final static Logger LOGGER = Logger.getLogger(ResponseData.class.getName());
 
   private long timestamp;
@@ -18,10 +21,10 @@ public class ResponseData {
   @JsonAttribute(ignore = true)
   private Collection<String> errors=new LinkedList<>();
   private String name,extractor;
-  private Map<String, Double> num = new HashMap<>();
-  private Map<String, String> str = new HashMap<>();
-  private Map<String, Long> timestamps = new HashMap<>();
-  private Set<String> extracted   = new HashSet<>();
+  private Map<String, Double> num = HashMapPool.getInstance().borrow();
+  private Map<String, String> str = HashMapPool.getInstance().borrow();
+  private Map<String, Long> timestamps = HashMapPool.getInstance().borrow();
+  private Set<String> extracted = new HashSet<>();
 
   public ResponseData() {
   }
@@ -62,19 +65,23 @@ public class ResponseData {
     String tsName = "num." + name;
     if (!num.containsKey(name)) {
       // Change the map structurally, needs to do it atomically.
-      Map<String, Double> nnum = new HashMap<>();
+      Map<String, Double> nnum = HashMapPool.getInstance().borrow();
       nnum.putAll(num);
       nnum.put(name, value);
+      Map tmp = num;
       num = nnum;
+      HashMapPool.getInstance().giveBack(tmp);
     } else {
       num.put(name, value);
     }
     if (!timestamps.containsKey(tsName)) {
       // Change the map structurally, needs to do it atomically.
-      Map<String, Long> nts = new HashMap<>();
+      Map<String, Long> nts = HashMapPool.getInstance().borrow();
       nts.putAll(timestamps);
       nts.put(tsName, System.currentTimeMillis());
+      Map tmp = timestamps;
       timestamps = nts;
+      HashMapPool.getInstance().giveBack(tmp);
     } else {
       timestamps.put(tsName, System.currentTimeMillis());
     }
@@ -84,19 +91,23 @@ public class ResponseData {
     String tsName = "str." + name;
     if (!str.containsKey(name)) {
       // Change the map structurally, needs to do it atomically.
-      Map<String, String> nstr = new HashMap<>();
+      Map<String, String> nstr = HashMapPool.getInstance().borrow();
       nstr.putAll(str);
       nstr.put(name, value);
+      Map tmp = str;
       str = nstr;
+      HashMapPool.getInstance().giveBack(tmp);
     } else {
       str.put(name, value);
     }
     if (!timestamps.containsKey(tsName)) {
       // Change the map structurally, needs to do it atomically.
-      Map<String, Long> nts = new HashMap<>();
+      Map<String, Long> nts = HashMapPool.getInstance().borrow();
       nts.putAll(timestamps);
       nts.put(tsName, System.currentTimeMillis());
+      Map tmp = timestamps;
       timestamps = nts;
+      HashMapPool.getInstance().giveBack(tmp);
     } else {
       timestamps.put(tsName, System.currentTimeMillis());
     }
@@ -110,12 +121,9 @@ public class ResponseData {
   public synchronized boolean purgeDataOlderThan(Duration timespan) {
     long now = System.currentTimeMillis();
     boolean changed = false;
-    Map<String, String> nstr = new HashMap<>();
-    nstr.putAll(str);
-    Map<String, Double> nnum = new HashMap<>();
-    nnum.putAll(num);
-    Map<String, Long> nts = new HashMap<>();
-    nts.putAll(timestamps);
+    Map<String, String> nstr = HashMapPool.getInstance().borrow(str);
+    Map<String, Double> nnum = HashMapPool.getInstance().borrow(num);
+    Map<String, Long> nts = HashMapPool.getInstance().borrow(timestamps);
 
     HashSet<String> keys = new HashSet<>();
     keys.addAll(nstr.keySet());
@@ -147,9 +155,15 @@ public class ResponseData {
       }
     }
     if (changed) {
+      Map a = num;
+      Map b = num;
+      Map c = num;
       num = nnum;
       str = nstr;
       timestamps = nts;
+      HashMapPool.getInstance().giveBack(a);
+      HashMapPool.getInstance().giveBack(b);
+      HashMapPool.getInstance().giveBack(c);
     }
     return changed;
   }
@@ -241,5 +255,15 @@ public class ResponseData {
         ", num=" + num.size() +
         ", str=" + str.size() +
         '}';
+  }
+
+  @Override
+  public void close() {
+    HashMapPool.getInstance().giveBack(this.num);
+    HashMapPool.getInstance().giveBack(this.str);
+    HashMapPool.getInstance().giveBack(this.timestamps);
+    this.num = null;
+    this.str = null;
+    this.timestamps = null;
   }
 }
