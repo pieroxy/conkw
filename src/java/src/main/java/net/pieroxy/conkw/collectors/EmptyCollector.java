@@ -24,10 +24,6 @@ public class EmptyCollector implements Collector {
   }
 
   @Override
-  public void prepareForCollection() {
-  }
-
-  @Override
   public void collectionDone() {
   }
 

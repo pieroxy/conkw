@@ -46,13 +46,9 @@ public class AccumulatorCollector<T extends LogRecord> implements Collector {
   }
 
   @Override
-  public void prepareForCollection() {
-    accumulator.prepareNewSession();
-    sc.prepareForCollection();
-  }
-
-  @Override
   public void collectionDone() {
+    accumulator.prepareNewSession();
+    sc.collectionDone();
   }
 
   @Override

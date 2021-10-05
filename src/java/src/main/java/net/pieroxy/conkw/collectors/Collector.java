@@ -21,13 +21,7 @@ public interface Collector {
     Collection<String> getErrors();
 
     /**
-     * Prepare for the coming of new data. The collector should start a new "session".
-     * @return
-     */
-    void prepareForCollection();
-
-    /**
-     * Notify the grabber that the current collection is done.
+     * Notify the grabber that the current collection is done. The collector should start a new "session" of collection.
      * @return
      */
     void collectionDone();

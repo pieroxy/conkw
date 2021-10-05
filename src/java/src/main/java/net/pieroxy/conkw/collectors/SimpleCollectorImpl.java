@@ -6,17 +6,23 @@ import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.util.Collection;
 
-public abstract class AbstractSimpleCollector implements SimpleCollector {
-    public ResponseData collectionInProgress;
-    protected ResponseData completedCollection;
+public class SimpleCollectorImpl implements SimpleCollector {
+    private ResponseData collectionInProgress;
+    private ResponseData completedCollection;
     private String configKey;
     protected Grabber grabber;
 
-    public AbstractSimpleCollector(Grabber g, String configKey) {
+    public SimpleCollectorImpl(Grabber g, String configKey) {
         this.grabber = g;
         this.completedCollection = new ResponseData(g, System.currentTimeMillis());
         this.collectionInProgress = new ResponseData(g, System.currentTimeMillis());
         this.configKey = configKey;
+    }
+
+    @Override
+    public synchronized void collectionDone() {
+        completedCollection = collectionInProgress;
+        collectionInProgress = new ResponseData(grabber, System.currentTimeMillis());
     }
 
     // Writing

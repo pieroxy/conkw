@@ -1,6 +1,7 @@
 package net.pieroxy.conkw.grabbersBase;
 
 import net.pieroxy.conkw.collectors.Collector;
+import net.pieroxy.conkw.webapp.grabbers.oshi.OshiGrabber;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.util.Collection;
@@ -106,10 +107,9 @@ public abstract class AsyncGrabber<T extends Collector> extends SimpleGrabber<T>
             try {
               getActiveCollectors().forEach(sc -> {
                 long a = System.nanoTime();
-                sc.prepareForCollection();
                 this.grabSync(sc);
-                sc.collectionDone();
                 sc.setTime(System.nanoTime() - a);
+                sc.collectionDone();
               });
             } finally {
               grabbingRightNow = false;

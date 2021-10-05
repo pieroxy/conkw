@@ -150,7 +150,6 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
     try {
       SimpleCollector collector = getOrCreateCollector(c);
       if (changed(collector)) {
-        collector.prepareForCollection();
         load(collector);
         log(Level.FINE, "Loaded data.");
         lastRun = System.currentTimeMillis();
@@ -173,7 +172,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
     if (collector == null) {
       collector = new SimpleTransientCollector(this, c.getConfigKey());
       collector.setTimestamp(0);
-      collector.prepareForCollection();
+      collector.collectionDone();
       log(Level.FINE, "Creating collector for config " + c.getConfigKey());
       Map<String, SimpleCollector> newSCMap = new HashMap<>(collectors);
       newSCMap.put(c.getConfigKey(), collector);
