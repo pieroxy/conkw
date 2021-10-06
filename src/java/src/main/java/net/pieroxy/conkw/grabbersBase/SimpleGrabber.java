@@ -35,7 +35,6 @@ public abstract class SimpleGrabber<T extends Collector> extends Grabber<T> {
       cached.getDataCopy().getNum().entrySet().forEach(entry -> toFill.collect(entry.getKey(), entry.getValue()));
       cached.getDataCopy().getStr().entrySet().forEach(entry -> toFill.collect(entry.getKey(), entry.getValue()));
       cached.getErrors().forEach(error -> toFill.addError(error));
-      toFill.getDataCopy().addExtracted(extractName);
     }
   }
 
