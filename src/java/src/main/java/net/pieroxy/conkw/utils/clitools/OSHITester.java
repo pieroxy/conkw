@@ -22,7 +22,7 @@ public class OSHITester {
     grabber.grabSync(sc);
     Thread.sleep(1000);
     grabber.grabSync(sc);
-    ResponseData rd = sc.getData();
+    ResponseData rd = sc.getDataCopy();
 
     Set<String> keys = new HashSet<>();
     keys.addAll(rd.getNum().keySet());

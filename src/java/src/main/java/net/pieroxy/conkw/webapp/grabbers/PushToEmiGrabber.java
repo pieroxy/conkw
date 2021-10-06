@@ -127,7 +127,7 @@ public class PushToEmiGrabber extends Grabber<SimpleCollector> implements Grabbe
   private ResponseData grab(Grabber g) {
     Collector c = g.getDefaultCollector();
     g.collect(c);
-    return c.getData();
+    return c.getDataCopy();
   }
 
   private void sendData(EmiInput input) throws IOException {

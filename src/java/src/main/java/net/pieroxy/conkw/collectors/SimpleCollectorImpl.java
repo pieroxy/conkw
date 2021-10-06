@@ -1,7 +1,6 @@
 package net.pieroxy.conkw.collectors;
 
 import net.pieroxy.conkw.grabbersBase.Grabber;
-import net.pieroxy.conkw.webapp.grabbers.procgrabber.ProcGrabber;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.util.Collection;
@@ -42,9 +41,8 @@ public class SimpleCollectorImpl implements SimpleCollector {
     }
 
     @Override
-    public void setData(ResponseData data) {
-        if (grabber instanceof ProcGrabber) System.out.println("Erasing");
-        collectionInProgress = data;
+    public void copyDataFrom(ResponseData data) {
+        collectionInProgress = new ResponseData(data);
     }
 
     @Override
@@ -53,8 +51,8 @@ public class SimpleCollectorImpl implements SimpleCollector {
     }
 
     @Override
-    public void setData(SimpleCollector data) {
-        collectionInProgress = data.getData();
+    public void copyDataFrom(SimpleCollector data) {
+        collectionInProgress = data.getDataCopy();
     }
 
     @Override
@@ -90,8 +88,8 @@ public class SimpleCollectorImpl implements SimpleCollector {
     }
 
     @Override
-    public synchronized ResponseData getData() {
-        return completedCollection;
+    public synchronized ResponseData getDataCopy() {
+        return new ResponseData(completedCollection);
     }
 
     @Override
@@ -102,5 +100,11 @@ public class SimpleCollectorImpl implements SimpleCollector {
             ", configKey='" + configKey + '\'' +
             ", grabber=" + grabber +
             '}';
+    }
+
+    @Override
+    public void close() {
+        collectionInProgress.close();
+        completedCollection.close();
     }
 }

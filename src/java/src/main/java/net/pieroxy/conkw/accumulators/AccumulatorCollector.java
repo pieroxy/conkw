@@ -27,10 +27,10 @@ public class AccumulatorCollector<T extends LogRecord> implements Collector {
   }
 
   @Override
-  public ResponseData getData() {
+  public ResponseData getDataCopy() {
     ResponseData res = new ResponseData(grabber, System.currentTimeMillis());
     accumulator.log("", res.getNum(), res.getStr());
-    ResponseData rd = sc.getData();
+    ResponseData rd = sc.getDataCopy();
     rd.getNum().entrySet().forEach(entry -> res.addMetric(entry.getKey(), entry.getValue()));
     rd.getStr().entrySet().forEach(entry -> res.addMetric(entry.getKey(), entry.getValue()));
     rd.getErrors().forEach(entry -> res.addError(entry));
@@ -94,5 +94,10 @@ public class AccumulatorCollector<T extends LogRecord> implements Collector {
   @Override
   public String getConfigKey() {
     return configKey;
+  }
+
+  @Override
+  public void close() {
+    // will close accumulators when they will be Closable
   }
 }

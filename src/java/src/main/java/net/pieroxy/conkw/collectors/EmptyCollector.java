@@ -14,7 +14,7 @@ public class EmptyCollector implements Collector {
   }
 
   @Override
-  public ResponseData getData() {
+  public ResponseData getDataCopy() {
     return new ResponseData(grabber, System.currentTimeMillis());
   }
 
@@ -68,5 +68,9 @@ public class EmptyCollector implements Collector {
   @Override
   public String getConfigKey() {
     return "";
+  }
+
+  @Override
+  public void close() {
   }
 }

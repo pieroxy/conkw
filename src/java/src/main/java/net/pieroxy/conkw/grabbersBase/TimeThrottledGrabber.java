@@ -100,7 +100,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
         lastRun = Math.min(rd.getTimestamp(), lastRun);
         lastGrabHadErrors = lastGrabHadErrors || rd.getErrors().size()>0;
         SimpleTransientCollector c = new SimpleTransientCollector(this, configKey);
-        c.setData(rd);
+        c.copyDataFrom(rd);
         collectors.put(configKey, c);
         c.collectionDone();
       }
@@ -111,7 +111,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
 
   private void writeCacheFile(Collection<SimpleCollector> data) {
     CachedData cdata = new CachedData();
-    data.forEach(c -> cdata.getDatasets().put(c.getConfigKey(), c.getData()));
+    data.forEach(c -> cdata.getDatasets().put(c.getConfigKey(), c.getDataCopy()));
     Map<String, String> pd = privateData;
     if (pd!=null && pd.size()>0) {
       cdata.setPrivateData(new HashMap<>());
@@ -156,9 +156,9 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
         collector.setTimestamp(lastRun);
         lastGrabHadErrors = collector.hasError();
         collector.collectionDone();
-        c.setData(collector);
+        c.copyDataFrom(collector);
       } else {
-        c.setData(collector);
+        c.copyDataFrom(collector);
       }
     } catch (Exception e) {
       log(Level.SEVERE, "Grabbing " + getName(), e);
@@ -184,7 +184,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
   @Override
   protected void fillCollector(SimpleCollector sc) {
     SimpleCollector rd = collectors.get(sc.getConfigKey());
-    if (rd!=null) sc.setData(rd);
+    if (rd!=null) sc.copyDataFrom(rd);
   }
 
   @Override

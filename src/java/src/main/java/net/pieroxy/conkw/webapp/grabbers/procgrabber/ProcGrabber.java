@@ -1,19 +1,16 @@
 package net.pieroxy.conkw.webapp.grabbers.procgrabber;
 
-import net.pieroxy.conkw.collectors.AbstractSimpleCollector;
 import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.collectors.SimpleTransientCollector;
 import net.pieroxy.conkw.utils.ExternalBinaryRunner;
 import net.pieroxy.conkw.utils.PerformanceTools;
 import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
 import net.pieroxy.conkw.utils.duration.CDuration;
-import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.time.Duration;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.stream.Collectors;

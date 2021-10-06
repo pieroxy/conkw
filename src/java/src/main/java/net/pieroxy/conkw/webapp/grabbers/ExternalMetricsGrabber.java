@@ -22,7 +22,7 @@ public class ExternalMetricsGrabber extends Grabber<SimpleTransientCollector> {
 
   @Override
   public void collect(SimpleTransientCollector c) {
-    c.setData(data);
+    c.copyDataFrom(data);
   }
 
   @Override

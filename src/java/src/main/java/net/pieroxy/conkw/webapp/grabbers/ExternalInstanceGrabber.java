@@ -58,7 +58,7 @@ public class ExternalInstanceGrabber extends AsyncGrabber<SimpleCollector> {
             authenticate();
           } catch (DisplayMessageException e) {
             res.addError(e.getMessage());
-            c.setData(res);
+            c.copyDataFrom(res);
           }
           grabSync(c);
         }
@@ -69,7 +69,7 @@ public class ExternalInstanceGrabber extends AsyncGrabber<SimpleCollector> {
           d.getStr().entrySet().forEach(de -> res.addMetric(prefix + de.getKey(), de.getValue()));
           d.getErrors().forEach(de -> res.addError(prefix + de));
         });
-        c.setData(res);
+        c.copyDataFrom(res);
       }
     } catch (Exception e) {
       log(Level.SEVERE, "Grabbing " + getName(), e);

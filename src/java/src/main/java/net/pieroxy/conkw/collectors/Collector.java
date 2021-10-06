@@ -4,7 +4,7 @@ import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.util.Collection;
 
-public interface Collector {
+public interface Collector extends AutoCloseable {
     String DEFAULT_METRIC_NAME="metric";
     String DEFAULT_METRIC_VALUE="value";
 
@@ -12,7 +12,7 @@ public interface Collector {
      * Returns data collected.
      * @return
      */
-    ResponseData getData();
+    ResponseData getDataCopy();
 
     /**
      * Returns data collected.
@@ -25,7 +25,6 @@ public interface Collector {
      * @return
      */
     void collectionDone();
-
 
     /**
      *
@@ -77,4 +76,7 @@ public interface Collector {
      * to be grabbed or a parameter as to how it is supposed to be aggregated.
      */
     String getConfigKey();
+
+    @Override
+    void close();
 }

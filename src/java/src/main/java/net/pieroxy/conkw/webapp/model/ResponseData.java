@@ -38,6 +38,20 @@ public class ResponseData implements Closeable {
     }
   }
 
+  public ResponseData(ResponseData source){
+    if (source!=null) {
+      this.timestamp = source.getTimestamp();
+      this.elapsedToGrab = source.getElapsedToGrab();
+      this.errors = new LinkedList<>(source.getErrors());
+      this.name = source.getName();
+      this.extractor = source.getExtractor();
+      this.num = HashMapPool.getInstance().borrow(source.getNum());
+      this.str = HashMapPool.getInstance().borrow(source.getStr());
+      this.timestamps = HashMapPool.getInstance().borrow(source.getTimestamps());
+      this.extracted = new HashSet<>(source.getExtracted());
+    }
+  }
+
   public void addExtracted(String e) {
     extracted.add(e);
   }
