@@ -37,6 +37,10 @@ public class Listener implements ServletContextListener {
         try {
           Grabber g = (Grabber) Class.forName(gc.getImplementation()).newInstance();
 
+          // Name
+          if (gc.getName() != null) {
+            g.setName(gc.getName());
+          }
           // Extract
           if (gc.getExtract() != null && !gc.getExtract().equals("all") && !gc.getExtract().equals("")) {
             g.setExtractProperties(gc.getExtract().split(","));
@@ -50,10 +54,6 @@ public class Listener implements ServletContextListener {
               LOGGER.severe("Could not parse log level " + llas + ". Using INFO.");
             }
             g.setLogLevel(logLevel);
-          }
-          // Name
-          if (gc.getName() != null) {
-            g.setName(gc.getName());
           }
           g.initConfig(ConfigReader.getHomeDir(), gc.getParameters(), gc.getNamedParameters());
 
