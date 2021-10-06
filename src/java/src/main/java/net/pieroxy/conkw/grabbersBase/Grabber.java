@@ -6,6 +6,7 @@ import net.pieroxy.conkw.utils.LongHolder;
 import net.pieroxy.conkw.utils.TimedData;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.duration.CDurationParser;
+import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 
 import java.io.File;
 import java.util.*;
@@ -30,7 +31,7 @@ public abstract class Grabber<T extends Collector> {
 
   Map<String, T> cachedResponses = new HashMap<>();
   Map<String, LongHolder> maxValues = new HashMap<>();
-  Map<String, TimedData<T>> extractedByConfiguration = new HashMap<>();
+  Map<String, TimedData<T>> extractedByConfiguration = HashMapPool.getInstance().borrow();
   private long lastConfigPurge;
 
   public String processAction(Map<String, String[]> parameterMap) {
@@ -79,13 +80,15 @@ public abstract class Grabber<T extends Collector> {
 
   public void addActiveCollector(String param) {
     if (extractedByConfiguration.containsKey(param)) return;
-    Map<String,TimedData<T>> nm = new HashMap<>(extractedByConfiguration);
+    Map<String,TimedData<T>> nm = HashMapPool.getInstance().borrow(extractedByConfiguration);
     if (param == null) {
       nm.put(null, new TimedData(getDefaultCollector()));
     } else {
       nm.put(param, new TimedData(parseCollector(param)));
     }
+    Map tmp = extractedByConfiguration;
     extractedByConfiguration = nm;
+    HashMapPool.getInstance().giveBack(tmp);
   }
 
   protected abstract void setConfig(Map<String, String> config, Map<String, Map<String, String>> namedConfigs);
