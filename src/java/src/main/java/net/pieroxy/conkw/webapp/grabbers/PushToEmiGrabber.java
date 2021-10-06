@@ -113,11 +113,12 @@ public class PushToEmiGrabber extends Grabber<SimpleCollector> implements Grabbe
     input.setStr(str);
     grabbers.forEach(g -> {
       if (shouldExtract(g.getName())) {
-        ResponseData data = grab(g); // Static grab cannot be parametrized
-        if (data!=null) {
-          data.getNum().forEach((k, v) -> num.put(prefix+"_"+g.getName() + "_" + k, v));
-          data.getStr().forEach((k, v) -> str.put(prefix+"_"+g.getName() + "_" + k, v));
-          data.getErrors().forEach(s -> log(Level.WARNING, s));
+        try (ResponseData data = grab(g)){ // Static grab cannot be parametrized
+          if (data != null) {
+            data.getNum().forEach((k, v) -> num.put(prefix + "_" + g.getName() + "_" + k, v));
+            data.getStr().forEach((k, v) -> str.put(prefix + "_" + g.getName() + "_" + k, v));
+            data.getErrors().forEach(s -> log(Level.WARNING, s));
+          }
         }
       }
     });
