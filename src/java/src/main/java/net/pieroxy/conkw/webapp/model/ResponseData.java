@@ -24,7 +24,6 @@ public class ResponseData implements Closeable {
   private Map<String, Double> num = HashMapPool.getInstance().borrow();
   private Map<String, String> str = HashMapPool.getInstance().borrow();
   private Map<String, Long> timestamps = HashMapPool.getInstance().borrow();
-  private Set<String> extracted = new HashSet<>();
 
   public ResponseData() {
   }
@@ -48,12 +47,7 @@ public class ResponseData implements Closeable {
       this.num = HashMapPool.getInstance().borrow(source.getNum());
       this.str = HashMapPool.getInstance().borrow(source.getStr());
       this.timestamps = HashMapPool.getInstance().borrow(source.getTimestamps());
-      this.extracted = new HashSet<>(source.getExtracted());
     }
-  }
-
-  public void addExtracted(String e) {
-    extracted.add(e);
   }
 
   public void addError(String e) {
@@ -232,14 +226,6 @@ public class ResponseData implements Closeable {
 
   public void setStr(Map<String, String> str) {
     this.str = str;
-  }
-
-  public Set<String> getExtracted() {
-    return extracted;
-  }
-
-  public void setExtracted(Set<String> extracted) {
-    this.extracted = extracted;
   }
 
   public String getExtractor() {
