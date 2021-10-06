@@ -89,11 +89,11 @@ public abstract class AsyncGrabber<T extends Collector> extends SimpleGrabber<T>
       long delay = 1000-msn-((long)(time/count))-50; // Give 50ms margin to the grabber jitter.
       if (delay<0) delay+=1000;
       if (delay <=0 || delay > 1500) delay = 1000;
-      if (delay<500) delay+=1000;
+      if (delay<100) delay+=1000;
       if (delay<=0) delay = 1000;
       if (canLogFiner()) log(Level.FINER, System.currentTimeMillis() + "::"+getName() + " waiting for " + delay);
       synchronized (this) {
-        if (canLogFiner()) this.log(Level.FINER, "Waiting " + (delay));
+        if (canLogFine()) this.log(Level.FINE, "Waiting " + (delay));
         this.wait(delay);
       }
       if (canLogFiner()) log(Level.FINER, System.currentTimeMillis() + "::"+getName() + " up");
