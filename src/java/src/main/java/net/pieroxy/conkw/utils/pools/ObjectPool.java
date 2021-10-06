@@ -11,14 +11,14 @@ import java.util.logging.Logger;
 
 public abstract class ObjectPool<T> {
     private final static Logger LOGGER = Logger.getLogger(ObjectPool.class.getName());
-    private final static int TARGET_OVERCAPACITY = 5; // Also by logic, the minimum capacity.
+    private final static int TARGET_OVERCAPACITY_AS_PRC_OF_A_SECOND = 100; // 100 means we cap the pool to hold no more of 1s of throughput.
 
     private final ObjectPoolInspector<T> inspector;
     private final Queue<T> pool = new LinkedList<>();
     private long requested, created, recycled, wronglyRecycled, dropped;
     private int targetSize = 10;
-    private int transientMinPoolSize = 10;
-    private int transientMissed = 0;
+    private long lastRequested = 0;
+    private long lastCheck = System.currentTimeMillis();
 
     protected abstract T createNewInstance();
     protected abstract T getInstanceToRecycle(T instance);
@@ -30,16 +30,16 @@ public abstract class ObjectPool<T> {
     public synchronized T borrow() {
         T result = pool.poll();
         requested++;
-        if (LOGGER.isLoggable(Level.FINE) && requested%100 == 0) {
-            LOGGER.log(Level.FINE, getDebugString());
+        if (System.currentTimeMillis() - lastCheck > 1000) {
+            lastCheck = System.currentTimeMillis();
+            computeTargetSize();
+            if (LOGGER.isLoggable(Level.FINE)) {
+                LOGGER.log(Level.FINE, getDebugString());
+            }
         }
         if (result == null) {
             created++;
-            transientMissed++;
-            transientMinPoolSize=0;
             result = createNewInstance();
-        } else {
-            transientMinPoolSize = Math.min(transientMinPoolSize, getPoolCurrentSize());
         }
         return inspector.giveOutInstance(result);
     }
@@ -53,28 +53,15 @@ public abstract class ObjectPool<T> {
                 recycled++;
                 pool.add(instance);
             }
-            if ((recycled+dropped)%100 == 0) {
-                computeTargetSize();
-            }
         } else {
             wronglyRecycled++;
         }
     }
 
     private void computeTargetSize() {
-        if (transientMissed > 0) {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE, "Increasing target size by number of missed items: " + transientMissed);
-            }
-            targetSize+=transientMissed;
-        } else {
-            if (LOGGER.isLoggable(Level.FINE)) {
-                LOGGER.log(Level.FINE, "Adjusting target size according to minimum size ("+transientMinPoolSize+"): " + (TARGET_OVERCAPACITY-transientMinPoolSize));
-            }
-            targetSize = Math.max(TARGET_OVERCAPACITY, targetSize + TARGET_OVERCAPACITY - transientMinPoolSize);
-        }
-        transientMissed = 0;
-        transientMinPoolSize = getPoolCurrentSize();
+        targetSize = (int)(requested-lastRequested)*100/TARGET_OVERCAPACITY_AS_PRC_OF_A_SECOND;
+        if (LOGGER.isLoggable(Level.FINE)) LOGGER.log(Level.FINE, "Adjusting target size to " + targetSize);
+        lastRequested = requested;
     }
 
     public long getRequested() {
