@@ -54,6 +54,8 @@ public class Listener implements ServletContextListener {
               LOGGER.severe("Could not parse log level " + llas + ". Using INFO.");
             }
             g.setLogLevel(logLevel);
+          } else {
+            g.setLogLevel(Level.INFO);
           }
           g.initConfig(ConfigReader.getHomeDir(), gc.getParameters(), gc.getNamedParameters());
 
