@@ -25,8 +25,8 @@ public abstract class Grabber<T extends Collector> {
   private Set<String> extract = new HashSet<>();
 
   private String name;
-  private Level logLevel = Level.INFO;
 
+  private Level logLevel;
 
   Map<String, T> cachedResponses = new HashMap<>();
   Map<String, LongHolder> maxValues = new HashMap<>();
@@ -98,7 +98,7 @@ public abstract class Grabber<T extends Collector> {
   }
 
   public void setLogLevel(Level l) {
-    if (l != logLevel) LOGGER.info(getName() + " logLevel is " + l);
+    if (l != logLevel) LOGGER.info("LogLevel is " + l);
     logLevel = l;
     LOGGER.setLevel(l);
   }
@@ -186,7 +186,7 @@ public abstract class Grabber<T extends Collector> {
     String n = getName();
     if (n==null) n = getDefaultName();
     Logger l = Logger.getLogger(this.getClass().getName() + "/" + n);
-    l.setLevel(logLevel);
+    if (logLevel!=null) l.setLevel(logLevel);
     return l;
   }
 
