@@ -44,9 +44,9 @@ public class ResponseData implements Closeable {
       this.errors = new LinkedList<>(source.getErrors());
       this.name = source.getName();
       this.extractor = source.getExtractor();
-      this.num = HashMapPool.getInstance().borrow(source.getNum());
-      this.str = HashMapPool.getInstance().borrow(source.getStr());
-      this.timestamps = HashMapPool.getInstance().borrow(source.getTimestamps());
+      this.num.putAll(source.getNum());
+      this.str.putAll(source.getStr());
+      this.timestamps.putAll(source.getTimestamps());
     }
   }
 
