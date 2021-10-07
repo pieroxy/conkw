@@ -72,7 +72,6 @@ public abstract class ObjectPool<T> {
 
     private void computeTargetSize() {
         targetSize = (int)(requested-lastRequested)*100/TARGET_OVERCAPACITY_AS_PRC_OF_A_SECOND;
-        if (LOGGER.isLoggable(Level.FINE)) LOGGER.log(Level.FINE, "Adjusting target size to " + targetSize);
         lastRequested = requested;
         int miss = targetSize - getPoolCurrentSize();
         // Slowly increase the size to the target.
