@@ -164,8 +164,8 @@ public class ResponseData implements Closeable {
     }
     if (changed) {
       Map a = num;
-      Map b = num;
-      Map c = num;
+      Map b = str;
+      Map c = timestamps;
       num = nnum;
       str = nstr;
       timestamps = nts;
