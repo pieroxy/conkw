@@ -50,8 +50,7 @@ public abstract class ObjectPool<T> {
     private boolean shouldDrop() {
         int difference = getPoolCurrentSize() - targetSize;
         if (difference>0 && (random.nextDouble()/difference < 0.01)) {
-            double r = random.nextDouble();
-            LOGGER.info("Droping an instance, difference=" + difference + " ex with r="+r+": " + (r/difference));
+            if (LOGGER.isLoggable(Level.FINER)) LOGGER.finer("Dropping an instance, difference=" + difference);
             return true;
         }
         return false;
@@ -80,7 +79,7 @@ public abstract class ObjectPool<T> {
         // This is because the target is recomputed every second and is thus prone to noise.
         // If we add too quickly, we'll end up dropping as fast and it serves little purpose.
         if (miss>0 && random.nextDouble()/miss < 0.01) {
-            LOGGER.info("Added an instance, miss=" + miss);
+            if (LOGGER.isLoggable(Level.FINER)) LOGGER.finer("Added an instance, miss=" + miss);
             pool.add(createNewInstance());
         }
     }
