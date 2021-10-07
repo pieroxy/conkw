@@ -2,6 +2,7 @@ package net.pieroxy.conkw.webapp.servlets;
 
 import net.pieroxy.conkw.grabbersBase.Grabber;
 import net.pieroxy.conkw.webapp.model.Response;
+import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -36,7 +37,9 @@ public class ApiManager implements MetaGrabber {
                 g.addActiveCollector(s.getParamValue());
                 g.collect();
                 synchronized (r) {
-                  r.add(g.getCollectorToUse(s.getParamValue()).getDataCopy());
+                  try (ResponseData rd = g.getCollectorToUse(s.getParamValue()).getDataCopy()) {
+                    r.add(rd);
+                  }
                 }
               }
             }
