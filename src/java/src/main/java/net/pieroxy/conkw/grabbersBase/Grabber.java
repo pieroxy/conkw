@@ -101,7 +101,7 @@ public abstract class Grabber<T extends Collector> {
   }
 
   public void setLogLevel(Level l) {
-    if (l != logLevel) LOGGER.info("LogLevel is " + l);
+    if (l != logLevel && l!=Level.INFO) LOGGER.info("LogLevel is " + l);
     logLevel = l;
     LOGGER.setLevel(l);
   }
