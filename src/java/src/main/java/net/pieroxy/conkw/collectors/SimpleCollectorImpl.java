@@ -42,7 +42,9 @@ public class SimpleCollectorImpl implements SimpleCollector {
 
     @Override
     public void copyDataFrom(ResponseData data) {
-        collectionInProgress = new ResponseData(data);
+        try (ResponseData tmp = collectionInProgress) {
+            collectionInProgress = new ResponseData(data);
+        }
     }
 
     @Override
@@ -52,7 +54,9 @@ public class SimpleCollectorImpl implements SimpleCollector {
 
     @Override
     public void copyDataFrom(SimpleCollector data) {
-        collectionInProgress = data.getDataCopy();
+        try (ResponseData tmp = collectionInProgress) {
+            collectionInProgress = data.getDataCopy();
+        }
     }
 
     @Override
