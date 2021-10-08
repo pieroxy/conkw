@@ -20,8 +20,10 @@ public class SimpleCollectorImpl implements SimpleCollector {
 
     @Override
     public synchronized void collectionDone() {
-        completedCollection = collectionInProgress;
-        collectionInProgress = new ResponseData(grabber, System.currentTimeMillis());
+        try (ResponseData tmp = completedCollection) {
+            completedCollection = collectionInProgress;
+            collectionInProgress = new ResponseData(grabber, System.currentTimeMillis());
+        }
     }
 
     // Writing
