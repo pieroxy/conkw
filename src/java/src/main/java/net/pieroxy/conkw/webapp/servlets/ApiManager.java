@@ -37,9 +37,7 @@ public class ApiManager implements MetaGrabber {
                 g.addActiveCollector(s.getParamValue());
                 g.collect();
                 synchronized (r) {
-                  try (ResponseData rd = g.getCollectorToUse(s.getParamValue()).getDataCopy()) {
-                    r.add(rd);
-                  }
+                  r.add(g.getCollectorToUse(s.getParamValue()).getDataCopy());
                 }
               }
             }

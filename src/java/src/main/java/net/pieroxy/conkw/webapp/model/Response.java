@@ -95,6 +95,7 @@ public class Response implements Closeable {
 
   @Override
   public void close() {
+    metrics.values().forEach(rd -> rd.close());
     HashMapPool.getInstance().giveBack(metrics);
     metrics = null;
   }
