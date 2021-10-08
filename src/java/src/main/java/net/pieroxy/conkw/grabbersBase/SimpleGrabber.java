@@ -26,10 +26,12 @@ public abstract class SimpleGrabber<T extends Collector> extends Grabber<T> {
           else
             log(Level.FINER,now + " Grabbing " + extractName + " cached on " + cached.getTimestamp() + " with delay " + delay.asMilliseconds());
         }
-        cached = getDefaultCollector();
-        method.extract(cached);
-        cached.collectionDone();
-        cachedResponses.put(extractName, cached);
+        try (T tmp = cached) {
+          cached = getDefaultCollector();
+          method.extract(cached);
+          cached.collectionDone();
+          cachedResponses.put(extractName, cached);
+        }
       }
 
       cached.fillCollector(toFill);
