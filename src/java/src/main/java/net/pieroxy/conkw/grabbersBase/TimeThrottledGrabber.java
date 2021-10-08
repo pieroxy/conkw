@@ -6,6 +6,7 @@ import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.collectors.SimpleTransientCollector;
 import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.utils.duration.CDuration;
+import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.io.File;
@@ -110,22 +111,23 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
   }
 
   private void writeCacheFile(Collection<SimpleCollector> data) {
-    CachedData cdata = new CachedData();
-    data.forEach(c -> cdata.getDatasets().put(c.getConfigKey(), c.getDataCopy()));
-    Map<String, String> pd = privateData;
-    if (pd!=null && pd.size()>0) {
-      cdata.setPrivateData(new HashMap<>());
-      cdata.getPrivateData().putAll(pd);
-    }
-    JsonWriter w = JsonHelper.getWriter();
-    DslJson<Object> json = JsonHelper.getJson();
-    synchronized (w) {
-      try (OutputStream os = new FileOutputStream(getCacheFile())) {
-        w.reset(os);
-        json.serialize(w, cdata);
-        w.flush();
-      } catch (Exception e) {
-        log(Level.SEVERE, e.getMessage());
+    try (CachedData cdata = new CachedData()) {
+      data.forEach(c -> cdata.getDatasets().put(c.getConfigKey(), c.getDataCopy()));
+      Map<String, String> pd = privateData;
+      if (pd != null && pd.size() > 0) {
+        cdata.setPrivateData(HashMapPool.getInstance().borrow());
+        cdata.getPrivateData().putAll(pd);
+      }
+      JsonWriter w = JsonHelper.getWriter();
+      DslJson<Object> json = JsonHelper.getJson();
+      synchronized (w) {
+        try (OutputStream os = new FileOutputStream(getCacheFile())) {
+          w.reset(os);
+          json.serialize(w, cdata);
+          w.flush();
+        } catch (Exception e) {
+          log(Level.SEVERE, e.getMessage());
+        }
       }
     }
   }
@@ -192,8 +194,8 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
     writeCacheFile(r);
   }
 
-  public static class CachedData {
-    private Map<String, ResponseData> datasets = new HashMap<>();
+  public static class CachedData implements AutoCloseable {
+    private Map<String, ResponseData> datasets = HashMapPool.getInstance().borrow();
     private Map<String, String> privateData;
 
 
@@ -211,6 +213,17 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
 
     public void setDatasets(Map<String, ResponseData> datasets) {
       this.datasets = datasets;
+    }
+
+    @Override
+    public void close() {
+      datasets.values().forEach(rd -> rd.close());
+      HashMapPool.getInstance().giveBack(datasets);
+      datasets = null;
+      if (privateData!=null) {
+        HashMapPool.getInstance().giveBack(privateData);
+        privateData = null;
+      }
     }
   }
 }
