@@ -15,6 +15,12 @@ public interface Collector extends AutoCloseable {
     ResponseData getDataCopy();
 
     /**
+     * Fill the Collector provided with numeric and string metrics, as well as errors.
+     * @return
+     */
+    void fillCollector(Collector c);
+
+    /**
      * Returns data collected.
      * @return
      */

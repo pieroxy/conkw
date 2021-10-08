@@ -19,6 +19,10 @@ public class EmptyCollector implements Collector {
   }
 
   @Override
+  public void fillCollector(Collector c) {
+  }
+
+  @Override
   public Collection<String> getErrors() {
     return new ArrayList<>();
   }

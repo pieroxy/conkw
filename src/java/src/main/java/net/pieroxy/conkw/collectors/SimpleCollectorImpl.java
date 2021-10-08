@@ -99,6 +99,13 @@ public class SimpleCollectorImpl implements SimpleCollector {
     }
 
     @Override
+    public void fillCollector(Collector toFill) {
+        completedCollection.getNum().entrySet().forEach(entry -> toFill.collect(entry.getKey(), entry.getValue()));
+        completedCollection.getStr().entrySet().forEach(entry -> toFill.collect(entry.getKey(), entry.getValue()));
+        completedCollection.getErrors().forEach(error -> toFill.addError(error));
+    }
+
+    @Override
     public String toString() {
         return "AbstractSimpleCollector{" +
             "collectionInProgress=" + collectionInProgress +
