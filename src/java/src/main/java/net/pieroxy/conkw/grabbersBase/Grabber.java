@@ -29,7 +29,6 @@ public abstract class Grabber<T extends Collector> {
 
   private Level logLevel;
 
-  Map<String, T> cachedResponses = new HashMap<>();
   Map<String, LongHolder> maxValues = new HashMap<>();
   Map<String, TimedData<T>> extractedByConfiguration = HashMapPool.getInstance().borrow();
   private long lastConfigPurge;

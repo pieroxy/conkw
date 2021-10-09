@@ -5,10 +5,13 @@ import net.pieroxy.conkw.utils.LongHolder;
 import net.pieroxy.conkw.utils.duration.CDuration;
 
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 
 public abstract class SimpleGrabber<T extends Collector> extends Grabber<T> {
   private volatile MaxComputer _maxComputer = null;
+  Map<String, T> cachedResponses = new HashMap<>();
 
 
   public void extract(T toFill, String extractName, ExtractMethod<T> method, CDuration delay) {
