@@ -18,8 +18,9 @@ public abstract class ObjectPool<T> {
     private final SplittableRandom random = new SplittableRandom();
 
     private final Queue<T> pool = new LinkedList<>();
-    private long requested, created, recycled, wronglyRecycled, dropped;
+    private long requested, created, recycled, wronglyRecycled, dropped, spawned;
     private int targetSize = 10;
+    private double targetSizeStable = 10;
     private long lastRequested = 0;
     private long lastCheck = System.currentTimeMillis();
 
@@ -72,6 +73,7 @@ public abstract class ObjectPool<T> {
 
     private void computeTargetSize() {
         targetSize = (int)(requested-lastRequested)*100/TARGET_OVERCAPACITY_AS_PRC_OF_A_SECOND;
+        targetSizeStable = targetSizeStable*0.9 + targetSize/10.;
         lastRequested = requested;
         int miss = targetSize - getPoolCurrentSize();
         // Slowly increase the size to the target.
@@ -80,6 +82,7 @@ public abstract class ObjectPool<T> {
         if (miss>0 && random.nextDouble()/miss < 0.01) {
             if (LOGGER.isLoggable(Level.FINER)) LOGGER.finer("Added an instance, miss=" + miss);
             pool.add(createNewInstance());
+            spawned++;
         }
     }
 
@@ -112,6 +115,6 @@ public abstract class ObjectPool<T> {
     }
 
     public String getDebugString() {
-        return "ObjectPool report :: requested:" + getRequested() + " created:" + getCreated() + " recycled:" + getRecycled() + " wrongRecycled:" + getWronglyRecycled() + " dropped:" + dropped + " currentSize:" + getPoolCurrentSize() + " targetSize:" + targetSize;
+        return "ObjectPool:: R:" + getRequested() + " C:" + getCreated() + " R:" + getRecycled() + " wR:" + getWronglyRecycled() + " (-):" + dropped + " (+):" + spawned + " S:" + getPoolCurrentSize() + " tS:" + targetSize + " tSS:"+((int)Math.round(targetSizeStable));
     }
 }
