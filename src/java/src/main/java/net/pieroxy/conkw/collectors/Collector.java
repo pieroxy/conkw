@@ -1,10 +1,11 @@
 package net.pieroxy.conkw.collectors;
 
+import net.pieroxy.conkw.utils.ConkwCloseable;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.util.Collection;
 
-public interface Collector extends AutoCloseable {
+public interface Collector extends ConkwCloseable {
     String DEFAULT_METRIC_NAME="metric";
     String DEFAULT_METRIC_VALUE="value";
 

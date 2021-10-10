@@ -4,6 +4,7 @@ import com.dslplatform.json.DslJson;
 import com.dslplatform.json.JsonWriter;
 import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.collectors.SimpleTransientCollector;
+import net.pieroxy.conkw.utils.ConkwCloseable;
 import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
@@ -187,7 +188,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
     }
   }
 
-  public static class CachedData implements AutoCloseable {
+  public static class CachedData implements ConkwCloseable {
     private Map<String, ResponseData> datasets = HashMapPool.getInstance().borrow();
     private Map<String, String> privateData;
 

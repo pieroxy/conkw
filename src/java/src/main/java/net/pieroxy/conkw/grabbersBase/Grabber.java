@@ -47,7 +47,7 @@ public abstract class Grabber<T extends Collector> {
     for (String s : nm.keySet()) {
       TimedData td = nm.get(s);
       if (td.getAge() > CONF_EXPIRATION_MS) {
-        nm.remove(s);
+        nm.remove(s).close();
         deleted = true;
       }
     }

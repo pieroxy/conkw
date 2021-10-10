@@ -1,6 +1,6 @@
 package net.pieroxy.conkw.utils;
 
-public class TimedData<T> {
+public class TimedData<T> implements ConkwCloseable {
     private long lastUsed;
     private T data;
 
@@ -22,5 +22,10 @@ public class TimedData<T> {
 
     public void useNow() {
         lastUsed = System.currentTimeMillis();
+    }
+
+    @Override
+    public void close() {
+        if (data instanceof ConkwCloseable) ((ConkwCloseable) data).close();
     }
 }
