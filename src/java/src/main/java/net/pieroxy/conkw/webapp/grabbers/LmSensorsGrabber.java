@@ -24,7 +24,7 @@ public class LmSensorsGrabber extends AsyncGrabber<SimpleCollector> {
   private Map<String, Boolean> extractCache = new HashMap<>();
 
   @Override
-  public boolean changed() {
+  public boolean changed(SimpleCollector c) {
     return true;
   }
 

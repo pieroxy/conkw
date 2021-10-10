@@ -26,7 +26,7 @@ public class ExternalInstanceGrabber extends AsyncGrabber<SimpleCollector> {
   private String sessionToken;
 
   @Override
-  public boolean changed() {
+  public boolean changed(SimpleCollector c) {
     return true;
   }
 

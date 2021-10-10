@@ -3,6 +3,7 @@ package net.pieroxy.conkw.webapp.grabbers.logfile;
 import net.pieroxy.conkw.accumulators.Accumulator;
 import net.pieroxy.conkw.accumulators.AccumulatorCollector;
 import net.pieroxy.conkw.accumulators.parser.AccumulatorExpressionParser;
+import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
 import net.pieroxy.conkw.webapp.grabbers.logfile.listeners.LogListener;
 import net.pieroxy.conkw.webapp.grabbers.logfile.listeners.LogParser;
@@ -25,7 +26,7 @@ public class TailLogFileGrabber extends AsyncGrabber<AccumulatorCollector> imple
     }
 
     @Override
-    public boolean changed() {
+    public boolean changed(AccumulatorCollector c) {
         return true;
     }
 

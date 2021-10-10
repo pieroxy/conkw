@@ -57,7 +57,7 @@ public class ProcGrabber extends AsyncGrabber<SimpleCollector> {
   }
 
   @Override
-  public boolean changed() {
+  public boolean changed(SimpleCollector c) {
     return true;
   }
 

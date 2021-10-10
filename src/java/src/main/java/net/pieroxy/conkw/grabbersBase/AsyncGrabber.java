@@ -13,7 +13,7 @@ public abstract class AsyncGrabber<T extends Collector> extends SimpleGrabber<T>
   public static final String LOAD_STATUS = "grab_status";
   public static final int GRAB_INACTIVE_THRESHOLD = 5000;
 
-  abstract public boolean changed();
+  abstract public boolean changed(T c);
   abstract public void grabSync(T c);
   protected void disposeSync() {}
 
@@ -21,7 +21,6 @@ public abstract class AsyncGrabber<T extends Collector> extends SimpleGrabber<T>
   private boolean shouldStop;
   private boolean running;
   private long lastGrab;
-  private Set<String> lastGrabConf = new HashSet<>();
   private boolean grabbingRightNow;
 
   private double time=100, count=1;
@@ -99,35 +98,30 @@ public abstract class AsyncGrabber<T extends Collector> extends SimpleGrabber<T>
       if (canLogFiner()) log(Level.FINER, System.currentTimeMillis() + "::"+getName() + " up");
       try {
         if (now - lastGrab < GRAB_INACTIVE_THRESHOLD) {
-          if (mustGrab()) {
-            refillLastGrabConf();
-            if (canLogFiner()) log(Level.FINER, System.currentTimeMillis() + "::" + getName() + " grab");
-            now = System.currentTimeMillis();
-            grabbingRightNow=true;
-            try {
-              getActiveCollectors().forEach(sc -> {
+          if (canLogFiner()) log(Level.FINER, System.currentTimeMillis() + "::" + getName() + " grab");
+          now = System.currentTimeMillis();
+          grabbingRightNow=true;
+          try {
+            getActiveCollectors().forEach(sc -> {
+              if (changed(sc)) {
                 long a = System.nanoTime();
                 this.grabSync(sc);
                 sc.setTime(System.nanoTime() - a);
                 sc.collectionDone();
-              });
-            } finally {
-              grabbingRightNow = false;
-            }
-            if (shutdownRequested()) return;
-            saveData(getActiveCollectors());
-            if (canLogFine()) {
-              long eor = System.currentTimeMillis();
-              time += eor - now;
-              count++;
-              time *= 0.9; // 0.9 factor to forget old values over time.
-              count *= 0.9;
-              this.log(Level.FINE, getName() + " takes on avg " + (long) (time / count) + " (this time " + (eor - now) + ")");
-            }
-          } else { // Not changed. We sill need to fill in the collectors
-            getActiveCollectors().forEach(sc -> {
-              fillCollector(sc);
+              }
             });
+          } finally {
+            grabbingRightNow = false;
+          }
+          if (shutdownRequested()) return;
+          collectionRoundIsDone(getActiveCollectors());
+          if (canLogFine()) {
+            long eor = System.currentTimeMillis();
+            time += eor - now;
+            count++;
+            time *= 0.9; // 0.9 factor to forget old values over time.
+            count *= 0.9;
+            this.log(Level.FINE, getName() + " takes on avg " + (long) (time / count) + " (this time " + (eor - now) + ")");
           }
         } else {
           // Pause the grabbers after 5s of inactivity.
@@ -141,29 +135,6 @@ public abstract class AsyncGrabber<T extends Collector> extends SimpleGrabber<T>
     }
   }
 
-  private void refillLastGrabConf() {
-    Set<String> newConfKeys = new HashSet<>();
-    getActiveCollectors().forEach(c -> newConfKeys.add(c.getConfigKey()));
-    lastGrabConf = newConfKeys;
-  }
-
-  protected boolean mustGrab() {
-    if (changed()) return true;
-    Collection<T> collectors = getActiveCollectors();
-    if (collectors.size()!=lastGrabConf.size()) return true;
-    for (T collector : collectors) {
-      if (!lastGrabConf.contains(collector.getConfigKey())) return true;
-    }
-    return false;
-  }
-
-  /**
-   * Override this if you have data you want to fill the collectors with
-   * @param sc
-   */
-  protected void fillCollector(T sc) {
-  }
-
-  public void saveData(Collection<T> data) {
+  public void collectionRoundIsDone(Collection<T> data) {
   }
 }

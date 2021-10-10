@@ -34,7 +34,7 @@ public class JavaSystemViewGrabber extends AsyncGrabber<SimpleCollector> {
   private Long cache_totalswp;
 
   @Override
-  public boolean changed() {
+  public boolean changed(SimpleCollector c) {
     return true;
   }
 

@@ -40,7 +40,7 @@ public class OshiGrabber extends AsyncGrabber<SimpleCollector> {
   }
 
   @Override
-  public boolean changed() {
+  public boolean changed(SimpleCollector g) {
     return true;
   }
 

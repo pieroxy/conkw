@@ -27,15 +27,15 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
   private CDuration ttl;
   private CDuration errorTtl;
   private boolean lastGrabHadErrors = false;
-  private Map<String, SimpleCollector> collectors = new HashMap<>();
-
-  public boolean isLastGrabHadErrors() {
-    return lastGrabHadErrors;
-  }
+  private Map<String, SimpleCollector> collectorsStore = new HashMap<>();
+  private boolean loaded, hasChanged;
 
   @Override
   public SimpleCollector getDefaultCollector() {
-    return new SimpleTransientCollector(this, DEFAULT_CONFIG_KEY);
+    SimpleTransientCollector res = new SimpleTransientCollector(this, DEFAULT_CONFIG_KEY);
+    res.setTimestamp(0);
+    res.collectionDone();
+    return res;
   }
 
   protected final void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
@@ -52,7 +52,6 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
     return lastGrabHadErrors ? errorTtl : ttl;
   }
 
-  private long lastRun=-1;
   private File storage;
   private Map<String, String> privateData = new HashMap<>();
 
@@ -93,16 +92,14 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
       cacheLoaded(data.getDatasets(), data.getPrivateData());
 
       log(Level.INFO, "Loading from cache " + getCacheFile().getAbsolutePath());
-      lastRun = System.currentTimeMillis();
       lastGrabHadErrors = false;
       for (Map.Entry<String, ResponseData> entry : data.getDatasets().entrySet()) {
         String configKey = entry.getKey();
         ResponseData rd = entry.getValue();
-        lastRun = Math.min(rd.getTimestamp(), lastRun);
         lastGrabHadErrors = lastGrabHadErrors || rd.getErrors().size()>0;
         SimpleTransientCollector c = new SimpleTransientCollector(this, configKey);
         c.copyDataFrom(rd);
-        collectors.put(configKey, c);
+        collectorsStore.put(configKey, c);
         c.collectionDone();
       }
     } catch (Exception e) {
@@ -111,6 +108,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
   }
 
   private void writeCacheFile(Collection<SimpleCollector> data) {
+    log(Level.FINE, "writeCacheFile() :: begin");
     try (CachedData cdata = new CachedData()) {
       data.forEach(c -> cdata.getDatasets().put(c.getConfigKey(), c.getDataCopy()));
       Map<String, String> pd = privateData;
@@ -133,10 +131,6 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
   }
 
   @Override
-  public final boolean changed() {
-    return getTtl().isExpired(lastRun, System.currentTimeMillis());
-  }
-
   public final boolean changed(SimpleCollector c) {
     if (canLogFine()) log(Level.FINE, "HasChanged? " + c.getTimestamp() + " : " + getTtl().isExpired(c.getTimestamp(), System.currentTimeMillis()));
     return getTtl().isExpired(c.getTimestamp(), System.currentTimeMillis());
@@ -144,54 +138,53 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
 
   @Override
   public final void grabSync(SimpleCollector c) {
-    lastGrabHadErrors = true;
     log(Level.FINE, "grabSync() :: begin");
-    if (lastRun==-1) {
+    if (!loaded) {
+      loaded = true;
       loadCacheFile();
     }
     try {
       SimpleCollector collector = getOrCreateCollector(c);
       if (changed(collector)) {
         load(collector);
-        log(Level.FINE, "Loaded data.");
-        lastRun = System.currentTimeMillis();
-        collector.setTimestamp(lastRun);
-        lastGrabHadErrors = collector.hasError();
+        log(Level.FINE, "grabSync() :: Loaded data.");
+        collector.setTimestamp(System.currentTimeMillis());
         collector.collectionDone();
-        c.copyDataFrom(collector);
+        hasChanged = true;
       } else {
-        c.copyDataFrom(collector);
+        log(Level.FINE, "grabSync() :: Cache was fresh, no need to reload.");
       }
+      c.copyDataFrom(collector);
     } catch (Exception e) {
       log(Level.SEVERE, "Grabbing " + getName(), e);
-      //return new ResponseData(this, System.currentTimeMillis());
       c.addError("Error while grabbing " + getName() + ": " + e.getMessage());
     }
   }
 
   private SimpleCollector getOrCreateCollector(SimpleCollector c) {
-    SimpleCollector collector = collectors.get(c.getConfigKey());
+    SimpleCollector collector = collectorsStore.get(c.getConfigKey());
     if (collector == null) {
       collector = new SimpleTransientCollector(this, c.getConfigKey());
       collector.setTimestamp(0);
       collector.collectionDone();
-      log(Level.FINE, "Creating collector for config " + c.getConfigKey());
-      Map<String, SimpleCollector> newSCMap = new HashMap<>(collectors);
+      if (canLogFine()) log(Level.FINE, "Creating collector for config " + c.getConfigKey());
+      Map<String, SimpleCollector> newSCMap = new HashMap<>(collectorsStore);
       newSCMap.put(c.getConfigKey(), collector);
-      collectors = newSCMap;
+      collectorsStore = newSCMap;
     }
     return collector;
   }
 
   @Override
-  protected void fillCollector(SimpleCollector sc) {
-    SimpleCollector rd = collectors.get(sc.getConfigKey());
-    if (rd!=null) sc.copyDataFrom(rd);
-  }
-
-  @Override
-  public void saveData(Collection<SimpleCollector> r) {
-    writeCacheFile(r);
+  public void collectionRoundIsDone(Collection<SimpleCollector> r) {
+    if (hasChanged) {
+      writeCacheFile(r);
+      hasChanged = false;
+    }
+    lastGrabHadErrors = false;
+    for (SimpleCollector c : r) {
+      lastGrabHadErrors = lastGrabHadErrors || c.hasError();
+    }
   }
 
   public static class CachedData implements AutoCloseable {

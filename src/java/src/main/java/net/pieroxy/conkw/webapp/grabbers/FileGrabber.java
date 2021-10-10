@@ -17,7 +17,7 @@ public class FileGrabber extends AsyncGrabber<SimpleCollector> {
   long lastTimestamp = 0;
 
   @Override
-  public boolean changed() {
+  public boolean changed(SimpleCollector c) {
     try {
       return Files.getLastModifiedTime(path).toMillis() != lastTimestamp;
     } catch (IOException e) {
