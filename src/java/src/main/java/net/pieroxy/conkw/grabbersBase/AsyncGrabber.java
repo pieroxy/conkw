@@ -68,7 +68,7 @@ public abstract class AsyncGrabber<T extends Collector> extends SimpleGrabber<T>
   }
 
   public void run() {
-    while (!shouldStop && thread == Thread.currentThread()) {
+    while (!shutdownRequested() && thread == Thread.currentThread()) {
       runEverySecond();
     }
     this.log(Level.INFO, "Dispose " + getName());
@@ -113,15 +113,16 @@ public abstract class AsyncGrabber<T extends Collector> extends SimpleGrabber<T>
           } finally {
             grabbingRightNow = false;
           }
-          if (shutdownRequested()) return;
-          collectionRoundIsDone(getActiveCollectors());
-          if (canLogFine()) {
-            long eor = System.currentTimeMillis();
-            time += eor - now;
-            count++;
-            time *= 0.9; // 0.9 factor to forget old values over time.
-            count *= 0.9;
-            this.log(Level.FINE, getName() + " takes on avg " + (long) (time / count) + " (this time " + (eor - now) + ")");
+          if (!shutdownRequested()) {
+            collectionRoundIsDone(getActiveCollectors());
+            if (canLogFine()) {
+              long eor = System.currentTimeMillis();
+              time += eor - now;
+              count++;
+              time *= 0.9; // 0.9 factor to forget old values over time.
+              count *= 0.9;
+              this.log(Level.FINE, getName() + " takes on avg " + (long) (time / count) + " (this time " + (eor - now) + ")");
+            }
           }
         } else {
           // Pause the grabbers after 5s of inactivity.
