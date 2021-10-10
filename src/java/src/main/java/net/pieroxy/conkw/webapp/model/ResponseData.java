@@ -2,9 +2,13 @@ package net.pieroxy.conkw.webapp.model;
 
 import com.dslplatform.json.CompiledJson;
 import com.dslplatform.json.JsonAttribute;
+import com.dslplatform.json.JsonConverter;
 import net.pieroxy.conkw.grabbersBase.Grabber;
 import net.pieroxy.conkw.utils.ConkwCloseable;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
+import net.pieroxy.conkw.utils.pools.hashmap.HashMapStringDoubleConverter;
+import net.pieroxy.conkw.utils.pools.hashmap.HashMapStringLongConverter;
+import net.pieroxy.conkw.utils.pools.hashmap.HashMapStringStringConverter;
 
 import java.time.Duration;
 import java.util.*;
@@ -19,10 +23,14 @@ public class ResponseData implements ConkwCloseable {
   @JsonAttribute(ignore = true)
   private Collection<String> errors=new LinkedList<>();
   private String name,extractor;
-  private Map<String, Double> num = HashMapPool.getInstance().borrow();
-  private Map<String, String> str = HashMapPool.getInstance().borrow();
-  private Map<String, Long> timestamps = HashMapPool.getInstance().borrow();
+  @JsonAttribute(converter = HashMapStringDoubleConverter.class)
+  private Map<String, Double> num;
+  @JsonAttribute(converter = HashMapStringStringConverter.class)
+  private Map<String, String> str;
+  @JsonAttribute(converter = HashMapStringLongConverter.class)
+  private Map<String, Long> timestamps;
 
+  // This is for DSL-JSON, so no allocation of the maps since JSON is going to handle it for us.
   public ResponseData() {
   }
 
@@ -32,6 +40,9 @@ public class ResponseData implements ConkwCloseable {
       this.name = grabber.getName();
       if (name == null) throw new RuntimeException("Grabber name cannot be null");
       this.extractor = grabber.getClass().getSimpleName();
+      this.num = HashMapPool.getInstance().borrow();
+      this.str = HashMapPool.getInstance().borrow();
+      this.timestamps = HashMapPool.getInstance().borrow();
     }
   }
 
@@ -42,9 +53,9 @@ public class ResponseData implements ConkwCloseable {
       this.errors = new LinkedList<>(source.getErrors());
       this.name = source.getName();
       this.extractor = source.getExtractor();
-      this.num.putAll(source.getNum());
-      this.str.putAll(source.getStr());
-      this.timestamps.putAll(source.getTimestamps());
+      this.num = HashMapPool.getInstance().borrow(source.getNum());
+      this.str = HashMapPool.getInstance().borrow(source.getStr());
+      this.timestamps = HashMapPool.getInstance().borrow(source.getTimestamps());
     }
   }
 

@@ -1,13 +1,16 @@
 package net.pieroxy.conkw.webapp.model;
 
 import com.dslplatform.json.CompiledJson;
+import com.dslplatform.json.JsonAttribute;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
+import net.pieroxy.conkw.utils.pools.hashmap.HashMapStringResponseDataConverter;
 
 import java.io.Closeable;
 import java.util.*;
 
 @CompiledJson(onUnknown = CompiledJson.Behavior.IGNORE)
 public class Response implements Closeable {
+  @JsonAttribute(converter = HashMapStringResponseDataConverter.class)
   private Map<String, ResponseData> metrics;
   private long timestamp;
   private int responseJitter;
