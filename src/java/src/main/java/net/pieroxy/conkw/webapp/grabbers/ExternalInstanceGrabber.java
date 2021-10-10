@@ -52,24 +52,25 @@ public class ExternalInstanceGrabber extends AsyncGrabber<SimpleCollector> {
 
 
       try (Response data = JsonHelper.getJson().deserialize(Response.class, is)) {
-        ResponseData res = new ResponseData(this, data.getTimestamp());
-        if (data.isNeedsAuthentication()) {
-          try {
-            authenticate();
-          } catch (DisplayMessageException e) {
-            res.addError(e.getMessage());
-            c.copyDataFrom(res);
+        try (ResponseData res = new ResponseData(this, data.getTimestamp())) {
+          if (data.isNeedsAuthentication()) {
+            try {
+              authenticate();
+            } catch (DisplayMessageException e) {
+              res.addError(e.getMessage());
+              c.copyDataFrom(res);
+            }
+            grabSync(c);
           }
-          grabSync(c);
+          data.getMetrics().entrySet().forEach(e -> {
+            ResponseData d = e.getValue();
+            String prefix = e.getKey() + "_";
+            d.getNum().entrySet().forEach(de -> res.addMetric(prefix + de.getKey(), de.getValue()));
+            d.getStr().entrySet().forEach(de -> res.addMetric(prefix + de.getKey(), de.getValue()));
+            d.getErrors().forEach(de -> res.addError(prefix + de));
+          });
+          c.copyDataFrom(res);
         }
-        data.getMetrics().entrySet().forEach(e -> {
-          ResponseData d = e.getValue();
-          String prefix = e.getKey() + "_";
-          d.getNum().entrySet().forEach(de -> res.addMetric(prefix + de.getKey(), de.getValue()));
-          d.getStr().entrySet().forEach(de -> res.addMetric(prefix + de.getKey(), de.getValue()));
-          d.getErrors().forEach(de -> res.addError(prefix + de));
-        });
-        c.copyDataFrom(res);
       }
     } catch (Exception e) {
       log(Level.SEVERE, "Grabbing " + getName(), e);
