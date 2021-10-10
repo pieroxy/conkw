@@ -3,17 +3,15 @@ package net.pieroxy.conkw.webapp.model;
 import com.dslplatform.json.CompiledJson;
 import com.dslplatform.json.JsonAttribute;
 import net.pieroxy.conkw.grabbersBase.Grabber;
+import net.pieroxy.conkw.utils.ConkwCloseable;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 
-import java.io.Closeable;
-import java.io.IOException;
 import java.time.Duration;
 import java.util.*;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @CompiledJson(onUnknown = CompiledJson.Behavior.IGNORE)
-public class ResponseData implements Closeable {
+public class ResponseData implements ConkwCloseable {
   private final static Logger LOGGER = Logger.getLogger(ResponseData.class.getName());
 
   private long timestamp;
