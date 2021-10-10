@@ -67,7 +67,7 @@ public class HashMapPoolTest extends TestCase {
         assertEquals(13, pool.getRecycled());
         assertEquals(11, pool.getCreated());
         ObjectPoolInspectorReport report = pool.getReport();
-        assertEquals(1, report.getViolations().size());
+        assertEquals(4, report.getViolations().size());
         assertEquals(10, report.getViolations().iterator().next().getInstances());
 
     }
