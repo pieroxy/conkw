@@ -138,7 +138,7 @@ public class PushToEmiGrabber extends Grabber<SimpleCollector> implements Grabbe
       conn.setConnectTimeout(200);
       conn.setReadTimeout(200);
       conn.setRequestMethod("POST");
-      conn.setRequestProperty("Content-Type", Emi.CONTENT_TYPE);
+      conn.setRequestProperty("Content-Type", Emi.CONTENT_TYPE_JSON);
       conn.setDoOutput(true);
       try (OutputStream os = conn.getOutputStream()) {
         DslJson<Object> json = JsonHelper.getJson();

@@ -4,13 +4,12 @@ import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.webapp.Filter;
 import net.pieroxy.conkw.webapp.grabbers.ExternalMetricsGrabber;
 import net.pieroxy.conkw.webapp.model.EmiInput;
-import net.pieroxy.conkw.webapp.model.Response;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -22,7 +21,7 @@ import java.util.logging.Logger;
 public class Emi extends HttpServlet {
   private final static Logger LOGGER = Logger.getLogger(Emi.class.getName());
 
-  public static final String CONTENT_TYPE="application/json";
+  public static final String CONTENT_TYPE_JSON="application/json";
 
   static Map<String, ExternalMetricsGrabber> allData = new HashMap<>();
 
@@ -55,7 +54,7 @@ public class Emi extends HttpServlet {
 
     String ct = req.getContentType();
     if (ct==null) ct="";
-    if (ct.equals(CONTENT_TYPE))
+    if (ct.equals(CONTENT_TYPE_JSON))
       parseJsonInput(req, resp, mg);
     else
       parseSingleInput(req, resp, mg);
@@ -114,7 +113,10 @@ public class Emi extends HttpServlet {
     try {
       resp.setContentType("text/html; charset=UTF-8");
       resp.setCharacterEncoding("UTF-8");
-      resp.getWriter().println(s);
+      PrintWriter w = resp.getWriter();
+      w.println(s);
+      w.flush();
+      w.close();
     } catch (IOException e) {
       // Do we need to log anything if we cannot write the response back ?
       // It usually means the client has already disconnected, not really our problem.
