@@ -43,16 +43,20 @@ public abstract class Grabber<T extends Collector> {
 
   private void gcConfigurations() {
     Map<String,TimedData<T>> nm = new HashMap<>(extractedByConfiguration);
-    boolean deleted = false;
+    Set<TimedData<T>> toClose = new HashSet<>();
     for (String s : nm.keySet()) {
       TimedData td = nm.get(s);
       if (td.getAge() > CONF_EXPIRATION_MS) {
-        nm.remove(s).close();
-        deleted = true;
+        toClose.add(nm.remove(s));
       }
     }
 
-    if (deleted) extractedByConfiguration = nm;
+    if (!toClose.isEmpty()) {
+      Map tmp = extractedByConfiguration;
+      extractedByConfiguration = nm;
+      for (TimedData<T> td : toClose) td.close();
+      HashMapPool.getInstance().giveBack(tmp);
+    }
     lastConfigPurge = System.currentTimeMillis();
   }
 
