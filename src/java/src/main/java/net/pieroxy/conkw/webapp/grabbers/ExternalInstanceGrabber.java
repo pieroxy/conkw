@@ -40,6 +40,8 @@ public class ExternalInstanceGrabber extends AsyncGrabber<SimpleCollector> {
     try {
       URL url = new URL(targetUrl + (StringUtil.isNullOrEmptyTrimmed(sessionToken)?"":("&"+ApiAuthManager.SID_FIELD+"="+sessionToken)));
       URLConnection con = url.openConnection();
+      con.setConnectTimeout(200);
+      con.setReadTimeout(200);
       HttpURLConnection http = (HttpURLConnection) con;
       http.connect();
 
