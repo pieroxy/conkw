@@ -42,7 +42,7 @@ public abstract class Grabber<T extends Collector> {
   public abstract T getDefaultCollector();
 
   private void gcConfigurations() {
-    Map<String,TimedData<T>> nm = new HashMap<>(extractedByConfiguration);
+    Map<String,TimedData<T>> nm = HashMapPool.getInstance().borrow(extractedByConfiguration);
     Set<TimedData<T>> toClose = new HashSet<>();
     for (String s : nm.keySet()) {
       TimedData td = nm.get(s);
@@ -51,7 +51,9 @@ public abstract class Grabber<T extends Collector> {
       }
     }
 
-    if (!toClose.isEmpty()) {
+    if (toClose.isEmpty()) {
+      HashMapPool.getInstance().giveBack(nm);
+    } else {
       Map tmp = extractedByConfiguration;
       extractedByConfiguration = nm;
       for (TimedData<T> td : toClose) td.close();
