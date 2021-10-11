@@ -6,16 +6,14 @@ import net.pieroxy.conkw.utils.pools.inspectors.ObjectPoolInspectorReport;
 
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.SplittableRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public abstract class ObjectPool<T> {
     private final static Logger LOGGER = Logger.getLogger(ObjectPool.class.getName());
-    private final static int TARGET_OVERCAPACITY_AS_PRC_OF_A_SECOND = 100; // 100 means we cap the pool to hold no more of 1s of throughput.
+    private final static int TARGET_OVERCAPACITY_AS_PRC_OF_A_SECOND = 100; // 100 means we cap the pool to hold no less of 100% of 1s of throughput.
 
     private final ObjectPoolInspector<T> inspector;
-    private final SplittableRandom random = new SplittableRandom();
 
     private final Queue<T> pool = new LinkedList<>();
     private long requested, created, recycled, wronglyRecycled, dropped, spawned;
@@ -23,6 +21,8 @@ public abstract class ObjectPool<T> {
     private double targetSizeStable = 10;
     private long lastRequested = 0;
     private long lastCheck = System.currentTimeMillis();
+    private int minSize = 10;
+    private int lastMinSize = 10;
 
     protected abstract T createNewInstance();
     protected abstract T getInstanceToRecycle(T instance);
@@ -45,12 +45,15 @@ public abstract class ObjectPool<T> {
             created++;
             result = createNewInstance();
         }
-        return inspector.giveOutInstance(result);
+
+        T res = inspector.giveOutInstance(result);
+        minSize = Math.min(minSize, getPoolCurrentSize());
+        return res;
     }
 
     private boolean shouldDrop() {
-        int difference = getPoolCurrentSize() - targetSize;
-        if (difference>0 && (random.nextDouble()/difference < 0.01)) {
+        int difference = minSize - (int)targetSizeStable;
+        if (difference>2) { // 2 to prevent noise from dropping instances
             if (LOGGER.isLoggable(Level.FINER)) LOGGER.finer("Dropping an instance, difference=" + difference);
             return true;
         }
@@ -75,15 +78,19 @@ public abstract class ObjectPool<T> {
         targetSize = (int)(requested-lastRequested)*100/TARGET_OVERCAPACITY_AS_PRC_OF_A_SECOND;
         targetSizeStable = targetSizeStable*0.9 + targetSize/10.;
         lastRequested = requested;
-        int miss = targetSize - getPoolCurrentSize();
-        // Slowly increase the size to the target.
-        // This is because the target is recomputed every second and is thus prone to noise.
-        // If we add too quickly, we'll end up dropping as fast and it serves little purpose.
-        if (miss>0 && random.nextDouble()/miss < 0.01) {
-            if (LOGGER.isLoggable(Level.FINER)) LOGGER.finer("Added an instance, miss=" + miss);
-            pool.add(createNewInstance());
-            spawned++;
+        int miss = (int)targetSizeStable - minSize;
+        if (miss>2) {
+            miss=miss-2;
+
+            if (LOGGER.isLoggable(Level.FINER)) LOGGER.finer("Adding "+miss+" instances");
+            while (miss>0) {
+                pool.add(createNewInstance());
+                spawned++;
+                miss--;
+            }
         }
+        lastMinSize = minSize;
+        minSize = getPoolCurrentSize();
     }
 
     public long getRequested() {
@@ -115,6 +122,6 @@ public abstract class ObjectPool<T> {
     }
 
     public String getDebugString() {
-        return "ObjectPool:: R:" + getRequested() + " C:" + getCreated() + " R:" + getRecycled() + " wR:" + getWronglyRecycled() + " (-):" + dropped + " (+):" + spawned + " S:" + getPoolCurrentSize() + " tS:" + targetSize + " tSS:"+((int)Math.round(targetSizeStable));
+        return "ObjectPool:: R:" + getRequested() + " C:" + getCreated() + " R:" + getRecycled() + " wR:" + getWronglyRecycled() + " (-):" + dropped + " (+):" + spawned + " S:" + getPoolCurrentSize() + " mS:" + lastMinSize + " tS:" + targetSize + " tSS:"+((int)Math.round(targetSizeStable));
     }
 }
