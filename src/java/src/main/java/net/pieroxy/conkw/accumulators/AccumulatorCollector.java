@@ -30,13 +30,14 @@ public class AccumulatorCollector<T extends LogRecord> implements Collector {
   public ResponseData getDataCopy() {
     ResponseData res = new ResponseData(grabber, System.currentTimeMillis());
     accumulator.log("", res.getNum(), res.getStr());
-    ResponseData rd = sc.getDataCopy();
-    rd.getNum().entrySet().forEach(entry -> res.addMetric(entry.getKey(), entry.getValue()));
-    rd.getStr().entrySet().forEach(entry -> res.addMetric(entry.getKey(), entry.getValue()));
-    rd.getErrors().forEach(entry -> res.addError(entry));
-    rd.setTimestamp(sc.getTimestamp());
-    rd.setElapsedToGrab(accumulator.getLastPeriod());
-    errors.forEach(res::addError);
+    try (ResponseData rd = sc.getDataCopy()) {
+      rd.getNum().entrySet().forEach(entry -> res.addMetric(entry.getKey(), entry.getValue()));
+      rd.getStr().entrySet().forEach(entry -> res.addMetric(entry.getKey(), entry.getValue()));
+      rd.getErrors().forEach(entry -> res.addError(entry));
+      res.setTimestamp(sc.getTimestamp());
+      res.setElapsedToGrab(accumulator.getLastPeriod());
+      errors.forEach(res::addError);
+    }
     return res;
   }
 
