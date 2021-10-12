@@ -28,7 +28,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
   private CDuration ttl;
   private CDuration errorTtl;
   private boolean lastGrabHadErrors = false;
-  private Map<String, SimpleCollector> collectorsStore = new HashMap<>();
+  private Map<String, SimpleCollector> collectorsStore = HashMapPool.getInstance().borrow();
   private boolean loaded, hasChanged;
 
   @Override
@@ -54,7 +54,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
   }
 
   private File storage;
-  private Map<String, String> privateData = new HashMap<>();
+  private Map<String, String> privateData = HashMapPool.getInstance().borrow();
 
   /**
    * Should be overriden by subclasses that are interested to read data from the cache when
@@ -169,7 +169,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
       collector.setTimestamp(0);
       collector.collectionDone();
       if (canLogFine()) log(Level.FINE, "Creating collector for config " + c.getConfigKey());
-      Map<String, SimpleCollector> newSCMap = new HashMap<>(collectorsStore);
+      Map<String, SimpleCollector> newSCMap = HashMapPool.getInstance().borrow(collectorsStore);
       newSCMap.put(c.getConfigKey(), collector);
       collectorsStore = newSCMap;
     }
@@ -189,7 +189,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
   }
 
   public static class CachedData implements ConkwCloseable {
-    private Map<String, ResponseData> datasets = HashMapPool.getInstance().borrow();
+    private Map<String, ResponseData> datasets;
     private Map<String, String> privateData;
 
 
@@ -202,6 +202,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
     }
 
     public Map<String, ResponseData> getDatasets() {
+      if (datasets == null) datasets = HashMapPool.getInstance().borrow();
       return datasets;
     }
 
