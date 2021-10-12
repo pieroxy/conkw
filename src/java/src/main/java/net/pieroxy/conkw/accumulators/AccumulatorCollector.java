@@ -105,5 +105,6 @@ public class AccumulatorCollector<T extends LogRecord> implements Collector {
   @Override
   public void close() {
     // will close accumulators when they will be Closable
+    sc.close();
   }
 }

@@ -20,7 +20,7 @@ public abstract class KeyAccumulator<A, T extends LogRecord> implements Accumula
 
   KeyAccumulatorData<A,T> current;
   KeyAccumulatorData<A,T> old;
-  Map<A, Double> floatingWeights = new HashMap<>();
+  Map<A, Double> floatingWeights = HashMapPool.getInstance().borrow();
 
   abstract public A getKey(T record);
 
