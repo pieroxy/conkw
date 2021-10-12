@@ -17,8 +17,9 @@ public abstract class ObjectPool<T> {
 
     private final Queue<T> pool = new LinkedList<>();
     private long requested, created, recycled, wronglyRecycled, dropped, spawned;
-    private int targetSize = 10;
-    private double targetSizeStable = 10;
+    private int ops = 10;
+    private double opsStable = 10;
+    private double targetStable = 10;
     private long lastRequested = 0;
     private long lastCheck = System.currentTimeMillis();
     private int minSize = 10;
@@ -52,7 +53,7 @@ public abstract class ObjectPool<T> {
     }
 
     private boolean shouldDrop() {
-        int difference = minSize - (int)targetSizeStable;
+        int difference = (int)(minSize - targetStable - opsStable);
         if (difference>2) { // 2 to prevent noise from dropping instances
             if (LOGGER.isLoggable(Level.FINER)) LOGGER.finer("Dropping an instance, difference=" + difference);
             return true;
@@ -75,10 +76,11 @@ public abstract class ObjectPool<T> {
     }
 
     private void computeTargetSize() {
-        targetSize = (int)(requested-lastRequested)*100/TARGET_OVERCAPACITY_AS_PRC_OF_A_SECOND;
-        targetSizeStable = targetSizeStable*0.9 + targetSize/10.;
+        ops = (int)(requested-lastRequested);
+        opsStable = opsStable*0.9 + ops/10.;
+        targetStable = opsStable*100/TARGET_OVERCAPACITY_AS_PRC_OF_A_SECOND;
         lastRequested = requested;
-        int miss = (int)targetSizeStable - minSize;
+        int miss = (int)targetStable - minSize;
         if (miss>2) {
             miss=miss-2;
 
@@ -122,6 +124,6 @@ public abstract class ObjectPool<T> {
     }
 
     public String getDebugString() {
-        return "ObjectPool:: R:" + getRequested() + " C:" + getCreated() + " R:" + getRecycled() + " wR:" + getWronglyRecycled() + " (-):" + dropped + " (+):" + spawned + " S:" + getPoolCurrentSize() + " mS:" + lastMinSize + " tS:" + targetSize + " tSS:"+((int)Math.round(targetSizeStable));
+        return "ObjectPool:: R:" + getRequested() + " C:" + getCreated() + " R:" + getRecycled() + " wR:" + getWronglyRecycled() + " (-):" + dropped + " (+):" + spawned + " S:" + getPoolCurrentSize() + " mS:" + lastMinSize + " ops:" + ops + " opsS:"+((int)Math.round(opsStable));
     }
 }
