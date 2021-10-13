@@ -10,7 +10,9 @@ public class ReusedRecycledObjectInspector implements ObjectPoolInspector<Map> {
 
   @Override
   public Map giveOutInstance(Map result) {
-    return new InstrumentedHashMap(result);
+    Map m = new InstrumentedHashMap();
+    m.putAll(result);
+    return m;
   }
 
   @Override

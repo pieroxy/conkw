@@ -4,6 +4,7 @@ import net.pieroxy.conkw.utils.pools.inspectors.InspectorProvider;
 import net.pieroxy.conkw.utils.pools.inspectors.ObjectPoolInspector;
 import net.pieroxy.conkw.utils.pools.inspectors.ObjectPoolInspectorReport;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.logging.Level;
@@ -125,5 +126,9 @@ public abstract class ObjectPool<T> {
 
     public String getDebugString() {
         return "ObjectPool:: R:" + getRequested() + " C:" + getCreated() + " R:" + getRecycled() + " wR:" + getWronglyRecycled() + " (-):" + dropped + " (+):" + spawned + " S:" + getPoolCurrentSize() + " mS:" + lastMinSize + " ops:" + ops + " opsS:"+((int)Math.round(opsStable));
+    }
+
+    protected Iterator<T> getPoolObjects() {
+        return pool.iterator();
     }
 }

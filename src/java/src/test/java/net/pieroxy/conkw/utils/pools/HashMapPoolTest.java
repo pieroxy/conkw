@@ -2,12 +2,12 @@ package net.pieroxy.conkw.utils.pools;
 
 import junit.framework.TestCase;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
+import net.pieroxy.conkw.utils.pools.hashmap.LightInstrumentedMap;
 import net.pieroxy.conkw.utils.pools.inspectors.NoopInspector;
 import net.pieroxy.conkw.utils.pools.inspectors.ObjectPoolInspectorReport;
 import net.pieroxy.conkw.utils.pools.inspectors.ReusedRecycledObjectInspector;
 import net.pieroxy.conkw.utils.pools.inspectors.UndisposedObjectsInspector;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -55,9 +55,9 @@ public class HashMapPoolTest extends TestCase {
             pool.giveBack(m);
         }
         pool.giveBack(new TreeMap());
-        pool.giveBack(new HashMap());
-        pool.giveBack(new HashMap());
-        pool.giveBack(new HashMap());
+        pool.giveBack(new LightInstrumentedMap());
+        pool.giveBack(new LightInstrumentedMap());
+        pool.giveBack(new LightInstrumentedMap());
 
         System.gc();
         UndisposedObjectsInspector inspector = (UndisposedObjectsInspector) pool.getInspector();

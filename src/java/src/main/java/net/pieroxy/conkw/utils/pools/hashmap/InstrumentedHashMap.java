@@ -3,25 +3,13 @@ package net.pieroxy.conkw.utils.pools.hashmap;
 import net.pieroxy.conkw.utils.pools.ObservableObject;
 import net.pieroxy.conkw.utils.pools.inspectors.ThreadStack;
 
-import java.io.Closeable;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class InstrumentedHashMap<K, V> implements Map<K, V>, ObservableObject {
-
-    private Map<K, V> instance;
+public class InstrumentedHashMap<K, V> extends LightInstrumentedMap<K, V> implements ObservableObject {
     private boolean accessed = true;
     ThreadStack violation;
-
-    public InstrumentedHashMap() {
-        instance = new HashMap<>();
-    }
-
-    public InstrumentedHashMap(Map<K, V> instance) {
-        this.instance = instance;
-    }
 
     private void access() {
         if (accessed) return;
@@ -34,84 +22,76 @@ public class InstrumentedHashMap<K, V> implements Map<K, V>, ObservableObject {
     @Override
     public int size() {
         access();
-        return instance.size();
+        return super.size();
     }
 
     @Override
     public boolean isEmpty() {
         access();
-        return instance.isEmpty();
+        return super.isEmpty();
     }
 
     @Override
     public boolean containsKey(Object key) {
         access();
-        return instance.containsKey(key);
+        return super.containsKey(key);
     }
 
     @Override
     public boolean containsValue(Object value) {
         access();
-        return instance.containsValue(value);
+        return super.containsValue(value);
     }
 
     @Override
     public V get(Object key) {
         access();
-        return instance.get(key);
+        return super.get(key);
     }
 
     @Override
     public V put(K key, V value) {
         access();
-        return instance.put(key, value);
+        return super.put(key, value);
     }
 
     @Override
     public V remove(Object key) {
         access();
-        return instance.remove(key);
+        return super.remove(key);
     }
 
     @Override
     public void putAll(Map<? extends K, ? extends V> m) {
         access();
-        instance.putAll(m);
+        super.putAll(m);
     }
 
     @Override
     public void clear() {
         access();
-        instance.clear();
+        super.clear();
     }
 
     @Override
     public Set<K> keySet() {
         access();
-        return instance.keySet();
+        return super.keySet();
     }
 
     @Override
     public Collection<V> values() {
         access();
-        return instance.values();
+        return super.values();
     }
 
     @Override
     public Set<Entry<K, V>> entrySet() {
         access();
-        return instance.entrySet();
+        return super.entrySet();
     }
 
     // End of Map implementation
-
-    public Map<K, V> getInstance() {
-        return instance;
-    }
-
-    public void setInstance(Map<K, V> instance) {
-        this.instance = instance;
-    }
 
     @Override
     public boolean hasBeenAccessed() {
