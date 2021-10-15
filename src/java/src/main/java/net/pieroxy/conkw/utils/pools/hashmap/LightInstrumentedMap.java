@@ -18,9 +18,13 @@ public class LightInstrumentedMap<K, V> implements Map<K, V> {
         return maxItemsPredicted;
     }
 
+    public void setMaxItemsPredicted(int maxItemsPredicted) {
+        this.maxItemsPredicted = maxItemsPredicted;
+    }
+
     /*
-            Map implementation :: BEGIN
-             */
+                Map implementation :: BEGIN
+                 */
     @Override
     public int size() {
         return instance.size();

@@ -26,4 +26,9 @@ public class HashMapStringDoubleConverter extends AbstractMapConverter<Double> {
     }
     return NumberConverter.deserializeDouble(reader);
   }
+
+  @Override
+  protected int getMapKey() {
+    return -10;
+  }
 }

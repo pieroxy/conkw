@@ -10,7 +10,7 @@ import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public abstract class ObjectPool<T> {
+public abstract class ObjectPool<T,P> {
     private final static Logger LOGGER = Logger.getLogger(ObjectPool.class.getName());
     private final static int TARGET_OVERCAPACITY_AS_PRC_OF_A_SECOND = 100; // 100 means we cap the pool to hold no less of 100% of 1s of throughput.
 
@@ -28,12 +28,13 @@ public abstract class ObjectPool<T> {
 
     protected abstract T createNewInstance();
     protected abstract T getInstanceToRecycle(T instance);
+    protected abstract T prepareInstance(P param, T result);
 
     protected ObjectPool(InspectorProvider behavior) {
        this.inspector = behavior.get(this);
     }
 
-    public synchronized T borrow() {
+    public synchronized T borrow(P param) {
         T result = pool.poll();
         requested++;
         if (System.currentTimeMillis() - lastCheck > 1000) {
@@ -48,7 +49,7 @@ public abstract class ObjectPool<T> {
             result = createNewInstance();
         }
 
-        T res = inspector.giveOutInstance(result);
+        T res = inspector.giveOutInstance(prepareInstance(param, result));
         minSize = Math.min(minSize, getPoolCurrentSize());
         return res;
     }

@@ -12,6 +12,7 @@ import java.util.TreeMap;
 
 public abstract class AbstractMapConverter<V> {
   protected abstract V deserializeNullableValue(JsonReader reader) throws IOException;
+  protected abstract int getMapKey();
 
   public void serializeNullableMap(@Nullable Map<String,V> value, JsonWriter sw) {
     if (value == null) {
@@ -53,7 +54,7 @@ public abstract class AbstractMapConverter<V> {
       if (nextToken == 125) {
         return new TreeMap();
       } else {
-        Map<String,V> res = HashMapPool.getInstance().borrow(); // This is the important part. The rest is boilerplate copied and pasted from DslJson project.
+        Map<String,V> res = HashMapPool.getInstance().borrow(getMapKey()); // This is the important part. The rest is boilerplate copied and pasted from DslJson project.
         String key = reader.readKey();
         res.put(key, deserializeNullableValue(reader));
 

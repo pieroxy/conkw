@@ -14,9 +14,9 @@ import java.util.TreeMap;
 public class HashMapPoolTest extends TestCase {
     public void testCreation() {
         Map<?,?> map = null;
-        ObjectPool<Map> pool = new HashMapPool((op) -> new NoopInspector());
+        ObjectPool<Map, Integer> pool = new HashMapPool((op) -> new NoopInspector());
         for (int i=0 ; i<100 ; i++) {
-            map = pool.borrow();
+            map = pool.borrow(1);
         }
         assertEquals(100, pool.getCreated());
         assertEquals(100, pool.getRequested());
@@ -25,10 +25,10 @@ public class HashMapPoolTest extends TestCase {
     }
     public void testReuse() {
         Map<?,?> map = null;
-        ObjectPool<Map> pool = new HashMapPool((op) -> new NoopInspector());
+        ObjectPool<Map, Integer> pool = new HashMapPool((op) -> new NoopInspector());
         for (int i=0 ; i<100 ; i++) {
             pool.giveBack(map);
-            map = pool.borrow();
+            map = pool.borrow(1);
         }
         assertEquals(1, pool.getWronglyRecycled());
         assertEquals(100, pool.getRequested());
@@ -36,7 +36,7 @@ public class HashMapPoolTest extends TestCase {
         assertEquals(1, pool.getCreated());
     }
     public void testWrongRecycle() {
-        ObjectPool<Map> pool = new HashMapPool((op) -> new NoopInspector());
+        ObjectPool<Map, Integer> pool = new HashMapPool((op) -> new NoopInspector());
         pool.giveBack(new TreeMap());
         pool.giveBack(null);
         assertEquals(2, pool.getWronglyRecycled());
@@ -45,13 +45,13 @@ public class HashMapPoolTest extends TestCase {
         assertEquals(0, pool.getCreated());
     }
     public void testDebugNotRecycledObjects() {
-        ObjectPool<Map> pool = new HashMapPool((op) -> new UndisposedObjectsInspector());
+        ObjectPool<Map, Integer> pool = new HashMapPool((op) -> new UndisposedObjectsInspector());
         Map m=null;
         for (int i=0 ; i<10 ; i++) {
-            m = pool.borrow();
+            m = pool.borrow(1);
         }
         for (int i=0 ; i<10 ; i++) {
-            m = pool.borrow();
+            m = pool.borrow(1);
             pool.giveBack(m);
         }
         pool.giveBack(new TreeMap());
@@ -73,20 +73,20 @@ public class HashMapPoolTest extends TestCase {
     }
 
     public void testClearReturnedObjects() {
-        ObjectPool<Map> pool = new HashMapPool((op) -> new NoopInspector());
-        Map m = pool.borrow();
+        ObjectPool<Map, Integer> pool = new HashMapPool((op) -> new NoopInspector());
+        Map m = pool.borrow(1);
         assertEquals(0, m.size());
         m.put("a", "b");
         pool.giveBack(m);
         for (int i=0 ; i<10 ; i++) {
-            m = pool.borrow();
+            m = pool.borrow(1);
             assertEquals(0, m.size());
         }
     }
 
     public void testAccessToGivenBackInstances() {
-        ObjectPool<Map> pool = new HashMapPool((op) -> new ReusedRecycledObjectInspector());
-        Map m = pool.borrow();
+        ObjectPool<Map, Integer> pool = new HashMapPool((op) -> new ReusedRecycledObjectInspector());
+        Map m = pool.borrow(1);
         pool.giveBack(m);
         ObjectPoolInspectorReport report = pool.getInspector().getReport();
         assertEquals(0, report.getViolations().size());

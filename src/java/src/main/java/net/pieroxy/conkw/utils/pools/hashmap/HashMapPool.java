@@ -8,7 +8,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-public class HashMapPool extends ObjectPool<Map> {
+public class HashMapPool extends ObjectPool<Map, Integer> {
+    public static final int SIZE_UNKNOWN = -1;
 
     // For easy use when needed:
     //static HashMapPool instance = new HashMapPool((op) -> new RegularReportInspector(new CountProducersInspector(6), CDuration.FIVE_SECONDS, op));
@@ -38,8 +39,14 @@ public class HashMapPool extends ObjectPool<Map> {
         return null;
     }
 
-    public <K, V> Map<K, V> borrow(Map<K, V> database) {
-        Map<K, V> map = (Map<K, V>) borrow();
+    @Override
+    protected Map prepareInstance(Integer param, Map result) {
+        ((LightInstrumentedMap)result).setMaxItemsPredicted(param);
+        return result;
+    }
+
+    public <K, V> Map<K, V> borrow(Map<K, V> database, int additionalItems) {
+        Map<K, V> map = (Map<K, V>) borrow(database.size() + additionalItems);
         map.putAll(database);
         return map;
     }
@@ -56,5 +63,13 @@ public class HashMapPool extends ObjectPool<Map> {
         sb.append(sizes.stream().map(String::valueOf).collect(Collectors.joining(",")));
         sb.append("]");
         return sb.toString();
+    }
+
+    public static int getUniqueCode(String...strings) {
+        int res = 0;
+        for (String s : strings) res ^= s.hashCode();
+        if (res > 0) res = -res;
+        if (res > -100) res -= 100;
+        return res;
     }
 }

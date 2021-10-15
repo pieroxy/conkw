@@ -5,6 +5,7 @@ import com.dslplatform.json.JsonWriter;
 import net.pieroxy.conkw.collectors.SimpleTransientCollector;
 import net.pieroxy.conkw.grabbersBase.Grabber;
 import net.pieroxy.conkw.utils.JsonHelper;
+import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 import net.pieroxy.conkw.webapp.servlets.Emi;
 
@@ -112,10 +113,10 @@ public class ExternalMetricsGrabber extends Grabber<SimpleTransientCollector> {
       data = JsonHelper.getJson().deserialize(ResponseData.class, fis);
     } catch (FileNotFoundException e) {
       log(Level.WARNING, "Could not load cached data file: " + getStorageFile());
-      data = new ResponseData(this, System.currentTimeMillis());
+      data = new ResponseData(this, System.currentTimeMillis(), HashMapPool.SIZE_UNKNOWN, HashMapPool.SIZE_UNKNOWN);
     } catch (Exception e) {
       log(Level.SEVERE, "Could not load cached data file.", e);
-      data = new ResponseData(this, System.currentTimeMillis());
+      data = new ResponseData(this, System.currentTimeMillis(), HashMapPool.SIZE_UNKNOWN, HashMapPool.SIZE_UNKNOWN);
     }
   }
 }

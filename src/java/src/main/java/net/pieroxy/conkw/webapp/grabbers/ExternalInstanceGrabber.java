@@ -54,7 +54,7 @@ public class ExternalInstanceGrabber extends AsyncGrabber<SimpleCollector> {
 
 
       try (Response data = JsonHelper.getJson().deserialize(Response.class, is)) {
-        try (ResponseData res = new ResponseData(this, data.getTimestamp())) {
+        try (ResponseData res = new ResponseData(this, data.getTimestamp(), data.getNumCount(), data.getStrCount())) {
           if (data.isNeedsAuthentication()) {
             try {
               authenticate();

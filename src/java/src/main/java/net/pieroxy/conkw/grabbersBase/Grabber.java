@@ -29,8 +29,7 @@ public abstract class Grabber<T extends Collector> {
 
   private Level logLevel;
 
-  Map<String, LongHolder> maxValues = HashMapPool.getInstance().borrow();
-  Map<String, TimedData<T>> extractedByConfiguration = HashMapPool.getInstance().borrow();
+  Map<String, TimedData<T>> extractedByConfiguration = HashMapPool.getInstance().borrow(1);
   private long lastConfigPurge;
 
   public String processAction(Map<String, String[]> parameterMap) {
@@ -42,7 +41,7 @@ public abstract class Grabber<T extends Collector> {
   public abstract T getDefaultCollector();
 
   private void gcConfigurations() {
-    Map<String,TimedData<T>> nm = HashMapPool.getInstance().borrow(extractedByConfiguration);
+    Map<String,TimedData<T>> nm = HashMapPool.getInstance().borrow(extractedByConfiguration, 0);
     Set<TimedData<T>> toClose = new HashSet<>();
     for (String s : nm.keySet()) {
       TimedData td = nm.get(s);
@@ -85,7 +84,7 @@ public abstract class Grabber<T extends Collector> {
 
   public void addActiveCollector(String param) {
     if (extractedByConfiguration.containsKey(param)) return;
-    Map<String,TimedData<T>> nm = HashMapPool.getInstance().borrow(extractedByConfiguration);
+    Map<String,TimedData<T>> nm = HashMapPool.getInstance().borrow(extractedByConfiguration, 1);
     if (param == null) {
       nm.put(null, new TimedData(getDefaultCollector()));
     } else {

@@ -17,21 +17,45 @@ public class Response implements Closeable {
   private boolean needsAuthentication;
   private Collection<String> errors = new LinkedList<>();
 
+  /**
+   * This constructor does not initialize the metrics field. Used for JSON.
+   */
   public Response() {
     this.timestamp = System.currentTimeMillis();
-    metrics = HashMapPool.getInstance().borrow();
   }
+
+  public Response(int numberOfMetrics) {
+    this.timestamp = System.currentTimeMillis();
+    metrics = HashMapPool.getInstance().borrow(numberOfMetrics);
+  }
+
   public Response(Response r, int jitter, String[]grabbers) {
     this.timestamp = r.timestamp;
     this.responseJitter = jitter;
     this.errors = r.errors;
-    this.metrics = HashMapPool.getInstance().borrow(); // No handling of capacity yet: grabbers.length elements planned.
+    this.metrics = HashMapPool.getInstance().borrow(grabbers.length);
     for (String s : grabbers) {
       ResponseData rd = r.metrics.get(s);
       if (rd!=null) {
         this.metrics.put(s, rd);
       }
     }
+  }
+
+  public int getNumCount() {
+    int res = 0;
+    for (ResponseData rd : metrics.values()) {
+      res += rd.getNum().size();
+    }
+    return res;
+  }
+
+  public int getStrCount() {
+    int res = 0;
+    for (ResponseData rd : metrics.values()) {
+      res += rd.getNum().size();
+    }
+    return res;
   }
 
   public static Response getError(String message) {

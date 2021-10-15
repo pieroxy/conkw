@@ -7,6 +7,7 @@ import net.pieroxy.conkw.utils.StringUtil;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.duration.CDurationParser;
 import net.pieroxy.conkw.grabbersBase.TimeThrottledGrabber;
+import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import javax.mail.*;
@@ -101,7 +102,7 @@ public class SpecificEmailCheckGrabber extends TimeThrottledGrabber {
 
     private void setPrivateData() {
         if (nextUID == null) return;
-        Map<String, String> pd = new HashMap<>();
+        Map<String, String> pd = HashMapPool.getInstance().borrow(1);
         pd.put(NEXT_UID, nextUID +"");
         setPrivateData(pd);
     }

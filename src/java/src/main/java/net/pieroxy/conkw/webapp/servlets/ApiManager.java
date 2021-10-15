@@ -25,7 +25,7 @@ public class ApiManager implements MetaGrabber {
 
   public Response buildResponse(long now, Collection<GrabberInput>grabbersRequested) {
     markGrabbersRequested(grabbersRequested, now);
-    Response r = new Response();
+    Response r = new Response(grabbersRequested.size());
     grabbersRequested.stream().parallel().forEach(
             s -> {
               Grabber g = allGrabbers.get(s.getName());

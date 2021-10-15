@@ -1,6 +1,7 @@
 package net.pieroxy.conkw.collectors;
 
 import net.pieroxy.conkw.grabbersBase.Grabber;
+import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ public class EmptyCollector implements Collector {
 
   @Override
   public ResponseData getDataCopy() {
-    return new ResponseData(grabber, System.currentTimeMillis());
+    return new ResponseData(grabber, System.currentTimeMillis(), HashMapPool.SIZE_UNKNOWN, HashMapPool.SIZE_UNKNOWN);
   }
 
   @Override

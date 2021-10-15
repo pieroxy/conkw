@@ -20,4 +20,9 @@ public class HashMapStringStringConverter extends AbstractMapConverter<String> {
   protected String deserializeNullableValue(JsonReader reader) throws IOException {
     return StringConverter.deserializeNullable(reader);
   }
+
+  @Override
+  protected int getMapKey() {
+    return -13;
+  }
 }

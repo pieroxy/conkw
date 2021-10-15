@@ -34,15 +34,15 @@ public class ResponseData implements ConkwCloseable {
   public ResponseData() {
   }
 
-  public ResponseData(Grabber grabber, long timestamp) {
+  public ResponseData(Grabber grabber, long timestamp, int numCount, int strCount) {
     this.timestamp = timestamp;
     if (grabber!=null) {
       this.name = grabber.getName();
       if (name == null) throw new RuntimeException("Grabber name cannot be null");
       this.extractor = grabber.getClass().getSimpleName();
-      this.num = HashMapPool.getInstance().borrow();
-      this.str = HashMapPool.getInstance().borrow();
-      this.timestamps = HashMapPool.getInstance().borrow();
+      this.num = HashMapPool.getInstance().borrow(numCount);
+      this.str = HashMapPool.getInstance().borrow(strCount);
+      this.timestamps = HashMapPool.getInstance().borrow(numCount + strCount);
     }
   }
 
@@ -53,9 +53,9 @@ public class ResponseData implements ConkwCloseable {
       this.errors = new LinkedList<>(source.getErrors());
       this.name = source.getName();
       this.extractor = source.getExtractor();
-      this.num = HashMapPool.getInstance().borrow(source.getNum());
-      this.str = HashMapPool.getInstance().borrow(source.getStr());
-      this.timestamps = HashMapPool.getInstance().borrow(source.getTimestamps());
+      this.num = HashMapPool.getInstance().borrow(source.getNum(), 0);
+      this.str = HashMapPool.getInstance().borrow(source.getStr(), 0);
+      this.timestamps = HashMapPool.getInstance().borrow(source.getTimestamps(), 0);
     }
   }
 
@@ -82,8 +82,7 @@ public class ResponseData implements ConkwCloseable {
     String tsName = "num." + name;
     if (!num.containsKey(name)) {
       // Change the map structurally, needs to do it atomically.
-      Map<String, Double> nnum = HashMapPool.getInstance().borrow();
-      nnum.putAll(num);
+      Map<String, Double> nnum = HashMapPool.getInstance().borrow(num, 1);
       nnum.put(name, value);
       Map tmp = num;
       num = nnum;
@@ -93,8 +92,7 @@ public class ResponseData implements ConkwCloseable {
     }
     if (!timestamps.containsKey(tsName)) {
       // Change the map structurally, needs to do it atomically.
-      Map<String, Long> nts = HashMapPool.getInstance().borrow();
-      nts.putAll(timestamps);
+      Map<String, Long> nts = HashMapPool.getInstance().borrow(timestamps,1);
       nts.put(tsName, System.currentTimeMillis());
       Map tmp = timestamps;
       timestamps = nts;
@@ -108,8 +106,7 @@ public class ResponseData implements ConkwCloseable {
     String tsName = "str." + name;
     if (!str.containsKey(name)) {
       // Change the map structurally, needs to do it atomically.
-      Map<String, String> nstr = HashMapPool.getInstance().borrow();
-      nstr.putAll(str);
+      Map<String, String> nstr = HashMapPool.getInstance().borrow(str, 1);
       nstr.put(name, value);
       Map tmp = str;
       str = nstr;
@@ -119,8 +116,7 @@ public class ResponseData implements ConkwCloseable {
     }
     if (!timestamps.containsKey(tsName)) {
       // Change the map structurally, needs to do it atomically.
-      Map<String, Long> nts = HashMapPool.getInstance().borrow();
-      nts.putAll(timestamps);
+      Map<String, Long> nts = HashMapPool.getInstance().borrow(timestamps, 1);
       nts.put(tsName, System.currentTimeMillis());
       Map tmp = timestamps;
       timestamps = nts;
@@ -138,9 +134,9 @@ public class ResponseData implements ConkwCloseable {
   public synchronized boolean purgeDataOlderThan(Duration timespan) {
     long now = System.currentTimeMillis();
     boolean changed = false;
-    Map<String, String> nstr = HashMapPool.getInstance().borrow(str);
-    Map<String, Double> nnum = HashMapPool.getInstance().borrow(num);
-    Map<String, Long> nts = HashMapPool.getInstance().borrow(timestamps);
+    Map<String, String> nstr = HashMapPool.getInstance().borrow(str,0);
+    Map<String, Double> nnum = HashMapPool.getInstance().borrow(num,0);
+    Map<String, Long> nts = HashMapPool.getInstance().borrow(timestamps,0);
 
     HashSet<String> keys = new HashSet<>();
     keys.addAll(nstr.keySet());

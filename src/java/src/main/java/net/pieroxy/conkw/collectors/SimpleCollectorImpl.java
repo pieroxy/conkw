@@ -1,6 +1,7 @@
 package net.pieroxy.conkw.collectors;
 
 import net.pieroxy.conkw.grabbersBase.Grabber;
+import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.util.Collection;
@@ -13,8 +14,8 @@ public class SimpleCollectorImpl implements SimpleCollector {
 
     public SimpleCollectorImpl(Grabber g, String configKey) {
         this.grabber = g;
-        this.completedCollection = new ResponseData(g, System.currentTimeMillis());
-        this.collectionInProgress = new ResponseData(g, System.currentTimeMillis());
+        this.completedCollection = new ResponseData(g, System.currentTimeMillis(), HashMapPool.SIZE_UNKNOWN, HashMapPool.SIZE_UNKNOWN);
+        this.collectionInProgress = new ResponseData(g, System.currentTimeMillis(), HashMapPool.SIZE_UNKNOWN, HashMapPool.SIZE_UNKNOWN);
         this.configKey = configKey;
     }
 
@@ -22,7 +23,7 @@ public class SimpleCollectorImpl implements SimpleCollector {
     public synchronized void collectionDone() {
         try (ResponseData tmp = completedCollection) {
             completedCollection = collectionInProgress;
-            collectionInProgress = new ResponseData(grabber, System.currentTimeMillis());
+            collectionInProgress = new ResponseData(grabber, System.currentTimeMillis(), tmp.getNum().size(), tmp.getStr().size());
         }
     }
 

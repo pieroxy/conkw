@@ -20,7 +20,7 @@ public abstract class KeyAccumulator<A, T extends LogRecord> implements Accumula
 
   KeyAccumulatorData<A,T> current;
   KeyAccumulatorData<A,T> old;
-  Map<A, Double> floatingWeights = HashMapPool.getInstance().borrow();
+  Map<A, Double> floatingWeights = HashMapPool.getInstance().borrow(HashMapPool.SIZE_UNKNOWN); // No possibility to predict
 
   abstract public A getKey(T record);
 
@@ -30,8 +30,8 @@ public abstract class KeyAccumulator<A, T extends LogRecord> implements Accumula
 
   public KeyAccumulator(AccumulatorProvider<T> provider) {
     this.provider = provider;
-    current = new KeyAccumulatorData<>();
-    old = new KeyAccumulatorData<>();
+    current = new KeyAccumulatorData<>(HashMapPool.SIZE_UNKNOWN);
+    old = new KeyAccumulatorData<>(HashMapPool.SIZE_UNKNOWN);
   }
 
   @Override
@@ -165,8 +165,8 @@ public abstract class KeyAccumulator<A, T extends LogRecord> implements Accumula
 
 
 class KeyAccumulatorData<A, T extends LogRecord> implements Closeable {
-  public KeyAccumulatorData() {
-    this.data = HashMapPool.getInstance().borrow();
+  public KeyAccumulatorData(int size) {
+    this.data = HashMapPool.getInstance().borrow(size);
   }
 
   double total;
@@ -185,7 +185,7 @@ class KeyAccumulatorData<A, T extends LogRecord> implements Closeable {
 
   public void replaceData(Map<A, Accumulator<T>> data) {
     Map old = this.data;
-    this.data = HashMapPool.getInstance().borrow(data);
+    this.data = HashMapPool.getInstance().borrow(data, (old.size()*100)/90); // Trying to account for more data.
     HashMapPool.getInstance().giveBack(old);
   }
 }

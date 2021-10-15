@@ -28,7 +28,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
   private CDuration ttl;
   private CDuration errorTtl;
   private boolean lastGrabHadErrors = false;
-  private Map<String, SimpleCollector> collectorsStore = HashMapPool.getInstance().borrow();
+  private Map<String, SimpleCollector> collectorsStore = HashMapPool.getInstance().borrow(1);
   private boolean loaded, hasChanged;
 
   @Override
@@ -54,7 +54,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
   }
 
   private File storage;
-  private Map<String, String> privateData = HashMapPool.getInstance().borrow();
+  private Map<String, String> privateData = HashMapPool.getInstance().borrow(1);
 
   /**
    * Should be overriden by subclasses that are interested to read data from the cache when
@@ -70,7 +70,9 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
    * @param privateData
    */
   protected void setPrivateData(Map<String, String> privateData) {
+    Map tmp = privateData;
     this.privateData = privateData;
+    HashMapPool.getInstance().giveBack(tmp);
   }
 
   private File getCacheFile() {
@@ -89,7 +91,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
     try (FileInputStream fis = new FileInputStream(cacheFile)) {
       CachedData data = JsonHelper.getJson().deserialize(CachedData.class, fis);
       privateData = data.getPrivateData();
-      if (privateData == null) privateData = new HashMap<>();
+      if (privateData == null) privateData = HashMapPool.getInstance().borrow(0);
       cacheLoaded(data.getDatasets(), data.getPrivateData());
 
       log(Level.INFO, "Loading from cache " + getCacheFile().getAbsolutePath());
@@ -114,7 +116,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
       data.forEach(c -> cdata.getDatasets().put(c.getConfigKey(), c.getDataCopy()));
       Map<String, String> pd = privateData;
       if (pd != null && pd.size() > 0) {
-        cdata.setPrivateData(HashMapPool.getInstance().borrow());
+        cdata.setPrivateData(HashMapPool.getInstance().borrow(pd.size()));
         cdata.getPrivateData().putAll(pd);
       }
       JsonWriter w = JsonHelper.getWriter();
@@ -169,7 +171,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
       collector.setTimestamp(0);
       collector.collectionDone();
       if (canLogFine()) log(Level.FINE, "Creating collector for config " + c.getConfigKey());
-      Map<String, SimpleCollector> newSCMap = HashMapPool.getInstance().borrow(collectorsStore);
+      Map<String, SimpleCollector> newSCMap = HashMapPool.getInstance().borrow(collectorsStore, 1);
       newSCMap.put(c.getConfigKey(), collector);
       collectorsStore = newSCMap;
     }
@@ -192,6 +194,19 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
     private Map<String, ResponseData> datasets;
     private Map<String, String> privateData;
 
+    /**
+     * This constructor does not initialize the datasets structure.
+     */
+    public CachedData() {
+    }
+
+    /**
+     * This constructor initializes the datasets structure to the size provided.
+     */
+    public CachedData(int datasetSize) {
+      datasets = HashMapPool.getInstance().borrow(datasetSize);
+    }
+
 
     public Map<String, String> getPrivateData() {
       return privateData;
@@ -202,7 +217,6 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
     }
 
     public Map<String, ResponseData> getDatasets() {
-      if (datasets == null) datasets = HashMapPool.getInstance().borrow();
       return datasets;
     }
 

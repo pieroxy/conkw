@@ -23,4 +23,9 @@ public class HashMapStringResponseDataConverter extends AbstractMapConverter<Res
   protected ResponseData deserializeNullableValue(JsonReader reader) throws IOException {
     return converter.read(reader);
   }
+
+  @Override
+  protected int getMapKey() {
+    return -12;
+  }
 }

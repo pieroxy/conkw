@@ -26,4 +26,9 @@ public class HashMapStringLongConverter  extends AbstractMapConverter<Long> {
     }
     return NumberConverter.deserializeLong(reader);
   }
+
+  @Override
+  protected int getMapKey() {
+    return -11;
+  }
 }

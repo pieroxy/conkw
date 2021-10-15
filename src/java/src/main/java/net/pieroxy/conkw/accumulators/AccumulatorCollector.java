@@ -28,9 +28,10 @@ public class AccumulatorCollector<T extends LogRecord> implements Collector {
 
   @Override
   public ResponseData getDataCopy() {
-    ResponseData res = new ResponseData(grabber, System.currentTimeMillis());
-    accumulator.log("", res.getNum(), res.getStr());
+    ResponseData res ;
     try (ResponseData rd = sc.getDataCopy()) {
+      res = new ResponseData(grabber, System.currentTimeMillis(), rd.getNum().size(), rd.getStr().size());
+      accumulator.log("", res.getNum(), res.getStr());
       rd.getNum().entrySet().forEach(entry -> res.addMetric(entry.getKey(), entry.getValue()));
       rd.getStr().entrySet().forEach(entry -> res.addMetric(entry.getKey(), entry.getValue()));
       rd.getErrors().forEach(entry -> res.addError(entry));
