@@ -67,7 +67,7 @@ public class HashMapPool extends ObjectPool<Map, Integer> {
 
     public static int getUniqueCode(String...strings) {
         int res = 0;
-        for (String s : strings) res ^= s.hashCode();
+        for (String s : strings) if (s!=null) res ^= s.hashCode();
         if (res > 0) res = -res;
         if (res > -100) res -= 100;
         return res;
