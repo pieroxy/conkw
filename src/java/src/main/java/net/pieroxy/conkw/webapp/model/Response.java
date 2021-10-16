@@ -44,16 +44,20 @@ public class Response implements Closeable {
 
   public int getNumCount() {
     int res = 0;
-    for (ResponseData rd : metrics.values()) {
-      res += rd.getNum().size();
+    if (metrics!=null) {
+      for (ResponseData rd : metrics.values()) {
+        res += rd.getNum().size();
+      }
     }
     return res;
   }
 
   public int getStrCount() {
     int res = 0;
-    for (ResponseData rd : metrics.values()) {
-      res += rd.getNum().size();
+    if (metrics!=null) {
+      for (ResponseData rd : metrics.values()) {
+        res += rd.getNum().size();
+      }
     }
     return res;
   }
@@ -122,9 +126,11 @@ public class Response implements Closeable {
 
   @Override
   public void close() {
-    metrics.values().forEach(rd -> rd.close());
-    HashMapPool.getInstance().giveBack(metrics);
-    metrics = null;
+    if (metrics!=null) {
+      metrics.values().forEach(rd -> rd.close());
+      HashMapPool.getInstance().giveBack(metrics);
+      metrics = null;
+    }
   }
 }
 
