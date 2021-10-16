@@ -62,7 +62,7 @@ public class ExternalInstanceGrabber extends AsyncGrabber<SimpleCollector> {
               res.addError(e.getMessage());
               c.copyDataFrom(res);
             }
-            grabSync(c);
+            return;
           }
           data.getMetrics().entrySet().forEach(e -> {
             ResponseData d = e.getValue();
