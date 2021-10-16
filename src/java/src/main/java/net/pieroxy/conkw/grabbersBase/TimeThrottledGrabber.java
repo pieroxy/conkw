@@ -111,7 +111,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
 
   private void writeCacheFile(Collection<SimpleCollector> data) {
     log(Level.FINE, "writeCacheFile() :: begin");
-    try (CachedData cdata = new CachedData()) {
+    try (CachedData cdata = new CachedData(data.size())) {
       data.forEach(c -> cdata.getDatasets().put(c.getConfigKey(), c.getDataCopy()));
       Map<String, String> pd = privateData;
       if (pd != null && pd.size() > 0) {
