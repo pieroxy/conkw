@@ -8,6 +8,7 @@ import net.pieroxy.conkw.collectors.SimpleTransientCollector;
 import net.pieroxy.conkw.grabbersBase.Grabber;
 import net.pieroxy.conkw.grabbersBase.GrabberListener;
 import net.pieroxy.conkw.utils.JsonHelper;
+import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 import net.pieroxy.conkw.webapp.model.EmiInput;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 import net.pieroxy.conkw.webapp.servlets.Emi;
@@ -98,11 +99,13 @@ public class PushToEmiGrabber extends Grabber<SimpleCollector> implements Grabbe
         if (runner == null) break;
 
         sendData(data);
+        if (canLogFine()) log(Level.FINE, "Sent " + data.getNum().size());
 
       } catch (Exception e) {
         log(Level.SEVERE, "", e);
       }
     }
+    log(Level.INFO, "Shutting down");
   }
 
   private EmiInput grabData() {
@@ -113,7 +116,9 @@ public class PushToEmiGrabber extends Grabber<SimpleCollector> implements Grabbe
     input.setStr(str);
     grabbers.forEach(g -> {
       if (shouldExtract(g.getName())) {
-        try (ResponseData data = grab(g)){ // Static grab cannot be parametrized
+        try (ResponseData data = grab(g)){ // Static grab cannot be parametrized for now
+          if (canLogFine()) log(Level.FINE, "Grabbed " + data.getNum().size());
+
           if (data != null) {
             data.getNum().forEach((k, v) -> num.put(prefix + "_" + g.getName() + "_" + k, v));
             data.getStr().forEach((k, v) -> str.put(prefix + "_" + g.getName() + "_" + k, v));
@@ -126,10 +131,10 @@ public class PushToEmiGrabber extends Grabber<SimpleCollector> implements Grabbe
   }
 
   private ResponseData grab(Grabber g) {
-    try (Collector c = g.getDefaultCollector()) {
-      g.collect(c);
-      return c.getDataCopy();
-    }
+    g.addActiveCollector(Grabber.DEFAULT_CONFIG_KEY);
+    g.collect();
+    log(Level.INFO, g.getCollectorToUse(Grabber.DEFAULT_CONFIG_KEY).toString());
+    return g.getCollectorToUse(Grabber.DEFAULT_CONFIG_KEY).getDataCopy();
   }
 
   private void sendData(EmiInput input) throws IOException {

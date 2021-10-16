@@ -12,10 +12,6 @@ public class TimedData<T> implements ConkwCloseable {
         return System.currentTimeMillis() - lastUsed;
     }
 
-    public void use() {
-
-    }
-
     public T getData() {
         return data;
     }

@@ -72,6 +72,7 @@ public abstract class Grabber<T extends Collector> {
   }
 
   public Collector getCollectorToUse(String config) {
+    if (config == null) config = DEFAULT_CONFIG_KEY;
     TimedData<? extends Collector> res = extractedByConfiguration.get(config);
     if (res==null) return EMPTY_COLLECTOR; // First call might encounter this situation.
     res.useNow();
@@ -85,8 +86,8 @@ public abstract class Grabber<T extends Collector> {
   public void addActiveCollector(String param) {
     if (extractedByConfiguration.containsKey(param)) return;
     Map<String,TimedData<T>> nm = HashMapPool.getInstance().borrow(extractedByConfiguration, 1);
-    if (param == null) {
-      nm.put(null, new TimedData(getDefaultCollector()));
+    if (param == null || param.equals(DEFAULT_CONFIG_KEY)) {
+      nm.put(DEFAULT_CONFIG_KEY, new TimedData(getDefaultCollector()));
     } else {
       nm.put(param, new TimedData(parseCollector(param)));
     }
