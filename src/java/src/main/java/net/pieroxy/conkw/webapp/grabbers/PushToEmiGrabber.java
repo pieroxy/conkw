@@ -133,7 +133,7 @@ public class PushToEmiGrabber extends Grabber<SimpleCollector> implements Grabbe
   private ResponseData grab(Grabber g) {
     g.addActiveCollector(Grabber.DEFAULT_CONFIG_KEY);
     g.collect();
-    log(Level.INFO, g.getCollectorToUse(Grabber.DEFAULT_CONFIG_KEY).toString());
+    if (canLogFine()) log(Level.FINE, g.getCollectorToUse(Grabber.DEFAULT_CONFIG_KEY).toString());
     return g.getCollectorToUse(Grabber.DEFAULT_CONFIG_KEY).getDataCopy();
   }
 
