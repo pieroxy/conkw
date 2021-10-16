@@ -124,6 +124,10 @@ public class Runner {
     private static int stopLoop(Config conf, InstanceId iid) throws IOException {
         int loopNumber = 0;
 
+        if (conf.getHttpPort() == -1 || iid == null) {
+            return STOP_NOOP;
+        }
+
         while (loopNumber < 20) {
             if (portAlreadyTaken(conf)) {
             } else {

@@ -7,6 +7,7 @@ import net.pieroxy.conkw.utils.RemoveJsonCommentsInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
 
 public class ConfigReader {
     public static final String NAME = "config.jsonc";
@@ -16,6 +17,11 @@ public class ConfigReader {
 
     public static Config getConfig() {
         Config config = null;
+        if (!getConfigFile().exists()) { // Probably being installed./
+            Config c = new Config();
+            c.setHttpPort(-1);
+            return c;
+        }
         try (InputStream is = new FileInputStream(getConfigFile())) {
             config =  new DslJson<>(Settings.basicSetup()).deserialize(Config.class, new RemoveJsonCommentsInputStream(is, getConfigFile().getAbsolutePath()));
         } catch (Exception e) {
