@@ -15,7 +15,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -30,6 +29,9 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
   private boolean lastGrabHadErrors = false;
   private Map<String, SimpleCollector> collectorsStore = HashMapPool.getInstance().borrow(1);
   private boolean loaded, hasChanged;
+  private File storage;
+  private Map<String, String> privateData = HashMapPool.getInstance().borrow(1);
+
 
   @Override
   public SimpleCollector getDefaultCollector() {
@@ -52,9 +54,6 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
   protected CDuration getTtl() {
     return lastGrabHadErrors ? errorTtl : ttl;
   }
-
-  private File storage;
-  private Map<String, String> privateData = HashMapPool.getInstance().borrow(1);
 
   /**
    * Should be overriden by subclasses that are interested to read data from the cache when
@@ -226,9 +225,11 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
 
     @Override
     public void close() {
-      datasets.values().forEach(rd -> rd.close());
-      HashMapPool.getInstance().giveBack(datasets);
-      datasets = null;
+      if (datasets!=null) {
+        datasets.values().forEach(rd -> rd.close());
+        HashMapPool.getInstance().giveBack(datasets);
+        datasets = null;
+      }
       if (privateData!=null) {
         HashMapPool.getInstance().giveBack(privateData);
         privateData = null;
