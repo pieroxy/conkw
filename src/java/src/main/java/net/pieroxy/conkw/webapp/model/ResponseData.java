@@ -177,6 +177,10 @@ public class ResponseData implements ConkwCloseable {
       HashMapPool.getInstance().giveBack(a);
       HashMapPool.getInstance().giveBack(b);
       HashMapPool.getInstance().giveBack(c);
+    } else {
+      HashMapPool.getInstance().giveBack(nnum);
+      HashMapPool.getInstance().giveBack(nstr);
+      HashMapPool.getInstance().giveBack(nts);
     }
     return changed;
   }
