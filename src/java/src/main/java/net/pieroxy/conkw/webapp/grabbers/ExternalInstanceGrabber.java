@@ -37,11 +37,13 @@ public class ExternalInstanceGrabber extends AsyncGrabber<SimpleCollector> {
 
   @Override
   public void grabSync(SimpleCollector c) {
+    URL url = null;
     try {
-      URL url = new URL(targetUrl + (StringUtil.isNullOrEmptyTrimmed(sessionToken)?"":("&"+ApiAuthManager.SID_FIELD+"="+sessionToken)));
+      url = new URL(targetUrl + (StringUtil.isNullOrEmptyTrimmed(sessionToken)?"":("&"+ApiAuthManager.SID_FIELD+"="+sessionToken)));
       URLConnection con = url.openConnection();
-      con.setConnectTimeout(200);
-      con.setReadTimeout(200);
+      con.setConnectTimeout(500);
+      con.setReadTimeout(500);
+      long ms = System.currentTimeMillis();
       HttpURLConnection http = (HttpURLConnection) con;
       http.connect();
 
@@ -54,6 +56,9 @@ public class ExternalInstanceGrabber extends AsyncGrabber<SimpleCollector> {
 
 
       try (Response data = JsonHelper.getJson().deserialize(Response.class, is)) {
+        if (canLogFine()) {
+          log(Level.FINE, "Time to grab: " + (System.currentTimeMillis()-ms) + "ms");
+        }
         try (ResponseData res = new ResponseData(this, data.getTimestamp(), data.getNumCount(), data.getStrCount())) {
           if (data.isNeedsAuthentication()) {
             try {
@@ -75,7 +80,7 @@ public class ExternalInstanceGrabber extends AsyncGrabber<SimpleCollector> {
         }
       }
     } catch (Exception e) {
-      log(Level.SEVERE, "Grabbing " + getName(), e);
+      log(Level.SEVERE, "EIG Grabbing " + getName() + " with URL " + url, e);
     }
   }
 
