@@ -34,17 +34,21 @@ public class Runner {
     private final static int STOP_NOOP  = 2;
     private final static int STOP_FAILED  = 3;
     private final static String GIT_REV;
+    private final static String MVN_VER;
 
     static {
-        String git_rev = "";
+        GIT_REV = readResourceFileAsString("GIT_REV");
+        MVN_VER = readResourceFileAsString("MVN_VER");
+    }
+
+    private static String readResourceFileAsString(String filename) {
         try {
-            InputStream is = Runner.class.getClassLoader().getResourceAsStream("GIT_REV");
-            git_rev = new BufferedReader(new InputStreamReader(is)).lines().findFirst().get();
+            InputStream is = Runner.class.getClassLoader().getResourceAsStream(filename);
+            return new BufferedReader(new InputStreamReader(is)).lines().findFirst().get();
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Could not read git version", e);
-            git_rev = "R_" + Math.random();
+            LOGGER.log(Level.SEVERE, "Could not read " + filename, e);
+            return filename + "_" + Math.random();
         }
-        GIT_REV = git_rev;
     }
 
     private static Tomcat tomcat;
@@ -180,7 +184,7 @@ public class Runner {
         System.setOut(new LoggingPrintStream("stdout", Level.INFO));
         System.setErr(new LoggingPrintStream("stderr", Level.SEVERE));
         GcLogging.installGCMonitoring();
-        LOGGER.log(Level.INFO, "Starting version " + GIT_REV);
+        LOGGER.log(Level.INFO, String.format("Starting version %s (build %s)", MVN_VER, GIT_REV));
         if (options.isStopCurrentInstance()) {
             if (!stop()) {
                 return;

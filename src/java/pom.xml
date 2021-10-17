@@ -165,6 +165,7 @@
                   <arg value="--short"/>
                   <arg value="HEAD"/>
                 </exec>
+                <echo file="src/main/resources/MVN_VER">${project.version}</echo>
               </target>
             </configuration>
             <goals>
