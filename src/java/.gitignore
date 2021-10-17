@@ -4,3 +4,4 @@ dependency-reduced-pom.xml
 out/
 target/
 build_local.sh
+/local.properties

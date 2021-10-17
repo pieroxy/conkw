@@ -19,9 +19,7 @@ import org.apache.catalina.startup.Tomcat;
 import org.apache.tomcat.util.descriptor.web.FilterDef;
 import org.apache.tomcat.util.descriptor.web.FilterMap;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintStream;
+import java.io.*;
 import java.lang.management.ManagementFactory;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
@@ -35,6 +33,19 @@ public class Runner {
     private final static int STOP_COMPLETE  = 1;
     private final static int STOP_NOOP  = 2;
     private final static int STOP_FAILED  = 3;
+    private final static String GIT_REV;
+
+    static {
+        String git_rev = "";
+        try {
+            InputStream is = Runner.class.getClassLoader().getResourceAsStream("GIT_REV");
+            git_rev = new BufferedReader(new InputStreamReader(is)).lines().findFirst().get();
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Could not read git version", e);
+            git_rev = "R_" + Math.random();
+        }
+        GIT_REV = git_rev;
+    }
 
     private static Tomcat tomcat;
 
@@ -169,6 +180,7 @@ public class Runner {
         System.setOut(new LoggingPrintStream("stdout", Level.INFO));
         System.setErr(new LoggingPrintStream("stderr", Level.SEVERE));
         GcLogging.installGCMonitoring();
+        LOGGER.log(Level.INFO, "Starting version " + GIT_REV);
         if (options.isStopCurrentInstance()) {
             if (!stop()) {
                 return;

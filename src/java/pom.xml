@@ -159,6 +159,12 @@
                 </replace>
                 <echo message="Packaging the web resources." />
                 <zip destfile="./src/main/resources/webapp-static.zip"  basedir="../web/"/>
+                <property prefix="config" file="local.properties"/>
+                <exec executable="${config.git}" output="src/main/resources/GIT_REV">
+                  <arg value="rev-parse"/>
+                  <arg value="--short"/>
+                  <arg value="HEAD"/>
+                </exec>
               </target>
             </configuration>
             <goals>
