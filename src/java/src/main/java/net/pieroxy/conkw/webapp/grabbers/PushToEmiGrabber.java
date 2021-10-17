@@ -95,11 +95,12 @@ public class PushToEmiGrabber extends Grabber<SimpleCollector> implements Grabbe
         }
         if (runner == null) break;
 
-        EmiInput data = grabData();
-        if (runner == null) break;
+        try (EmiInput data = grabData()) {
+          if (runner == null) break;
 
-        sendData(data);
-        if (canLogFine()) log(Level.FINE, "Sent " + data.getNum().size());
+          sendData(data);
+          if (canLogFine()) log(Level.FINE, "Sent " + data.getNum().size());
+        }
 
       } catch (Exception e) {
         log(Level.SEVERE, "", e);
@@ -110,8 +111,8 @@ public class PushToEmiGrabber extends Grabber<SimpleCollector> implements Grabbe
 
   private EmiInput grabData() {
     EmiInput input = new EmiInput();
-    Map<String, String> str = new HashMap<>();
-    Map<String, Double> num = new HashMap<>();
+    Map<String, String> str = HashMapPool.getInstance().borrow(HashMapPool.getUniqueCode(this.getClass().getName(), getName(), "str"));
+    Map<String, Double> num = HashMapPool.getInstance().borrow(HashMapPool.getUniqueCode(this.getClass().getName(), getName(), "num"));
     input.setNum(num);
     input.setStr(str);
     grabbers.forEach(g -> {
