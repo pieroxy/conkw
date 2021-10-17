@@ -1,6 +1,7 @@
 package net.pieroxy.conkw.webapp.servlets;
 
 import net.pieroxy.conkw.utils.JsonHelper;
+import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 import net.pieroxy.conkw.webapp.Filter;
 import net.pieroxy.conkw.webapp.grabbers.ExternalMetricsGrabber;
 import net.pieroxy.conkw.webapp.model.EmiInput;
@@ -63,8 +64,7 @@ public class Emi extends HttpServlet {
   }
 
   private void parseJsonInput(HttpServletRequest req, HttpServletResponse resp, ExternalMetricsGrabber mg) {
-    try {
-      EmiInput data = JsonHelper.getJson().deserialize(EmiInput.class, req.getInputStream());
+    try (EmiInput data = JsonHelper.getJson().deserialize(EmiInput.class, req.getInputStream())) {
       data.getNum().entrySet().forEach(e -> mg.addMetric(e.getKey(), e.getValue()));
       data.getStr().entrySet().forEach(e -> mg.addMetric(e.getKey(), e.getValue()));
     } catch (IOException e) {

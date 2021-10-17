@@ -1,12 +1,19 @@
 package net.pieroxy.conkw.webapp.model;
 
+import com.dslplatform.json.CompiledJson;
+import com.dslplatform.json.JsonAttribute;
 import net.pieroxy.conkw.utils.ConkwCloseable;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
+import net.pieroxy.conkw.utils.pools.hashmap.HashMapStringDoubleConverter;
+import net.pieroxy.conkw.utils.pools.hashmap.HashMapStringStringConverter;
 
 import java.util.*;
 
+@CompiledJson(onUnknown = CompiledJson.Behavior.IGNORE)
 public class EmiInput implements ConkwCloseable {
+  @JsonAttribute(converter = HashMapStringDoubleConverter.class)
   private Map<String, Double> num;
+  @JsonAttribute(converter = HashMapStringStringConverter.class)
   private Map<String, String> str;
 
   public Map<String, Double> getNum() {
