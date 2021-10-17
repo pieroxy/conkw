@@ -44,12 +44,14 @@ public class ApiAuthManager {
     if (authConfig!=null) {
       Arrays.stream(authConfig.getUsers()).forEach(u -> allUsersToKeep.put(u.getLogin(), u));
     }
-    Arrays.stream(newAuth.getUsers()).forEach(u -> {
-      User current = allUsersToKeep.get(u.getLogin());
-      if (current != null && !current.equals(u)) {
-        allUsersToKeep.remove(u.getLogin());
-      }
-    });
+    if (newAuth.getUsers()!=null) {
+      Arrays.stream(newAuth.getUsers()).forEach(u -> {
+        User current = allUsersToKeep.get(u.getLogin());
+        if (current != null && !current.equals(u)) {
+          allUsersToKeep.remove(u.getLogin());
+        }
+      });
+    }
     sessions.getSessions().values().forEach(s -> {
       if (!s.expired() && allUsersToKeep.containsKey(s.getUser().getLogin())) {
         newsessions.put(s.getKey(), s);
