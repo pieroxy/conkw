@@ -4,6 +4,7 @@ import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.collectors.SimpleTransientCollector;
 import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
 import net.pieroxy.conkw.utils.ExternalBinaryRunner;
+import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -46,7 +47,7 @@ public class LmSensorsGrabber extends AsyncGrabber<SimpleCollector> {
     String chipname = null;
     String chipsensor = null;
 
-    Map<String, StringBuilder> categories = new HashMap<>();
+    Map<String, StringBuilder> categories = HashMapPool.getInstance().borrow(HashMapPool.getUniqueCode(this.getClass().getName(), getName(), "categories"));
 
     while (true) {
       try {
@@ -76,6 +77,7 @@ public class LmSensorsGrabber extends AsyncGrabber<SimpleCollector> {
     for (Map.Entry<String, StringBuilder> e : categories.entrySet()) {
       c.collect(e.getKey(), e.getValue().toString());
     }
+    HashMapPool.getInstance().giveBack(categories);
   }
 
   private void addMetric(SimpleCollector c, Map<String, StringBuilder> categories, String prefix1, String prefix2, String metricName, double value) {
