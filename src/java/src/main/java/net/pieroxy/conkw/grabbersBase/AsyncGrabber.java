@@ -31,6 +31,7 @@ public abstract class AsyncGrabber<T extends Collector> extends SimpleGrabber<T>
 
   @Override
   public final void dispose() {
+    super.dispose();
     shouldStop=true;
     synchronized (this) {
       this.notifyAll();

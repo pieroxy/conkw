@@ -12,7 +12,7 @@ import java.util.logging.Level;
 
 public abstract class SimpleGrabber<T extends Collector> extends Grabber<T> {
   private volatile MaxComputer _maxComputer = null;
-  Map<String, T> cachedResponses = new HashMap<>();
+  Map<String, T> cachedResponses = HashMapPool.getInstance().borrow(HashMapPool.SIZE_UNKNOWN);
   Map<String, LongHolder> maxValuesLastComputed = HashMapPool.getInstance().borrow(HashMapPool.getUniqueCode(SimpleGrabber.class.getName(), getName()));
 
 
@@ -89,5 +89,10 @@ public abstract class SimpleGrabber<T extends Collector> extends Grabber<T> {
         lh.value = System.currentTimeMillis();
       }
     }
+  }
+
+  @Override
+  public void dispose() {
+    HashMapPool.getInstance().giveBack(cachedResponses);
   }
 }
