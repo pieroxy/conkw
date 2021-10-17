@@ -45,6 +45,7 @@ public abstract class Grabber<T extends Collector> {
     Set<TimedData<T>> toClose = new HashSet<>();
     for (String s : nm.keySet()) {
       TimedData td = nm.get(s);
+      if (canLogFiner()) log(Level.FINER, "GC :: " + td + " ??? " + (td.getAge() > CONF_EXPIRATION_MS) + " $$$ " + super.toString());
       if (td.getAge() > CONF_EXPIRATION_MS) {
         toClose.add(nm.remove(s));
       }
@@ -55,13 +56,17 @@ public abstract class Grabber<T extends Collector> {
     } else {
       Map tmp = extractedByConfiguration;
       extractedByConfiguration = nm;
-      for (TimedData<T> td : toClose) td.close();
+      for (TimedData<T> td : toClose) {
+        if (canLogFine()) log(Level.FINE, "GCed collector " + td);
+        td.close();
+      }
       HashMapPool.getInstance().giveBack(tmp);
     }
     lastConfigPurge = System.currentTimeMillis();
   }
 
   public final void collect() {
+    if (canLogFine()) log(Level.FINE,  "Collecting " + getActiveCollectors().stream().map(c -> c.getConfigKey()).collect(Collectors.joining(",")));
     getActiveCollectors().forEach(this::collect);
   }
 
@@ -75,6 +80,7 @@ public abstract class Grabber<T extends Collector> {
     if (config == null) config = DEFAULT_CONFIG_KEY;
     TimedData<? extends Collector> res = extractedByConfiguration.get(config);
     if (res==null) return EMPTY_COLLECTOR; // First call might encounter this situation.
+    if (canLogFiner()) log(Level.FINER, "About to use " + res + " out of " + extractedByConfiguration.size() + " $$$ " + super.toString());
     res.useNow();
     return res.getData();
   }
@@ -84,13 +90,19 @@ public abstract class Grabber<T extends Collector> {
   }
 
   public void addActiveCollector(String param) {
-    if (extractedByConfiguration.containsKey(param)) return;
-    Map<String,TimedData<T>> nm = HashMapPool.getInstance().borrow(extractedByConfiguration, 1);
-    if (param == null || param.equals(DEFAULT_CONFIG_KEY)) {
-      nm.put(DEFAULT_CONFIG_KEY, new TimedData(getDefaultCollector()));
-    } else {
-      nm.put(param, new TimedData(parseCollector(param)));
+    if (param == null) param = DEFAULT_CONFIG_KEY;
+    if (extractedByConfiguration.containsKey(param)) {
+      return;
     }
+    Map<String,TimedData<T>> nm = HashMapPool.getInstance().borrow(extractedByConfiguration, 1);
+    TimedData<T> created;
+    if (param == null || param.equals(DEFAULT_CONFIG_KEY)) {
+      nm.put(DEFAULT_CONFIG_KEY, created = new TimedData(getDefaultCollector()));
+    } else {
+      nm.put(param, created = new TimedData(parseCollector(param)));
+    }
+    if (canLogFiner()) log(Level.FINER, "Created " + extractedByConfiguration.get(param) + " from param '" + param + "'");
+
     Map tmp = extractedByConfiguration;
     extractedByConfiguration = nm;
     HashMapPool.getInstance().giveBack(tmp);
