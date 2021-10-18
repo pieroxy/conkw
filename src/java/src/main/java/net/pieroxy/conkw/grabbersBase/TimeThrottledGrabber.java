@@ -88,23 +88,24 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
       return;
     }
     try (FileInputStream fis = new FileInputStream(cacheFile)) {
-      CachedData data = JsonHelper.getJson().deserialize(CachedData.class, fis);
-      Map tmp = privateData;
-      privateData = data.getPrivateData();
-      HashMapPool.getInstance().giveBack(tmp);
-      if (privateData == null) privateData = HashMapPool.getInstance().borrow(0);
-      cacheLoaded(data.getDatasets(), data.getPrivateData());
+      try (CachedData data = JsonHelper.getJson().deserialize(CachedData.class, fis)) {
+        Map tmp = privateData;
+        privateData = data.getPrivateData();
+        HashMapPool.getInstance().giveBack(tmp);
+        if (privateData == null) privateData = HashMapPool.getInstance().borrow(0);
+        cacheLoaded(data.getDatasets(), data.getPrivateData());
 
-      log(Level.INFO, "Loading from cache " + getCacheFile().getAbsolutePath());
-      lastGrabHadErrors = false;
-      for (Map.Entry<String, ResponseData> entry : data.getDatasets().entrySet()) {
-        String configKey = entry.getKey();
-        ResponseData rd = entry.getValue();
-        lastGrabHadErrors = lastGrabHadErrors || rd.getErrors().size()>0;
-        SimpleTransientCollector c = new SimpleTransientCollector(this, configKey);
-        c.copyDataFrom(rd);
-        collectorsStore.put(configKey, c);
-        c.collectionDone();
+        log(Level.INFO, "Loading from cache " + getCacheFile().getAbsolutePath());
+        lastGrabHadErrors = false;
+        for (Map.Entry<String, ResponseData> entry : data.getDatasets().entrySet()) {
+          String configKey = entry.getKey();
+          ResponseData rd = entry.getValue();
+          lastGrabHadErrors = lastGrabHadErrors || rd.getErrors().size() > 0;
+          SimpleTransientCollector c = new SimpleTransientCollector(this, configKey);
+          c.copyDataFrom(rd);
+          collectorsStore.put(configKey, c);
+          c.collectionDone();
+        }
       }
     } catch (Exception e) {
       log(Level.SEVERE, "Could not load cached data file.", e);
