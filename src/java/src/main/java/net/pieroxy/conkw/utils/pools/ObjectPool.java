@@ -64,6 +64,7 @@ public abstract class ObjectPool<T,P> {
     }
 
     public synchronized void giveBack(T instance) {
+        if (instance == null) return;
         instance = inspector.recycle(getInstanceToRecycle(instance));
         if (instance!=null) {
             if (shouldDrop()) {
