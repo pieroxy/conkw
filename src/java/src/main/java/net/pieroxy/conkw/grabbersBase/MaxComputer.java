@@ -12,9 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
-/**
- * This class doesn't need the HashMapPool because it produces HashMaps only the first time it is used, it is stable over time.
- */
 public class MaxComputer {
   public static String FILENAME = ".autoMax.json";
 
@@ -35,19 +32,21 @@ public class MaxComputer {
     Map<String, Double> grabberDb = database.get(cn);
     if (grabberDb == null) {
       if (grabber.canLogFiner()) grabber.log(Level.FINER, "maxComputer: creating grabber db for " + cn);
-      Map<String, Map<String, Double>> newdb = new HashMap<>(database);
+      Map tmp = database;
+      Map<String, Map<String, Double>> newdb = HashMapPool.getInstance().borrow(database, 1);
       newdb.put(cn, grabberDb = new HashMap<>());
       grabberDb.put(metricName, currentValue);
       database = newdb;
       save();
+      HashMapPool.getInstance().giveBack(tmp);
       return currentValue;
     }
     Object maxO = grabberDb.get(metricName);
     if (maxO == null) {
       if (grabber.canLogFiner()) grabber.log(Level.FINER, "maxComputer: creating metric " + cn + " -- " + metricName);
-      Map<String, Double> newGrabberDb = new HashMap<>(grabberDb);
+      Map<String, Double> newGrabberDb = HashMapPool.getInstance().borrow(grabberDb, 1);
       newGrabberDb.put(metricName, currentValue);
-      database.put(cn, newGrabberDb);
+      HashMapPool.getInstance().giveBack(database.put(cn, newGrabberDb));
       save();
       return currentValue;
     }
@@ -81,11 +80,11 @@ public class MaxComputer {
       try {
         database = JsonHelper.readFromFile(Map.class, store);
       } catch (Exception e) {
-        database = new HashMap<>();
+        database = HashMapPool.getInstance().borrow(1);
         grabber.log(Level.SEVERE, "maxComputer: Unable to parse " + store.getAbsolutePath(), e);
       }
     } else {
-      database = new HashMap<>();
+      database = HashMapPool.getInstance().borrow(1);
     }
   }
 }
