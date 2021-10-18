@@ -89,7 +89,9 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
     }
     try (FileInputStream fis = new FileInputStream(cacheFile)) {
       CachedData data = JsonHelper.getJson().deserialize(CachedData.class, fis);
+      Map tmp = privateData;
       privateData = data.getPrivateData();
+      HashMapPool.getInstance().giveBack(tmp);
       if (privateData == null) privateData = HashMapPool.getInstance().borrow(0);
       cacheLoaded(data.getDatasets(), data.getPrivateData());
 
