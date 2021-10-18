@@ -6,6 +6,7 @@ import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 
 import java.time.Duration;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -93,6 +94,8 @@ public abstract class SimpleGrabber<T extends Collector> extends Grabber<T> {
 
   @Override
   public void dispose() {
-    HashMapPool.getInstance().giveBack(cachedResponses);
+    Map tmp = cachedResponses;
+    cachedResponses = Collections.emptyMap();
+    HashMapPool.getInstance().giveBack(tmp);
   }
 }
