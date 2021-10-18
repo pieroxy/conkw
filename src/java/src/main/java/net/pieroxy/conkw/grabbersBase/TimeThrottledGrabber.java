@@ -69,7 +69,7 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
    * @param privateData
    */
   protected void setPrivateData(Map<String, String> privateData) {
-    Map tmp = privateData;
+    Map tmp = this.privateData;
     this.privateData = privateData;
     HashMapPool.getInstance().giveBack(tmp);
   }
