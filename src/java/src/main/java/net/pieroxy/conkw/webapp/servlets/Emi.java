@@ -24,19 +24,22 @@ public class Emi extends HttpServlet {
 
   public static final String CONTENT_TYPE_JSON="application/json";
 
-  static Map<String, ExternalMetricsGrabber> allData = new HashMap<>();
+  static Map<String, ExternalMetricsGrabber> allData = HashMapPool.getInstance().borrow(1);
 
   public static synchronized void addOrUpdateGrabber(ExternalMetricsGrabber externalMetricsGrabber) {
-    Map<String, ExternalMetricsGrabber> td = new HashMap<>();
-    td.putAll(allData);
+    Map tmp = allData;
+    Map<String, ExternalMetricsGrabber> td = HashMapPool.getInstance().borrow(allData, 1);
     String name = externalMetricsGrabber.getName();
     td.put(name, externalMetricsGrabber);
     LOGGER.log(Level.INFO, "Registered EIG " + name);
     allData = td;
+    HashMapPool.getInstance().giveBack(tmp);
   }
 
   public static synchronized void clearGrabbers() {
-    allData = new HashMap<>();
+    Map tmp = allData;
+    allData = HashMapPool.getInstance().borrow(1);
+    HashMapPool.getInstance().giveBack(tmp);
   }
 
   @Override

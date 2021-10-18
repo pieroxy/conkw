@@ -1,6 +1,7 @@
 package net.pieroxy.conkw.webapp.servlets;
 
 import net.pieroxy.conkw.grabbersBase.Grabber;
+import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 import net.pieroxy.conkw.webapp.model.Response;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
@@ -13,10 +14,10 @@ public class ApiManager implements MetaGrabber {
 
   private Map<String, Grabber> allGrabbers;
 
-  Map<String, Long> lastRequestPerGrabber = new HashMap<>();
+  Map<String, Long> lastRequestPerGrabber = HashMapPool.getInstance().borrow(1);
 
   public ApiManager(List<Grabber> grabbers) {
-    allGrabbers = new HashMap<>();
+    allGrabbers = HashMapPool.getInstance().borrow(grabbers.size());
     grabbers.forEach(g -> {allGrabbers.put(g.getName(), g);});
   }
 
@@ -53,9 +54,11 @@ public class ApiManager implements MetaGrabber {
         if (g==null) {
           LOGGER.log(Level.WARNING, "Grabber " + gin.getName() + " not found.");
         } else {
-          Map<String, Long> newmap = new HashMap<>(lastRequestPerGrabber);
+          Map tmp = lastRequestPerGrabber;
+          Map<String, Long> newmap = HashMapPool.getInstance().borrow(lastRequestPerGrabber,1);
           newmap.put(gin.getName(), ts);
           lastRequestPerGrabber = newmap;
+          HashMapPool.getInstance().giveBack(tmp);
         }
       } else {
         lastRequestPerGrabber.put(gin.getName(), ts);
