@@ -6,6 +6,7 @@ import net.pieroxy.conkw.utils.ExternalBinaryRunner;
 import net.pieroxy.conkw.utils.PerformanceTools;
 import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
 import net.pieroxy.conkw.utils.duration.CDuration;
+import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -22,7 +23,7 @@ public class ProcGrabber extends AsyncGrabber<SimpleCollector> {
 
   private boolean disabled = false;
 
-  private Map<Long,Long> lastProcessesCpuUsage = new HashMap<>();
+  private Map<Long,Long> lastProcessesCpuUsage = HashMapPool.getInstance().borrow(100);
   // This is not the number of CPU but the number of ints to parse from the first line of /proc/stat
   private double[] lastCpuUsage = new double[7];
   private Map<String, Long> lastBlockDeviceRead = new HashMap<>();
@@ -515,12 +516,13 @@ public class ProcGrabber extends AsyncGrabber<SimpleCollector> {
       ProcessStat.releaseAll();
       if (procStatFileLimit>0) {
         if (procStatFile.size()>procStatFileLimit) {
+          if (canLogFine()) log(Level.FINE, "GCing PSF " + procStatFile.size());
           gcProcStatFile();
           procStatFileLimit = 0;
         }
       }
       if (procStatFileLimit==0) {
-        procStatFileLimit = procStatFile.size()*4;
+        procStatFileLimit = procStatFile.size()*2;
       }
     }
   }
@@ -535,9 +537,11 @@ public class ProcGrabber extends AsyncGrabber<SimpleCollector> {
 
     if (canLogFine()) log(Level.FINE, "GC procStatFile by removing " + expiredKeys.size() + " out of " + procStatFile.size() + " entries.");
     expiredKeys.forEach(k -> procStatFile.remove(k));
-    Map<Long, Long> lpcu = new HashMap<>(procStatFile.size());
+    Map<Long, Long> lpcu = HashMapPool.getInstance().borrow(procStatFile.size());
     procStatFile.keySet().forEach(k -> lpcu.put(k, lastProcessesCpuUsage.get(k)));
+    Map tmp = lastProcessesCpuUsage;
     lastProcessesCpuUsage = lpcu;
+    HashMapPool.getInstance().giveBack(tmp);
   }
 
   private File getStatFileForProcess(Long pid, long now) {
