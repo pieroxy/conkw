@@ -30,7 +30,7 @@ public class HashMapPoolTest extends TestCase {
             pool.giveBack(map);
             map = pool.borrow(1);
         }
-        assertEquals(1, pool.getWronglyRecycled());
+        assertEquals(0, pool.getWronglyRecycled()); // null is not counted as wrong.
         assertEquals(100, pool.getRequested());
         assertEquals(99, pool.getRecycled());
         assertEquals(1, pool.getCreated());
@@ -39,7 +39,7 @@ public class HashMapPoolTest extends TestCase {
         ObjectPool<Map, Integer> pool = new HashMapPool((op) -> new NoopInspector());
         pool.giveBack(new TreeMap());
         pool.giveBack(null);
-        assertEquals(2, pool.getWronglyRecycled());
+        assertEquals(1, pool.getWronglyRecycled());
         assertEquals(0, pool.getRequested());
         assertEquals(0, pool.getRecycled());
         assertEquals(0, pool.getCreated());
