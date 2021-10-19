@@ -158,7 +158,10 @@ public abstract class KeyAccumulator<A, T extends LogRecord> implements Accumula
 
     @Override
     public int compareTo(Object o) {
-      return -Double.compare(value, ((Tuple)o).value);
+      Tuple ot = (Tuple)o;
+      int res = -Double.compare(value, ot.value);
+      if (res == 0) res = key.compareTo(ot.key);
+      return res;
     }
   }
 }
