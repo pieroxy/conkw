@@ -10,14 +10,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AccumulatorExpressionParser {
+public class AccumulatorExpressionParser<T extends LogRecord> {
     private static final Map<String, Class<? extends Accumulator<? extends LogRecord>>> accumulatorsByName = new HashMap();
 
-    public Accumulator<LogRecord> parse(String expr) {
+    public Accumulator<T> parse(String expr) {
         return parseAccumulator(expr, new int[]{0});
     }
 
-    private AccumulatorProvider<LogRecord> parseAccumulatorProvider(String expr, int[]index) {
+    private AccumulatorProvider<T> parseAccumulatorProvider(String expr, int[]index) {
         StringBuilder name = new StringBuilder();
         for (int i=index[0] ; i<expr.length() ; i++) {
             char c = expr.charAt(i);
@@ -34,7 +34,7 @@ public class AccumulatorExpressionParser {
         return buildAccumulator(constructor, expr, index);
     }
 
-    private Accumulator<LogRecord> parseAccumulator(String expr, int[]index) {
+    private Accumulator<T> parseAccumulator(String expr, int[]index) {
         try {
             return parseAccumulatorProvider(expr, index).getAccumulator();
         } catch (ParseException e) {
@@ -44,7 +44,7 @@ public class AccumulatorExpressionParser {
         }
     }
 
-    private AccumulatorProvider<LogRecord> buildAccumulator(TypedConstructor constructor, String expr, int[]index) {
+    private AccumulatorProvider<T> buildAccumulator(TypedConstructor constructor, String expr, int[]index) {
         if (expr.charAt(index[0])!='(') throw new ParseException("Expected '('", expr, index);
         Object[]params = new Object[constructor.params.size()];
         int paramIndex=0;
@@ -57,7 +57,7 @@ public class AccumulatorExpressionParser {
         if (constructor.params.size()==0) index[0]++;
         index[0]++;
         try {
-            return () -> constructor.c.newInstance(params);
+            return () -> (Accumulator<T>)constructor.c.newInstance(params);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

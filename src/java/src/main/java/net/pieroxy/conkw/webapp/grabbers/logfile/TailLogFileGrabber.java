@@ -12,13 +12,13 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class TailLogFileGrabber extends AsyncGrabber<AccumulatorCollector> implements LogListener<LogRecord> {
+public class TailLogFileGrabber<T extends LogRecord> extends AsyncGrabber<AccumulatorCollector<T>> implements LogListener<T> {
     private final static Logger LOGGER = Logger.getLogger(TailLogFileGrabber.class.getName());
 
     private String filename;
     private String parserClassName;
-    private RealTimeLogFileReader reader;
-    private Accumulator<LogRecord> accumulator;
+    private RealTimeLogFileReader<T> reader;
+    private Accumulator<T> accumulator;
 
     @Override
     public void disposeSync() {
@@ -26,15 +26,15 @@ public class TailLogFileGrabber extends AsyncGrabber<AccumulatorCollector> imple
     }
 
     @Override
-    public boolean changed(AccumulatorCollector c) {
+    public boolean changed(AccumulatorCollector<T> c) {
         return true;
     }
 
     @Override
-    public synchronized void grabSync(AccumulatorCollector c) {
+    public synchronized void grabSync(AccumulatorCollector<T> c) {
         if (reader == null) {
             try {
-                reader = new RealTimeLogFileReader(filename, this, (LogParser<LogRecord>) Class.forName(parserClassName).newInstance());
+                reader = new RealTimeLogFileReader<T>(filename, this, (LogParser<T>) Class.forName(parserClassName).newInstance());
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                 log(Level.SEVERE, "Impossible to instanciate class " + parserClassName, e);
             }
@@ -48,8 +48,8 @@ public class TailLogFileGrabber extends AsyncGrabber<AccumulatorCollector> imple
     }
 
     @Override
-    public AccumulatorCollector getDefaultCollector() {
-        return new AccumulatorCollector(this, DEFAULT_CONFIG_KEY, "default", accumulator);
+    public AccumulatorCollector<T> getDefaultCollector() {
+        return new AccumulatorCollector<T>(this, DEFAULT_CONFIG_KEY, "default", accumulator);
     }
 
     @Override
@@ -57,11 +57,11 @@ public class TailLogFileGrabber extends AsyncGrabber<AccumulatorCollector> imple
         filename = config.get("filename");
         parserClassName = config.get("parserClassName");
         String accConf = config.get("accumulators");
-        accumulator = new AccumulatorExpressionParser().parse(accConf);
+        accumulator = new AccumulatorExpressionParser<T>().parse(accConf);
     }
 
     @Override
-    public synchronized void newLine(long time, LogRecord line) {
+    public synchronized void newLine(long time, T line) {
         synchronized (accumulator) {
             accumulator.add(line);
         }
