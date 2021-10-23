@@ -185,6 +185,7 @@
               <goal>shade</goal>
             </goals>
             <configuration>
+              <finalName>conkw-${project.version}</finalName>
               <artifactSet>
                 <!--includes>
                   <include>com.dslplatform:*</include>
@@ -196,6 +197,25 @@
                   <mainClass>net.pieroxy.conkw.standalone.Runner</mainClass>
                 </transformer>
               </transformers>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <finalName>conkw-public-${project.version}</finalName>
+              <includes>
+                <include>net/pieroxy/conkw/pub/**/*.class</include>
+                <include>**/LogRecord.class</include>
+              </includes>
             </configuration>
           </execution>
         </executions>
