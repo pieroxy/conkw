@@ -3,10 +3,10 @@ package net.pieroxy.conkw.webapp.grabbers.logfile;
 import net.pieroxy.conkw.accumulators.Accumulator;
 import net.pieroxy.conkw.accumulators.AccumulatorCollector;
 import net.pieroxy.conkw.accumulators.parser.AccumulatorExpressionParser;
-import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
+import net.pieroxy.conkw.pub.mdlog.LogRecord;
 import net.pieroxy.conkw.webapp.grabbers.logfile.listeners.LogListener;
-import net.pieroxy.conkw.webapp.grabbers.logfile.listeners.LogParser;
+import net.pieroxy.conkw.pub.mdlog.LogParser;
 
 import java.util.*;
 import java.util.logging.Level;

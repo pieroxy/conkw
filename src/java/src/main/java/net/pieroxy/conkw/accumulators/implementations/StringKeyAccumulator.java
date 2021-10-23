@@ -1,6 +1,6 @@
 package net.pieroxy.conkw.accumulators.implementations;
 
-import net.pieroxy.conkw.webapp.grabbers.logfile.LogRecord;
+import net.pieroxy.conkw.pub.mdlog.LogRecord;
 import net.pieroxy.conkw.accumulators.*;
 
 public class StringKeyAccumulator<T extends LogRecord> extends KeyAccumulator<String, T> {

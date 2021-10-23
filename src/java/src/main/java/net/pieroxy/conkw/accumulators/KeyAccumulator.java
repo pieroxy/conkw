@@ -1,7 +1,7 @@
 package net.pieroxy.conkw.accumulators;
 
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
-import net.pieroxy.conkw.webapp.grabbers.logfile.LogRecord;
+import net.pieroxy.conkw.pub.mdlog.LogRecord;
 
 import java.io.Closeable;
 import java.io.IOException;

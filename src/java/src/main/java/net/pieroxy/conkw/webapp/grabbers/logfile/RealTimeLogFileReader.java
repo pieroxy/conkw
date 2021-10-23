@@ -1,7 +1,8 @@
 package net.pieroxy.conkw.webapp.grabbers.logfile;
 
+import net.pieroxy.conkw.pub.mdlog.LogRecord;
 import net.pieroxy.conkw.webapp.grabbers.logfile.listeners.LogListener;
-import net.pieroxy.conkw.webapp.grabbers.logfile.listeners.LogParser;
+import net.pieroxy.conkw.pub.mdlog.LogParser;
 
 import java.io.*;
 import java.util.logging.Level;

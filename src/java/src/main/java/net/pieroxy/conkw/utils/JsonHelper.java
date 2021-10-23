@@ -3,14 +3,9 @@ package net.pieroxy.conkw.utils;
 import com.dslplatform.json.DslJson;
 import com.dslplatform.json.JsonWriter;
 import com.dslplatform.json.runtime.Settings;
-import net.pieroxy.conkw.webapp.grabbers.spotify.CurrentlyPlayingResponse;
 
 import java.io.*;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
 
 public class JsonHelper {
 

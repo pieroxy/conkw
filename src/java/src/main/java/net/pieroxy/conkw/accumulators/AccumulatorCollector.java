@@ -4,7 +4,7 @@ import net.pieroxy.conkw.accumulators.implementations.RootAccumulator;
 import net.pieroxy.conkw.collectors.Collector;
 import net.pieroxy.conkw.collectors.SimpleTransientCollector;
 import net.pieroxy.conkw.grabbersBase.Grabber;
-import net.pieroxy.conkw.webapp.grabbers.logfile.LogRecord;
+import net.pieroxy.conkw.pub.mdlog.LogRecord;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.util.ArrayList;

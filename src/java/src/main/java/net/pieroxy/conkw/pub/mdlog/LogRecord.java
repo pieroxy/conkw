@@ -1,6 +1,5 @@
-package net.pieroxy.conkw.webapp.grabbers.logfile;
+package net.pieroxy.conkw.pub.mdlog;
 
-import java.util.Date;
 import java.util.Map;
 
 public interface LogRecord {

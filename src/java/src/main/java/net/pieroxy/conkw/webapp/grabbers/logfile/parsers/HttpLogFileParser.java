@@ -1,8 +1,7 @@
 package net.pieroxy.conkw.webapp.grabbers.logfile.parsers;
 
 import net.pieroxy.conkw.utils.JsonHelper;
-import net.pieroxy.conkw.webapp.grabbers.logfile.RealTimeLogFileReader;
-import net.pieroxy.conkw.webapp.grabbers.logfile.listeners.LogParser;
+import net.pieroxy.conkw.pub.mdlog.LogParser;
 import net.pieroxy.conkw.webapp.servlets.HttpLogEvent;
 
 import java.io.IOException;

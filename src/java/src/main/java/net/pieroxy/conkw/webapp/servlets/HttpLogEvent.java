@@ -1,7 +1,8 @@
 package net.pieroxy.conkw.webapp.servlets;
 
+import net.pieroxy.conkw.pub.mdlog.LogRecord;
+
 import com.dslplatform.json.CompiledJson;
-import net.pieroxy.conkw.webapp.grabbers.logfile.LogRecord;
 
 import java.util.HashMap;
 import java.util.Map;

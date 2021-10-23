@@ -1,6 +1,4 @@
-package net.pieroxy.conkw.webapp.grabbers.logfile.parsers;
-
-import net.pieroxy.conkw.webapp.grabbers.logfile.LogRecord;
+package net.pieroxy.conkw.pub.mdlog;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -4,8 +4,8 @@ import net.pieroxy.conkw.ConkwTestCase;
 import net.pieroxy.conkw.accumulators.implementations.*;
 import net.pieroxy.conkw.accumulators.parser.AccumulatorExpressionParser;
 import net.pieroxy.conkw.accumulators.parser.ParseException;
-import net.pieroxy.conkw.webapp.grabbers.logfile.LogRecord;
-import net.pieroxy.conkw.webapp.grabbers.logfile.parsers.GenericLogRecord;
+import net.pieroxy.conkw.pub.mdlog.LogRecord;
+import net.pieroxy.conkw.pub.mdlog.GenericLogRecord;
 
 import java.util.HashMap;
 import java.util.Map;
