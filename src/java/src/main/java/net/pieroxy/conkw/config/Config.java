@@ -7,6 +7,7 @@ public class Config {
   private GrabberConfig[]grabbers;
   private ApiAuth apiAuth;
   private int httpPort;
+  private boolean enableApiCompression;
   private boolean disableDefaultUI;
   private boolean disableCustomUI;
   private boolean disableApi;
@@ -71,5 +72,13 @@ public class Config {
 
   public void setApiAuth(ApiAuth apiAuth) {
     this.apiAuth = apiAuth;
+  }
+
+  public boolean isEnableApiCompression() {
+    return enableApiCompression;
+  }
+
+  public void setEnableApiCompression(boolean enableApiCompression) {
+    this.enableApiCompression = enableApiCompression;
   }
 }

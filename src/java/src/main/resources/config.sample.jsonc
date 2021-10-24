@@ -241,6 +241,10 @@
   // the process to be launched as root.
   "httpPort": 12789,
 
+  // If true, bandwidth usage will decrease but CPU usage will increase. 
+  // Note that compression is always on for static resources (html, css, js, ...)
+  "enableApiCompression":true, 
+
   // If true, the default UI answering at / will not be run. This includes reference UI for grabbers, documentation and js, css and image files.
   "disableDefaultUI":false,
   // If true, the custom UI answering at /ui will not be run. This includes every file under $CONKW_HOME/ui
@@ -249,5 +253,6 @@
   "disableApi":false,
   // If true, the EMI answering at /emi will not be run. If no EMG grabbers are configured it makes sense.
   "disableEmi":false
+  
   // NOTE: If all four flags above are set to true, no web server will be run along with conkw.
 }

@@ -252,6 +252,9 @@ public class Runner {
         Connector ctr = new Connector();
         ctr.setPort(config.getHttpPort());
         tomcat.setConnector(ctr);
+        ctr.setProperty("compression", "on");
+        ctr.setProperty("compressionMinSize", "512");
+        ctr.setProperty("compressibleMimeType", "text/html, text/css, application/javascript, image/svg+xml" + (config.isEnableApiCompression() ? ", application/json" : ""));
 
         LOGGER.info("Configuring app with basedir: " + webappDir.getAbsolutePath());
 
