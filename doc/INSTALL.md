@@ -20,15 +20,18 @@ git clone https://github.com/pieroxy/conkw.git
 
 ### 2. Build the solution
 
+Note that if you are on windows or MacOS, you will need to edit `local.properties` to hold the location of the `git` binary.
+
 ```sh
 cd conkw/src/java
+cp local.sample.properties local.properties
 mvn package
 ```
 
 ### 3. Run the program
 
 ```sh
-java -jar target/conkw.jar install
+java -jar target/conkw-bin-*.jar install
 ```
 
 This last step will install the program in `~/.conkw`. If you want it installed somewhere else just specify where with the `--home` option. Just remember that at this stage, the program keeps all it needs in one place: Binaries, configuration, temp files, etc...
