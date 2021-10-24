@@ -121,7 +121,8 @@
   </dependencies>
 
   <build>
-    <finalName>conkw</finalName>
+    <defaultGoal>clean package</defaultGoal>
+    <finalName>conkw-full-${project.version}</finalName>
     <plugins>
       <plugin>
         <groupId>com.ruleoftech</groupId>
@@ -185,12 +186,6 @@
               <goal>shade</goal>
             </goals>
             <configuration>
-              <finalName>conkw-bin-${project.version}</finalName>
-              <artifactSet>
-                <!--includes>
-                  <include>com.dslplatform:*</include>
-                </includes-->
-              </artifactSet>
               <minimizeJar>false</minimizeJar>
               <transformers>
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
