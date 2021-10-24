@@ -5,10 +5,14 @@ import net.pieroxy.conkw.utils.pools.ObjectPool;
 import net.pieroxy.conkw.utils.pools.inspectors.*;
 
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 
 public class HashMapPool extends ObjectPool<Map, Integer> {
+    private final static Logger LOGGER = Logger.getLogger(ObjectPool.class.getName());
+
     public static final int SIZE_UNKNOWN = -1;
 
     // For easy use when needed:
@@ -42,6 +46,9 @@ public class HashMapPool extends ObjectPool<Map, Integer> {
     @Override
     protected Map prepareInstance(Integer param, Map result) {
         ((LightInstrumentedMap)result).setMaxItemsPredicted(param);
+        if (!result.isEmpty()) {
+            LOGGER.log(Level.SEVERE, "A map was accessed after being given back to the pool. You should run HashMapPool with the ReusedRecycledObjectInspector to figure out the code responsible. Bad things will happen.");
+        }
         return result;
     }
 
