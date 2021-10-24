@@ -185,7 +185,7 @@
               <goal>shade</goal>
             </goals>
             <configuration>
-              <finalName>conkw-${project.version}</finalName>
+              <finalName>conkw-bin-${project.version}</finalName>
               <artifactSet>
                 <!--includes>
                   <include>com.dslplatform:*</include>
