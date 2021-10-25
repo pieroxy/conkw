@@ -11,6 +11,7 @@ We will show you the basics in here:
   "grabbers":[],
   "apiAuth":{},
   "httpPort": 12789,
+  "enableApiCompression":true, 
   "disableDefaultUI":false,
   "disableCustomUI":false,
   "disableApi":false,
@@ -21,6 +22,7 @@ We will show you the basics in here:
 * `grabbers`: This is the list of grabbers with their configurations. Refer to the next section to see how to define and configure a grabber.
 * `apiAuth`: This is the configuration for the api authentication. See the section below for details.
 * `httpPort`: This holds the port number on which the http server is listening.
+* `enableApiCompression`: Set to `true`, conkw will compress the output of the API to save bandwidth. This is of course a tradeoff with CPU usage that will increase. Note that other endpoints, and notably static files, are compressed. The default value if `false` as conkw will often be used on a LAN, alleviating the need to save bandwidth.
 * `disableDefaultUI`: Set to `true` to hide the default UI. The documentation, home page and grabbers default UI will be unavailable.
 * `disableCustomUI`: Set to `true` to hide the custon UI. Everything under `$CONKW_HOME/ui` is normally accessible through the `/ui` endpoint. This flag will hide it.
 * `disableApi`: Set to `true` to hide the API. If you don't need any UI nor the API, disable it here and the `/api` endpoint won't be registered.
