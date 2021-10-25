@@ -22,14 +22,19 @@ They grab data from external sources. Weather, music, stock price, etc.
 * [LatestUnreadMailsGrabber](GRABBER_LATEST_EMAILS.md)
 * [SpecificEmailCheckGrabber](GRABBER_SPECIFIC_EMAIL.md)
 
+## The customizable multidimensional grabbers
+They allow you to monitor any application real-time data, providing aggregations such as averages, counts, histograms, etc.
+
+* [TailLogFileGrabber](GRABBER_TAIL_LOG.md)
+
 ## The external grabbers 
 They allow your conkw to monitor other data that you will grab yourself. Push that data directly in your conkw, or write it to a file for conkw to parse.
 
 * [FileGrabber](GRABBER_FILE.md)
 * [ExternalMetricsGrabber](GRABBER_EMI.md)
 
-## The external grabbers 
-Used to monitor a conkw instance from another conkw instance. This is how you monitor several computers metrics in one unique conkw instance.
+## The mesh grabbers 
+Used to monitor a conkw instance from another conkw instance, hence, they allow you to build a mesh of conkw instances. This is how you monitor several computers metrics in one unique conkw instance.
 
 * [PushToEmiGrabber](GRABBER_PUSH.md)
 * [ExternalInstanceGrabber](GRABBER_EIG.md)
