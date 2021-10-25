@@ -68,7 +68,6 @@ public class HttpLogEvent implements LogRecord {
     @Override
     public Map<String, Double> getValues() {
         Map<String, Double> values= new HashMap<>();
-        values.put(LogRecord.COUNT, 1d);
         values.put(SIZE, (double)size);
         values.put(TIME, (double)time);
         return values;
