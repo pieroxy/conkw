@@ -9,7 +9,6 @@ import java.util.Map;
 
 @CompiledJson(onUnknown = CompiledJson.Behavior.FAIL)
 public class HttpLogEvent implements LogRecord {
-    public static final String NAME="event_http";
     public static final String SIZE="size";
     public static final String TIME="time";
     public static final String CONTENT_TYPE="contentType";
@@ -41,11 +40,6 @@ public class HttpLogEvent implements LogRecord {
     }
 
     @Override
-    public boolean isValid() {
-        return true;
-    }
-
-    @Override
     public Map<String, String> getDimensions() {
         Map<String, String> dimensions = new HashMap<>();
         dimensions.put(CONTENT_TYPE, getContentType());
@@ -71,10 +65,6 @@ public class HttpLogEvent implements LogRecord {
         values.put(SIZE, (double)size);
         values.put(TIME, (double)time);
         return values;
-    }
-
-    public String getName() {
-        return NAME;
     }
 
     public String sanitizedContentType(String ct) {

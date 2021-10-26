@@ -13,11 +13,6 @@ public class GenericLogRecord implements LogRecord {
     }
 
     @Override
-    public boolean isValid() {
-        return true;
-    }
-
-    @Override
     public Map<String, String> getDimensions() {
         return dims;
     }
@@ -25,11 +20,6 @@ public class GenericLogRecord implements LogRecord {
     @Override
     public Map<String, Double> getValues() {
         return vals;
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 
     public GenericLogRecord addValue(String valName, double value) {
