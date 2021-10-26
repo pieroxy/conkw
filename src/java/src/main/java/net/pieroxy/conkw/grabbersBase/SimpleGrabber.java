@@ -2,6 +2,7 @@ package net.pieroxy.conkw.grabbersBase;
 
 import net.pieroxy.conkw.collectors.Collector;
 import net.pieroxy.conkw.utils.LongHolder;
+import net.pieroxy.conkw.utils.collections.BlackHoleMap;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 
@@ -95,7 +96,7 @@ public abstract class SimpleGrabber<T extends Collector> extends Grabber<T> {
   @Override
   public void dispose() {
     Map tmp = cachedResponses;
-    cachedResponses = Collections.emptyMap();
+    cachedResponses = new BlackHoleMap();
     HashMapPool.getInstance().giveBack(tmp);
   }
 }
