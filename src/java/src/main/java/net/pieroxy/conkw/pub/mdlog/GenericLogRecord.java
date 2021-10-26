@@ -6,11 +6,6 @@ import java.util.Map;
 public class GenericLogRecord implements LogRecord {
     private final Map<String, String> dims = new HashMap<>();
     private final Map<String, Double> vals = new HashMap<>();
-    private final String name;
-
-    public GenericLogRecord(String name) {
-        this.name = name;
-    }
 
     @Override
     public Map<String, String> getDimensions() {
