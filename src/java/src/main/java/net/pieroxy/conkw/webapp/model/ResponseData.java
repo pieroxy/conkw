@@ -2,9 +2,8 @@ package net.pieroxy.conkw.webapp.model;
 
 import com.dslplatform.json.CompiledJson;
 import com.dslplatform.json.JsonAttribute;
-import com.dslplatform.json.JsonConverter;
 import net.pieroxy.conkw.grabbersBase.Grabber;
-import net.pieroxy.conkw.utils.ConkwCloseable;
+import net.pieroxy.conkw.pub.misc.ConkwCloseable;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapStringDoubleConverter;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapStringLongConverter;

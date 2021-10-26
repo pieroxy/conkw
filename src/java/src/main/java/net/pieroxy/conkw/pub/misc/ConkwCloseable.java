@@ -1,4 +1,4 @@
-package net.pieroxy.conkw.utils;
+package net.pieroxy.conkw.pub.misc;
 
 public interface ConkwCloseable extends AutoCloseable {
   @Override

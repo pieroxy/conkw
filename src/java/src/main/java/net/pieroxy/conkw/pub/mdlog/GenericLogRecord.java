@@ -32,4 +32,8 @@ public class GenericLogRecord implements LogRecord {
         return this;
     }
 
+    @Override
+    public void close() {
+
+    }
 }

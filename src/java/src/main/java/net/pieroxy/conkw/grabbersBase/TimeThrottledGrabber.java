@@ -4,7 +4,7 @@ import com.dslplatform.json.DslJson;
 import com.dslplatform.json.JsonWriter;
 import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.collectors.SimpleTransientCollector;
-import net.pieroxy.conkw.utils.ConkwCloseable;
+import net.pieroxy.conkw.pub.misc.ConkwCloseable;
 import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;

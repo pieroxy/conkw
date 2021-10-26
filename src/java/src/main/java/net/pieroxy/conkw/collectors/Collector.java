@@ -1,6 +1,6 @@
 package net.pieroxy.conkw.collectors;
 
-import net.pieroxy.conkw.utils.ConkwCloseable;
+import net.pieroxy.conkw.pub.misc.ConkwCloseable;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.util.Collection;

@@ -64,6 +64,7 @@ public class TailLogFileGrabber<T extends LogRecord> extends AsyncGrabber<Accumu
     public synchronized void newLine(long time, T line) {
         synchronized (accumulator) {
             accumulator.add(line);
+            line.close();
         }
     }
 }

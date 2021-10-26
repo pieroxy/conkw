@@ -156,4 +156,8 @@ public class HttpLogEvent implements LogRecord {
     public void setIp(String ip) {
         this.ip = ip;
     }
+
+    @Override
+    public void close() {
+    }
 }

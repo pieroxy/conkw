@@ -1,5 +1,7 @@
 package net.pieroxy.conkw.utils;
 
+import net.pieroxy.conkw.pub.misc.ConkwCloseable;
+
 public class TimedData<T> implements ConkwCloseable {
     private long lastUsed;
     private T data;
