@@ -14,8 +14,6 @@ public class ApiManager implements MetaGrabber {
 
   private Map<String, Grabber> allGrabbers;
 
-  Map<String, Long> lastRequestPerGrabber = HashMapPool.getInstance().borrow(1);
-
   public ApiManager(List<Grabber> grabbers) {
     allGrabbers = HashMapPool.getInstance().borrow(grabbers.size());
     grabbers.forEach(g -> {allGrabbers.put(g.getName(), g);});
@@ -25,7 +23,6 @@ public class ApiManager implements MetaGrabber {
   }
 
   public Response buildResponse(long now, Collection<GrabberInput>grabbersRequested) {
-    markGrabbersRequested(grabbersRequested, now);
     Response r = new Response(grabbersRequested.size());
     grabbersRequested.stream().parallel().forEach(
             s -> {
@@ -44,26 +41,6 @@ public class ApiManager implements MetaGrabber {
             }
     );
     return r;
-  }
-
-  private void markGrabbersRequested(Collection<GrabberInput>grabbersRequested, long ts) {
-    for (GrabberInput gin : grabbersRequested) {
-      Long l = lastRequestPerGrabber.get(gin.getName());
-      if (l==null) {
-        Grabber g = allGrabbers.get(gin.getName());
-        if (g==null) {
-          LOGGER.log(Level.WARNING, "Grabber " + gin.getName() + " not found.");
-        } else {
-          Map tmp = lastRequestPerGrabber;
-          Map<String, Long> newmap = HashMapPool.getInstance().borrow(lastRequestPerGrabber,1);
-          newmap.put(gin.getName(), ts);
-          lastRequestPerGrabber = newmap;
-          HashMapPool.getInstance().giveBack(tmp);
-        }
-      } else {
-        lastRequestPerGrabber.put(gin.getName(), ts);
-      }
-    }
   }
 
   public String notifyGrabberAction(String action, Map<String, String[]> parameterMap) {
