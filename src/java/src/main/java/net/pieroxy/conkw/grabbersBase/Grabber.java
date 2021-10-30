@@ -2,11 +2,9 @@ package net.pieroxy.conkw.grabbersBase;
 
 import net.pieroxy.conkw.collectors.Collector;
 import net.pieroxy.conkw.collectors.EmptyCollector;
-import net.pieroxy.conkw.utils.LongHolder;
 import net.pieroxy.conkw.utils.TimedData;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.duration.CDurationParser;
-import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 
 import java.io.File;
 import java.util.*;
@@ -29,7 +27,7 @@ public abstract class Grabber<T extends Collector> {
 
   private Level logLevel;
 
-  Map<String, TimedData<T>> extractedByConfiguration = HashMapPool.getInstance().borrow(1);
+  Map<String, TimedData<T>> extractedByConfiguration = new HashMap<>();
   private long lastConfigPurge;
 
   public String processAction(Map<String, String[]> parameterMap) {
@@ -41,26 +39,23 @@ public abstract class Grabber<T extends Collector> {
   public abstract T getDefaultCollector();
 
   private void gcConfigurations() {
-    Map<String,TimedData<T>> nm = HashMapPool.getInstance().borrow(extractedByConfiguration, 0);
+    Map<String, TimedData<T>> nm = new HashMap<>(extractedByConfiguration);
     Set<TimedData<T>> toClose = new HashSet<>();
     for (String s : nm.keySet()) {
       TimedData td = nm.get(s);
-      if (canLogFiner()) log(Level.FINER, "GC :: " + td + " ??? " + (td.getAge() > CONF_EXPIRATION_MS) + " $$$ " + super.toString());
+      if (canLogFiner())
+        log(Level.FINER, "GC :: " + td + " ??? " + (td.getAge() > CONF_EXPIRATION_MS) + " $$$ " + super.toString());
       if (td.getAge() > CONF_EXPIRATION_MS) {
         toClose.add(nm.remove(s));
       }
     }
 
-    if (toClose.isEmpty()) {
-      HashMapPool.getInstance().giveBack(nm);
-    } else {
-      Map tmp = extractedByConfiguration;
+    if (!toClose.isEmpty()) {
       extractedByConfiguration = nm;
       for (TimedData<T> td : toClose) {
         if (canLogFine()) log(Level.FINE, "GCed collector " + td);
         td.close();
       }
-      HashMapPool.getInstance().giveBack(tmp);
     }
     lastConfigPurge = System.currentTimeMillis();
   }
@@ -94,18 +89,17 @@ public abstract class Grabber<T extends Collector> {
     if (extractedByConfiguration.containsKey(param)) {
       return;
     }
-    Map<String,TimedData<T>> nm = HashMapPool.getInstance().borrow(extractedByConfiguration, 1);
+    Map<String, TimedData<T>> nm = new HashMap<>(extractedByConfiguration);
     TimedData<T> created;
     if (param == null || param.equals(DEFAULT_CONFIG_KEY)) {
       nm.put(DEFAULT_CONFIG_KEY, created = new TimedData(getDefaultCollector()));
     } else {
       nm.put(param, created = new TimedData(parseCollector(param)));
     }
-    if (canLogFiner()) log(Level.FINER, "Created " + extractedByConfiguration.get(param) + " from param '" + param + "'");
+    if (canLogFiner())
+      log(Level.FINER, "Created " + extractedByConfiguration.get(param) + " from param '" + param + "'");
 
-    Map tmp = extractedByConfiguration;
     extractedByConfiguration = nm;
-    HashMapPool.getInstance().giveBack(tmp);
   }
 
   protected abstract void setConfig(Map<String, String> config, Map<String, Map<String, String>> namedConfigs);
