@@ -147,6 +147,23 @@
         </configuration>
       </plugin>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <sourceFileIncludes>net/pieroxy/conkw/pub/**/*.java</sourceFileIncludes>
+          <reportOutputDirectory>../web/doc/</reportOutputDirectory>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>javadoc</goal>
+            </goals>
+            <id>execution1</id>
+            <phase>generate-resources</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
         <artifactId>maven-antrun-plugin</artifactId>
         <version>1.7</version>
         <executions>
@@ -209,7 +226,6 @@
               <finalName>conkw-public-${project.version}</finalName>
               <includes>
                 <include>net/pieroxy/conkw/pub/**/*.class</include>
-                <include>**/LogRecord.class</include>
               </includes>
             </configuration>
           </execution>
