@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 
-public class FileGrabber extends AsyncGrabber<SimpleCollector> {
+public class FileGrabber extends AsyncGrabber<SimpleCollector, FileGrabber.FileGrabberConfig> {
   File file;
   Path path;
   long lastTimestamp = 0;
@@ -67,5 +67,9 @@ public class FileGrabber extends AsyncGrabber<SimpleCollector> {
   @Override
   public String getDefaultName() {
     return "file";
+  }
+
+  public static class FileGrabberConfig {
+
   }
 }

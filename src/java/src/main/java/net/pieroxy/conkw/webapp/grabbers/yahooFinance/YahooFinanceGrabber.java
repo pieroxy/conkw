@@ -16,7 +16,7 @@ import java.net.URLConnection;
 import java.util.Map;
 import java.util.logging.Level;
 
-public class YahooFinanceGrabber extends TimeThrottledGrabber {
+public class YahooFinanceGrabber extends TimeThrottledGrabber<YahooFinanceGrabber.YahooFinanceGrabberConfig> {
   private static final String NAME = "yahoof";
 
   String symbol,region,key;
@@ -82,5 +82,9 @@ public class YahooFinanceGrabber extends TimeThrottledGrabber {
   @Override
   protected String getCacheKey() {
     return symbol + "/" + region + "/" + key;
+  }
+
+  public static class YahooFinanceGrabberConfig extends TimeThrottledGrabber.TimeThrottledGrabberConfig {
+
   }
 }

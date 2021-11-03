@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public abstract class Grabber<T extends Collector> {
+public abstract class Grabber<T extends Collector, C> {
   private Logger LOGGER = createLogger();
   private static final long CONF_EXPIRATION_MS = 10000; // 10s
   private final Collector EMPTY_COLLECTOR = new EmptyCollector(this);
@@ -37,6 +37,15 @@ public abstract class Grabber<T extends Collector> {
   public abstract void dispose();
   public abstract String getDefaultName();
   public abstract T getDefaultCollector();
+
+  /**
+   * Override if you want to provide configuration options.
+   * @return The default configuration, to be overridden by the config file. Note that the class provided must
+   * not include any member of types with no default constructors.
+   */
+  public C getDefaultConfig() {
+    return null;
+  }
 
   private void gcConfigurations() {
     Map<String, TimedData<T>> nm = new HashMap<>(extractedByConfiguration);

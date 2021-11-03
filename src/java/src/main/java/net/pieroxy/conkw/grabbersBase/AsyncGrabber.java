@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
 
-public abstract class AsyncGrabber<T extends Collector> extends SimpleGrabber<T> implements Runnable {
+public abstract class AsyncGrabber<T extends Collector, C> extends SimpleGrabber<T, C> implements Runnable {
   public static final String LOAD_STATUS = "grab_status";
   public static final int GRAB_INACTIVE_THRESHOLD = 5000;
 

@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
-public class SpotifyGrabber extends TimeThrottledGrabber {
+public class SpotifyGrabber extends TimeThrottledGrabber<SpotifyGrabber.SpotifyGrabberConfig> {
 
   private CDuration RUNNING_TTL = CDurationParser.parse("0m");
   private CDuration IDLE_TTL = CDurationParser.parse("3s");
@@ -332,4 +332,7 @@ public class SpotifyGrabber extends TimeThrottledGrabber {
     return "client_id="+clientId+"&client_secret="+clientSecret+"&grant_type=authorization_code&code="+ URLEncoder.encode(AUTH_CODE, StandardCharsets.UTF_8.toString())+"&redirect_uri="+URLEncoder.encode(redirectUri, StandardCharsets.UTF_8.toString());
   }
 
+  public static class SpotifyGrabberConfig extends TimeThrottledGrabber.TimeThrottledGrabberConfig {
+
+  }
 }

@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 
-public class OpenWeatherMapGrabber extends TimeThrottledGrabber {
+public class OpenWeatherMapGrabber extends TimeThrottledGrabber<OpenWeatherMapGrabber.OpenWeatherMapGrabberConfig> {
   static final String NAME = "owm";
 
   String token;
@@ -408,5 +408,8 @@ public class OpenWeatherMapGrabber extends TimeThrottledGrabber {
         }
     }
     return "align.svg";
+  }
+
+  public static class OpenWeatherMapGrabberConfig extends TimeThrottledGrabber.TimeThrottledGrabberConfig {
   }
 }

@@ -20,7 +20,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 // Bluntly copy pasted from https://gist.github.com/sureshpai/8c762603969e78dc2c68
-public class HttpsCertGrabber extends TimeThrottledGrabber {
+public class HttpsCertGrabber extends TimeThrottledGrabber<HttpsCertGrabber.HttpsCertGrabberConfig> {
   private String names;
 
   // usage : SSLCertExpiry host <cn>
@@ -155,5 +155,9 @@ public class HttpsCertGrabber extends TimeThrottledGrabber {
   @Override
   protected String getCacheKey() {
     return names;
+  }
+
+  public static class HttpsCertGrabberConfig extends TimeThrottledGrabber.TimeThrottledGrabberConfig {
+
   }
 }

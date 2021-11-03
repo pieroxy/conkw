@@ -1,6 +1,7 @@
 package net.pieroxy.conkw.config;
 
 import com.dslplatform.json.CompiledJson;
+import com.dslplatform.json.JsonObject;
 
 import java.util.Map;
 
@@ -10,6 +11,7 @@ public class GrabberConfig {
   private String name;
   private String extract;
   private String logLevel;
+  private Object config;
   private Map<String, String> parameters;
   private Map<String, Map<String, String>> namedParameters;
 
@@ -59,5 +61,13 @@ public class GrabberConfig {
 
   public void setNamedParameters(Map<String, Map<String, String>> namedParameters) {
     this.namedParameters = namedParameters;
+  }
+
+  public Object getConfig() {
+    return config;
+  }
+
+  public void setConfig(Object config) {
+    this.config = config;
   }
 }

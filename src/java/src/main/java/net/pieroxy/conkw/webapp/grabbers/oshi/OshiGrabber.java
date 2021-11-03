@@ -17,7 +17,7 @@ import oshi.util.EdidUtil;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class OshiGrabber extends AsyncGrabber<SimpleCollector> {
+public class OshiGrabber extends AsyncGrabber<SimpleCollector, OshiGrabber.OshiGrabberConfig> {
   static final String NAME = "oshi";
 
   public static final String CONFIG_STATIC_DATA_DELAY="staticDataDelay";
@@ -571,5 +571,9 @@ public class OshiGrabber extends AsyncGrabber<SimpleCollector> {
     if (sdd!=null) {
       staticDataDelay = CDurationParser.parse(sdd);
     }
+  }
+
+  public static class OshiGrabberConfig {
+
   }
 }
