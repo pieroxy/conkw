@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
-public abstract class SimpleGrabber<T extends Collector> extends Grabber<T> {
+public abstract class SimpleGrabber<T extends Collector, C> extends Grabber<T, C> {
   private volatile MaxComputer _maxComputer = null;
   Map<String, T> cachedResponses = HashMapPool.getInstance().borrow(HashMapPool.SIZE_UNKNOWN);
   Map<String, LongHolder> maxValuesLastComputed = HashMapPool.getInstance().borrow(HashMapPool.getUniqueCode(SimpleGrabber.class.getName(), getName()));

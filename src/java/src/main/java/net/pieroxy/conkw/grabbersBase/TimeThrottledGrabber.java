@@ -18,7 +18,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.logging.Level;
 
-public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector> {
+public abstract class TimeThrottledGrabber<C extends TimeThrottledGrabber.TimeThrottledGrabberConfig> extends AsyncGrabber<SimpleCollector, C> {
   protected abstract CDuration getDefaultTtl();
   protected abstract void load(SimpleCollector res);
   protected abstract String getCacheKey();
@@ -237,6 +237,18 @@ public abstract class TimeThrottledGrabber extends AsyncGrabber<SimpleCollector>
         HashMapPool.getInstance().giveBack(privateData);
         privateData = null;
       }
+    }
+  }
+
+  public static class TimeThrottledGrabberConfig {
+    CDuration ttl;
+
+    public CDuration getTtl() {
+      return ttl;
+    }
+
+    public void setTtl(CDuration ttl) {
+      this.ttl = ttl;
     }
   }
 }

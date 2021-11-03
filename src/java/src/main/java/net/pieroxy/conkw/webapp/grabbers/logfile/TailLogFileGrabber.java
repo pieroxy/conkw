@@ -12,7 +12,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class TailLogFileGrabber<T extends LogRecord> extends AsyncGrabber<AccumulatorCollector<T>> implements LogListener<T> {
+public class TailLogFileGrabber<T extends LogRecord> extends AsyncGrabber<AccumulatorCollector<T>, TailLogFileGrabber.TailLogFileGrabberConfig> implements LogListener<T> {
     private final static Logger LOGGER = Logger.getLogger(TailLogFileGrabber.class.getName());
 
     private String filename;
@@ -66,5 +66,9 @@ public class TailLogFileGrabber<T extends LogRecord> extends AsyncGrabber<Accumu
             accumulator.add(line);
             line.close();
         }
+    }
+
+    public static class TailLogFileGrabberConfig {
+
     }
 }

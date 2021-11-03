@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
-public class PushToEmiGrabber extends Grabber<SimpleCollector> implements GrabberListener, Runnable {
+public class PushToEmiGrabber extends Grabber<SimpleCollector, PushToEmiGrabber.PushToEmiGrabberConfig> implements GrabberListener, Runnable {
 
   private String prefix;
   private URL url;
@@ -169,5 +169,9 @@ public class PushToEmiGrabber extends Grabber<SimpleCollector> implements Grabbe
 
   private long getSleepTime() {
     return (long)(Math.random()*20-10+1000);
+  }
+
+  public static class PushToEmiGrabberConfig {
+
   }
 }

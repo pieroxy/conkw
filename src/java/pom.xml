@@ -125,6 +125,15 @@
     <finalName>conkw-full-${project.version}</finalName>
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <compilerArguments>
+            <Adsljson.unknown>ALLOW</Adsljson.unknown>
+          </compilerArguments>
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>com.ruleoftech</groupId>
         <artifactId>markdown-page-generator-plugin</artifactId>
         <version>2.1.0</version>

@@ -17,7 +17,7 @@ import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ProcGrabber extends AsyncGrabber<SimpleCollector> {
+public class ProcGrabber extends AsyncGrabber<SimpleCollector, ProcGrabber.ProcGrabberConfig> {
   static final String MDSTAT_FILE = "/proc/mdstat";
   static final String NAME = "proc";
 
@@ -566,6 +566,10 @@ public class ProcGrabber extends AsyncGrabber<SimpleCollector> {
       ps.setTotalCpuDiff(v);
     }
     return ps;
+  }
+
+  public static class ProcGrabberConfig {
+
   }
 }
 

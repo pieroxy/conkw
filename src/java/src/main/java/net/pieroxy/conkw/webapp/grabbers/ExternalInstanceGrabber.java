@@ -18,7 +18,7 @@ import java.net.URLEncoder;
 import java.util.Map;
 import java.util.logging.Level;
 
-public class ExternalInstanceGrabber extends AsyncGrabber<SimpleCollector> {
+public class ExternalInstanceGrabber extends AsyncGrabber<SimpleCollector, ExternalInstanceGrabber.ExternalInstanceGrabberConfig> {
 
   private String targetUrl;
   private String login;
@@ -105,5 +105,9 @@ public class ExternalInstanceGrabber extends AsyncGrabber<SimpleCollector> {
     if (targetUrl.indexOf('?')==-1) targetUrl+="?";
     login = config.get("login");
     pass = config.get("password");
+  }
+
+  public static class ExternalInstanceGrabberConfig {
+
   }
 }

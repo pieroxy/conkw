@@ -14,7 +14,7 @@ import java.net.URLConnection;
 import java.util.Map;
 import java.util.logging.Level;
 
-public class BingNewsGrabber extends TimeThrottledGrabber {
+public class BingNewsGrabber extends TimeThrottledGrabber<BingNewsGrabber.BingNewsGrabberConfig> {
   static final String NAME = "bingnews";
 
   String countrycode,key;
@@ -85,5 +85,9 @@ public class BingNewsGrabber extends TimeThrottledGrabber {
   @Override
   protected String getCacheKey() {
     return countrycode + key;
+  }
+
+  public static class BingNewsGrabberConfig extends TimeThrottledGrabber.TimeThrottledGrabberConfig {
+
   }
 }

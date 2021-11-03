@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public class JavaSystemViewGrabber extends AsyncGrabber<SimpleCollector> {
+public class JavaSystemViewGrabber extends AsyncGrabber<SimpleCollector, JavaSystemViewGrabber.JavaSystemViewGrabberConfig> {
   private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
   static final String NAME = "sys";
 
@@ -180,5 +180,9 @@ public class JavaSystemViewGrabber extends AsyncGrabber<SimpleCollector> {
   @Override
   public String getDefaultName() {
     return NAME;
+  }
+
+  public static class JavaSystemViewGrabberConfig {
+
   }
 }

@@ -24,7 +24,7 @@ import java.util.logging.Level;
 import java.util.regex.Pattern;
 
 
-public class SpecificEmailCheckGrabber extends TimeThrottledGrabber {
+public class SpecificEmailCheckGrabber extends TimeThrottledGrabber<SpecificEmailCheckGrabber.SpecificEmailCheckGrabberConfig> {
     static final String NAME = "specificmail";
     private static final String LAST_SEEN = "last_seen";
     private static final String NEXT_UID = "next_uid";
@@ -169,5 +169,9 @@ public class SpecificEmailCheckGrabber extends TimeThrottledGrabber {
     @Override
     protected String getCacheKey() {
         return cackeKey;
+    }
+
+    public static class SpecificEmailCheckGrabberConfig extends TimeThrottledGrabber.TimeThrottledGrabberConfig {
+
     }
 }

@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.logging.Level;
 
-public class ExternalMetricsGrabber extends Grabber<SimpleTransientCollector> {
+public class ExternalMetricsGrabber extends Grabber<SimpleTransientCollector, ExternalMetricsGrabber.ExternalMetricsGrabberConfig> {
 
   private ResponseData data = null;
   private boolean changed;
@@ -118,5 +118,9 @@ public class ExternalMetricsGrabber extends Grabber<SimpleTransientCollector> {
       log(Level.SEVERE, "Could not load cached data file.", e);
       data = new ResponseData(this, System.currentTimeMillis(), HashMapPool.SIZE_UNKNOWN, HashMapPool.SIZE_UNKNOWN);
     }
+  }
+
+  public static class ExternalMetricsGrabberConfig {
+
   }
 }

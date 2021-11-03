@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
 
-public class LmSensorsGrabber extends AsyncGrabber<SimpleCollector> {
+public class LmSensorsGrabber extends AsyncGrabber<SimpleCollector, LmSensorsGrabber.LmSensorsGrabberConfig> {
   static final String NAME = "lmsensors";
 
   ExternalBinaryRunner runner;
@@ -139,6 +139,9 @@ public class LmSensorsGrabber extends AsyncGrabber<SimpleCollector> {
         include.add(Pattern.compile(s));
       }
     }
+  }
+
+  public static class LmSensorsGrabberConfig {
 
   }
 }

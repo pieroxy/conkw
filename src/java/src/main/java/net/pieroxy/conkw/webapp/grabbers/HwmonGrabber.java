@@ -10,7 +10,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
 
-public class HwmonGrabber extends AsyncGrabber<SimpleCollector> {
+public class HwmonGrabber extends AsyncGrabber<SimpleCollector, HwmonGrabber.HwmonGrabberConfig> {
     static final String NAME = "hwmon";
 
     private FileObject root = null;;
@@ -221,5 +221,9 @@ public class HwmonGrabber extends AsyncGrabber<SimpleCollector> {
             if (res == null) children.put(m, res = new FileObject(new File(file, m)));
             return res;
         }
+    }
+
+    public static class HwmonGrabberConfig {
+
     }
 }

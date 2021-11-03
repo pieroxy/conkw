@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
-public class LatestUnreadMailsGrabber extends TimeThrottledGrabber {
+public class LatestUnreadMailsGrabber extends TimeThrottledGrabber<LatestUnreadMailsGrabber.LatestUnreadMailsGrabberConfig> {
     static final String NAME = "mails";
 
     private int maxMessages = 10;
@@ -109,4 +109,7 @@ public class LatestUnreadMailsGrabber extends TimeThrottledGrabber {
         return cackeKey;
     }
 
+    public static class LatestUnreadMailsGrabberConfig extends TimeThrottledGrabber.TimeThrottledGrabberConfig {
+
+    }
 }
