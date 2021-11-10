@@ -42,6 +42,9 @@ public class GrabberConfigReader {
         if (value instanceof String && type == String.class) {
             return value;
         }
+        if (value instanceof Boolean && type == Boolean.class) {
+            return value;
+        }
 
         throw new RuntimeException("Could not coerce value of type " + value.getClass().getName() + " to " + type.getName());
     }
