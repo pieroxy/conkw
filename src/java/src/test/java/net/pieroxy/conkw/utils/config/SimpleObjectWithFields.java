@@ -1,8 +1,9 @@
 package net.pieroxy.conkw.utils.config;
 
 public class SimpleObjectWithFields {
-    String stringValue;
-    Double doubleValue;
+    private String stringValue;
+    private Double doubleValue;
+    private Boolean boolValue;
 
     public String getStringValue() {
         return stringValue;
@@ -18,5 +19,13 @@ public class SimpleObjectWithFields {
 
     public void setDoubleValue(Double doubleValue) {
         this.doubleValue = doubleValue;
+    }
+
+    public Boolean getBoolValue() {
+        return boolValue;
+    }
+
+    public void setBoolValue(Boolean boolValue) {
+        this.boolValue = boolValue;
     }
 }

@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 public class GrabberConfigReaderTest extends TestCase {
-    private final String TEST_SIMPLE = "{\"version\":1, \"object\":{\"doubleValue\":123,\"stringValue\":\"tsv\"}}";
+    private final String TEST_SIMPLE = "{\"version\":1, \"object\":{\"boolValue\":true,\"doubleValue\":123,\"stringValue\":\"tsv\"}}";
 
     public void testNumber() {
         try {
@@ -19,6 +19,7 @@ public class GrabberConfigReaderTest extends TestCase {
             GrabberConfigReader.fillObject(o, data.object);
             assertEquals("tsv", o.getStringValue());
             assertEquals(123., o.getDoubleValue());
+            assertTrue(o.getBoolValue());
         } catch (IOException e) {
             fail("Threw an exception : " + e.getMessage());
         }
