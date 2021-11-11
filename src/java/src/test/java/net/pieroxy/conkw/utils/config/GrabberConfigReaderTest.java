@@ -45,11 +45,24 @@ public class GrabberConfigReaderTest extends TestCase {
             assertEquals(3, o.getStringValues().size());
             assertEquals(6, o.getDoubleValues().size());
             assertEquals(6, o.getBoolValues().size());
-            assertEquals("tsv", o.getStringValues().get(0));
-            assertEquals("tsv2", o.getStringValues().get(1));
-            assertEquals("", o.getStringValues().get(2));
-            /*assertEquals(123., o.getDoubleValues());
-            assertEquals(o.getBoolValue());*/
+            int index = 0;
+            assertEquals("tsv", o.getStringValues().get(index++));
+            assertEquals("tsv2", o.getStringValues().get(index++));
+            assertEquals("", o.getStringValues().get(index++));
+            index = 0;
+            assertEquals(123., o.getDoubleValues().get(index++));
+            assertEquals(2., o.getDoubleValues().get(index++));
+            assertEquals(6., o.getDoubleValues().get(index++));
+            assertEquals(4., o.getDoubleValues().get(index++));
+            assertEquals(25e11, o.getDoubleValues().get(index++));
+            assertEquals(-5., o.getDoubleValues().get(index++));
+            index = 0;
+            assertEquals(Boolean.TRUE, o.getBoolValues().get(index++));
+            assertEquals(Boolean.FALSE, o.getBoolValues().get(index++));
+            assertEquals(Boolean.FALSE, o.getBoolValues().get(index++));
+            assertEquals(Boolean.TRUE, o.getBoolValues().get(index++));
+            assertEquals(Boolean.FALSE, o.getBoolValues().get(index++));
+            assertEquals(Boolean.TRUE, o.getBoolValues().get(index++));
         } catch (IOException e) {
             fail("Threw an exception : " + e.getMessage());
         }
