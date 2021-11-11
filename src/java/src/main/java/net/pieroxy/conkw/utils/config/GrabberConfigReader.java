@@ -46,6 +46,7 @@ public class GrabberConfigReader {
     }
 
     public static Object buildObject(Object value, Type genericType) {
+        if (value == null) return null;
         if (value instanceof Number && genericType == Double.class) {
             return ((Number)value).doubleValue();
         }
@@ -79,7 +80,7 @@ public class GrabberConfigReader {
             reason = "value is *not* a list : " + value;
         }
 
-        throw new RuntimeException("Could not coerce value of type " + value.getClass().getName() + " to " + genericType.getTypeName() + " because " + reason);
+        throw new RuntimeException("Could not coerce value of type " + (value == null ? "<null>" : value.getClass().getName()) + " to " + genericType.getTypeName() + " because " + reason);
     }
 
     static Method getSetter(Object src, String fieldName) {
