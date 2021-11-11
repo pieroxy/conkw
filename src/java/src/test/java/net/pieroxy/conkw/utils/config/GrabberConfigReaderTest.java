@@ -9,6 +9,8 @@ import java.nio.charset.StandardCharsets;
 
 public class GrabberConfigReaderTest extends TestCase {
     private final String TEST_SIMPLE = "{\"version\":1, \"object\":{\"boolValue\":true,\"doubleValue\":123,\"stringValue\":\"tsv\"}}";
+    private final String TEST_NULLS = "{\"version\":1, \"object\":{\"boolValue\":null,\"doubleValue\":null,\"stringValue\":null}}";
+    private final String TEST_MISSING = "{\"version\":1, \"object\":{}}";
     private final String TEST_SIMPLE_LISTS = "{\"version\":2, \"object\":{" +
             "\"boolValues\":[true,false,false,true,false,true]," +
             "\"doubleValues\":[123,2,6,4,2.5e12,-5]," +
@@ -27,6 +29,36 @@ public class GrabberConfigReaderTest extends TestCase {
             assertEquals("tsv", o.getStringValue());
             assertEquals(123., o.getDoubleValue());
             assertEquals(Boolean.TRUE, o.getBoolValue());
+        } catch (IOException e) {
+            fail("Threw an exception : " + e.getMessage());
+        }
+    }
+
+    public void testSimpleNulls() {
+        try {
+            TestModel data = JsonHelper.getJson().deserialize(TestModel.class, new ByteArrayInputStream(TEST_NULLS.getBytes(StandardCharsets.UTF_8)));
+            assertEquals(1, data.version);
+
+            SimpleObjectWithFields o = new SimpleObjectWithFields();
+            GrabberConfigReader.fillObject(o, data.object);
+            assertNull(o.getBoolValue());
+            assertNull(o.getStringValue());
+            assertNull(o.getDoubleValue());
+        } catch (IOException e) {
+            fail("Threw an exception : " + e.getMessage());
+        }
+    }
+
+    public void testMissing() {
+        try {
+            TestModel data = JsonHelper.getJson().deserialize(TestModel.class, new ByteArrayInputStream(TEST_MISSING.getBytes(StandardCharsets.UTF_8)));
+            assertEquals(1, data.version);
+
+            SimpleObjectWithFields o = new SimpleObjectWithFields();
+            GrabberConfigReader.fillObject(o, data.object);
+            assertNull(o.getBoolValue());
+            assertNull(o.getStringValue());
+            assertNull(o.getDoubleValue());
         } catch (IOException e) {
             fail("Threw an exception : " + e.getMessage());
         }
