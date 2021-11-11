@@ -21,6 +21,18 @@ public class GrabberConfigReaderTest extends ConkwTestCase {
         assertEquals(Boolean.TRUE, o.getBoolValue());
     }
 
+    public void testSimpleTypesErrors() {
+        assertThrows(() -> parseandFillInCustomProperty(
+                "{\"version\":1, \"object\":{\"boolValue\":2,\"doubleValue\":123,\"stringValue\":\"tsv\"}}", 1, ObjectWithSimpleFields.class),
+            RuntimeException.class, null);
+        assertThrows(() -> parseandFillInCustomProperty(
+                "{\"version\":1, \"object\":{\"boolValue\":true,\"doubleValue\":\"123\",\"stringValue\":\"tsv\"}}", 1, ObjectWithSimpleFields.class),
+            RuntimeException.class, null);
+        assertThrows(() -> parseandFillInCustomProperty(
+                "{\"version\":1, \"object\":{\"boolValue\":true,\"doubleValue\":123,\"stringValue\":false}}", 1, ObjectWithSimpleFields.class),
+            RuntimeException.class, null);
+    }
+
     public void testSimpleNulls() {
         ObjectWithSimpleFields o = parseandFillInCustomProperty("{\"version\":2, \"object\":{\"boolValue\":null,\"doubleValue\":null,\"stringValue\":null}}",
             2, ObjectWithSimpleFields.class);
