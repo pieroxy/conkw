@@ -11,11 +11,8 @@ import java.nio.charset.StandardCharsets;
 public class GrabberConfigReaderTest extends ConkwTestCase {
 
     public void testSimpleTypes() {
-        TestModel data = parseJson("{\"version\":1, \"object\":{\"boolValue\":true,\"doubleValue\":123,\"stringValue\":\"tsv\"}}");
-        assertEquals(1, data.version);
-
-        ObjectWithSimpleFields o = new ObjectWithSimpleFields();
-        GrabberConfigReader.fillObject(o, data.object);
+        ObjectWithSimpleFields o = parseandFillInCustomProperty("{\"version\":1, \"object\":{\"boolValue\":true,\"doubleValue\":123,\"stringValue\":\"tsv\"}}",
+            1, ObjectWithSimpleFields.class);
         assertNotNull(o.getBoolValue());
         assertNotNull(o.getStringValue());
         assertNotNull(o.getDoubleValue());
@@ -25,36 +22,26 @@ public class GrabberConfigReaderTest extends ConkwTestCase {
     }
 
     public void testSimpleNulls() {
-        TestModel data = parseJson("{\"version\":2, \"object\":{\"boolValue\":null,\"doubleValue\":null,\"stringValue\":null}}");
-        assertEquals(2, data.version);
-
-        ObjectWithSimpleFields o = new ObjectWithSimpleFields();
-        GrabberConfigReader.fillObject(o, data.object);
+        ObjectWithSimpleFields o = parseandFillInCustomProperty("{\"version\":2, \"object\":{\"boolValue\":null,\"doubleValue\":null,\"stringValue\":null}}",
+            2, ObjectWithSimpleFields.class);
         assertNull(o.getBoolValue());
         assertNull(o.getStringValue());
         assertNull(o.getDoubleValue());
     }
 
     public void testMissing() {
-        TestModel data = parseJson("{\"version\":3, \"object\":{}}");
-        assertEquals(3, data.version);
-
-        ObjectWithSimpleFields o = new ObjectWithSimpleFields();
-        GrabberConfigReader.fillObject(o, data.object);
+        ObjectWithSimpleFields o = parseandFillInCustomProperty("{\"version\":3, \"object\":{}}", 3, ObjectWithSimpleFields.class);
         assertNull(o.getBoolValue());
         assertNull(o.getStringValue());
         assertNull(o.getDoubleValue());
     }
 
     public void testSimpleLists() {
-        TestModel data = parseJson("{\"version\":4, \"object\":{" +
+        ObjectWithSimpleList o = parseandFillInCustomProperty("{\"version\":4, \"object\":{" +
             "\"boolValues\":[true,false,false,true,false,true]," +
             "\"doubleValues\":[123,2,6,4,2.5e12,-5]," +
-            "\"stringValues\":[\"tsv\",\"tsv2\",\"\"]}}");
-        assertEquals(4, data.version);
-
-        ObjectWithSimpleList o = new ObjectWithSimpleList();
-        GrabberConfigReader.fillObject(o, data.object);
+            "\"stringValues\":[\"tsv\",\"tsv2\",\"\"]}}",
+            4, ObjectWithSimpleList.class);
         assertNotNull(o.getBoolValues());
         assertNotNull(o.getStringValues());
         assertNotNull(o.getDoubleValues());
@@ -82,14 +69,11 @@ public class GrabberConfigReaderTest extends ConkwTestCase {
     }
 
     public void testSimpleListsWithNulls() {
-        TestModel data = parseJson("{\"version\":5, \"object\":{" +
-            "\"boolValues\":[true,null]," +
-            "\"doubleValues\":[123,null]," +
-            "\"stringValues\":[\"tsv\",null]}}");
-        assertEquals(5, data.version);
-
-        ObjectWithSimpleList o = new ObjectWithSimpleList();
-        GrabberConfigReader.fillObject(o, data.object);
+        ObjectWithSimpleList o = parseandFillInCustomProperty("{\"version\":5, \"object\":{" +
+                "\"boolValues\":[true,null]," +
+                "\"doubleValues\":[123,null]," +
+                "\"stringValues\":[\"tsv\",null]}}",
+            5, ObjectWithSimpleList.class);
         assertNotNull(o.getBoolValues());
         assertNotNull(o.getStringValues());
         assertNotNull(o.getDoubleValues());
@@ -108,33 +92,27 @@ public class GrabberConfigReaderTest extends ConkwTestCase {
     }
 
     public void testSimpleNullLists() {
-        TestModel data = parseJson("{\"version\":6, \"object\":{" +
-            "\"boolValues\":null," +
-            "\"doubleValues\":null," +
-            "\"stringValues\":null}}");
-        assertEquals(6, data.version);
-
-        ObjectWithSimpleList o = new ObjectWithSimpleList();
-        GrabberConfigReader.fillObject(o, data.object);
+        ObjectWithSimpleList o = parseandFillInCustomProperty("{\"version\":6, \"object\":{" +
+                "\"boolValues\":null," +
+                "\"doubleValues\":null," +
+                "\"stringValues\":null}}",
+            6, ObjectWithSimpleList.class);
         assertNull(o.getBoolValues());
         assertNull(o.getStringValues());
         assertNull(o.getDoubleValues());
     }
 
     public void testCustomField() {
-        TestModel data = parseJson("{\"version\":6, \"object\":{" +
-            "\"object\":{" +
-            "\"doubleValue\":123," +
-            "\"doubleList\":[]," +
-            "\"subObject\":{\"doubleValue\":2e200,\"doubleList\":[1,-100000000000000000000]}," +
-            "\"customList\":[" +
-            "{\"doubleValue\":31,\"doubleList\":[1,null,-100]}," +
-            "{\"subObject\":{\"doubleValue\":2e210,\"doubleList\":[1,-1000000000000000000]}}" +
-            "]}}}");
-        assertEquals(6, data.version);
-
-        ObjectWithCustomField o = new ObjectWithCustomField();
-        GrabberConfigReader.fillObject(o, data.object);
+        ObjectWithCustomField o = parseandFillInCustomProperty("{\"version\":7, \"object\":{" +
+                "\"object\":{" +
+                "\"doubleValue\":123," +
+                "\"doubleList\":[]," +
+                "\"subObject\":{\"doubleValue\":2e200,\"doubleList\":[1,-100000000000000000000]}," +
+                "\"customList\":[" +
+                "{\"doubleValue\":31,\"doubleList\":[1,null,-100]}," +
+                "{\"subObject\":{\"doubleValue\":2e210,\"doubleList\":[1,-1000000000000000000]}}" +
+                "]}}}",
+            7, ObjectWithCustomField.class);
         assertNotNull(o.getObject());
         assertEquals(CustomObject.class, o.getObject().getClass());
         assertEquals(123., o.getObject().getDoubleValue());
@@ -177,4 +155,19 @@ public class GrabberConfigReaderTest extends ConkwTestCase {
             throw new RuntimeException(e);
         }
     }
+
+    private <T> T parseandFillInCustomProperty(String s, int i, Class<T> type) {
+        TestModel data = parseJson(s);
+        assertEquals(i, data.version);
+
+        T o = null;
+        try {
+            o = type.newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        GrabberConfigReader.fillObject(o, data.object);
+        return o;
+    }
+
 }
