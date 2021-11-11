@@ -24,7 +24,7 @@ public class GrabberConfigReaderTest extends TestCase {
         TestModel data = parseJson(TEST_SIMPLE);
         assertEquals(1, data.version);
 
-        SimpleObjectWithFields o = new SimpleObjectWithFields();
+        ObjectWithSimpleFields o = new ObjectWithSimpleFields();
         GrabberConfigReader.fillObject(o, data.object);
         assertNotNull(o.getBoolValue());
         assertNotNull(o.getStringValue());
@@ -38,7 +38,7 @@ public class GrabberConfigReaderTest extends TestCase {
         TestModel data = parseJson(TEST_NULLS);
         assertEquals(2, data.version);
 
-        SimpleObjectWithFields o = new SimpleObjectWithFields();
+        ObjectWithSimpleFields o = new ObjectWithSimpleFields();
         GrabberConfigReader.fillObject(o, data.object);
         assertNull(o.getBoolValue());
         assertNull(o.getStringValue());
@@ -49,7 +49,7 @@ public class GrabberConfigReaderTest extends TestCase {
         TestModel data = parseJson(TEST_MISSING);
         assertEquals(3, data.version);
 
-        SimpleObjectWithFields o = new SimpleObjectWithFields();
+        ObjectWithSimpleFields o = new ObjectWithSimpleFields();
         GrabberConfigReader.fillObject(o, data.object);
         assertNull(o.getBoolValue());
         assertNull(o.getStringValue());
@@ -60,7 +60,7 @@ public class GrabberConfigReaderTest extends TestCase {
         TestModel data = parseJson(TEST_SIMPLE_LISTS);
         assertEquals(4, data.version);
 
-        SimpleObjectWithSimpleList o = new SimpleObjectWithSimpleList();
+        ObjectWithSimpleList o = new ObjectWithSimpleList();
         GrabberConfigReader.fillObject(o, data.object);
         assertNotNull(o.getBoolValues());
         assertNotNull(o.getStringValues());
@@ -92,7 +92,7 @@ public class GrabberConfigReaderTest extends TestCase {
         TestModel data = parseJson(TEST_SIMPLE_LISTS_WITH_NULLS);
         assertEquals(5, data.version);
 
-        SimpleObjectWithSimpleList o = new SimpleObjectWithSimpleList();
+        ObjectWithSimpleList o = new ObjectWithSimpleList();
         GrabberConfigReader.fillObject(o, data.object);
         assertNotNull(o.getBoolValues());
         assertNotNull(o.getStringValues());
@@ -118,7 +118,7 @@ public class GrabberConfigReaderTest extends TestCase {
             "\"stringValues\":null}}");
         assertEquals(6, data.version);
 
-        SimpleObjectWithSimpleList o = new SimpleObjectWithSimpleList();
+        ObjectWithSimpleList o = new ObjectWithSimpleList();
         GrabberConfigReader.fillObject(o, data.object);
         assertNull(o.getBoolValues());
         assertNull(o.getStringValues());
