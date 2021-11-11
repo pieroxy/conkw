@@ -16,7 +16,7 @@ public class GrabberConfigReader {
 
     public static void fillObject(Object config, Object json) {
         if (config == null || json == null) return;
-        if (LOGGER.isLoggable(Level.FINE) {
+        if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Instance is " + json);
             LOGGER.fine("Class is " + json.getClass().getName());
         }
