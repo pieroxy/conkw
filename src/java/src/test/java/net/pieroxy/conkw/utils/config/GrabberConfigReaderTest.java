@@ -111,6 +111,20 @@ public class GrabberConfigReaderTest extends TestCase {
         assertEquals(null, o.getBoolValues().get(index++));
     }
 
+    public void testSimpleNullLists() {
+        TestModel data = parseJson("{\"version\":6, \"object\":{" +
+            "\"boolValues\":null," +
+            "\"doubleValues\":null," +
+            "\"stringValues\":null}}");
+        assertEquals(6, data.version);
+
+        SimpleObjectWithSimpleList o = new SimpleObjectWithSimpleList();
+        GrabberConfigReader.fillObject(o, data.object);
+        assertNull(o.getBoolValues());
+        assertNull(o.getStringValues());
+        assertNull(o.getDoubleValues());
+    }
+
     TestModel parseJson(String json) {
         try {
             return JsonHelper.getJson().deserialize(TestModel.class, new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8)));
