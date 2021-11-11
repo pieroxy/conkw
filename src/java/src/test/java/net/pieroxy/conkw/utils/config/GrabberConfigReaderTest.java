@@ -50,9 +50,9 @@ public class GrabberConfigReaderTest extends ConkwTestCase {
 
     public void testSimpleLists() {
         ObjectWithSimpleList o = parseandFillInCustomProperty("{\"version\":4, \"object\":{" +
-            "\"boolValues\":[true,false,false,true,false,true]," +
-            "\"doubleValues\":[123,2,6,4,2.5e12,-5]," +
-            "\"stringValues\":[\"tsv\",\"tsv2\",\"\"]}}",
+                "\"boolValues\":[true,false,false,true,false,true]," +
+                "\"doubleValues\":[123,2,6,4,2.5e12,-5]," +
+                "\"stringValues\":[\"tsv\",\"tsv2\",\"\"]}}",
             4, ObjectWithSimpleList.class);
         assertNotNull(o.getBoolValues());
         assertNotNull(o.getStringValues());
@@ -78,6 +78,27 @@ public class GrabberConfigReaderTest extends ConkwTestCase {
         assertEquals(Boolean.TRUE, o.getBoolValues().get(index++));
         assertEquals(Boolean.FALSE, o.getBoolValues().get(index++));
         assertEquals(Boolean.TRUE, o.getBoolValues().get(index++));
+    }
+
+    public void testSimpleListsErrors() {
+        assertThrows(() -> parseandFillInCustomProperty("{\"version\":4, \"object\":{" +
+                "\"boolValues\":[true,false,\"false\",true,false,true]," +
+                "\"doubleValues\":[123,2,6,4,2.5e12,-5]," +
+                "\"stringValues\":[\"tsv\",\"tsv2\",\"\"]}}",
+            4, ObjectWithSimpleList.class),
+            RuntimeException.class,null);
+        assertThrows(() -> parseandFillInCustomProperty("{\"version\":4, \"object\":{" +
+                    "\"boolValues\":[true,false,false,true,false,true]," +
+                    "\"doubleValues\":[123,2,6,4,2.5e12,true]," +
+                    "\"stringValues\":[\"tsv\",\"tsv2\",\"\"]}}",
+                4, ObjectWithSimpleList.class),
+            RuntimeException.class,null);
+        assertThrows(() -> parseandFillInCustomProperty("{\"version\":4, \"object\":{" +
+                    "\"boolValues\":[true,false,false,true,false,true]," +
+                    "\"doubleValues\":[123,2,6,4,2.5e12,-5]," +
+                    "\"stringValues\":[\"tsv\",\"tsv2\",true]}}",
+                4, ObjectWithSimpleList.class),
+            RuntimeException.class,null);
     }
 
     public void testSimpleListsWithNulls() {
@@ -158,6 +179,53 @@ public class GrabberConfigReaderTest extends ConkwTestCase {
         assertEquals(2, o.getObject().getCustomList().get(1).getSubObject().getDoubleList().size());
         assertEquals(1., o.getObject().getCustomList().get(1).getSubObject().getDoubleList().get(index++));
         assertEquals(-1e18, o.getObject().getCustomList().get(1).getSubObject().getDoubleList().get(index++));
+    }
+
+    public void testCustomFieldWithErrors() {
+        assertThrows(() -> parseandFillInCustomProperty("{\"version\":7, \"object\":{" +
+                    "\"object\":{" +
+                    "\"doubleValue\":123," +
+                    "\"doubleList\":[]," +
+                    "\"subObject\":{\"doublevalue\":2e200,\"doubleList\":[1,-100000000000000000000]}," +
+                    "\"customList\":[" +
+                    "{\"doubleValue\":31,\"doubleList\":[1,null,-100]}," +
+                    "{\"subObject\":{\"doubleValue\":2e210,\"doubleList\":[1,-1000000000000000000]}}" +
+                    "]}}}",
+                7, ObjectWithCustomField.class),
+            RuntimeException.class, null);
+        assertThrows(() -> parseandFillInCustomProperty("{\"version\":7, \"object\":{" +
+                    "\"object\":{" +
+                    "\"doubleValue\":123," +
+                    "\"doubleList\":true," +
+                    "\"subObject\":{\"doubleValue\":2e200,\"doubleList\":[1,-100000000000000000000]}," +
+                    "\"customList\":[" +
+                    "{\"doubleValue\":31,\"doubleList\":[1,null,-100]}," +
+                    "{\"subObject\":{\"doubleValue\":2e210,\"doubleList\":[1,-1000000000000000000]}}" +
+                    "]}}}",
+                7, ObjectWithCustomField.class),
+            RuntimeException.class, null);
+        assertThrows(() -> parseandFillInCustomProperty("{\"version\":7, \"object\":{" +
+                    "\"object\":{" +
+                    "\"doubleValue\":123," +
+                    "\"doubleList\":[]," +
+                    "\"subObject\":{\"doubleValue\":2e200,\"doubleList\":[1,-100000000000000000000]}," +
+                    "\"customList\":[" +
+                    "{\"doubleValues\":31,\"doubleList\":[1,null,-100]}," +
+                    "{\"subObject\":{\"doubleValue\":2e210,\"doubleList\":[1,-1000000000000000000]}}" +
+                    "]}}}",
+                7, ObjectWithCustomField.class),
+            RuntimeException.class, null);
+        assertThrows(() -> parseandFillInCustomProperty("{\"version\":7, \"object\":{" +
+                    "\"object\":{" +
+                    "\"doubleValue\":123," +
+                    "\"doubleList\":[]," +
+                    "\"subObject\":{\"doubleValue\":2e200,\"doubleList\":[1,-100000000000000000000]}," +
+                    "\"customList\":[" +
+                    "{\"doubleValue\":31,\"doubleList\":[1,null,-100]}," +
+                    "{\"subObject\":{\"doubleValues\":2e210,\"doubleList\":[1,-1000000000000000000]}}" +
+                    "]}}}",
+                7, ObjectWithCustomField.class),
+            RuntimeException.class, null);
     }
 
     TestModel parseJson(String json) {
