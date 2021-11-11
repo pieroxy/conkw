@@ -2,9 +2,13 @@ package net.pieroxy.conkw.utils.config;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class GrabberConfigReader {
@@ -12,8 +16,10 @@ public class GrabberConfigReader {
 
     public static void fillObject(Object config, Object json) {
         if (config == null || json == null) return;
-        LOGGER.info("Instance is " + json);
-        LOGGER.info("Class is " + json.getClass().getName());
+        if (LOGGER.isLoggable(Level.FINE) {
+            LOGGER.fine("Instance is " + json);
+            LOGGER.fine("Class is " + json.getClass().getName());
+        }
         if (json instanceof Map) {
             fillMap(config, (Map<String, ?>)json);
         }
@@ -25,7 +31,7 @@ public class GrabberConfigReader {
             if (value != null) {
                 try {
                     Method m = getSetter(src, s);
-                    m.invoke(src, buildObject(value, m.getParameterTypes()[0], m.getGenericParameterTypes()[0]));
+                    m.invoke(src, buildObject(value, m.getGenericParameterTypes()[0]));
                 } catch (RuntimeException e) {
                     throw e;
                 } catch (Exception e) {
@@ -35,18 +41,45 @@ public class GrabberConfigReader {
         });
     }
 
-    public static Object buildObject(Object value, Class type, Type genericType) {
-        if (value instanceof Number && type == Double.class) {
+    public static boolean isSimpleType(Type t) {
+        return t == Double.class || t == Boolean.class || t == String.class;
+    }
+
+    public static Object buildObject(Object value, Type genericType) {
+        if (value instanceof Number && genericType == Double.class) {
             return ((Number)value).doubleValue();
         }
-        if (value instanceof String && type == String.class) {
+        if (value instanceof String && genericType == String.class) {
             return value;
         }
-        if (value instanceof Boolean && type == Boolean.class) {
+        if (value instanceof Boolean && genericType == Boolean.class) {
             return value;
+        }
+        String reason = "";
+        if (value instanceof List) {
+            List list = (List)value;
+            if (genericType instanceof ParameterizedType) {
+                ParameterizedType pt = (ParameterizedType) genericType;
+                if (pt.getRawType() == List.class) {
+                    Type listOf = pt.getActualTypeArguments()[0];
+                    if (isSimpleType(listOf)) {
+                        List res = new ArrayList(list.size());
+                        list.forEach(e -> res.add(buildObject(e, listOf)));
+                        return res;
+                    } else {
+                        reason = "*not* a simple type : " + listOf;
+                    }
+                } else {
+                    reason = "*not* a list : " + pt.getRawType();
+                }
+            } else {
+                reason = "*not* a ParameterizedType : " + genericType;
+            }
+        } else {
+            reason = "value is *not* a list : " + value;
         }
 
-        throw new RuntimeException("Could not coerce value of type " + value.getClass().getName() + " to " + type.getName());
+        throw new RuntimeException("Could not coerce value of type " + value.getClass().getName() + " to " + genericType.getTypeName() + " because " + reason);
     }
 
     static Method getSetter(Object src, String fieldName) {
