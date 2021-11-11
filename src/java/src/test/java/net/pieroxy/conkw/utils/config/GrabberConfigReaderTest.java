@@ -226,6 +226,17 @@ public class GrabberConfigReaderTest extends ConkwTestCase {
                     "]}}}",
                 7, ObjectWithCustomField.class),
             RuntimeException.class, null);
+        assertThrows(() -> parseandFillInCustomProperty("{\"version\":7, \"object\":{" +
+                    "\"object\":{" +
+                    "\"doubleValue\":123," +
+                    "\"doubleList\":[]," +
+                    "\"subObject\":{\"doubleValue\":2e200,\"doubleList\":[1,-100000000000000000000]}," +
+                    "\"customList\":[" +
+                    "\"Dude !\"," +
+                    "{\"subObject\":{\"doubleValue\":2e210,\"doubleList\":[1,-1000000000000000000]}}" +
+                    "]}}}",
+                7, ObjectWithCustomField.class),
+            RuntimeException.class, null);
     }
 
     TestModel parseJson(String json) {
