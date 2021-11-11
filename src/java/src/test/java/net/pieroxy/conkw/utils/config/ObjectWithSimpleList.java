@@ -2,7 +2,7 @@ package net.pieroxy.conkw.utils.config;
 
 import java.util.List;
 
-public class SimpleObjectWithSimpleList {
+public class ObjectWithSimpleList {
     private List<String> stringValues;
     private List<Double> doubleValues;
     private List<Boolean> boolValues;

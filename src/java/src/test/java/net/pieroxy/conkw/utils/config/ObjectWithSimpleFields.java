@@ -1,6 +1,6 @@
 package net.pieroxy.conkw.utils.config;
 
-public class SimpleObjectWithFields {
+public class ObjectWithSimpleFields {
     private String stringValue;
     private Double doubleValue;
     private Boolean boolValue;
