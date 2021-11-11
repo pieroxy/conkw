@@ -1,13 +1,14 @@
 package net.pieroxy.conkw.utils.config;
 
 import junit.framework.TestCase;
+import net.pieroxy.conkw.ConkwTestCase;
 import net.pieroxy.conkw.utils.JsonHelper;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-public class GrabberConfigReaderTest extends TestCase {
+public class GrabberConfigReaderTest extends ConkwTestCase {
 
     public void testSimpleTypes() {
         TestModel data = parseJson("{\"version\":1, \"object\":{\"boolValue\":true,\"doubleValue\":123,\"stringValue\":\"tsv\"}}");
@@ -118,6 +119,55 @@ public class GrabberConfigReaderTest extends TestCase {
         assertNull(o.getBoolValues());
         assertNull(o.getStringValues());
         assertNull(o.getDoubleValues());
+    }
+
+    public void testCustomField() {
+        TestModel data = parseJson("{\"version\":6, \"object\":{" +
+            "\"object\":{" +
+            "\"doubleValue\":123," +
+            "\"doubleList\":[]," +
+            "\"subObject\":{\"doubleValue\":2e200,\"doubleList\":[1,-100000000000000000000]}," +
+            "\"customList\":[" +
+            "{\"doubleValue\":31,\"doubleList\":[1,null,-100]}," +
+            "{\"subObject\":{\"doubleValue\":2e210,\"doubleList\":[1,-1000000000000000000]}}" +
+            "]}}}");
+        assertEquals(6, data.version);
+
+        ObjectWithCustomField o = new ObjectWithCustomField();
+        GrabberConfigReader.fillObject(o, data.object);
+        assertNotNull(o.getObject());
+        assertEquals(CustomObject.class, o.getObject().getClass());
+        assertEquals(123., o.getObject().getDoubleValue());
+        assertNotNull(o.getObject().getDoubleList());
+        assertEquals(0, o.getObject().getDoubleList().size());
+        assertNotNull(o.getObject().getSubObject());
+        assertEquals(2e200, o.getObject().getSubObject().getDoubleValue());
+        assertNotNull(o.getObject().getSubObject().getDoubleList());
+        assertEquals(2, o.getObject().getSubObject().getDoubleList().size());
+        int index = 0;
+        assertEquals(1.0, o.getObject().getSubObject().getDoubleList().get(index++));
+        assertEquals(-1e20, o.getObject().getSubObject().getDoubleList().get(index++));
+
+        assertNotNull(o.getObject().getCustomList());
+        assertEquals(2, o.getObject().getCustomList().size());
+
+        assertNotNull(o.getObject().getCustomList().get(0));
+        assertEquals(31., o.getObject().getCustomList().get(0).getDoubleValue());
+        assertNotNull(o.getObject().getCustomList().get(0).getDoubleList());
+        assertEquals(3, o.getObject().getCustomList().get(0).getDoubleList().size());
+        index = 0;
+        assertEquals(1., o.getObject().getCustomList().get(0).getDoubleList().get(index++));
+        assertEquals(null, o.getObject().getCustomList().get(0).getDoubleList().get(index++));
+        assertEquals(-100., o.getObject().getCustomList().get(0).getDoubleList().get(index++));
+
+        assertNotNull(o.getObject().getCustomList().get(1));
+        assertNotNull(o.getObject().getCustomList().get(1).getSubObject());
+        assertEquals(2e210, o.getObject().getCustomList().get(1).getSubObject().getDoubleValue());
+        assertNotNull(o.getObject().getCustomList().get(1).getSubObject().getDoubleList());
+        index = 0;
+        assertEquals(2, o.getObject().getCustomList().get(1).getSubObject().getDoubleList().size());
+        assertEquals(1., o.getObject().getCustomList().get(1).getSubObject().getDoubleList().get(index++));
+        assertEquals(-1e18, o.getObject().getCustomList().get(1).getSubObject().getDoubleList().get(index++));
     }
 
     TestModel parseJson(String json) {

@@ -14,14 +14,14 @@ import java.util.logging.Logger;
 public class GrabberConfigReader {
     private static Logger LOGGER = Logger.getLogger(GrabberConfigReader.class.getName());
 
-    public static void fillObject(Object config, Object json) {
-        if (config == null || json == null) return;
+    public static void fillObject(Object container, Object json) {
+        if (container == null || json == null) return;
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Instance is " + json);
             LOGGER.fine("Class is " + json.getClass().getName());
         }
         if (json instanceof Map) {
-            fillMap(config, (Map<String, ?>)json);
+            fillMap(container, (Map<String, ?>)json);
         }
     }
 
@@ -46,18 +46,15 @@ public class GrabberConfigReader {
     }
 
     public static Object buildObject(Object value, Type genericType) {
-        if (value == null) return null;
-        if (value instanceof Number && genericType == Double.class) {
-            return ((Number)value).doubleValue();
-        }
-        if (value instanceof String && genericType == String.class) {
-            return value;
-        }
-        if (value instanceof Boolean && genericType == Boolean.class) {
-            return value;
-        }
         String reason = "";
-        if (value instanceof List) {
+        if (value == null) return null;
+        else if (value instanceof Number && genericType == Double.class) {
+            return ((Number)value).doubleValue();
+        } else if (value instanceof String && genericType == String.class) {
+            return value;
+        } else if (value instanceof Boolean && genericType == Boolean.class) {
+            return value;
+        } else if (value instanceof List) {
             List list = (List)value;
             if (genericType instanceof ParameterizedType) {
                 ParameterizedType pt = (ParameterizedType) genericType;
@@ -68,7 +65,21 @@ public class GrabberConfigReader {
                         list.forEach(e -> res.add(buildObject(e, listOf)));
                         return res;
                     } else {
-                        reason = "*not* a simple type : " + listOf;
+                        if (listOf instanceof Class) {
+                            List res = new ArrayList(list.size());
+                            list.forEach(e -> {
+                                try {
+                                    Object resVal = ((Class) listOf).newInstance();
+                                    fillObject(resVal, e);
+                                    res.add(resVal);
+                                } catch (Exception ex) {
+                                    throw new RuntimeException("Could not instantiate " + listOf + ".", ex);
+                                }
+                            });
+                            return res;
+                        } else {
+                            reason = "*not* a java.lang.Class : " + genericType;
+                        }
                     }
                 } else {
                     reason = "*not* a list : " + pt.getRawType();
@@ -76,8 +87,20 @@ public class GrabberConfigReader {
             } else {
                 reason = "*not* a ParameterizedType : " + genericType;
             }
+        } else if (value instanceof Map) { // We have a custom object here
+            if (genericType instanceof Class) {
+                try {
+                    Object res = ((Class)genericType).newInstance();
+                    fillObject(res, value);
+                    return res;
+                } catch (Exception e) {
+                    throw new RuntimeException("Could not instantiate "+genericType+".", e);
+                }
+            } else {
+                reason = "*not* a java.lang.Class : " + genericType;
+            }
         } else {
-            reason = "value is *not* a list : " + value;
+            throw new RuntimeException("Could not coerce value of type " + (value == null ? "<null>" : value.getClass().getName()) + " to " + genericType.getTypeName() + " because its type isn't supported.");
         }
 
         throw new RuntimeException("Could not coerce value of type " + (value == null ? "<null>" : value.getClass().getName()) + " to " + genericType.getTypeName() + " because " + reason);
