@@ -8,20 +8,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 public class GrabberConfigReaderTest extends TestCase {
-    private final String TEST_SIMPLE = "{\"version\":1, \"object\":{\"boolValue\":true,\"doubleValue\":123,\"stringValue\":\"tsv\"}}";
-    private final String TEST_NULLS = "{\"version\":2, \"object\":{\"boolValue\":null,\"doubleValue\":null,\"stringValue\":null}}";
-    private final String TEST_MISSING = "{\"version\":3, \"object\":{}}";
-    private final String TEST_SIMPLE_LISTS = "{\"version\":4, \"object\":{" +
-        "\"boolValues\":[true,false,false,true,false,true]," +
-        "\"doubleValues\":[123,2,6,4,2.5e12,-5]," +
-        "\"stringValues\":[\"tsv\",\"tsv2\",\"\"]}}";
-    private final String TEST_SIMPLE_LISTS_WITH_NULLS = "{\"version\":5, \"object\":{" +
-        "\"boolValues\":[true,null]," +
-        "\"doubleValues\":[123,null]," +
-        "\"stringValues\":[\"tsv\",null]}}";
 
     public void testSimpleTypes() {
-        TestModel data = parseJson(TEST_SIMPLE);
+        TestModel data = parseJson("{\"version\":1, \"object\":{\"boolValue\":true,\"doubleValue\":123,\"stringValue\":\"tsv\"}}");
         assertEquals(1, data.version);
 
         ObjectWithSimpleFields o = new ObjectWithSimpleFields();
@@ -35,7 +24,7 @@ public class GrabberConfigReaderTest extends TestCase {
     }
 
     public void testSimpleNulls() {
-        TestModel data = parseJson(TEST_NULLS);
+        TestModel data = parseJson("{\"version\":2, \"object\":{\"boolValue\":null,\"doubleValue\":null,\"stringValue\":null}}");
         assertEquals(2, data.version);
 
         ObjectWithSimpleFields o = new ObjectWithSimpleFields();
@@ -46,7 +35,7 @@ public class GrabberConfigReaderTest extends TestCase {
     }
 
     public void testMissing() {
-        TestModel data = parseJson(TEST_MISSING);
+        TestModel data = parseJson("{\"version\":3, \"object\":{}}");
         assertEquals(3, data.version);
 
         ObjectWithSimpleFields o = new ObjectWithSimpleFields();
@@ -57,7 +46,10 @@ public class GrabberConfigReaderTest extends TestCase {
     }
 
     public void testSimpleLists() {
-        TestModel data = parseJson(TEST_SIMPLE_LISTS);
+        TestModel data = parseJson("{\"version\":4, \"object\":{" +
+            "\"boolValues\":[true,false,false,true,false,true]," +
+            "\"doubleValues\":[123,2,6,4,2.5e12,-5]," +
+            "\"stringValues\":[\"tsv\",\"tsv2\",\"\"]}}");
         assertEquals(4, data.version);
 
         ObjectWithSimpleList o = new ObjectWithSimpleList();
@@ -89,7 +81,10 @@ public class GrabberConfigReaderTest extends TestCase {
     }
 
     public void testSimpleListsWithNulls() {
-        TestModel data = parseJson(TEST_SIMPLE_LISTS_WITH_NULLS);
+        TestModel data = parseJson("{\"version\":5, \"object\":{" +
+            "\"boolValues\":[true,null]," +
+            "\"doubleValues\":[123,null]," +
+            "\"stringValues\":[\"tsv\",null]}}");
         assertEquals(5, data.version);
 
         ObjectWithSimpleList o = new ObjectWithSimpleList();
