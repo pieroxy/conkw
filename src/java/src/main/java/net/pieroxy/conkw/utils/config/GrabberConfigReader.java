@@ -22,6 +22,8 @@ public class GrabberConfigReader {
         }
         if (json instanceof Map) {
             fillMap(container, (Map<String, ?>)json);
+        } else {
+            throw new RuntimeException(json.getClass().getName() + " is not a Map");
         }
     }
 
