@@ -1,27 +1,38 @@
 package net.pieroxy.conkw.utils.config;
 
+import net.pieroxy.conkw.utils.duration.CDuration;
+import net.pieroxy.conkw.utils.duration.CDurationParser;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class GrabberConfigReader {
     private static Logger LOGGER = Logger.getLogger(GrabberConfigReader.class.getName());
+    private static final Map<Class, CustomConverter> customStringConverters = new HashMap<>();
 
-    public static void fillObject(Object container, Object json) {
-        if (container == null || json == null) return;
+    static {
+        customStringConverters.put(CDuration.class, new CustomConverter() {
+            @Override
+            public Object convert(String dat) {
+                return CDurationParser.parse(dat);
+            }
+        });
+    }
+
+    public static <T> T fillObject(T container, Object json) {
+        if (container == null || json == null) return container;
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Instance is " + json);
             LOGGER.fine("Class is " + json.getClass().getName());
         }
         if (json instanceof Map) {
             fillMap(container, (Map<String, ?>)json);
+            return container;
         } else {
             throw new RuntimeException(json.getClass().getName() + " is not a Map");
         }
@@ -101,6 +112,8 @@ public class GrabberConfigReader {
             } else {
                 reason = "*not* a java.lang.Class : " + genericType;
             }
+        } else if (value instanceof String && customStringConverters.containsKey(genericType)) { // We have a custom converter
+            return customStringConverters.get(genericType).convert((String)value);
         } else {
             throw new RuntimeException("Could not coerce value of type " + (value == null ? "<null>" : value.getClass().getName()) + " to " + genericType.getTypeName() + " because its type isn't supported.");
         }
