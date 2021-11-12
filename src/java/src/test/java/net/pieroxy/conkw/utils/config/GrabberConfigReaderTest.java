@@ -181,6 +181,18 @@ public class GrabberConfigReaderTest extends ConkwTestCase {
         assertEquals(-1e18, o.getObject().getCustomList().get(1).getSubObject().getDoubleList().get(index++));
     }
 
+    public void testCDuration() {
+        ObjectWithCustomField o = parseandFillInCustomProperty("{\"version\":7, \"object\":{" +
+                "\"object\":{" +
+                "\"duration\":\"3d\"" +
+                "}}}",
+            7, ObjectWithCustomField.class);
+        assertNotNull(o.getObject());
+        assertEquals(CustomObject.class, o.getObject().getClass());
+        assertNotNull(o.getObject().getDuration());
+        assertEquals(3, o.getObject().getDuration().asDays());
+    }
+
     public void testCustomFieldWithErrors() {
         assertThrows(() -> parseandFillInCustomProperty("{\"version\":7, \"object\":{" +
                     "\"object\":{" +
