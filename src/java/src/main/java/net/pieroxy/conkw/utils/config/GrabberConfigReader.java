@@ -27,7 +27,7 @@ public class GrabberConfigReader {
         }
     }
 
-    public static void fillMap(Object src, Map<String, ?> json) {
+    private static void fillMap(Object src, Map<String, ?> json) {
         json.keySet().stream().forEach(s -> {
             Object value = json.get(s);
             if (value != null) {
@@ -43,11 +43,11 @@ public class GrabberConfigReader {
         });
     }
 
-    public static boolean isSimpleType(Type t) {
+    private static boolean isSimpleType(Type t) {
         return t == Double.class || t == Boolean.class || t == String.class;
     }
 
-    public static Object buildObject(Object value, Type genericType) {
+    private static Object buildObject(Object value, Type genericType) {
         String reason = "";
         if (value == null) return null;
         else if (value instanceof Number && genericType == Double.class) {
@@ -108,7 +108,7 @@ public class GrabberConfigReader {
         throw new RuntimeException("Could not coerce value of type " + (value == null ? "<null>" : value.getClass().getName()) + " to " + genericType.getTypeName() + " because " + reason);
     }
 
-    static Method getSetter(Object src, String fieldName) {
+    private static Method getSetter(Object src, String fieldName) {
         Method[] methods = src.getClass().getDeclaredMethods();
         String name = getSetterName(fieldName);
         for (Method m : methods) {
@@ -117,7 +117,7 @@ public class GrabberConfigReader {
         throw new RuntimeException("Could not find public setter for field " + fieldName);
     }
 
-    static String getSetterName(String fieldName) {
+    private static String getSetterName(String fieldName) {
         return "set" + fieldName.substring(0,1).toUpperCase(Locale.ROOT) + fieldName.substring(1);
     }
 }
