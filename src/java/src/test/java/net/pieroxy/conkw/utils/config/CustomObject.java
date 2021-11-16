@@ -1,5 +1,7 @@
 package net.pieroxy.conkw.utils.config;
 
+import net.pieroxy.conkw.utils.duration.CDuration;
+
 import java.util.List;
 
 public class CustomObject {
@@ -7,6 +9,7 @@ public class CustomObject {
   private List<Double> doubleList;
   private CustomObject subObject;
   private List<CustomObject> customList;
+  private CDuration duration;
 
   public Double getDoubleValue() {
     return doubleValue;
@@ -38,5 +41,13 @@ public class CustomObject {
 
   public void setCustomList(List<CustomObject> customList) {
     this.customList = customList;
+  }
+
+  public CDuration getDuration() {
+    return duration;
+  }
+
+  public void setDuration(CDuration duration) {
+    this.duration = duration;
   }
 }
