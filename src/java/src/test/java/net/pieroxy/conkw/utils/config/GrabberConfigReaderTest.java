@@ -171,6 +171,20 @@ public class GrabberConfigReaderTest extends ConkwTestCase {
         assertNull(o.getSc().get("testB"));
     }
 
+    public void testNullMaps() {
+        ObjectWithMaps o = parseandFillInCustomProperty("{\"version\":7, \"object\":{" +
+                        "\"ss\":null" +
+                        ", \"sb\":null" +
+                        ", \"sd\":null" +
+                        ", \"sc\":null" +
+                        "}}}",
+                7, ObjectWithMaps.class);
+        assertNull(o.getSs());
+        assertNull(o.getSd());
+        assertNull(o.getSb());
+        assertNull(o.getSc());
+    }
+
     public void testCustomField() {
         ObjectWithCustomField o = parseandFillInCustomProperty("{\"version\":7, \"object\":{" +
                 "\"object\":{" +
