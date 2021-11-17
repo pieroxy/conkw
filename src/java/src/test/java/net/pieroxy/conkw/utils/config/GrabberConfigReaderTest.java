@@ -135,6 +135,42 @@ public class GrabberConfigReaderTest extends ConkwTestCase {
         assertNull(o.getDoubleValues());
     }
 
+    public void testMaps() {
+        ObjectWithMaps o = parseandFillInCustomProperty("{\"version\":7, \"object\":{" +
+                        "\"ss\":{" +
+                            "\"test\":\"123\"" +
+                        "}, \"sb\":{" +
+                            "\"testa\":true," +
+                            "\"testb\":false" +
+                        "}, \"sd\":{" +
+                            "\"test1\":123," +
+                            "\"test2\":1.001e100" +
+                        "}, \"sc\":{" +
+                            "\"testA\":{\"doubleValue\":2e200,\"doubleList\":[0.1,-1001]}," +
+                            "\"testB\":null" +
+                        "}}}",
+                7, ObjectWithMaps.class);
+        assertNotNull(o.getSs());
+        assertEquals(1, o.getSs().size());
+        assertEquals("123", o.getSs().get("test"));
+        assertNotNull(o.getSd());
+        assertEquals(2, o.getSd().size());
+        assertEquals(123., o.getSd().get("test1"));
+        assertEquals(1.001e100, o.getSd().get("test2"));
+        assertNotNull(o.getSb());
+        assertEquals(2, o.getSb().size());
+        assertEquals(Boolean.TRUE, o.getSb().get("testa"));
+        assertEquals(Boolean.FALSE, o.getSb().get("testb"));
+        assertNotNull(o.getSc());
+        assertEquals(2, o.getSc().size());
+        assertNotNull(o.getSc().get("testA"));
+        assertEquals(2e200, o.getSc().get("testA").getDoubleValue());
+        assertEquals(2, o.getSc().get("testA").getDoubleList().size());
+        assertEquals(.1, o.getSc().get("testA").getDoubleList().get(0));
+        assertEquals(-1001d, o.getSc().get("testA").getDoubleList().get(1));
+        assertNull(o.getSc().get("testB"));
+    }
+
     public void testCustomField() {
         ObjectWithCustomField o = parseandFillInCustomProperty("{\"version\":7, \"object\":{" +
                 "\"object\":{" +
