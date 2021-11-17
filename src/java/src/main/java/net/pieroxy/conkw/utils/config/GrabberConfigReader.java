@@ -100,8 +100,8 @@ public class GrabberConfigReader {
             } else {
                 reason = "*not* a ParameterizedType : " + genericType;
             }
-        } else if (value instanceof Map) { // We have a custom object here
-            if (genericType instanceof Class) {
+        } else if (value instanceof Map) {
+            if (genericType instanceof Class) { // We have a custom object here, handled as a JavaBean
                 try {
                     Object res = ((Class)genericType).newInstance();
                     fillObject(res, value);
@@ -109,9 +109,24 @@ public class GrabberConfigReader {
                 } catch (Exception e) {
                     throw new RuntimeException("Could not instantiate "+genericType+".", e);
                 }
+            } else if (genericType instanceof ParameterizedType) {
+                ParameterizedType pt = (ParameterizedType) genericType;
+                if (pt.getRawType() == Map.class) {
+                    Type keys = pt.getActualTypeArguments()[0];
+                    Type values = pt.getActualTypeArguments()[1];
+                    Map<Object, Object> valueMap = (Map<Object, Object>) value;
+                    Map res = new HashMap();
+                    valueMap.entrySet().forEach((Map.Entry e) -> {
+                        res.put(buildObject(e.getKey(), keys), buildObject(e.getValue(), values));
+                    });
+                    return res;
+                } else {
+                    reason = "*not* A Map " + genericType;
+                }
             } else {
-                reason = "*not* a java.lang.Class : " + genericType;
+                reason = "*not* A java.lang.Class nor a ParameterizedType: " + genericType;
             }
+
         } else if (value instanceof String && customStringConverters.containsKey(genericType)) { // We have a custom converter
             return customStringConverters.get(genericType).convert((String)value);
         } else {
