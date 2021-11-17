@@ -171,6 +171,33 @@ public class GrabberConfigReaderTest extends ConkwTestCase {
         assertNull(o.getSc().get("testB"));
     }
 
+    public void testWronglyTypedMaps() {
+        assertThrows(() -> parseandFillInCustomProperty("{\"version\":7, \"object\":{" +
+                        "\"ss\":{\"test\":123}}}",
+                7, ObjectWithMaps.class), RuntimeException.class, null);
+        assertThrows(() -> parseandFillInCustomProperty("{\"version\":7, \"object\":{" +
+                        "\"ss\":{\"test\":true}}}",
+                7, ObjectWithMaps.class), RuntimeException.class, null);
+        assertThrows(() -> parseandFillInCustomProperty("{\"version\":7, \"object\":{" +
+                        "\"sb\":{\"test\":\"true\"}}}",
+                7, ObjectWithMaps.class), RuntimeException.class, null);
+        assertThrows(() -> parseandFillInCustomProperty("{\"version\":7, \"object\":{" +
+                        "\"sb\":{\"test\":123}}}",
+                7, ObjectWithMaps.class), RuntimeException.class, null);
+        assertThrows(() -> parseandFillInCustomProperty("{\"version\":7, \"object\":{" +
+                        "\"sd\":{\"test\":\"123\"}}}",
+                7, ObjectWithMaps.class), RuntimeException.class, null);
+        assertThrows(() -> parseandFillInCustomProperty("{\"version\":7, \"object\":{" +
+                        "\"sd\":{\"test\":true}}}",
+                7, ObjectWithMaps.class), RuntimeException.class, null);
+        assertThrows(() -> parseandFillInCustomProperty("{\"version\":7, \"object\":{" +
+                        "\"sd\":{\"test\":{}}}}",
+                7, ObjectWithMaps.class), RuntimeException.class, null);
+        assertThrows(() -> parseandFillInCustomProperty("{\"version\":7, \"object\":{" +
+                        "\"sd\":{\"test\":[]}}}",
+                7, ObjectWithMaps.class), RuntimeException.class, null);
+    }
+
     public void testNullMaps() {
         ObjectWithMaps o = parseandFillInCustomProperty("{\"version\":7, \"object\":{" +
                         "\"ss\":null" +
