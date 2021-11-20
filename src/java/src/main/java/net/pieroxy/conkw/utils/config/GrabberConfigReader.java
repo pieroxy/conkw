@@ -73,27 +73,9 @@ public class GrabberConfigReader {
                 ParameterizedType pt = (ParameterizedType) genericType;
                 if (pt.getRawType() == List.class) {
                     Type listOf = pt.getActualTypeArguments()[0];
-                    if (isSimpleType(listOf)) {
                         List res = new ArrayList(list.size());
                         list.forEach(e -> res.add(buildObject(e, listOf)));
                         return res;
-                    } else {
-                        if (listOf instanceof Class) {
-                            List res = new ArrayList(list.size());
-                            list.forEach(e -> {
-                                try {
-                                    Object resVal = ((Class) listOf).newInstance();
-                                    fillObject(resVal, e);
-                                    res.add(resVal);
-                                } catch (Exception ex) {
-                                    throw new RuntimeException("Could not instantiate " + listOf + ".", ex);
-                                }
-                            });
-                            return res;
-                        } else {
-                            reason = "*not* a java.lang.Class : " + genericType;
-                        }
-                    }
                 } else {
                     reason = "*not* a list : " + pt.getRawType();
                 }
