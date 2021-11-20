@@ -22,7 +22,6 @@ public abstract class Grabber<T extends Collector, C> {
   private File storageFolder=null;
   private File tmpFolder=null;
   private Set<String> extract = new HashSet<>();
-  private C config;
 
   private String name;
 
@@ -46,14 +45,6 @@ public abstract class Grabber<T extends Collector, C> {
    */
   public C getDefaultConfig() {
     return null;
-  }
-
-  public C getConfig() {
-    return config;
-  }
-
-  public void setConfig(C config) {
-    this.config = config;
   }
 
   private void gcConfigurations() {

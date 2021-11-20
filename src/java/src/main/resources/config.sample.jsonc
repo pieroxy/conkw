@@ -113,20 +113,6 @@
         "names":"google.com,facebook.com,apple.com"
       }
     },
-    //HTTP
-    {
-      // Http endpoint grabber. Extracts size, response time and custom regexp captures from a http(s) endpoint.
-      "implementation":"net.pieroxy.conkw.webapp.grabbers.http.HttpEndpointGrabber",
-      "config": {
-        "endpoints":[
-          {
-            "id":"toto",
-            "url":"http://localhost:12789/api?grabbers=sys"
-          }
-        ]
-      }
-    },
-    
     //FILE
     {
       // File grabber. Extracts data from flat files.
