@@ -5,6 +5,7 @@ import net.pieroxy.conkw.config.ConfigReader;
 import net.pieroxy.conkw.config.GrabberConfig;
 import net.pieroxy.conkw.grabbersBase.Grabber;
 import net.pieroxy.conkw.grabbersBase.GrabberListener;
+import net.pieroxy.conkw.utils.config.GrabberConfigReader;
 import net.pieroxy.conkw.webapp.servlets.Api;
 import net.pieroxy.conkw.webapp.servlets.ApiManager;
 import net.pieroxy.conkw.webapp.servlets.Emi;
@@ -57,6 +58,7 @@ public class Listener implements ServletContextListener {
           } else {
             g.setLogLevel(Level.INFO);
           }
+          GrabberConfigReader.fillObject(g.getDefaultConfig(), gc.getConfig());
           g.initConfig(ConfigReader.getHomeDir(), gc.getParameters(), gc.getNamedParameters());
 
           if (g.getName() == null) {
