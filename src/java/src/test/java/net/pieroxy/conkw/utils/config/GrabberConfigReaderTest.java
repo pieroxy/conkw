@@ -270,6 +270,20 @@ public class GrabberConfigReaderTest extends ConkwTestCase {
         assertEquals(3, o.getObject().getDuration().asDays());
     }
 
+    public void testExistingValues() {
+        TestModel data = parseJson("{\"version\":72, \"object\":{}}");
+        assertEquals(72, data.version);
+        assertNotNull(data.getObject());
+
+        ObjectWithSimpleFields o = new ObjectWithSimpleFields();
+        o.setDoubleValue(365.);
+        o.setStringValue("abc123");
+        GrabberConfigReader.fillObject(o, data.object);
+
+        assertEquals(365., o.getDoubleValue());
+        assertEquals("abc123", o.getStringValue());
+    }
+
     public void testCustomFieldWithErrors() {
         assertThrows(() -> parseandFillInCustomProperty("{\"version\":7, \"object\":{" +
                     "\"object\":{" +
