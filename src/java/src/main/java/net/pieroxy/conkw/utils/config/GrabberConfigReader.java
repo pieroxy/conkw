@@ -48,7 +48,7 @@ public class GrabberConfigReader {
                 } catch (RuntimeException e) {
                     throw e;
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    throw new RuntimeException("Could not access field " + s + ". Please ensure both the containing class and the setter are public.", e);
                 }
             }
         });
