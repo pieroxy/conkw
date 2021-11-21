@@ -22,6 +22,7 @@ public abstract class Grabber<T extends Collector, C> {
   private File storageFolder=null;
   private File tmpFolder=null;
   private Set<String> extract = new HashSet<>();
+  private C config;
 
   private String name;
 
@@ -45,6 +46,14 @@ public abstract class Grabber<T extends Collector, C> {
    */
   public C getDefaultConfig() {
     return null;
+  }
+
+  public C getConfig() {
+    return config;
+  }
+
+  public void setConfig(C config) {
+    this.config = config;
   }
 
   private void gcConfigurations() {
@@ -206,15 +215,21 @@ public abstract class Grabber<T extends Collector, C> {
   }
 
   private Logger createLogger() {
-    String n = getName();
-    if (n==null) n = getDefaultName();
-    Logger l = Logger.getLogger(this.getClass().getName() + "/" + n);
+    String loggerName = getGrabberFQN();
+    Logger l = Logger.getLogger(loggerName);
     if (logLevel!=null) l.setLevel(logLevel);
     return l;
   }
 
+  public String getGrabberFQN() {
+    String n = getName();
+    if (n==null) n = getDefaultName();
+    String loggerName = this.getClass().getName() + "/" + n;
+    return loggerName;
+  }
+
   @Override
   public String toString() {
-    return getClass().getName() + "/" + getName();
+    return getGrabberFQN();
   }
 }
