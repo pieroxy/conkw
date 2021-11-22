@@ -4,7 +4,7 @@ import com.dslplatform.json.DslJson;
 import com.dslplatform.json.JsonWriter;
 import net.pieroxy.conkw.config.ApiAuth;
 import net.pieroxy.conkw.config.User;
-import net.pieroxy.conkw.utils.HashTools;
+import net.pieroxy.conkw.utils.hashing.HashTools;
 import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.webapp.model.NeedsAuthResponse;
 import net.pieroxy.conkw.webapp.servlets.auth.ChallengeResponse;

@@ -2,7 +2,7 @@ package net.pieroxy.conkw.webapp.grabbers.email;
 
 import com.sun.mail.imap.IMAPFolder;
 import net.pieroxy.conkw.collectors.SimpleCollector;
-import net.pieroxy.conkw.utils.HashTools;
+import net.pieroxy.conkw.utils.hashing.HashTools;
 import net.pieroxy.conkw.utils.StringUtil;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.duration.CDurationParser;
@@ -17,7 +17,6 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
