@@ -22,6 +22,8 @@ public abstract class TimeThrottledGrabber<C extends TimeThrottledGrabber.TimeTh
   protected abstract CDuration getDefaultTtl();
   protected abstract void load(SimpleCollector res);
   protected abstract String getCacheKey();
+
+  @Deprecated
   protected abstract void applyConfig(Map<String, String> config, Map<String, Map<String, String>> configs);
 
   private CDuration ttl;
@@ -42,13 +44,24 @@ public abstract class TimeThrottledGrabber<C extends TimeThrottledGrabber.TimeTh
   }
 
   protected final void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
-    ttl = getDefaultTtl();
-    errorTtl = new CDuration(Math.max(1, Math.min(60, getDefaultTtl().asSeconds() / 10)));
+    if (getConfig() == null) {
+      // Old config handling
+      ttl = getDefaultTtl();
+      errorTtl = new CDuration(Math.max(1, Math.min(60, getDefaultTtl().asSeconds() / 10)));
 
-    ttl = getDurationProperty("ttl", config, ttl);
-    errorTtl = getDurationProperty("errorTtl", config, errorTtl);
+      ttl = getDurationProperty("ttl", config, ttl);
+      errorTtl = getDurationProperty("errorTtl", config, errorTtl);
 
-    applyConfig(config, configs);
+      applyConfig(config, configs);
+    } else {
+      // New config handling
+      ttl = getConfig().getTtl();
+      if (ttl == null) throw new RuntimeException("No TTL defined for grabber " + getGrabberFQN());
+      errorTtl = getConfig().getErrorTtl() == null ?
+              new CDuration(Math.max(1, Math.min(60, ttl.asSeconds() / 10)))
+              :
+              getConfig().getErrorTtl();
+    }
   }
 
   protected CDuration getTtl() {
@@ -242,6 +255,7 @@ public abstract class TimeThrottledGrabber<C extends TimeThrottledGrabber.TimeTh
 
   public static class TimeThrottledGrabberConfig {
     CDuration ttl;
+    CDuration errorTtl;
 
     public CDuration getTtl() {
       return ttl;
@@ -249,6 +263,14 @@ public abstract class TimeThrottledGrabber<C extends TimeThrottledGrabber.TimeTh
 
     public void setTtl(CDuration ttl) {
       this.ttl = ttl;
+    }
+
+    public CDuration getErrorTtl() {
+      return errorTtl;
+    }
+
+    public void setErrorTtl(CDuration errorTtl) {
+      this.errorTtl = errorTtl;
     }
   }
 }
