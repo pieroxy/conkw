@@ -5,6 +5,7 @@ import net.pieroxy.conkw.collectors.SimpleTransientCollector;
 import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
 import net.pieroxy.conkw.utils.*;
 import net.pieroxy.conkw.utils.exceptions.DisplayMessageException;
+import net.pieroxy.conkw.utils.hashing.HashTools;
 import net.pieroxy.conkw.webapp.model.NeedsAuthResponse;
 import net.pieroxy.conkw.webapp.model.Response;
 import net.pieroxy.conkw.webapp.model.ResponseData;

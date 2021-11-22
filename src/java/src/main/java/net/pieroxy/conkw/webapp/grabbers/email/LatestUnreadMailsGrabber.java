@@ -1,7 +1,7 @@
 package net.pieroxy.conkw.webapp.grabbers.email;
 
 import net.pieroxy.conkw.collectors.SimpleCollector;
-import net.pieroxy.conkw.utils.HashTools;
+import net.pieroxy.conkw.utils.hashing.HashTools;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.duration.CDurationParser;
 import net.pieroxy.conkw.grabbersBase.TimeThrottledGrabber;

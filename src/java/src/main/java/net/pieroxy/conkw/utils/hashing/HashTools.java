@@ -1,4 +1,4 @@
-package net.pieroxy.conkw.utils;
+package net.pieroxy.conkw.utils.hashing;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
