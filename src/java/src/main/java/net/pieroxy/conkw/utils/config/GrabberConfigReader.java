@@ -10,6 +10,7 @@ import java.lang.reflect.Type;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 public class GrabberConfigReader {
     private static Logger LOGGER = Logger.getLogger(GrabberConfigReader.class.getName());
@@ -20,6 +21,12 @@ public class GrabberConfigReader {
             @Override
             public Object convert(String dat) {
                 return CDurationParser.parse(dat);
+            }
+        });
+        customStringConverters.put(Pattern.class, new CustomConverter() {
+            @Override
+            public Object convert(String dat) {
+                return Pattern.compile(dat);
             }
         });
     }
