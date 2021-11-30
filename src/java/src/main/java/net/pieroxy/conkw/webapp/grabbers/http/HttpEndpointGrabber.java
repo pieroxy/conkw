@@ -13,6 +13,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -60,25 +61,33 @@ public class HttpEndpointGrabber extends TimeThrottledGrabber<HttpEndpointGrabbe
             }
             String body = DebugTools.isToString(is);
             long lastByte = System.nanoTime();
-            res.collect(AccumulatorUtils.addToMetricName("", endPointMonitoringConfig.id, "size"), body.length());
-            res.collect(AccumulatorUtils.addToMetricName("", endPointMonitoringConfig.id, "firstByteTime"), firstByte - begin);
-            res.collect(AccumulatorUtils.addToMetricName("", endPointMonitoringConfig.id, "lastByteTime"), lastByte - begin);
-            for (Map.Entry<String, Pattern> p : endPointMonitoringConfig.toExtract.entrySet()) {
-                Matcher m = p.getValue().matcher(body);
-                if (m.groupCount() == 1) {
-                    res.collect(AccumulatorUtils.addToMetricName("", endPointMonitoringConfig.id, p.getKey()), m.group(1));
-                }
-            }
+            collectDataFromHttp(begin, firstByte, lastByte, body, endPointMonitoringConfig, res);
         } catch (Exception e) {
             res.collect(AccumulatorUtils.addToMetricName("", endPointMonitoringConfig.id, "error"), e.getMessage());
         }
     }
 
-    @Override
-    protected String getCacheKey() {
-        Md5Sum sum = new Md5Sum();
-        getConfig().addToHash(sum);
-        return sum.getMd5Sum();
+    protected void collectDataFromHttp(long begin, long firstByte, long lastByte, String body, EndPointMonitoringConfig endPointMonitoringConfig, SimpleCollector res) {
+        res.collect(AccumulatorUtils.addToMetricName(endPointMonitoringConfig.id, "size"), body.length());
+        res.collect(AccumulatorUtils.addToMetricName(endPointMonitoringConfig.id, "firstByte", "time"), firstByte - begin);
+        res.collect(AccumulatorUtils.addToMetricName(endPointMonitoringConfig.id, "lastByte", "time"), lastByte - begin);
+        if (canLogFine()) log(Level.FINE, "Capturing Regexes: " + endPointMonitoringConfig.toExtract.size());
+        for (EndPointMonitoringPatternConfig p : endPointMonitoringConfig.toExtract) {
+            if (canLogFine()) log(Level.FINE, "Pattern: " + p.getPattern().pattern());
+            Matcher m = p.getPattern().matcher(body);
+            if (canLogFine()) log(Level.FINE, "Matches: " + m.matches()+ " Groups: " + m.groupCount());
+            if (m.groupCount() == 1 && m.matches()) {
+                String values = m.group(1);
+                if (canLogFine()) log(Level.FINE, "Captured: "+values);
+                String metricName = AccumulatorUtils.addToMetricName(endPointMonitoringConfig.id, p.getId());
+                if (canLogFine()) log(Level.FINE, "With name: " + metricName);
+                if (p.isNumber() !=null && p.isNumber()) {
+                    res.collect(metricName, Double.parseDouble(values));
+                } else {
+                    res.collect(metricName, values);
+                }
+            }
+        }
     }
 
     @Override
@@ -116,7 +125,7 @@ public class HttpEndpointGrabber extends TimeThrottledGrabber<HttpEndpointGrabbe
     public static class EndPointMonitoringConfig implements Hashable {
         String id;
         String url;
-        Map<String, Pattern> toExtract;
+        List<EndPointMonitoringPatternConfig> toExtract;
 
         @Override
         public String toString() {
@@ -143,20 +152,55 @@ public class HttpEndpointGrabber extends TimeThrottledGrabber<HttpEndpointGrabbe
             this.url = url;
         }
 
-        public Map<String, Pattern> getToExtract() {
+        public List<EndPointMonitoringPatternConfig> getToExtract() {
             return toExtract;
         }
 
-        public void setToExtract(Map<String, Pattern> toExtract) {
+        public void setToExtract(List<EndPointMonitoringPatternConfig> toExtract) {
             this.toExtract = toExtract;
         }
 
         @Override
         public void addToHash(Md5Sum sum) {
             sum.add(id).add(url);
-            for (Map.Entry<String, Pattern> e : toExtract.entrySet()) {
-                sum.add(e.getKey()).add(e.getValue().pattern());
+            for (EndPointMonitoringPatternConfig c : toExtract) {
+                c.addToHash(sum);
             }
+        }
+    }
+
+    public static class EndPointMonitoringPatternConfig implements Hashable {
+        private String id;
+        private Pattern pattern;
+        private Boolean number;
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public Pattern getPattern() {
+            return pattern;
+        }
+
+        public void setPattern(Pattern pattern) {
+            this.pattern = pattern;
+        }
+
+        public Boolean isNumber() {
+            return number;
+        }
+
+        public void setNumber(Boolean number) {
+            this.number = number;
+        }
+
+        @Override
+        public void addToHash(Md5Sum sum) {
+            sum.add(id).add(pattern.pattern()).add(number ? "true" : "false");
         }
     }
 }
