@@ -7,6 +7,8 @@ import net.pieroxy.conkw.collectors.SimpleTransientCollector;
 import net.pieroxy.conkw.pub.misc.ConkwCloseable;
 import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.utils.duration.CDuration;
+import net.pieroxy.conkw.utils.hashing.Hashable;
+import net.pieroxy.conkw.utils.hashing.Md5Sum;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
@@ -21,7 +23,13 @@ import java.util.logging.Level;
 public abstract class TimeThrottledGrabber<C extends TimeThrottledGrabber.TimeThrottledGrabberConfig> extends AsyncGrabber<SimpleCollector, C> {
   protected abstract CDuration getDefaultTtl();
   protected abstract void load(SimpleCollector res);
-  protected abstract String getCacheKey();
+
+  //TODO make this final after config refacto
+  protected String getCacheKey() {
+    Md5Sum sum = new Md5Sum();
+    getConfig().addToHash(sum);
+    return sum.getMd5Sum();
+  }
 
   @Deprecated
   protected abstract void applyConfig(Map<String, String> config, Map<String, Map<String, String>> configs);
@@ -253,9 +261,14 @@ public abstract class TimeThrottledGrabber<C extends TimeThrottledGrabber.TimeTh
     }
   }
 
-  public static class TimeThrottledGrabberConfig {
+  public abstract static class TimeThrottledGrabberConfig implements Hashable {
     CDuration ttl;
     CDuration errorTtl;
+
+    @Override
+    //TODO remove this after config refacto
+    public void addToHash(Md5Sum sum) {
+    }
 
     public CDuration getTtl() {
       return ttl;
