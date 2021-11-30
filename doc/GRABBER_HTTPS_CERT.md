@@ -29,4 +29,4 @@ For each domain name (here `mysite.com`), this grabber will produce three metric
 
 It also produces the list of all names, as defined in the configuration:
 
- `str.alldomains` the comma separated list of domains in the configuration file.
+* `str.alldomains` the comma separated list of domains in the configuration file.
