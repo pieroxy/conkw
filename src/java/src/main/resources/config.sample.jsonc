@@ -122,7 +122,18 @@
         "endpoints":[
           {
             "id":"sysgrabber",
-            "url":"http://localhost:12789/api?grabbers=sys"
+            "url":"http://localhost:12789/api?grabbers=sys",
+            "toExtract":[
+              {
+                "id":"cpu",
+                "pattern":".*\"totalCpuUsage\":([0-9+-e.]+),.*",
+                "number":true
+              }
+            ]
+          },
+          {
+            "id":"home",
+            "url":"http://localhost:12789/"
           }
         ]
       }
