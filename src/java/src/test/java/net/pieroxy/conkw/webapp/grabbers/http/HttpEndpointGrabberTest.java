@@ -26,6 +26,10 @@ public class HttpEndpointGrabberTest extends ConkwTestCase {
         conf.getToExtract().get(1).setId("pat2");
         conf.getToExtract().get(1).setNumber(true);
         conf.getToExtract().get(1).setPattern(Pattern.compile(".*data(.*)"));
+        conf.getToExtract().add(new HttpEndpointGrabber.EndPointMonitoringPatternConfig());
+        conf.getToExtract().get(2).setId("pat3");
+        conf.getToExtract().get(2).setNumber(false);
+        conf.getToExtract().get(2).setPattern(Pattern.compile(".*data(.*)toto"));
 
         grabber.collectDataFromHttp(0, 100, 200, "lots of data123", conf, sc);
         sc.collectionDone();
@@ -33,7 +37,11 @@ public class HttpEndpointGrabberTest extends ConkwTestCase {
         ResponseData data = sc.getDataCopy();
         assertMapContains(data.getNum(), "ex.firstByte.time", 100.);
         assertMapContains(data.getNum(), "ex.lastByte.time", 200.);
-        assertMapContains(data.getStr(), "ex.pat1", "of");
-        assertMapContains(data.getNum(), "ex.pat2", 123.);
+        assertMapContains(data.getNum(), "ex.pat1.matched", 1.);
+        assertMapContains(data.getNum(), "ex.pat2.matched", 1.);
+        assertMapContains(data.getNum(), "ex.pat3.matched", 0.);
+        assertMapContains(data.getStr(), "ex.pat1.captured", "of");
+        assertMapContains(data.getNum(), "ex.pat2.captured", 123.);
+        assertMapDoesNotContain(data.getNum(), "ex.pat3.captured");
     }
 }

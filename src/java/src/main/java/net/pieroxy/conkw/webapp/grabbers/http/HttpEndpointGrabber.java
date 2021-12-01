@@ -73,13 +73,15 @@ public class HttpEndpointGrabber extends TimeThrottledGrabber<HttpEndpointGrabbe
         res.collect(AccumulatorUtils.addToMetricName(endPointMonitoringConfig.id, "lastByte", "time"), lastByte - begin);
         if (canLogFine()) log(Level.FINE, "Capturing Regexes: " + endPointMonitoringConfig.toExtract.size());
         for (EndPointMonitoringPatternConfig p : endPointMonitoringConfig.toExtract) {
+            String rootMetricName = AccumulatorUtils.addToMetricName(endPointMonitoringConfig.id, p.getId());
             if (canLogFine()) log(Level.FINE, "Pattern: " + p.getPattern().pattern());
             Matcher m = p.getPattern().matcher(body);
             if (canLogFine()) log(Level.FINE, "Matches: " + m.matches()+ " Groups: " + m.groupCount());
+            res.collect(AccumulatorUtils.addToMetricName(rootMetricName, "matched"), m.matches() ? 1 : 0);
             if (m.groupCount() == 1 && m.matches()) {
+                String metricName = AccumulatorUtils.addToMetricName(rootMetricName, "captured");
                 String values = m.group(1);
                 if (canLogFine()) log(Level.FINE, "Captured: "+values);
-                String metricName = AccumulatorUtils.addToMetricName(endPointMonitoringConfig.id, p.getId());
                 if (canLogFine()) log(Level.FINE, "With name: " + metricName);
                 if (p.isNumber() !=null && p.isNumber()) {
                     res.collect(metricName, Double.parseDouble(values));
