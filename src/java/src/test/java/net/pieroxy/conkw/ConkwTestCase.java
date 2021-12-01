@@ -18,6 +18,13 @@ public abstract class ConkwTestCase extends TestCase {
         }
     }
 
+    public void assertMapDoesNotContain(Map<?,?> data, Object key) { {
+        if (data.containsKey(key)) {
+            String msg = "Key '"+key+"' found in map with value '"+data.get(key)+"'";
+            fail(msg);
+        }
+    }}
+
     public  <T extends Throwable> void assertThrows(Runnable r, Class<T> shouldThrow, ExceptionInspector<T> inspector) {
         try {
             r.run();
