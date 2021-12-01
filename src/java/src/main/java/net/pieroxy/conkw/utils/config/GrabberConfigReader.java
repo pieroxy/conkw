@@ -126,12 +126,19 @@ public class GrabberConfigReader {
     }
 
     private static Method getSetter(Object src, String fieldName) {
-        Method[] methods = src.getClass().getDeclaredMethods();
+        return getSetter(src.getClass(), src.getClass(), fieldName);
+    }
+    private static Method getSetter(Class originalClazz, Class clazz, String fieldName) {
+        Method[] methods = clazz.getDeclaredMethods();
         String name = getSetterName(fieldName);
         for (Method m : methods) {
             if (m.getParameterCount() == 1 && m.getName().equals(name) && Modifier.isPublic(m.getModifiers())) return m;
         }
-        throw new RuntimeException("Could not find public setter for field " + fieldName);
+        Class superClazz = clazz.getSuperclass();
+        if (superClazz!=null) return getSetter(originalClazz, superClazz, fieldName);
+
+        if (clazz.isInterface()) return null;
+        throw new RuntimeException("Could not find public setter for field " + fieldName + " on " + originalClazz);
     }
 
     private static String getSetterName(String fieldName) {

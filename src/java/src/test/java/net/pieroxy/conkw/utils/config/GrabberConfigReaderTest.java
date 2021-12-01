@@ -342,6 +342,15 @@ public class GrabberConfigReaderTest extends ConkwTestCase {
             RuntimeException.class, null);
     }
 
+    public void testSuperClassFields() {
+        ChildObject o = parseandFillInCustomProperty("{\"version\":17, \"object\":{\"childProperty\":\"CP\",\"motherProperty\":\"MP\"}}",
+                17, ChildObject.class);
+        assertNotNull(o.getMotherProperty());
+        assertNotNull(o.getChildProperty());
+        assertEquals("MP", o.getMotherProperty());
+        assertEquals("CP", o.getChildProperty());
+    }
+
     TestModel parseJson(String json) {
         try {
             return JsonHelper.getJson().deserialize(TestModel.class, new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8)));
