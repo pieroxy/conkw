@@ -300,7 +300,7 @@ ConkW.loaded = function(req, requestTime) {
 }
 
 ConkW.setStatus = function(msg) {
-    var status = document.getElementById("str_status");
+    var status = document.getElementById("cw-status");
     if (status) {
         status.innerHTML = msg;
         status.title = msg;
@@ -393,6 +393,8 @@ ConkW.getProperLabel = function(key, value) {
             return this.getTimeLabel(value);
         case "time_ms":
             return this.getTimeLabel(value/1000);
+        case "time_small_ns":
+            return this.getPrecisionTimeLabelInNs(value);
         case "load":
             return this.getLoadLabel(value);
         case "rpm":
@@ -519,6 +521,18 @@ ConkW.getTimeLabel = function(value) {
     res = value + 'y ' + res;
 
     return res;
+}
+
+ConkW.getPrecisionTimeLabelInNs = function(value) {
+    var res = "";
+    value = value / 1000000;
+    res = ""+value;
+    while (res.length < 6) {
+        if (res.indexOf(".")>-1) res += "0";
+        else res += "."
+    }
+    if (res.length > 6) res = res.substring(0, 6);
+    return res + "ms"
 }
 
 ConkW.getTempLabel = function(value) {
@@ -836,6 +850,7 @@ class PropertyHolder {
     constructor(e, ns, v, pn) {
         this.element = e;
         this.propertyName = pn;
+        if (pn == "classname") this.propertyName = "className";
         this.valueExpr = ConkW.parseValueExpression(v);
         this.ns = ns;
         this.cacheKey = ConkW.getUniqueNumber();
