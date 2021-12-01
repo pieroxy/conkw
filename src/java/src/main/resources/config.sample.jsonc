@@ -117,7 +117,7 @@
     {
       // Http endpoint grabber. Extracts size, response time and custom regexp captures from a http(s) endpoint.
       "implementation":"net.pieroxy.conkw.webapp.grabbers.http.HttpEndpointGrabber",
-      "name":"http_em",
+      "name":"http_em_sys",
       "config": {
         "endpoints":[
           {
@@ -134,6 +134,39 @@
           {
             "id":"home",
             "url":"http://localhost:12789/"
+          }
+        ]
+      }
+    },
+    //HTTP
+    {
+      // Http endpoint grabber. Extracts size, response time and custom regexp captures from a http(s) endpoint.
+      "implementation":"net.pieroxy.conkw.webapp.grabbers.http.HttpEndpointGrabber",
+      "name":"http_em_exts",
+      "config": {
+        "ttl": "1m",
+        "endpoints":[
+          {
+            "id":"slack",
+            "url":"https://status.slack.com/api/v2.0.0/current",
+            "toExtract":[
+              {
+                "id":"ok",
+                "pattern":".*\"status\":\"ok\".*",
+                "number":false
+              }
+            ]
+          },
+          {
+            "id":"office365",
+            "url": "https://portal.office.com/servicestatus",
+            "toExtract":[
+              {
+                "id":"ok",
+                "pattern":".*Everything is up and running.*",
+                "number":false
+              }
+            ]
           }
         ]
       }
