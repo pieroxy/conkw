@@ -34,6 +34,11 @@ public class RemoveJsonCommentsInputStreamTest extends TestCase {
         assertEquals("\"tot//oblah\"", filter("\"tot//oblah\""));
     }
 
+    public void testDoubleQuoteInString() throws Exception {
+        assertEquals("\"to\"t", filter("\"to\"t//oblah\""));
+        assertEquals("\"to\\\"t//oblah\"", filter("\"to\\\"t//oblah\""));
+    }
+
     private String filter(String input) throws IOException {
         InputStream is = new ByteArrayInputStream(input.getBytes(Charset.forName("UTF8")));
         InputStream is2 = new RemoveJsonCommentsInputStream(is, "test");

@@ -37,7 +37,7 @@ public class RemoveJsonCommentsInputStream extends InputStream {
                 else if (next == '\\') status = STATUS_STRING_BACKSLASH;
                 break;
             case STATUS_STRING_BACKSLASH:
-                status = STATUS_NORMAL;
+                status = STATUS_STRING;
                 break;
         }
         return next;
