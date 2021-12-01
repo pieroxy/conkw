@@ -26,7 +26,7 @@ public class GrabberConfigReader {
         customStringConverters.put(Pattern.class, new CustomConverter() {
             @Override
             public Object convert(String dat) {
-                return Pattern.compile(dat);
+                return Pattern.compile(dat, Pattern.DOTALL);
             }
         });
     }
