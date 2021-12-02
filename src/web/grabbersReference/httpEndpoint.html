@@ -50,6 +50,8 @@
             This is another sample HttpEndpointGrabber that reads popular cloud status pages. It updates itself every minute.<br><br>
             <label>     <a href="https://status.slack.com/" target="_blank">Slack</a> : </label><cw-label cw-ns="http_em_exts" cw-prop-className="e:str::${num['slack.ok.matched'] ? '' : 'cw-error'}" cw-value="e:str::${num['slack.ok.matched'] ? 'OK' : 'Ongoing incident'}"></cw-label><br>
             <label><a href="https://portal.office.com/servicestatus" target="_blank">Office 365</a> : </label><cw-label cw-ns="http_em_exts" cw-prop-className="e:str::${num['office365.ok.matched'] ? '' : 'cw-error'}" cw-value="e:str::${num['office365.ok.matched'] ? 'OK' : 'Ongoing incident'}"></cw-label><br>
+            <label>    <a href="https://trello.status.atlassian.com/" target="_blank">Trello</a> : </label><cw-label cw-ns="http_em_exts" cw-prop-className="e:str::${num['trello.ok.matched'] ? '' : 'cw-error'}" cw-value="e:str::${num['trello.ok.matched'] ? 'OK' : 'Ongoing incident'}"></cw-label><br>
+            <label>  <a href="https://opsgenie.status.atlassian.com/" target="_blank">OpsGenie</a> : </label><cw-label cw-ns="http_em_exts" cw-prop-className="e:str::${num['opsgenie.ok.matched'] ? '' : 'cw-error'}" cw-value="e:str::${num['opsgenie.ok.matched'] ? 'OK' : 'Ongoing incident'}"></cw-label><br>
             
           </div>
         </div>

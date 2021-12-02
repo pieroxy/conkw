@@ -167,6 +167,28 @@
                 "number":false
               }
             ]
+          },
+          {
+            "id":"trello",
+            "url": "https://trello.status.atlassian.com/",
+            "toExtract":[
+              {
+                "id":"ok",
+                "pattern":".*All Systems Operational.*",
+                "number":false
+              }
+            ]
+          },
+          {
+            "id":"opsgenie",
+            "url": "https://opsgenie.status.atlassian.com/",
+            "toExtract":[
+              {
+                "id":"ok",
+                "pattern":".*All Systems Operational.*",
+                "number":false
+              }
+            ]
           }
         ]
       }
