@@ -6,6 +6,7 @@ import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.collectors.SimpleTransientCollector;
 import net.pieroxy.conkw.pub.misc.ConkwCloseable;
 import net.pieroxy.conkw.utils.JsonHelper;
+import net.pieroxy.conkw.utils.Utils;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.hashing.Hashable;
 import net.pieroxy.conkw.utils.hashing.Md5Sum;
@@ -108,15 +109,19 @@ public abstract class TimeThrottledGrabber<C extends TimeThrottledGrabber.TimeTh
       log(Level.INFO, "Cache file not found, might be the first run.");
       return;
     }
+    log(Level.INFO, "Loading from cache " + getCacheFile().getAbsolutePath());
     try (FileInputStream fis = new FileInputStream(cacheFile)) {
       try (CachedData data = JsonHelper.getJson().deserialize(CachedData.class, fis)) {
+        if (!Utils.objectEquals(data.getCacheKey(),getCacheKey())) {
+          log(Level.INFO, "Config changed. Discarding cache.");
+          return;
+        }
         Map tmp = privateData;
         privateData = data.getPrivateData();
         HashMapPool.getInstance().giveBack(tmp);
         if (privateData == null) privateData = HashMapPool.getInstance().borrow(0);
         cacheLoaded(data.getDatasets(), data.getPrivateData());
 
-        log(Level.INFO, "Loading from cache " + getCacheFile().getAbsolutePath());
         lastGrabHadErrors = false;
         for (Map.Entry<String, ResponseData> entry : data.getDatasets().entrySet()) {
           String configKey = entry.getKey();
@@ -137,6 +142,7 @@ public abstract class TimeThrottledGrabber<C extends TimeThrottledGrabber.TimeTh
     log(Level.FINE, "writeCacheFile() :: begin");
     try (CachedData cdata = new CachedData(data.size())) {
       data.forEach(c -> cdata.getDatasets().put(c.getConfigKey(), c.getDataCopy()));
+      cdata.setCacheKey(getCacheKey());
       Map<String, String> pd = privateData;
       if (pd != null && pd.size() > 0) {
         cdata.setPrivateData(HashMapPool.getInstance().borrow(pd.size()));
@@ -216,6 +222,7 @@ public abstract class TimeThrottledGrabber<C extends TimeThrottledGrabber.TimeTh
   public static class CachedData implements ConkwCloseable {
     private Map<String, ResponseData> datasets;
     private Map<String, String> privateData;
+    private String cacheKey;
 
     /**
      * This constructor does not initialize the datasets structure.
@@ -258,6 +265,14 @@ public abstract class TimeThrottledGrabber<C extends TimeThrottledGrabber.TimeTh
         HashMapPool.getInstance().giveBack(privateData);
         privateData = null;
       }
+    }
+
+    public String getCacheKey() {
+      return cacheKey;
+    }
+
+    public void setCacheKey(String cacheKey) {
+      this.cacheKey = cacheKey;
     }
   }
 
