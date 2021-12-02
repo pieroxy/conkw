@@ -165,8 +165,10 @@ public class HttpEndpointGrabber extends TimeThrottledGrabber<HttpEndpointGrabbe
         @Override
         public void addToHash(Md5Sum sum) {
             sum.add(id).add(url);
-            for (EndPointMonitoringPatternConfig c : toExtract) {
-                c.addToHash(sum);
+            if (toExtract!=null) {
+                for (EndPointMonitoringPatternConfig c : toExtract) {
+                    c.addToHash(sum);
+                }
             }
         }
     }
