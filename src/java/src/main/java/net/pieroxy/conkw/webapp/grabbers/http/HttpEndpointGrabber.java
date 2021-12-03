@@ -78,6 +78,7 @@ public class HttpEndpointGrabber extends TimeThrottledGrabber<HttpEndpointGrabbe
             Matcher m = p.getPattern().matcher(body);
             if (canLogFine()) log(Level.FINE, "Matches: " + m.matches()+ " Groups: " + m.groupCount());
             res.collect(AccumulatorUtils.addToMetricName(rootMetricName, "matched"), m.matches() ? 1 : 0);
+            res.collect(AccumulatorUtils.addToMetricName(rootMetricName, "found"), getMatches(m));
             if (m.groupCount() == 1 && m.matches()) {
                 String metricName = AccumulatorUtils.addToMetricName(rootMetricName, "captured");
                 String values = m.group(1);
@@ -90,6 +91,12 @@ public class HttpEndpointGrabber extends TimeThrottledGrabber<HttpEndpointGrabbe
                 }
             }
         }
+    }
+
+    private double getMatches(Matcher m) {
+        int res = 0;
+        while(m.find()) res++;
+        return res;
     }
 
     @Override

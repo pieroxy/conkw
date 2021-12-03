@@ -189,6 +189,17 @@
                 "number":false
               }
             ]
+          },
+          {
+            "id":"googleWorkspace",
+            "url": "https://www.google.com/appsstatus/dashboard/",
+            "toExtract":[
+              {
+                "id":"ok",
+                "pattern":"(<a class=\"status-icon available\"></a>)",
+                "number":false
+              }
+            ]
           }
         ]
       }
