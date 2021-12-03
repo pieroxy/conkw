@@ -18,6 +18,7 @@ public class ResponseData implements ConkwCloseable {
   private final static Logger LOGGER = Logger.getLogger(ResponseData.class.getName());
 
   private long timestamp;
+  private boolean initialized;
   private long elapsedToGrab;
   @JsonAttribute(ignore = true)
   private Collection<String> errors=new LinkedList<>();
@@ -48,6 +49,7 @@ public class ResponseData implements ConkwCloseable {
   public ResponseData(ResponseData source){
     if (source!=null) {
       this.timestamp = source.getTimestamp();
+      this.initialized = source.isInitialized();
       this.elapsedToGrab = source.getElapsedToGrab();
       this.errors = new LinkedList<>(source.getErrors());
       this.name = source.getName();
@@ -273,5 +275,14 @@ public class ResponseData implements ConkwCloseable {
     this.num = null;
     this.str = null;
     this.timestamps = null;
+  }
+
+  public void setInitialized(boolean initialized) {
+    this.initialized = initialized;
+    System.out.println("INIT::" + initialized);
+  }
+
+  public boolean isInitialized() {
+    return initialized;
   }
 }
