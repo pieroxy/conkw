@@ -42,6 +42,7 @@ public abstract class TimeThrottledGrabber<C extends TimeThrottledGrabber.TimeTh
   private boolean loaded, hasChanged;
   private File storage;
   private Map<String, String> privateData = HashMapPool.getInstance().borrow(1);
+  private boolean initialized = false;
 
 
   @Override
@@ -121,6 +122,7 @@ public abstract class TimeThrottledGrabber<C extends TimeThrottledGrabber.TimeTh
         HashMapPool.getInstance().giveBack(tmp);
         if (privateData == null) privateData = HashMapPool.getInstance().borrow(0);
         cacheLoaded(data.getDatasets(), data.getPrivateData());
+        initialized = true;
 
         lastGrabHadErrors = false;
         for (Map.Entry<String, ResponseData> entry : data.getDatasets().entrySet()) {
@@ -181,8 +183,10 @@ public abstract class TimeThrottledGrabber<C extends TimeThrottledGrabber.TimeTh
         load(collector);
         log(Level.FINE, "grabSync() :: Loaded data.");
         collector.setTimestamp(System.currentTimeMillis());
+        collector.setInitialized(initialized);
         collector.collectionDone();
         hasChanged = true;
+        initialized = true;
       } else {
         log(Level.FINE, "grabSync() :: Cache was fresh, no need to reload.");
       }

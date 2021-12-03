@@ -121,4 +121,9 @@ public class SimpleCollectorImpl implements SimpleCollector {
         collectionInProgress.close();
         completedCollection.close();
     }
+
+    @Override
+    public void setInitialized(boolean initialized) {
+        collectionInProgress.setInitialized(initialized);
+    }
 }
