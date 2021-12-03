@@ -69,8 +69,9 @@ heading {
     color: #66c;
 }
 
-.cw-stale {
-    color: #888;
+.cw-stale, .cw-stale *, .cw-stale .cw-error {
+    color: #888 ! important;
+    background-color: transparent ! important;
 }
 
 
