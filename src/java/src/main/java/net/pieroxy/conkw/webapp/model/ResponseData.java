@@ -279,7 +279,6 @@ public class ResponseData implements ConkwCloseable {
 
   public void setInitialized(boolean initialized) {
     this.initialized = initialized;
-    System.out.println("INIT::" + initialized);
   }
 
   public boolean isInitialized() {
