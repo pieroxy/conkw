@@ -4,7 +4,7 @@ This is the https cert grabber. It will probe the domain names provided through 
 
 
 
-* *Full name:* `net.pieroxy.conkw.webapp.grabbers.HttpsCertGrabber`
+* *Full name:* `net.pieroxy.conkw.webapp.grabbers.http.HttpsCertGrabber`
 * *Default instance name:* `httpscert`
 
 ## Use cases
@@ -13,9 +13,19 @@ This is the https cert grabber. It will probe the domain names provided through 
 * You want a way to make sure your Let's Encrypt certs auto-renewal scripts work.
 
 ## Configuration
-The configuration property is `names`. It contains a comma separated list of domain names. Additionally, it can contain a colon and a port number for those services that do not listen on the port 443.
 
-For example: `"names":"apple.com,google.com:443,microsoft.com"`
+```json
+"config": {
+  "domains": [
+    "google.com",
+    "facebook.com",
+    "apple.com:443"
+  ]
+}
+```
+
+
+The configuration holds one array of domains called `domains`. It contains a list of domain names. Additionally, it can contain a colon and a port number for those services that do not listen on the port 443.
 
 As this is a `TimeThrottledGrabber`, you can define `ttl` and `errorTtl`. [See here for more details](CONFIGURE.md). The default ttl is 3 hours.
 
