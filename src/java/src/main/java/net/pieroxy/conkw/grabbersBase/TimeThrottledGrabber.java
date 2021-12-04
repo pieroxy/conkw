@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.logging.Level;
 
 public abstract class TimeThrottledGrabber<C extends TimeThrottledGrabber.TimeThrottledGrabberConfig> extends AsyncGrabber<SimpleCollector, C> {
+  //TODO remove this after config refacto
   protected abstract CDuration getDefaultTtl();
   protected abstract void load(SimpleCollector res);
 
