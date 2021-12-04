@@ -1,4 +1,4 @@
-package net.pieroxy.conkw.webapp.grabbers;
+package net.pieroxy.conkw.webapp.grabbers.http;
 
 import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.grabbersBase.TimeThrottledGrabber;
@@ -13,6 +13,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -21,8 +22,7 @@ import javax.net.ssl.X509TrustManager;
 
 // Bluntly copy pasted from https://gist.github.com/sureshpai/8c762603969e78dc2c68
 public class HttpsCertGrabber extends TimeThrottledGrabber<HttpsCertGrabber.HttpsCertGrabberConfig> {
-  private String names;
-
+  private String _domainsAsString = null;
   // usage : SSLCertExpiry host <cn>
   // does a http://host request.
   // takes an optional cn variable (which defaults to host)
@@ -125,8 +125,22 @@ public class HttpsCertGrabber extends TimeThrottledGrabber<HttpsCertGrabber.Http
   }
 
   @Override
+  public HttpsCertGrabberConfig getDefaultConfig() {
+    HttpsCertGrabberConfig conf = new HttpsCertGrabberConfig();
+    conf.setTtl(CDurationParser.parse("3h"));
+    return conf;
+  }
+
+  @Override
   protected void applyConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
-    names = config.get("names");
+    throw new RuntimeException("Parameters are deprecated. Please use config instead.");
+  }
+
+  private String getDomainsAsString() {
+    if (_domainsAsString==null) {
+      _domainsAsString = getConfig().getDomains().stream().collect(Collectors.joining(","));
+    }
+    return _domainsAsString;
   }
 
   @Override
@@ -137,7 +151,7 @@ public class HttpsCertGrabber extends TimeThrottledGrabber<HttpsCertGrabber.Http
   @Override
   protected void load(SimpleCollector res) {
     long now = System.currentTimeMillis();
-    Arrays.stream(names.split(",")).forEach(s -> {
+    getConfig().getDomains().forEach(s -> {
       try {
         Date exp = getExpirationDate(s);
         if (exp!=null) {
@@ -149,15 +163,18 @@ public class HttpsCertGrabber extends TimeThrottledGrabber<HttpsCertGrabber.Http
         res.addError(e.getMessage());
       }
     });
-    res.collect("alldomains", names);
-  }
-
-  @Override
-  protected String getCacheKey() {
-    return names;
+    res.collect("alldomains", getDomainsAsString());
   }
 
   public static class HttpsCertGrabberConfig extends TimeThrottledGrabber.TimeThrottledGrabberConfig {
+    List<String>domains;
 
+    public List<String> getDomains() {
+      return domains;
+    }
+
+    public void setDomains(List<String> domains) {
+      this.domains = domains;
+    }
   }
 }

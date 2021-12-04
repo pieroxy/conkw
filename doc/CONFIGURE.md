@@ -46,6 +46,9 @@ The `grabbers` section of the config file is an array. It contains one entry per
     "lon":"2.3488",
     "ttl":"1m",
     "errorTtl":"10s"
+  },
+  "config" : {
+
   }
 },
 ```
@@ -56,12 +59,13 @@ Here is the meaning of these parameters:
 * `extract` : The list of metrics you want to extract for this instance. Note that some grabbers do not act on this list. Read the documentation for your grabber to see which supports only extracting part of their metrics.
 * `logLevel` : The log level of this grabber. Used to troubleshoot a grabber that refuses to do what you want it to do. Hop on to the [toubleshooting](TROUBLESHOOT.md) section of this guide for more details.
 * `name` : The name of this grabber instance. This is the name the UI will see, and the name that needs to be provided to the API. Most grabbers have a default instance name, shown in their documentation page. Not more than one grabber instance might exist with the same name, so all of your grabbers in the list must have a different name.
-* `parameters` : This is the map of strings that is used to configure the grabber. This is highly grabber specific. Read the documentation or the default config file to see how to configure your grabber.
+* `parameters` : *This is deprecated and will very soon be removed* This is the map of strings that is used to configure the grabber. This is highly grabber specific. Read the documentation or the default config file to see how to configure your grabber.
+* `config` This is the data that is used to configure the grabber. This is grabber specific. Read the documentation or the default config file to see how to configure your grabber.
 
-Note: Some grabbers extend the `TimeThrottledGrabber` class and can define two extra properties in their `parameters`:
+Note: Some grabbers extend the `TimeThrottledGrabber` class and can define two extra properties in their `config`:
 
 * `ttl` The time to wait after a fetch. All grabbers implementing `TimeThrottledGrabber` define a default for this value.
-* `errorTtl` The time to wait after an erroneous fetch. This is by default the `ttl` divided by ten within the range [1-60]. Note that an error will be displayed in the UI after a fetch failure.
+* `errorTtl` The time to wait after an erroneous fetch. This is by default the `ttl` divided by ten within the range [1s-60s]. Note that an error will be displayed in the UI after a fetch failure.
 * [Have a look at how to write durations here](CONCEPTS.md)
 
 ## The API authentication
