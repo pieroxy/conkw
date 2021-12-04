@@ -32,6 +32,7 @@ public abstract class TimeThrottledGrabber<C extends TimeThrottledGrabber.TimeTh
     return sum.getMd5Sum();
   }
 
+  //TODO remove this after config refacto
   @Deprecated
   protected abstract void applyConfig(Map<String, String> config, Map<String, Map<String, String>> configs);
 
@@ -285,7 +286,7 @@ public abstract class TimeThrottledGrabber<C extends TimeThrottledGrabber.TimeTh
     CDuration errorTtl;
 
     @Override
-    //TODO remove this after config refacto
+    //TODO remove this after config refacto. Subclasses need to implement this.
     public void addToHash(Md5Sum sum) {
     }
 
