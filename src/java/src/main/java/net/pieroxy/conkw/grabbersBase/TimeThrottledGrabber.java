@@ -35,7 +35,8 @@ public abstract class TimeThrottledGrabber<C extends TimeThrottledGrabber.TimeTh
 
   //TODO remove this after config refacto
   @Deprecated
-  protected abstract void applyConfig(Map<String, String> config, Map<String, Map<String, String>> configs);
+  protected void applyConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
+  }
 
   private CDuration ttl;
   private CDuration errorTtl;

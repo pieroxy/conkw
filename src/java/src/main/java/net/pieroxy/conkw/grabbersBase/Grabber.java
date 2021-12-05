@@ -124,7 +124,9 @@ public abstract class Grabber<T extends Collector, C> {
     extractedByConfiguration = nm;
   }
 
-  protected abstract void setConfig(Map<String, String> config, Map<String, Map<String, String>> namedConfigs);
+  // TODO remove this after config refactoring
+  protected void setConfig(Map<String, String> config, Map<String, Map<String, String>> namedConfigs) {
+  }
 
   public void initConfig(File homeDir, Map<String, String> config, Map<String, Map<String, String>> namedConfigs) {
     storageFolder = new File(homeDir, "data");
