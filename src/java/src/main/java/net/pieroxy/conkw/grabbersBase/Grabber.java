@@ -239,4 +239,12 @@ public abstract class Grabber<T extends Collector, C> {
   public String toString() {
     return getGrabberFQN();
   }
+
+  /**
+   * Subclasses should override this method to initialize themselves after the config has been read and set. It is
+   * generally a good idea to call <code>super.initializeGrabber();</code> in this method, unless you know what you're
+   * doing. And even then, it's probably a mistake.
+   */
+  public void initializeGrabber() {
+  }
 }
