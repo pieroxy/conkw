@@ -268,8 +268,9 @@ cw-clock #clock-minute {
 .lcd.cw-stale *,
 .cw-stale .lcd,
 .cw-stale .lcd * {
-    color: #709181;
+    color: #709181 ! important;
     text-shadow: 0.1em 0.1em #779989;
+    background-color: #7da190 ! important;
 }
 
 .cw-stale.lcd gauge,
