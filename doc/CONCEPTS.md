@@ -68,6 +68,11 @@ As a last note, be aware that some of these formattings output a space padded st
     * `1000` -> `1s`
     * `65000` -> `1m 5s`
     * `123456000` -> `1d 10h 17m 36s`
+* `time_small_ns` Takes a number of nanoseconds and display it as a number of milliseconds with 6 digits. After 1e12, number get truncated and the display is erroneous.
+    * `1000` -> `0.0010ms`
+    * `1231000` -> `1.2310ms`
+    * `1.23e9` -> `1230.0ms`
+    * `1000` -> `0.0010ms`
 * `load` Output the number, padded on the right with spaces to a 5 chars long string. Works with positive numbers below 100. Spaces are represented with `_` for better readability.
     * `1` -> `1____`
     * `1.2` -> `1.2__`
