@@ -13,13 +13,13 @@ This is the config file. This is where you can define the log level of a specifi
 ```json
 {
   "implementation":"net.pieroxy.conkw.webapp.grabbers.openweathermap.OpenWeatherMapGrabber",
-  "extract":"minute,hour,day,current",
   "logLevel":"FINE",
   "name":"paris_weather",
-  "parameters": {
+  "config": {
+    "toExtract":["minute","hour","day","current"],
     "token":"abcdef1234567890",
-    "lat":"48.8534",
-    "lon":"2.3488"
+    "lat":48.8534,
+    "lon":2.3488
   }
 },
 ```

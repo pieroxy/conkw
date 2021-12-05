@@ -37,18 +37,15 @@ The `grabbers` section of the config file is an array. It contains one entry per
 ```json
 {
   "implementation":"net.pieroxy.conkw.webapp.grabbers.openweathermap.OpenWeatherMapGrabber",
-  "extract":"minute,hour,day,current",
   "logLevel":"FINE",
   "name":"paris_weather",
-  "parameters": {
+  "config": {
+    "toExtract":["minute","hour","day","current"],
     "token":"abcdef1234567890",
-    "lat":"48.8534",
-    "lon":"2.3488",
+    "lat":48.8534,
+    "lon":2.3488,
     "ttl":"1m",
     "errorTtl":"10s"
-  },
-  "config" : {
-
   }
 },
 ```
@@ -56,7 +53,6 @@ The `grabbers` section of the config file is an array. It contains one entry per
 Here is the meaning of these parameters:
 
 * `implementation` : The fully qualified name of the class implementing the grabber. Note that more than one instance of a specific implementation might exist in your config file. In this example, you might want to monitor the weather in Paris, Dubaï and Tokyo. You will define three grabbers with `OpenWeatherMapGrabber` as an implementation.
-* `extract` : The list of metrics you want to extract for this instance. Note that some grabbers do not act on this list. Read the documentation for your grabber to see which supports only extracting part of their metrics.
 * `logLevel` : The log level of this grabber. Used to troubleshoot a grabber that refuses to do what you want it to do. Hop on to the [toubleshooting](TROUBLESHOOT.md) section of this guide for more details.
 * `name` : The name of this grabber instance. This is the name the UI will see, and the name that needs to be provided to the API. Most grabbers have a default instance name, shown in their documentation page. Not more than one grabber instance might exist with the same name, so all of your grabbers in the list must have a different name.
 * `parameters` : *This is deprecated and will very soon be removed* This is the map of strings that is used to configure the grabber. This is highly grabber specific. Read the documentation or the default config file to see how to configure your grabber.
