@@ -139,11 +139,6 @@ public class HttpsCertGrabber extends TimeThrottledGrabber<HttpsCertGrabber.Http
   }
 
   @Override
-  protected CDuration getDefaultTtl() {
-    return CDurationParser.parse("3h");
-  }
-
-  @Override
   protected void load(SimpleCollector res) {
     long now = System.currentTimeMillis();
     getConfig().getDomains().forEach(s -> {
