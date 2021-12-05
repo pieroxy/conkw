@@ -42,6 +42,7 @@ public class Listener implements ServletContextListener {
           if (gc.getName() != null) {
             g.setName(gc.getName());
           }
+          // TODO Remove after config refacto
           // Extract
           if (gc.getExtract() != null && !gc.getExtract().equals("all") && !gc.getExtract().equals("")) {
             g.setExtractProperties(gc.getExtract().split(","));
