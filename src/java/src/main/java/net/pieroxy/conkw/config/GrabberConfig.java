@@ -9,6 +9,8 @@ import java.util.Map;
 public class GrabberConfig {
   private String implementation;
   private String name;
+
+  // TODO Remove after config refacto
   private String extract;
   private String logLevel;
   private Object config;

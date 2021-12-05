@@ -1,18 +1,21 @@
 package net.pieroxy.conkw.webapp.grabbers.openweathermap;
 
 import net.pieroxy.conkw.collectors.SimpleCollector;
+import net.pieroxy.conkw.grabbersBase.PartiallyExtractableConfig;
 import net.pieroxy.conkw.utils.DebugTools;
 import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.utils.StringUtil;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.duration.CDurationParser;
 import net.pieroxy.conkw.grabbersBase.TimeThrottledGrabber;
+import net.pieroxy.conkw.utils.hashing.Md5Sum;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.time.Duration;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
@@ -20,8 +23,6 @@ import java.util.logging.Level;
 public class OpenWeatherMapGrabber extends TimeThrottledGrabber<OpenWeatherMapGrabber.OpenWeatherMapGrabberConfig> {
   static final String NAME = "owm";
 
-  String token;
-  double lat, lon;
   static Map<String, String> locationNames = new ConcurrentHashMap<>();
 
   @Override
@@ -31,9 +32,6 @@ public class OpenWeatherMapGrabber extends TimeThrottledGrabber<OpenWeatherMapGr
 
   @Override
   public void applyConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
-    lon = Double.parseDouble(config.get("lon"));
-    lat = Double.parseDouble(config.get("lat"));
-    token = String.valueOf(config.get("token"));
   }
 
   @Override
@@ -42,8 +40,15 @@ public class OpenWeatherMapGrabber extends TimeThrottledGrabber<OpenWeatherMapGr
   }
 
   @Override
+  public OpenWeatherMapGrabberConfig getDefaultConfig() {
+    OpenWeatherMapGrabberConfig conf = new OpenWeatherMapGrabberConfig();
+    conf.setTtl(CDurationParser.parse("5m"));
+    return conf;
+  }
+
+  @Override
   protected void load(SimpleCollector responseData) {
-    if (!StringUtil.isValidApiKey(token)) {
+    if (!StringUtil.isValidApiKey(getConfig().getToken())) {
       responseData.addError("Open Weather Map is not properly configured.");
       return;
     }
@@ -51,7 +56,7 @@ public class OpenWeatherMapGrabber extends TimeThrottledGrabber<OpenWeatherMapGr
     String city = grabCity();
 
     try {
-      URL url = new URL("https://api.openweathermap.org/data/2.5/onecall?lat="+lat+"&lon="+lon+"&units=metric&appid="+token);
+      URL url = new URL("https://api.openweathermap.org/data/2.5/onecall?lat="+getConfig().getLat()+"&lon="+getConfig().getLon()+"&units=metric&appid="+getConfig().getToken());
       URLConnection con = url.openConnection();
       HttpURLConnection http = (HttpURLConnection) con;
       http.connect();
@@ -151,16 +156,11 @@ public class OpenWeatherMapGrabber extends TimeThrottledGrabber<OpenWeatherMapGr
     }
   }
 
-  @Override
-  protected String getCacheKey() {
-    return lat + "x" + lon;
-  }
-
   private String grabCity() {
-    String key = lat+"x"+lon;
+    String key = getConfig().getLat()+"x"+getConfig().getLon();
     if (!locationNames.containsKey(key)) {
       try {
-        URL url = new URL("https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&units=metric&appid=" + token);
+        URL url = new URL("https://api.openweathermap.org/data/2.5/weather?lat=" + getConfig().getLat() + "&lon=" + getConfig().getLon() + "&units=metric&appid=" + getConfig().getToken());
         URLConnection con = url.openConnection();
         HttpURLConnection http = (HttpURLConnection) con;
         http.connect();
@@ -410,6 +410,50 @@ public class OpenWeatherMapGrabber extends TimeThrottledGrabber<OpenWeatherMapGr
     return "align.svg";
   }
 
-  public static class OpenWeatherMapGrabberConfig extends TimeThrottledGrabber.TimeThrottledGrabberConfig {
+  public static class OpenWeatherMapGrabberConfig extends TimeThrottledGrabber.TimeThrottledGrabberConfig implements PartiallyExtractableConfig {
+    private Double lon;
+    private Double lat;
+    private String token;
+    private List<String> toExtract;
+
+    @Override
+    public void addToHash(Md5Sum sum) {
+      sum.add(String.valueOf(lon)).add("//").add(String.valueOf(lat));
+      if (toExtract!=null) toExtract.forEach(sum::add);
+    }
+
+    public Double getLon() {
+      return lon;
+    }
+
+    public void setLon(Double lon) {
+      this.lon = lon;
+    }
+
+    public Double getLat() {
+      return lat;
+    }
+
+    public void setLat(Double lat) {
+      this.lat = lat;
+    }
+
+    public String getToken() {
+      return token;
+    }
+
+    public void setToken(String token) {
+      this.token = token;
+    }
+
+    @Override
+    public List<String> getToExtract() {
+      return toExtract;
+    }
+
+    @Override
+    public void setToExtract(List<String> toExtract) {
+      this.toExtract = toExtract;
+    }
   }
 }

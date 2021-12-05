@@ -23,12 +23,12 @@ In order to use it, you need to:
 ```json
 {
   "implementation":"net.pieroxy.conkw.webapp.grabbers.openweathermap.OpenWeatherMapGrabber",
-  "extract":"minute,hour,day,current",
   "name":"paris_weather",
-  "parameters": {
+  "config": {
+    "toExtract":["minute","hour","day","current"],
     "token":"your api token here",
-    "lat":"48.8534",
-    "lon":"2.3488"
+    "lat":48.8534,
+    "lon":2.3488
   }
 },
 ```

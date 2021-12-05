@@ -54,6 +54,10 @@ public abstract class Grabber<T extends Collector, C> {
 
   public void setConfig(C config) {
     this.config = config;
+    if (config instanceof PartiallyExtractableConfig) {
+      PartiallyExtractableConfig pc = (PartiallyExtractableConfig) config;
+      if (pc.getToExtract()!=null) pc.getToExtract().forEach(extract::add);
+    }
   }
 
   private void gcConfigurations() {
@@ -135,6 +139,7 @@ public abstract class Grabber<T extends Collector, C> {
     LOGGER.setLevel(l);
   }
 
+  // TODO remove after config refacto
   public void setExtractProperties(String[]toExtract) {
     for (String val : toExtract) {
       extract.add(val);
