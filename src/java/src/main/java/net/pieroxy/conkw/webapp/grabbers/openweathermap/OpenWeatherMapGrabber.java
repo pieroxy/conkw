@@ -31,11 +31,6 @@ public class OpenWeatherMapGrabber extends TimeThrottledGrabber<OpenWeatherMapGr
   }
 
   @Override
-  protected CDuration getDefaultTtl() {
-    return CDurationParser.parse("5m");
-  }
-
-  @Override
   public OpenWeatherMapGrabberConfig getDefaultConfig() {
     OpenWeatherMapGrabberConfig conf = new OpenWeatherMapGrabberConfig();
     conf.setTtl(CDurationParser.parse("5m"));
