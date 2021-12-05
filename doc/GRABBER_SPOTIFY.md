@@ -34,7 +34,7 @@ This is all you have to do on the spotify website. Now:
 
 Note: Here is below the default config portion for the SpotifyGrabber:
 ```json
-"parameters": {
+"config": {
   "clientId":"Your client id",
   "clientSecret":"Your client secret",
   "redirectUri":"Your redirect URI"

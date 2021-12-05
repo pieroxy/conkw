@@ -8,6 +8,7 @@ import net.pieroxy.conkw.utils.StringUtil;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.duration.CDurationParser;
 import net.pieroxy.conkw.grabbersBase.TimeThrottledGrabber;
+import net.pieroxy.conkw.utils.hashing.Md5Sum;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -29,11 +30,15 @@ public class SpotifyGrabber extends TimeThrottledGrabber<SpotifyGrabber.SpotifyG
   private File DATAFILE = null;
   private String ACCESS_TOKEN = null;
   private String AUTH_CODE = null;
-  private String clientId;
-  private String clientSecret;
-  private String redirectUri;
   private boolean isPlaying = true;
   private static String stateToken = RandomHelper.getSequence()+";grabberAction=spotify;";
+
+  @Override
+  public SpotifyGrabberConfig getDefaultConfig() {
+    SpotifyGrabberConfig c = new SpotifyGrabberConfig();
+    c.setTtl(IDLE_TTL);
+    return c;
+  }
 
   public String processAction(Map<String, String[]> parameterMap) {
     try {
@@ -103,11 +108,8 @@ public class SpotifyGrabber extends TimeThrottledGrabber<SpotifyGrabber.SpotifyG
   }
 
   @Override
-  public void applyConfig(Map<String, String> config, Map<String, Map<String, String>> configs){
-    clientId = config.get("clientId");
-    clientSecret = config.get("clientSecret");
-    redirectUri = config.get("redirectUri");
-
+  public void initializeGrabber() {
+    super.initializeGrabber();
     try {
       DATAFILE = getTmp("spotifyTokens.txt");
       if (DATAFILE.exists()) {
@@ -138,15 +140,10 @@ public class SpotifyGrabber extends TimeThrottledGrabber<SpotifyGrabber.SpotifyG
   }
 
   @Override
-  protected CDuration getDefaultTtl() {
-    return IDLE_TTL;
-  }
-
-  @Override
   protected void load(SimpleCollector sr) {
-    if (!StringUtil.isValidApiKey(clientId) ||
-        !StringUtil.isValidApiKey(clientSecret) ||
-        !StringUtil.isValidUrl(redirectUri)) {
+    if (!StringUtil.isValidApiKey(getConfig().getClientId()) ||
+        !StringUtil.isValidApiKey(getConfig().getClientSecret()) ||
+        !StringUtil.isValidUrl(getConfig().getRedirectUri())) {
       sr.addError("SpotifyGrabber is not properly configured");
     } else {
       try {
@@ -157,11 +154,6 @@ public class SpotifyGrabber extends TimeThrottledGrabber<SpotifyGrabber.SpotifyG
         sr.addError("spotify-error: " + e.getMessage());
       }
     }
-  }
-
-  @Override
-  protected String getCacheKey() {
-    return clientId;
   }
 
   private void loadSpotify(SimpleCollector r) throws IOException {
@@ -322,17 +314,48 @@ public class SpotifyGrabber extends TimeThrottledGrabber<SpotifyGrabber.SpotifyG
   }
 
   private String getRefreshAccessTokenRequest() throws UnsupportedEncodingException {
-    return "client_id="+clientId+"&client_secret="+clientSecret+"&grant_type=refresh_token&refresh_token="+URLEncoder.encode(AUTH_CODE, StandardCharsets.UTF_8.toString());
+    return "client_id="+getConfig().getClientId()+"&client_secret="+getConfig().getClientSecret()+"&grant_type=refresh_token&refresh_token="+URLEncoder.encode(AUTH_CODE, StandardCharsets.UTF_8.toString());
   }
 
   private String getInitUrl() throws UnsupportedEncodingException {
-    return  "https://accounts.spotify.com/authorize?client_id="+clientId+"&response_type=code&redirect_uri="+URLEncoder.encode(redirectUri, StandardCharsets.UTF_8.toString())+"&scope=user-modify-playback-state%20user-read-private%20user-read-email%20user-read-currently-playing&state=" + stateToken;
+    return  "https://accounts.spotify.com/authorize?client_id="+ getConfig().getClientId()+"&response_type=code&redirect_uri="+URLEncoder.encode(getConfig().getRedirectUri(), StandardCharsets.UTF_8.toString())+"&scope=user-modify-playback-state%20user-read-private%20user-read-email%20user-read-currently-playing&state=" + stateToken;
   }
   private String getLoadAccessTokenRequest() throws UnsupportedEncodingException {
-    return "client_id="+clientId+"&client_secret="+clientSecret+"&grant_type=authorization_code&code="+ URLEncoder.encode(AUTH_CODE, StandardCharsets.UTF_8.toString())+"&redirect_uri="+URLEncoder.encode(redirectUri, StandardCharsets.UTF_8.toString());
+    return "client_id="+ getConfig().getClientId()+"&client_secret="+ getConfig().getClientSecret()+"&grant_type=authorization_code&code="+ URLEncoder.encode(AUTH_CODE, StandardCharsets.UTF_8.toString())+"&redirect_uri="+URLEncoder.encode(getConfig().getRedirectUri(), StandardCharsets.UTF_8.toString());
   }
 
   public static class SpotifyGrabberConfig extends TimeThrottledGrabber.TimeThrottledGrabberConfig {
+    private String clientId;
+    private String clientSecret;
+    private String redirectUri;
 
+    @Override
+    public void addToHash(Md5Sum sum) {
+      sum.add(clientId).add(clientSecret);
+    }
+
+    public String getClientId() {
+      return clientId;
+    }
+
+    public void setClientId(String clientId) {
+      this.clientId = clientId;
+    }
+
+    public String getClientSecret() {
+      return clientSecret;
+    }
+
+    public void setClientSecret(String clientSecret) {
+      this.clientSecret = clientSecret;
+    }
+
+    public String getRedirectUri() {
+      return redirectUri;
+    }
+
+    public void setRedirectUri(String redirectUri) {
+      this.redirectUri = redirectUri;
+    }
   }
 }
