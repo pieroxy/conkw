@@ -60,7 +60,13 @@ public class Listener implements ServletContextListener {
             g.setLogLevel(Level.INFO);
           }
           g.setConfig(GrabberConfigReader.fillObject(g.getDefaultConfig(), gc.getConfig()));
+          /* TODO: Uncomment after the config refactoring is done.
+          if (g.getConfig() == null) {
+            throw new RuntimeException("Grabber " + g.getGrabberFQN() + " does not have a non-null default configuration.");
+          }
+           */
           g.initConfig(ConfigReader.getHomeDir(), gc.getParameters(), gc.getNamedParameters());
+          g.initializeGrabber();
 
           if (g.getName() == null) {
             throw new IllegalArgumentException("Grabber name must be defined for grabber " + g.getClass().getName());
