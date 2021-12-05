@@ -75,7 +75,7 @@
     {
       // Spotify grabber. Extracts currently playing stuff from your spotify account.
       "implementation":"net.pieroxy.conkw.webapp.grabbers.spotify.SpotifyGrabber",
-      "parameters": {
+      "config": {
         "clientId":"Your client id",
         "clientSecret":"Your client secret",
         "redirectUri":"Your redirect URI"
