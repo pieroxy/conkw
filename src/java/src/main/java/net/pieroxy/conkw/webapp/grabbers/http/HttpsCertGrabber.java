@@ -131,11 +131,6 @@ public class HttpsCertGrabber extends TimeThrottledGrabber<HttpsCertGrabber.Http
     return conf;
   }
 
-  @Override
-  protected void applyConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
-    throw new RuntimeException("Parameters are deprecated. Please use config instead.");
-  }
-
   private String getDomainsAsString() {
     if (_domainsAsString==null) {
       _domainsAsString = getConfig().getDomains().stream().collect(Collectors.joining(","));
