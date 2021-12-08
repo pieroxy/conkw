@@ -39,8 +39,14 @@ public class SimpleCollectorImpl implements SimpleCollector {
         collectionInProgress.addMetric(metric, value);
     }
 
+    /**
+     * Sets the time spend to collect this data, if not already set.
+     * @param time The time taken to grab data in this collector.
+     */
     public void setTime(long time) {
-        collectionInProgress.setElapsedToGrab(time);
+        if (collectionInProgress.getElapsedToGrab() == 0) {
+            collectionInProgress.setElapsedToGrab(time);
+        }
     }
 
     @Override
