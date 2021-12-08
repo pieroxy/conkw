@@ -60,7 +60,7 @@
             <br>Status: <cw-label style="width:unset" cw-ns="mails" cw-value="m:str::grab_status"></cw-label>
             <br>Number of unread emails: <cw-label style="width:50px" cw-ns="mails" cw-value="m:num:si:mails_unread_total"></cw-label>
             <br>Last fetch: <cw-label style="width:unset" cw-ns="mails" cw-value="e:num:time_ms:${Date.now()-timestamp}"></cw-label>
-            <br>Last fetch duration: <cw-label style="width:unset" cw-ns="mails" cw-value="e:num:time_ms:${elapsedToGrab}"></cw-label>
+            <br>Last fetch duration: <cw-label style="width:unset" cw-ns="mails" cw-value="e:num:time_ns:${elapsedToGrab}"></cw-label>
             <div cw-ns="mails" cw-multinode-from="l:num::0" cw-multinode-to="m:num::mails_len" cw-multinode-pattern="#">
                 <div class="cw-block">
                     <hr><cw-label cw-escapeHtml="yes" style="width:unset" cw-ns="mails" cw-value="m:num:tstodate:mail_#_date"></cw-label> <cw-label style="width:unset;display:inline-block" cw-ns="mails" cw-value="m:num:tstohhmm:mail_#_date"></cw-label> <cw-label cw-ns="mails" cw-value="m:str::mail_#_account"></cw-label>
