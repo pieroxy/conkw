@@ -268,26 +268,27 @@
       // This is the latest email grabber.
       "implementation":"net.pieroxy.conkw.webapp.grabbers.email.LatestUnreadMailsGrabber",
       "name":"mails",
-      "parameters": {
-        /* "ttl":"5m" */ // Default value
-        /* "maxMessages":"10" */ // Default value
-      },
-      "namedParameters": {
+      "config": {
+        "ttl":"5m", // Default value
+        "maxMessages":10, // Default value
+        "accounts": [
         // Sample configuration for gmail
-        /*"my gmail account": {
-          "server":"imap.googlemail.com",
-          "port":"993",
-          "login":"my_account@gmail.com",
-          "password":"mypassword"
-        }*/
-        // Sample configuration for outlook365
-        /*
-        "hotmail!!": {
-          "server":"outlook.office365.com",
-          "port":"993",
-          "login":"my_email@hotmail.com",
-          "password":"mypassword!"
-        }*/
+          {
+            "name": "my gmail account",
+            "server":"imap.googlemail.com",
+            "port":993,
+            "login":"my_account@gmail.com",
+            "password":"" // my gmail password
+          },
+          // Sample configuration for outlook365
+          {
+            "name": "my hotmail account",
+            "server":"outlook.office365.com",
+            "port":993,
+            "login":"my_email@hotmail.com",
+            "password":"" // my hotmail password
+          }
+        ]
       }
     },
     //SPECIFIC EMAIL
