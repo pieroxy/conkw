@@ -183,6 +183,8 @@ public abstract class Grabber<T extends Collector, C> {
     return name;
   }
 
+  // TODO Remove after config refacto is done
+  @Deprecated
   protected int getIntProperty(String propertyName, Map<String, String> config, int defaultValue) {
     String propValue = config.get(propertyName);
     if (propValue != null) {
@@ -191,6 +193,8 @@ public abstract class Grabber<T extends Collector, C> {
     return defaultValue;
   }
 
+  // TODO Remove after config refacto is done
+  @Deprecated
   protected String getStringProperty(String propertyName, Map<String, String> config, String defaultValue) {
     String propValue = config.get(propertyName);
     if (propValue != null) {
@@ -199,6 +203,8 @@ public abstract class Grabber<T extends Collector, C> {
     return defaultValue;
   }
 
+  // TODO Remove after config refacto is done
+  @Deprecated
   protected CDuration getDurationProperty(String propertyName, Map<String, String> config, CDuration defaultValue) {
     String propValue = config.get(propertyName);
     if (propValue != null) {
@@ -208,6 +214,8 @@ public abstract class Grabber<T extends Collector, C> {
     return defaultValue;
   }
 
+  // TODO Remove after config refacto is done
+  @Deprecated
   protected Pattern getRegexpProperty(String propertyName, Map<String, String> config, int flags) {
     String propValue = config.get(propertyName);
     if (propValue != null) {
