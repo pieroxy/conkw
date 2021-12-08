@@ -39,14 +39,14 @@ For every news, where _n_ goes from 0 to `num.news_size-1`:
 
 Here is the sample config portion:
 ```jsonc
-    {
-      "implementation":"net.pieroxy.conkw.webapp.grabbers.bingnews.BingNewsGrabber",
-      "parameters": {
-        "ttl":"1h", // The time between two refreshes. 
-        "countrycode":"fr", // To get French news.
-        "key":"your bing news rapidapi key here"
-      }
-    },
+{
+  "implementation":"net.pieroxy.conkw.webapp.grabbers.bingnews.BingNewsGrabber",
+  "config": {
+    "ttl":"1h", // The time between two refreshes. 
+    "countrycode":"fr", // To get French news.
+    "key":"your bing news rapidapi key here"
+  }
+},
 ```
 
 As this is a `TimeThrottledGrabber`, you can define `ttl` and `errorTtl`. [See here for more details](CONFIGURE.md). The default ttl is 1 hour.
