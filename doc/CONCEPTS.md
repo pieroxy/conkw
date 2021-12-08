@@ -68,6 +68,7 @@ As a last note, be aware that some of these formattings output a space padded st
     * `1000` -> `1s`
     * `65000` -> `1m 5s`
     * `123456000` -> `1d 10h 17m 36s`
+* `time_ns` Same as `time_ms` but divides the input by 1000000000 before proceeding (nanoseconds).
 * `time_small_ns` Takes a number of nanoseconds and display it as a number of milliseconds with 6 digits. After 1e12, number get truncated and the display is erroneous.
     * `1000` -> `0.0010ms`
     * `1231000` -> `1.2310ms`

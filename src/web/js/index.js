@@ -393,6 +393,8 @@ ConkW.getProperLabel = function(key, value) {
             return this.getTimeLabel(value);
         case "time_ms":
             return this.getTimeLabel(value/1000);
+        case "time_ns":
+            return this.getTimeLabel(value/1000000000);
         case "time_small_ns":
             return this.getPrecisionTimeLabelInNs(value);
         case "load":

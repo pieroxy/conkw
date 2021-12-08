@@ -46,7 +46,6 @@ public interface Collector extends ConkwCloseable {
     void setTimestamp(long time);
 
     /**
-     *
      * @return The time taken to grab data in this collector.
      */
     long getTime();
