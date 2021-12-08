@@ -16,7 +16,8 @@ public class Md5Sum {
     }
 
     public Md5Sum add(String part) {
-        md.update(part.getBytes(StandardCharsets.UTF_8));
+        if (part != null)
+            md.update(part.getBytes(StandardCharsets.UTF_8));
         return this;
     }
 
