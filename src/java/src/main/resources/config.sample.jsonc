@@ -98,7 +98,7 @@
     {
       // Bing News grabber. Extracts a few news headlines.
       "implementation":"net.pieroxy.conkw.webapp.grabbers.bingnews.BingNewsGrabber",
-      "parameters": {
+      "config": {
         "ttl":"1h", // The time between two refreshes. 
         "errorTtl": "2h",
         "countrycode":"us", // To get U.S. news.

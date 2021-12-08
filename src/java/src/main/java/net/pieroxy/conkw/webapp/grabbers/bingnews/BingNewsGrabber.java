@@ -6,18 +6,16 @@ import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.duration.CDurationParser;
 import net.pieroxy.conkw.grabbersBase.TimeThrottledGrabber;
+import net.pieroxy.conkw.utils.hashing.Md5Sum;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Map;
 import java.util.logging.Level;
 
 public class BingNewsGrabber extends TimeThrottledGrabber<BingNewsGrabber.BingNewsGrabberConfig> {
   static final String NAME = "bingnews";
-
-  String countrycode,key;
 
   @Override
   public String getDefaultName() {
@@ -25,14 +23,15 @@ public class BingNewsGrabber extends TimeThrottledGrabber<BingNewsGrabber.BingNe
   }
 
   @Override
-  public void applyConfig(Map<String, String> config, Map<String, Map<String, String>> configs){
-    countrycode = String.valueOf(config.get("countrycode"));
-    key = String.valueOf(config.get("key"));
+  protected CDuration getDefaultTtl() {
+    return CDurationParser.parse("1h");
   }
 
   @Override
-  protected CDuration getDefaultTtl() {
-    return CDurationParser.parse("1h");
+  public BingNewsGrabberConfig getDefaultConfig() {
+    BingNewsGrabberConfig c = new BingNewsGrabberConfig();
+    c.setTtl(CDuration.ONE_HOUR);
+    return c;
   }
 
   @Override
@@ -47,11 +46,11 @@ public class BingNewsGrabber extends TimeThrottledGrabber<BingNewsGrabber.BingNe
  * --header 'x-rapidapi-key: 297df7b9f3msh5744c499d256951p13de3cjsnba5f5a25bc3b'
  */
 
-      URL url = new URL("https://bing-news-search1.p.rapidapi.com/news?safeSearch=Off&textFormat=Raw&cc="+countrycode);
+      URL url = new URL("https://bing-news-search1.p.rapidapi.com/news?safeSearch=Off&textFormat=Raw&cc="+ getConfig().getCountrycode());
       URLConnection con = url.openConnection();
       HttpURLConnection http = (HttpURLConnection) con;
       http.setRequestMethod("GET");
-      http.setRequestProperty("x-rapidapi-key", key);
+      http.setRequestProperty("x-rapidapi-key", getConfig().getKey());
       http.connect();
 
       InputStream is;
@@ -82,12 +81,29 @@ public class BingNewsGrabber extends TimeThrottledGrabber<BingNewsGrabber.BingNe
     }
   }
 
-  @Override
-  protected String getCacheKey() {
-    return countrycode + key;
-  }
-
   public static class BingNewsGrabberConfig extends TimeThrottledGrabber.TimeThrottledGrabberConfig {
+    private String countrycode;
+    private String key;
 
+    @Override
+    public void addToHash(Md5Sum sum) {
+      sum.add(countrycode);
+    }
+
+    public String getCountrycode() {
+      return countrycode;
+    }
+
+    public void setCountrycode(String countrycode) {
+      this.countrycode = countrycode;
+    }
+
+    public String getKey() {
+      return key;
+    }
+
+    public void setKey(String key) {
+      this.key = key;
+    }
   }
 }
