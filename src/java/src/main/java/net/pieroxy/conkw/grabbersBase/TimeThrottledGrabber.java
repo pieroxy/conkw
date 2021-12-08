@@ -23,6 +23,7 @@ import java.util.logging.Level;
 
 public abstract class TimeThrottledGrabber<C extends TimeThrottledGrabber.TimeThrottledGrabberConfig> extends AsyncGrabber<SimpleCollector, C> {
   //TODO remove this after config refacto
+  @Deprecated
   protected CDuration getDefaultTtl() {
     return null;
   }

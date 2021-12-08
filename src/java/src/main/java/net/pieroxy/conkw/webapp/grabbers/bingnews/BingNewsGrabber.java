@@ -23,11 +23,6 @@ public class BingNewsGrabber extends TimeThrottledGrabber<BingNewsGrabber.BingNe
   }
 
   @Override
-  protected CDuration getDefaultTtl() {
-    return CDurationParser.parse("1h");
-  }
-
-  @Override
   public BingNewsGrabberConfig getDefaultConfig() {
     BingNewsGrabberConfig c = new BingNewsGrabberConfig();
     c.setTtl(CDuration.ONE_HOUR);
