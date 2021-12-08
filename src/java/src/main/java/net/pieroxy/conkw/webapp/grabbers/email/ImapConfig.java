@@ -4,12 +4,15 @@ import java.util.Map;
 
 public class ImapConfig {
     private String server,login,password,name;
-    private int port;
+    private Double port;
+
+    public ImapConfig() {
+    }
 
     public ImapConfig(String name, Map<String, String> conf) {
         setName(name);
         setServer(conf.get("server"));
-        setPort(Integer.parseInt(conf.get("port")));
+        setPort(Double.parseDouble(conf.get("port")));
         setLogin(conf.get("login"));
         setPassword(conf.get("password"));
     }
@@ -34,11 +37,11 @@ public class ImapConfig {
         this.server = server;
     }
 
-    public int getPort() {
+    public Double getPort() {
         return port;
     }
 
-    public void setPort(int port) {
+    public void setPort(Double port) {
         this.port = port;
     }
 

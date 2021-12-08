@@ -148,7 +148,7 @@ public class SpecificEmailCheckGrabber extends TimeThrottledGrabber<SpecificEmai
         Session session = Session.getDefaultInstance(new Properties());
         session.setDebug(canLogFine());
         Store store = session.getStore("imaps");
-        store.connect(imapConf.getServer(), imapConf.getPort(), imapConf.getLogin(), imapConf.getPassword());
+        store.connect(imapConf.getServer(), (int)(double)imapConf.getPort(), imapConf.getLogin(), imapConf.getPassword());
         Folder inbox = store.getFolder(folder);
         inbox.open(Folder.READ_ONLY);
         if (canLogFine()) log(Level.FINE, "lastUID: " + nextUID);
