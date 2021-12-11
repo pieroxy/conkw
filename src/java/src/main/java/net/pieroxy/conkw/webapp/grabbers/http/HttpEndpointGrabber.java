@@ -12,7 +12,6 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,11 +28,6 @@ public class HttpEndpointGrabber extends TimeThrottledGrabber<HttpEndpointGrabbe
         HttpEndpointGrabberConfig res = new HttpEndpointGrabberConfig();
         res.setTtl(CDuration.ZERO);
         return res;
-    }
-
-    @Override
-    protected CDuration getDefaultTtl() {
-        return null;
     }
 
     @Override
@@ -99,11 +93,6 @@ public class HttpEndpointGrabber extends TimeThrottledGrabber<HttpEndpointGrabbe
         return res;
     }
 
-    @Override
-    protected void applyConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
-        // This is the old way of doing configuration
-    }
-    
     public static class HttpEndpointGrabberConfig extends TimeThrottledGrabber.TimeThrottledGrabberConfig implements Hashable {
         List<EndPointMonitoringConfig> endpoints;
 
