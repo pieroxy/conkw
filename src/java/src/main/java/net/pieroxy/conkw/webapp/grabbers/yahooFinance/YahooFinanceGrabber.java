@@ -7,6 +7,7 @@ import net.pieroxy.conkw.utils.StringUtil;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.duration.CDurationParser;
 import net.pieroxy.conkw.grabbersBase.TimeThrottledGrabber;
+import net.pieroxy.conkw.utils.hashing.Md5Sum;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.io.InputStream;
@@ -19,41 +20,39 @@ import java.util.logging.Level;
 public class YahooFinanceGrabber extends TimeThrottledGrabber<YahooFinanceGrabber.YahooFinanceGrabberConfig> {
   private static final String NAME = "yahoof";
 
-  String symbol,region,key;
-
   @Override
   public String getDefaultName() {
     return NAME;
   }
 
   @Override
-  public void applyConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
-    symbol = String.valueOf(config.get("symbol"));
-    region = String.valueOf(config.get("region"));
-    key = String.valueOf(config.get("key"));
-    if (canLogFine()) log(Level.FINE, "Initializing with symbol " + symbol);
+  public YahooFinanceGrabberConfig getDefaultConfig() {
+    YahooFinanceGrabberConfig res = new YahooFinanceGrabberConfig();
+    res.setTtl(CDurationParser.parse("5h"));
+    return res;
   }
 
   @Override
-  protected CDuration getDefaultTtl() {
-    return CDurationParser.parse("4h");
+  public void applyConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
+    if (canLogFine()) log(Level.FINE, "Initializing with symbol " + getConfig().getSymbol());
   }
 
   @Override
   protected void load(SimpleCollector c) {
     try {
-      if (!StringUtil.isValidApiKey(key)) {
+      if (!StringUtil.isValidApiKey(getConfig().getKey())) {
+        log(Level.INFO, "YahooFinanceGrabber not properly configured.");
         c.addError("YahooFinanceGrabber not properly configured.");
         return;
       }
 
-      log(Level.FINE, "Loading data for symbol " + symbol);
+      log(Level.FINE, "Loading data for symbol " + getConfig().getSymbol());
 
-      URL url = new URL("https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-summary?symbol="+symbol+"&region="+region);
+      URL url = new URL("https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-summary?symbol="+ getConfig().getSymbol()+"&region="+ getConfig().getRegion());
       URLConnection con = url.openConnection();
       HttpURLConnection http = (HttpURLConnection) con;
       http.setRequestMethod("GET");
-      http.setRequestProperty("x-rapidapi-key", key);
+      http.setRequestProperty("x-rapidapi-key", getConfig().getKey());
       http.connect();
 
       InputStream is;
@@ -72,19 +71,41 @@ public class YahooFinanceGrabber extends TimeThrottledGrabber<YahooFinanceGrabbe
       c.collect("currencySymbol", response.getPrice().getCurrencySymbol());
       c.collect("currency", response.getPrice().getCurrency());
       c.collect("marketCapFmt", response.getPrice().getMarketCap().getFmt());
-
-      return;
     } catch (Exception e) {
       log(Level.SEVERE, "", e);
     }
   }
 
-  @Override
-  protected String getCacheKey() {
-    return symbol + "/" + region + "/" + key;
-  }
-
   public static class YahooFinanceGrabberConfig extends TimeThrottledGrabber.TimeThrottledGrabberConfig {
+    private String symbol,region,key;
 
+    @Override
+    public void addToHash(Md5Sum sum) {
+      sum.add(symbol).add(region).add(key);
+    }
+
+    public String getSymbol() {
+      return symbol;
+    }
+
+    public void setSymbol(String symbol) {
+      this.symbol = symbol;
+    }
+
+    public String getRegion() {
+      return region;
+    }
+
+    public void setRegion(String region) {
+      this.region = region;
+    }
+
+    public String getKey() {
+      return key;
+    }
+
+    public void setKey(String key) {
+      this.key = key;
+    }
   }
 }

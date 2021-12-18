@@ -86,7 +86,7 @@
       // Yahoo finance grabber. Extracts all sorts of metrics for a stock value, cryptocurrency, etc, here the Apple stock.
       "implementation":"net.pieroxy.conkw.webapp.grabbers.yahooFinance.YahooFinanceGrabber",
       "name":"apple",
-      "parameters": {
+      "config": {
         "ttl":"5h", // The time between two refreshes. 
         "errorTtl": "10h",
         "symbol":"AAPL",
