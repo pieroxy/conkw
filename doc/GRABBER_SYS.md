@@ -15,7 +15,7 @@ This is the system grabber written in pure Java. It doesn't rely on anything els
   "implementation":"net.pieroxy.conkw.webapp.grabbers.JavaSystemViewGrabber",
   "extract":"sys,cpu,freespace",
   "parameters": {
-    "mountPoints":"/"
+    "mountPoints":["/"]
   }
 },
 ```
@@ -57,7 +57,7 @@ Extracts metrics about filesystems, such as total capacity and available space.
 
 The list of filesystems monitored can come from two sources:
 
-* The grabber `mountPoints` parameter, which can contain a comma separated list of mount points, pointing to filesystems to monitor. For example: `/,/media/USB` or `C:\,D:\`
+* The grabber `mountPoints` parameter, which can contain a comma separated list of mount points, pointing to filesystems to monitor. For example: `["/","/media/USB"]` or `["C:\","D:\"]`
 * If the list of filesystems is not set, the filesystems are detected automatically. On windows, they are the list of drives returned by `File.listRoots()`, on other systems they are guessed by excluding from `FileSystems.getDefault().getFileStores()` all path starting with anyone of `/dev /snap /sys /System /proc /run` which usually represent special filesystems, not general purpose storage filesystems.
 
 
