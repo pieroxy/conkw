@@ -33,7 +33,8 @@ public class YahooFinanceGrabber extends TimeThrottledGrabber<YahooFinanceGrabbe
   }
 
   @Override
-  public void applyConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
+  public void initializeGrabber() {
+    super.initializeGrabber();
     if (canLogFine()) log(Level.FINE, "Initializing with symbol " + getConfig().getSymbol());
   }
 
