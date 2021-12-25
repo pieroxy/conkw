@@ -15,10 +15,10 @@
     {
       // Some CPU usage view, filesystem space monitoring, working on all platforms
       "implementation":"net.pieroxy.conkw.webapp.grabbers.JavaSystemViewGrabber",
-      "parameters": {
-        // List here all the mount points of your machines to monitor free space, separated by a comma.
+      "config": {
+        // List here all the mount points of your machines to monitor free space.
         // If not specified, mount points will be guessed.
-        /* "mountPoints":"/" */
+        /* "mountPoints":["/", "/mnt/second"] */
       }
     },
     //OSHI

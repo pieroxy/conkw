@@ -43,6 +43,11 @@ public class JavaSystemViewGrabber extends AsyncGrabber<SimpleCollector, JavaSys
   }
 
   @Override
+  public JavaSystemViewGrabberConfig getDefaultConfig() {
+    return new JavaSystemViewGrabberConfig();
+  }
+
+  @Override
   public void grabSync(SimpleCollector c) {
     extract(c, "sys", this::grabSys, CDuration.ONE_MINUTE);
     extract(c, "cpu", this::grabCpu, CDuration.ZERO);
@@ -134,9 +139,9 @@ public class JavaSystemViewGrabber extends AsyncGrabber<SimpleCollector, JavaSys
   }
 
   @Override
-  public void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
-    String mpstr = config.get("mountPoints");
-    if (mpstr == null) {
+  public void initializeGrabber() {
+    List<String> mps = getConfig().getMountPoints();
+    if (mps == null) {
       if (OsCheck.getOperatingSystemType() == OsCheck.OSType.Windows) {
         File[]roots = File.listRoots();
         mountPoints = Arrays.stream(roots).map(f -> f.getAbsolutePath()).collect(Collectors.toList());
@@ -160,7 +165,7 @@ public class JavaSystemViewGrabber extends AsyncGrabber<SimpleCollector, JavaSys
       }
       if (canLogInfo()) log(Level.INFO, "Detected mount points to be " + mountPoints.stream().collect(Collectors.joining(",")));
     } else {
-      mountPoints = Arrays.asList(mpstr.split(","));
+      mountPoints = mps;
     }
     mountPointsStores = new ArrayList<>(mountPoints.size());
     for (String mp : mountPoints) {
@@ -183,6 +188,14 @@ public class JavaSystemViewGrabber extends AsyncGrabber<SimpleCollector, JavaSys
   }
 
   public static class JavaSystemViewGrabberConfig {
+    List<String>mountPoints;
 
+    public List<String> getMountPoints() {
+      return mountPoints;
+    }
+
+    public void setMountPoints(List<String> mountPoints) {
+      this.mountPoints = mountPoints;
+    }
   }
 }
