@@ -22,24 +22,12 @@ import java.util.Map;
 import java.util.logging.Level;
 
 public abstract class TimeThrottledGrabber<C extends TimeThrottledGrabber.TimeThrottledGrabberConfig> extends AsyncGrabber<SimpleCollector, C> {
-  //TODO remove this after config refacto
-  @Deprecated
-  protected CDuration getDefaultTtl() {
-    return null;
-  }
-
   protected abstract void load(SimpleCollector res);
 
-  //TODO make this final after config refacto
-  protected String getCacheKey() {
+  protected final String getCacheKey() {
     Md5Sum sum = new Md5Sum();
     getConfig().addToHash(sum);
     return sum.getMd5Sum();
-  }
-
-  //TODO remove this after config refacto
-  @Deprecated
-  protected void applyConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
   }
 
   private CDuration ttl;
@@ -60,25 +48,18 @@ public abstract class TimeThrottledGrabber<C extends TimeThrottledGrabber.TimeTh
     return res;
   }
 
-  protected final void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
-    if (getConfig() == null) {
-      // Old config handling
-      ttl = getDefaultTtl();
-      errorTtl = new CDuration(Math.max(1, Math.min(60, getDefaultTtl().asSeconds() / 10)));
-
-      ttl = getDurationProperty("ttl", config, ttl);
-      errorTtl = getDurationProperty("errorTtl", config, errorTtl);
-
-      applyConfig(config, configs);
-    } else {
-      // New config handling
-      ttl = getConfig().getTtl();
-      if (ttl == null) throw new RuntimeException("No TTL defined for grabber " + getGrabberFQN());
-      errorTtl = getConfig().getErrorTtl() == null ?
-              new CDuration(Math.max(1, Math.min(60, ttl.asSeconds() / 10)))
-              :
-              getConfig().getErrorTtl();
-    }
+  /**
+   * Subclasses should call this in order to initialize ttls.
+   */
+  @Override
+  public void initializeGrabber() {
+    super.initializeGrabber();
+    ttl = getConfig().getTtl();
+    if (ttl == null) throw new RuntimeException("No TTL defined for grabber " + getGrabberFQN());
+    errorTtl = getConfig().getErrorTtl() == null ?
+            new CDuration(Math.max(1, Math.min(60, ttl.asSeconds() / 10)))
+            :
+            getConfig().getErrorTtl();
   }
 
   protected CDuration getTtl() {
@@ -290,11 +271,6 @@ public abstract class TimeThrottledGrabber<C extends TimeThrottledGrabber.TimeTh
   public abstract static class TimeThrottledGrabberConfig implements Hashable {
     CDuration ttl;
     CDuration errorTtl;
-
-    @Override
-    //TODO remove this after config refacto. Subclasses need to implement this.
-    public void addToHash(Md5Sum sum) {
-    }
 
     public CDuration getTtl() {
       return ttl;

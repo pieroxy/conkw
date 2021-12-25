@@ -4,6 +4,7 @@ import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.grabbersBase.TimeThrottledGrabber;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.duration.CDurationParser;
+import net.pieroxy.conkw.utils.hashing.Md5Sum;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.io.IOException;
@@ -165,6 +166,11 @@ public class HttpsCertGrabber extends TimeThrottledGrabber<HttpsCertGrabber.Http
 
     public void setDomains(List<String> domains) {
       this.domains = domains;
+    }
+
+    @Override
+    public void addToHash(Md5Sum sum) {
+      getDomains().forEach(sum::add);
     }
   }
 }
