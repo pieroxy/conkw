@@ -15,13 +15,18 @@ This is the specific email check grabber. It fetches an IMAP folder and look for
 ```json
 {
     "implementation":"net.pieroxy.conkw.webapp.grabbers.email.SpecificEmailCheckGrabber",
-    "parameters": {
-        "ttl":"5m",
-        "folder":"YourImapFolder",
-        "subjectRegexp":"Specify the subject regexp",
-        "senderRegexp":"specify the sender email",
-        "bodyRegexp":"Specify the body regexp",
-        "imapConf" :"MyEmailAccount!!:imap.googlemail.com:993:my_email@gmail.com:mypassword"
+    "config": {
+        "ttl": "1h",
+        "folder": "Backups",
+        "subjectRegexp": ".Backup of the NAS.*",
+        "bodyRegexp": ".*Backup and Prune finished successfully.*",
+        "senderRegexp": "pieroxy@my-server-live",
+        "imapConf": {
+            "server": "imap.googlemail.com",
+            "port": 993,
+            "login": "myaccount@gmail.com",
+            "password": "mypassword"
+        }
     }
 }
 ```
@@ -65,20 +70,26 @@ Here is my configuration for the SpecificEmailCheckGrabber:
 ```json
 {
     "implementation":"net.pieroxy.conkw.webapp.grabbers.email.SpecificEmailCheckGrabber",
-    "parameters": {
-        "ttl":"1h",
-        "folder":"technicalStuff/Backups",
-        "subjectRegexp":"Backups .*",
-        "bodyRegexp":".*Backup and Prune finished successfully.*",
-        "senderRegexp":"email@sending-address",
-        "imapConf" :"account:imap.googlemail.com:993:my_email@gmail.com:my_app_password"
+    "implementation":"net.pieroxy.conkw.webapp.grabbers.email.SpecificEmailCheckGrabber",
+    "config": {
+        "ttl": "1h",
+        "folder": "technicalStuff/Backups",
+        "subjectRegexp": "Backups .*",
+        "bodyRegexp": ".*Backup and Prune finished successfully.*",
+        "senderRegexp": "email@sending-address",
+        "imapConf": {
+            "server": "imap.googlemail.com",
+            "port": 993,
+            "login": "myaccount@gmail.com",
+            "password": "mypassword"
+        }
     }
 }
 ```
 
 * `ttl:1h` No need to be too agressive. Plus, a run might emmit a warning because a file was locked and it couldn't read it, so we'll set the threshold to 8 hours before assuming there is an issue.
 * `folder:technicalStuff/Backups` This is where my gmail filter puts all emails sent by the backup script.
-* `subjectRegexp:Backups .*` We wil only consider emails whose subject start with `Backups `.
+* `subjectRegexp:Backups .*` We will only consider emails whose subject start with `Backups `.
 * `senderRegexp:email@sending-address` I hardcoded the email of the sender.
 * `bodyRegexp:.*Backup and Prune finished successfully.*` I only look for emails reporting a successful backup - ie with no warnings or errors. Those will have the sentence `Backup and Prune finished successfully` somewhere in their body.
 * `imapConf` That's the configuration of my gmail account.

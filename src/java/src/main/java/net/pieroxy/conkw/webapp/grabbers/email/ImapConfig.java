@@ -1,8 +1,11 @@
 package net.pieroxy.conkw.webapp.grabbers.email;
 
+import net.pieroxy.conkw.utils.hashing.Hashable;
+import net.pieroxy.conkw.utils.hashing.Md5Sum;
+
 import java.util.Map;
 
-public class ImapConfig {
+public class ImapConfig implements Hashable {
     private String server,login,password,name;
     private Double port;
 
@@ -61,4 +64,12 @@ public class ImapConfig {
         this.password = password;
     }
 
+    @Override
+    public void addToHash(Md5Sum sum) {
+        sum.add(getLogin());
+        sum.add(getName());
+        sum.add(getPassword());
+        sum.add(getServer());
+        sum.add(String.valueOf(getPort()));
+    }
 }

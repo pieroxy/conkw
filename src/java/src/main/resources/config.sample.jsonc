@@ -295,17 +295,15 @@
     {
       // This is the specific email grabber.
       "implementation":"net.pieroxy.conkw.webapp.grabbers.email.SpecificEmailCheckGrabber",
-      "parameters": {
+      "config": {
         /* "ttl":"5m" */
         "folder":"YourImapFolder",
         "subjectRegexp":"Specify the subject regexp",
         "senderRegexp":"specify the sender email",
-        "bodyRegexp":"Specify the body regexp"
-      },
-      "namedParameters": {
+        "bodyRegexp":"Specify the body regexp",
         "imapConf": {
           "server":"imap.googlemail.com",
-          "port":"993",
+          "port":993,
           "login":"my_account@gmail.com",
           "password":""
         }
