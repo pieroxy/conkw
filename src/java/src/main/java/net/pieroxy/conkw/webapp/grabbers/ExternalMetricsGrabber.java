@@ -45,7 +45,6 @@ public class ExternalMetricsGrabber extends Grabber<SimpleTransientCollector, Ex
     return new SimpleTransientCollector(this, DEFAULT_CONFIG_KEY);
   }
 
-
   public void addMetric(String name, double value) {
     data.atomicAddMetricWithTimestamp(name, value);
     save();
@@ -105,7 +104,7 @@ public class ExternalMetricsGrabber extends Grabber<SimpleTransientCollector, Ex
 
 
   @Override
-  protected void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
+  public void initializeGrabber() {
     Emi.addOrUpdateGrabber(this);
 
     try (FileInputStream fis = new FileInputStream(getStorageFile())) {
@@ -121,6 +120,5 @@ public class ExternalMetricsGrabber extends Grabber<SimpleTransientCollector, Ex
   }
 
   public static class ExternalMetricsGrabberConfig {
-
   }
 }
