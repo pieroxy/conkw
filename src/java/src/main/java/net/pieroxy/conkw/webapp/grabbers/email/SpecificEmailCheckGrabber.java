@@ -2,20 +2,16 @@ package net.pieroxy.conkw.webapp.grabbers.email;
 
 import com.sun.mail.imap.IMAPFolder;
 import net.pieroxy.conkw.collectors.SimpleCollector;
-import net.pieroxy.conkw.utils.hashing.HashTools;
-import net.pieroxy.conkw.utils.StringUtil;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.duration.CDurationParser;
 import net.pieroxy.conkw.grabbersBase.TimeThrottledGrabber;
+import net.pieroxy.conkw.utils.hashing.Md5Sum;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import javax.mail.*;
 import javax.mail.search.ComparisonTerm;
 import javax.mail.search.ReceivedDateTerm;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.Map;
 import java.util.Properties;
@@ -27,13 +23,7 @@ public class SpecificEmailCheckGrabber extends TimeThrottledGrabber<SpecificEmai
     static final String NAME = "specificmail";
     private static final String LAST_SEEN = "last_seen";
     private static final String NEXT_UID = "next_uid";
-    private String cackeKey = "nothing";
 
-    private String folder;
-    private Pattern subjectRegexp;
-    private Pattern senderRegexp;
-    private Pattern bodyRegexp;
-    private ImapConfig imapConf;
     private Long nextUID;
     private long lastSeen = 0;
 
@@ -55,31 +45,10 @@ public class SpecificEmailCheckGrabber extends TimeThrottledGrabber<SpecificEmai
     }
 
     @Override
-    protected void applyConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
-        if (config==null || configs==null) return;
-        if (configs.get("imapConf")==null) return;
-        if (StringUtil.isNullOrEmptyTrimmed(configs.get("imapConf").get("password"))) return;
-        
-        folder = getStringProperty("folder", config, "INBOX");
-        subjectRegexp = getRegexpProperty("subjectRegexp", config, 0);
-        bodyRegexp = getRegexpProperty("bodyRegexp", config, Pattern.DOTALL);
-        senderRegexp = getRegexpProperty("senderRegexp", config, 0);
-        imapConf = new ImapConfig("imap", configs.get("imapConf"));
-
-        MessageDigest md;
-        try {
-            md = MessageDigest.getInstance("MD5");
-        } catch (NoSuchAlgorithmException e) {
-            log(Level.SEVERE, "", e);
-            return;
-        }
-        md.update((folder+subjectRegexp+bodyRegexp+senderRegexp+imapConf).getBytes(StandardCharsets.UTF_8));
-        cackeKey = HashTools.byteArrayToHexString(md.digest());
-    }
-
-    @Override
-    protected CDuration getDefaultTtl() {
-        return CDurationParser.parse("5m");
+    public SpecificEmailCheckGrabberConfig getDefaultConfig() {
+        SpecificEmailCheckGrabberConfig res = new SpecificEmailCheckGrabberConfig();
+        res.setTtl(CDuration.FIVE_MINUTES);
+        return res;
     }
 
     @Override
@@ -125,20 +94,20 @@ public class SpecificEmailCheckGrabber extends TimeThrottledGrabber<SpecificEmai
     }
 
     private boolean matches(Message m) throws Exception {
-        if (subjectRegexp!=null) {
-            if (canLogFine()) log(Level.FINE, "Checking re " + subjectRegexp + " in subject for message " + m.getSubject());
-            if (!subjectRegexp.matcher(m.getSubject()).matches()) return false;
+        if (getConfig().getSubjectRegexp()!=null) {
+            if (canLogFine()) log(Level.FINE, "Checking re " + getConfig().getSubjectRegexp() + " in subject for message " + m.getSubject());
+            if (!getConfig().getSubjectRegexp().matcher(m.getSubject()).matches()) return false;
         }
-        if (senderRegexp!=null) {
+        if (getConfig().getSenderRegexp()!=null) {
             if (canLogFine()) {
                 log(Level.FINE, "Checking sender for message " + m.getSubject());
                 log(Level.FINE, "Address is '" + MailTools.getMailAddress(m.getFrom()[0]) + "'");
             }
-            if (!senderRegexp.matcher(MailTools.getMailAddress(m.getFrom()[0])).matches()) return false;
+            if (!getConfig().getSenderRegexp().matcher(MailTools.getMailAddress(m.getFrom()[0])).matches()) return false;
         }
-        if (bodyRegexp!=null) {
+        if (getConfig().getBodyRegexp()!=null) {
             if (canLogFine())log(Level.INFO, "Checking body for message " + m.getSubject());
-            if (!bodyRegexp.matcher(MailTools.getPlainContent(m.getContent())).matches()) return false;
+            if (!getConfig().getBodyRegexp().matcher(MailTools.getPlainContent(m.getContent())).matches()) return false;
         }
         if (canLogFine()) log(Level.FINE, "Success for message " + m.getSubject());
         return true;
@@ -148,8 +117,12 @@ public class SpecificEmailCheckGrabber extends TimeThrottledGrabber<SpecificEmai
         Session session = Session.getDefaultInstance(new Properties());
         session.setDebug(canLogFine());
         Store store = session.getStore("imaps");
-        store.connect(imapConf.getServer(), (int)(double)imapConf.getPort(), imapConf.getLogin(), imapConf.getPassword());
-        Folder inbox = store.getFolder(folder);
+        store.connect(
+                getConfig().getImapConf().getServer(),
+                (int)(double)getConfig().getImapConf().getPort(),
+                getConfig().getImapConf().getLogin(),
+                getConfig().getImapConf().getPassword());
+        Folder inbox = store.getFolder(getConfig().getFolder());
         inbox.open(Folder.READ_ONLY);
         if (canLogFine()) log(Level.FINE, "lastUID: " + nextUID);
 
@@ -165,12 +138,57 @@ public class SpecificEmailCheckGrabber extends TimeThrottledGrabber<SpecificEmai
         }
     }
 
-    @Override
-    protected String getCacheKey() {
-        return cackeKey;
-    }
-
     public static class SpecificEmailCheckGrabberConfig extends TimeThrottledGrabber.TimeThrottledGrabberConfig {
+        String folder;
+        Pattern subjectRegexp;
+        Pattern bodyRegexp;
+        Pattern senderRegexp;
+        ImapConfig imapConf;
 
+        @Override
+        public void addToHash(Md5Sum sum) {
+            sum.add(folder).add(subjectRegexp.pattern()).add(bodyRegexp.pattern()).add(senderRegexp.pattern());
+            getImapConf().addToHash(sum);
+        }
+
+        public String getFolder() {
+            return folder;
+        }
+
+        public void setFolder(String folder) {
+            this.folder = folder;
+        }
+
+        public Pattern getSubjectRegexp() {
+            return subjectRegexp;
+        }
+
+        public void setSubjectRegexp(Pattern subjectRegexp) {
+            this.subjectRegexp = subjectRegexp;
+        }
+
+        public Pattern getBodyRegexp() {
+            return bodyRegexp;
+        }
+
+        public void setBodyRegexp(Pattern bodyRegexp) {
+            this.bodyRegexp = bodyRegexp;
+        }
+
+        public Pattern getSenderRegexp() {
+            return senderRegexp;
+        }
+
+        public void setSenderRegexp(Pattern senderRegexp) {
+            this.senderRegexp = senderRegexp;
+        }
+
+        public ImapConfig getImapConf() {
+            return imapConf;
+        }
+
+        public void setImapConf(ImapConfig imapConf) {
+            this.imapConf = imapConf;
+        }
     }
 }

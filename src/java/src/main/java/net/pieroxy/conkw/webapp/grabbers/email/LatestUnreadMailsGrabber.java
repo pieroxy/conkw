@@ -92,13 +92,7 @@ public class LatestUnreadMailsGrabber extends TimeThrottledGrabber<LatestUnreadM
         @Override
         public void addToHash(Md5Sum sum) {
             sum.add(String.valueOf(maxMessages));
-            getAccounts().stream().forEach(ic -> {
-                sum.add(ic.getLogin());
-                sum.add(ic.getName());
-                sum.add(ic.getPassword());
-                sum.add(ic.getServer());
-                sum.add(String.valueOf(ic.getPort()));
-            });
+            getAccounts().stream().forEach(ic -> ic.addToHash(sum));
         }
 
         public Double getMaxMessages() {
