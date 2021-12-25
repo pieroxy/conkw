@@ -15,16 +15,16 @@ This is the EIG grabber, or external instance grabber. It will fetch metrics fro
 The configuration only parameter is the API URL that this instance needs to call. This is the same API that the UI calls to fetch data. For example:
 
 ```json
-    {
-      // External instance grabber. Grabs metrics from another live instance of conkw.
-      "implementation":"net.pieroxy.conkw.webapp.grabbers.ExternalInstanceGrabber",
-      "name":"test_eig",
-      "parameters": {
-        "url":"http://1.2.3.4:12789/api?grabbers=proc,sys",
-        "login":"myuser",
-        "password":"mypassword"
-      }
-    }
+{
+  // External instance grabber. Grabs metrics from another live instance of conkw.
+  "implementation":"net.pieroxy.conkw.webapp.grabbers.ExternalInstanceGrabber",
+  "name":"test_eig",
+  "config": {
+    "url":"http://1.2.3.4:12789/api?grabbers=proc,sys",
+    "login":"myuser",
+    "password":"mypassword"
+  }
+}
 ```
 
 Where:

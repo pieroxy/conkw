@@ -16,14 +16,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
-import java.util.Map;
 import java.util.logging.Level;
 
 public class ExternalInstanceGrabber extends AsyncGrabber<SimpleCollector, ExternalInstanceGrabber.ExternalInstanceGrabberConfig> {
-
-  private String targetUrl;
-  private String login;
-  private String pass;
   private String sessionToken;
 
   @Override
@@ -37,10 +32,15 @@ public class ExternalInstanceGrabber extends AsyncGrabber<SimpleCollector, Exter
   }
 
   @Override
+  public ExternalInstanceGrabberConfig getDefaultConfig() {
+    return new ExternalInstanceGrabberConfig();
+  }
+
+  @Override
   public void grabSync(SimpleCollector c) {
     URL url = null;
     try {
-      url = new URL(targetUrl + (StringUtil.isNullOrEmptyTrimmed(sessionToken)?"":("&"+ApiAuthManager.SID_FIELD+"="+sessionToken)));
+      url = new URL(getConfig().getUrl() + (StringUtil.isNullOrEmptyTrimmed(sessionToken)?"":("&"+ApiAuthManager.SID_FIELD+"="+sessionToken)));
       URLConnection con = url.openConnection();
       con.setConnectTimeout(500);
       con.setReadTimeout(500);
@@ -86,11 +86,11 @@ public class ExternalInstanceGrabber extends AsyncGrabber<SimpleCollector, Exter
   }
 
   private void authenticate() throws Exception {
-    if (login == null || pass==null) throw new DisplayMessageException(this.getClass().getSimpleName() + "/" + getName() + ": Authentication is not configured but endpoint needs it.");
-    NeedsAuthResponse res1 = HttpUtils.get(targetUrl + "&" + ApiAuthManager.USER_FIELD + "=" + URLEncoder.encode(login, "UTF-8"), NeedsAuthResponse.class);
+    if (getConfig().getLogin() == null || getConfig().getPassword()==null) throw new DisplayMessageException(this.getClass().getSimpleName() + "/" + getName() + ": Authentication is not configured but endpoint needs it.");
+    NeedsAuthResponse res1 = HttpUtils.get(getConfig().getUrl() + "&" + ApiAuthManager.USER_FIELD + "=" + URLEncoder.encode(getConfig().getLogin(), "UTF-8"), NeedsAuthResponse.class);
     if (StringUtil.isNullOrEmptyTrimmed(res1.getSaltForPassword())) throw new DisplayMessageException(this.getClass().getSimpleName() + "/" + getName() + ": Authentication failed at step 1.");
-    String pwd = HashTools.toSHA1(res1.getSaltForPassword() + pass);
-    NeedsAuthResponse res = HttpUtils.get(targetUrl + "&" + ApiAuthManager.USER_FIELD + "=" + URLEncoder.encode(login, "UTF-8") + "&" + ApiAuthManager.PASS_FIELD + "=" + pwd, NeedsAuthResponse.class);
+    String pwd = HashTools.toSHA1(res1.getSaltForPassword() + getConfig().getPassword());
+    NeedsAuthResponse res = HttpUtils.get(getConfig().getUrl() + "&" + ApiAuthManager.USER_FIELD + "=" + URLEncoder.encode(getConfig().getLogin(), "UTF-8") + "&" + ApiAuthManager.PASS_FIELD + "=" + pwd, NeedsAuthResponse.class);
     sessionToken = res.getSessionToken();
     if (StringUtil.isNullOrEmptyTrimmed(sessionToken)) throw new DisplayMessageException(this.getClass().getSimpleName() + "/" + getName() + ": Authentication failed.");
   }
@@ -100,15 +100,33 @@ public class ExternalInstanceGrabber extends AsyncGrabber<SimpleCollector, Exter
     return "ext";
   }
 
-  @Override
-  protected void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
-    targetUrl = config.get("url");
-    if (targetUrl.indexOf('?')==-1) targetUrl+="?";
-    login = config.get("login");
-    pass = config.get("password");
-  }
-
   public static class ExternalInstanceGrabberConfig {
+    private String url;
+    private String login;
+    private String password;
 
+    public String getUrl() {
+      return url;
+    }
+
+    public void setUrl(String url) {
+      this.url = url;
+    }
+
+    public String getLogin() {
+      return login;
+    }
+
+    public void setLogin(String login) {
+      this.login = login;
+    }
+
+    public String getPassword() {
+      return password;
+    }
+
+    public void setPassword(String password) {
+      this.password = password;
+    }
   }
 }

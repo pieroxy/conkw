@@ -231,7 +231,7 @@
       // External instance grabber. Grabs metrics from another live instance of conkw.
       "implementation":"net.pieroxy.conkw.webapp.grabbers.ExternalInstanceGrabber",
       "name":"test_eig",
-      "parameters": {
+      "config": {
         "url":"http://localhost:12789/api?grabbers=sys",
         // The following fields are used if the remote endpoint is authenticated
         "login":"Remote api login here",
