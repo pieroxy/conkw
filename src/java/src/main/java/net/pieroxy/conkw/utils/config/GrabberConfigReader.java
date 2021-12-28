@@ -7,6 +7,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -17,16 +19,13 @@ public class GrabberConfigReader {
     private static final Map<Class, CustomConverter> customStringConverters = new HashMap<>();
 
     static {
-        customStringConverters.put(CDuration.class, new CustomConverter() {
-            @Override
-            public Object convert(String dat) {
-                return CDurationParser.parse(dat);
-            }
-        });
-        customStringConverters.put(Pattern.class, new CustomConverter() {
-            @Override
-            public Object convert(String dat) {
-                return Pattern.compile(dat, Pattern.DOTALL);
+        customStringConverters.put(CDuration.class, dat -> CDurationParser.parse(dat));
+        customStringConverters.put(Pattern.class, dat -> Pattern.compile(dat, Pattern.DOTALL));
+        customStringConverters.put(URL.class, dat -> {
+            try {
+                return new URL(dat);
+            } catch (MalformedURLException e) {
+                throw new RuntimeException(e);
             }
         });
     }
