@@ -56,9 +56,9 @@ public abstract class Grabber<T extends Collector, C> {
     this.config = config;
     if (config instanceof PartiallyExtractableConfig) {
       PartiallyExtractableConfig pc = (PartiallyExtractableConfig) config;
-
       if (pc.getToExtract()!=null) {
         pc.getToExtract().forEach(extract::add);
+        log(Level.INFO, "Extracting: " + extract.stream().collect(Collectors.joining(",")));
       }
     }
   }
@@ -150,6 +150,7 @@ public abstract class Grabber<T extends Collector, C> {
     for (String val : toExtract) {
       extract.add(val);
     }
+    log(Level.INFO, "Extracting: " + extract.stream().collect(Collectors.joining(",")));
   }
 
   protected boolean shouldExtract(String value) {
