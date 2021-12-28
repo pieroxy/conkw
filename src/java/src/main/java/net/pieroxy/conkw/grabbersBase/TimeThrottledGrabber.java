@@ -268,7 +268,7 @@ public abstract class TimeThrottledGrabber<C extends TimeThrottledGrabber.TimeTh
     }
   }
 
-  public abstract static class TimeThrottledGrabberConfig implements Hashable {
+  public abstract static class TimeThrottledGrabberConfig extends PartiallyExtractableConfig implements Hashable {
     CDuration ttl;
     CDuration errorTtl;
 
