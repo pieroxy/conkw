@@ -2,6 +2,7 @@ package net.pieroxy.conkw.webapp.grabbers.procgrabber;
 
 import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.collectors.SimpleTransientCollector;
+import net.pieroxy.conkw.grabbersBase.PartiallyExtractableConfig;
 import net.pieroxy.conkw.utils.ExternalBinaryRunner;
 import net.pieroxy.conkw.utils.PerformanceTools;
 import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
@@ -58,12 +59,20 @@ public class ProcGrabber extends AsyncGrabber<SimpleCollector, ProcGrabber.ProcG
   }
 
   @Override
+  public ProcGrabberConfig getDefaultConfig() {
+    ProcGrabberConfig res = new ProcGrabberConfig();
+    res.setMdstatFile(MDSTAT_FILE);
+    return res;
+  }
+
+  @Override
   public boolean changed(SimpleCollector c) {
     return true;
   }
 
   @Override
-  public void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs){
+  public void initializeGrabber() {
+    super.initializeGrabber();
 
     computeNbCpus();
 
@@ -73,19 +82,13 @@ public class ProcGrabber extends AsyncGrabber<SimpleCollector, ProcGrabber.ProcG
       return;
     }
 
-    String sbd = config.get("blockDevices");
-    if (sbd!=null) {
-      blockDevices = Arrays.asList(sbd.split(","));
-    }
+    blockDevices = getConfig().getBlockDevices();
     if (blockDevices == null) {
       autoDetectBlockDevices = true;
     }
-    if (config.get("mdstatFile")!=null) {
-      mdstatFile = new File(config.get("mdstatFile"));
-      log(Level.INFO, "Using mdstat file from " + mdstatFile.getAbsolutePath());
-    } else {
-      mdstatFile = new File(MDSTAT_FILE);
-    }
+
+    mdstatFile = new File(getConfig().getMdstatFile());
+    log(Level.INFO, "Using mdstat file from " + mdstatFile.getAbsolutePath());
   }
 
   private void computeNbCpus() {
@@ -568,8 +571,25 @@ public class ProcGrabber extends AsyncGrabber<SimpleCollector, ProcGrabber.ProcG
     return ps;
   }
 
-  public static class ProcGrabberConfig {
+  public static class ProcGrabberConfig extends PartiallyExtractableConfig {
+    private List<String> blockDevices;
+    private String mdstatFile;
 
+    public List<String> getBlockDevices() {
+      return blockDevices;
+    }
+
+    public void setBlockDevices(List<String> blockDevices) {
+      this.blockDevices = blockDevices;
+    }
+
+    public String getMdstatFile() {
+      return mdstatFile;
+    }
+
+    public void setMdstatFile(String mdstatFile) {
+      this.mdstatFile = mdstatFile;
+    }
   }
 }
 

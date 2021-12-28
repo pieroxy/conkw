@@ -5,7 +5,7 @@
     {
       // This is the system grabber for Linux OS.
       "implementation":"net.pieroxy.conkw.webapp.grabbers.procgrabber.ProcGrabber",
-      "parameters": {
+      "config": {
         // List here the block devices of your machine, to monitor I/O, separated by a comma
         // If not specified, devices will be guessed.
         /* "blockDevices":"sda" */
