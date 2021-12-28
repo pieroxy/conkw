@@ -3,10 +3,8 @@ package net.pieroxy.conkw.webapp.grabbers.oshi;
 import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.collectors.SimpleTransientCollector;
 import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
-import net.pieroxy.conkw.utils.StringUtil;
+import net.pieroxy.conkw.grabbersBase.PartiallyExtractableConfig;
 import net.pieroxy.conkw.utils.duration.CDuration;
-import net.pieroxy.conkw.utils.duration.CDurationParser;
-import net.pieroxy.conkw.webapp.model.ResponseData;
 import oshi.hardware.*;
 import oshi.software.os.OSFileStore;
 import oshi.software.os.OSProcess;
@@ -23,8 +21,6 @@ public class OshiGrabber extends AsyncGrabber<SimpleCollector, OshiGrabber.OshiG
   public static final String CONFIG_STATIC_DATA_DELAY="staticDataDelay";
   public static final String CONFIG_DETAILED_DATA_DELAY="detailedDataDelay";
 
-  private CDuration staticDataDelay = CDurationParser.parse("1d");
-  private CDuration detailedDataDelay = CDuration.ONE_MINUTE;
   private Map<Integer, OSProcess> previousProcesses;
   OSHIExtractor extractor = new OSHIExtractor();
   long[]ticks;
@@ -50,6 +46,14 @@ public class OshiGrabber extends AsyncGrabber<SimpleCollector, OshiGrabber.OshiG
   }
 
   @Override
+  public OshiGrabberConfig getDefaultConfig() {
+    OshiGrabberConfig res = new OshiGrabberConfig();
+    res.setStaticDataDelay(CDuration.ONE_DAY);
+    res.setDetailedDataDelay(CDuration.ONE_MINUTE);
+    return res;
+  }
+
+  @Override
   public void grabSync(SimpleCollector c) {
     long now = System.currentTimeMillis();
     lastGrabSync = now;
@@ -58,35 +62,35 @@ public class OshiGrabber extends AsyncGrabber<SimpleCollector, OshiGrabber.OshiG
     // Overall: 146m / 1.2s
     extract(c, "sensors", this::extractSensors, CDuration.ZERO); // 250k
     extract(c, "memory", this::extractMemory, CDuration.ZERO); // 41k
-    extract(c, "physicalmemory", this::extractPhysicalMemory, staticDataDelay); // 8k
+    extract(c, "physicalmemory", this::extractPhysicalMemory, getConfig().getStaticDataDelay()); // 8k
     extract(c, "virtualmemory", this::extractVirtualMemory, CDuration.ZERO); // 193k
-    extract(c, "computer", this::extractComputer, staticDataDelay); // 9k
-    extract(c, "baseboard", this::extractBaseboard, staticDataDelay); // 9k
-    extract(c, "firmware", this::extractFirmware, staticDataDelay); // 9k
+    extract(c, "computer", this::extractComputer, getConfig().getStaticDataDelay()); // 9k
+    extract(c, "baseboard", this::extractBaseboard, getConfig().getStaticDataDelay()); // 9k
+    extract(c, "firmware", this::extractFirmware, getConfig().getStaticDataDelay()); // 9k
     extract(c, "cpu", this::extractCpu, CDuration.ZERO); // 1.2m / 70ms
     extract(c, "cpubycore", this::extractCpuByCore, CDuration.ZERO); // 70k
-    extract(c, "cpuident", this::extractCpuIdent, staticDataDelay); // 9k
-    extract(c, "displays", this::extractDisplays, staticDataDelay); // 26k
+    extract(c, "cpuident", this::extractCpuIdent, getConfig().getStaticDataDelay()); // 9k
+    extract(c, "displays", this::extractDisplays, getConfig().getStaticDataDelay()); // 26k
     extract(c, "disksio", this::extractDisksIo, CDuration.ZERO); // 11k
-    extract(c, "disksinfos", this::extractDisks, detailedDataDelay); // 20k
-    extract(c, "graphicscards", this::extractGraphicsCards, staticDataDelay); // 10k
-    extract(c, "nics", this::extractNics, detailedDataDelay); // 12k
+    extract(c, "disksinfos", this::extractDisks, getConfig().getDetailedDataDelay()); // 20k
+    extract(c, "graphicscards", this::extractGraphicsCards, getConfig().getStaticDataDelay()); // 10k
+    extract(c, "nics", this::extractNics, getConfig().getDetailedDataDelay()); // 12k
     extract(c, "netbw", this::extractNetbw, CDuration.ZERO); // 12k
     extract(c, "battery", this::extractBattery, CDuration.FIVE_SECONDS); // 8k
-    extract(c, "psus", this::extractPsus, detailedDataDelay); // 8k
-    extract(c, "soundcards", this::extractSoundCards, staticDataDelay); // 9k
-    extract(c, "usb", this::extractUsbDevices, detailedDataDelay); // 17k
-    extract(c, "os", this::extractOperatingSystem, detailedDataDelay); // 350k
+    extract(c, "psus", this::extractPsus, getConfig().getDetailedDataDelay()); // 8k
+    extract(c, "soundcards", this::extractSoundCards, getConfig().getStaticDataDelay()); // 9k
+    extract(c, "usb", this::extractUsbDevices, getConfig().getDetailedDataDelay()); // 17k
+    extract(c, "os", this::extractOperatingSystem, getConfig().getDetailedDataDelay()); // 350k
     extract(c, "filestores", this::extractFileStores, CDuration.ZERO); // 28k
-    extract(c, "tcpv4", this::extractTcpv4, detailedDataDelay); // 9k
-    extract(c, "tcpv6", this::extractTcpv6, detailedDataDelay); // 9k
-    extract(c, "udpv4", this::extractUdpv4, detailedDataDelay); // 9k
-    extract(c, "udpv6", this::extractUdpv6, detailedDataDelay); // 9k
-    extract(c, "sessions", this::extractSessions, detailedDataDelay); // 10k
+    extract(c, "tcpv4", this::extractTcpv4, getConfig().getDetailedDataDelay()); // 9k
+    extract(c, "tcpv6", this::extractTcpv6, getConfig().getDetailedDataDelay()); // 9k
+    extract(c, "udpv4", this::extractUdpv4, getConfig().getDetailedDataDelay()); // 9k
+    extract(c, "udpv6", this::extractUdpv6, getConfig().getDetailedDataDelay()); // 9k
+    extract(c, "sessions", this::extractSessions, getConfig().getDetailedDataDelay()); // 10k
     extract(c, "shortsessions", this::extractShortSessions, CDuration.ZERO); // 9k
-    extract(c, "netp", this::extractNetworkParams, detailedDataDelay); // 198k
-    extract(c, "processes", this::extractProcesses, detailedDataDelay); // 125m / 400ms
-    extract(c, "services", this::extractServices, detailedDataDelay); // 20m / 400ms
+    extract(c, "netp", this::extractNetworkParams, getConfig().getDetailedDataDelay()); // 198k
+    extract(c, "processes", this::extractProcesses, getConfig().getDetailedDataDelay()); // 125m / 400ms
+    extract(c, "services", this::extractServices, getConfig().getDetailedDataDelay()); // 20m / 400ms
   }
 
   private void extractServices(SimpleCollector c) {
@@ -561,19 +565,24 @@ public class OshiGrabber extends AsyncGrabber<SimpleCollector, OshiGrabber.OshiG
     return NAME;
   }
 
-  @Override
-  public void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
-    String ddd = config.get(CONFIG_DETAILED_DATA_DELAY);
-    if (!StringUtil.isNullOrEmptyTrimmed(ddd)) {
-      detailedDataDelay = CDurationParser.parse(ddd);
-    }
-    String sdd = config.get(CONFIG_STATIC_DATA_DELAY);
-    if (sdd!=null) {
-      staticDataDelay = CDurationParser.parse(sdd);
-    }
-  }
+  public static class OshiGrabberConfig extends PartiallyExtractableConfig {
+    private CDuration staticDataDelay;
+    private CDuration detailedDataDelay;
 
-  public static class OshiGrabberConfig {
+    public CDuration getStaticDataDelay() {
+      return staticDataDelay;
+    }
 
+    public void setStaticDataDelay(CDuration staticDataDelay) {
+      this.staticDataDelay = staticDataDelay;
+    }
+
+    public CDuration getDetailedDataDelay() {
+      return detailedDataDelay;
+    }
+
+    public void setDetailedDataDelay(CDuration detailedDataDelay) {
+      this.detailedDataDelay = detailedDataDelay;
+    }
   }
 }
