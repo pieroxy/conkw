@@ -25,17 +25,17 @@
     {
       // OSHI/JNA view of the system, detailed, works on most platforms, much slower and detailed than Proc on Linux
       "implementation":"net.pieroxy.conkw.webapp.grabbers.oshi.OshiGrabber",
-      "parameters": {
-        // Default name is "oshi"
-        /* "name":"oshi" */
+      // Default name is "oshi"
+      /* "name":"oshi" */
+      "config": {
+        "toExtract":["sensors","memory","physicalmemory","virtualmemory","computer","baseboard","firmware","cpu","cpubycore","cpuident","displays","disksio","disksinfos","graphicscards","nics","netbw","battery","psus","soundcards","usb","os","filestores","tcpv4","tcpv6","udpv4","udpv6","sessions","shortsessions","netp"]
         // The delay between refreshes of the data deemed "static". Defaults to one day.
         /* "staticDataDelay":"1d", */
         // The delay between refreshes of the data deemed "detailed" which is more expensive to extract.
-        // Defaults to one minute.
-        /* "detailedDataDelay":"1m", */
+        // Defaults to 5 seconds.
+        /* "detailedDataDelay":"5s", */
       },
       // Do not extract "sessions" and "processes" which are the most expensive.
-      "extract":"sensors,memory,physicalmemory,virtualmemory,computer,baseboard,firmware,cpu,cpubycore,cpuident,displays,disksio,disksinfos,graphicscards,nics,netbw,battery,psus,soundcards,usb,os,filestores,tcpv4,tcpv6,udpv4,udpv6,sessions,shortsessions,netp",
       "logLevel":"INFO"
     },
     //OSHI-PROCS
@@ -43,8 +43,8 @@
       // OSHI/JNA view of the system. This one extracts only the processes.
       "implementation":"net.pieroxy.conkw.webapp.grabbers.oshi.OshiGrabber",
       "name":"oshi-processes",
-      "extract":"processes",
-      "parameters": {
+      "config": {
+        "toExtract":["processes"],
         "detailedDataDelay":"5s"
       }
     },
@@ -52,9 +52,9 @@
     {
       // OSHI/JNA view of the system. This one extracts only the services.
       "implementation":"net.pieroxy.conkw.webapp.grabbers.oshi.OshiGrabber",
-      "extract":"services",
       "name":"oshi-services",
-      "parameters": {
+      "config": {
+        "toExtract":["services"],
         "detailedDataDelay":"5s"
       }
     },
