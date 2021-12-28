@@ -2,11 +2,11 @@ package net.pieroxy.conkw.webapp.grabbers;
 
 import com.dslplatform.json.DslJson;
 import com.dslplatform.json.JsonWriter;
-import net.pieroxy.conkw.collectors.Collector;
 import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.collectors.SimpleTransientCollector;
 import net.pieroxy.conkw.grabbersBase.Grabber;
 import net.pieroxy.conkw.grabbersBase.GrabberListener;
+import net.pieroxy.conkw.grabbersBase.PartiallyExtractableConfig;
 import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 import net.pieroxy.conkw.webapp.model.EmiInput;
@@ -18,11 +18,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -30,8 +28,6 @@ import java.util.stream.Collectors;
 
 public class PushToEmiGrabber extends Grabber<SimpleCollector, PushToEmiGrabber.PushToEmiGrabberConfig> implements GrabberListener, Runnable {
 
-  private String prefix;
-  private URL url;
   private Thread runner;
   private List<Grabber> grabbers;
 
@@ -63,13 +59,13 @@ public class PushToEmiGrabber extends Grabber<SimpleCollector, PushToEmiGrabber.
   }
 
   @Override
-  protected void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
-    try {
-      url = new URL(config.get("url"));
-    } catch (MalformedURLException e) {
-      throw new RuntimeException(e);
-    }
-    prefix = config.get("prefix");
+  public PushToEmiGrabberConfig getDefaultConfig() {
+    return new PushToEmiGrabberConfig();
+  }
+
+  @Override
+  public void initializeGrabber() {
+    super.initializeGrabber();
     runner = new Thread(this, "PushToEmiGrabber");
     runner.start();
   }
@@ -121,8 +117,8 @@ public class PushToEmiGrabber extends Grabber<SimpleCollector, PushToEmiGrabber.
           if (canLogFine()) log(Level.FINE, "Grabbed " + data.getNum().size());
 
           if (data != null) {
-            data.getNum().forEach((k, v) -> num.put(prefix + "_" + g.getName() + "_" + k, v));
-            data.getStr().forEach((k, v) -> str.put(prefix + "_" + g.getName() + "_" + k, v));
+            data.getNum().forEach((k, v) -> num.put(getConfig().getPrefix() + "_" + g.getName() + "_" + k, v));
+            data.getStr().forEach((k, v) -> str.put(getConfig().getPrefix() + "_" + g.getName() + "_" + k, v));
             data.getErrors().forEach(s -> log(Level.WARNING, s));
           }
         }
@@ -140,7 +136,7 @@ public class PushToEmiGrabber extends Grabber<SimpleCollector, PushToEmiGrabber.
 
   private void sendData(EmiInput input) throws IOException {
     try {
-      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+      HttpURLConnection conn = (HttpURLConnection) getConfig().getUrl().openConnection();
       conn.setConnectTimeout(200);
       conn.setReadTimeout(200);
       conn.setRequestMethod("POST");
@@ -161,9 +157,9 @@ public class PushToEmiGrabber extends Grabber<SimpleCollector, PushToEmiGrabber.
         }
       }
     } catch (SocketTimeoutException e) {
-      log(Level.SEVERE, "Timed out sending data to " + url);
+      log(Level.SEVERE, "Timed out sending data to " + getConfig().getUrl());
     } catch (Exception e) {
-      log(Level.SEVERE, "Could not send data to " + url, e);
+      log(Level.SEVERE, "Could not send data to " + getConfig().getUrl(), e);
     }
   }
 
@@ -171,7 +167,24 @@ public class PushToEmiGrabber extends Grabber<SimpleCollector, PushToEmiGrabber.
     return (long)(Math.random()*20-10+1000);
   }
 
-  public static class PushToEmiGrabberConfig {
+  public static class PushToEmiGrabberConfig extends PartiallyExtractableConfig {
+    private String prefix;
+    private URL url;
 
+    public String getPrefix() {
+      return prefix;
+    }
+
+    public void setPrefix(String prefix) {
+      this.prefix = prefix;
+    }
+
+    public URL getUrl() {
+      return url;
+    }
+
+    public void setUrl(URL url) {
+      this.url = url;
+    }
   }
 }
