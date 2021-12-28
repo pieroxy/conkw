@@ -56,7 +56,10 @@ public abstract class Grabber<T extends Collector, C> {
     this.config = config;
     if (config instanceof PartiallyExtractableConfig) {
       PartiallyExtractableConfig pc = (PartiallyExtractableConfig) config;
-      if (pc.getToExtract()!=null) pc.getToExtract().forEach(extract::add);
+
+      if (pc.getToExtract()!=null) {
+        pc.getToExtract().forEach(extract::add);
+      }
     }
   }
 
@@ -128,6 +131,7 @@ public abstract class Grabber<T extends Collector, C> {
   protected void setConfig(Map<String, String> config, Map<String, Map<String, String>> namedConfigs) {
   }
 
+  // TODO remove this after config refactoring
   public void initConfig(File homeDir, Map<String, String> config, Map<String, Map<String, String>> namedConfigs) {
     storageFolder = new File(homeDir, "data");
     tmpFolder = new File(homeDir, "tmp");
