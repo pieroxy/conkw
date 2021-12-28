@@ -401,16 +401,15 @@ public class OpenWeatherMapGrabber extends TimeThrottledGrabber<OpenWeatherMapGr
     return "align.svg";
   }
 
-  public static class OpenWeatherMapGrabberConfig extends TimeThrottledGrabber.TimeThrottledGrabberConfig implements PartiallyExtractableConfig {
+  public static class OpenWeatherMapGrabberConfig extends TimeThrottledGrabber.TimeThrottledGrabberConfig  {
     private Double lon;
     private Double lat;
     private String token;
-    private List<String> toExtract;
 
     @Override
     public void addToHash(Md5Sum sum) {
+      super.addToHash(sum);
       sum.add(String.valueOf(lon)).add("//").add(String.valueOf(lat));
-      if (toExtract!=null) toExtract.forEach(sum::add);
     }
 
     public Double getLon() {
@@ -435,16 +434,6 @@ public class OpenWeatherMapGrabber extends TimeThrottledGrabber<OpenWeatherMapGr
 
     public void setToken(String token) {
       this.token = token;
-    }
-
-    @Override
-    public List<String> getToExtract() {
-      return toExtract;
-    }
-
-    @Override
-    public void setToExtract(List<String> toExtract) {
-      this.toExtract = toExtract;
     }
   }
 }

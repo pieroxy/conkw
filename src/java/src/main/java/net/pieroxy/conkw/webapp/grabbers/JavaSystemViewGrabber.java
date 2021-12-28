@@ -3,6 +3,7 @@ package net.pieroxy.conkw.webapp.grabbers;
 import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.collectors.SimpleTransientCollector;
 import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
+import net.pieroxy.conkw.grabbersBase.PartiallyExtractableConfig;
 import net.pieroxy.conkw.utils.OsCheck;
 import net.pieroxy.conkw.utils.duration.CDuration;
 
@@ -187,7 +188,7 @@ public class JavaSystemViewGrabber extends AsyncGrabber<SimpleCollector, JavaSys
     return NAME;
   }
 
-  public static class JavaSystemViewGrabberConfig {
+  public static class JavaSystemViewGrabberConfig extends PartiallyExtractableConfig {
     List<String>mountPoints;
 
     public List<String> getMountPoints() {

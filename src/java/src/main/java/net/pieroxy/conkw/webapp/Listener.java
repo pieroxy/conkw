@@ -64,11 +64,6 @@ public class Listener implements ServletContextListener {
             throw new RuntimeException("Grabber " + g.getGrabberFQN() + " did not provide a default configuration but the config file has one.");
           }
           g.setConfig(GrabberConfigReader.fillObject(g.getDefaultConfig(), gc.getConfig()));
-          /* TODO: Uncomment after the config refactoring is done.
-          if (g.getConfig() == null) {
-            throw new RuntimeException("Grabber " + g.getGrabberFQN() + " does not have a non-null default configuration.");
-          }
-           */
           if (g.getConfig() != null && (gc.getParameters()!=null || gc.getNamedParameters()!=null)) {
             throw new RuntimeException("Grabber " + g.getGrabberFQN() + " has a mix of old and new config.");
           }
