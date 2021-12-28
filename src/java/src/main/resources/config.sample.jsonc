@@ -260,7 +260,8 @@
     {
       "implementation":"net.pieroxy.conkw.webapp.grabbers.HwmonGrabber",
       "name":"hwmon",
-      "parameters": {
+      "config": {
+        "include":[".*_input"]
       }
     },
     //LATEST EMAILS

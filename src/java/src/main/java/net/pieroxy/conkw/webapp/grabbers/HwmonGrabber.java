@@ -23,6 +23,11 @@ public class HwmonGrabber extends AsyncGrabber<SimpleCollector, HwmonGrabber.Hwm
     }
 
     @Override
+    public HwmonGrabberConfig getDefaultConfig() {
+        return new HwmonGrabberConfig();
+    }
+
+    @Override
     public boolean changed(SimpleCollector c) {
         return true;
     }
@@ -194,14 +199,12 @@ public class HwmonGrabber extends AsyncGrabber<SimpleCollector, HwmonGrabber.Hwm
     }
 
     @Override
-    protected void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
-        String includeString = config.get("include");
+    public void initializeGrabber() {
+        super.initializeGrabber();
 
-        if (includeString != null) {
+        if (getConfig().getInclude() != null) {
             include = new HashSet<>();
-            for (String s : includeString.split(",")) {
-                include.add(Pattern.compile(s));
-            }
+            getConfig().getInclude().forEach(include::add);
         }
     }
 
@@ -224,6 +227,14 @@ public class HwmonGrabber extends AsyncGrabber<SimpleCollector, HwmonGrabber.Hwm
     }
 
     public static class HwmonGrabberConfig {
+        List<Pattern> include;
 
+        public List<Pattern> getInclude() {
+            return include;
+        }
+
+        public void setInclude(List<Pattern> include) {
+            this.include = include;
+        }
     }
 }

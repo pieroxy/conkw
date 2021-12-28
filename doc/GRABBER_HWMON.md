@@ -21,8 +21,8 @@ The reference documentation of the kernel sysfs hwmon interface can [be found he
 {
     "implementation":"net.pieroxy.conkw.webapp.grabbers.HwmonGrabber",
     "extract":"hwmon0,hwmon4",
-    "parameters": {
-      "include":".*_input"
+    "config": {
+      "include":[".*_input"]
     },
     "namedParameters": {
     }
@@ -30,7 +30,7 @@ The reference documentation of the kernel sysfs hwmon interface can [be found he
 ```
 
 * `extract` chooses which hwmon sensors you're willing to monitor
-* `include` is an include list, as a comma separated list of regexps against file names. HwmonGrabber will only extract values from those files whose name match one of those regexp.
+* `include` is an include list, a list of regexps against file names. HwmonGrabber will only extract values from those files whose name match one of those regexp.
 
 ## Metrics
 
