@@ -7,6 +7,7 @@ public final class CDuration {
   public static final CDuration ONE_MINUTE = CDurationParser.parse("1m");
   public static final CDuration FIVE_MINUTES = CDurationParser.parse("5m");
   public static final CDuration ONE_HOUR = CDurationParser.parse("1h");
+  public static final CDuration ONE_DAY = CDurationParser.parse("1d");
 
   public CDuration(long numberOfSeconds) {
     this.seconds = numberOfSeconds;
