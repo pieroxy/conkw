@@ -20,7 +20,7 @@ This is the system grabber written in pure Java. It doesn't rely on anything els
 },
 ```
 
-* Allows to extract only part of the metrics it can gather, for optimal performances
+* `toExtract` Allows to extract only part of the metrics it can gather, for optimal performances
 * `mountPoints` Allows to specify the mountpoints you want monitored for free space. If not present, the mount points will be inferred automatically. See `freespace` below for more information.
 
 ## Possible extractions:
