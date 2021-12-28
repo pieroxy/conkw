@@ -94,11 +94,23 @@ public class GrabberConfigReaderTest extends ConkwTestCase {
                 4, ObjectWithSimpleList.class),
             RuntimeException.class,null);
         assertThrows(() -> parseandFillInCustomProperty("{\"version\":4, \"object\":{" +
-                    "\"boolValues\":[true,false,false,true,false,true]," +
-                    "\"doubleValues\":[123,2,6,4,2.5e12,-5]," +
-                    "\"stringValues\":[\"tsv\",\"tsv2\",true]}}",
+                        "\"boolValues\":[true,false,false,true,false,true]," +
+                        "\"doubleValues\":[123,2,6,4,2.5e12,-5]," +
+                        "\"stringValues\":[\"tsv\",\"tsv2\",true]}}",
                 4, ObjectWithSimpleList.class),
-            RuntimeException.class,null);
+                RuntimeException.class,null);
+        assertThrows(() -> parseandFillInCustomProperty("{\"version\":4, \"object\":{" +
+                        "\"boolValues\":true}}",
+                4, ObjectWithSimpleList.class),
+                RuntimeException.class,null);
+        assertThrows(() -> parseandFillInCustomProperty("{\"version\":4, \"object\":{" +
+                        "\"stringValues\":\"true\"}}",
+                4, ObjectWithSimpleList.class),
+                RuntimeException.class,null);
+        assertThrows(() -> parseandFillInCustomProperty("{\"version\":4, \"object\":{" +
+                        "\"doubleValues\":1.54}}",
+                4, ObjectWithSimpleList.class),
+                RuntimeException.class,null);
     }
 
     public void testSimpleListsWithNulls() {
