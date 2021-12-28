@@ -13,8 +13,8 @@ This is the system grabber written in pure Java. It doesn't rely on anything els
 ```json
 {
   "implementation":"net.pieroxy.conkw.webapp.grabbers.JavaSystemViewGrabber",
-  "extract":"sys,cpu,freespace",
   "parameters": {
+    "toExtract":["sys","cpu","freespace"],
     "mountPoints":["/"]
   }
 },
