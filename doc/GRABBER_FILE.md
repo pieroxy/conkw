@@ -56,7 +56,7 @@ This file fed to FileGrabber will result in the following metrics:
 ## Performance and refresh rate
 The files are parsed at program startup, then each second, if their last modified time changed, they will be parsed again, otherwise the cached version will be used.
 
-Note: You can use several instances of this grabber in order to grab more than one file. Do that by making it appear several times in the config file, with a different filename each time. You will have to choose a different name for each instance.
+Note: You can use several instances of this grabber in order to grab more than one file. Do that by making it appear several times in the config file. You will have to choose a different name for each instance.
 
 ## Configuration
 
@@ -64,13 +64,13 @@ Note: You can use several instances of this grabber in order to grab more than o
     {
       "implementation":"net.pieroxy.conkw.webapp.grabbers.FileGrabber",
       "name":"mygrabber",
-      "parameters": {
+      "config": {
         "file":"/tmp/somefile.txt"
       }
     },
 ```
 
-The simplest thing here: Only specify a name and tghe file to grab, and you're set!
+The simplest thing here: Only specify the name of the file to grab, and you're set!
 
 ## Real world use case
 
@@ -178,5 +178,3 @@ Screenshots:
 
 * Slack is ok: ![](https://pieroxy.net/conkw/screenshots-doc/slack_ok.png) 
 * Slack experiences an issue: ![](https://pieroxy.net/conkw/screenshots-doc/slack_warning.png) 
-
-

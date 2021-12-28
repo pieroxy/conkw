@@ -31,6 +31,11 @@ public class FileGrabber extends AsyncGrabber<SimpleCollector, FileGrabber.FileG
   }
 
   @Override
+  public FileGrabberConfig getDefaultConfig() {
+    return new FileGrabberConfig();
+  }
+
+  @Override
   public void grabSync(SimpleCollector c) {
     try {
       long ts = Files.getLastModifiedTime(path).toMillis();
@@ -58,10 +63,11 @@ public class FileGrabber extends AsyncGrabber<SimpleCollector, FileGrabber.FileG
   }
 
   @Override
-  public void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs){
-    this.log(Level.INFO, "FileGrabber Name is " + getName());
-    this.file = new File((String)config.get("file"));
+  public void initializeGrabber() {
+    super.initializeGrabber();
+    this.file = new File(getConfig().getFile());
     this.path = this.file.toPath();
+    this.log(Level.INFO, "FileGrabber Name is " + getName() + " for file " + this.file.getAbsolutePath());
   }
 
   @Override
@@ -70,6 +76,14 @@ public class FileGrabber extends AsyncGrabber<SimpleCollector, FileGrabber.FileG
   }
 
   public static class FileGrabberConfig {
+    String file;
 
+    public String getFile() {
+      return file;
+    }
+
+    public void setFile(String file) {
+      this.file = file;
+    }
   }
 }

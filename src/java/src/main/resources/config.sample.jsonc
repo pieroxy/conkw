@@ -214,7 +214,7 @@
       // File grabber. Extracts data from flat files.
       "implementation":"net.pieroxy.conkw.webapp.grabbers.FileGrabber",
       "name":"samplefile",
-      "parameters": {
+      "config": {
         "file":"$FGSF"
       }
     },
