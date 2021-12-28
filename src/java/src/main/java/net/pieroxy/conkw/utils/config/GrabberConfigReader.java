@@ -119,7 +119,7 @@ public class GrabberConfigReader {
         } else if (value instanceof String && customStringConverters.containsKey(genericType)) { // We have a custom converter
             return customStringConverters.get(genericType).convert((String)value);
         } else {
-            throw new RuntimeException("Could not coerce value of type " + (value == null ? "<null>" : value.getClass().getName()) + " to " + genericType.getTypeName() + " because its type isn't supported.");
+            throw new RuntimeException("Could not coerce value of type " + (value == null ? "<null>" : value.getClass().getName()) + " to " + genericType.getTypeName() + " because no converter could be found.");
         }
 
         throw new RuntimeException("Could not coerce value of type " + (value == null ? "<null>" : value.getClass().getName()) + " to " + genericType.getTypeName() + " because " + reason);
