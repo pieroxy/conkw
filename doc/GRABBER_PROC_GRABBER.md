@@ -13,15 +13,15 @@ This is the system grabber for Linux. It relies heavily on `/proc` and `/sys` fi
 ```json
 {
   "implementation":"net.pieroxy.conkw.webapp.grabbers.procgrabber.ProcGrabber",
-  "extract":"processes,uptime,bdio",
-  "parameters": {
+  "config": {
+    "toExtract":"processes,uptime,bdio",
     "blockDevices":"sda",
     "mdstatFile":"/proc/mdstat"
   }
 },
 ```
 
-* Allows to extract only part of the metrics it can gather, for optimal performances
+* `toExtract` allows to extract only part of the metrics it can gather, for optimal performances
 * `mdstatFile` allows to specify the location and name of the mdstat file. If not present, the default is `/proc/mdstat`.
 * `blockDevices` Allows to specify the block devices you want to monitor. If not present, an attempt will be made to autodetect them, see `bdio` below for more details.
 
