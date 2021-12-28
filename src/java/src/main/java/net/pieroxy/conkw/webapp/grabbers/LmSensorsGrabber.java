@@ -10,10 +10,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
 
@@ -31,6 +28,11 @@ public class LmSensorsGrabber extends AsyncGrabber<SimpleCollector, LmSensorsGra
 
   public SimpleCollector getDefaultCollector() {
     return new SimpleTransientCollector(this, DEFAULT_CONFIG_KEY);
+  }
+
+  @Override
+  public LmSensorsGrabberConfig getDefaultConfig() {
+    return new LmSensorsGrabberConfig();
   }
 
   @Override
@@ -130,18 +132,24 @@ public class LmSensorsGrabber extends AsyncGrabber<SimpleCollector, LmSensorsGra
   }
 
   @Override
-  protected void setConfig(Map<String, String> config, Map<String, Map<String, String>> configs) {
-    String includeString = config.get("include");
+  public void initializeGrabber() {
+    super.initializeGrabber();
 
-    if (includeString != null) {
+    if (getConfig().getInclude() != null) {
       include = new HashSet<>();
-      for (String s : includeString.split(",")) {
-        include.add(Pattern.compile(s));
-      }
+      getConfig().getInclude().forEach(include::add);
     }
   }
 
   public static class LmSensorsGrabberConfig {
+    List<Pattern> include;
 
+    public List<Pattern> getInclude() {
+      return include;
+    }
+
+    public void setInclude(List<Pattern> include) {
+      this.include = include;
+    }
   }
 }

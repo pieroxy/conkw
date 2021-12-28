@@ -252,8 +252,8 @@
     {
       "implementation":"net.pieroxy.conkw.webapp.grabbers.LmSensorsGrabber",
       "name":"lmsensors",
-      "parameters": {
-        "include":".*_input"
+      "config": {
+        "include":[".*_input"]
       }
     },
     //hwmon
