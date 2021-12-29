@@ -63,8 +63,8 @@ public class FileGrabber extends AsyncGrabber<SimpleCollector, FileGrabber.FileG
   }
 
   @Override
-  public void initializeGrabber() {
-    super.initializeGrabber();
+  public void initializeGrabber(File homeDir) {
+    super.initializeGrabber(homeDir);
     this.file = new File(getConfig().getFile());
     this.path = this.file.toPath();
     this.log(Level.INFO, "FileGrabber Name is " + getName() + " for file " + this.file.getAbsolutePath());

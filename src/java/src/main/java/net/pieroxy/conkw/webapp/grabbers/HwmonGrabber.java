@@ -199,8 +199,8 @@ public class HwmonGrabber extends AsyncGrabber<SimpleCollector, HwmonGrabber.Hwm
     }
 
     @Override
-    public void initializeGrabber() {
-        super.initializeGrabber();
+    public void initializeGrabber(File homeDir) {
+        super.initializeGrabber(homeDir);
 
         if (getConfig().getInclude() != null) {
             include = new HashSet<>();

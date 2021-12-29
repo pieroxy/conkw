@@ -239,9 +239,9 @@
     //PEMIG
     {
       "implementation":"net.pieroxy.conkw.webapp.grabbers.PushToEmiGrabber",
-      "extract":"sys",
       "name":"p2emi",
       "config": {
+        "toExtract":["sys"],
         "url":"http://localhost:12789/emi?ns=test_emi",
         "prefix":"testpush"
       }

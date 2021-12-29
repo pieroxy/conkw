@@ -140,7 +140,8 @@ public class JavaSystemViewGrabber extends AsyncGrabber<SimpleCollector, JavaSys
   }
 
   @Override
-  public void initializeGrabber() {
+  public void initializeGrabber(File homeDir) {
+    super.initializeGrabber(homeDir);
     List<String> mps = getConfig().getMountPoints();
     if (mps == null) {
       if (OsCheck.getOperatingSystemType() == OsCheck.OSType.Windows) {

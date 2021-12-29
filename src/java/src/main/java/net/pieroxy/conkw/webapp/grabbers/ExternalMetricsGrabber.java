@@ -104,7 +104,8 @@ public class ExternalMetricsGrabber extends Grabber<SimpleTransientCollector, Ex
 
 
   @Override
-  public void initializeGrabber() {
+  public void initializeGrabber(File homeDir) {
+    super.initializeGrabber(homeDir);
     Emi.addOrUpdateGrabber(this);
 
     try (FileInputStream fis = new FileInputStream(getStorageFile())) {

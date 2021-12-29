@@ -127,30 +127,10 @@ public abstract class Grabber<T extends Collector, C> {
     extractedByConfiguration = nm;
   }
 
-  // TODO remove this after config refactoring
-  private void setConfig(Map<String, String> config, Map<String, Map<String, String>> namedConfigs) {
-  }
-
-  // TODO remove this after config refactoring
-  public void initConfig(File homeDir, Map<String, String> config, Map<String, Map<String, String>> namedConfigs) {
-    storageFolder = new File(homeDir, "data");
-    tmpFolder = new File(homeDir, "tmp");
-    if (name == null) setName(getDefaultName());
-    setConfig(config, namedConfigs);
-  }
-
   public void setLogLevel(Level l) {
     if (l != logLevel && l!=Level.INFO) LOGGER.info("LogLevel is " + l);
     logLevel = l;
     LOGGER.setLevel(l);
-  }
-
-  // TODO remove after config refacto
-  public void setExtractProperties(String[]toExtract) {
-    for (String val : toExtract) {
-      extract.add(val);
-    }
-    log(Level.INFO, "Extracting: " + extract.stream().collect(Collectors.joining(",")));
   }
 
   protected boolean shouldExtract(String value) {
@@ -188,47 +168,6 @@ public abstract class Grabber<T extends Collector, C> {
     return name;
   }
 
-  // TODO Remove after config refacto is done
-  @Deprecated
-  protected int getIntProperty(String propertyName, Map<String, String> config, int defaultValue) {
-    String propValue = config.get(propertyName);
-    if (propValue != null) {
-      return Integer.parseInt(propValue);
-    }
-    return defaultValue;
-  }
-
-  // TODO Remove after config refacto is done
-  @Deprecated
-  protected String getStringProperty(String propertyName, Map<String, String> config, String defaultValue) {
-    String propValue = config.get(propertyName);
-    if (propValue != null) {
-      return propValue;
-    }
-    return defaultValue;
-  }
-
-  // TODO Remove after config refacto is done
-  @Deprecated
-  protected CDuration getDurationProperty(String propertyName, Map<String, String> config, CDuration defaultValue) {
-    String propValue = config.get(propertyName);
-    if (propValue != null) {
-      return CDurationParser.parse(propValue);
-    }
-
-    return defaultValue;
-  }
-
-  // TODO Remove after config refacto is done
-  @Deprecated
-  protected Pattern getRegexpProperty(String propertyName, Map<String, String> config, int flags) {
-    String propValue = config.get(propertyName);
-    if (propValue != null) {
-      return Pattern.compile(propValue, flags);
-    }
-    return null;
-  }
-
   public void setName(String name) {
     this.name = name;
     LOGGER = createLogger();
@@ -258,6 +197,9 @@ public abstract class Grabber<T extends Collector, C> {
    * generally a good idea to call <code>super.initializeGrabber();</code> in this method, unless you know what you're
    * doing. And even then, it's probably a mistake.
    */
-  public void initializeGrabber() {
+  public void initializeGrabber(File homeDir) {
+    storageFolder = new File(homeDir, "data");
+    tmpFolder = new File(homeDir, "tmp");
+    if (name == null) setName(getDefaultName());
   }
 }

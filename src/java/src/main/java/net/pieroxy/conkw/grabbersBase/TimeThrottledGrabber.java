@@ -52,8 +52,8 @@ public abstract class TimeThrottledGrabber<C extends TimeThrottledGrabber.TimeTh
    * Subclasses should call this in order to initialize ttls.
    */
   @Override
-  public void initializeGrabber() {
-    super.initializeGrabber();
+  public void initializeGrabber(File homeDir) {
+    super.initializeGrabber(homeDir);
     ttl = getConfig().getTtl();
     if (ttl == null) throw new RuntimeException("No TTL defined for grabber " + getGrabberFQN());
     errorTtl = getConfig().getErrorTtl() == null ?

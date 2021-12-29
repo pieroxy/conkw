@@ -10,6 +10,7 @@ import net.pieroxy.conkw.grabbersBase.TimeThrottledGrabber;
 import net.pieroxy.conkw.utils.hashing.Md5Sum;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
+import java.io.File;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -33,8 +34,8 @@ public class YahooFinanceGrabber extends TimeThrottledGrabber<YahooFinanceGrabbe
   }
 
   @Override
-  public void initializeGrabber() {
-    super.initializeGrabber();
+  public void initializeGrabber(File homeDir) {
+    super.initializeGrabber(homeDir);
     if (canLogFine()) log(Level.FINE, "Initializing with symbol " + getConfig().getSymbol());
   }
 

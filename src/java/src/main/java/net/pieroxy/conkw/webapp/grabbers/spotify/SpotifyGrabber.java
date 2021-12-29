@@ -108,8 +108,8 @@ public class SpotifyGrabber extends TimeThrottledGrabber<SpotifyGrabber.SpotifyG
   }
 
   @Override
-  public void initializeGrabber() {
-    super.initializeGrabber();
+  public void initializeGrabber(File homeDir) {
+    super.initializeGrabber(homeDir);
     try {
       DATAFILE = getTmp("spotifyTokens.txt");
       if (DATAFILE.exists()) {
