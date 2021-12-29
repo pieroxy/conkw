@@ -6,10 +6,7 @@ import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
 import net.pieroxy.conkw.utils.ExternalBinaryRunner;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
@@ -132,8 +129,8 @@ public class LmSensorsGrabber extends AsyncGrabber<SimpleCollector, LmSensorsGra
   }
 
   @Override
-  public void initializeGrabber() {
-    super.initializeGrabber();
+  public void initializeGrabber(File homeDir) {
+    super.initializeGrabber(homeDir);
 
     if (getConfig().getInclude() != null) {
       include = new HashSet<>();

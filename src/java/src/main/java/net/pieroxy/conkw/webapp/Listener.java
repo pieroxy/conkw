@@ -42,11 +42,6 @@ public class Listener implements ServletContextListener {
           if (gc.getName() != null) {
             g.setName(gc.getName());
           }
-          // TODO Remove after config refacto
-          // Extract
-          if (gc.getExtract() != null && !gc.getExtract().equals("all") && !gc.getExtract().equals("")) {
-            g.setExtractProperties(gc.getExtract().split(","));
-          }
           // logLevel
           String llas = gc.getLogLevel();
           if (llas != null) {
@@ -68,8 +63,7 @@ public class Listener implements ServletContextListener {
             throw new RuntimeException("Grabber " + g.getGrabberFQN() + " has a mix of old and new config.");
           }
 
-          g.initConfig(ConfigReader.getHomeDir(), gc.getParameters(), gc.getNamedParameters());
-          g.initializeGrabber();
+          g.initializeGrabber(ConfigReader.getHomeDir());
 
           if (g.getName() == null) {
             throw new IllegalArgumentException("Grabber name must be defined for grabber " + g.getClass().getName());
@@ -82,7 +76,7 @@ public class Listener implements ServletContextListener {
             }
           }
         } catch (Exception e) {
-          LOGGER.log(Level.SEVERE, "Initializing grabber " + gc.getImplementation() + " with name " + gc.getExtract(), e);
+          LOGGER.log(Level.SEVERE, "Initializing grabber " + gc.getImplementation() + " with name " + gc.getName(), e);
         }
       }
 

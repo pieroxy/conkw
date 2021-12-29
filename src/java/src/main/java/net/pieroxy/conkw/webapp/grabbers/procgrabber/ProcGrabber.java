@@ -71,8 +71,8 @@ public class ProcGrabber extends AsyncGrabber<SimpleCollector, ProcGrabber.ProcG
   }
 
   @Override
-  public void initializeGrabber() {
-    super.initializeGrabber();
+  public void initializeGrabber(File homeDir) {
+    super.initializeGrabber(homeDir);
 
     computeNbCpus();
 

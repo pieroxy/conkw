@@ -10,8 +10,6 @@ public class GrabberConfig {
   private String implementation;
   private String name;
 
-  // TODO Remove after config refacto
-  private String extract;
   private String logLevel;
   private Object config;
   private Map<String, String> parameters;
@@ -23,14 +21,6 @@ public class GrabberConfig {
 
   public void setParameters(Map<String, String> parameters) {
     this.parameters = parameters;
-  }
-
-  public String getExtract() {
-    return extract;
-  }
-
-  public void setExtract(String extract) {
-    this.extract = extract;
   }
 
   public String getLogLevel() {
