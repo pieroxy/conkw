@@ -1,5 +1,7 @@
 package net.pieroxy.conkw.utils.config;
 
+import net.pieroxy.conkw.accumulators.Accumulator;
+import net.pieroxy.conkw.accumulators.parser.AccumulatorExpressionParser;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.duration.CDurationParser;
 
@@ -21,6 +23,7 @@ public class GrabberConfigReader {
     static {
         customStringConverters.put(CDuration.class, dat -> CDurationParser.parse(dat));
         customStringConverters.put(Pattern.class, dat -> Pattern.compile(dat, Pattern.DOTALL));
+        customStringConverters.put(Accumulator.class, dat -> new AccumulatorExpressionParser<>().parse(dat));
         customStringConverters.put(URL.class, dat -> {
             try {
                 return new URL(dat);

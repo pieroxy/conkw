@@ -128,7 +128,7 @@ public abstract class Grabber<T extends Collector, C> {
   }
 
   // TODO remove this after config refactoring
-  protected void setConfig(Map<String, String> config, Map<String, Map<String, String>> namedConfigs) {
+  private void setConfig(Map<String, String> config, Map<String, Map<String, String>> namedConfigs) {
   }
 
   // TODO remove this after config refactoring

@@ -12,13 +12,10 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class TailLogFileGrabber<T extends LogRecord> extends AsyncGrabber<AccumulatorCollector<T>, TailLogFileGrabber.TailLogFileGrabberConfig> implements LogListener<T> {
+public class TailLogFileGrabber<T extends LogRecord> extends AsyncGrabber<AccumulatorCollector<T>, TailLogFileGrabber.TailLogFileGrabberConfig<T>> implements LogListener<T> {
     private final static Logger LOGGER = Logger.getLogger(TailLogFileGrabber.class.getName());
 
-    private String filename;
-    private String parserClassName;
     private RealTimeLogFileReader<T> reader;
-    private Accumulator<T> accumulator;
 
     @Override
     public void disposeSync() {
@@ -34,9 +31,9 @@ public class TailLogFileGrabber<T extends LogRecord> extends AsyncGrabber<Accumu
     public synchronized void grabSync(AccumulatorCollector<T> c) {
         if (reader == null) {
             try {
-                reader = new RealTimeLogFileReader<T>(filename, this, (LogParser<T>) Class.forName(parserClassName).newInstance());
+                reader = new RealTimeLogFileReader<T>(getConfig().getFilename(), this, (LogParser<T>) Class.forName(getConfig().getParserClassName()).newInstance());
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-                log(Level.SEVERE, "Impossible to instanciate class " + parserClassName, e);
+                log(Level.SEVERE, "Impossible to instanciate class " + getConfig().getParserClassName(), e);
             }
             reader.start();
         }
@@ -49,26 +46,49 @@ public class TailLogFileGrabber<T extends LogRecord> extends AsyncGrabber<Accumu
 
     @Override
     public AccumulatorCollector<T> getDefaultCollector() {
-        return new AccumulatorCollector<T>(this, DEFAULT_CONFIG_KEY, "default", accumulator);
+        return new AccumulatorCollector<T>(this, DEFAULT_CONFIG_KEY, "default", getConfig().getAccumulator());
     }
 
     @Override
-    protected void setConfig(Map<String, String> config, Map<String, Map<String, String>> namedConfigs) {
-        filename = config.get("filename");
-        parserClassName = config.get("parserClassName");
-        String accConf = config.get("accumulators");
-        accumulator = new AccumulatorExpressionParser<T>().parse(accConf);
+    public TailLogFileGrabberConfig getDefaultConfig() {
+        return new TailLogFileGrabberConfig();
     }
 
     @Override
     public synchronized void newLine(long time, T line) {
-        synchronized (accumulator) {
-            accumulator.add(line);
+        synchronized (getConfig().getAccumulator()) {
+            getConfig().getAccumulator().add(line);
             line.close();
         }
     }
 
-    public static class TailLogFileGrabberConfig {
+    public static class TailLogFileGrabberConfig<T extends LogRecord> {
+        private String filename;
+        private String parserClassName;
+        private Accumulator accumulator;
 
+        public String getFilename() {
+            return filename;
+        }
+
+        public void setFilename(String filename) {
+            this.filename = filename;
+        }
+
+        public String getParserClassName() {
+            return parserClassName;
+        }
+
+        public void setParserClassName(String parserClassName) {
+            this.parserClassName = parserClassName;
+        }
+
+        public Accumulator<T> getAccumulator() {
+            return accumulator;
+        }
+
+        public void setAccumulator(Accumulator accumulator) {
+            this.accumulator = accumulator;
+        }
     }
 }

@@ -14,17 +14,17 @@ This grabber will listen to a log file, and extract data from it. It, of course,
 ```json
 {
   "implementation":"net.pieroxy.conkw.webapp.grabbers.logfile.TailLogFileGrabber",
-  "parameters": {
+  "config": {
     "filename":"/home/pieroxy/.conkw/logs/http.log",
     "parserClassName":"net.pieroxy.conkw.webapp.grabbers.logfile.parsers.HttpLogFileParser",
-    "accumulators":"multi([name(sizehist,log125hist(size,1000,1000000)),name(byct,stablekey(contentType,count(),3)),name(byuri,stablekey(uri,count(),3)),sum(size,0),count(),sum(time,0)])"
+    "accumulator":"multi([name(sizehist,log125hist(size,1000,1000000)),name(byct,stablekey(contentType,count(),3)),name(byuri,stablekey(uri,count(),3)),sum(size,0),count(),sum(time,0)])"
   }
 }
 ```
 
 * The `filename`, without much surprise, is the file this instance should monitor.
 * `parserClassName` represents the fully qualified class name used to parse those logs and output a `LogRecord` out of them. See the [Provide your classes](PROVIDE_CLASSES.md) documentation to see how you can write your own parsers.
-* `accumulators` is an expression allowing you to tell conkw how you want those datapoints aggregated. See [Aggregating multi dimensional datapoints](AGGREGATE.md) to understand how you can aggregate data.
+* `accumulator` is an expression allowing you to tell conkw how you want those datapoints aggregated. See [Aggregating multi dimensional datapoints](AGGREGATE.md) to understand how you can aggregate data.
 
 ## Extractions for the default http parser
 

@@ -222,9 +222,7 @@
     {
       // External metric grabber. Exposes metrics injected through the /emi endpoint.
       "implementation":"net.pieroxy.conkw.webapp.grabbers.ExternalMetricsGrabber",
-      "name":"test_emi",
-      "parameters": {
-      }
+      "name":"test_emi"
     },
     //EIG
     {
@@ -313,10 +311,10 @@
     // Log file tail
     {
       "implementation":"net.pieroxy.conkw.webapp.grabbers.logfile.TailLogFileGrabber",
-      "parameters": {
+      "config": {
         "filename":"$HTTPLOGFILE",
         "parserClassName":"net.pieroxy.conkw.webapp.grabbers.logfile.parsers.HttpLogFileParser",
-        "accumulators":"multi([name(sizehist,log125hist(size,1000,1000000)),name(byct,stablekey(contentType,count(),3)),name(byuri,stablekey(uri,count(),3)),sum(size,0),count(),sum(time,0)])"
+        "accumulator":"multi([name(sizehist,log125hist(size,1000,1000000)),name(byct,stablekey(contentType,count(),3)),name(byuri,stablekey(uri,count(),3)),sum(size,0),count(),sum(time,0)])"
       }
     }
    //END OF GRABBERS
