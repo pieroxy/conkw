@@ -167,7 +167,7 @@ gauge>div.gaugewarning {
     background-color: #800000 ! important;
 }
 
-gauge>div.gaugestale {
+gauge>div.gaugestale , gauge.cw-stale>div.gauge {
     background-color: #888 ! important;
 }
 
