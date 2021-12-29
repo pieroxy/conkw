@@ -79,7 +79,7 @@
             <div id="hbs" class="cw-block">
                 <heading>Size histogram in bytes</heading>
                 <div cw-ns="taillog" cw-multinode-in="m:str::sizehist.histValues" cw-multinode-pattern="#">
-                    <br><cw-label cw-ns="taillog" cw-value="l:str:histogramBucket:#" title="#" style="width:140px"></cw-label><cw-label cw-ns="taillog" style="width:50px" cw-value="m:num:si:sizehist.#.histValue"></cw-label><gauge cw-ns="taillog" cw-prop-title="m:num:si:sizehist.#.total" cw-gauge0="default:m:num::sizehist.#.histValue" cw-min="l:num::0" cw-max="m:num::byct.total"></gauge>
+                    <br><cw-label cw-ns="taillog" cw-value="l:str:histogramBucket:#" title="#" style="width:140px"></cw-label><cw-label cw-ns="taillog" style="width:50px" cw-value="m:num:si:sizehist.#.histValue"></cw-label><gauge cw-ns="taillog" cw-prop-title="m:num:si:sizehist.#.histValue" cw-gauge0="default:m:num::sizehist.#.histValue" cw-min="l:num::0" cw-max="m:num::byct.total"></gauge>
                 </div>
             </div>
         </columncontainer>
