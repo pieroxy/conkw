@@ -12,8 +12,12 @@ public class GrabberConfig {
 
   private String logLevel;
   private Object config;
+
+  // Old properties that cannot be used anymore (move to new configuration)
+  private String extract;
   private Map<String, String> parameters;
   private Map<String, Map<String, String>> namedParameters;
+  // End of old properties
 
   public Map<String, String> getParameters() {
     return parameters;
@@ -61,5 +65,13 @@ public class GrabberConfig {
 
   public void setConfig(Object config) {
     this.config = config;
+  }
+
+  public String getExtract() {
+    return extract;
+  }
+
+  public void setExtract(String extract) {
+    this.extract = extract;
   }
 }

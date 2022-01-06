@@ -59,8 +59,8 @@ public class Listener implements ServletContextListener {
             throw new RuntimeException("Grabber " + g.getGrabberFQN() + " did not provide a default configuration but the config file has one.");
           }
           g.setConfig(GrabberConfigReader.fillObject(g.getDefaultConfig(), gc.getConfig()));
-          if (g.getConfig() != null && (gc.getParameters()!=null || gc.getNamedParameters()!=null)) {
-            throw new RuntimeException("Grabber " + g.getGrabberFQN() + " has a mix of old and new config.");
+          if (gc.getParameters()!=null || gc.getNamedParameters()!=null || gc.getExtract()!=null) {
+            throw new RuntimeException("Grabber " + g.getGrabberFQN() + " uses the old configuration. The properties 'parameters', 'namedParameters' and 'extract' cannot be used anymore in a grabber configuration section. Please refer to the documentation to see how to configure your grabber.");
           }
 
           g.initializeGrabber(ConfigReader.getHomeDir());
