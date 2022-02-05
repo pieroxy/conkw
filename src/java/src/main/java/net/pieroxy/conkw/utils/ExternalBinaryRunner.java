@@ -17,9 +17,13 @@ public class ExternalBinaryRunner {
     this.binaryPath = binaryPathAndArgs;
     for (String prefix : locations) {
       this.binaryPathFile = new File(prefix+binaryPathAndArgs[0]);
-      this.binaryPath[0] = this.binaryPathFile.getAbsolutePath();
-      if (exists()) break;
+      if (LOGGER.isLoggable(Level.FINE)) LOGGER.fine("Trying " + binaryPathAndArgs[0] + " at " + this.binaryPathFile.getAbsolutePath());
+      if (exists()) {
+        if (LOGGER.isLoggable(Level.INFO)) LOGGER.info("Found " + binaryPathAndArgs[0] + " at " + this.binaryPathFile.getAbsolutePath());
+        return;
+      }
     }
+    LOGGER.severe("Did not find executable for " + binaryPathAndArgs[0]);
   }
 
   public boolean exists() {
