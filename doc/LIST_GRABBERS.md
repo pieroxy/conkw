@@ -19,6 +19,7 @@ They grab data from external sources. Weather, music, stock price, etc.
 * [YahooFinanceGrabber](GRABBER_YF.md)
 * [BingNewsGrabber](GRABBER_BN.md)
 * [HttpsCertGrabber](GRABBER_HTTPS_CERT.md)
+* [HttpEndpointGrabber](GRABBER_HTTP_ENDPOINT.md)
 * [LatestUnreadMailsGrabber](GRABBER_LATEST_EMAILS.md)
 * [SpecificEmailCheckGrabber](GRABBER_SPECIFIC_EMAIL.md)
 
