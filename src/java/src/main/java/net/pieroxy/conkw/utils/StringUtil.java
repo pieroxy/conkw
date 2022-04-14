@@ -51,5 +51,4 @@ public class StringUtil {
       sbf.append(toAdd.substring(toAdd.length() - len));
     }
   }
-
 }
