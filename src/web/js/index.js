@@ -26,7 +26,23 @@ ConkW.init = function() {
     var options = document.body.getAttribute("cw-options") || "";
     var checkScreenFlag = options.indexOf("noresize")==-1;
     this.initDomCache();
-    this.scheduleLoad(true);
+    setTimeout(() => this.scheduleLoad(true), 5000);
+    try {
+        let worker = new Worker("/js/worker.js");
+        worker.onmessage = () => {
+            if (!ConkW.workerWorking) {
+                console.log("Scheduling by worker.");
+                ConkW.workerWorking = true;
+            }
+            try {
+                ConkW.load();
+            } catch (e) {
+                ConkW.handleError(e);
+            }
+        };
+    } catch (e) {
+        console.log(e);
+    }
     if (checkScreenFlag) window.onresize = function() {zis.checkScreen()};
     this.dates.initClocks();
     if (checkScreenFlag) this.checkScreen();
@@ -75,6 +91,10 @@ ConkW.callApi = function(qs) {
 }
 
 ConkW.scheduleLoad = function(forcenow) {
+    if (ConkW.workerWorking) {
+        console.log("Disabling timeout scheduler.");
+        return;
+    }
     var nowb = Date.now();
     var jnow = nowb%1000;
     if (jnow>150 && !forcenow) {
