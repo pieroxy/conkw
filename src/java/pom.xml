@@ -122,7 +122,7 @@
 
   <build>
     <defaultGoal>clean package</defaultGoal>
-    <finalName>conkw-full-${project.version}</finalName>
+    <finalName>conkw-core-${project.version}</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -232,7 +232,7 @@
               <goal>jar</goal>
             </goals>
             <configuration>
-              <finalName>conkw-public-${project.version}</finalName>
+              <finalName>conkw-api-${project.version}</finalName>
               <includes>
                 <include>net/pieroxy/conkw/pub/**/*.class</include>
               </includes>
