@@ -67,7 +67,7 @@ public class Runner {
                 install(options);
                 break;
             default:
-                System.out.println("conkw version " + GIT_REV);
+                System.out.println("ConkW version " + MVN_VER + " (" + GIT_REV + ")");
                 System.out.println("");
                 System.out.println("Usage:");
                 System.out.println("java -jar conkw.jar ACTION [OPTIONS...]");
