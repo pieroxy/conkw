@@ -2,6 +2,7 @@ package net.pieroxy.conkw.webapp;
 
 import net.pieroxy.conkw.config.Config;
 import net.pieroxy.conkw.config.ConfigReader;
+import net.pieroxy.conkw.config.CredentialsStore;
 import net.pieroxy.conkw.config.GrabberConfig;
 import net.pieroxy.conkw.grabbersBase.Grabber;
 import net.pieroxy.conkw.grabbersBase.GrabberListener;
@@ -12,7 +13,7 @@ import net.pieroxy.conkw.webapp.servlets.Emi;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import java.io.*;
+import java.io.IOException;
 import java.nio.file.*;
 import java.util.*;
 import java.util.logging.Level;
@@ -21,12 +22,15 @@ import java.util.logging.Logger;
 public class Listener implements ServletContextListener {
   private final static Logger LOGGER = Logger.getLogger(Listener.class.getName());
 
-  Config config;
-
   private List<Grabber> grabbers;
   private WatchService watchService;
   private ApiManager apiManager;
   private boolean toDestroy = false;
+  private final Runnable onDestroy;
+
+  public Listener(Runnable onDestroy) {
+    this.onDestroy = onDestroy;
+  }
 
   public void loadConfig() {
     Config config = ConfigReader.getConfig();
@@ -135,24 +139,38 @@ public class Listener implements ServletContextListener {
 
   @Override
   public void contextDestroyed(ServletContextEvent servletContextEvent) {
-    toDestroy = true;
     try {
-      apiManager.close();
+      toDestroy = true;
+      try {
+        apiManager.close();
+      } catch (Exception e) {
+        LOGGER.log(Level.FINE, "", e);
+      }
+      try {
+        watchService.close();
+      } catch (Exception e) {
+        LOGGER.log(Level.FINE, "", e);
+      }
+      try {
+        Api.close();
+      } catch (Exception e) {
+        LOGGER.log(Level.FINE, "", e);
+      }
+      for (Grabber g : grabbers) {
+        try {
+          g.dispose();
+        } catch (Exception e) {
+          LOGGER.log(Level.FINE, "", e);
+        }
+      }
     } catch (Exception e) {
-      LOGGER.log(Level.FINE, "", e);
-    }
-    try {
-      watchService.close();
-    } catch (IOException e) {
-      LOGGER.log(Level.FINE, "", e);
-    }
-    try {
-      Api.close();
-    } catch (Exception e) {
-      LOGGER.log(Level.FINE, "", e);
-    }
-    for (Grabber g: grabbers) {
-      g.dispose();
+      LOGGER.log(Level.WARNING, "While shutting down", e);
+    } finally {
+      try {
+        if (onDestroy!=null) onDestroy.run();
+      } catch (Exception e) {
+        LOGGER.log(Level.WARNING, "While shutting down", e);
+      }
     }
   }
 

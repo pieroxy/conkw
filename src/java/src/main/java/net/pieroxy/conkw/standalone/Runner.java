@@ -3,8 +3,8 @@ package net.pieroxy.conkw.standalone;
 import net.pieroxy.conkw.config.Config;
 import net.pieroxy.conkw.config.ConfigReader;
 import net.pieroxy.conkw.utils.FileTools;
-import net.pieroxy.conkw.utils.hashing.HashTools;
 import net.pieroxy.conkw.utils.JsonHelper;
+import net.pieroxy.conkw.utils.hashing.HashTools;
 import net.pieroxy.conkw.utils.logging.GcLogging;
 import net.pieroxy.conkw.utils.logging.LoggingPrintStream;
 import net.pieroxy.conkw.webapp.Filter;
@@ -24,6 +24,9 @@ import java.lang.management.ManagementFactory;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,6 +37,7 @@ public class Runner {
     private final static int STOP_FAILED  = 3;
     private final static String GIT_REV;
     private final static String MVN_VER;
+    private static boolean tomcatShutdownRequested = false;
 
     static {
         GIT_REV = readResourceFileAsString("GIT_REV");
@@ -201,7 +205,7 @@ public class Runner {
         if (config.getHttpPort() <= 0) throw new Exception("httpPort configured to an invalid value of " + config.getHttpPort());
 
         if (config.disableTomcat()) {
-            Listener listener = new Listener();
+            Listener listener = new Listener(() -> {});
             listener.contextInitialized(null);
             synchronized (Runner.class) {
                 Runner.class.wait();
@@ -217,7 +221,7 @@ public class Runner {
         String key = HashTools.getRandomSequence(10);
         String pid = ManagementFactory.getRuntimeMXBean().getName();
         InstanceId iid = new InstanceId(pid, key);
-        Api.configureShutdownHook(iid, () -> shutdown());
+        Api.configureShutdownHook(iid, Runner::shutdown);
         File out = getInstanceIdFile();
         try {
             FileTools.makeFileWritableForUser(out);
@@ -233,12 +237,18 @@ public class Runner {
     }
 
     private static void shutdown() {
+        if (tomcat == null) return;
+        LOGGER.log(Level.INFO, "Shutting Down.");
         try {
-            LOGGER.log(Level.INFO, "Shutting Down.");
+            tomcatShutdownRequested = true;
             tomcat.stop();
+        } catch (LifecycleException e) {
+            LOGGER.log(Level.SEVERE, "Stopping Tomcat " + e);
+        }
+        try {
             tomcat.destroy();
         } catch (LifecycleException e) {
-            LOGGER.log(Level.SEVERE, "Stopping Tomcat", e);
+            LOGGER.log(Level.SEVERE, "Destroying Tomcat" + e);
         }
     }
 
@@ -324,9 +334,23 @@ public class Runner {
             addMimeTypes(ctx);
         }
 
-        ctx.addApplicationLifecycleListener(new Listener());
+        ctx.addApplicationLifecycleListener(new Listener(Runner::listenerShutdownComplete));
         ctx.addFilterDef(fd);
         ctx.addFilterMap(fm);
+    }
+
+    private static void listenerShutdownComplete() {
+        if (tomcatShutdownRequested) return;
+        // Here means the context did not start properly.
+        // No need to keep Tomcat running.
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        scheduler.schedule(() -> {
+            try {
+                if (!tomcatShutdownRequested) shutdown();
+            } finally {
+                scheduler.shutdown();
+            }
+        }, 1, TimeUnit.SECONDS);
     }
 
     private static boolean has(String[] args, String lookFor) {
