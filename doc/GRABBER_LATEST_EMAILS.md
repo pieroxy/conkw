@@ -29,8 +29,7 @@ This is the latest unread emails grabber. It fetches your unread emails from one
         "name": "my hotmail account",
         "server":"outlook.office365.com",
         "port":993,
-        "login":"my_email@hotmail.com",
-        "password":"Do not use this as a password"
+        "credentialsRef":"TheUserCredentials"
       }
     ]
   }
@@ -45,7 +44,7 @@ This is the latest unread emails grabber. It fetches your unread emails from one
       * `name` is the name used for this configuration. Used for the UI to differentiate sources.
       * `server` is the server. Above you can find examples for outlook and gmail.
       * `port` is the port, usually 993.
-      * `credentialsRef` Credentials for your user account. Please see [all about credentials](CONCEPTS_CREDS.md) for details
+      * `credentialsRef` Credentials for your user account. See [all about credentials](CONCEPTS_CREDS.md) for details
       * Note that the password of the credential is the password for the account. For Outlook accounts, it is the password of your account. For gmail accounts, you must [setup an application password](https://support.google.com/accounts/answer/185833) for ConkW and put it here.
 
 ## Metrics

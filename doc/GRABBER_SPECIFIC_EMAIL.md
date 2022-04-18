@@ -35,7 +35,13 @@ This is the specific email check grabber. It fetches an IMAP folder and look for
 * `subjectRegexp` is the regexp used to check against the mail subject. May be ommited.
 * `senderRegexp` is the regexp used to check against the mail sender address. May be ommited.
 * `bodyRegexp` is the regexp used to check against the mail body. May be ommited.
-* `imapConf` Your IMAP configuration. [See the LatestEmailsGrabber for more information](GRABBER_LATEST_EMAILS.md)
+* `imapConf` Your IMAP configuration.
+      * `server` is the server. Above you can find examples for outlook and gmail.
+      * `port` is the port, usually 993.
+      * `credentialsRef` Credentials for your user account. See [all about credentials](CONCEPTS_CREDS.md) for details.
+      * Note that the password of the credential is the password for the account. For Outlook accounts, it is the password of your account. For gmail accounts, you must [setup an application password](https://support.google.com/accounts/answer/185833) for ConkW and put it here.
+
+
 
 ## Metrics
 
@@ -79,8 +85,7 @@ Here is my configuration for the SpecificEmailCheckGrabber:
         "imapConf": {
             "server": "imap.googlemail.com",
             "port": 993,
-            "login": "myaccount@gmail.com",
-            "password": "mypassword"
+            "credentialsRef": "myUserCreds"
         }
     }
 }
@@ -91,7 +96,7 @@ Here is my configuration for the SpecificEmailCheckGrabber:
 * `subjectRegexp:Backups .*` We will only consider emails whose subject start with `Backups `.
 * `senderRegexp:email@sending-address` I hardcoded the email of the sender.
 * `bodyRegexp:.*Backup and Prune finished successfully.*` I only look for emails reporting a successful backup - ie with no warnings or errors. Those will have the sentence `Backup and Prune finished successfully` somewhere in their body.
-* `imapConf` That's the configuration of my gmail account.
+* `imapConf` That's the configuration of the email account.
 
 ### What do I get from this ?
 

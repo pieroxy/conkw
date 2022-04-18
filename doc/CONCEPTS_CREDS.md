@@ -31,7 +31,7 @@ Some grabbers, or even conkw itself, may need credentials. Those are best known 
     "sessionInactivityTimeout":"30d", // Delay after which every unused session expires.
     "users":[ // You can define here many users.
       {
-        "credentialsRef":"uiUser"
+        "credentialsRef":"interfaceUser"
       }
     ]
   },
