@@ -1,12 +1,8 @@
 package net.pieroxy.conkw.grabbersBase;
 
 import net.pieroxy.conkw.collectors.Collector;
-import net.pieroxy.conkw.webapp.grabbers.oshi.OshiGrabber;
-import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.logging.Level;
 
 public abstract class AsyncGrabber<T extends Collector, C> extends SimpleGrabber<T, C> implements Runnable {
@@ -17,7 +13,7 @@ public abstract class AsyncGrabber<T extends Collector, C> extends SimpleGrabber
   abstract public void grabSync(T c);
   protected void disposeSync() {}
 
-  public Thread thread;
+  public volatile Thread thread;
   private boolean shouldStop;
   private boolean running;
   private long lastGrab;
@@ -50,17 +46,21 @@ public abstract class AsyncGrabber<T extends Collector, C> extends SimpleGrabber
     lastGrab = System.currentTimeMillis();
 
     if (thread == null) {
-      running = true;
-      thread = new Thread(this, this.getClass().getSimpleName() + "/" + getName());
-      this.log(Level.INFO, "Starts " + getName());
-      try {
-        thread.start();
-      } catch (Exception e) {
-        log(Level.SEVERE, "", e);
-        thread = null;
-        running = false;
+      synchronized (this) {
+        if (thread == null) {
+          running = true;
+          thread = new Thread(this, this.getClass().getSimpleName() + "/" + getName());
+          this.log(Level.INFO, "Starts " + getName());
+          try {
+            thread.start();
+          } catch (Exception e) {
+            log(Level.SEVERE, "", e);
+            thread = null;
+            running = false;
+          }
+          c.collect(LOAD_STATUS, "Initializing");
+        }
       }
-      c.collect(LOAD_STATUS, "Initializing");
     } else if (grabbingRightNow) {
       c.collect(LOAD_STATUS, getLoadingString());
     } else {
