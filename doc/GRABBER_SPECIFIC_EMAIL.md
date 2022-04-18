@@ -24,8 +24,7 @@ This is the specific email check grabber. It fetches an IMAP folder and look for
         "imapConf": {
             "server": "imap.googlemail.com",
             "port": 993,
-            "login": "myaccount@gmail.com",
-            "password": "mypassword"
+            "credentialsRef": "myusercreds"
         }
     }
 }

@@ -1,44 +1,40 @@
 package net.pieroxy.conkw.config;
 
+import net.pieroxy.conkw.utils.Utils;
+
 import java.util.Objects;
 
 public class User {
-  String login;
-  String password;
-
-  public String getLogin() {
-    return login;
-  }
-
-  public void setLogin(String login) {
-    this.login = login;
-  }
-
-  public String getPassword() {
-    return password;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
-  }
+  private Credentials credentials;
+  private String credentialsRef;
 
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     User user = (User) o;
-    return login.equals(user.login) && password.equals(user.password);
+    return Utils.objectEquals(credentials, user.credentials) &&
+        Utils.objectEquals(credentialsRef, user.credentialsRef);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(login, password);
+    return Objects.hash(credentials, credentialsRef);
   }
 
-  public User clearPassword() {
-    User res = new User();
-    res.setLogin(getLogin());
-    res.setPassword("");
-    return res;
+  public Credentials getCredentials() {
+    return credentials;
+  }
+
+  public void setCredentials(Credentials credentials) {
+    this.credentials = credentials;
+  }
+
+  public String getCredentialsRef() {
+    return credentialsRef;
+  }
+
+  public void setCredentialsRef(String credentialsRef) {
+    this.credentialsRef = credentialsRef;
   }
 }

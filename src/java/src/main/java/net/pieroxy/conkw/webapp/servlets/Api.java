@@ -3,6 +3,7 @@ package net.pieroxy.conkw.webapp.servlets;
 import com.dslplatform.json.DslJson;
 import com.dslplatform.json.JsonWriter;
 import net.pieroxy.conkw.config.ApiAuth;
+import net.pieroxy.conkw.config.CredentialsStore;
 import net.pieroxy.conkw.standalone.InstanceId;
 import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.webapp.Filter;
@@ -11,9 +12,13 @@ import net.pieroxy.conkw.webapp.model.Response;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,12 +31,12 @@ public class Api extends HttpServlet {
   private static InstanceId instanceId;
   private static Runnable shutdown;
 
-  public static void setContext(ApiManager api, ApiAuth authConfig, File dataDir) {
+  public static void setContext(ApiManager api, ApiAuth authConfig, CredentialsStore creds, File dataDir) {
     Api.api = api;
     if (auth==null) {
       auth = new ApiAuthManager();
     }
-    auth.applyConfig(authConfig, dataDir);
+    auth.applyConfig(authConfig, creds, dataDir);
   }
 
   public static void close() {

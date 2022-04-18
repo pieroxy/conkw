@@ -18,6 +18,10 @@ Notes:
 * A minute is defined as being 60 seconds.
 * You cannot combine several units in the same string. To express one minute and 30 seconds, you must use the seconds unit and write `90s`.
 
+## Credentials
+
+Some grabbers, or even conkw itself, may need credentials. See [this dedicated page](MONITOR.md) to figure how to make them available to conkw.
+
 ## Formatting numbers
 
 **WARNING**: Number formatting isn't today at a level I think would be acceptable. This is going to change at some point. The good news is that since the actual formatting is just a list of keywords, backward compatibility will be trivial so you can use whatever is in there knowing it will be supported for a long time.

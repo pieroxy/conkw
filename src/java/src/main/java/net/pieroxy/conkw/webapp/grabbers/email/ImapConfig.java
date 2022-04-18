@@ -1,27 +1,19 @@
 package net.pieroxy.conkw.webapp.grabbers.email;
 
+import net.pieroxy.conkw.config.Credentials;
+import net.pieroxy.conkw.config.CredentialsProvider;
 import net.pieroxy.conkw.utils.hashing.Hashable;
 import net.pieroxy.conkw.utils.hashing.Md5Sum;
 
 import java.util.Map;
 
-public class ImapConfig implements Hashable {
-    private String server,login,password,name;
+public class ImapConfig implements Hashable, CredentialsProvider {
+    private String server,name;
+    private Credentials credentials;
+    private String credentialsRef;
     private Double port;
 
     public ImapConfig() {
-    }
-
-    public ImapConfig(String name, Map<String, String> conf) {
-        setName(name);
-        setServer(conf.get("server"));
-        setPort(Double.parseDouble(conf.get("port")));
-        setLogin(conf.get("login"));
-        setPassword(conf.get("password"));
-    }
-
-    public String getUniqueContentString() {
-        return name + server + port + login + password;
     }
 
     public String getName() {
@@ -48,28 +40,28 @@ public class ImapConfig implements Hashable {
         this.port = port;
     }
 
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     @Override
     public void addToHash(Md5Sum sum) {
-        sum.add(getLogin());
+        sum.add(getCredentialsRef());
+        if (credentials!=null) credentials.addToHash(sum);
         sum.add(getName());
-        sum.add(getPassword());
         sum.add(getServer());
         sum.add(String.valueOf(getPort()));
+    }
+
+    public Credentials getCredentials() {
+        return credentials;
+    }
+
+    public void setCredentials(Credentials credentials) {
+        this.credentials = credentials;
+    }
+
+    public String getCredentialsRef() {
+        return credentialsRef;
+    }
+
+    public void setCredentialsRef(String credentialsRef) {
+        this.credentialsRef = credentialsRef;
     }
 }

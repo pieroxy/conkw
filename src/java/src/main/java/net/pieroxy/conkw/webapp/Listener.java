@@ -34,6 +34,7 @@ public class Listener implements ServletContextListener {
 
   public void loadConfig() {
     Config config = ConfigReader.getConfig();
+    CredentialsStore creds = ConfigReader.getCredentials();
     try {
       List<Grabber> newg = new ArrayList<>();
       Set<String> newgnames = new HashSet<>();
@@ -62,7 +63,7 @@ public class Listener implements ServletContextListener {
           if (defaultConf == null && gc.getConfig()!=null) {
             throw new RuntimeException("Grabber " + g.getGrabberFQN() + " did not provide a default configuration but the config file has one.");
           }
-          g.setConfig(GrabberConfigReader.fillObject(g.getDefaultConfig(), gc.getConfig()));
+          g.setConfig(GrabberConfigReader.fillObject(g.getDefaultConfig(), gc.getConfig()), creds.getFor(g.getClass()));
           if (gc.getParameters()!=null || gc.getNamedParameters()!=null || gc.getExtract()!=null) {
             throw new RuntimeException("Grabber " + g.getGrabberFQN() + " uses the old configuration. The properties 'parameters', 'namedParameters' and 'extract' cannot be used anymore in a grabber configuration section. Please refer to the documentation to see how to configure your grabber.");
           }
@@ -113,7 +114,7 @@ public class Listener implements ServletContextListener {
       System.gc();
 
       if (apiManager!=null) apiManager.close();
-      Api.setContext(apiManager=new ApiManager(grabbers), config.getApiAuth(), ConfigReader.getDataDir());
+      Api.setContext(apiManager=new ApiManager(grabbers), config.getApiAuth(), creds.getFor(net.pieroxy.conkw.webapp.servlets.Api.class), ConfigReader.getDataDir());
     } catch (Exception e) {
       LOGGER.log(Level.SEVERE, "Error loading and applying configuration.", e);
     }

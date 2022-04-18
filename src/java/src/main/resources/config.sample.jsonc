@@ -276,16 +276,14 @@
             "name": "my gmail account",
             "server":"imap.googlemail.com",
             "port":993,
-            "login":"my_account@gmail.com",
-            "password":"" // my gmail password
+            "credentialsRef":"gmailUser1"
           },
           // Sample configuration for outlook365
           {
             "name": "my hotmail account",
             "server":"outlook.office365.com",
             "port":993,
-            "login":"my_email@hotmail.com",
-            "password":"" // my hotmail password
+            "credentialsRef":"hotmailUser1"
           }
         ]
       }
@@ -303,8 +301,7 @@
         "imapConf": {
           "server":"imap.googlemail.com",
           "port":993,
-          "login":"my_account@gmail.com",
-          "password":""
+          "credentialsRef":"gmailUser1"
         }
       }
     },
@@ -325,14 +322,13 @@
     "sessionInactivityTimeout":"30d", // Delay after which every unused session expires.
     "users":[ // You can define here many users.
       {
-        "login":"testuser",
-        "password":"foobar"
+        "credentialsRef":"uiUser"
       }
     ]
   },
 
   // This is the port the web server will listen to. Note that values below 1024 are discouraged as they require
-  // the process to be launched as root.
+  // the process to be launched as root on Linux systems.
   "httpPort": 12789,
 
   // If true, bandwidth usage will decrease but CPU usage will increase. 

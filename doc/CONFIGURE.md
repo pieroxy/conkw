@@ -75,8 +75,7 @@ This section of the configuration file allows you to setup authentication for th
   "sessionInactivityTimeout":"30d",
   "users":[
     {
-      "login":"testuser", 
-      "password":"foobar"
+      "credentialsRef":"testuser"
     }
   ]
 },
@@ -85,7 +84,7 @@ This section of the configuration file allows you to setup authentication for th
 * `auth` : Set to `false`, the api is not authenticated. Set to `true`, only users in the users list can connect to the API.
 * `sessionLifetime` : The lifetime of any session. After this delay, the session will be deleted. See below for the format.
 * `sessionInactivityTimeout` : The lifetime of any session when inactive. After this delay is elapsed while no request is made with a given session, the session will be deleted. See below for the format.
-* `users` : The list of users, with their users and passwords, in clear text. This is the V1, please be patient. Yes, clear text password is not ideal from a security point of view. 
+* `users` : The list of users, with their credentials. Please see [all about credentials](CONCEPTS_CREDS.md) for details
 
 
 ## Duration format

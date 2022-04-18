@@ -3,9 +3,11 @@ package net.pieroxy.conkw.webapp.servlets;
 import com.dslplatform.json.DslJson;
 import com.dslplatform.json.JsonWriter;
 import net.pieroxy.conkw.config.ApiAuth;
+import net.pieroxy.conkw.config.Credentials;
+import net.pieroxy.conkw.config.CredentialsStore;
 import net.pieroxy.conkw.config.User;
-import net.pieroxy.conkw.utils.hashing.HashTools;
 import net.pieroxy.conkw.utils.JsonHelper;
+import net.pieroxy.conkw.utils.hashing.HashTools;
 import net.pieroxy.conkw.webapp.model.NeedsAuthResponse;
 import net.pieroxy.conkw.webapp.servlets.auth.ChallengeResponse;
 import net.pieroxy.conkw.webapp.servlets.auth.Session;
@@ -24,45 +26,56 @@ public class ApiAuthManager {
   public final static String SID_FIELD = "__SID__";
 
   private ApiAuth authConfig;
+  private CredentialsStore credentials;
   private Sessions sessions = new Sessions();
   private List<ChallengeResponse> challenges = new ArrayList<>();
   private File sessionsStore;
   private boolean changed;
   private Thread saveThread;
 
-  public void applyConfig(ApiAuth auth, File dataDir) {
+  public void applyConfig(ApiAuth auth, CredentialsStore creds, File dataDir) {
     ApiAuth newAuth = auth == null ? new ApiAuth() : auth;
-    updateAuthConfig(newAuth);
+    updateAuthConfig(newAuth, creds);
     sessionsStore = new File(dataDir, "sessions.json");
     if (saveThread==null) initFromStore(auth);
   }
 
-  private void updateAuthConfig(ApiAuth newAuth) {
+  private void updateAuthConfig(ApiAuth newAuth, CredentialsStore credentials) {
+    this.credentials = credentials;
     Map<String, Session> newsessions = new HashMap<>();
     List<ChallengeResponse> newchallenges = new ArrayList<>();
     Map<String, User> allUsersToKeep = new HashMap<>();
     if (authConfig!=null) {
-      Arrays.stream(authConfig.getUsers()).forEach(u -> allUsersToKeep.put(u.getLogin(), u));
+      Arrays.stream(authConfig.getUsers()).forEach(u -> allUsersToKeep.put(getCredentials(u).getId(), u));
     }
     if (newAuth.getUsers()!=null) {
       Arrays.stream(newAuth.getUsers()).forEach(u -> {
-        User current = allUsersToKeep.get(u.getLogin());
-        if (current != null && !current.equals(u)) {
-          allUsersToKeep.remove(u.getLogin());
+        Credentials cred = getCredentials(u);
+        if (cred!=null) {
+          User current = allUsersToKeep.get(cred.getId());
+          if (current != null && !current.equals(u)) {
+            allUsersToKeep.remove(getCredentials(u).getId());
+          }
         }
       });
     }
     sessions.getSessions().values().forEach(s -> {
-      if (!s.expired() && allUsersToKeep.containsKey(s.getUser().getLogin())) {
+      if (!s.expired() && allUsersToKeep.containsKey(getCredentials(s.getUser()).getId())) {
         newsessions.put(s.getKey(), s);
         s.applyConfig(newAuth);
       }});
-    challenges.forEach(c -> {if (!c.expired() && allUsersToKeep.containsKey(c.getUser().getLogin())) newchallenges.add(c);});
+    challenges.forEach(c -> {if (!c.expired() && allUsersToKeep.containsKey(getCredentials(c.getUser()).getId())) newchallenges.add(c);});
 
     authConfig = newAuth;
     sessions.setSessions(newsessions);
     challenges = newchallenges;
     changed = true;
+  }
+
+  private Credentials getCredentials(User u) {
+    if (u.getCredentials()!=null) return u.getCredentials();
+    return credentials.getStore().get(u.getCredentialsRef());
+
   }
 
   private void initFromStore(ApiAuth cfg) {
@@ -121,8 +134,8 @@ public class ApiAuthManager {
         LOGGER.fine("Password information present: " + pass);
         ChallengeResponse validatedCr = null;
         for (ChallengeResponse cr : challenges) {
-          if (cr.getUser().getLogin().equals(user)) {
-            String sha1 = HashTools.toSHA1(cr.getSaltValue() + cr.getUser().getPassword());
+          if (getCredentials(cr.getUser()).getId().equals(user)) {
+            String sha1 = HashTools.toSHA1(cr.getSaltValue() + getCredentials(cr.getUser()).getSecret());
             if (sha1.equals(pass)) {
               validatedCr = cr;
               break;
@@ -132,8 +145,8 @@ public class ApiAuthManager {
         if (validatedCr!=null) {
           LOGGER.fine("Valid CR found");
           String random = HashTools.getRandomSequence(8);
-          addSession(new Session(random, validatedCr.getUser().clearPassword(), authConfig));
-          addSession(new Session(random, validatedCr.getUser().clearPassword(), authConfig));
+          addSession(new Session(random, validatedCr.getUser(), authConfig));
+          addSession(new Session(random, validatedCr.getUser(), authConfig));
           response.setSessionToken(random);
         } else {
           LOGGER.fine("No valid CR found");
@@ -166,7 +179,7 @@ public class ApiAuthManager {
     User[]users = authConfig.getUsers();
     if (users == null) return null;
     for (User u : users) {
-      if (u.getLogin().equals(user)) return u;
+      if (getCredentials(u).getId().equals(user)) return u;
     }
     return null;
   }

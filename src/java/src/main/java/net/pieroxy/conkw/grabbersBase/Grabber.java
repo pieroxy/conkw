@@ -2,6 +2,9 @@ package net.pieroxy.conkw.grabbersBase;
 
 import net.pieroxy.conkw.collectors.Collector;
 import net.pieroxy.conkw.collectors.EmptyCollector;
+import net.pieroxy.conkw.config.Credentials;
+import net.pieroxy.conkw.config.CredentialsProvider;
+import net.pieroxy.conkw.config.CredentialsStore;
 import net.pieroxy.conkw.utils.TimedData;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.duration.CDurationParser;
@@ -10,7 +13,6 @@ import java.io.File;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public abstract class Grabber<T extends Collector, C> {
@@ -30,6 +32,7 @@ public abstract class Grabber<T extends Collector, C> {
 
   Map<String, TimedData<T>> extractedByConfiguration = new HashMap<>();
   private long lastConfigPurge;
+  private CredentialsStore credentials;
 
   public String processAction(Map<String, String[]> parameterMap) {
     return "";
@@ -52,7 +55,8 @@ public abstract class Grabber<T extends Collector, C> {
     return config;
   }
 
-  public void setConfig(C config) {
+  public void setConfig(C config, CredentialsStore credentials) {
+    this.credentials = credentials;
     this.config = config;
     if (config instanceof PartiallyExtractableConfig) {
       PartiallyExtractableConfig pc = (PartiallyExtractableConfig) config;
@@ -61,6 +65,11 @@ public abstract class Grabber<T extends Collector, C> {
         log(Level.INFO, "Extracting: " + extract.stream().collect(Collectors.joining(",")));
       }
     }
+  }
+
+  protected Credentials getCredentials(CredentialsProvider provider) {
+    if (provider.getCredentials()!=null) return provider.getCredentials();
+    return credentials.getStore().get(provider.getCredentialsRef());
   }
 
   private void gcConfigurations() {

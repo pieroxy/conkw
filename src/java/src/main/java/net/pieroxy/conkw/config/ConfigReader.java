@@ -7,17 +7,18 @@ import net.pieroxy.conkw.utils.RemoveJsonCommentsInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.nio.file.Files;
+import java.util.HashMap;
 
 public class ConfigReader {
     public static final String NAME = "config.jsonc";
+    public static final String CREDS_NAME = "credentials.jsonc";
     public static final String LOGGING_NAME = "logging.properties";
 
     private static File home;
 
     public static Config getConfig() {
         Config config = null;
-        if (!getConfigFile().exists()) { // Probably being installed./
+        if (!getConfigFile().exists()) { // Probably being installed.
             Config c = new Config();
             c.setHttpPort(-1);
             return c;
@@ -29,6 +30,30 @@ public class ConfigReader {
         }
 
         return config;
+    }
+
+    public static CredentialsStore getCredentials() {
+        File file = getCredentialsFile();
+        if (!file.exists()) {
+            CredentialsStore c = new CredentialsStore();
+            c.setStore(new HashMap<>());
+            return c;
+        }
+        CredentialsStore cs = null;
+        try (InputStream is = new FileInputStream(file)) {
+            cs =  new DslJson<>(Settings.basicSetup()).deserialize(CredentialsStore.class, new RemoveJsonCommentsInputStream(is, getConfigFile().getAbsolutePath()));
+            for (String s : cs.getStore().keySet()) {
+                cs.getStore().get(s).setReference(s);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Unable to parse credentials file file " + file.getAbsolutePath() + ": " + e.getMessage(), e);
+        }
+
+        return cs;
+    }
+
+    public static File getCredentialsFile() {
+        return new File(getConfDir(), CREDS_NAME);
     }
 
     public static File getHomeDir() {

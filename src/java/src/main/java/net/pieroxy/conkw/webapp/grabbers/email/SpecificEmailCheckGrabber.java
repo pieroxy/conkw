@@ -2,9 +2,10 @@ package net.pieroxy.conkw.webapp.grabbers.email;
 
 import com.sun.mail.imap.IMAPFolder;
 import net.pieroxy.conkw.collectors.SimpleCollector;
+import net.pieroxy.conkw.config.Credentials;
+import net.pieroxy.conkw.grabbersBase.TimeThrottledGrabber;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.duration.CDurationParser;
-import net.pieroxy.conkw.grabbersBase.TimeThrottledGrabber;
 import net.pieroxy.conkw.utils.hashing.Md5Sum;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 import net.pieroxy.conkw.webapp.model.ResponseData;
@@ -114,14 +115,18 @@ public class SpecificEmailCheckGrabber extends TimeThrottledGrabber<SpecificEmai
     }
 
     private Message[] getMessages() throws MessagingException {
+        Credentials creds = getCredentials(getConfig().getImapConf());
+        if (creds == null) {
+            log(Level.WARNING, "No credentials for IMAP configuration " + getConfig().getImapConf());
+        }
         Session session = Session.getDefaultInstance(new Properties());
         session.setDebug(canLogFine());
         Store store = session.getStore("imaps");
         store.connect(
-                getConfig().getImapConf().getServer(),
-                (int)(double)getConfig().getImapConf().getPort(),
-                getConfig().getImapConf().getLogin(),
-                getConfig().getImapConf().getPassword());
+            getConfig().getImapConf().getServer(),
+            (int)(double)getConfig().getImapConf().getPort(),
+            creds.getId(),
+            creds.getSecret());
         Folder inbox = store.getFolder(getConfig().getFolder());
         inbox.open(Folder.READ_ONLY);
         if (canLogFine()) log(Level.FINE, "lastUID: " + nextUID);

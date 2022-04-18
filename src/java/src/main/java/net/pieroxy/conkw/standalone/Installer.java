@@ -1,9 +1,14 @@
 package net.pieroxy.conkw.standalone;
 
 import net.pieroxy.conkw.config.ConfigReader;
-import net.pieroxy.conkw.utils.*;
+import net.pieroxy.conkw.utils.OsCheck;
+import net.pieroxy.conkw.utils.StreamTools;
+import net.pieroxy.conkw.utils.TextReplacer;
+import net.pieroxy.conkw.utils.ZipUtil;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
@@ -55,12 +60,17 @@ public class Installer {
         File sampleFG = new File(ConfigReader.getConfDir(), "example.properties");
         String httpLogFile = new File(ConfigReader.getLogDir(), "http.log").getAbsolutePath();
         StreamTools.copyTextFilePreserveOriginalAndWarnOnStdout(
-                getClass().getClassLoader().getResourceAsStream("config.sample.jsonc"),
-                ConfigReader.getConfigFile(),
-                overrideConfig,
-                new TextReplacer()
-                        .add("$FGSF", sampleFG.getAbsolutePath())
-                        .add("$HTTPLOGFILE", httpLogFile));
+            getClass().getClassLoader().getResourceAsStream("config.sample.jsonc"),
+            ConfigReader.getConfigFile(),
+            overrideConfig,
+            new TextReplacer()
+                .add("$FGSF", sampleFG.getAbsolutePath())
+                .add("$HTTPLOGFILE", httpLogFile));
+        StreamTools.copyTextFilePreserveOriginalAndWarnOnStdout(
+            getClass().getClassLoader().getResourceAsStream("credentials.sample.jsonc"),
+            ConfigReader.getCredentialsFile(),
+            overrideConfig,
+            new TextReplacer());
         StreamTools.copyTextFilePreserveOriginalAndWarnOnStdout(
                 getClass().getClassLoader().getResourceAsStream("example.properties"),
                 sampleFG,

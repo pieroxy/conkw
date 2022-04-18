@@ -1,12 +1,12 @@
 package net.pieroxy.conkw.webapp.grabbers.email;
 
 import net.pieroxy.conkw.collectors.SimpleCollector;
+import net.pieroxy.conkw.config.Credentials;
+import net.pieroxy.conkw.grabbersBase.TimeThrottledGrabber;
 import net.pieroxy.conkw.utils.StringUtil;
 import net.pieroxy.conkw.utils.duration.CDuration;
-import net.pieroxy.conkw.grabbersBase.TimeThrottledGrabber;
 import net.pieroxy.conkw.utils.hashing.Md5Sum;
 
-import java.util.Properties;
 import javax.mail.*;
 import javax.mail.search.FlagTerm;
 import java.util.*;
@@ -15,12 +15,13 @@ import java.util.logging.Level;
 public class LatestUnreadMailsGrabber extends TimeThrottledGrabber<LatestUnreadMailsGrabber.LatestUnreadMailsGrabberConfig> {
     static final String NAME = "mails";
 
-    private static Message[] getMessages(ImapConfig conf, boolean debug) throws MessagingException {
-        if (isValidPassword(conf.getPassword())) {
+    private Message[] getMessages(ImapConfig conf, boolean debug) throws MessagingException {
+        Credentials creds = getCredentials(conf);
+        if (isValidPassword(creds.getSecret())) {
             Session session = Session.getDefaultInstance(new Properties());
             session.setDebug(debug);
             Store store = session.getStore("imaps");
-            store.connect(conf.getServer(), (int) (double) conf.getPort(), conf.getLogin(), conf.getPassword());
+            store.connect(conf.getServer(), (int) (double) conf.getPort(), creds.getId(), creds.getSecret());
             Folder inbox = store.getFolder("INBOX");
             inbox.open(Folder.READ_ONLY);
 
@@ -65,7 +66,7 @@ public class LatestUnreadMailsGrabber extends TimeThrottledGrabber<LatestUnreadM
                     if (shutdownRequested()) return;
                 }
             } catch (MessagingException e) {
-                res.addError("Unable to fetch mail for " + c.getLogin() + ": " + e.getMessage());
+                res.addError("Unable to fetch mail for " + c.getCredentials().getReference() + ": " + e.getMessage());
                 log(Level.SEVERE, "", e);
             }
         }
