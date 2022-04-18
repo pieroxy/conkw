@@ -142,12 +142,16 @@ public class Listener implements ServletContextListener {
     try {
       toDestroy = true;
       try {
-        apiManager.close();
+        if (apiManager!=null) {
+          apiManager.close();
+        }
       } catch (Exception e) {
         LOGGER.log(Level.FINE, "", e);
       }
       try {
-        watchService.close();
+        if (watchService!=null) {
+          watchService.close();
+        }
       } catch (Exception e) {
         LOGGER.log(Level.FINE, "", e);
       }
@@ -156,11 +160,15 @@ public class Listener implements ServletContextListener {
       } catch (Exception e) {
         LOGGER.log(Level.FINE, "", e);
       }
-      for (Grabber g : grabbers) {
-        try {
-          g.dispose();
-        } catch (Exception e) {
-          LOGGER.log(Level.FINE, "", e);
+      if (grabbers!=null) {
+        for (Grabber g : grabbers) {
+          try {
+            if (g!=null) {
+              g.dispose();
+            }
+          } catch (Exception e) {
+            LOGGER.log(Level.FINE, "", e);
+          }
         }
       }
     } catch (Exception e) {
