@@ -5,6 +5,7 @@ import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.util.Collection;
+import java.util.logging.Level;
 
 public class SimpleCollectorImpl implements SimpleCollector {
     private ResponseData collectionInProgress;
@@ -22,8 +23,11 @@ public class SimpleCollectorImpl implements SimpleCollector {
     @Override
     public synchronized void collectionDone() {
         try (ResponseData tmp = completedCollection) {
+            if (tmp == null) grabber.log(Level.WARNING, "completedCollection is null");
+            if (tmp.isClosed()) grabber.log(Level.WARNING, "completedCollection was already closed");
+            if (!tmp.isOpened()) grabber.log(Level.WARNING, "completedCollection was not opened");
             completedCollection = collectionInProgress;
-            collectionInProgress = new ResponseData(grabber, System.currentTimeMillis(), tmp.getNum().size(), tmp.getStr().size());
+            collectionInProgress = new ResponseData(grabber, System.currentTimeMillis(), tmp.getNumSize(), tmp.getStrSize());
         }
     }
 

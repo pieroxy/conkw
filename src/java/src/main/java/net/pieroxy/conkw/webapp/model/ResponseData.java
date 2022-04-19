@@ -10,7 +10,10 @@ import net.pieroxy.conkw.utils.pools.hashmap.HashMapStringLongConverter;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapStringStringConverter;
 
 import java.time.Duration;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Map;
 import java.util.logging.Logger;
 
 @CompiledJson(onUnknown = CompiledJson.Behavior.IGNORE)
@@ -30,6 +33,9 @@ public class ResponseData implements ConkwCloseable {
   @JsonAttribute(converter = HashMapStringLongConverter.class)
   private Map<String, Long> timestamps;
 
+  private boolean closed;
+  private boolean opened;
+
   // This is for DSL-JSON, so no allocation of the maps since JSON is going to handle it for us.
   public ResponseData() {
   }
@@ -43,6 +49,7 @@ public class ResponseData implements ConkwCloseable {
       this.num = HashMapPool.getInstance().borrow(numCount);
       this.str = HashMapPool.getInstance().borrow(strCount);
       this.timestamps = HashMapPool.getInstance().borrow(numCount + strCount);
+      opened = true;
     }
   }
 
@@ -57,6 +64,7 @@ public class ResponseData implements ConkwCloseable {
       this.num = HashMapPool.getInstance().borrow(source.getNum(), 0);
       this.str = HashMapPool.getInstance().borrow(source.getStr(), 0);
       this.timestamps = HashMapPool.getInstance().borrow(source.getTimestamps(), 0);
+      opened = true;
     }
   }
 
@@ -226,6 +234,14 @@ public class ResponseData implements ConkwCloseable {
     return str;
   }
 
+  public int getNumSize() {
+    return num == null ? 0 : num.size();
+  }
+
+  public int getStrSize() {
+    return str == null ? 0 : str.size();
+  }
+
   public void setName(String name) {
     this.name = name;
   }
@@ -269,6 +285,7 @@ public class ResponseData implements ConkwCloseable {
 
   @Override
   public void close() {
+    closed = true;
     HashMapPool.getInstance().giveBack(this.num);
     HashMapPool.getInstance().giveBack(this.str);
     HashMapPool.getInstance().giveBack(this.timestamps);
@@ -283,5 +300,13 @@ public class ResponseData implements ConkwCloseable {
 
   public boolean isInitialized() {
     return initialized;
+  }
+
+  public boolean isClosed() {
+    return closed;
+  }
+
+  public boolean isOpened() {
+    return opened;
   }
 }
