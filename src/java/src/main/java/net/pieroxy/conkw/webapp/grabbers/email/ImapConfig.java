@@ -5,8 +5,6 @@ import net.pieroxy.conkw.config.CredentialsProvider;
 import net.pieroxy.conkw.utils.hashing.Hashable;
 import net.pieroxy.conkw.utils.hashing.Md5Sum;
 
-import java.util.Map;
-
 public class ImapConfig implements Hashable, CredentialsProvider {
     private String server,name;
     private Credentials credentials;
@@ -14,6 +12,17 @@ public class ImapConfig implements Hashable, CredentialsProvider {
     private Double port;
 
     public ImapConfig() {
+    }
+
+    @Override
+    public String toString() {
+        return "ImapConfig{" +
+            "server='" + server + '\'' +
+            ", name='" + name + '\'' +
+            ", credentials=" + credentials +
+            ", credentialsRef='" + credentialsRef + '\'' +
+            ", port=" + port +
+            '}';
     }
 
     public String getName() {
