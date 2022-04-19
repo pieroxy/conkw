@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,7 +23,7 @@ public class Emi extends HttpServlet {
 
   public static final String CONTENT_TYPE_JSON="application/json";
 
-  static Map<String, ExternalMetricsGrabber> allData = HashMapPool.getInstance().borrow(1);
+  private static Map<String, ExternalMetricsGrabber> allData = HashMapPool.getInstance().borrow(1);
 
   public static synchronized void addOrUpdateGrabber(ExternalMetricsGrabber externalMetricsGrabber) {
     Map tmp = allData;
