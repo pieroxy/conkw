@@ -12,18 +12,17 @@ import net.pieroxy.conkw.webapp.servlets.Emi;
 import java.io.*;
 import java.time.Duration;
 import java.util.Date;
-import java.util.Map;
 import java.util.logging.Level;
 
 public class ExternalMetricsGrabber extends Grabber<SimpleTransientCollector, ExternalMetricsGrabber.ExternalMetricsGrabberConfig> {
 
-  private ResponseData data = null;
+  private ResponseData globalData = null;
   private boolean changed;
   private Thread saveThread;
 
   @Override
   public void collect(SimpleTransientCollector c) {
-    c.copyDataFrom(data);
+    c.copyDataFrom(globalData);
     c.collectionDone();
   }
 
@@ -46,12 +45,12 @@ public class ExternalMetricsGrabber extends Grabber<SimpleTransientCollector, Ex
   }
 
   public void addMetric(String name, double value) {
-    data.atomicAddMetricWithTimestamp(name, value);
+    globalData.atomicAddMetricWithTimestamp(name, value);
     save();
   }
 
   public void addMetric(String name, String value) {
-    data.atomicAddMetricWithTimestamp(name, value);
+    globalData.atomicAddMetricWithTimestamp(name, value);
     save();
   }
 
@@ -72,6 +71,7 @@ public class ExternalMetricsGrabber extends Grabber<SimpleTransientCollector, Ex
         synchronized (this) {
           this.wait(10000); // No need to save more than once every 10s
         }
+        ResponseData data = globalData;
         {
           // Purging expired values every hours at most
           int hoursnow=new Date().getHours();
@@ -110,13 +110,13 @@ public class ExternalMetricsGrabber extends Grabber<SimpleTransientCollector, Ex
 
     try (FileInputStream fis = new FileInputStream(getStorageFile())) {
       log(Level.INFO, "Loading state from " + getStorageFile().getAbsolutePath());
-      data = JsonHelper.getJson().deserialize(ResponseData.class, fis);
+      globalData = JsonHelper.getJson().deserialize(ResponseData.class, fis);
     } catch (FileNotFoundException e) {
       log(Level.WARNING, "Could not load cached data file: " + getStorageFile());
-      data = new ResponseData(this, System.currentTimeMillis(), HashMapPool.SIZE_UNKNOWN, HashMapPool.SIZE_UNKNOWN);
+      globalData = new ResponseData(this, System.currentTimeMillis(), HashMapPool.SIZE_UNKNOWN, HashMapPool.SIZE_UNKNOWN);
     } catch (Exception e) {
       log(Level.SEVERE, "Could not load cached data file.", e);
-      data = new ResponseData(this, System.currentTimeMillis(), HashMapPool.SIZE_UNKNOWN, HashMapPool.SIZE_UNKNOWN);
+      globalData = new ResponseData(this, System.currentTimeMillis(), HashMapPool.SIZE_UNKNOWN, HashMapPool.SIZE_UNKNOWN);
     }
   }
 
