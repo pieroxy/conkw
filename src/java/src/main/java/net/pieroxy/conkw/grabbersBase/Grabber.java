@@ -6,8 +6,6 @@ import net.pieroxy.conkw.config.Credentials;
 import net.pieroxy.conkw.config.CredentialsProvider;
 import net.pieroxy.conkw.config.CredentialsStore;
 import net.pieroxy.conkw.utils.TimedData;
-import net.pieroxy.conkw.utils.duration.CDuration;
-import net.pieroxy.conkw.utils.duration.CDurationParser;
 
 import java.io.File;
 import java.util.*;
@@ -157,19 +155,19 @@ public abstract class Grabber<T extends Collector, C> {
   }
 
 
-  protected final void log(Level loglevel, String message) {
+  public final void log(Level loglevel, String message) {
     LOGGER.log(loglevel, message);
   }
-  protected final void log(Level loglevel, String message, Throwable t) {
+  public final void log(Level loglevel, String message, Throwable t) {
     LOGGER.log(loglevel, message, t);
   }
-  protected final boolean canLogInfo() {
+  public final boolean canLogInfo() {
     return LOGGER.isLoggable(Level.INFO);
   }
-  protected final boolean canLogFine() {
+  public final boolean canLogFine() {
     return LOGGER.isLoggable(Level.FINE);
   }
-  protected final boolean canLogFiner() {
+  public final boolean canLogFiner() {
     return LOGGER.isLoggable(Level.FINER);
   }
 
