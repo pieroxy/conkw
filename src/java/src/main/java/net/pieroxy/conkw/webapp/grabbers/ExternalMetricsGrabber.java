@@ -19,9 +19,16 @@ public class ExternalMetricsGrabber extends Grabber<SimpleTransientCollector, Ex
   private ResponseData globalData = null;
   private boolean changed;
   private Thread saveThread;
+  private long lastCollection;
 
   @Override
-  public void collect(SimpleTransientCollector c) {
+  public synchronized void collect(SimpleTransientCollector c) {
+    if (System.currentTimeMillis() - lastCollection < 900) {
+      // Last collection was less than 1s ago.
+      // Testing with 900ms to avoid threshold effects.
+      return;
+    }
+    lastCollection = System.currentTimeMillis();
     c.copyDataFrom(globalData);
     c.collectionDone();
   }
