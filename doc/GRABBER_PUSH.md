@@ -18,7 +18,8 @@ This is the PushToEmiGrabber grabber. It is used to push all or part of the conf
   "config": {
     "toExtract":["sys"],
     "url":"http://localhost:12789/emi?ns=test_emi",
-    "prefix":"mygrabber"
+    "prefix":"mygrabber",
+    "timeout":200
   }
 }
 ```
@@ -27,6 +28,7 @@ This is the PushToEmiGrabber grabber. It is used to push all or part of the conf
 * `toExtract` this is the list of extractors to extract and send away. All metrics from every extractor will be prefixed by the extractor name.
 * `prefix` this is a unique string used to prefix all metrics.
 * `url` This is pointing to the conkw instance you want to send your metrics to. Needs to be a `http` or `https` url. Note that you have to specify the grabber name on the target conkw instance through the `ns` parameter.
+* `timeout` is the timeout set to each requests, in milliseconds. The default value is `200`. For systems in the same LAN it is more than enough. If the systems must go through a slow connection, you might want to increase this number.
 
 Let's take the `totalCpuUsage` metric of the `sys` grabber. With the above configuration, the metric will be pushed as `mygrabber_sys_totalCpuUsage`. That's the prefix, the extractor name and the actual metric name, all separated by underscores.
 

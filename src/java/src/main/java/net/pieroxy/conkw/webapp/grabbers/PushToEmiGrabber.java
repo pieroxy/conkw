@@ -134,8 +134,8 @@ public class PushToEmiGrabber extends Grabber<SimpleCollector, PushToEmiGrabber.
   private void sendData(EmiInput input) throws IOException {
     try {
       HttpURLConnection conn = (HttpURLConnection) getConfig().getUrl().openConnection();
-      conn.setConnectTimeout(200);
-      conn.setReadTimeout(200);
+      conn.setConnectTimeout(getConfig().getTimeout());
+      conn.setReadTimeout(getConfig().getTimeout());
       conn.setRequestMethod("POST");
       conn.setRequestProperty("Content-Type", Emi.CONTENT_TYPE_JSON);
       conn.setDoOutput(true);
@@ -167,6 +167,7 @@ public class PushToEmiGrabber extends Grabber<SimpleCollector, PushToEmiGrabber.
   public static class PushToEmiGrabberConfig extends PartiallyExtractableConfig {
     private String prefix;
     private URL url;
+    private int timeout = 200;
 
     public String getPrefix() {
       return prefix;
@@ -182,6 +183,14 @@ public class PushToEmiGrabber extends Grabber<SimpleCollector, PushToEmiGrabber.
 
     public void setUrl(URL url) {
       this.url = url;
+    }
+
+    public int getTimeout() {
+      return timeout;
+    }
+
+    public void setTimeout(int timeout) {
+      this.timeout = timeout;
     }
   }
 }
