@@ -16,7 +16,7 @@ This is the PushToEmiGrabber grabber. It is used to push all or part of the conf
   "implementation":"net.pieroxy.conkw.webapp.grabbers.PushToEmiGrabber",
   "name":"p2emi",
   "config": {
-    "toExtract":"sys",
+    "toExtract":["sys"],
     "url":"http://localhost:12789/emi?ns=test_emi",
     "prefix":"mygrabber"
   }
