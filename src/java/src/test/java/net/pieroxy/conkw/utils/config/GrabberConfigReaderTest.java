@@ -1,6 +1,5 @@
 package net.pieroxy.conkw.utils.config;
 
-import junit.framework.TestCase;
 import net.pieroxy.conkw.ConkwTestCase;
 import net.pieroxy.conkw.utils.JsonHelper;
 
@@ -39,6 +38,33 @@ public class GrabberConfigReaderTest extends ConkwTestCase {
         assertNull(o.getBoolValue());
         assertNull(o.getStringValue());
         assertNull(o.getDoubleValue());
+    }
+
+    public void testNumbersTypes() {
+        ObjectWithNumbers o = parseandFillInCustomProperty("{\"version\":2345, \"object\":{\"doubleObjectValue\":1.2345,\"intObjectValue\":12345,\"byteObjectValue\":12,\"shortObjectValue\":123,\"longObjectValue\":123456,\"floatObjectValue\":1.5432,\"doubleValue\":4.5678,\"intValue\":45678,\"byteValue\":45,\"shortValue\":4567,\"longValue\":456789,\"floatValue\":4.8765}}",
+            2345, ObjectWithNumbers.class);
+
+        assertEquals(1.2345, o.getDoubleObjectValue());
+        assertEquals(Integer.valueOf(12345), o.getIntObjectValue());
+        assertEquals(Byte.valueOf((byte)12), o.getByteObjectValue());
+        assertEquals(Short.valueOf((short)123), o.getShortObjectValue());
+        assertEquals(Long.valueOf(123456), o.getLongObjectValue());
+        assertEquals(Float.valueOf(1.5432f), o.getFloatObjectValue());
+        assertEquals(4.5678, o.getDoubleValue());
+        assertEquals(45678, o.getIntValue());
+        assertEquals(45, o.getByteValue());
+        assertEquals(4567, o.getShortValue());
+        assertEquals(456789, o.getLongValue());
+        assertEquals(4.8765f, o.getFloatValue());
+
+
+        /*
+
+
+
+
+
+         */
     }
 
     public void testMissing() {
