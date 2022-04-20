@@ -70,8 +70,22 @@ public class GrabberConfigReader {
     private static Object buildObject(Object value, Type genericType) {
         String reason = "";
         if (value == null) return null;
-        else if (value instanceof Number && genericType == Double.class) {
-            return ((Number)value).doubleValue();
+        else if (value instanceof Number) {
+            if (genericType == Double.class || genericType == double.class) {
+                return ((Number) value).doubleValue();
+            } else if (genericType == Integer.class || genericType == int.class) {
+                return ((Number) value).intValue();
+            } else if (genericType == Long.class || genericType == long.class) {
+                return ((Number) value).longValue();
+            } else if (genericType == Short.class || genericType == short.class) {
+                return ((Number) value).shortValue();
+            } else if (genericType == Byte.class || genericType == byte.class) {
+                return ((Number) value).byteValue();
+            } else if (genericType == Float.class || genericType == float.class) {
+                return ((Number) value).floatValue();
+            } else {
+                throw new RuntimeException("Could not coerce a number to " + genericType.getTypeName() + ".");
+            }
         } else if (value instanceof String && genericType == String.class) {
             return value;
         } else if (value instanceof Boolean && genericType == Boolean.class) {
