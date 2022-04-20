@@ -45,10 +45,10 @@ public class ApiAuthManager {
     Map<String, Session> newsessions = new HashMap<>();
     List<ChallengeResponse> newchallenges = new ArrayList<>();
     Map<String, User> allUsersToKeep = new HashMap<>();
-    if (authConfig!=null) {
+    if (authConfig!=null && authConfig.getUsers()!=null) {
       Arrays.stream(authConfig.getUsers()).forEach(u -> allUsersToKeep.put(getCredentials(u).getId(), u));
     }
-    if (newAuth.getUsers()!=null) {
+    if (newAuth!=null && newAuth.getUsers()!=null) {
       Arrays.stream(newAuth.getUsers()).forEach(u -> {
         Credentials cred = getCredentials(u);
         if (cred!=null) {
