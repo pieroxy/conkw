@@ -56,15 +56,6 @@ public class GrabberConfigReaderTest extends ConkwTestCase {
         assertEquals(4567, o.getShortValue());
         assertEquals(456789, o.getLongValue());
         assertEquals(4.8765f, o.getFloatValue());
-
-
-        /*
-
-
-
-
-
-         */
     }
 
     public void testMissing() {
