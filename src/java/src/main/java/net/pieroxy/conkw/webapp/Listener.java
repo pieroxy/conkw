@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.util.*;
 import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 public class Listener implements ServletContextListener {
@@ -189,12 +190,16 @@ public class Listener implements ServletContextListener {
       if (toDestroy) return;
       try {
         key = watchService.take();
-        boolean shouldReload = false;
+        boolean shouldReloadConfig = false;
+        boolean shouldReloadLoggingConfig = false;
         for (WatchEvent<?> event : key.pollEvents()) {
           if (ConfigReader.NAME.equals(event.context().toString()))
-            shouldReload = true;
+            shouldReloadConfig = true;
+          if (ConfigReader.LOGGING_NAME.equals(event.context().toString()))
+            shouldReloadLoggingConfig = true;
         }
-        if (shouldReload) loadConfig();
+        if (shouldReloadConfig) loadConfig();
+        if (shouldReloadLoggingConfig) LogManager.getLogManager().readConfiguration();
         key.reset();
       } catch (java.nio.file.ClosedWatchServiceException e) {
         if (toDestroy) return;
