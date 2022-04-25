@@ -16,7 +16,7 @@ public class HttpLogFileParser implements LogParser<HttpLogEvent> {
 
     @Override
     public HttpLogEvent parse(String line) {
-        byte[]bytes = line.substring(59).getBytes(StandardCharsets.UTF_8);
+        byte[]bytes = line.substring(line.indexOf('{')).getBytes(StandardCharsets.UTF_8);
         try {
             HttpLogEvent data = JsonHelper.getJson().deserialize(HttpLogEvent.class, bytes, bytes.length);
             return data;
