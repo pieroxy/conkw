@@ -5,6 +5,7 @@ import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.grabbersBase.TimeThrottledGrabber;
 import net.pieroxy.conkw.utils.DebugTools;
 import net.pieroxy.conkw.utils.duration.CDuration;
+import net.pieroxy.conkw.utils.duration.CDurationParser;
 import net.pieroxy.conkw.utils.hashing.Hashable;
 import net.pieroxy.conkw.utils.hashing.Md5Sum;
 
@@ -36,8 +37,9 @@ public class HttpEndpointGrabber extends TimeThrottledGrabber<HttpEndpointGrabbe
     }
 
     private void loadEndpoint(SimpleCollector res, EndPointMonitoringConfig endPointMonitoringConfig) {
+        long begin = System.nanoTime();
         try {
-            long begin = System.nanoTime();
+            if (canLogFine()) log(Level.FINE, "Loading URL: " + endPointMonitoringConfig.url);
             URL u = new URL(endPointMonitoringConfig.url);
             HttpURLConnection http = (HttpURLConnection)u.openConnection();
             http.setConnectTimeout(500);
@@ -55,9 +57,33 @@ public class HttpEndpointGrabber extends TimeThrottledGrabber<HttpEndpointGrabbe
             }
             String body = DebugTools.isToString(is);
             long lastByte = System.nanoTime();
+            if (canLogFine()) log(Level.FINE, "Loaded URL: " + endPointMonitoringConfig.url);
             collectDataFromHttp(begin, firstByte, lastByte, body, endPointMonitoringConfig, res);
         } catch (Exception e) {
-            res.collect(AccumulatorUtils.addToMetricName("", endPointMonitoringConfig.id, "error"), e.getMessage());
+            long time = System.nanoTime() - begin;
+            if (canLogFine()) log(Level.FINE, "Error loading URL: " + endPointMonitoringConfig.url + " with error " + e.getMessage());
+            fillError(res, endPointMonitoringConfig, time, e.getMessage());
+        }
+    }
+
+    private void fillError(SimpleCollector res, EndPointMonitoringConfig endPointMonitoringConfig, long time, String message) {
+        res.collect(AccumulatorUtils.addToMetricName(endPointMonitoringConfig.id, "size"), 0);
+        res.collect(AccumulatorUtils.addToMetricName(endPointMonitoringConfig.id, "firstByte", "time"), time);
+        res.collect(AccumulatorUtils.addToMetricName(endPointMonitoringConfig.id, "lastByte", "time"), time);
+        res.collect(AccumulatorUtils.addToMetricName("", endPointMonitoringConfig.id, "error"), message);
+
+        if (endPointMonitoringConfig.toExtract != null) {
+            for (EndPointMonitoringPatternConfig p : endPointMonitoringConfig.toExtract) {
+                String rootMetricName = AccumulatorUtils.addToMetricName(endPointMonitoringConfig.id, p.getId());
+                res.collect(AccumulatorUtils.addToMetricName(rootMetricName, "matched"), 0);
+                res.collect(AccumulatorUtils.addToMetricName(rootMetricName, "found"), 0);
+                String metricName = AccumulatorUtils.addToMetricName(rootMetricName, "captured");
+                if (p.isNumber() !=null && p.isNumber()) {
+                    res.collect(metricName, 0);
+                } else {
+                    res.collect(metricName, null);
+                }
+            }
         }
     }
 
