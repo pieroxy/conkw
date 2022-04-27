@@ -2,8 +2,9 @@
 
 ## Duration format
 
-Here and there in the config file or in the UI, you will have to configure durations or delays. They can be expressed in seconds, minutes, hours, days or years. Here are a few examples:
+Here and there in the config file or in the UI, you will have to configure durations or delays. They can be expressed in milliseconds, seconds, minutes, hours, days or years. Here are a few examples:
 
+* `250ms` a quarter of a second
 * `30s` 30 seconds
 * `5m` 5 minutes
 * `1h` one hour
@@ -16,7 +17,7 @@ Notes:
 * A day is defined as being 24 hours.
 * An hour is defined as being 60 minutes.
 * A minute is defined as being 60 seconds.
-* You cannot combine several units in the same string. To express one minute and 30 seconds, you must use the seconds unit and write `90s`.
+* You cannot combine several units in the same string, and every number is an integer. To express one minute and 30 seconds, you can use the seconds unit and write `90s`. You cannot write `1m30s` or `1.5m`
 
 ## Credentials
 

@@ -11,20 +11,24 @@ public class CDurationParser {
     return dur;
   }
   public static CDuration parse(String s) {
-    long l = Long.parseLong(s.substring(0, s.length()-1));
-    switch (s.charAt(s.length()-1)) {
-      case 's':
-        return new CDuration(l);
-      case 'm':
-        return new CDuration(l*60);
-      case 'h':
-        return new CDuration(l*3600);
-      case 'd':
-        return new CDuration(l*86400);
-      case 'y':
-        return new CDuration(l*31536000);
+    if (s.endsWith("ms")) {
+      return new CDuration(parse(s, 2), true);
+    } else if (s.endsWith("s")) {
+      return new CDuration(parse(s, 1));
+    } else if (s.endsWith("m")) {
+      return new CDuration(parse(s, 1)*60);
+    } else if (s.endsWith("h")) {
+      return new CDuration(parse(s, 1)*3600);
+    } else if (s.endsWith("d")) {
+      return new CDuration(parse(s, 1)*86400);
+    } else if (s.endsWith("y")) {
+      return new CDuration(parse(s, 1)*31536000);
     }
     throw new RuntimeException("CDuration not recognized: " + s);
+  }
+
+  private static long parse(String s, int suffixSize) {
+    return Long.parseLong(s.substring(0, s.length()-suffixSize));
   }
 
   static String toString(CDuration d) {
