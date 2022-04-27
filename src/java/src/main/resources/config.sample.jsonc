@@ -200,7 +200,7 @@
             "toExtract":[
               {
                 "id":"ok",
-                "pattern":"(<a class=\"status-icon available\"></a>)",
+                "pattern":"(<a class=\"status-icon disruption\"></a>)",
                 "number":false
               }
             ]
