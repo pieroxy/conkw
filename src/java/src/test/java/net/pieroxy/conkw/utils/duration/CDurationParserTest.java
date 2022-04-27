@@ -18,6 +18,6 @@ public class CDurationParserTest extends ConkwTestCase {
         assertEquals(365*8*24, CDurationParser.parse("8y").asHours());
         assertEquals(365*8*24*60, CDurationParser.parse("8y").asMinutes());
         assertEquals(365*8*24*60*60, CDurationParser.parse("8y").asSeconds());
-        assertEquals(365*8*24*60*60*1000, CDurationParser.parse("8y").asMilliseconds());
+        assertEquals(365*8*24*60*60*1000l, CDurationParser.parse("8y").asMilliseconds());
     }
 }
