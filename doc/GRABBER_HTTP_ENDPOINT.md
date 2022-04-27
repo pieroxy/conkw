@@ -16,6 +16,7 @@ This is the http endpoint grabber. It will probe the provided http(s) URLs and g
   {
     "id":"home",
     "url":"http://myservice.com/",
+    "timeout":"250ms",
     "toExtract":[
       {
         "id":"version",
@@ -51,10 +52,22 @@ This is the http endpoint grabber. It will probe the provided http(s) URLs and g
 
 As this is a `TimeThrottledGrabber`, you can define `ttl` and `errorTtl`. [See here for more details](CONFIGURE.md). The default ttl is 1 second.
 
-For each endpoint being monitored, you can define its name on the metric path and the URL being monitored, as well as a set of regular expressions that can either match the whole body or a part of it. If the `number` property is set to `true`, the matching area will be converted to a Double. Here is the explanation for the three endpoints defined above:
+For each endpoint being monitored, you can define:
+
+* its name on the metric path 
+* the URL being monitored
+* A timeout for the http request. The default timeout is 500ms. If the url fetching times out:
+    * The grabber will report an error.
+    * The size will be set to zero.
+    * Both time metrics will be set to the actual time.
+    * All regexps will report `found` and `matched` to be zero.
+* A set of regular expressions that can either match the whole body or a part of it. 
+    * If the `number` property is set to `true`, the matching area will be converted to a Double. Here is the explanation for the three endpoints defined above:
 
 ### home
 This one monitors the home page of the website `http://myservice.com/` under the `home` keyword. Additionally, it will try to capture the content of the `<code class=\"version\">` html tag under the `version` keyword.
+
+If the document takes more than 250ms to be fetched, the grabber will report an error. See above for details.
 
 Note: It is not a good idea to parse HTML with a regexp. Hopefully, it's my website, so I control how the HTML is generated. So this basic pattern matching is actually acceptable.
 

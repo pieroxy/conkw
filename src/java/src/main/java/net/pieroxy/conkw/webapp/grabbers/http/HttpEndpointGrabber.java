@@ -42,8 +42,8 @@ public class HttpEndpointGrabber extends TimeThrottledGrabber<HttpEndpointGrabbe
             if (canLogFine()) log(Level.FINE, "Loading URL: " + endPointMonitoringConfig.url);
             URL u = new URL(endPointMonitoringConfig.url);
             HttpURLConnection http = (HttpURLConnection)u.openConnection();
-            http.setConnectTimeout(500);
-            http.setReadTimeout(500);
+            http.setConnectTimeout((int)endPointMonitoringConfig.getTimeout().asMilliseconds());
+            http.setReadTimeout((int)endPointMonitoringConfig.getTimeout().asMilliseconds());
             http.setRequestMethod("GET"); // PUT is another valid option
             http.connect();
             int rc = http.getResponseCode();
@@ -61,7 +61,9 @@ public class HttpEndpointGrabber extends TimeThrottledGrabber<HttpEndpointGrabbe
             collectDataFromHttp(begin, firstByte, lastByte, body, endPointMonitoringConfig, res);
         } catch (Exception e) {
             long time = System.nanoTime() - begin;
-            if (canLogFine()) log(Level.FINE, "Error loading URL: " + endPointMonitoringConfig.url + " with error " + e.getMessage());
+            log(Level.WARNING, "Error loading URL: " + endPointMonitoringConfig.url + " with error " + e.getMessage());
+            log(Level.FINE, "Stack trace: ", e);
+
             fillError(res, endPointMonitoringConfig, time, e.getMessage());
         }
     }
@@ -91,23 +93,25 @@ public class HttpEndpointGrabber extends TimeThrottledGrabber<HttpEndpointGrabbe
         res.collect(AccumulatorUtils.addToMetricName(endPointMonitoringConfig.id, "size"), body.length());
         res.collect(AccumulatorUtils.addToMetricName(endPointMonitoringConfig.id, "firstByte", "time"), firstByte - begin);
         res.collect(AccumulatorUtils.addToMetricName(endPointMonitoringConfig.id, "lastByte", "time"), lastByte - begin);
-        if (canLogFine()) log(Level.FINE, "Capturing Regexes: " + endPointMonitoringConfig.toExtract.size());
-        for (EndPointMonitoringPatternConfig p : endPointMonitoringConfig.toExtract) {
-            String rootMetricName = AccumulatorUtils.addToMetricName(endPointMonitoringConfig.id, p.getId());
-            if (canLogFine()) log(Level.FINE, "Pattern: " + p.getPattern().pattern());
-            Matcher m = p.getPattern().matcher(body);
-            if (canLogFine()) log(Level.FINE, "Matches: " + m.matches()+ " Groups: " + m.groupCount());
-            res.collect(AccumulatorUtils.addToMetricName(rootMetricName, "matched"), m.matches() ? 1 : 0);
-            res.collect(AccumulatorUtils.addToMetricName(rootMetricName, "found"), getMatches(m));
-            if (m.groupCount() == 1 && m.matches()) {
-                String metricName = AccumulatorUtils.addToMetricName(rootMetricName, "captured");
-                String values = m.group(1);
-                if (canLogFine()) log(Level.FINE, "Captured: "+values);
-                if (canLogFine()) log(Level.FINE, "With name: " + metricName);
-                if (p.isNumber() !=null && p.isNumber()) {
-                    res.collect(metricName, Double.parseDouble(values));
-                } else {
-                    res.collect(metricName, values);
+        if (canLogFine()) log(Level.FINE, "Capturing Regexes: " + (endPointMonitoringConfig.toExtract == null ? "null" : endPointMonitoringConfig.toExtract.size()));
+        if (endPointMonitoringConfig.toExtract!=null) {
+            for (EndPointMonitoringPatternConfig p : endPointMonitoringConfig.toExtract) {
+                String rootMetricName = AccumulatorUtils.addToMetricName(endPointMonitoringConfig.id, p.getId());
+                if (canLogFine()) log(Level.FINE, "Pattern: " + p.getPattern().pattern());
+                Matcher m = p.getPattern().matcher(body);
+                if (canLogFine()) log(Level.FINE, "Matches: " + m.matches() + " Groups: " + m.groupCount());
+                res.collect(AccumulatorUtils.addToMetricName(rootMetricName, "matched"), m.matches() ? 1 : 0);
+                res.collect(AccumulatorUtils.addToMetricName(rootMetricName, "found"), getMatches(m));
+                if (m.groupCount() == 1 && m.matches()) {
+                    String metricName = AccumulatorUtils.addToMetricName(rootMetricName, "captured");
+                    String values = m.group(1);
+                    if (canLogFine()) log(Level.FINE, "Captured: " + values);
+                    if (canLogFine()) log(Level.FINE, "With name: " + metricName);
+                    if (p.isNumber() != null && p.isNumber()) {
+                        res.collect(metricName, Double.parseDouble(values));
+                    } else {
+                        res.collect(metricName, values);
+                    }
                 }
             }
         }
@@ -147,9 +151,10 @@ public class HttpEndpointGrabber extends TimeThrottledGrabber<HttpEndpointGrabbe
     }
 
     public static class EndPointMonitoringConfig implements Hashable {
-        String id;
-        String url;
-        List<EndPointMonitoringPatternConfig> toExtract;
+        private String id;
+        private String url;
+        private List<EndPointMonitoringPatternConfig> toExtract;
+        private CDuration timeout = CDurationParser.parse("500ms");
 
         @Override
         public String toString() {
@@ -192,6 +197,14 @@ public class HttpEndpointGrabber extends TimeThrottledGrabber<HttpEndpointGrabbe
                     c.addToHash(sum);
                 }
             }
+        }
+
+        public CDuration getTimeout() {
+            return timeout;
+        }
+
+        public void setTimeout(CDuration timeout) {
+            this.timeout = timeout;
         }
     }
 
