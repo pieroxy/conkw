@@ -179,7 +179,12 @@ public class ApiAuthManager {
     User[]users = authConfig.getUsers();
     if (users == null) return null;
     for (User u : users) {
-      if (getCredentials(u).getId().equals(user)) return u;
+      Credentials creds = getCredentials(u);
+      if (creds == null) {
+        LOGGER.warning("User has no credentials: " + u);
+      } else {
+        if (creds.getId().equals(user)) return u;
+      }
     }
     return null;
   }
