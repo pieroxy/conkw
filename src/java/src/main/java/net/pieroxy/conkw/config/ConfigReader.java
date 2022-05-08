@@ -8,8 +8,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.logging.Logger;
 
 public class ConfigReader {
+    private final static Logger LOGGER = Logger.getLogger(ConfigReader.class.getName());
     public static final String NAME = "config.jsonc";
     public static final String CREDS_NAME = "credentials.jsonc";
     public static final String LOGGING_NAME = "logging.properties";
@@ -35,10 +37,12 @@ public class ConfigReader {
     public static CredentialsStore getCredentials() {
         File file = getCredentialsFile();
         if (!file.exists()) {
+            LOGGER.warning("Credentials file not found at " + file.getAbsolutePath());
             CredentialsStore c = new CredentialsStore();
             c.setStore(new HashMap<>());
             return c;
         }
+        LOGGER.info("Reading credentials file at " + file.getAbsolutePath());
         CredentialsStore cs = null;
         try (InputStream is = new FileInputStream(file)) {
             cs =  new DslJson<>(Settings.basicSetup()).deserialize(CredentialsStore.class, new RemoveJsonCommentsInputStream(is, getConfigFile().getAbsolutePath()));
@@ -46,6 +50,7 @@ public class ConfigReader {
                 cs.getStore().get(s).setReference(s);
             }
         } catch (Exception e) {
+            LOGGER.severe("Unparseable credentials file " + file.getAbsolutePath());
             throw new RuntimeException("Unable to parse credentials file file " + file.getAbsolutePath() + ": " + e.getMessage(), e);
         }
 
