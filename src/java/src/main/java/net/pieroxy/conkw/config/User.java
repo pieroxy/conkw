@@ -37,4 +37,12 @@ public class User {
   public void setCredentialsRef(String credentialsRef) {
     this.credentialsRef = credentialsRef;
   }
+
+  @Override
+  public String toString() {
+    return "User{" +
+        "credentials=" + credentials +
+        ", credentialsRef='" + credentialsRef + '\'' +
+        '}';
+  }
 }
