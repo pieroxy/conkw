@@ -40,6 +40,12 @@ public class TailLogFileGrabber<T extends LogRecord> extends AsyncGrabber<Accumu
     }
 
     @Override
+    public AccumulatorCollector<T> parseCollector(String param) {
+        // There is a cache, so there is probably no need to optimize this.
+        return (AccumulatorCollector<T>) new AccumulatorExpressionParser().parse(param);
+    }
+
+    @Override
     public String getDefaultName() {
         return "taillog";
     }
