@@ -4,7 +4,7 @@ import net.pieroxy.conkw.utils.Utils;
 
 import java.util.Objects;
 
-public class User {
+public class User implements CredentialsProvider {
   private Credentials credentials;
   private String credentialsRef;
 
