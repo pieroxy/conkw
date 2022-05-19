@@ -2,25 +2,38 @@ package net.pieroxy.conkw.utils;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class PrefixedKeyMap<V> implements Map<String,V> {
     private final Map<String,V> src;
     private String prefix = "";
+    private Stack<String> prefixes = new Stack<>();
     private int size = -1;
 
     public PrefixedKeyMap(Map<String, V> originalData) {
         this.src = originalData;
     }
 
-    public void setPrefix(String prefix) {
-        this.prefix = prefix;
+    public void pushPrefix(String prefix) {
+        prefixes.push(prefix);
+        prefixChanged();
+    }
+
+    public String popPrefix() {
+        String res = prefixes.pop();
+        prefixChanged();
+        return res;
+    }
+
+    private void prefixChanged() {
+        this.prefix = prefixes.stream().collect(Collectors.joining());
         this.size = -1;
     }
 
+    public String getCurrentPrefix() {
+        return prefix;
+    }
 
     @Override
     public int size() {

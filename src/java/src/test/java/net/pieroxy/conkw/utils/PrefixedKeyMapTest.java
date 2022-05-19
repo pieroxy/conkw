@@ -14,9 +14,12 @@ public class PrefixedKeyMapTest extends ConkwTestCase {
         PrefixedKeyMap<String> pkm = new PrefixedKeyMap<>(new HashMap<>());
         assertEquals(0, pkm.size());
         assertEquals(true, pkm.isEmpty());
-        pkm.setPrefix("toto");
+        assertEquals("", pkm.getCurrentPrefix());
+
+        pkm.pushPrefix("toto");
         assertEquals(0, pkm.size());
         assertEquals(true, pkm.isEmpty());
+        assertEquals("toto", pkm.getCurrentPrefix());
     }
 
     public void testOneEntry() {
@@ -27,15 +30,21 @@ public class PrefixedKeyMapTest extends ConkwTestCase {
         assertEquals(1, pkm.size());
         assertEquals(false, pkm.isEmpty());
         assertEquals("toti", pkm.keySet().stream().collect(Collectors.joining(",")));
-        pkm.setPrefix("to");
+        assertEquals("", pkm.getCurrentPrefix());
+
+        pkm.pushPrefix("to");
         assertEquals(1, pkm.size());
         assertEquals(false, pkm.isEmpty());
         assertEquals("tutu", pkm.get("ti"));
         assertEquals("ti", pkm.keySet().stream().collect(Collectors.joining(",")));
-        pkm.setPrefix("tu");
+        assertEquals("to", pkm.getCurrentPrefix());
+
+        pkm.popPrefix();
+        pkm.pushPrefix("tu");
         assertEquals(0, pkm.size());
         assertEquals(true, pkm.isEmpty());
         assertEquals("", pkm.keySet().stream().collect(Collectors.joining(",")));
+        assertEquals("tu", pkm.getCurrentPrefix());
     }
 
     public void testMultipleEntries() {
@@ -60,14 +69,15 @@ public class PrefixedKeyMapTest extends ConkwTestCase {
         assertEquals(false, pkm.isEmpty());
         assertEquals("2.1,2.2,2.3,toast,tortoise,tota,toti", pkm.keySet().stream().sorted().collect(Collectors.joining(",")));
 
-        pkm.setPrefix("tot");
+        pkm.pushPrefix("tot");
         assertEquals(2, pkm.size());
         assertEquals(false, pkm.isEmpty());
         assertMapContains(pkm, "i", "tutu");
         assertMapContains(pkm, "a", "totatutu");
         assertEquals("a,i", pkm.keySet().stream().sorted().collect(Collectors.joining(",")));
 
-        pkm.setPrefix("2.");
+        pkm.popPrefix();
+        pkm.pushPrefix("2.");
         assertEquals(3, pkm.size());
         assertEquals(false, pkm.isEmpty());
         assertMapContains(pkm, "1", "twentyone");
@@ -75,5 +85,53 @@ public class PrefixedKeyMapTest extends ConkwTestCase {
         assertMapContains(pkm, "3", "twentythree");
         assertEquals("1,2,3", pkm.keySet().stream().collect(Collectors.joining(",")));
         assertEquals("twentyone,twentythree,twentytwo", pkm.values().stream().sorted().collect(Collectors.joining(",")));
+    }
+
+    public void testMultipleLevels() {
+        Map<String, String> map = new HashMap<>();
+        map.put("1.1", "eleven");
+        map.put("2.1", "twentyone");
+        map.put("2.2", "twentytwo");
+        map.put("2.3", "twentythree");
+        map.put("2.1.a", "twentyonea");
+        map.put("2.1.b", "twentyoneb");
+        map.put("2.1.c", "twentyonec");
+        PrefixedKeyMap<String> pkm = new PrefixedKeyMap<>(map);
+
+        assertEquals(7, pkm.size());
+
+        pkm.pushPrefix("1.");
+        assertEquals(1, pkm.size());
+        pkm.pushPrefix("2");
+        assertEquals(0, pkm.size());
+
+        pkm.popPrefix();
+        pkm.popPrefix();
+        pkm.pushPrefix("2.");
+        assertEquals(6, pkm.size());
+        assertMapContains(pkm, "1", "twentyone");
+        assertMapContains(pkm, "2", "twentytwo");
+        assertMapContains(pkm, "3", "twentythree");
+        assertMapContains(pkm, "1.a", "twentyonea");
+        assertMapContains(pkm, "1.b", "twentyoneb");
+        assertMapContains(pkm, "1.c", "twentyonec");
+        pkm.pushPrefix("1.");
+        assertEquals(3, pkm.size());
+        assertMapContains(pkm, "a", "twentyonea");
+        assertMapContains(pkm, "b", "twentyoneb");
+        assertMapContains(pkm, "c", "twentyonec");
+
+        pkm.popPrefix();
+        assertEquals(6, pkm.size());
+        assertMapContains(pkm, "1", "twentyone");
+        assertMapContains(pkm, "2", "twentytwo");
+        assertMapContains(pkm, "3", "twentythree");
+        assertMapContains(pkm, "1.a", "twentyonea");
+        assertMapContains(pkm, "1.b", "twentyoneb");
+        assertMapContains(pkm, "1.c", "twentyonec");
+
+        pkm.popPrefix();
+        assertEquals(7, pkm.size());
+
     }
 }
