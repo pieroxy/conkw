@@ -1,5 +1,6 @@
 package net.pieroxy.conkw.accumulators;
 
+import com.sun.javaws.exceptions.InvalidArgumentException;
 import net.pieroxy.conkw.utils.StringUtil;
 
 public class AccumulatorUtils {
@@ -18,5 +19,38 @@ public class AccumulatorUtils {
                 .replaceAll(",", "_c")
                 .replaceAll("\\.", "_d")
                 ;
+    }
+
+    public static String parseMetricPathElement(String s) {
+        StringBuilder sb = new StringBuilder(s.length());
+        int status=0;
+        for (int i=0 ; i<s.length() ; i++) {
+            char c = s.charAt(i);
+            switch (status) {
+                case 0:
+                    if (c == '_') {
+                        status=1;
+                    } else {
+                        sb.append(c);
+                    }
+                    break;
+                case 1:
+                    switch (c) {
+                        case '_':
+                            sb.append("_");
+                            break;
+                        case 'c':
+                            sb.append(",");
+                            break;
+                        case 'd':
+                            sb.append(".");
+                            break;
+                        default:
+                            throw new RuntimeException("Unknown sequence _" + c);
+                    }
+                    status=0;
+            }
+        }
+        return sb.toString();
     }
 }
