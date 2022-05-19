@@ -1,5 +1,6 @@
 package net.pieroxy.conkw.accumulators;
 
+import net.pieroxy.conkw.utils.PrefixedKeyMap;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 import net.pieroxy.conkw.pub.mdlog.LogRecord;
 
@@ -143,6 +144,10 @@ public abstract class KeyAccumulator<A, T extends LogRecord> implements Accumula
                     .sorted(Comparator.comparingDouble(a -> -old.getData().get(a).getTotal()))
                     .map(a -> String.valueOf(a))
                     .collect(Collectors.joining(",")));
+  }
+
+  @Override
+  public void initializeFromData(PrefixedKeyMap<Double> num, PrefixedKeyMap<String> str) {
   }
 
   static class Tuple implements Comparable {

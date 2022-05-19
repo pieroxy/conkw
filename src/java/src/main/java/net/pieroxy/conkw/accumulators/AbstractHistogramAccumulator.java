@@ -1,6 +1,7 @@
 package net.pieroxy.conkw.accumulators;
 
 import net.pieroxy.conkw.pub.mdlog.LogRecord;
+import net.pieroxy.conkw.utils.PrefixedKeyMap;
 
 import java.util.List;
 import java.util.Map;
@@ -86,6 +87,11 @@ public abstract class AbstractHistogramAccumulator<T extends LogRecord> implemen
             }
         }
         str.put(AccumulatorUtils.addToMetricName(prefix, "histValues"), dims.toString());
+    }
+
+    @Override
+    public void initializeFromData(PrefixedKeyMap<Double> num, PrefixedKeyMap<String> str) {
+
     }
 }
 

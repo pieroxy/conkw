@@ -1,6 +1,8 @@
 package net.pieroxy.conkw.accumulators;
 
 import net.pieroxy.conkw.pub.mdlog.LogRecord;
+import net.pieroxy.conkw.utils.PrefixedKeyMap;
+import net.pieroxy.conkw.webapp.model.EmiInput;
 
 import java.util.Map;
 
@@ -18,8 +20,8 @@ public interface Accumulator<T extends LogRecord> {
    * @param acc
    */
   void sumWith(Accumulator acc);
+  void initializeFromData(PrefixedKeyMap<Double> num, PrefixedKeyMap<String> str);
   double getTotal();
   void prepareNewSession();
   void log(String prefix, Map<String, Double> num, Map<String, String> str);
-
 }

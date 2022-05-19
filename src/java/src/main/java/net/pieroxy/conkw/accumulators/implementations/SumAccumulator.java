@@ -3,6 +3,7 @@ package net.pieroxy.conkw.accumulators.implementations;
 import net.pieroxy.conkw.pub.mdlog.LogRecord;
 import net.pieroxy.conkw.accumulators.Accumulator;
 import net.pieroxy.conkw.accumulators.AccumulatorUtils;
+import net.pieroxy.conkw.utils.PrefixedKeyMap;
 
 import java.util.Map;
 
@@ -29,6 +30,11 @@ public class SumAccumulator<T extends LogRecord> implements Accumulator<T> {
   @Override
   public void sumWith(Accumulator acc) {
     lastValue += ((SumAccumulator)acc).lastValue;
+  }
+
+  @Override
+  public void initializeFromData(PrefixedKeyMap<Double> num, PrefixedKeyMap<String> str) {
+
   }
 
   @Override

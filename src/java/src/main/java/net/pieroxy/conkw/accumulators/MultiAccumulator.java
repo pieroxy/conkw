@@ -1,6 +1,7 @@
 package net.pieroxy.conkw.accumulators;
 
 import net.pieroxy.conkw.pub.mdlog.LogRecord;
+import net.pieroxy.conkw.utils.PrefixedKeyMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,11 @@ public class MultiAccumulator<T extends LogRecord> implements Accumulator<T> {
     for (int i=0 ; i<getLength() ; i++) {
       getAccumulator(i).sumWith(ma.getAccumulator(i));
     };
+  }
+
+  @Override
+  public void initializeFromData(PrefixedKeyMap<Double> num, PrefixedKeyMap<String> str) {
+    accumulators.stream().forEach(a -> a.initializeFromData(num,str));
   }
 
   @Override
