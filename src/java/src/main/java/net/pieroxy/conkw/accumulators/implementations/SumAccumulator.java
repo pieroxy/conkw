@@ -34,7 +34,9 @@ public class SumAccumulator<T extends LogRecord> implements Accumulator<T> {
 
   @Override
   public void initializeFromData(PrefixedKeyMap<Double> num, PrefixedKeyMap<String> str) {
-
+    Double value = num.get(AccumulatorUtils.cleanMetricPathElement(valueName) + "." + NAME);
+    if (value==null) this.value = 0;
+    else this.value = value;
   }
 
   @Override
