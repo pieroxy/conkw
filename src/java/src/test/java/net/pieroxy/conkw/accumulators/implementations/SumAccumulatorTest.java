@@ -15,6 +15,14 @@ public class SumAccumulatorTest extends ConkwTestCase {
         sa.prepareNewSession();
         assertEquals(19., sa.getTotal());
     }
+    public void testDefaultValue() {
+        SumAccumulator<Data> sa = new SumAccumulator<>("vvv", -10);
+        sa.add(new Data().addVal("vvv", 12.));
+        sa.add(new Data().addVal("abc", 155.).addVal("vvv", 7.));
+        sa.add(new Data().addVal("avvv", 7.));
+        sa.prepareNewSession();
+        assertEquals(9., sa.getTotal());
+    }
 }
 
 class Data implements LogRecord {
