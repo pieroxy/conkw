@@ -22,6 +22,7 @@ public class AccumulatorUtils {
     }
 
     public static String parseMetricPathElement(String s) {
+        if (s.indexOf("_")==-1) return s;
         StringBuilder sb = new StringBuilder(s.length());
         int status=0;
         for (int i=0 ; i<s.length() ; i++) {
