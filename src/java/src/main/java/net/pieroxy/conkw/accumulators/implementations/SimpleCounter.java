@@ -1,8 +1,8 @@
 package net.pieroxy.conkw.accumulators.implementations;
 
-import net.pieroxy.conkw.pub.mdlog.LogRecord;
 import net.pieroxy.conkw.accumulators.Accumulator;
 import net.pieroxy.conkw.accumulators.AccumulatorUtils;
+import net.pieroxy.conkw.pub.mdlog.LogRecord;
 import net.pieroxy.conkw.utils.PrefixedKeyMap;
 
 import java.util.Map;
@@ -38,7 +38,7 @@ public class SimpleCounter<T extends LogRecord> implements Accumulator<T> {
 
   @Override
   public void initializeFromData(PrefixedKeyMap<Double> num, PrefixedKeyMap<String> str) {
-
+    count = (int)(double)num.get(NAME);
   }
 
   @Override
