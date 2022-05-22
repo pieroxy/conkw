@@ -1,5 +1,6 @@
 package net.pieroxy.conkw.accumulators.implementations;
 
+import net.pieroxy.conkw.ConkwTestCase;
 import net.pieroxy.conkw.pub.mdlog.LogRecord;
 
 import java.util.HashMap;
@@ -32,4 +33,12 @@ class Data implements LogRecord {
   @Override
   public void close() {
   }
+
+  public void assertEquals(Data log2, ConkwTestCase tc) {
+    tc.assertEquals(log2.getValues().size(), getValues().size());
+    tc.assertEquals(log2.getDimensions().size(), getDimensions().size());
+    log2.getValues().entrySet().stream().forEach(e->tc.assertMapContains(log2.getValues(), e.getKey(), e.getValue()));
+    log2.getDimensions().entrySet().stream().forEach(e->tc.assertMapContains(log2.getDimensions(), e.getKey(), e.getValue()));
+  }
+
 }

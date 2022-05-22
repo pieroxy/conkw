@@ -10,9 +10,9 @@ public class NamedAccumulatorTest extends ConkwTestCase {
     na.prepareNewSession();
     assertEquals(12., na.getAccumulator().getTotal());
 
-    Log log = new Log();
-    na.log("", log.values, log.dimensions);
-    assertMapContains(log.values, "toto.value.sum", 12.);
+    Data log = new Data();
+    na.log("", log.getValues(), log.getDimensions());
+    assertMapContains(log.getValues(), "toto.value.sum", 12.);
   }
 
   public void testInitializeFromData() {
@@ -22,14 +22,14 @@ public class NamedAccumulatorTest extends ConkwTestCase {
     na.add(new Data().addVal("avvv", 7.));
     na.prepareNewSession();
 
-    Log log = new Log();
-    na.log("", log.values, log.dimensions);
+    Data log = new Data();
+    na.log("", log.getValues(), log.getDimensions());
     NamedAccumulator<Data> na2 = new NamedAccumulator("prefix", new SumAccumulator<>("vv.v", 0));
-    na2.initializeFromData(new PrefixedKeyMap<>(log.values), new PrefixedKeyMap<>(log.dimensions));
+    na2.initializeFromData(new PrefixedKeyMap<>(log.getValues()), new PrefixedKeyMap<>(log.getDimensions()));
     na2.prepareNewSession();
     assertEquals(9., na2.getTotal());
-    Log log2 = new Log();
-    na2.log("", log2.values, log2.dimensions);
+    Data log2 = new Data();
+    na2.log("", log2.getValues(), log2.getDimensions());
     log.assertEquals(log2, this);
   }
 
