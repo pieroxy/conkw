@@ -1,11 +1,7 @@
 package net.pieroxy.conkw.accumulators.implementations;
 
 import net.pieroxy.conkw.ConkwTestCase;
-import net.pieroxy.conkw.pub.mdlog.LogRecord;
 import net.pieroxy.conkw.utils.PrefixedKeyMap;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class SumAccumulatorTest extends ConkwTestCase {
     public void testSimple() {
@@ -31,41 +27,12 @@ public class SumAccumulatorTest extends ConkwTestCase {
         sa.add(new Data().addVal("avvv", 7.));
         sa.prepareNewSession();
 
-        Map<String,String> dims = new HashMap<>();
-        Map<String,Double> vals = new HashMap<>();
-        sa.log("", vals, dims);
+        Log log = new Log();
+        sa.log("", log.values, log.dimensions);
         SumAccumulator sa2 = new SumAccumulator("vv.v", 0);
-        sa2.initializeFromData(new PrefixedKeyMap<>(vals), new PrefixedKeyMap<>(dims));
+        sa2.initializeFromData(new PrefixedKeyMap<>(log.values), new PrefixedKeyMap<>(log.dimensions));
         sa2.prepareNewSession();
         assertEquals(9., sa2.getTotal());
     }
 }
 
-class Data implements LogRecord {
-    HashMap<String, String> dims = new HashMap<>();
-    HashMap<String, Double> vals = new HashMap<>();
-
-    public Data addDim(String name, String value) {
-        dims.put(name, value);
-        return this;
-    }
-
-    public Data addVal(String name, Double value) {
-        vals.put(name, value);
-        return this;
-    }
-
-    @Override
-    public Map<String, String> getDimensions() {
-        return dims;
-    }
-
-    @Override
-    public Map<String, Double> getValues() {
-        return vals;
-    }
-
-    @Override
-    public void close() {
-    }
-}
