@@ -2,7 +2,10 @@ package net.pieroxy.conkw.utils;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
 import java.util.stream.Collectors;
 
 public class PrefixedKeyMap<V> implements Map<String,V> {
@@ -98,7 +101,34 @@ public class PrefixedKeyMap<V> implements Map<String,V> {
     }
 
     @Override
-    public Set<Entry<String, V>> entrySet() {
-        throw new NotImplementedException();
+    public Set<Map.Entry<String, V>> entrySet() {
+        return src.entrySet().stream().filter(e -> e.getKey().startsWith(prefix)).map(e -> new Entry(e.getKey().substring(prefix.length()), e.getValue())).collect(Collectors.toSet());
+    }
+
+    private class Entry implements Map.Entry<String, V> {
+        private String key;
+        private V value;
+
+        public Entry(String key, V value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        @Override
+        public String getKey() {
+            return key;
+        }
+
+        @Override
+        public V getValue() {
+            return value;
+        }
+
+        @Override
+        public V setValue(V value) {
+            V oldValue = this.value;
+            this.value = value;
+            return oldValue;
+        }
     }
 }

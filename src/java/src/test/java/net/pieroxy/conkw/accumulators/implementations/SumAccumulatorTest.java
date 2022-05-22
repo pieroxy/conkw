@@ -33,6 +33,9 @@ public class SumAccumulatorTest extends ConkwTestCase {
         sa2.initializeFromData(new PrefixedKeyMap<>(log.values), new PrefixedKeyMap<>(log.dimensions));
         sa2.prepareNewSession();
         assertEquals(9., sa2.getTotal());
+        Log log2 = new Log();
+        sa2.log("", log2.values, log2.dimensions);
+        log.assertEquals(log2, this);
     }
 }
 
