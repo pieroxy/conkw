@@ -1,36 +1,39 @@
 package net.pieroxy.conkw.accumulators.implementations;
 
-import net.pieroxy.conkw.ConkwTestCase;
 import net.pieroxy.conkw.utils.PrefixedKeyMap;
 
-public class NamedAccumulatorTest extends ConkwTestCase {
-  public void testSimple() {
-    NamedAccumulator<Data> na = new NamedAccumulator<>("toto", new SumAccumulator<>("value", 0));
-    na.add(new Data().addVal("value", 12.));
-    na.prepareNewSession();
-    assertEquals(12., na.getAccumulator().getTotal());
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
-    Data log = new Data();
-    na.log("", log.getValues(), log.getDimensions());
-    assertMapContains(log.getValues(), "toto.value.sum", 12.);
+public class NamedAccumulatorTest extends AbstractAccumulatorTest<NamedAccumulator<Data>> {
+
+  @Override
+  protected NamedAccumulator<Data> buildAccumulator() {
+    return new NamedAccumulator<>("toto", new SumAccumulator<>("vv.v", -10));
   }
 
-  public void testInitializeFromData() {
-    NamedAccumulator<Data> na = new NamedAccumulator("prefix", new SumAccumulator<>("vv.v", -10));
-    na.add(new Data().addVal("vv.v", 12.));
-    na.add(new Data().addVal("abc", 155.).addVal("vv.v", 7.));
-    na.add(new Data().addVal("avvv", 7.));
-    na.prepareNewSession();
-
-    Data log = new Data();
-    na.log("", log.getValues(), log.getDimensions());
-    NamedAccumulator<Data> na2 = new NamedAccumulator("prefix", new SumAccumulator<>("vv.v", 0));
-    na2.initializeFromData(new PrefixedKeyMap<>(log.getValues()), new PrefixedKeyMap<>(log.getDimensions()));
-    na2.prepareNewSession();
-    assertEquals(9., na2.getTotal());
-    Data log2 = new Data();
-    na2.log("", log2.getValues(), log2.getDimensions());
-    log.assertEquals(log2, this);
+  @Override
+  protected Collection<Data> buildData() {
+    return Arrays.stream(new Data[]{
+            new Data().addVal("vv.v", 12.),
+            new Data().addVal("abc", 155.).addVal("vv.v", 7.),
+            new Data().addVal("avvv", 7.)
+    }).collect(Collectors.toList());
   }
 
+  @Override
+  protected void assertAccumulatorInternalState(NamedAccumulator<Data> acc) {
+    assertEquals(9., acc.getTotal());
+  }
+
+  @Override
+  protected void assertAccumulatorLog(Data log) {
+    assertMapContains(log.getValues(), "toto.vv_dv.sum", 9.);
+  }
+
+  @Override
+  public void test() {
+    super.testInitializeFromData();
+  }
 }
