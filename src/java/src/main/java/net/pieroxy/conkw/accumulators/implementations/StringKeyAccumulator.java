@@ -2,8 +2,14 @@ package net.pieroxy.conkw.accumulators.implementations;
 
 import net.pieroxy.conkw.pub.mdlog.LogRecord;
 import net.pieroxy.conkw.accumulators.*;
+import net.pieroxy.conkw.utils.PrefixedKeyMap;
+
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class StringKeyAccumulator<T extends LogRecord> extends KeyAccumulator<String, T> {
+  private final static Logger LOGGER = Logger.getLogger(StringKeyAccumulator.class.getName());
   public static final String NAME = "stringkey";
 
   public interface StringProvider<T> {
@@ -11,12 +17,10 @@ public class StringKeyAccumulator<T extends LogRecord> extends KeyAccumulator<St
   }
 
   private final String dimensionName;
-  private final AccumulatorProvider<T> ap;
 
   public StringKeyAccumulator(String dimensionName, AccumulatorProvider<T> ap) {
     super(ap);
     this.dimensionName = dimensionName;
-    this.ap = ap;
   }
 
   @Override
@@ -24,11 +28,27 @@ public class StringKeyAccumulator<T extends LogRecord> extends KeyAccumulator<St
     return AccumulatorUtils.cleanMetricPathElement(line.getDimensions().get(dimensionName));
   }
 
-  public String getDimensionName() {
-    return dimensionName;
+  @Override
+  public void initializeFromData(PrefixedKeyMap<Double> num, PrefixedKeyMap<String> str) {
+    String[]values = str.get("values").split(",");
+    current.setTotal(num.get("total"));
+
+    for (String k : values) {
+      Accumulator<T> acc = current.getData().getOrDefault(k, null);
+      if (acc==null) try {
+        current.getData().put(k, acc = buildNewAccumulator());
+        num.pushPrefix(k+".");
+        str.pushPrefix(k+".");
+        acc.initializeFromData(num,str);
+        num.popPrefix();
+        str.popPrefix();
+      } catch (Exception e) {
+        LOGGER.log(Level.SEVERE, "Cannot create accumulator", e);
+      }
+    });
   }
 
-  public AccumulatorProvider<T> getAp() {
-    return ap;
+  public String getDimensionName() {
+    return dimensionName;
   }
 }

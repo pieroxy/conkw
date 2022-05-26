@@ -17,9 +17,9 @@ import java.util.stream.Collectors;
  */
 public abstract class KeyAccumulator<A, T extends LogRecord> implements Accumulator<T> {
   private final static Logger LOGGER = Logger.getLogger(KeyAccumulator.class.getName());
-  private final AccumulatorProvider<T> provider;
+  private final AccumulatorProvider<T> __provider;
 
-  KeyAccumulatorData<A,T> current;
+  protected KeyAccumulatorData<A,T> current;
   KeyAccumulatorData<A,T> old;
   Map<A, Double> floatingWeights = HashMapPool.getInstance().borrow(HashMapPool.SIZE_UNKNOWN); // No possibility to predict
 
@@ -30,7 +30,7 @@ public abstract class KeyAccumulator<A, T extends LogRecord> implements Accumula
   }
 
   public KeyAccumulator(AccumulatorProvider<T> provider) {
-    this.provider = provider;
+    this.__provider = provider;
     current = new KeyAccumulatorData<>(HashMapPool.SIZE_UNKNOWN);
     old = new KeyAccumulatorData<>(HashMapPool.SIZE_UNKNOWN);
   }
@@ -40,6 +40,10 @@ public abstract class KeyAccumulator<A, T extends LogRecord> implements Accumula
     return old.total;
   }
 
+  protected Accumulator<T> buildNewAccumulator() throws Exception {
+    return __provider.getAccumulator();
+  }
+
   @Override
   public double add(T line) {
     A key = getKey(line);
@@ -47,7 +51,7 @@ public abstract class KeyAccumulator<A, T extends LogRecord> implements Accumula
 
     Accumulator<T> acc = current.getData().getOrDefault(key, null);
     if (acc==null) try {
-      current.getData().put(key, acc = provider.getAccumulator());
+      current.getData().put(key, acc = buildNewAccumulator());
     } catch (Exception e) {
       LOGGER.log(Level.SEVERE, "Cannot create accumulator", e);
     }
@@ -63,7 +67,7 @@ public abstract class KeyAccumulator<A, T extends LogRecord> implements Accumula
       Accumulator a = old.getData().get(entry.getKey());
       try {
         if (a == null) {
-          a = provider.getAccumulator();
+          a = buildNewAccumulator();
           old.getData().put(entry.getKey(), a);
         }
         a.sumWith(entry.getValue());
@@ -116,7 +120,7 @@ public abstract class KeyAccumulator<A, T extends LogRecord> implements Accumula
           if (keys.length() > 0) keys.append(',');
           keys.append(t.key);
         } else {
-          if (others == null) others = provider.getAccumulator();
+          if (others == null) others = buildNewAccumulator();
           others.sumWith(t.acc);
         }
       }
@@ -146,10 +150,6 @@ public abstract class KeyAccumulator<A, T extends LogRecord> implements Accumula
                     .collect(Collectors.joining(",")));
   }
 
-  @Override
-  public void initializeFromData(PrefixedKeyMap<Double> num, PrefixedKeyMap<String> str) {
-  }
-
   static class Tuple implements Comparable {
     String key;
     double value;
@@ -169,31 +169,36 @@ public abstract class KeyAccumulator<A, T extends LogRecord> implements Accumula
       return res;
     }
   }
+
+  protected class KeyAccumulatorData<A, T extends LogRecord> implements Closeable {
+    public KeyAccumulatorData(int size) {
+      this.data = HashMapPool.getInstance().borrow(size);
+    }
+
+    double total;
+    private Map<A, Accumulator<T>> data;
+
+    @Override
+    public void close() throws IOException {
+      Map m = data;
+      data = null;
+      HashMapPool.getInstance().giveBack(m);
+    }
+
+    public Map<A, Accumulator<T>> getData() {
+      return data;
+    }
+
+    public void replaceData(Map<A, Accumulator<T>> data) {
+      Map old = this.data;
+      this.data = HashMapPool.getInstance().borrow(data, (old.size()*100)/90); // Trying to account for more data.
+      HashMapPool.getInstance().giveBack(old);
+    }
+
+    public void setTotal(double total) {
+      this.total = total;
+    }
+  }
 }
 
 
-class KeyAccumulatorData<A, T extends LogRecord> implements Closeable {
-  public KeyAccumulatorData(int size) {
-    this.data = HashMapPool.getInstance().borrow(size);
-  }
-
-  double total;
-  private Map<A, Accumulator<T>> data;
-
-  @Override
-  public void close() throws IOException {
-    Map m = data;
-    data = null;
-    HashMapPool.getInstance().giveBack(m);
-  }
-
-  public Map<A, Accumulator<T>> getData() {
-    return data;
-  }
-
-  public void replaceData(Map<A, Accumulator<T>> data) {
-    Map old = this.data;
-    this.data = HashMapPool.getInstance().borrow(data, (old.size()*100)/90); // Trying to account for more data.
-    HashMapPool.getInstance().giveBack(old);
-  }
-}
