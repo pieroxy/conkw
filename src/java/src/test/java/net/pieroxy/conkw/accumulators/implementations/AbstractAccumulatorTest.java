@@ -12,7 +12,6 @@ public abstract class AbstractAccumulatorTest<T extends Accumulator<Data>> exten
     protected abstract Collection<Data> buildData();
     protected abstract void assertAccumulatorInternalState(T acc);
     protected abstract void assertAccumulatorLog(Data log);
-    public abstract void test();
 
     @Test
     public final void testInitializeFromData() {
