@@ -14,12 +14,11 @@ public class StringKeyAccumulatorTest extends AbstractAccumulatorTest<StringKeyA
 
     @Override
     protected Collection<Data> buildData() {
-        return Arrays.asList(new Data[]{
+        return Arrays.asList(
                 new Data().addDim("dim", "a").addVal("val", 12.),
                 new Data().addDim("dim", "a").addVal("val", 11.),
                 new Data().addDim("dim", "b").addVal("val", 10.),
-                new Data().addDim("dim", "c").addVal("val", 2.),
-        });
+                new Data().addDim("dim", "c").addVal("val", 2.));
     }
 
     @Override
@@ -38,6 +37,4 @@ public class StringKeyAccumulatorTest extends AbstractAccumulatorTest<StringKeyA
     public void test() {
         buildAccumulator().initializeFromData(new PrefixedKeyMap<>(new HashMap<>()), new PrefixedKeyMap<>(new HashMap<>()));
     }
-
-
 }

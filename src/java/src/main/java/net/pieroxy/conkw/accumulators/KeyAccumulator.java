@@ -1,8 +1,7 @@
 package net.pieroxy.conkw.accumulators;
 
-import net.pieroxy.conkw.utils.PrefixedKeyMap;
-import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 import net.pieroxy.conkw.pub.mdlog.LogRecord;
+import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -84,16 +83,14 @@ public abstract class KeyAccumulator<A, T extends LogRecord> implements Accumula
 
     if (getMaxBuckets()!=null) {
       // Keep all the keys ever seen
-      current.getData().entrySet().forEach(e -> {
-        Double d = floatingWeights.get(e.getKey());
-        if (d==null) d = 0d;
-        floatingWeights.put(e.getKey(), 0.9*d+e.getValue().getTotal());
-        e.getValue().prepareNewSession();
+      current.getData().forEach((key, value) -> {
+        Double d = floatingWeights.get(key);
+        if (d == null) d = 0d;
+        floatingWeights.put(key, 0.9 * d + value.getTotal());
+        value.prepareNewSession();
       });
     } else {
-      current.getData().entrySet().forEach(e -> {
-        e.getValue().prepareNewSession();
-      });
+      current.getData().forEach((key, value) -> value.prepareNewSession());
       current.getData().clear();
     }
     current.total = 0;
@@ -110,7 +107,7 @@ public abstract class KeyAccumulator<A, T extends LogRecord> implements Accumula
   void logStable(String prefix, Map<String, Double> num, Map<String, String> str) {
     try {
       Set<Tuple> tree = new TreeSet<>();
-      old.getData().entrySet().forEach(e -> tree.add(new Tuple(String.valueOf(e.getKey()), floatingWeights.getOrDefault(e.getKey(), 0d) + e.getValue().getTotal(), e.getValue())));
+      old.getData().forEach((key, value) -> tree.add(new Tuple(String.valueOf(key), floatingWeights.getOrDefault(key, 0d) + value.getTotal(), value)));
       StringBuilder keys = new StringBuilder();
       int detail = getMaxBuckets();
       Accumulator others = null;

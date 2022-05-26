@@ -8,27 +8,26 @@ import java.util.Collection;
 
 public class MultiAccumulatorTest extends AbstractAccumulatorTest<MultiAccumulator<Data>> {
     @Override
-    protected MultiAccumulator buildAccumulator() {
-        return new MultiAccumulator(new Accumulator[] {
-                new NamedAccumulator("sum0", new SumAccumulator("tosum", 0)),
-                new NamedAccumulator("sum10", new SumAccumulator("tosum", -10)),
-                new SimpleCounter()
+    protected MultiAccumulator<Data> buildAccumulator() {
+        return new MultiAccumulator<>(new Accumulator[]{
+                new NamedAccumulator<Data>("sum0", new SumAccumulator<>("tosum", 0)),
+                new NamedAccumulator<Data>("sum10", new SumAccumulator<>("tosum", -10)),
+                new SimpleCounter<Data>()
         });
     }
 
     @Override
     protected Collection<Data> buildData() {
-        return Arrays.asList(new Data[]{
+        return Arrays.asList(
                 new Data().addVal("tosum", 1.),
                 new Data().addVal("nottosum", 10.),
                 new Data().addVal("tosum", 1.),
                 new Data().addVal("tosum", 1.),
-                new Data().addVal("tosum", 1.),
-        });
+                new Data().addVal("tosum", 1.));
     }
 
     @Override
-    protected void assertAccumulatorInternalState(MultiAccumulator acc) {
+    protected void assertAccumulatorInternalState(MultiAccumulator<Data> acc) {
     }
 
     @Override

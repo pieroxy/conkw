@@ -2,7 +2,6 @@ package net.pieroxy.conkw.accumulators.implementations;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 public class NamedAccumulatorTest extends AbstractAccumulatorTest<NamedAccumulator<Data>> {
 
@@ -13,11 +12,10 @@ public class NamedAccumulatorTest extends AbstractAccumulatorTest<NamedAccumulat
 
   @Override
   protected Collection<Data> buildData() {
-    return Arrays.stream(new Data[]{
+    return Arrays.asList(
             new Data().addVal("vv.v", 12.),
             new Data().addVal("abc", 155.).addVal("vv.v", 7.),
-            new Data().addVal("avvv", 7.)
-    }).collect(Collectors.toList());
+            new Data().addVal("avvv", 7.));
   }
 
   @Override
