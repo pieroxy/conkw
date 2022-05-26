@@ -46,10 +46,5 @@ public class SumAccumulatorTest extends AbstractAccumulatorTest<SumAccumulator<D
     protected void assertAccumulatorLog(Data log) {
         assertMapContains(log.getValues(), "vv_dv.sum", 9.);
     }
-
-    @Override
-    public void test() {
-        super.testInitializeFromData();
-    }
 }
 

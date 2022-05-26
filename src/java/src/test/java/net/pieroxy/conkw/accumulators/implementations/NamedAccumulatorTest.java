@@ -27,9 +27,4 @@ public class NamedAccumulatorTest extends AbstractAccumulatorTest<NamedAccumulat
   protected void assertAccumulatorLog(Data log) {
     assertMapContains(log.getValues(), "toto.vv_dv.sum", 9.);
   }
-
-  @Override
-  public void test() {
-    super.testInitializeFromData();
-  }
 }

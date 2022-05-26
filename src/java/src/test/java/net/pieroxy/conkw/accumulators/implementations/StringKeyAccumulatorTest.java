@@ -33,8 +33,8 @@ public class StringKeyAccumulatorTest extends AbstractAccumulatorTest<StringKeyA
         assertMapContains(log.getValues(), "c.val.sum", 2.);
     }
 
-    @Override
     public void test() {
+        // This should not throw an exception
         buildAccumulator().initializeFromData(new PrefixedKeyMap<>(new HashMap<>()), new PrefixedKeyMap<>(new HashMap<>()));
     }
 }

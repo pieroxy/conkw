@@ -36,8 +36,4 @@ public class MultiAccumulatorTest extends AbstractAccumulatorTest<MultiAccumulat
         assertMapContains(log.getValues(), "sum10.tosum.sum", -6.);
         assertMapContains(log.getValues(), "sum0.tosum.sum", 4.);
     }
-
-    @Override
-    public void test() {
-    }
 }

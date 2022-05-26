@@ -36,9 +36,4 @@ public class SimpleCounterTest extends AbstractAccumulatorTest<SimpleCounter<Dat
   protected void assertAccumulatorLog(Data log) {
     assertMapContains(log.getValues(), "count", 123.);
   }
-
-  @Override
-  public void test() {
-
-  }
 }
