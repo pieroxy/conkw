@@ -4,15 +4,14 @@ import net.pieroxy.conkw.accumulators.Accumulator;
 import net.pieroxy.conkw.accumulators.AccumulatorCollector;
 import net.pieroxy.conkw.accumulators.parser.AccumulatorExpressionParser;
 import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
-import net.pieroxy.conkw.pub.mdlog.LogRecord;
+import net.pieroxy.conkw.pub.mdlog.DataRecord;
 import net.pieroxy.conkw.webapp.grabbers.logfile.listeners.LogListener;
 import net.pieroxy.conkw.pub.mdlog.LogParser;
 
-import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class TailLogFileGrabber<T extends LogRecord> extends AsyncGrabber<AccumulatorCollector<T>, TailLogFileGrabber.TailLogFileGrabberConfig<T>> implements LogListener<T> {
+public class TailLogFileGrabber<T extends DataRecord> extends AsyncGrabber<AccumulatorCollector<T>, TailLogFileGrabber.TailLogFileGrabberConfig<T>> implements LogListener<T> {
     private final static Logger LOGGER = Logger.getLogger(TailLogFileGrabber.class.getName());
 
     private RealTimeLogFileReader<T> reader;
@@ -68,7 +67,7 @@ public class TailLogFileGrabber<T extends LogRecord> extends AsyncGrabber<Accumu
         }
     }
 
-    public static class TailLogFileGrabberConfig<T extends LogRecord> {
+    public static class TailLogFileGrabberConfig<T extends DataRecord> {
         private String filename;
         private String parserClassName;
         private Accumulator accumulator;

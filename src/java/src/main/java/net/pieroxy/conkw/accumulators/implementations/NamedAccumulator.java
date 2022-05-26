@@ -2,12 +2,12 @@ package net.pieroxy.conkw.accumulators.implementations;
 
 import net.pieroxy.conkw.accumulators.Accumulator;
 import net.pieroxy.conkw.accumulators.AccumulatorUtils;
-import net.pieroxy.conkw.pub.mdlog.LogRecord;
+import net.pieroxy.conkw.pub.mdlog.DataRecord;
 import net.pieroxy.conkw.utils.PrefixedKeyMap;
 
 import java.util.Map;
 
-public class NamedAccumulator<T extends LogRecord> implements Accumulator<T> {
+public class NamedAccumulator<T extends DataRecord> implements Accumulator<T> {
   public static final String NAME = "name";
 
   private final String rootName;

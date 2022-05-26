@@ -4,13 +4,13 @@ import net.pieroxy.conkw.accumulators.Accumulator;
 import net.pieroxy.conkw.accumulators.AccumulatorProvider;
 import net.pieroxy.conkw.accumulators.AccumulatorUtils;
 import net.pieroxy.conkw.accumulators.KeyAccumulator;
-import net.pieroxy.conkw.pub.mdlog.LogRecord;
+import net.pieroxy.conkw.pub.mdlog.DataRecord;
 import net.pieroxy.conkw.utils.PrefixedKeyMap;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class StringKeyAccumulator<T extends LogRecord> extends KeyAccumulator<String, T> {
+public class StringKeyAccumulator<T extends DataRecord> extends KeyAccumulator<String, T> {
   private final static Logger LOGGER = Logger.getLogger(StringKeyAccumulator.class.getName());
   public static final String NAME = "stringkey";
 

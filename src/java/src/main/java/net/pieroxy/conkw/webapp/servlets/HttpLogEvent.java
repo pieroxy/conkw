@@ -1,6 +1,6 @@
 package net.pieroxy.conkw.webapp.servlets;
 
-import net.pieroxy.conkw.pub.mdlog.LogRecord;
+import net.pieroxy.conkw.pub.mdlog.DataRecord;
 
 import com.dslplatform.json.CompiledJson;
 
@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @CompiledJson(onUnknown = CompiledJson.Behavior.FAIL)
-public class HttpLogEvent implements LogRecord {
+public class HttpLogEvent implements DataRecord {
     public static final String SIZE="size";
     public static final String TIME="time";
     public static final String CONTENT_TYPE="contentType";

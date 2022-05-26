@@ -1,12 +1,12 @@
 package net.pieroxy.conkw.accumulators;
 
-import net.pieroxy.conkw.pub.mdlog.LogRecord;
+import net.pieroxy.conkw.pub.mdlog.DataRecord;
 import net.pieroxy.conkw.utils.PrefixedKeyMap;
 
 import java.util.List;
 import java.util.Map;
 
-public abstract class AbstractHistogramAccumulator<T extends LogRecord> implements Accumulator<T> {
+public abstract class AbstractHistogramAccumulator<T extends DataRecord> implements Accumulator<T> {
     Data data;
     Data lastData;
 

@@ -1,13 +1,13 @@
 package net.pieroxy.conkw.accumulators;
 
-import net.pieroxy.conkw.pub.mdlog.LogRecord;
+import net.pieroxy.conkw.pub.mdlog.DataRecord;
 import net.pieroxy.conkw.utils.PrefixedKeyMap;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class MultiAccumulator<T extends LogRecord> implements Accumulator<T> {
+public class MultiAccumulator<T extends DataRecord> implements Accumulator<T> {
   public static final String NAME = "multi";
 
   private final List<Accumulator<T>> accumulators = new ArrayList<>();

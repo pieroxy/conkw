@@ -1,6 +1,6 @@
 package net.pieroxy.conkw.accumulators;
 
-import net.pieroxy.conkw.pub.mdlog.LogRecord;
+import net.pieroxy.conkw.pub.mdlog.DataRecord;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 
 import java.io.Closeable;
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  * This abstract class will allow aggregations around a key and the number of occurrence of said key.
  * @param <A> The type of the key being considered.
  */
-public abstract class KeyAccumulator<A, T extends LogRecord> implements Accumulator<T> {
+public abstract class KeyAccumulator<A, T extends DataRecord> implements Accumulator<T> {
   private final static Logger LOGGER = Logger.getLogger(KeyAccumulator.class.getName());
   private final AccumulatorProvider<T> __provider;
 
@@ -167,7 +167,7 @@ public abstract class KeyAccumulator<A, T extends LogRecord> implements Accumula
     }
   }
 
-  protected class KeyAccumulatorData<A, T extends LogRecord> implements Closeable {
+  protected class KeyAccumulatorData<A, T extends DataRecord> implements Closeable {
     public KeyAccumulatorData(int size) {
       this.data = HashMapPool.getInstance().borrow(size);
     }

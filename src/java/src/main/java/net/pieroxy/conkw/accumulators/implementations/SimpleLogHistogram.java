@@ -1,6 +1,6 @@
 package net.pieroxy.conkw.accumulators.implementations;
 
-import net.pieroxy.conkw.pub.mdlog.LogRecord;
+import net.pieroxy.conkw.pub.mdlog.DataRecord;
 import net.pieroxy.conkw.accumulators.AbstractHistogramAccumulator;
 
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ public class SimpleLogHistogram extends AbstractHistogramAccumulator {
     }
 
     @Override
-    public Double getValue(LogRecord line) {
+    public Double getValue(DataRecord line) {
         return line.getValues().get(valueKey);
     }
 }

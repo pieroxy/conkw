@@ -1,12 +1,12 @@
 package net.pieroxy.conkw.accumulators.implementations;
 
 import net.pieroxy.conkw.ConkwTestCase;
-import net.pieroxy.conkw.pub.mdlog.LogRecord;
+import net.pieroxy.conkw.pub.mdlog.DataRecord;
 
 import java.util.HashMap;
 import java.util.Map;
 
-class Data implements LogRecord {
+class Data implements DataRecord {
   HashMap<String, String> dims = new HashMap<>();
   HashMap<String, Double> vals = new HashMap<>();
 

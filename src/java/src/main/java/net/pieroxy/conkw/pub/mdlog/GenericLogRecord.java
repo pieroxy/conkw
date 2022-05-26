@@ -3,7 +3,7 @@ package net.pieroxy.conkw.pub.mdlog;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GenericLogRecord implements LogRecord {
+public class GenericLogRecord implements DataRecord {
     private final Map<String, String> dims = new HashMap<>();
     private final Map<String, Double> vals = new HashMap<>();
 

@@ -1,6 +1,6 @@
 package net.pieroxy.conkw.webapp.grabbers.logfile;
 
-import net.pieroxy.conkw.pub.mdlog.LogRecord;
+import net.pieroxy.conkw.pub.mdlog.DataRecord;
 import net.pieroxy.conkw.webapp.grabbers.logfile.listeners.LogListener;
 import net.pieroxy.conkw.pub.mdlog.LogParser;
 
@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  * Note that is the file is not found, it will wait until the file exists and start following it.
  * Note that if the file exists, its content up to the execution of the program will be skipped.
  */
-public class RealTimeLogFileReader<T extends LogRecord> extends Thread {
+public class RealTimeLogFileReader<T extends DataRecord> extends Thread {
     private final static Logger LOGGER = Logger.getLogger(RealTimeLogFileReader.class.getName());
 
     private String fullFilename;

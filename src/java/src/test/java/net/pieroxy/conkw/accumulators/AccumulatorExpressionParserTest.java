@@ -4,7 +4,7 @@ import net.pieroxy.conkw.ConkwTestCase;
 import net.pieroxy.conkw.accumulators.implementations.*;
 import net.pieroxy.conkw.accumulators.parser.AccumulatorExpressionParser;
 import net.pieroxy.conkw.accumulators.parser.ParseException;
-import net.pieroxy.conkw.pub.mdlog.LogRecord;
+import net.pieroxy.conkw.pub.mdlog.DataRecord;
 import net.pieroxy.conkw.pub.mdlog.GenericLogRecord;
 
 import java.util.HashMap;
@@ -18,7 +18,7 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         SumAccumulator sa = (SumAccumulator) a;
         assertEquals("aa", sa.getValueName());
 
-        LogRecord lr = new GenericLogRecord().addValue("size", 33d).addValue("aa", 34d);
+        DataRecord lr = new GenericLogRecord().addValue("size", 33d).addValue("aa", 34d);
         a.add(lr);
         a.add(lr);
         Map<String, Double> result = new HashMap<>();
@@ -37,7 +37,7 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         assertNotNull(a);
         assertEquals(SimpleCounter.class, a.getClass());
 
-        LogRecord lr = new GenericLogRecord().addValue("size", 33d).addValue("aa", 34d);
+        DataRecord lr = new GenericLogRecord().addValue("size", 33d).addValue("aa", 34d);
         a.add(lr);
         Map<String, Double> result = new HashMap<>();
         a.prepareNewSession();
@@ -55,7 +55,7 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         assertNotNull(na.getAccumulator());
         assertEquals(SimpleCounter.class, na.getAccumulator().getClass());
 
-        LogRecord lr = new GenericLogRecord().addValue("size", 33d).addValue("aa", 34d);
+        DataRecord lr = new GenericLogRecord().addValue("size", 33d).addValue("aa", 34d);
         a.add(lr);
         a.add(lr);
         a.add(lr);
@@ -78,7 +78,7 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         assertEquals(SimpleCounter.class, na.getAccumulator(0).getClass());
         assertEquals(SumAccumulator.class, na.getAccumulator(1).getClass());
 
-        LogRecord lr = new GenericLogRecord().addValue("size", 33d).addValue("aa", 34d);
+        DataRecord lr = new GenericLogRecord().addValue("size", 33d).addValue("aa", 34d);
         a.add(lr);
         a.add(lr);
         a.add(lr);
@@ -98,7 +98,7 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         StringKeyAccumulator na = (StringKeyAccumulator)a;
         assertEquals("uri", na.getDimensionName());
 
-        LogRecord lr = new GenericLogRecord().addValue("size", 33d).addValue("aa", 34d);
+        DataRecord lr = new GenericLogRecord().addValue("size", 33d).addValue("aa", 34d);
         a.add(lr);
         a.add(lr);
         a.add(lr);
@@ -124,7 +124,7 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         assertEquals("uri", na.getDimensionName());
         assertEquals(3, (int)na.getMaxBuckets());
 
-        LogRecord lr = new GenericLogRecord().addDimension("uri", "a");
+        DataRecord lr = new GenericLogRecord().addDimension("uri", "a");
         for (int i=0 ; i<10 ; i++) a.add(lr);
         lr = new GenericLogRecord().addDimension("uri", "bleh");
         for (int i=0 ; i<7 ; i++) a.add(lr);
@@ -154,7 +154,7 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         assertEquals(4, na.getThresholds().size());
         assertEquals("size", na.getValueKey());
 
-        LogRecord lr = new GenericLogRecord().addValue("size", 0.5);
+        DataRecord lr = new GenericLogRecord().addValue("size", 0.5);
         for (int i=0 ; i<10 ; i++) a.add(lr);
         lr = new GenericLogRecord().addValue("size", 0.7);
         for (int i=0 ; i<9 ; i++) a.add(lr);
@@ -187,7 +187,7 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         assertEquals(12, na.getThresholds().size());
         assertEquals("size", na.getValueKey());
 
-        LogRecord lr = new GenericLogRecord().addValue("size", 0.5);
+        DataRecord lr = new GenericLogRecord().addValue("size", 0.5);
         for (int i=0 ; i<10 ; i++) a.add(lr);
         lr = new GenericLogRecord().addValue("size", 0.7);
         for (int i=0 ; i<9 ; i++) a.add(lr);
@@ -230,7 +230,7 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         assertEquals(6, na.getThresholds().size());
         assertEquals("size", na.getValueKey());
 
-        LogRecord lr = new GenericLogRecord().addValue("size", 0.5);
+        DataRecord lr = new GenericLogRecord().addValue("size", 0.5);
         for (int i=0 ; i<10 ; i++) a.add(lr);
         lr = new GenericLogRecord().addValue("size", 0.7);
         for (int i=0 ; i<9 ; i++) a.add(lr);

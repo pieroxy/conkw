@@ -2,12 +2,12 @@ package net.pieroxy.conkw.accumulators.implementations;
 
 import net.pieroxy.conkw.accumulators.Accumulator;
 import net.pieroxy.conkw.accumulators.AccumulatorUtils;
-import net.pieroxy.conkw.pub.mdlog.LogRecord;
+import net.pieroxy.conkw.pub.mdlog.DataRecord;
 import net.pieroxy.conkw.utils.PrefixedKeyMap;
 
 import java.util.Map;
 
-public class SimpleCounter<T extends LogRecord> implements Accumulator<T> {
+public class SimpleCounter<T extends DataRecord> implements Accumulator<T> {
   public static final String NAME = "count";
   int count;
   int oldCount;
@@ -21,7 +21,7 @@ public class SimpleCounter<T extends LogRecord> implements Accumulator<T> {
   }
 
   @Override
-  public double add(LogRecord line) {
+  public double add(DataRecord line) {
     count++;
     return 1d;
   }

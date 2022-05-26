@@ -2,7 +2,7 @@ package net.pieroxy.conkw.accumulators.parser;
 
 import net.pieroxy.conkw.accumulators.*;
 import net.pieroxy.conkw.accumulators.implementations.*;
-import net.pieroxy.conkw.pub.mdlog.LogRecord;
+import net.pieroxy.conkw.pub.mdlog.DataRecord;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AccumulatorExpressionParser<T extends LogRecord> {
-    private static final Map<String, Class<? extends Accumulator<? extends LogRecord>>> accumulatorsByName = new HashMap();
+public class AccumulatorExpressionParser<T extends DataRecord> {
+    private static final Map<String, Class<? extends Accumulator<? extends DataRecord>>> accumulatorsByName = new HashMap();
 
     public Accumulator<T> parse(String expr) {
         return parseAccumulator(expr, new int[]{0});
@@ -27,7 +27,7 @@ public class AccumulatorExpressionParser<T extends LogRecord> {
                 break;
             }
         }
-        Class<? extends Accumulator<? extends LogRecord>> a = accumulatorsByName.get(name.toString());
+        Class<? extends Accumulator<? extends DataRecord>> a = accumulatorsByName.get(name.toString());
         if (a == null) throw new ParseException("Unknown accumulator '" + name + "'.", expr, index);
         TypedConstructor constructor = getConstructorParams(a);
         index[0]+=name.length();
@@ -112,7 +112,7 @@ public class AccumulatorExpressionParser<T extends LogRecord> {
                 return ar;
             }
             case ACCUMULATOR: {
-                Accumulator<LogRecord>[] ar = new Accumulator[result.size()];
+                Accumulator<DataRecord>[] ar = new Accumulator[result.size()];
                 int i = 0;
                 for (Object o : result) {
                     ar[i++] = (Accumulator) o;
@@ -158,8 +158,8 @@ public class AccumulatorExpressionParser<T extends LogRecord> {
         return i;
     }
 
-    private TypedConstructor getConstructorParams(Class<? extends Accumulator<? extends LogRecord>> a) {
-        Constructor<Accumulator<LogRecord>>[] cs = (Constructor<Accumulator<LogRecord>>[]) a.getConstructors();
+    private TypedConstructor getConstructorParams(Class<? extends Accumulator<? extends DataRecord>> a) {
+        Constructor<Accumulator<DataRecord>>[] cs = (Constructor<Accumulator<DataRecord>>[]) a.getConstructors();
         if (cs.length == 1) return buildTypedConstructor(cs[0]);
         if (cs.length == 2) {
             if (cs[0].getParameterCount() == 0) return buildTypedConstructor(cs[1]);
@@ -168,7 +168,7 @@ public class AccumulatorExpressionParser<T extends LogRecord> {
         throw new RuntimeException("Class "+a.getName()+" must have only one constructor with parameters.");
     }
 
-    private TypedConstructor buildTypedConstructor(Constructor<Accumulator<LogRecord>> c) {
+    private TypedConstructor buildTypedConstructor(Constructor<Accumulator<DataRecord>> c) {
         Class<?>[] types = c.getParameterTypes();
         TypedConstructor tc = new TypedConstructor();
         tc.c = c;
@@ -201,7 +201,7 @@ public class AccumulatorExpressionParser<T extends LogRecord> {
         String name = null;
         try {
             name = String.valueOf(acc.getDeclaredField("NAME").get(null));
-            accumulatorsByName.put(name, (Class<Accumulator<? extends LogRecord>>)acc);
+            accumulatorsByName.put(name, (Class<Accumulator<? extends DataRecord>>)acc);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

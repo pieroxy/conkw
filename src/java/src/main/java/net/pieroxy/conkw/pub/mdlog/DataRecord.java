@@ -4,7 +4,7 @@ import net.pieroxy.conkw.pub.misc.ConkwCloseable;
 
 import java.util.Map;
 
-public interface LogRecord extends ConkwCloseable {
+public interface DataRecord extends ConkwCloseable {
     String COUNT = "count";
 
     Map<String, String> getDimensions();

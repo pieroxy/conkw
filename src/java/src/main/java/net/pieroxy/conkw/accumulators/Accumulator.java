@@ -1,8 +1,7 @@
 package net.pieroxy.conkw.accumulators;
 
-import net.pieroxy.conkw.pub.mdlog.LogRecord;
+import net.pieroxy.conkw.pub.mdlog.DataRecord;
 import net.pieroxy.conkw.utils.PrefixedKeyMap;
-import net.pieroxy.conkw.webapp.model.EmiInput;
 
 import java.util.Map;
 
@@ -10,7 +9,7 @@ import java.util.Map;
  * This interface defines the behavior of an accumulator. An accumulator will accumulate (and aggregate) data
  * and will then be able to log its data on the Maps provided.
  */
-public interface Accumulator<T extends LogRecord> {
+public interface Accumulator<T extends DataRecord> {
   double add(T line);
 
   /**
