@@ -1,12 +1,11 @@
 package net.pieroxy.conkw.accumulators.implementations;
 
-import net.pieroxy.conkw.utils.PrefixedKeyMap;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class SimpleCounterTest extends AbstractAccumulatorTest<SimpleCounter<Data>> {
+
   public void testSimple() {
     SimpleCounter<Data> sa = new SimpleCounter<>();
     sa.add(new Data().addVal("vvv", 12.));

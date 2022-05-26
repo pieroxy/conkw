@@ -1,15 +1,10 @@
 package net.pieroxy.conkw.accumulators.implementations;
 
-import net.pieroxy.conkw.ConkwTestCase;
-import net.pieroxy.conkw.utils.PrefixedKeyMap;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
 public class SumAccumulatorTest extends AbstractAccumulatorTest<SumAccumulator<Data>> {
-
-
 
     public void testSimple() {
         SumAccumulator<Data> sa = new SumAccumulator<>("vvv", 0);

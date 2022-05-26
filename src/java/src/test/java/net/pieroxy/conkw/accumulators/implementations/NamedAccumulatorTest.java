@@ -1,7 +1,5 @@
 package net.pieroxy.conkw.accumulators.implementations;
 
-import net.pieroxy.conkw.utils.PrefixedKeyMap;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
