@@ -15,7 +15,7 @@ public abstract class AbstractAccumulatorTest<T extends Accumulator<Data>> exten
     public abstract void test();
 
     @Test
-    public void testInitializeFromData() {
+    public final void testInitializeFromData() {
         T accumulator1 = buildAccumulator();
         buildData().stream().forEach(accumulator1::add);
         accumulator1.prepareNewSession();
