@@ -30,7 +30,9 @@ public class StringKeyAccumulator<T extends LogRecord> extends KeyAccumulator<St
 
   @Override
   public void initializeFromData(PrefixedKeyMap<Double> num, PrefixedKeyMap<String> str) {
-    String[]values = str.get("values").split(",");
+    String valuesAsString = str.get("values");
+    if (valuesAsString == null) return;
+    String[]values = valuesAsString.split(",");
     current.setTotal(num.get("total"));
 
     for (String k : values) {
@@ -45,7 +47,7 @@ public class StringKeyAccumulator<T extends LogRecord> extends KeyAccumulator<St
       } catch (Exception e) {
         LOGGER.log(Level.SEVERE, "Cannot create accumulator", e);
       }
-    });
+    }
   }
 
   public String getDimensionName() {
