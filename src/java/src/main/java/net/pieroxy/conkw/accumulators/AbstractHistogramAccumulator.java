@@ -4,11 +4,10 @@ import net.pieroxy.conkw.pub.mdlog.DataRecord;
 import net.pieroxy.conkw.utils.PrefixedKeyMap;
 
 import java.util.List;
-import java.util.Map;
 
 public abstract class AbstractHistogramAccumulator<T extends DataRecord> implements Accumulator<T> {
-    Data data;
-    Data lastData;
+    HistogramData data;
+    HistogramData lastData;
 
     public abstract List<Double> getThresholds();
     public abstract Double getValue(T line);
@@ -17,8 +16,8 @@ public abstract class AbstractHistogramAccumulator<T extends DataRecord> impleme
      * Needs to be called before any operation and after getThresholds is set to return the thresholds.
      */
     protected void init() {
-        data = new Data(getThresholds().size()+1);
-        lastData = new Data(getThresholds().size()+1);
+        data = new HistogramData(getThresholds().size()+1);
+        lastData = new HistogramData(getThresholds().size()+1);
     }
 
     @Override
@@ -95,12 +94,12 @@ public abstract class AbstractHistogramAccumulator<T extends DataRecord> impleme
     }
 }
 
-class Data {
+class HistogramData {
     double globalSum;
     double globalCount;
     double[]histogram = null;
 
-    void copyFrom(Data d) {
+    void copyFrom(HistogramData d) {
         if (d == null) {
             globalCount = globalSum = 0;
         } else {
@@ -110,7 +109,7 @@ class Data {
         }
     }
 
-    public Data(int size) {
+    public HistogramData(int size) {
         this.histogram = new double[size];
     }
 }
