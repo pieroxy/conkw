@@ -97,14 +97,14 @@ public abstract class KeyAccumulator<A, T extends DataRecord> implements Accumul
   }
 
   @Override
-  public void log(String prefix, Map<String, Double> num, Map<String, String> str) {
+  public void log(String prefix, DataRecord record) {
     if (getMaxBuckets()==null)
-      logSimple(prefix, num, str);
+      logSimple(prefix, record);
     else
-      logStable(prefix, num, str);
+      logStable(prefix, record);
   }
 
-  void logStable(String prefix, Map<String, Double> num, Map<String, String> str) {
+  void logStable(String prefix, DataRecord record) {
     try {
       Set<Tuple> tree = new TreeSet<>();
       old.getData().forEach((key, value) -> tree.add(new Tuple(String.valueOf(key), floatingWeights.getOrDefault(key, 0d) + value.getTotal(), value)));
@@ -113,7 +113,7 @@ public abstract class KeyAccumulator<A, T extends DataRecord> implements Accumul
       Accumulator others = null;
       for (Tuple t : tree) {
         if (detail-- > 0) {
-          t.acc.log(AccumulatorUtils.addToMetricName(prefix, String.valueOf(t.key)), num, str);
+          t.acc.log(AccumulatorUtils.addToMetricName(prefix, String.valueOf(t.key)), record);
           if (keys.length() > 0) keys.append(',');
           keys.append(t.key);
         } else {
@@ -122,25 +122,25 @@ public abstract class KeyAccumulator<A, T extends DataRecord> implements Accumul
         }
       }
       if (others!=null) {
-        others.log(AccumulatorUtils.addToMetricName(prefix, "others"), num, str);
+        others.log(AccumulatorUtils.addToMetricName(prefix, "others"), record);
         if (keys.length() > 0) keys.append(',');
         keys.append("others");
       }
-      num.put(AccumulatorUtils.addToMetricName(prefix, "total"), old.total);
-      str.put(AccumulatorUtils.addToMetricName(prefix, "values"), keys.toString());
+      record.getValues().put(AccumulatorUtils.addToMetricName(prefix, "total"), old.total);
+      record.getDimensions().put(AccumulatorUtils.addToMetricName(prefix, "values"), keys.toString());
     } catch (Exception e) {
       LOGGER.log(Level.SEVERE, "", e);
     }
   }
 
-  public void logSimple(String prefix, Map<String, Double> num, Map<String, String> str) {
+  public void logSimple(String prefix, DataRecord record) {
     for (Map.Entry<A, Accumulator<T>> entry : old.getData().entrySet()) {
-      entry.getValue().log(AccumulatorUtils.addToMetricName(prefix, String.valueOf(entry.getKey())), num, str);
+      entry.getValue().log(AccumulatorUtils.addToMetricName(prefix, String.valueOf(entry.getKey())), record);
     }
-    num.put(AccumulatorUtils.addToMetricName(prefix, "total"), old.total);
+    record.getValues().put(AccumulatorUtils.addToMetricName(prefix, "total"), old.total);
     List<A> values = new ArrayList<>();
     values.addAll(old.getData().keySet());
-    str.put(AccumulatorUtils.addToMetricName(prefix, "values"),
+    record.getDimensions().put(AccumulatorUtils.addToMetricName(prefix, "values"),
             values.stream()
                     .sorted(Comparator.comparingDouble(a -> -old.getData().get(a).getTotal()))
                     .map(a -> String.valueOf(a))

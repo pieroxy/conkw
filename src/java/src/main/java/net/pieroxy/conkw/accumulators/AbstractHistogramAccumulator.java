@@ -66,12 +66,12 @@ public abstract class AbstractHistogramAccumulator<T extends DataRecord> impleme
     }
 
     @Override
-    public void log(String prefix, Map<String, Double> num, Map<String, String> str) {
-        num.put(AccumulatorUtils.addToMetricName(prefix, "total"), lastData.globalSum);
-        num.put(AccumulatorUtils.addToMetricName(prefix, "count"), lastData.globalCount);
+    public void log(String prefix, DataRecord record) {
+        record.getValues().put(AccumulatorUtils.addToMetricName(prefix, "total"), lastData.globalSum);
+        record.getValues().put(AccumulatorUtils.addToMetricName(prefix, "count"), lastData.globalCount);
 
         if (lastData.globalCount>0)
-            num.put(AccumulatorUtils.addToMetricName(prefix, "avg"), lastData.globalSum/lastData.globalCount);
+            record.getValues().put(AccumulatorUtils.addToMetricName(prefix, "avg"), lastData.globalSum/lastData.globalCount);
 
         List<Double> thresholds = getThresholds();
         StringBuilder dims = new StringBuilder();
@@ -79,14 +79,14 @@ public abstract class AbstractHistogramAccumulator<T extends DataRecord> impleme
             double current = lastData.histogram[i];
             if (i>0) dims.append(",");
             if (i==lastData.histogram.length-1) {
-                num.put(AccumulatorUtils.addToMetricName(prefix, "above", "histValue"), current);
+                record.getValues().put(AccumulatorUtils.addToMetricName(prefix, "above", "histValue"), current);
                 dims.append(AccumulatorUtils.cleanMetricPathElement("above"));
             } else {
-                num.put(AccumulatorUtils.addToMetricName(prefix, String.valueOf(thresholds.get(i)), "histValue"), current);
+                record.getValues().put(AccumulatorUtils.addToMetricName(prefix, String.valueOf(thresholds.get(i)), "histValue"), current);
                 dims.append(AccumulatorUtils.cleanMetricPathElement(String.valueOf(thresholds.get(i))));
             }
         }
-        str.put(AccumulatorUtils.addToMetricName(prefix, "histValues"), dims.toString());
+        record.getDimensions().put(AccumulatorUtils.addToMetricName(prefix, "histValues"), dims.toString());
     }
 
     @Override

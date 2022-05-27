@@ -6,7 +6,7 @@ import net.pieroxy.conkw.pub.mdlog.DataRecord;
 import java.util.HashMap;
 import java.util.Map;
 
-class Data implements DataRecord {
+public class Data implements DataRecord {
   HashMap<String, String> dims = new HashMap<>();
   HashMap<String, Double> vals = new HashMap<>();
 

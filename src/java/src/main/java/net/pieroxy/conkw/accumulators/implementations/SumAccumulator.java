@@ -45,8 +45,8 @@ public class SumAccumulator<T extends DataRecord> implements Accumulator<T> {
   }
 
   @Override
-  public void log(String prefix, Map<String, Double> data, Map<String, String> str) {
-    data.put(AccumulatorUtils.addToMetricName(prefix, valueName, NAME), lastValue);
+  public void log(String prefix, DataRecord record) {
+    record.getValues().put(AccumulatorUtils.addToMetricName(prefix, valueName, NAME), lastValue);
   }
 
   @Override

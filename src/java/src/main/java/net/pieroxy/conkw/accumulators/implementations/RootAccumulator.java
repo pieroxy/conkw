@@ -51,9 +51,9 @@ public class RootAccumulator<T extends DataRecord> implements Accumulator<T> {
   }
 
   @Override
-  public synchronized void log(String prefix, Map<String, Double> data, Map<String, String> str) {
-    data.put(AccumulatorUtils.addToMetricName(prefix, ELAPSED), (double)lastPeriod);
-    accumulator.log(prefix, data, str);
+  public synchronized void log(String prefix, DataRecord record) {
+    record.getValues().put(AccumulatorUtils.addToMetricName(prefix, ELAPSED), (double)lastPeriod);
+    accumulator.log(prefix, record);
   }
 
   @Override

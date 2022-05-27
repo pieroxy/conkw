@@ -31,7 +31,7 @@ public class AccumulatorCollector<T extends DataRecord> implements Collector {
     ResponseData res ;
     try (ResponseData rd = sc.getDataCopy()) {
       res = new ResponseData(grabber, System.currentTimeMillis(), rd.getNum().size(), rd.getStr().size());
-      accumulator.log("", res.getNum(), res.getStr());
+      accumulator.log("", res);
       rd.getNum().entrySet().forEach(entry -> res.addMetric(entry.getKey(), entry.getValue()));
       rd.getStr().entrySet().forEach(entry -> res.addMetric(entry.getKey(), entry.getValue()));
       rd.getErrors().forEach(entry -> res.addError(entry));

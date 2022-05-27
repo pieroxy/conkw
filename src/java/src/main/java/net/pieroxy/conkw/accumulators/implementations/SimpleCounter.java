@@ -27,8 +27,8 @@ public class SimpleCounter<T extends DataRecord> implements Accumulator<T> {
   }
 
   @Override
-  public void log(String prefix, Map<String, Double> data, Map<String, String> str) {
-    data.put(AccumulatorUtils.addToMetricName(prefix, NAME), (double)oldCount);
+  public void log(String prefix, DataRecord record) {
+    record.getValues().put(AccumulatorUtils.addToMetricName(prefix, NAME), (double)oldCount);
   }
 
   @Override

@@ -51,8 +51,8 @@ public class NamedAccumulator<T extends DataRecord> implements Accumulator<T> {
   }
 
   @Override
-  public synchronized void log(String prefix, Map<String, Double> data, Map<String, String> str) {
-    accumulator.log(AccumulatorUtils.addToMetricName(prefix, rootName), data, str);
+  public synchronized void log(String prefix, DataRecord record) {
+    accumulator.log(AccumulatorUtils.addToMetricName(prefix, rootName), record);
   }
 
   @Override

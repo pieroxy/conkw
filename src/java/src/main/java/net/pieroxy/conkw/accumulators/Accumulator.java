@@ -22,5 +22,5 @@ public interface Accumulator<T extends DataRecord> {
   void initializeFromData(PrefixedKeyMap<Double> num, PrefixedKeyMap<String> str);
   double getTotal();
   void prepareNewSession();
-  void log(String prefix, Map<String, Double> num, Map<String, String> str);
+  void log(String prefix, DataRecord record);
 }

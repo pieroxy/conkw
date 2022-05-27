@@ -3,6 +3,7 @@ package net.pieroxy.conkw.webapp.model;
 import com.dslplatform.json.CompiledJson;
 import com.dslplatform.json.JsonAttribute;
 import net.pieroxy.conkw.grabbersBase.Grabber;
+import net.pieroxy.conkw.pub.mdlog.DataRecord;
 import net.pieroxy.conkw.pub.misc.ConkwCloseable;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapStringDoubleConverter;
@@ -17,7 +18,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 @CompiledJson(onUnknown = CompiledJson.Behavior.IGNORE)
-public class ResponseData implements ConkwCloseable {
+public class ResponseData implements ConkwCloseable, DataRecord {
   private final static Logger LOGGER = Logger.getLogger(ResponseData.class.getName());
 
   private long timestamp;
@@ -308,5 +309,15 @@ public class ResponseData implements ConkwCloseable {
 
   public boolean isOpened() {
     return opened;
+  }
+
+  @Override
+  public Map<String, String> getDimensions() {
+    return getStr();
+  }
+
+  @Override
+  public Map<String, Double> getValues() {
+    return getNum();
   }
 }

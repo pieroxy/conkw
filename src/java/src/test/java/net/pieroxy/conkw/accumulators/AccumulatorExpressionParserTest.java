@@ -2,6 +2,7 @@ package net.pieroxy.conkw.accumulators;
 
 import net.pieroxy.conkw.ConkwTestCase;
 import net.pieroxy.conkw.accumulators.implementations.*;
+import net.pieroxy.conkw.accumulators.implementations.Data;
 import net.pieroxy.conkw.accumulators.parser.AccumulatorExpressionParser;
 import net.pieroxy.conkw.accumulators.parser.ParseException;
 import net.pieroxy.conkw.pub.mdlog.DataRecord;
@@ -21,15 +22,15 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         DataRecord lr = new GenericLogRecord().addValue("size", 33d).addValue("aa", 34d);
         a.add(lr);
         a.add(lr);
-        Map<String, Double> result = new HashMap<>();
+        DataRecord result = new Data();
         a.prepareNewSession();
-        a.log("", result, new HashMap<>());
-        assertMapContains(result, "aa.sum", 68d);
+        a.log("", result);
+        assertMapContains(result.getValues(), "aa.sum", 68d);
         lr = new GenericLogRecord().addValue("size", 33d).addValue("ab", 34d);
         a.add(lr);
         a.prepareNewSession();
-        a.log("", result, new HashMap<>());
-        assertEquals(1000d, result.get("aa.sum"));
+        a.log("", result);
+        assertEquals(1000d, result.getValues().get("aa.sum"));
     }
 
     public void testCount() {
@@ -39,10 +40,10 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
 
         DataRecord lr = new GenericLogRecord().addValue("size", 33d).addValue("aa", 34d);
         a.add(lr);
-        Map<String, Double> result = new HashMap<>();
+        DataRecord result = new Data();
         a.prepareNewSession();
-        a.log("", result, new HashMap<>());
-        assertEquals(1d, result.get("count"));
+        a.log("", result);
+        assertEquals(1d, result.getValues().get("count"));
     }
 
     public void testNamed() {
@@ -60,10 +61,10 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         a.add(lr);
         a.add(lr);
         a.add(lr);
-        Map<String, Double> result = new HashMap<>();
+        DataRecord result = new Data();
         a.prepareNewSession();
-        a.log("", result, new HashMap<>());
-        assertMapContains(result, "toto.count", 4d);
+        a.log("", result);
+        assertMapContains(result.getValues(), "toto.count", 4d);
     }
 
     public void testMulti() {
@@ -83,11 +84,11 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         a.add(lr);
         a.add(lr);
         a.add(lr);
-        Map<String, Double> result = new HashMap<>();
+        DataRecord result = new Data();
         a.prepareNewSession();
-        a.log("", result, new HashMap<>());
-        assertMapContains(result, "count", 4d);
-        assertMapContains(result, "aa.sum", 34*4d);
+        a.log("", result);
+        assertMapContains(result.getValues(), "count", 4d);
+        assertMapContains(result.getValues(), "aa.sum", 34*4d);
     }
 
     public void testStringKey() {
@@ -106,13 +107,12 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         lr = new GenericLogRecord().addValue("size", 33d).addValue("aa", 34d).addDimension("uri", "bleh");
         a.add(lr);
         a.add(lr);
-        Map<String, Double> num = new HashMap<>();
-        Map<String, String> str = new HashMap<>();
+        Data data = new Data();
         a.prepareNewSession();
-        a.log("", num, str);
-        assertMapContains(num, "null.count", 4d);
-        assertMapContains(num, "bleh.count", 2d);
-        assertMapContains(str, "values", "null,bleh");
+        a.log("", data);
+        assertMapContains(data.getValues(), "null.count", 4d);
+        assertMapContains(data.getValues(), "bleh.count", 2d);
+        assertMapContains(data.getDimensions(), "values", "null,bleh");
     }
 
     public void testStableKey() {
@@ -134,15 +134,14 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         for (int i=0 ; i<1 ; i++) a.add(lr);
         lr = new GenericLogRecord().addDimension("uri", "blyh");
         for (int i=0 ; i<70 ; i++) a.add(lr);
-        Map<String, Double> num = new HashMap<>();
-        Map<String, Double> str = new HashMap<>();
+        Data data = new Data();
         a.prepareNewSession();
-        a.log("", num, str);
-        assertMapContains(str, "values", "blyh,a,bleh,others");
-        assertMapContains(num, "blyh.count", 70d);
-        assertMapContains(num, "a.count", 10d);
-        assertMapContains(num, "bleh.count", 7d);
-        assertMapContains(num, "others.count", 3d);
+        a.log("", data);
+        assertMapContains(data.getDimensions(), "values", "blyh,a,bleh,others");
+        assertMapContains(data.getValues(), "blyh.count", 70d);
+        assertMapContains(data.getValues(), "a.count", 10d);
+        assertMapContains(data.getValues(), "bleh.count", 7d);
+        assertMapContains(data.getValues(), "others.count", 3d);
     }
 
     public void testSimpleLog10Histogram() {
@@ -166,16 +165,15 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         for (int i=0 ; i<6 ; i++) a.add(lr);
         lr = new GenericLogRecord().addValue("size", 100);
         for (int i=0 ; i<4 ; i++) a.add(lr);
-        Map<String, Double> num = new HashMap<>();
-        Map<String, Double> str = new HashMap<>();
+        Data data = new Data();
         a.prepareNewSession();
-        a.log("", num, str);
-        assertMapContains(num, "1_d0.histValue", 19d);
-        assertMapContains(num, "10_d0.histValue", 0d);
-        assertMapContains(num, "100_d0.histValue", 12d);
-        assertMapContains(num, "1000_d0.histValue", 7d);
-        assertMapContains(num, "above.histValue", 6d);
-        assertMapContains(str, "histValues", "1_d0,10_d0,100_d0,1000_d0,above");
+        a.log("", data);
+        assertMapContains(data.getValues(), "1_d0.histValue", 19d);
+        assertMapContains(data.getValues(), "10_d0.histValue", 0d);
+        assertMapContains(data.getValues(), "100_d0.histValue", 12d);
+        assertMapContains(data.getValues(), "1000_d0.histValue", 7d);
+        assertMapContains(data.getValues(), "above.histValue", 6d);
+        assertMapContains(data.getDimensions(), "histValues", "1_d0,10_d0,100_d0,1000_d0,above");
     }
 
     public void testSimpleLog2Histogram() {
@@ -201,24 +199,23 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         for (int i=0 ; i<4 ; i++) a.add(lr);
         lr = new GenericLogRecord().addValue("size", 2500);
         for (int i=0 ; i<1 ; i++) a.add(lr);
-        Map<String, Double> num = new HashMap<>();
-        Map<String, Double> str = new HashMap<>();
+        Data data = new Data();
         a.prepareNewSession();
-        a.log("", num, str);
-        assertMapContains(num, "1_d0.histValue", 19d);
-        assertMapContains(num, "2_d0.histValue", 0d);
-        assertMapContains(num, "4_d0.histValue", 0d);
-        assertMapContains(num, "8_d0.histValue", 0d);
-        assertMapContains(num, "16_d0.histValue", 0d);
-        assertMapContains(num, "32_d0.histValue", 0d);
-        assertMapContains(num, "64_d0.histValue", 8d);
-        assertMapContains(num, "128_d0.histValue", 4d);
-        assertMapContains(num, "256_d0.histValue", 7d);
-        assertMapContains(num, "512_d0.histValue", 0d);
-        assertMapContains(num, "1024_d0.histValue", 0d);
-        assertMapContains(num, "2048_d0.histValue", 6d);
-        assertMapContains(num, "above.histValue", 1d);
-        assertMapContains(str, "histValues", "1_d0,2_d0,4_d0,8_d0,16_d0,32_d0,64_d0,128_d0,256_d0,512_d0,1024_d0,2048_d0,above");
+        a.log("", data);
+        assertMapContains(data.getValues(), "1_d0.histValue", 19d);
+        assertMapContains(data.getValues(), "2_d0.histValue", 0d);
+        assertMapContains(data.getValues(), "4_d0.histValue", 0d);
+        assertMapContains(data.getValues(), "8_d0.histValue", 0d);
+        assertMapContains(data.getValues(), "16_d0.histValue", 0d);
+        assertMapContains(data.getValues(), "32_d0.histValue", 0d);
+        assertMapContains(data.getValues(), "64_d0.histValue", 8d);
+        assertMapContains(data.getValues(), "128_d0.histValue", 4d);
+        assertMapContains(data.getValues(), "256_d0.histValue", 7d);
+        assertMapContains(data.getValues(), "512_d0.histValue", 0d);
+        assertMapContains(data.getValues(), "1024_d0.histValue", 0d);
+        assertMapContains(data.getValues(), "2048_d0.histValue", 6d);
+        assertMapContains(data.getValues(), "above.histValue", 1d);
+        assertMapContains(data.getDimensions(), "histValues", "1_d0,2_d0,4_d0,8_d0,16_d0,32_d0,64_d0,128_d0,256_d0,512_d0,1024_d0,2048_d0,above");
     }
 
     public void testSimpleLog125Histogram() {
@@ -242,21 +239,20 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         for (int i=0 ; i<6 ; i++) a.add(lr);
         lr = new GenericLogRecord().addValue("size", 100);
         for (int i=0 ; i<4 ; i++) a.add(lr);
-        Map<String, Double> num = new HashMap<>();
-        Map<String, Double> str = new HashMap<>();
+        Data data = new Data();
         a.prepareNewSession();
-        a.log("", num, str);
-        assertMapContains(num, "10_d0.histValue", 19d);
-        assertMapContains(num, "20_d0.histValue", 0d);
-        assertMapContains(num, "50_d0.histValue", 0d);
-        assertMapContains(num, "100_d0.histValue", 12d);
-        assertMapContains(num, "200_d0.histValue", 7d);
-        assertMapContains(num, "500_d0.histValue", 0d);
-        assertMapContains(num, "above.histValue", 6d);
-        assertMapContains(num, "count", 44d);
-        assertMapContains(num, "total", 8266.3d);
-        assertMapContains(num, "avg", 8266.3d/44);
-        assertMapContains(str, "histValues", "10_d0,20_d0,50_d0,100_d0,200_d0,500_d0,above");
+        a.log("", data);
+        assertMapContains(data.getValues(), "10_d0.histValue", 19d);
+        assertMapContains(data.getValues(), "20_d0.histValue", 0d);
+        assertMapContains(data.getValues(), "50_d0.histValue", 0d);
+        assertMapContains(data.getValues(), "100_d0.histValue", 12d);
+        assertMapContains(data.getValues(), "200_d0.histValue", 7d);
+        assertMapContains(data.getValues(), "500_d0.histValue", 0d);
+        assertMapContains(data.getValues(), "above.histValue", 6d);
+        assertMapContains(data.getValues(), "count", 44d);
+        assertMapContains(data.getValues(), "total", 8266.3d);
+        assertMapContains(data.getValues(), "avg", 8266.3d/44);
+        assertMapContains(data.getDimensions(), "histValues", "10_d0,20_d0,50_d0,100_d0,200_d0,500_d0,above");
     }
 
     // TODO Needs some more cases

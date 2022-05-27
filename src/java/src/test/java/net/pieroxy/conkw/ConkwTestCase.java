@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 public abstract class ConkwTestCase extends TestCase {
-    public void assertMapContains(Map<?,?> data, Object key, Object value) {
+    public  <K,V> void assertMapContains(Map<K,V> data, K key, V value) {
         if (data.containsKey(key)) {
             assertEquals("Looking for key " + key, value, data.get(key));
         } else {
@@ -18,7 +18,7 @@ public abstract class ConkwTestCase extends TestCase {
         }
     }
 
-    public void assertMapDoesNotContain(Map<?,?> data, Object key) { {
+    public <K> void assertMapDoesNotContain(Map<K,?> data, K key) { {
         if (data.containsKey(key)) {
             String msg = "Key '"+key+"' found in map with value '"+data.get(key)+"'";
             fail(msg);

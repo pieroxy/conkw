@@ -21,14 +21,14 @@ public abstract class AbstractAccumulatorTest<T extends Accumulator<Data>> exten
         assertAccumulatorInternalState(accumulator1);
 
         Data log = new Data();
-        accumulator1.log("", log.getValues(), log.getDimensions());
+        accumulator1.log("", log);
         assertAccumulatorLog(log);
         T accumulator2 = buildAccumulator();
         accumulator2.initializeFromData(new PrefixedKeyMap<>(log.getValues()), new PrefixedKeyMap<>(log.getDimensions()));
         accumulator2.prepareNewSession();
         assertAccumulatorInternalState(accumulator2);
         Data log2 = new Data();
-        accumulator2.log("", log2.getValues(), log2.getDimensions());
+        accumulator2.log("", log2);
         log.assertEquals(log2, this);
         assertAccumulatorLog(log2);
     }

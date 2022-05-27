@@ -1,6 +1,5 @@
 package net.pieroxy.conkw.accumulators;
 
-import com.sun.javaws.exceptions.InvalidArgumentException;
 import net.pieroxy.conkw.utils.StringUtil;
 
 public class AccumulatorUtils {

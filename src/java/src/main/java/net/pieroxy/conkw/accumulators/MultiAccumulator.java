@@ -60,7 +60,7 @@ public class MultiAccumulator<T extends DataRecord> implements Accumulator<T> {
   }
 
   @Override
-  public void log(String prefix, Map<String, Double> num, Map<String, String> str) {
-    for (Accumulator<T> acc : accumulators) acc.log(prefix, num, str);
+  public void log(String prefix, DataRecord record) {
+    for (Accumulator<T> acc : accumulators) acc.log(prefix, record);
   }
 }
