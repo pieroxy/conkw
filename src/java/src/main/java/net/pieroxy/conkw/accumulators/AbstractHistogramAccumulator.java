@@ -1,7 +1,7 @@
 package net.pieroxy.conkw.accumulators;
 
 import net.pieroxy.conkw.pub.mdlog.DataRecord;
-import net.pieroxy.conkw.utils.prefixeddata.PrefixedKeyMap;
+import net.pieroxy.conkw.utils.prefixeddata.PrefixedDataRecord;
 
 import java.util.List;
 
@@ -89,8 +89,7 @@ public abstract class AbstractHistogramAccumulator<T extends DataRecord> impleme
     }
 
     @Override
-    public void initializeFromData(PrefixedKeyMap<Double> num, PrefixedKeyMap<String> str) {
-
+    public void initializeFromData(PrefixedDataRecord r) {
     }
 }
 

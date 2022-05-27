@@ -1,7 +1,7 @@
 package net.pieroxy.conkw.accumulators;
 
 import net.pieroxy.conkw.pub.mdlog.DataRecord;
-import net.pieroxy.conkw.utils.prefixeddata.PrefixedKeyMap;
+import net.pieroxy.conkw.utils.prefixeddata.PrefixedDataRecord;
 
 /**
  * This interface defines the behavior of an accumulator. An accumulator will accumulate (and aggregate) data
@@ -17,7 +17,7 @@ public interface Accumulator<T extends DataRecord> {
    * @param acc
    */
   void sumWith(Accumulator acc);
-  void initializeFromData(PrefixedKeyMap<Double> num, PrefixedKeyMap<String> str);
+  void initializeFromData(PrefixedDataRecord record);
   double getTotal();
   void prepareNewSession();
   void log(String prefix, DataRecord record);

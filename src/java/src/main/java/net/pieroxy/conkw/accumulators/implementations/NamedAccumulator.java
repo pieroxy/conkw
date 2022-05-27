@@ -3,7 +3,7 @@ package net.pieroxy.conkw.accumulators.implementations;
 import net.pieroxy.conkw.accumulators.Accumulator;
 import net.pieroxy.conkw.accumulators.AccumulatorUtils;
 import net.pieroxy.conkw.pub.mdlog.DataRecord;
-import net.pieroxy.conkw.utils.prefixeddata.PrefixedKeyMap;
+import net.pieroxy.conkw.utils.prefixeddata.PrefixedDataRecord;
 
 public class NamedAccumulator<T extends DataRecord> implements Accumulator<T> {
   public static final String NAME = "name";
@@ -35,12 +35,10 @@ public class NamedAccumulator<T extends DataRecord> implements Accumulator<T> {
   }
 
   @Override
-  public void initializeFromData(PrefixedKeyMap<Double> num, PrefixedKeyMap<String> str) {
-    num.pushPrefix(rootName + ".");
-    str.pushPrefix(rootName + ".");
-    accumulator.initializeFromData(num,str);
-    num.popPrefix();
-    str.popPrefix();
+  public void initializeFromData(PrefixedDataRecord record) {
+    record.pushPrefix(rootName + ".");
+    accumulator.initializeFromData(record);
+    record.popPrefix();
   }
 
   @Override

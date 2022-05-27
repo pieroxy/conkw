@@ -2,7 +2,7 @@ package net.pieroxy.conkw.accumulators.implementations;
 
 import net.pieroxy.conkw.ConkwTestCase;
 import net.pieroxy.conkw.accumulators.Accumulator;
-import net.pieroxy.conkw.utils.prefixeddata.PrefixedKeyMap;
+import net.pieroxy.conkw.utils.prefixeddata.PrefixedDataRecordImpl;
 import org.junit.Test;
 
 import java.util.Collection;
@@ -24,7 +24,7 @@ public abstract class AbstractAccumulatorTest<T extends Accumulator<Data>> exten
         accumulator1.log("", log);
         assertAccumulatorLog(log);
         T accumulator2 = buildAccumulator();
-        accumulator2.initializeFromData(new PrefixedKeyMap<>(log.getValues()), new PrefixedKeyMap<>(log.getDimensions()));
+        accumulator2.initializeFromData(new PrefixedDataRecordImpl(log));
         accumulator2.prepareNewSession();
         assertAccumulatorInternalState(accumulator2);
         Data log2 = new Data();

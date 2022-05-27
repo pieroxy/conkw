@@ -1,7 +1,7 @@
 package net.pieroxy.conkw.accumulators;
 
 import net.pieroxy.conkw.pub.mdlog.DataRecord;
-import net.pieroxy.conkw.utils.prefixeddata.PrefixedKeyMap;
+import net.pieroxy.conkw.utils.prefixeddata.PrefixedDataRecord;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,8 +42,8 @@ public class MultiAccumulator<T extends DataRecord> implements Accumulator<T> {
   }
 
   @Override
-  public void initializeFromData(PrefixedKeyMap<Double> num, PrefixedKeyMap<String> str) {
-    accumulators.stream().forEach(a -> a.initializeFromData(num,str));
+  public void initializeFromData(PrefixedDataRecord record) {
+    accumulators.stream().forEach(a -> a.initializeFromData(record));
   }
 
   @Override

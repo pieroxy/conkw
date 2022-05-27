@@ -1,6 +1,8 @@
 package net.pieroxy.conkw.utils.prefixeddata;
 
+import net.pieroxy.conkw.pub.misc.ConkwCloseable;
 import net.pieroxy.conkw.utils.StringUtil;
+import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Collection;
@@ -9,7 +11,7 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.stream.Collectors;
 
-public class PrefixedKeyMap<V> implements Map<String,V> {
+public class PrefixedKeyMap<V> implements Map<String,V>, ConkwCloseable {
     private final Map<String,V> src;
     private String prefix = "";
     private Stack<String> prefixes = new Stack<>();
@@ -104,6 +106,11 @@ public class PrefixedKeyMap<V> implements Map<String,V> {
     @Override
     public Set<Map.Entry<String, V>> entrySet() {
         return src.entrySet().stream().filter(e -> e.getKey().startsWith(prefix)).map(e -> new Entry(e.getKey().substring(prefix.length()), e.getValue())).collect(Collectors.toSet());
+    }
+
+    @Override
+    public void close() {
+        HashMapPool.getInstance().giveBack(src);
     }
 
     private class Entry implements Map.Entry<String, V> {

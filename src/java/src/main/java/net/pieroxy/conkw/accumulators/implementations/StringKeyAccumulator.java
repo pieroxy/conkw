@@ -5,7 +5,7 @@ import net.pieroxy.conkw.accumulators.AccumulatorProvider;
 import net.pieroxy.conkw.accumulators.AccumulatorUtils;
 import net.pieroxy.conkw.accumulators.KeyAccumulator;
 import net.pieroxy.conkw.pub.mdlog.DataRecord;
-import net.pieroxy.conkw.utils.prefixeddata.PrefixedKeyMap;
+import net.pieroxy.conkw.utils.prefixeddata.PrefixedDataRecord;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,21 +31,19 @@ public class StringKeyAccumulator<T extends DataRecord> extends KeyAccumulator<S
   }
 
   @Override
-  public void initializeFromData(PrefixedKeyMap<Double> num, PrefixedKeyMap<String> str) {
-    String valuesAsString = str.get("values");
+  public void initializeFromData(PrefixedDataRecord record) {
+    String valuesAsString = record.getDimensions().get("values");
     if (valuesAsString == null) return;
     String[]values = valuesAsString.split(",");
-    current.setTotal(num.get("total"));
+    current.setTotal(record.getValues().get("total"));
 
     for (String k : values) {
       Accumulator<T> acc = current.getData().getOrDefault(k, null);
       if (acc==null) try {
         current.getData().put(k, acc = buildNewAccumulator());
-        num.pushPrefix(k+".");
-        str.pushPrefix(k+".");
-        acc.initializeFromData(num,str);
-        num.popPrefix();
-        str.popPrefix();
+        record.pushPrefix(k+".");
+        acc.initializeFromData(record);
+        record.popPrefix();
       } catch (Exception e) {
         LOGGER.log(Level.SEVERE, "Cannot create accumulator", e);
       }

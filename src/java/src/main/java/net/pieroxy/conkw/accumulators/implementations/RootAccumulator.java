@@ -3,9 +3,7 @@ package net.pieroxy.conkw.accumulators.implementations;
 import net.pieroxy.conkw.accumulators.Accumulator;
 import net.pieroxy.conkw.accumulators.AccumulatorUtils;
 import net.pieroxy.conkw.pub.mdlog.DataRecord;
-import net.pieroxy.conkw.utils.prefixeddata.PrefixedKeyMap;
-
-import java.util.Map;
+import net.pieroxy.conkw.utils.prefixeddata.PrefixedDataRecord;
 
 public class RootAccumulator<T extends DataRecord> implements Accumulator<T> {
   public static final String NAME = "root";
@@ -41,8 +39,8 @@ public class RootAccumulator<T extends DataRecord> implements Accumulator<T> {
   }
 
   @Override
-  public void initializeFromData(PrefixedKeyMap<Double> num, PrefixedKeyMap<String> str) {
-    accumulator.initializeFromData(num,str);
+  public void initializeFromData(PrefixedDataRecord record) {
+    accumulator.initializeFromData(record);
   }
 
   @Override

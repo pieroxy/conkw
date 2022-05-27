@@ -1,10 +1,9 @@
 package net.pieroxy.conkw.accumulators.implementations;
 
-import net.pieroxy.conkw.utils.prefixeddata.PrefixedKeyMap;
+import net.pieroxy.conkw.utils.prefixeddata.PrefixedDataRecordImpl;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 
 public class StringKeyAccumulatorTest extends AbstractAccumulatorTest<StringKeyAccumulator<Data>> {
     @Override
@@ -35,6 +34,6 @@ public class StringKeyAccumulatorTest extends AbstractAccumulatorTest<StringKeyA
 
     public void test() {
         // This should not throw an exception
-        buildAccumulator().initializeFromData(new PrefixedKeyMap<>(new HashMap<>()), new PrefixedKeyMap<>(new HashMap<>()));
+        buildAccumulator().initializeFromData(new PrefixedDataRecordImpl());
     }
 }

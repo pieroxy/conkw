@@ -1,11 +1,9 @@
 package net.pieroxy.conkw.accumulators.implementations;
 
-import net.pieroxy.conkw.pub.mdlog.DataRecord;
 import net.pieroxy.conkw.accumulators.Accumulator;
 import net.pieroxy.conkw.accumulators.AccumulatorUtils;
-import net.pieroxy.conkw.utils.prefixeddata.PrefixedKeyMap;
-
-import java.util.Map;
+import net.pieroxy.conkw.pub.mdlog.DataRecord;
+import net.pieroxy.conkw.utils.prefixeddata.PrefixedDataRecord;
 
 public class SumAccumulator<T extends DataRecord> implements Accumulator<T> {
   public static final String NAME = "sum";
@@ -33,8 +31,8 @@ public class SumAccumulator<T extends DataRecord> implements Accumulator<T> {
   }
 
   @Override
-  public void initializeFromData(PrefixedKeyMap<Double> num, PrefixedKeyMap<String> str) {
-    Double value = num.get(AccumulatorUtils.cleanMetricPathElement(valueName) + "." + NAME);
+  public void initializeFromData(PrefixedDataRecord record) {
+    Double value = record.getValues().get(AccumulatorUtils.cleanMetricPathElement(valueName) + "." + NAME);
     if (value==null) this.value = 0;
     else this.value = value;
   }

@@ -1,7 +1,6 @@
 package net.pieroxy.conkw.config;
 
 import com.dslplatform.json.CompiledJson;
-import com.dslplatform.json.JsonObject;
 
 import java.util.Map;
 
