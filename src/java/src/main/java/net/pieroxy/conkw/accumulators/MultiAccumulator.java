@@ -1,11 +1,10 @@
 package net.pieroxy.conkw.accumulators;
 
 import net.pieroxy.conkw.pub.mdlog.DataRecord;
-import net.pieroxy.conkw.utils.PrefixedKeyMap;
+import net.pieroxy.conkw.utils.prefixeddata.PrefixedKeyMap;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class MultiAccumulator<T extends DataRecord> implements Accumulator<T> {
   public static final String NAME = "multi";

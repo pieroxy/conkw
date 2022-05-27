@@ -3,9 +3,7 @@ package net.pieroxy.conkw.accumulators.implementations;
 import net.pieroxy.conkw.accumulators.Accumulator;
 import net.pieroxy.conkw.accumulators.AccumulatorUtils;
 import net.pieroxy.conkw.pub.mdlog.DataRecord;
-import net.pieroxy.conkw.utils.PrefixedKeyMap;
-
-import java.util.Map;
+import net.pieroxy.conkw.utils.prefixeddata.PrefixedKeyMap;
 
 public class SimpleCounter<T extends DataRecord> implements Accumulator<T> {
   public static final String NAME = "count";

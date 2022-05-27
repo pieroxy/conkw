@@ -2,7 +2,7 @@ package net.pieroxy.conkw.accumulators.implementations;
 
 import net.pieroxy.conkw.ConkwTestCase;
 import net.pieroxy.conkw.accumulators.Accumulator;
-import net.pieroxy.conkw.utils.PrefixedKeyMap;
+import net.pieroxy.conkw.utils.prefixeddata.PrefixedKeyMap;
 import org.junit.Test;
 
 import java.util.Collection;

@@ -1,7 +1,7 @@
 package net.pieroxy.conkw.utils;
 
-import junit.framework.TestCase;
 import net.pieroxy.conkw.ConkwTestCase;
+import net.pieroxy.conkw.utils.prefixeddata.PrefixedKeyMap;
 
 import java.util.HashMap;
 import java.util.Map;

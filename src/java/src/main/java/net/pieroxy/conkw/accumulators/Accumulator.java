@@ -1,9 +1,7 @@
 package net.pieroxy.conkw.accumulators;
 
 import net.pieroxy.conkw.pub.mdlog.DataRecord;
-import net.pieroxy.conkw.utils.PrefixedKeyMap;
-
-import java.util.Map;
+import net.pieroxy.conkw.utils.prefixeddata.PrefixedKeyMap;
 
 /**
  * This interface defines the behavior of an accumulator. An accumulator will accumulate (and aggregate) data

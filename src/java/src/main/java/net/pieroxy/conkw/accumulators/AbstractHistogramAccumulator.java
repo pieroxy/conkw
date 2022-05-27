@@ -1,7 +1,7 @@
 package net.pieroxy.conkw.accumulators;
 
 import net.pieroxy.conkw.pub.mdlog.DataRecord;
-import net.pieroxy.conkw.utils.PrefixedKeyMap;
+import net.pieroxy.conkw.utils.prefixeddata.PrefixedKeyMap;
 
 import java.util.List;
 

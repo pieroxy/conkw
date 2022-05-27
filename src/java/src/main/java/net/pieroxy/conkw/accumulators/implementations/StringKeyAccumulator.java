@@ -5,7 +5,7 @@ import net.pieroxy.conkw.accumulators.AccumulatorProvider;
 import net.pieroxy.conkw.accumulators.AccumulatorUtils;
 import net.pieroxy.conkw.accumulators.KeyAccumulator;
 import net.pieroxy.conkw.pub.mdlog.DataRecord;
-import net.pieroxy.conkw.utils.PrefixedKeyMap;
+import net.pieroxy.conkw.utils.prefixeddata.PrefixedKeyMap;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

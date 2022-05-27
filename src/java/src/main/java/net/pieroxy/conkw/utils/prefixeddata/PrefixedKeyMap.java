@@ -1,5 +1,6 @@
-package net.pieroxy.conkw.utils;
+package net.pieroxy.conkw.utils.prefixeddata;
 
+import net.pieroxy.conkw.utils.StringUtil;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Collection;
