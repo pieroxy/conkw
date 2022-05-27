@@ -1,33 +1,39 @@
 package net.pieroxy.conkw.collectors;
 
 import net.pieroxy.conkw.grabbersBase.Grabber;
-import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.util.Collection;
 import java.util.logging.Level;
 
+import static net.pieroxy.conkw.utils.pools.hashmap.HashMapPool.SIZE_UNKNOWN;
+
 public class SimpleCollectorImpl implements SimpleCollector {
     private ResponseData collectionInProgress;
     private ResponseData completedCollection;
-    private String configKey;
-    protected Grabber grabber;
+    private final String configKey;
+    protected Grabber<?, ?> grabber;
 
-    public SimpleCollectorImpl(Grabber g, String configKey) {
+    public SimpleCollectorImpl(Grabber<?, ?> g, String configKey) {
         this.grabber = g;
-        this.completedCollection = new ResponseData(g, System.currentTimeMillis(), HashMapPool.SIZE_UNKNOWN, HashMapPool.SIZE_UNKNOWN);
-        this.collectionInProgress = new ResponseData(g, System.currentTimeMillis(), HashMapPool.SIZE_UNKNOWN, HashMapPool.SIZE_UNKNOWN);
+        this.completedCollection = new ResponseData(g, System.currentTimeMillis(), SIZE_UNKNOWN, SIZE_UNKNOWN);
+        this.collectionInProgress = new ResponseData(g, System.currentTimeMillis(), SIZE_UNKNOWN, SIZE_UNKNOWN);
         this.configKey = configKey;
     }
 
     @Override
     public synchronized void collectionDone() {
         try (ResponseData tmp = completedCollection) {
-            if (tmp == null) grabber.log(Level.WARNING, "completedCollection is null");
-            if (tmp.isClosed()) grabber.log(Level.WARNING, "completedCollection was already closed");
-            if (!tmp.isOpened()) grabber.log(Level.WARNING, "completedCollection was not opened");
-            completedCollection = collectionInProgress;
-            collectionInProgress = new ResponseData(grabber, System.currentTimeMillis(), tmp.getNumSize(), tmp.getStrSize());
+            if (tmp == null) {
+                grabber.log(Level.WARNING, "completedCollection is null");
+                completedCollection = collectionInProgress;
+                collectionInProgress = new ResponseData(grabber, System.currentTimeMillis(), SIZE_UNKNOWN, SIZE_UNKNOWN);
+            } else {
+                if (tmp.isClosed()) grabber.log(Level.WARNING, "completedCollection was already closed");
+                if (!tmp.isOpened()) grabber.log(Level.WARNING, "completedCollection was not opened");
+                completedCollection = collectionInProgress;
+                collectionInProgress = new ResponseData(grabber, System.currentTimeMillis(), tmp.getNumSize(), tmp.getStrSize());
+            }
         }
     }
 
@@ -111,9 +117,9 @@ public class SimpleCollectorImpl implements SimpleCollector {
 
     @Override
     public void fillCollector(Collector toFill) {
-        completedCollection.getNum().entrySet().forEach(entry -> toFill.collect(entry.getKey(), entry.getValue()));
-        completedCollection.getStr().entrySet().forEach(entry -> toFill.collect(entry.getKey(), entry.getValue()));
-        completedCollection.getErrors().forEach(error -> toFill.addError(error));
+        completedCollection.getNum().forEach(toFill::collect);
+        completedCollection.getStr().forEach(toFill::collect);
+        completedCollection.getErrors().forEach(toFill::addError);
     }
 
     @Override
