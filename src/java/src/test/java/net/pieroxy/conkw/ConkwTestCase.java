@@ -4,6 +4,8 @@ import junit.framework.TestCase;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public abstract class ConkwTestCase extends TestCase {
     public  <K,V> void assertMapContains(Map<K,V> data, K key, V value) {
@@ -58,6 +60,19 @@ public abstract class ConkwTestCase extends TestCase {
         }
 
         return false;
+    }
+
+    public <K,V> void assertMapEquals(Map<K,V> values2, Map<K,V> values1) {
+        String keys2 = values2.keySet().stream().map(String::valueOf).sorted().collect(Collectors.joining(","));
+        String keys1 = values1.keySet().stream().map(String::valueOf).sorted().collect(Collectors.joining(","));
+        if (!Objects.equals(keys1, keys2)) {
+            fail("Expected keys to be " +
+                    keys2 +
+                    " but were " +
+                    keys1);
+        }
+        values2.entrySet().stream().forEach(e->assertMapContains(values1, e.getKey(), e.getValue()));
+
     }
 
     public static interface ExceptionInspector<T extends Throwable> {

@@ -35,10 +35,7 @@ public class Data implements DataRecord {
   }
 
   public void assertEquals(Data log2, ConkwTestCase tc) {
-    tc.assertEquals(log2.getValues().size(), getValues().size());
-    tc.assertEquals(log2.getDimensions().size(), getDimensions().size());
-    log2.getValues().entrySet().stream().forEach(e->tc.assertMapContains(log2.getValues(), e.getKey(), e.getValue()));
-    log2.getDimensions().entrySet().stream().forEach(e->tc.assertMapContains(log2.getDimensions(), e.getKey(), e.getValue()));
+    tc.assertMapEquals(log2.getValues(), getValues());
+    tc.assertMapEquals(log2.getDimensions(), getDimensions());
   }
-
 }
