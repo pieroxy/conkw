@@ -10,13 +10,23 @@ import java.util.stream.Collectors;
 public abstract class ConkwTestCase extends TestCase {
     public  <K,V> void assertMapContains(Map<K,V> data, K key, V value) {
         if (data.containsKey(key)) {
-            assertEquals("Looking for key " + key, value, data.get(key));
+            assertSmartEquals("Looking for key " + key, value, data.get(key));
         } else {
             String msg = "Key '"+key+"' not found. Keys in the map["+data.size()+"]: ";
             for (Object o : data.keySet()) {
                 msg += "'" + o + "' ";
             }
             fail(msg);
+        }
+    }
+
+    private <V> void assertSmartEquals(String s, V expected, V value) {
+        if (expected instanceof Double) {
+            double diff = Math.abs((Double)expected - (Double)value);
+            if (diff < Math.abs((Double)expected)/1e6) return;
+            assertEquals(s, expected, value);
+        } else {
+            assertEquals(s, expected, value);
         }
     }
 
