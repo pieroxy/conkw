@@ -2,14 +2,10 @@ package net.pieroxy.conkw.accumulators;
 
 import net.pieroxy.conkw.ConkwTestCase;
 import net.pieroxy.conkw.accumulators.implementations.*;
-import net.pieroxy.conkw.accumulators.implementations.Data;
 import net.pieroxy.conkw.accumulators.parser.AccumulatorExpressionParser;
 import net.pieroxy.conkw.accumulators.parser.ParseException;
 import net.pieroxy.conkw.pub.mdlog.DataRecord;
 import net.pieroxy.conkw.pub.mdlog.GenericLogRecord;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class AccumulatorExpressionParserTest extends ConkwTestCase {
     public void testSum() {
@@ -168,12 +164,12 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         Data data = new Data();
         a.prepareNewSession();
         a.log("", data);
-        assertMapContains(data.getValues(), "1_d0.histValue", 19d);
-        assertMapContains(data.getValues(), "10_d0.histValue", 0d);
-        assertMapContains(data.getValues(), "100_d0.histValue", 12d);
-        assertMapContains(data.getValues(), "1000_d0.histValue", 7d);
+        assertMapContains(data.getValues(), "1.histValue", 19d);
+        assertMapContains(data.getValues(), "10.histValue", 0d);
+        assertMapContains(data.getValues(), "100.histValue", 12d);
+        assertMapContains(data.getValues(), "1000.histValue", 7d);
         assertMapContains(data.getValues(), "above.histValue", 6d);
-        assertMapContains(data.getDimensions(), "histValues", "1_d0,10_d0,100_d0,1000_d0,above");
+        assertMapContains(data.getDimensions(), "histValues", "1,10,100,1000,above");
     }
 
     public void testSimpleLog2Histogram() {
@@ -202,20 +198,20 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         Data data = new Data();
         a.prepareNewSession();
         a.log("", data);
-        assertMapContains(data.getValues(), "1_d0.histValue", 19d);
-        assertMapContains(data.getValues(), "2_d0.histValue", 0d);
-        assertMapContains(data.getValues(), "4_d0.histValue", 0d);
-        assertMapContains(data.getValues(), "8_d0.histValue", 0d);
-        assertMapContains(data.getValues(), "16_d0.histValue", 0d);
-        assertMapContains(data.getValues(), "32_d0.histValue", 0d);
-        assertMapContains(data.getValues(), "64_d0.histValue", 8d);
-        assertMapContains(data.getValues(), "128_d0.histValue", 4d);
-        assertMapContains(data.getValues(), "256_d0.histValue", 7d);
-        assertMapContains(data.getValues(), "512_d0.histValue", 0d);
-        assertMapContains(data.getValues(), "1024_d0.histValue", 0d);
-        assertMapContains(data.getValues(), "2048_d0.histValue", 6d);
+        assertMapContains(data.getValues(), "1.histValue", 19d);
+        assertMapContains(data.getValues(), "2.histValue", 0d);
+        assertMapContains(data.getValues(), "4.histValue", 0d);
+        assertMapContains(data.getValues(), "8.histValue", 0d);
+        assertMapContains(data.getValues(), "16.histValue", 0d);
+        assertMapContains(data.getValues(), "32.histValue", 0d);
+        assertMapContains(data.getValues(), "64.histValue", 8d);
+        assertMapContains(data.getValues(), "128.histValue", 4d);
+        assertMapContains(data.getValues(), "256.histValue", 7d);
+        assertMapContains(data.getValues(), "512.histValue", 0d);
+        assertMapContains(data.getValues(), "1024.histValue", 0d);
+        assertMapContains(data.getValues(), "2048.histValue", 6d);
         assertMapContains(data.getValues(), "above.histValue", 1d);
-        assertMapContains(data.getDimensions(), "histValues", "1_d0,2_d0,4_d0,8_d0,16_d0,32_d0,64_d0,128_d0,256_d0,512_d0,1024_d0,2048_d0,above");
+        assertMapContains(data.getDimensions(), "histValues", "1,2,4,8,16,32,64,128,256,512,1024,2048,above");
     }
 
     public void testSimpleLog125Histogram() {
@@ -242,17 +238,17 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         Data data = new Data();
         a.prepareNewSession();
         a.log("", data);
-        assertMapContains(data.getValues(), "10_d0.histValue", 19d);
-        assertMapContains(data.getValues(), "20_d0.histValue", 0d);
-        assertMapContains(data.getValues(), "50_d0.histValue", 0d);
-        assertMapContains(data.getValues(), "100_d0.histValue", 12d);
-        assertMapContains(data.getValues(), "200_d0.histValue", 7d);
-        assertMapContains(data.getValues(), "500_d0.histValue", 0d);
+        assertMapContains(data.getValues(), "10.histValue", 19d);
+        assertMapContains(data.getValues(), "20.histValue", 0d);
+        assertMapContains(data.getValues(), "50.histValue", 0d);
+        assertMapContains(data.getValues(), "100.histValue", 12d);
+        assertMapContains(data.getValues(), "200.histValue", 7d);
+        assertMapContains(data.getValues(), "500.histValue", 0d);
         assertMapContains(data.getValues(), "above.histValue", 6d);
         assertMapContains(data.getValues(), "count", 44d);
         assertMapContains(data.getValues(), "total", 8266.3d);
         assertMapContains(data.getValues(), "avg", 8266.3d/44);
-        assertMapContains(data.getDimensions(), "histValues", "10_d0,20_d0,50_d0,100_d0,200_d0,500_d0,above");
+        assertMapContains(data.getDimensions(), "histValues", "10,20,50,100,200,500,above");
     }
 
     // TODO Needs some more cases
