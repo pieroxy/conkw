@@ -8,6 +8,7 @@ We will show you the basics in here:
 
 ```json
 {
+  "instanceName": "_default_",
   "grabbers":[],
   "apiAuth":{},
   "httpPort": 12789,
@@ -19,6 +20,7 @@ We will show you the basics in here:
 }
 ```
 
+* `instanceName` is the name of your conkw. This is especially useful if you plan on clustering as it will be the name under which the metrics of this conkw are reported (if the source reporting is enabled). Usually you want to reflect the host name or ip address of the machine conkw is running on here.
 * `grabbers`: This is the list of grabbers with their configurations. Refer to the next section to see how to define and configure a grabber.
 * `apiAuth`: This is the configuration for the api authentication. See the section below for details.
 * `httpPort`: This holds the port number on which the http server is listening.

@@ -2,11 +2,12 @@ package net.pieroxy.conkw.webapp.servlets;
 
 import net.pieroxy.conkw.grabbersBase.Grabber;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
+import net.pieroxy.conkw.webapp.Listener;
 import net.pieroxy.conkw.webapp.model.Response;
-import net.pieroxy.conkw.webapp.model.ResponseData;
 
-import java.util.*;
-import java.util.logging.Level;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 public class ApiManager implements MetaGrabber {
@@ -24,6 +25,7 @@ public class ApiManager implements MetaGrabber {
 
   public Response buildResponse(long now, Collection<GrabberInput>grabbersRequested) {
     Response r = new Response(grabbersRequested.size());
+    r.setInstanceName(Listener.getInstanceName());
     grabbersRequested.stream().parallel().forEach(
             s -> {
               Grabber g = allGrabbers.get(s.getName());

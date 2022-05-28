@@ -7,6 +7,7 @@ public class Config {
   private GrabberConfig[]grabbers;
   private ApiAuth apiAuth;
   private int httpPort;
+  private String instanceName;
   private boolean enableApiCompression;
   private boolean disableDefaultUI;
   private boolean disableCustomUI;
@@ -80,5 +81,13 @@ public class Config {
 
   public void setEnableApiCompression(boolean enableApiCompression) {
     this.enableApiCompression = enableApiCompression;
+  }
+
+  public String getInstanceName() {
+    return instanceName;
+  }
+
+  public void setInstanceName(String instanceName) {
+    this.instanceName = instanceName;
   }
 }

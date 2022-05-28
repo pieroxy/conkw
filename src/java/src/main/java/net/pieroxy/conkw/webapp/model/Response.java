@@ -6,13 +6,16 @@ import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapStringResponseDataConverter;
 
 import java.io.Closeable;
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Map;
 
 @CompiledJson(onUnknown = CompiledJson.Behavior.IGNORE)
 public class Response implements Closeable {
   @JsonAttribute(converter = HashMapStringResponseDataConverter.class)
   private Map<String, ResponseData> metrics;
   private long timestamp;
+  private String instanceName;
   private int responseJitter;
   private boolean needsAuthentication;
   private Collection<String> errors = new LinkedList<>();
@@ -131,6 +134,14 @@ public class Response implements Closeable {
       HashMapPool.getInstance().giveBack(metrics);
       metrics = null;
     }
+  }
+
+  public String getInstanceName() {
+    return instanceName;
+  }
+
+  public void setInstanceName(String instanceName) {
+    this.instanceName = instanceName;
   }
 }
 

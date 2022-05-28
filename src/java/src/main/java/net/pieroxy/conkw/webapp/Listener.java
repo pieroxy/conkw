@@ -28,6 +28,7 @@ public class Listener implements ServletContextListener {
   private ApiManager apiManager;
   private boolean toDestroy = false;
   private final Runnable onDestroy;
+  private static String instanceName;
 
   public Listener(Runnable onDestroy) {
     this.onDestroy = onDestroy;
@@ -35,6 +36,7 @@ public class Listener implements ServletContextListener {
 
   public void loadConfig() {
     Config config = ConfigReader.getConfig();
+    instanceName = config.getInstanceName();
     CredentialsStore creds = ConfigReader.getCredentials();
     try {
       List<Grabber> newg = new ArrayList<>();
@@ -206,5 +208,9 @@ public class Listener implements ServletContextListener {
       } catch (Exception e) {
       }
     }
+  }
+
+  public static String getInstanceName() {
+    return instanceName;
   }
 }

@@ -22,6 +22,7 @@ The API in `grabbers` mode will return a JSON like this:
 ```json
 {
   "timestamp": 1621865909383,
+  "instanceName":"_default__",
   "errors": [],
   "responseJitter": 52,
   "metrics": {
@@ -55,6 +56,7 @@ The API in `grabbers` mode will return a JSON like this:
 At the root level:
 
 * `timestamp` is the timestamp at which this response was built, calling all extractors for their data.
+* `instanceName` the name of the conkw reporting the data. Useful in a setup where several conkw are installed.
 * `errors` is the list of error messages produced by the api, grabbers, etc.
 * `responseJitter` is the current timestamp in millisecond modulo 1000 of the server at the time of the request. 
 * `needsAuthentication` is a flag indicating the need for authentication. It is `true` if authentication is on and the current request is not authenticated. When `true`, the following property is not set.
