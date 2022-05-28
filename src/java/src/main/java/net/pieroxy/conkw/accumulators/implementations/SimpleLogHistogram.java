@@ -1,14 +1,13 @@
 package net.pieroxy.conkw.accumulators.implementations;
 
-import net.pieroxy.conkw.pub.mdlog.DataRecord;
 import net.pieroxy.conkw.accumulators.AbstractHistogramAccumulator;
+import net.pieroxy.conkw.pub.mdlog.DataRecord;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SimpleLogHistogram extends AbstractHistogramAccumulator {
+public class SimpleLogHistogram<T extends DataRecord> extends AbstractHistogramAccumulator<T> {
     public static final String NAME = "loghist";
-
 
     private final List<Double> thresholds;
     private String valueKey;

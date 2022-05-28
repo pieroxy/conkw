@@ -72,7 +72,6 @@ public abstract class AbstractHistogramAccumulator<T extends DataRecord> impleme
         if (lastData.globalCount>0)
             record.getValues().put(AccumulatorUtils.addToMetricName(prefix, "avg"), lastData.globalSum/lastData.globalCount);
 
-        List<Double> thresholds = getThresholds();
         StringBuilder dims = new StringBuilder();
         for (int i=0 ; i<lastData.histogram.length ; i++) {
             double current = lastData.histogram[i];
@@ -81,15 +80,31 @@ public abstract class AbstractHistogramAccumulator<T extends DataRecord> impleme
                 record.getValues().put(AccumulatorUtils.addToMetricName(prefix, "above", "histValue"), current);
                 dims.append(AccumulatorUtils.cleanMetricPathElement("above"));
             } else {
-                record.getValues().put(AccumulatorUtils.addToMetricName(prefix, String.valueOf(thresholds.get(i)), "histValue"), current);
-                dims.append(AccumulatorUtils.cleanMetricPathElement(String.valueOf(thresholds.get(i))));
+                String key = getKeyForSerialization(i);
+                record.getValues().put(AccumulatorUtils.addToMetricName(prefix, key, "histValue"), current);
+                dims.append(AccumulatorUtils.cleanMetricPathElement(key));
             }
         }
         record.getDimensions().put(AccumulatorUtils.addToMetricName(prefix, "histValues"), dims.toString());
     }
 
+    String getKeyForSerialization(int index) {
+        String key = String.valueOf(getThresholds().get(index));
+        if (key.endsWith(".0")) key = key.substring(0, key.length()-2);
+        return key;
+    }
+
     @Override
     public void initializeFromData(PrefixedDataRecord r) {
+        data.globalCount = r.getValues().get("count");
+        data.globalSum = r.getValues().get("total");
+        List<Double> thresholds = getThresholds();
+        for (int i=0 ; i< thresholds.size() ; i++) {
+            String key = AccumulatorUtils.cleanMetricPathElement(getKeyForSerialization(i));
+            Double d = r.getValues().get(key + ".histValue");
+            data.histogram[i] = d;
+        }
+        data.histogram[thresholds.size()] = r.getValues().get("above.histValue");
     }
 }
 
