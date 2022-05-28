@@ -14,9 +14,10 @@ public interface Accumulator<T extends DataRecord> {
    * Implementations are only expected to sum with another instance of themselves. They may throw if
    * an instance of another class is provided. A ClassCastException for example :)
    * This holds true for the whole set of accumulators this accumulator might hold.
+   * This function takes the currently stable set of metrics and injects it in the current set of metrics.
    * @param acc
    */
-  void sumWith(Accumulator acc);
+  void sumWith(Accumulator<T> acc);
   void initializeFromData(PrefixedDataRecord record);
   double getTotal();
   void prepareNewSession();

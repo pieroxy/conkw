@@ -28,6 +28,13 @@ public class SimpleCounterTest extends AbstractAccumulatorTest<SimpleCounter<Dat
   }
 
   @Override
+  protected Collection<Data> buildExtraData() {
+    List<Data> ld = new ArrayList<>();
+    for (int i=0 ; i<321 ; i++) ld.add(null);
+    return ld;
+  }
+
+  @Override
   protected void assertAccumulatorInternalState(SimpleCounter<Data> acc) {
     assertEquals(123., acc.getTotal());
   }

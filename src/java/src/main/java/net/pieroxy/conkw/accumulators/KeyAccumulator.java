@@ -60,20 +60,24 @@ public abstract class KeyAccumulator<A, T extends DataRecord> implements Accumul
   }
 
   @Override
-  public void sumWith(Accumulator acc) {
-    KeyAccumulator<A, T> ka = (KeyAccumulator) acc;
-    ka.old.getData().entrySet().stream().forEach(entry -> {
-      Accumulator a = old.getData().get(entry.getKey());
+  public void sumWith(Accumulator<T> otherGeneric) {
+    KeyAccumulator<A, T> other  = (KeyAccumulator<A, T>) otherGeneric;
+    other.old.getData().forEach((key, value) -> {
+      Accumulator<T> a = current.getData().get(key);
       try {
         if (a == null) {
           a = buildNewAccumulator();
-          old.getData().put(entry.getKey(), a);
+          current.getData().put(key, a);
         }
-        a.sumWith(entry.getValue());
+        a.sumWith(value);
       } catch (Exception e) {
         LOGGER.log(Level.SEVERE, "", e);
       }
     });
+    current.total += other.old.total;
+  }
+
+  public void sum(KeyAccumulatorData<A, T> mine, KeyAccumulatorData<A, T> other) {
   }
 
   @Override
@@ -106,12 +110,12 @@ public abstract class KeyAccumulator<A, T extends DataRecord> implements Accumul
 
   void logStable(String prefix, DataRecord record) {
     try {
-      Set<Tuple> tree = new TreeSet<>();
-      old.getData().forEach((key, value) -> tree.add(new Tuple(String.valueOf(key), floatingWeights.getOrDefault(key, 0d) + value.getTotal(), value)));
+      Set<Tuple<T>> tree = new TreeSet<>();
+      old.getData().forEach((key, value) -> tree.add(new Tuple<T>(String.valueOf(key), floatingWeights.getOrDefault(key, 0d) + value.getTotal(), value)));
       StringBuilder keys = new StringBuilder();
       int detail = getMaxBuckets();
-      Accumulator others = null;
-      for (Tuple t : tree) {
+      Accumulator<T> others = null;
+      for (Tuple<T> t : tree) {
         if (detail-- > 0) {
           t.acc.log(AccumulatorUtils.addToMetricName(prefix, String.valueOf(t.key)), record);
           if (keys.length() > 0) keys.append(',');
@@ -122,6 +126,7 @@ public abstract class KeyAccumulator<A, T extends DataRecord> implements Accumul
         }
       }
       if (others!=null) {
+        others.prepareNewSession();
         others.log(AccumulatorUtils.addToMetricName(prefix, "others"), record);
         if (keys.length() > 0) keys.append(',');
         keys.append("others");
@@ -147,12 +152,12 @@ public abstract class KeyAccumulator<A, T extends DataRecord> implements Accumul
                     .collect(Collectors.joining(",")));
   }
 
-  static class Tuple implements Comparable {
+  static class Tuple<T extends DataRecord> implements Comparable {
     String key;
     double value;
-    private Accumulator acc;
+    private Accumulator<T> acc;
 
-    public Tuple(String key, double value, Accumulator acc) {
+    public Tuple(String key, double value, Accumulator<T> acc) {
       this.key = key;
       this.value = value;
       this.acc = acc;

@@ -21,6 +21,16 @@ public class StringKeyAccumulatorTest extends AbstractAccumulatorTest<StringKeyA
     }
 
     @Override
+    protected Collection<Data> buildExtraData() {
+        return Arrays.asList(
+                new Data().addDim("dim", "a").addVal("val", 12.1),
+                new Data().addDim("dim", "a").addVal("val", 11.1),
+                new Data().addDim("dim", "b").addVal("val", 10.1),
+                new Data().addDim("dim", "abc").addVal("val", 10.11),
+                new Data().addDim("dim", "c").addVal("val", 2.1));
+    }
+
+    @Override
     protected void assertAccumulatorInternalState(StringKeyAccumulator<Data> acc) {
     }
 

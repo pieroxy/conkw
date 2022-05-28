@@ -31,7 +31,7 @@ public class SimpleCounter<T extends DataRecord> implements Accumulator<T> {
 
   @Override
   public void sumWith(Accumulator acc) {
-    oldCount += ((SimpleCounter)acc).oldCount;
+    count += ((SimpleCounter)acc).oldCount;
   }
 
   @Override

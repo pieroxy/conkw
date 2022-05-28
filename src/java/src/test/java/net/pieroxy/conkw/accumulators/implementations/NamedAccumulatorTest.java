@@ -19,6 +19,14 @@ public class NamedAccumulatorTest extends AbstractAccumulatorTest<NamedAccumulat
   }
 
   @Override
+  protected Collection<Data> buildExtraData() {
+    return Arrays.asList(
+            new Data().addVal("vv.v", 0.1),
+            new Data().addVal("abc", 155.).addVal("vv.v", 0.2),
+            new Data().addVal("avvv", 7.));
+  }
+
+  @Override
   protected void assertAccumulatorInternalState(NamedAccumulator<Data> acc) {
     assertEquals(9., acc.getTotal());
   }

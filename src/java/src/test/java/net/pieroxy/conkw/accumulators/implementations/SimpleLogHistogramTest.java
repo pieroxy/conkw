@@ -23,6 +23,19 @@ public class SimpleLogHistogramTest extends AbstractAccumulatorTest<SimpleLogHis
     }
 
     @Override
+    protected Collection<Data> buildExtraData() {
+        return Arrays.asList(
+                new Data().addVal("time", 1.23),
+                new Data().addVal("time", 12.3),
+                new Data().addVal("time", 13.3),
+                new Data().addVal("time", 3.3E8),
+                new Data().addVal("time", 130.3),
+                new Data().addVal("time", 13.3e100),
+                new Data().addVal("time", 13.3)
+        );
+    }
+
+    @Override
     protected void assertAccumulatorLog(Data log) {
         assertMapContains(log.getValues(), "10.histValue", 1.);
         assertMapContains(log.getValues(), "100.histValue", 3.);

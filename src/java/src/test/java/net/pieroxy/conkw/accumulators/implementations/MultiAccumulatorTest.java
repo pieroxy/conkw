@@ -27,6 +27,16 @@ public class MultiAccumulatorTest extends AbstractAccumulatorTest<MultiAccumulat
     }
 
     @Override
+    protected Collection<Data> buildExtraData() {
+        return Arrays.asList(
+                new Data().addVal("tosum", 1.2345),
+                new Data().addVal("nottosum", 0.0010),
+                new Data().addVal("tothreesum", 1.),
+                new Data().addVal("tosum", 1.2),
+                new Data().addVal("tosum", 1.3));
+    }
+
+    @Override
     protected void assertAccumulatorInternalState(MultiAccumulator<Data> acc) {
     }
 

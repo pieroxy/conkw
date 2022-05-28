@@ -22,7 +22,12 @@ public abstract class AbstractHistogramAccumulator<T extends DataRecord> impleme
 
     @Override
     public void sumWith(Accumulator acc) {
-        throw new RuntimeException("Not Implemented");
+        AbstractHistogramAccumulator other = (AbstractHistogramAccumulator) acc;
+        data.globalSum += other.lastData.globalSum;
+        data.globalCount += other.lastData.globalCount;
+        for (int i=0 ; i<data.histogram.length ; i++) {
+            data.histogram[i] += other.lastData.histogram[i];
+        }
     }
 
     @Override
@@ -106,24 +111,26 @@ public abstract class AbstractHistogramAccumulator<T extends DataRecord> impleme
         }
         data.histogram[thresholds.size()] = r.getValues().get("above.histValue");
     }
-}
 
-class HistogramData {
-    double globalSum;
-    double globalCount;
-    double[]histogram = null;
 
-    void copyFrom(HistogramData d) {
-        if (d == null) {
-            globalCount = globalSum = 0;
-        } else {
-            globalCount = d.globalCount;
-            globalSum = d.globalSum;
-            System.arraycopy(d.histogram, 0, histogram, 0, histogram.length);
+    class HistogramData {
+        double globalSum;
+        double globalCount;
+        double[]histogram = null;
+
+        void copyFrom(HistogramData d) {
+            if (d == null) {
+                globalCount = globalSum = 0;
+            } else {
+                globalCount = d.globalCount;
+                globalSum = d.globalSum;
+                System.arraycopy(d.histogram, 0, histogram, 0, histogram.length);
+            }
+        }
+
+        public HistogramData(int size) {
+            this.histogram = new double[size];
         }
     }
-
-    public HistogramData(int size) {
-        this.histogram = new double[size];
-    }
 }
+

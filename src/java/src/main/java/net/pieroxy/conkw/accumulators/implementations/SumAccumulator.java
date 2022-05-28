@@ -27,7 +27,7 @@ public class SumAccumulator<T extends DataRecord> implements Accumulator<T> {
 
   @Override
   public void sumWith(Accumulator acc) {
-    lastValue += ((SumAccumulator)acc).lastValue;
+    value += ((SumAccumulator)acc).lastValue;
   }
 
   @Override

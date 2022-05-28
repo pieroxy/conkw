@@ -31,9 +31,18 @@ public class SumAccumulatorTest extends AbstractAccumulatorTest<SumAccumulator<D
     @Override
     protected Collection<Data> buildData() {
         return Arrays.stream(new Data[] {
-            new Data().addVal("vv.v", 12.),
-            new Data().addVal("abc", 155.).addVal("vv.v", 7.),
-            new Data().addVal("avvv", 7.),
+                new Data().addVal("vv.v", 12.),
+                new Data().addVal("abc", 155.).addVal("vv.v", 7.),
+                new Data().addVal("avvv", 7.),
+        }).collect(Collectors.toList());
+    }
+
+    @Override
+    protected Collection<Data> buildExtraData() {
+        return Arrays.stream(new Data[] {
+                new Data().addVal("vv.v", 12.1),
+                new Data().addVal("abc", 155.).addVal("vv.v", 7.1),
+                new Data().addVal("avvv", 7.1),
         }).collect(Collectors.toList());
     }
 
