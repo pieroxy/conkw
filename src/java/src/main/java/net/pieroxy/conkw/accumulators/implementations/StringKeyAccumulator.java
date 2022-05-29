@@ -40,7 +40,7 @@ public class StringKeyAccumulator<T extends DataRecord> extends KeyAccumulator<S
     for (String k : values) {
       Accumulator<T> acc = current.getData().getOrDefault(k, null);
       if (acc==null) try {
-        current.getData().put(k, acc = buildNewAccumulator());
+        current.getData().put(k, acc = getAccumulator());
         record.pushPrefix(k+".");
         acc.initializeFromData(record);
         record.popPrefix();
@@ -48,6 +48,11 @@ public class StringKeyAccumulator<T extends DataRecord> extends KeyAccumulator<S
         LOGGER.log(Level.SEVERE, "Cannot create accumulator", e);
       }
     }
+  }
+
+  @Override
+  public Accumulator<T> getFreshInstance() {
+    return new StringKeyAccumulator<T>(dimensionName, this);
   }
 
   public String getDimensionName() {

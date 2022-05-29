@@ -1,7 +1,8 @@
 package net.pieroxy.conkw.accumulators.implementations;
 
-import net.pieroxy.conkw.pub.mdlog.DataRecord;
 import net.pieroxy.conkw.accumulators.AbstractHistogramAccumulator;
+import net.pieroxy.conkw.accumulators.Accumulator;
+import net.pieroxy.conkw.pub.mdlog.DataRecord;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +11,13 @@ public class Simple125Histogram extends AbstractHistogramAccumulator {
   public static final String NAME = "log125hist";
   private final String valueKey;
   private final ArrayList<Double> thresholds;
+  private final double min;
+  private final double max;
 
   public Simple125Histogram(String valueKey, double min, double max) {
     this.valueKey = valueKey;
+    this.min = min;
+    this.max = max;
     double scale = 1;
     int rot = 0;
     boolean inrange = false;
@@ -58,5 +63,10 @@ public class Simple125Histogram extends AbstractHistogramAccumulator {
 
   public String getValueKey() {
     return valueKey;
+  }
+
+  @Override
+  public Accumulator getFreshInstance() {
+    return new Simple125Histogram(valueKey, min, max);
   }
 }

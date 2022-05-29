@@ -65,4 +65,8 @@ public class RootAccumulator<T extends DataRecord> implements Accumulator<T> {
   public long getLastPeriod() {
     return lastPeriod;
   }
+
+  public Accumulator<T> getFreshInstance() {
+    return new RootAccumulator<T>(rootName, accumulator.getFreshInstance());
+  }
 }

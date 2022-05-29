@@ -48,6 +48,11 @@ public class SumAccumulator<T extends DataRecord> implements Accumulator<T> {
   }
 
   @Override
+  public Accumulator<T> getFreshInstance() {
+    return new SumAccumulator<T>(valueName, defaultValue);
+  }
+
+  @Override
   public void prepareNewSession() {
     lastValue = value;
     value=0;

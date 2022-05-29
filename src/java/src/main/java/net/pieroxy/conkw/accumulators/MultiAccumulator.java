@@ -4,6 +4,7 @@ import net.pieroxy.conkw.pub.mdlog.DataRecord;
 import net.pieroxy.conkw.utils.prefixeddata.PrefixedDataRecord;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MultiAccumulator<T extends DataRecord> implements Accumulator<T> {
@@ -11,10 +12,8 @@ public class MultiAccumulator<T extends DataRecord> implements Accumulator<T> {
 
   private final List<Accumulator<T>> accumulators = new ArrayList<>();
 
-  public MultiAccumulator(Accumulator[]accumulators) {
-    for (Accumulator a : accumulators) {
-      this.accumulators.add(a);
-    }
+  public MultiAccumulator(Accumulator<T>[]accumulators) {
+    this.accumulators.addAll(Arrays.asList(accumulators));
   }
 
   public Accumulator<T> getAccumulator(int index) {
@@ -33,7 +32,7 @@ public class MultiAccumulator<T extends DataRecord> implements Accumulator<T> {
   }
 
   @Override
-  public void sumWith(Accumulator acc) {
+  public void sumWith(Accumulator<T> acc) {
     MultiAccumulator<T> ma = (MultiAccumulator<T>) acc;
     if (ma.getLength()!=getLength()) throw new ClassCastException("Trying to sum two different MultiAccumulators");
     for (int i=0 ; i<getLength() ; i++) {
@@ -43,7 +42,7 @@ public class MultiAccumulator<T extends DataRecord> implements Accumulator<T> {
 
   @Override
   public void initializeFromData(PrefixedDataRecord record) {
-    accumulators.stream().forEach(a -> a.initializeFromData(record));
+    accumulators.forEach(a -> a.initializeFromData(record));
   }
 
   @Override
@@ -61,5 +60,10 @@ public class MultiAccumulator<T extends DataRecord> implements Accumulator<T> {
   @Override
   public void log(String prefix, DataRecord record) {
     for (Accumulator<T> acc : accumulators) acc.log(prefix, record);
+  }
+
+  @Override
+  public Accumulator<T> getFreshInstance() {
+    return new MultiAccumulator<>(accumulators.stream().map(Accumulator::getFreshInstance).toArray(Accumulator[]::new));
   }
 }

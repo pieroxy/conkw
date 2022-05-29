@@ -22,4 +22,5 @@ public interface Accumulator<T extends DataRecord> {
   double getTotal();
   void prepareNewSession();
   void log(String prefix, DataRecord record);
+  Accumulator<T> getFreshInstance();
 }

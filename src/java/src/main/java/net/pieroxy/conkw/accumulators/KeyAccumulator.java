@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  * This abstract class will allow aggregations around a key and the number of occurrence of said key.
  * @param <A> The type of the key being considered.
  */
-public abstract class KeyAccumulator<A, T extends DataRecord> implements Accumulator<T> {
+public abstract class KeyAccumulator<A, T extends DataRecord> implements Accumulator<T>, AccumulatorProvider<T> {
   private final static Logger LOGGER = Logger.getLogger(KeyAccumulator.class.getName());
   private final AccumulatorProvider<T> __provider;
 
@@ -39,7 +39,8 @@ public abstract class KeyAccumulator<A, T extends DataRecord> implements Accumul
     return old.total;
   }
 
-  protected Accumulator<T> buildNewAccumulator() throws Exception {
+  @Override
+  public Accumulator<T> getAccumulator() throws Exception {
     return __provider.getAccumulator();
   }
 
@@ -50,7 +51,7 @@ public abstract class KeyAccumulator<A, T extends DataRecord> implements Accumul
 
     Accumulator<T> acc = current.getData().getOrDefault(key, null);
     if (acc==null) try {
-      current.getData().put(key, acc = buildNewAccumulator());
+      current.getData().put(key, acc = getAccumulator());
     } catch (Exception e) {
       LOGGER.log(Level.SEVERE, "Cannot create accumulator", e);
     }
@@ -66,7 +67,7 @@ public abstract class KeyAccumulator<A, T extends DataRecord> implements Accumul
       Accumulator<T> a = current.getData().get(key);
       try {
         if (a == null) {
-          a = buildNewAccumulator();
+          a = getAccumulator();
           current.getData().put(key, a);
         }
         a.sumWith(value);
@@ -121,7 +122,7 @@ public abstract class KeyAccumulator<A, T extends DataRecord> implements Accumul
           if (keys.length() > 0) keys.append(',');
           keys.append(t.key);
         } else {
-          if (others == null) others = buildNewAccumulator();
+          if (others == null) others = getAccumulator();
           others.sumWith(t.acc);
         }
       }

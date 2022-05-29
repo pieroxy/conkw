@@ -52,6 +52,11 @@ public class NamedAccumulator<T extends DataRecord> implements Accumulator<T> {
   }
 
   @Override
+  public Accumulator<T> getFreshInstance() {
+    return new NamedAccumulator<T>(rootName, getAccumulator().getFreshInstance());
+  }
+
+  @Override
   public synchronized void prepareNewSession() {
     accumulator.prepareNewSession();
   }

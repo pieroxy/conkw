@@ -1,6 +1,7 @@
 package net.pieroxy.conkw.accumulators.implementations;
 
 import net.pieroxy.conkw.accumulators.AbstractHistogramAccumulator;
+import net.pieroxy.conkw.accumulators.Accumulator;
 import net.pieroxy.conkw.pub.mdlog.DataRecord;
 
 import java.util.ArrayList;
@@ -12,10 +13,12 @@ public class SimpleLogHistogram<T extends DataRecord> extends AbstractHistogramA
     private final List<Double> thresholds;
     private String valueKey;
     private double base;
+    private double max;
 
     public SimpleLogHistogram(String valueKey, double base, double max) {
         this.valueKey = valueKey;
         this.base = base;
+        this.max = max;
         double t = 1;
         max = Math.abs(max);
         thresholds = new ArrayList<>();
@@ -38,5 +41,10 @@ public class SimpleLogHistogram<T extends DataRecord> extends AbstractHistogramA
     @Override
     public Double getValue(DataRecord line) {
         return line.getValues().get(valueKey);
+    }
+
+    @Override
+    public Accumulator<T> getFreshInstance() {
+        return new SimpleLogHistogram<T>(valueKey, base, max);
     }
 }
