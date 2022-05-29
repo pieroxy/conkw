@@ -21,7 +21,7 @@ Notes:
 
 ## Credentials
 
-Some grabbers, or even conkw itself, may need credentials. See [this dedicated page](MONITOR.md) to figure how to make them available to conkw.
+Some grabbers, or even conkw itself, may need credentials. See [this dedicated page](CONCEPTS_CREDS.md) to figure how to make them available to conkw.
 
 ## Formatting numbers
 
