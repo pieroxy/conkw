@@ -30,8 +30,14 @@ public abstract class AbstractAccumulatorTest<T extends Accumulator<Data>> exten
         assertAccumulatorInternalState(accumulator2);
         Data log2 = new Data();
         accumulator2.log("", log2);
+        cleanupLoggedDataBeforeComparison(log);
+        cleanupLoggedDataBeforeComparison(log2);
         log.assertEquals(log2, this);
         assertAccumulatorLog(log2);
+    }
+
+    public void cleanupLoggedDataBeforeComparison(Data log) {
+
     }
 
     @Test
@@ -53,6 +59,8 @@ public abstract class AbstractAccumulatorTest<T extends Accumulator<Data>> exten
         Data logB = new Data();
         accumulator3.log("", logB);
 
+        cleanupLoggedDataBeforeComparison(logA);
+        cleanupLoggedDataBeforeComparison(logB);
         logA.assertEquals(logB, this);
     }
 

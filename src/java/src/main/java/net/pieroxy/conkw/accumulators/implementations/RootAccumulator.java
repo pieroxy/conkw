@@ -35,11 +35,14 @@ public class RootAccumulator<T extends DataRecord> implements Accumulator<T> {
 
   @Override
   public void sumWith(Accumulator acc) {
-    accumulator.sumWith(((NamedAccumulator)acc).getAccumulator());
+    accumulator.sumWith(((RootAccumulator)acc).getAccumulator());
   }
 
   @Override
   public void initializeFromData(PrefixedDataRecord record) {
+    Double el = record.getValues().get(ELAPSED);
+    if (el == null) return; // No data to initialize
+    lastPeriod = (long)(double)el;
     accumulator.initializeFromData(record);
   }
 
