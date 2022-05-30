@@ -54,6 +54,24 @@ public class PrefixedKeyMap<V> implements Map<String,V>, ConkwCloseable {
     }
 
     @Override
+    public String toString() {
+        return "PrefixedKeyMap{" +
+                "src=" + debug(src) +
+                ", prefix='" + prefix + '\'' +
+                ", prefixes=" + prefixes +
+                ", size=" + size +
+                '}';
+    }
+
+    private String debug(Map<String,V> src) {
+        return src
+                .entrySet()
+                .stream()
+                .map(e -> "["+e.getKey() + "= " + e.getValue()+"]")
+                .collect(Collectors.joining(","));
+    }
+
+    @Override
     public boolean isEmpty() {
         return size() == 0;
     }
