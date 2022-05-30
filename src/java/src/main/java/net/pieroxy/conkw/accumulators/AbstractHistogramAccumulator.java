@@ -101,7 +101,12 @@ public abstract class AbstractHistogramAccumulator<T extends DataRecord> impleme
 
     @Override
     public void initializeFromData(PrefixedDataRecord r) {
-        data.globalCount = r.getValues().get("count");
+        Double ct = r.getValues().get("count");
+        if (ct == null) {
+            // We assume there is no data to initialize ourselves from
+            return;
+        }
+        data.globalCount = ct;
         data.globalSum = r.getValues().get("total");
         List<Double> thresholds = getThresholds();
         for (int i=0 ; i< thresholds.size() ; i++) {

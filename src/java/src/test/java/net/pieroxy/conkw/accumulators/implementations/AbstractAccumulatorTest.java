@@ -55,4 +55,19 @@ public abstract class AbstractAccumulatorTest<T extends Accumulator<Data>> exten
 
         logA.assertEquals(logB, this);
     }
+
+    @Test
+    public final void testEmptyInitialization() {
+        Data log = new Data();
+        T accumulator1 = buildAccumulator();
+        T accumulator2 = buildAccumulator();
+        accumulator1.initializeFromData(new PrefixedDataRecordImpl(log));
+
+        Data logA = new Data();
+        accumulator1.log("", logA);
+        Data logB = new Data();
+        accumulator2.log("", logB);
+        logA.assertEquals(logB, this);
+
+    }
 }

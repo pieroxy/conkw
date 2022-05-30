@@ -41,7 +41,8 @@ public class SimpleCounter<T extends DataRecord> implements Accumulator<T> {
 
   @Override
   public void initializeFromData(PrefixedDataRecord record) {
-    count = (int)(double)record.getValues().get(NAME);
+    Double val = record.getValues().get(NAME);
+    count = val==null ? 0 : (int)(double)val;
   }
 
   @Override
