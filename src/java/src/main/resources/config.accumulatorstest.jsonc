@@ -1,0 +1,158 @@
+{
+  "instanceName": "_default_",
+  // This is the list of Grabbers. Grabbers are things conkw will be able to fetch infos from.
+  "grabbers":[
+    {
+      "implementation":"net.pieroxy.conkw.webapp.grabbers.logfile.FakeGeneratedLogFileGrabber",
+      "name":"httpsimulation01",
+      "config":{
+        "accumulator":"multi([name(sizehist,log125hist(size,1000,1000000)),name(timehist,log125hist(time,1,1000)),name(byct,stablekey(contentType,count(),3)),name(byuri,stablekey(uri,count(),3)),sum(size,0),count(),sum(time,0)])",
+        "traffic" : [
+          {
+            "server":"srv001",
+            "qps":120,"time":3,"size":1024,"verb":"getBasicData",
+            "host":"myhost.com","uri":"/api","userAgent":"Google Chrome","status":200,"contentType":"text/json","ip":"1.2.3.4"
+          },
+          {
+            "server":"srv001",
+            "qps":7,"time":500,"size":6000,"verb":"getComplexHeavyQuery",
+            "host":"myhost.com","uri":"/api","userAgent":"Google Chrome","status":200,"contentType":"text/json","ip":"1.2.3.4"
+          },
+          {
+            "server":"srv001",
+            "qps":30,"time":35,"size":100,"verb":"putSomeStuffInDb",
+            "host":"myhost.com","uri":"/api","userAgent":"Google Chrome","status":200,"contentType":"text/json","ip":"1.2.3.4"
+          }
+        ]
+      }
+    },
+    {
+      "implementation":"net.pieroxy.conkw.webapp.grabbers.logfile.FakeGeneratedLogFileGrabber",
+      "name":"httpsimulation02",
+      "config":{
+        "accumulator":"multi([name(sizehist,log125hist(size,1000,1000000)),name(timehist,log125hist(time,1,1000)),name(byct,stablekey(contentType,count(),3)),name(byuri,stablekey(uri,count(),3)),sum(size,0),count(),sum(time,0)])",
+        "traffic" : [
+          {
+            "server":"srv002",
+            "qps":120,"time":3,"size":1024,"verb":"getBasicData",
+            "host":"myhost.com","uri":"/api","userAgent":"Google Chrome","status":200,"contentType":"text/json","ip":"1.2.3.4"
+          },
+          {
+            "server":"srv002",
+            "qps":7,"time":500,"size":6000,"verb":"getComplexHeavyQuery",
+            "host":"myhost.com","uri":"/api","userAgent":"Google Chrome","status":200,"contentType":"text/json","ip":"1.2.3.4"
+          },
+          {
+            "server":"srv002",
+            "qps":30,"time":35,"size":100,"verb":"putSomeStuffInDb",
+            "host":"myhost.com","uri":"/api","userAgent":"Google Chrome","status":200,"contentType":"text/json","ip":"1.2.3.4"
+          }
+        ]
+      }
+    },
+    {
+      "implementation":"net.pieroxy.conkw.webapp.grabbers.logfile.FakeGeneratedLogFileGrabber",
+      "name":"httpsimulation03",
+      "config":{
+        "accumulator":"multi([name(sizehist,log125hist(size,1000,1000000)),name(timehist,log125hist(time,1,1000)),name(byct,stablekey(contentType,count(),3)),name(byuri,stablekey(uri,count(),3)),sum(size,0),count(),sum(time,0)])",
+        "traffic" : [
+          {
+            "server":"srv003",
+            "qps":120,"time":3,"size":1024,"verb":"getBasicData",
+            "host":"myhost.com","uri":"/api","userAgent":"Google Chrome","status":200,"contentType":"text/json","ip":"1.2.3.4"
+          },
+          {
+            "server":"srv003",
+            "qps":7,"time":500,"size":6000,"verb":"getComplexHeavyQuery",
+            "host":"myhost.com","uri":"/api","userAgent":"Google Chrome","status":200,"contentType":"text/json","ip":"1.2.3.4"
+          },
+          {
+            "server":"srv003",
+            "qps":30,"time":35,"size":100,"verb":"putSomeStuffInDb",
+            "host":"myhost.com","uri":"/api","userAgent":"Google Chrome","status":200,"contentType":"text/json","ip":"1.2.3.4"
+          }
+        ]
+      }
+    },
+    {
+      "implementation":"net.pieroxy.conkw.webapp.grabbers.logfile.FakeGeneratedLogFileGrabber",
+      "name":"httpsimulation04",
+      "config":{
+        "accumulator":"multi([name(sizehist,log125hist(size,1000,1000000)),name(timehist,log125hist(time,1,1000)),name(byct,stablekey(contentType,count(),3)),name(byuri,stablekey(uri,count(),3)),sum(size,0),count(),sum(time,0)])",
+        "traffic" : [
+          {
+            "server":"srv004",
+            "qps":120,"time":1003,"size":1024,"verb":"getBasicData",
+            "host":"myhost.com","uri":"/api","userAgent":"Google Chrome","status":200,"contentType":"text/json","ip":"1.2.3.4"
+          },
+          {
+            "server":"srv004",
+            "qps":7,"time":1500,"size":6000,"verb":"getComplexHeavyQuery",
+            "host":"myhost.com","uri":"/api","userAgent":"Google Chrome","status":200,"contentType":"text/json","ip":"1.2.3.4"
+          },
+          {
+            "server":"srv004",
+            "qps":30,"time":1035,"size":100,"verb":"putSomeStuffInDb",
+            "host":"myhost.com","uri":"/api","userAgent":"Google Chrome","status":200,"contentType":"text/json","ip":"1.2.3.4"
+          }
+        ]
+      }
+    },
+    {
+      "implementation":"net.pieroxy.conkw.webapp.grabbers.clustering.ExternalInstanceAggregator",
+      "name":"agg",
+      "config": {
+        "accumulator":"multi([name(sizehist,log125hist(size,1000,1000000)),name(timehist,log125hist(time,1,1000)),name(byct,stablekey(contentType,count(),3)),name(byuri,stablekey(uri,count(),3)),sum(size,0),count(),sum(time,0)])",
+        "endpoints":[
+          {
+            "url":"http://localhost:12789/api",
+            "grabberName": "httpsimulation01"
+          },
+          {
+            "url":"http://localhost:12789/api",
+            "grabberName": "httpsimulation02"
+          },
+          {
+            "url":"http://localhost:12789/api",
+            "grabberName": "httpsimulation03"
+          },
+          {
+            "url":"http://localhost:12789/api",
+            "grabberName": "httpsimulation04"
+          }
+        ]
+      }
+      
+    }
+   //END OF GRABBERS
+  ],
+  "apiAuth":{
+    "auth":false, // Set to true to activate API authentication 
+    "sessionLifetime":"1y", // Delay after which every session expires.
+    "sessionInactivityTimeout":"30d", // Delay after which every unused session expires.
+    "users":[ // You can define here many users.
+      {
+        "credentialsRef":"uiUser"
+      }
+    ]
+  },
+
+  // This is the port the web server will listen to. Note that values below 1024 are discouraged as they require
+  // the process to be launched as root on Linux systems.
+  "httpPort": 12789,
+
+  // If true, bandwidth usage will decrease but CPU usage will increase. 
+  // Note that compression is always on for static resources (html, css, js, ...)
+  "enableApiCompression":true, 
+
+  // If true, the default UI answering at / will not be run. This includes reference UI for grabbers, documentation and js, css and image files.
+  "disableDefaultUI":false,
+  // If true, the custom UI answering at /ui will not be run. This includes every file under $CONKW_HOME/ui
+  "disableCustomUI":false,
+  // If true, the API answering at /api will not be run. No UI will work against this instance because no metrics can be served.
+  "disableApi":false,
+  // If true, the EMI answering at /emi will not be run. If no EMG grabbers are configured it makes sense.
+  "disableEmi":false
+  
+  // NOTE: If all four flags above are set to true, no web server will be run along with conkw.
+}

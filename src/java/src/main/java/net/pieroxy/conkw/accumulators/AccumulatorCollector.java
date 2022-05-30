@@ -108,4 +108,8 @@ public class AccumulatorCollector<T extends DataRecord> implements Collector {
     // will close accumulators when they will be Closable
     sc.close();
   }
+
+  public RootAccumulator<T> getAccumulator() {
+    return accumulator;
+  }
 }
