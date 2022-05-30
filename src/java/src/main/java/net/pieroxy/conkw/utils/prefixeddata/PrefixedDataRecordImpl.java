@@ -49,4 +49,12 @@ public class PrefixedDataRecordImpl implements PrefixedDataRecord {
         if (!Objects.equals(a,b)) throw new RuntimeException("Prefixes mismatched: " + a + " vs " + b);
         return a;
     }
+
+    @Override
+    public String toString() {
+        return "PrefixedDataRecordImpl{" +
+                "dimensions=" + dimensions +
+                ", values=" + values +
+                '}';
+    }
 }
