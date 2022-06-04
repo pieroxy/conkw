@@ -1,4 +1,5 @@
 import m = require('mithril');
+import "../css/style.scss";
 
 export class Test implements m.Component<any, any> {
   view(vnode:m.Vnode<any, any>):m.Children {
