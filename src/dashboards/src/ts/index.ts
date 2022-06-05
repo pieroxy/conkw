@@ -1,12 +1,13 @@
 import m = require('mithril');
 import "../css/style.scss";
+import { HomePage } from './components/pages/HomePage';
+import { LoginPage } from './components/pages/LoginPage';
+import { AuthenticatedPageResolver } from './utils/AuthenticatedPageResolver';
 
-export class Test implements m.Component<any, any> {
-  view(vnode:m.Vnode<any, any>):m.Children {
-    if (vnode==null) {
-      return m("", "vnode is null");
-    }
-    return m("", "Hello world");
-  }
-}
-m.mount(document.body, Test)
+(function () {
+  m.route.prefix = "?";
+  m.route(document.body, "/home", {
+    "/home":new AuthenticatedPageResolver(HomePage),
+    "/login":LoginPage
+  })
+})();
