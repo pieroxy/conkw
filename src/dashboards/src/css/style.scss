@@ -1,5 +1,14 @@
-$body-color: red;
+@use "../../../web/css/fonts.css";
+
+$bg-color: #300a24;
+$text-color: lightgray;
 
 body {
-  color: $body-color;
+  font-family: Raleway, sans-serif;
+  font-size:18px;
+  background-color: $bg-color;
+  color: $text-color;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  overflow-y: scroll;
 }
+

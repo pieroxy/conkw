@@ -16,8 +16,22 @@ module.exports = {
           // Creates `style` nodes from JS strings
           "style-loader",
           // Translates CSS into CommonJS
-          "css-loader",
-          // Compiles Sass to CSS
+          {
+            loader: 'css-loader',
+            options: {
+              url: {
+                filter: (url, resourcePath) => {
+                  // resourcePath - path to css file
+    
+                  // Don't handle `img.png` urls
+                  if (url.indexOf("/fonts/")==0) {
+                    return false;
+                  }
+                  return true;
+                },
+              },
+            }
+          },          // Compiles Sass to CSS
           "sass-loader",
         ],
       },
