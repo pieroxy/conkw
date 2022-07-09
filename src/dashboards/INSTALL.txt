@@ -1,8 +1,8 @@
 npm init --yes
+npm install typescript --save-dev
 npm install mithril --save
 npm install @types/mithril --save-dev
 npm install @types/mithril-global --save-dev
-npm install typescript --save-dev
 
 # webpack
 npm install webpack webpack-cli --save-dev
