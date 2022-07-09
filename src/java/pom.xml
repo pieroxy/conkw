@@ -270,7 +270,9 @@
         </executions>
         <configuration>
           <jsonLibrary>jackson2</jsonLibrary>
-          <classPatterns>net.pieroxy.conkw.webapp.model.*</classPatterns>
+          <classesWithAnnotations>
+            net.pieroxy.conkw.api.TypeScriptType
+          </classesWithAnnotations>
           <outputKind>module</outputKind>
         </configuration>
       </plugin>

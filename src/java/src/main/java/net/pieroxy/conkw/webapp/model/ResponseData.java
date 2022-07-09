@@ -2,6 +2,7 @@ package net.pieroxy.conkw.webapp.model;
 
 import com.dslplatform.json.CompiledJson;
 import com.dslplatform.json.JsonAttribute;
+import net.pieroxy.conkw.api.TypeScriptType;
 import net.pieroxy.conkw.grabbersBase.Grabber;
 import net.pieroxy.conkw.pub.mdlog.DataRecord;
 import net.pieroxy.conkw.pub.misc.ConkwCloseable;
@@ -18,6 +19,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 @CompiledJson(onUnknown = CompiledJson.Behavior.IGNORE)
+@TypeScriptType
 public class ResponseData implements ConkwCloseable, DataRecord {
   private final static Logger LOGGER = Logger.getLogger(ResponseData.class.getName());
 
