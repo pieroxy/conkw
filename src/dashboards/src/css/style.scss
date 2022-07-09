@@ -6,7 +6,7 @@ $primary-color-hover: #00adad;
 $text-color: lightgray;
 $error-color: #c49d07;
 
-html {
+html, body {
   height:100%;
 }
 
@@ -18,24 +18,50 @@ body {
   padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
   overflow-y: scroll;
   height:100%;
+  margin:0;
+  padding:0;
 }
 
+/* CSS reset */
+
+input:autofill {
+  background: #fff; /* or any other */
+}
+
+input:focus {
+  outline : none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Login page */
+
 .loginpage {
-  display:flex;
-  align-items:center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
   flex-direction: column;
 
-  > div {
-    margin:10px;
-  }
-
-  .inputlabel {
-    color:#999;
-  }
-
-  .title {
-    font-size: 50px;
-    font-weight: 200;
+  .loginarea2 {
+    display:flex;
+    align-items:center;
+    flex-direction: column;
+  
+    > div {
+      margin:10px;
+    }
+  
+    .inputlabel {
+      color:#999;
+    }
+  
+    .title {
+      font-size: 50px;
+      font-weight: 200;
+    }
   }
 }
 
@@ -59,7 +85,6 @@ input.error {
 }
 
 input:focus {
-  outline : none;
   border:2px solid lightgray;
   opacity: 0.9;
   box-shadow: inset 3px 3px 5px rgb(0 0 0 / 40%);
@@ -78,3 +103,14 @@ button:hover {
   background-color: $primary-color-hover;
 }
 
+@media screen and (min-width:700px) {
+  .loginpage {
+    flex-direction: row;
+
+    .loginarea2 {
+      border-left:1px solid rgba(255,255,255,0.3);
+      padding-left: 10px;
+      margin-left: 20px;
+    }
+  }
+}

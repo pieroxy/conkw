@@ -16,38 +16,42 @@ export class LoginPage extends AbstractPage<any> {
   }
   render():void | m.Children {
     return m(".loginpage", [
-      m("img", {
-        src:"/images/logo-white-400.png",
-        style: {
-          opacity:0.1,
-          width:"300px"
-        }
-      }),
-      m(".title", "Please log in"),
-      m("", [
-        m(".inputlabel", "Username"),
-        m(TextFieldInput, {
-          refHolder: this,
-          refProperty: "username",
-          form:this.form,
-          requiredMessage:"Please enter your login"
+      m(".loginarea1", [
+        m("img", {
+          src:"/images/logo-white-400.png",
+          style: {
+            opacity:0.1,
+            width:"300px"
+          }
         }),
       ]),
-      m("", [
-        m(".inputlabel", "Password"),
-        m(PasswordFieldInput, {
-          refHolder: this,
-          refProperty: "password",
-          form:this.form,
-          requiredMessage:"Please enter your password"
-        }),
-      ]),
-      m("", [
-        m(Button, {
-          action:()=>{},
-          form:this.form
-        }, "Login")
-      ]),
+      m(".loginarea2", [
+        m(".title", "Please log in"),
+        m("", [
+          m(".inputlabel", "Username"),
+          m(TextFieldInput, {
+            refHolder: this,
+            refProperty: "username",
+            form:this.form,
+            requiredMessage:"Please enter your login"
+          }),
+        ]),
+        m("", [
+          m(".inputlabel", "Password"),
+          m(PasswordFieldInput, {
+            refHolder: this,
+            refProperty: "password",
+            form:this.form,
+            requiredMessage:"Please enter your password"
+          }),
+        ]),
+        m("", [
+          m(Button, {
+            action:()=>{},
+            form:this.form
+          }, "Login")
+        ]),
+      ])
     ]);
   }
 }
