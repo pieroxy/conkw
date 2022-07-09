@@ -1,4 +1,4 @@
-import m = require('mithril');
+import m from 'mithril';
 import { AbstractPage } from './AbstractPage';
 
 export class HomePage extends AbstractPage<any> {

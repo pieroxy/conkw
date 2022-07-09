@@ -3,6 +3,10 @@
 $bg-color: #300a24;
 $text-color: lightgray;
 
+html {
+  height:100%;
+}
+
 body {
   font-family: Raleway, sans-serif;
   font-size:18px;
@@ -10,5 +14,29 @@ body {
   color: $text-color;
   padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
   overflow-y: scroll;
+  height:100%;
 }
 
+.loginpage {
+  display:flex;
+  align-items:center;
+  flex-direction: column;
+}
+
+.loginpage > div {
+  margin:10px;
+}
+
+.loginpage input {
+  padding:5px;
+  font-size: 18px;
+}
+
+.inputlabel {
+  color:gray;
+}
+
+.title {
+  font-size: 50px;
+  font-weight: 200;
+}

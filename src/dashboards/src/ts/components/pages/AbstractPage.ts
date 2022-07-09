@@ -1,4 +1,4 @@
-import m = require('mithril');
+import m from 'mithril';
 
 
 export abstract class AbstractPage<A> implements m.Component<A, any> {
