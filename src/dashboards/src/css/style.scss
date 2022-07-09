@@ -1,7 +1,10 @@
 @use "../../../web/css/fonts.css";
 
 $bg-color: #300a24;
+$primary-color: darkcyan;
+$primary-color-hover: #00adad;
 $text-color: lightgray;
+$error-color: #c49d07;
 
 html {
   height:100%;
@@ -21,22 +24,57 @@ body {
   display:flex;
   align-items:center;
   flex-direction: column;
+
+  > div {
+    margin:10px;
+  }
+
+  .inputlabel {
+    color:#999;
+  }
+
+  .title {
+    font-size: 50px;
+    font-weight: 200;
+  }
 }
 
-.loginpage > div {
-  margin:10px;
-}
+/* Form elements */
 
-.loginpage input {
+input {
   padding:5px;
   font-size: 18px;
+  opacity: 0.7;
+  border:2px solid $bg-color;
+  box-shadow: inset 3px 3px 5px rgb(0 0 0 / 20%);
+  background-color: white;
 }
 
-.inputlabel {
-  color:gray;
+input:hover {
+  opacity: 0.8;
 }
 
-.title {
-  font-size: 50px;
-  font-weight: 200;
+input.error {
+  background-color: $error-color;
 }
+
+input:focus {
+  outline : none;
+  border:2px solid lightgray;
+  opacity: 0.9;
+  box-shadow: inset 3px 3px 5px rgb(0 0 0 / 40%);
+}
+
+button {
+  padding: 10px 30px;
+  font-size: 18px;
+  border: none;
+  background-color: $primary-color;
+  border-radius: 5px;
+  box-shadow: inset 3px 3px 5px rgb(255 255 255 / 10%), inset -3px -3px 5px rgb(0 0 0 / 10%);
+}
+
+button:hover {
+  background-color: $primary-color-hover;
+}
+

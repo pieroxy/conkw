@@ -2,15 +2,16 @@ import m from 'mithril';
 
 import { Children } from "mithril";
 import { GenericInput } from './GenericInput';
-import { GenericInputAttrs } from './GenericInputAttrs';
 import { HtmlInputEvent } from './HtmlInputEvent';
+import { TextInputAttrs } from './TextFieldInput';
 
-export class TextFieldInput extends GenericInput<string, TextInputAttrs> {
+export class PasswordFieldInput extends GenericInput<string, TextInputAttrs> {
+  
   render(_vnode: m.Vnode<TextInputAttrs>): void | Children {
     return m(
       "input" + this.getErrorClass(), 
       {
-        type:"text",
+        type:"password",
         oninput: (e:HtmlInputEvent) => {
           this.setValue(e.target.value);
           this.computeErrorState();
@@ -22,7 +23,4 @@ export class TextFieldInput extends GenericInput<string, TextInputAttrs> {
   isEmpty(): boolean {
     return !this.getValueAsString()
   }
-}
-
-export interface TextInputAttrs extends GenericInputAttrs<string> {
 }
