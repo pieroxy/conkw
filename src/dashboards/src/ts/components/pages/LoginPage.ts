@@ -12,6 +12,13 @@ export class LoginPage extends AbstractPage<any> {
   }
   render():m.Children {
     return m(".loginpage", [
+      m("img", {
+        src:"/images/logo-white-400.png",
+        style: {
+          opacity:0.1,
+          width:"300px"
+        }
+      }),
       m(".title", "Please log in"),
       m("", [
         m(".inputlabel", "Username"),
