@@ -1,4 +1,5 @@
 import m from 'mithril';
+import { Form } from '../forms/Form';
 import { TextFieldInput } from '../forms/TextFieldInput';
 import { AbstractPage } from './AbstractPage';
 
@@ -10,7 +11,8 @@ export class LoginPage extends AbstractPage<any> {
   getPageTitle(): string {
     return "ConkW - Login";
   }
-  render():m.Children {
+  render():void | m.Children {
+    let form = new Form();
     return m(".loginpage", [
       m("img", {
         src:"/images/logo-white-400.png",
@@ -22,12 +24,13 @@ export class LoginPage extends AbstractPage<any> {
       m(".title", "Please log in"),
       m("", [
         m(".inputlabel", "Username"),
-        m(<any>TextFieldInput, {
-          refHolder:this,
-          refProperty:"username"
-        })
+        m(TextFieldInput, {
+          refHolder: this,
+          refProperty: "username",
+          form:form,
+          requiredMessage:"Please enter your login"
+        }, ""),
       ]),
     ]);
   }
 }
-

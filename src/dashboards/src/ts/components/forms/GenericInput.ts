@@ -3,7 +3,7 @@ import m from 'mithril';
 import { _NoLifecycle, Vnode, Children } from "mithril";
 import { GenericInputAttrs } from "./GenericInputAttrs";
 
-export abstract class GenericInput<VT, T extends GenericInputAttrs<VT>> implements m.Component<T, any> {
+export abstract class GenericInput<VT, T extends GenericInputAttrs<VT>> implements m.ClassComponent<T> {
   abstract isEmpty():boolean;
   abstract render(_vnode: Vnode<T, _NoLifecycle<any>>): void | Children;
 
@@ -15,7 +15,7 @@ export abstract class GenericInput<VT, T extends GenericInputAttrs<VT>> implemen
   private convertValueToString:(value:VT)=>string;
   private convertValueFromString:(value:String) => VT;
 
-  oninit(vnode: Vnode<T, _NoLifecycle<any>>) {
+  oninit(vnode: Vnode<T>) {
     if (vnode.attrs.format) {
       this.convertValueToString = vnode.attrs.format;
     } else {
@@ -30,7 +30,7 @@ export abstract class GenericInput<VT, T extends GenericInputAttrs<VT>> implemen
     this.refProperty = vnode.attrs.refProperty;
   }
   
-  view(vnode: Vnode<T, _NoLifecycle<any>>): void | Children {
+  view(vnode: Vnode<T>): void | Children {
     this.refHolder = vnode.attrs.refHolder;
     this.refProperty = vnode.attrs.refProperty;
     this.requiredMessage = vnode.attrs.requiredMessage;

@@ -1,31 +1,26 @@
 import m from 'mithril';
 
-import { _NoLifecycle, Vnode, Children } from "mithril";
-import { GenericInput } from "./GenericInput";
-import { GenericInputAttrs } from "./GenericInputAttrs";
+import { Children } from "mithril";
+import { GenericInput } from './GenericInput';
+import { GenericInputAttrs } from './GenericInputAttrs';
 import { HtmlInputEvent } from './HtmlInputEvent';
 
-export abstract class TextFieldInput<V, T extends TextInputAttrs<V>> extends GenericInput<V, T> {
-  abstract onEnter(value:V):void;
+export class TextFieldInput extends GenericInput<string, TextInputAttrs> {
   
-  render(_vnode: Vnode<T, _NoLifecycle<any>>): void | Children {
+  render(_vnode: m.Vnode<TextInputAttrs>): void | Children {
     return m(
       "input", 
       {
-        type:this.getInputType(),
+        type:"text",
         oninput: (e:HtmlInputEvent) => {this.setValue(e.target.value)},
         value: this.getValueAsString()
       });
   }
 
-  isEmpty():boolean {
-    return !!this.getValueAsString() && !!this.getValueAsString().length;
+  isEmpty(): boolean {
+    return !this.getValueAsString()
   }
+}
 
-  getInputType():string {
-    return "text";
-  }
-};
-
-export interface TextInputAttrs<V> extends GenericInputAttrs<V> {
+export interface TextInputAttrs extends GenericInputAttrs<string> {
 }

@@ -3,7 +3,7 @@ import m = require('mithril');
 import { Form } from "./Form";
 
 export interface GenericInputAttrs<T> {
-  params:m.Attributes,
+  params?:m.Attributes,
   refHolder: any,
   refProperty: string|number,
   requiredMessage?: string,
