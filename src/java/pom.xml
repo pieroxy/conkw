@@ -184,6 +184,13 @@
                 <replace dir="../web/doc/" token=".md&quot;" value=".html&quot;">
                   <include name="**/*.html"/>
                 </replace>
+                <echo message="Building dashboards." />
+                <delete><fileset dir="../dashboards/dist/"/></delete>
+                <exec executable="../dashboards/build.sh" dir="../dashboards"></exec>
+                <delete><fileset dir="../web/dashboards/"/></delete>
+                <copy todir="../web/dashboards/">
+                  <fileset dir="../dashboards/dist/"></fileset>
+                </copy>
                 <echo message="Packaging the web resources." />
                 <zip destfile="./src/main/resources/webapp-static.zip"  basedir="../web/"/>
                 <property prefix="config" file="local.properties"/>
