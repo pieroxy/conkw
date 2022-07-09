@@ -118,6 +118,11 @@
       <version>1.9.8</version>
       <scope>compile</scope>
     </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.13.3</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -177,7 +182,7 @@
         <version>1.7</version>
         <executions>
           <execution>
-            <phase>generate-resources</phase>
+            <phase>prepare-package</phase>
             <configuration>
               <target>
                 <echo message="Fixing documentation links." />
@@ -200,6 +205,9 @@
                   <arg value="HEAD"/>
                 </exec>
                 <echo file="src/main/resources/MVN_VER">${project.version}</echo>
+                <copy todir="../dashboards/src/auto/">
+                  <fileset dir="../../src/java/target/typescript-generator/"></fileset>
+                </copy>
               </target>
             </configuration>
             <goals>
@@ -246,6 +254,25 @@
             </configuration>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <groupId>cz.habarta.typescript-generator</groupId>
+        <artifactId>typescript-generator-maven-plugin</artifactId>
+        <version>2.35.1025</version>
+        <executions>
+          <execution>
+            <id>generate</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <phase>process-classes</phase>
+          </execution>
+        </executions>
+        <configuration>
+          <jsonLibrary>jackson2</jsonLibrary>
+          <classPatterns>net.pieroxy.conkw.webapp.model.*</classPatterns>
+          <outputKind>module</outputKind>
+        </configuration>
       </plugin>
     </plugins>
   </build>
