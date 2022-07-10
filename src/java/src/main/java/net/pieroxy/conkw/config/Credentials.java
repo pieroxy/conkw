@@ -11,6 +11,7 @@ public class Credentials implements Hashable {
   private String id;
   private String secret;
   private Set<String> accessibleTo;
+  private Set<UserRole> roles;
 
   public String getId() {
     return id;
@@ -71,5 +72,13 @@ public class Credentials implements Hashable {
         ", id='" + id + '\'' +
         ", accessibleTo=" + accessibleTo +
         '}';
+  }
+
+  public Set<UserRole> getRoles() {
+    return roles;
+  }
+
+  public void setRoles(Set<UserRole> roles) {
+    this.roles = roles;
   }
 }

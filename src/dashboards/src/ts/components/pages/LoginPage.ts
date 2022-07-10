@@ -23,7 +23,7 @@ export class LoginPage extends AbstractPage<any> {
         m("img", {
           src:"/images/logo-white-400.png",
           style: {
-            opacity:0.1,
+            opacity:0.4,
             width:"300px"
           }
         }),

@@ -31,7 +31,7 @@ export class Api {
   }
 
   private static apiInternal<I,O>(p:ApiParams<I>): Promise<O> {
-    var ct = "application/x-www-form-urlencoded";
+    var ct = "application/json";
 
     if (this.timeout) {
       clearTimeout(this.timeout);
@@ -43,14 +43,13 @@ export class Api {
       "client": JSON.stringify(p.client)
     }
 
-    p.url = p.url + (p.method === "GET" ? ("?input=" + encodeURIComponent(JSON.stringify(p.content))) : "");
-
     this.waiting = true;
     return m.request({
       method: p.method,
       url: p.url,
       headers: headers,
-      serialize: (p.method === "POST" ? ()=>JSON.stringify(p.content) : function () { }),
+      body: p.method === 'POST' ? p.content : null,
+      params: p.method === 'GET' ? {input:p.content}:{},
     }).then((arg:any) => {
       this.timeout = window.setTimeout(() => {Api.waiting = false;Api.timeout=0;m.redraw()} , 150);
       return arg;

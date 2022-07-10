@@ -1,8 +1,16 @@
 package net.pieroxy.conkw.api.implementations;
 
+import com.dslplatform.json.CompiledJson;
 import net.pieroxy.conkw.api.metadata.AbstractApiEndpoint;
+import net.pieroxy.conkw.api.metadata.ApiMethod;
+import net.pieroxy.conkw.api.metadata.Endpoint;
 import net.pieroxy.conkw.api.metadata.TypeScriptType;
+import net.pieroxy.conkw.config.UserRole;
 
+@Endpoint(
+    method = ApiMethod.POST,
+    role = UserRole.ANONYMOUS
+)
 public class DoLoginEndpoint extends AbstractApiEndpoint<DoLoginEndpointInput, DoLoginEndpointOutput> {
   @Override
   public DoLoginEndpointOutput process(DoLoginEndpointInput input) throws Exception {
@@ -16,6 +24,7 @@ public class DoLoginEndpoint extends AbstractApiEndpoint<DoLoginEndpointInput, D
 }
 
 @TypeScriptType
+@CompiledJson
 class DoLoginEndpointInput {
   private String login;
   private String password;
@@ -38,6 +47,7 @@ class DoLoginEndpointInput {
 }
 
 @TypeScriptType
+@CompiledJson
 class DoLoginEndpointOutput {
   String token;
 }

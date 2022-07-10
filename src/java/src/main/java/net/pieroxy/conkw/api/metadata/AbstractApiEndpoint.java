@@ -20,7 +20,7 @@ public abstract class AbstractApiEndpoint<I,O> {
     return LOGGER;
   }
 
-  protected void process(HttpServletRequest req, HttpServletResponse res) throws Exception {
+  public void process(HttpServletRequest req, HttpServletResponse res) throws Exception {
     try {
       I input;
       if (req.getMethod().equals("GET")) {
