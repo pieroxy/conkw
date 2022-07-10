@@ -1,4 +1,4 @@
-package net.pieroxy.conkw.api;
+package net.pieroxy.conkw.api.metadata;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

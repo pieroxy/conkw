@@ -190,24 +190,32 @@
                   <include name="**/*.html"/>
                 </replace>
                 <echo message="Building dashboards." />
+                <copy todir="../dashboards/src/ts/auto/">
+                  <fileset dir="../../src/java/target/typescript-generator/"/>
+                </copy>
                 <delete><fileset dir="../dashboards/dist/"/></delete>
-                <exec executable="../dashboards/build.sh" dir="../dashboards"></exec>
+                <exec failonerror="true" executable="../dashboards/build.sh" dir="../dashboards"/>
                 <delete><fileset dir="../web/dashboards/"/></delete>
                 <copy todir="../web/dashboards/">
-                  <fileset dir="../dashboards/dist/"></fileset>
+                  <fileset dir="../dashboards/dist/"/>
                 </copy>
                 <echo message="Packaging the web resources." />
-                <zip destfile="./src/main/resources/webapp-static.zip"  basedir="../web/"/>
                 <property prefix="config" file="local.properties"/>
-                <exec executable="${config.git}" output="src/main/resources/GIT_REV">
+                <exec failonerror="true" executable="${config.git}" outputproperty="GIT_REV">
                   <arg value="rev-parse"/>
                   <arg value="--short"/>
                   <arg value="HEAD"/>
                 </exec>
+                <exec failonerror="true" executable="${config.git}" outputproperty="GIT_DEPTH">
+                  <arg value="rev-list"/>
+                  <arg value="--count"/>
+                  <arg value="HEAD"/>
+                </exec>
                 <echo file="src/main/resources/MVN_VER">${project.version}</echo>
-                <copy todir="../dashboards/src/auto/">
-                  <fileset dir="../../src/java/target/typescript-generator/"></fileset>
-                </copy>
+                <echo file="src/main/resources/GIT_REV">${GIT_REV}</echo>
+                <echo file="src/main/resources/GIT_DEPTH">${GIT_DEPTH}</echo>
+                <echo file="../web/version.js">window.MVN_VER="${project.version}";window.GIT_REV="${GIT_REV}";window.GIT_DEPTH="${GIT_DEPTH}";</echo>
+                <zip destfile="./src/main/resources/webapp-static.zip"  basedir="../web/"/>
               </target>
             </configuration>
             <goals>
@@ -271,9 +279,10 @@
         <configuration>
           <jsonLibrary>jackson2</jsonLibrary>
           <classesWithAnnotations>
-            net.pieroxy.conkw.api.TypeScriptType
+            net.pieroxy.conkw.api.metadata.TypeScriptType
           </classesWithAnnotations>
           <outputKind>module</outputKind>
+          <mapEnum>asEnum</mapEnum>
         </configuration>
       </plugin>
     </plugins>

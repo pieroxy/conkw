@@ -2,7 +2,7 @@ package net.pieroxy.conkw.webapp.model;
 
 import com.dslplatform.json.CompiledJson;
 import com.dslplatform.json.JsonAttribute;
-import net.pieroxy.conkw.api.TypeScriptType;
+import net.pieroxy.conkw.api.metadata.TypeScriptType;
 import net.pieroxy.conkw.grabbersBase.Grabber;
 import net.pieroxy.conkw.pub.mdlog.DataRecord;
 import net.pieroxy.conkw.pub.misc.ConkwCloseable;

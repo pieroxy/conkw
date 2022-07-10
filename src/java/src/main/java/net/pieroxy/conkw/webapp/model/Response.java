@@ -2,7 +2,7 @@ package net.pieroxy.conkw.webapp.model;
 
 import com.dslplatform.json.CompiledJson;
 import com.dslplatform.json.JsonAttribute;
-import net.pieroxy.conkw.api.TypeScriptType;
+import net.pieroxy.conkw.api.metadata.TypeScriptType;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapStringResponseDataConverter;
 

@@ -11,6 +11,7 @@ import net.pieroxy.conkw.webapp.Filter;
 import net.pieroxy.conkw.webapp.Listener;
 import net.pieroxy.conkw.webapp.servlets.Api;
 import net.pieroxy.conkw.webapp.servlets.Emi;
+import net.pieroxy.conkw.webapp.servlets.ModularApi;
 import org.apache.catalina.LifecycleException;
 import org.apache.catalina.connector.Connector;
 import org.apache.catalina.core.StandardContext;
@@ -318,6 +319,8 @@ public class Runner {
         if (!config.isDisableApi()) {
             tomcat.addServlet(contextPath, "api", new Api());
             ctx.addServletMappingDecoded("/api", "api");
+            tomcat.addServlet(contextPath, "modularApi", new ModularApi());
+            ctx.addServletMappingDecoded("/api/*", "modularApi");
         }
 
         if (!config.isDisableEmi()) {

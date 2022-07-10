@@ -1,4 +1,6 @@
 import m from 'mithril';
+import { DoLoginEndpointInput, DoLoginEndpointOutput } from '../../auto/pieroxy-conkw';
+import { Api } from '../../utils/api/Api';
 import { Button } from '../forms/Button';
 import { Form } from '../forms/Form';
 import { PasswordFieldInput } from '../forms/PasswordFieldInput';
@@ -47,7 +49,16 @@ export class LoginPage extends AbstractPage<any> {
         ]),
         m("", [
           m(Button, {
-            action:()=>{},
+            action:()=>{
+              Api.call<DoLoginEndpointInput, DoLoginEndpointOutput>({
+                method:"POST",
+                endpoint:"DoLogin",
+                body:{
+                  login:this.username,
+                  password:this.password
+                }
+              })
+            },
             form:this.form
           }, "Login")
         ]),

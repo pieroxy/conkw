@@ -45,6 +45,23 @@ public class JsonHelper {
   }
 
   /**
+   * Serialize the object provided into the OutputStream provided.
+   * @param o
+   * @param f
+   * @throws IOException
+   */
+  public static void writeToOutputStream(Object o, OutputStream os) throws IOException {
+    DslJson<Object> json = JsonHelper.getJson();
+    JsonWriter w = JsonHelper.getWriter();
+
+    synchronized (w) {
+      w.reset(os);
+      json.serialize(w, o);
+      w.flush();
+    }
+  }
+
+  /**
    *
    * @param type
    * @param f
@@ -59,6 +76,31 @@ public class JsonHelper {
       }
     }
     return null;
+  }
+
+  /**
+   *
+   * @param type
+   * @param is
+   * @param <T>
+   * @return The deserialized object
+   * @throws IOException
+   */
+  public static <T> T readFromInputStream(Class<T> type, InputStream is) throws IOException {
+    return getJson().deserialize(type, is);
+  }
+
+  /**
+   *
+   * @param type
+   * @param input
+   * @param <T>
+   * @return The deserialized object
+   * @throws IOException
+   */
+  public static <T> T readFromString(Class<T> type, String input) throws IOException {
+    byte[]data = input.getBytes(StandardCharsets.UTF_8);
+    return getJson().deserialize(type, data, data.length);
   }
 
 
