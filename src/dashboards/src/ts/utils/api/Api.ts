@@ -1,5 +1,6 @@
 import m from 'mithril';
 import { ClientInfo } from '../../auto/pieroxy-conkw';
+import { AppVersion } from '../../auto/version';
 import { ApiOptions } from './ApiOptions';
 
 import { ApiParams } from "./ApiParams";
@@ -14,9 +15,9 @@ export class Api {
 
   public static getClientInfo():ClientInfo {
     return {
-      appVersion:(<any>window).MVN_VER,
-      gitDepth:(<any>window).GIT_DEPTH,
-      gitRevision:(<any>window).GIT_REV,
+      appVersion:AppVersion.MVN_VER,
+      gitDepth:AppVersion.GIT_DEPTH,
+      gitRevision:AppVersion.GIT_REV,
     };
   }
 
