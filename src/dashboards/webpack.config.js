@@ -48,6 +48,8 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       title: 'ConkW Dashboards',
+      template: './src/html/index.html',
+
     }),
   ],
 };

@@ -24,6 +24,9 @@ body {
 
 /* CSS reset */
 
+@-ms-viewport { width: device-width; }
+html { -webkit-text-size-adjust: 100%; }
+
 input:autofill {
   background: #fff; /* or any other */
 }
@@ -63,6 +66,26 @@ input:focus {
       font-weight: 200;
     }
   }
+
+  .footer {
+    position: absolute;
+    bottom: 10px;
+    color: gray;
+    text-align: center;
+
+    > span {
+      padding:0 20px;
+      border-left:1px solid gray;
+      display: inline-block;
+
+      a, a:visited, a:active {
+        color:gray;
+      }
+    }
+    > span:first-child {
+      border-left:0px;
+    }
+  }
 }
 
 /* Form elements */
@@ -97,6 +120,7 @@ button {
   background-color: $primary-color;
   border-radius: 5px;
   box-shadow: inset 3px 3px 5px rgb(255 255 255 / 10%), inset -3px -3px 5px rgb(0 0 0 / 10%);
+  color:black;
 }
 
 button:hover {
