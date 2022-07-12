@@ -10,6 +10,7 @@ public class Credentials implements Hashable {
   private String reference;
   private String id;
   private String secret;
+  private HashedSecret hashedSecret;
   private Set<String> accessibleTo;
   private Set<UserRole> roles;
 
@@ -80,5 +81,13 @@ public class Credentials implements Hashable {
 
   public void setRoles(Set<UserRole> roles) {
     this.roles = roles;
+  }
+
+  public HashedSecret getHashedSecret() {
+    return hashedSecret;
+  }
+
+  public void setHashedSecret(HashedSecret hashedSecret) {
+    this.hashedSecret = hashedSecret;
   }
 }

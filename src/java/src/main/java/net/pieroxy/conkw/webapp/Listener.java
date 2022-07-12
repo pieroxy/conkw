@@ -1,5 +1,6 @@
 package net.pieroxy.conkw.webapp;
 
+import net.pieroxy.conkw.api.implementations.DoLoginEndpoint;
 import net.pieroxy.conkw.config.Config;
 import net.pieroxy.conkw.config.ConfigReader;
 import net.pieroxy.conkw.config.CredentialsStore;
@@ -38,6 +39,7 @@ public class Listener implements ServletContextListener {
     Config config = ConfigReader.getConfig();
     instanceName = config.getInstanceName();
     CredentialsStore creds = ConfigReader.getCredentials();
+    DoLoginEndpoint.setCredentials(creds);
     try {
       List<Grabber> newg = new ArrayList<>();
       Set<String> newgnames = new HashSet<>();

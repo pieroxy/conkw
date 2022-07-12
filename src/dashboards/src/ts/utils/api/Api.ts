@@ -1,6 +1,8 @@
 import m from 'mithril';
-import { ClientInfo } from '../../auto/pieroxy-conkw';
+import { ApiResultCodes, ClientInfo } from '../../auto/pieroxy-conkw';
 import { AppVersion } from '../../auto/version';
+import { Notification, Notifications, NotificationsClass, NotificationsType } from '../../components/alwayson/Notifications';
+import { ApiResponse } from '../types';
 import { ApiOptions } from './ApiOptions';
 
 import { ApiParams } from "./ApiParams";
@@ -22,11 +24,24 @@ export class Api {
   }
 
   public static call<I,O>(options:ApiOptions<I>): Promise<O> {
-    return Api.apiInternal<I,O>({
+    return Api.apiInternal<I,ApiResponse<O>>({
       method: options.method,
       content: options.body,
       client:Api.getClientInfo(),
       url:"/api/" + options.endpoint
+    }).then((r:ApiResponse<O>):O => {
+      switch (r.code) {
+        case ApiResultCodes.OK:
+          return r.content;
+        case ApiResultCodes.DISPLAY_ERROR:
+          Notifications.addNotification(new Notification(NotificationsClass.LOGIN, NotificationsType.WARNING, r.message));
+          throw "HandledError";
+        case ApiResultCodes.TECH_ERROR:
+        default:
+          throw "HandledError";
+      }
+    }).catch(() => {
+      return new Promise(()=>{});
     });
   }
 

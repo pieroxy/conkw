@@ -2,6 +2,7 @@ import m from 'mithril';
 import { DoLoginEndpointInput, DoLoginEndpointOutput } from '../../auto/pieroxy-conkw';
 import { AppVersion } from '../../auto/version';
 import { Api } from '../../utils/api/Api';
+import { Notification, Notifications, NotificationsClass, NotificationsType } from '../alwayson/Notifications';
 import { Button } from '../forms/Button';
 import { Form } from '../forms/Form';
 import { PasswordFieldInput } from '../forms/PasswordFieldInput';
@@ -17,7 +18,7 @@ export class LoginPage extends AbstractPage<any> {
   getPageTitle(): string {
     return "ConkW - Login";
   }
-  render():void | m.Children {
+  render():m.Children {
     return m(".loginpage", [
       m(".loginarea1", [
         m("img", {
@@ -58,6 +59,8 @@ export class LoginPage extends AbstractPage<any> {
                   login:this.username,
                   password:this.password
                 }
+              }).then((_data:DoLoginEndpointOutput) => {
+                Notifications.addNotification(new Notification(NotificationsClass.LOGIN, NotificationsType.INFO, "Welcome"))
               })
             },
             form:this.form
