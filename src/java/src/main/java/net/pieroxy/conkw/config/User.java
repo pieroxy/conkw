@@ -8,6 +8,13 @@ public class User implements CredentialsProvider {
   private Credentials credentials;
   private String credentialsRef;
 
+  public User() {
+  }
+
+  public User(Credentials credentials) {
+    this.credentials = credentials;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;

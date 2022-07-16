@@ -7,11 +7,13 @@ import net.pieroxy.conkw.api.metadata.Endpoint;
 import net.pieroxy.conkw.api.metadata.TypeScriptType;
 import net.pieroxy.conkw.config.Credentials;
 import net.pieroxy.conkw.config.HashedSecret;
+import net.pieroxy.conkw.config.User;
 import net.pieroxy.conkw.config.UserRole;
 import net.pieroxy.conkw.utils.Services;
 import net.pieroxy.conkw.utils.StringUtil;
 import net.pieroxy.conkw.utils.exceptions.DisplayMessageException;
 import net.pieroxy.conkw.utils.hashing.HashTools;
+import net.pieroxy.conkw.webapp.servlets.auth.Session;
 
 import java.util.logging.Logger;
 
@@ -56,7 +58,8 @@ public class DoLoginEndpoint extends AbstractApiEndpoint<DoLoginEndpointInput, D
   }
 
   private DoLoginEndpointOutput buildSession(Credentials c) {
-    return new DoLoginEndpointOutput(c.getId());
+    Session s = services.getApiAuthManager().buildSession(new User(c));
+    return new DoLoginEndpointOutput(s.getKey());
   }
 
   @Override
