@@ -2,6 +2,7 @@ package net.pieroxy.conkw.standalone;
 
 import net.pieroxy.conkw.config.Config;
 import net.pieroxy.conkw.config.ConfigReader;
+import net.pieroxy.conkw.config.LocalStorageManager;
 import net.pieroxy.conkw.utils.FileTools;
 import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.utils.Services;
@@ -207,7 +208,7 @@ public class Runner {
 
         if (config.getHttpPort() <= 0) throw new Exception("httpPort configured to an invalid value of " + config.getHttpPort());
 
-        Services services = new Services();
+        Services services = new Services(new LocalStorageManager(ConfigReader.getHomeDir()));
         services.setConfiguration(config);
 
         if (config.disableTomcat()) {

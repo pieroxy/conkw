@@ -2,6 +2,7 @@ package net.pieroxy.conkw.utils;
 
 import net.pieroxy.conkw.config.Config;
 import net.pieroxy.conkw.config.CredentialsStore;
+import net.pieroxy.conkw.config.LocalStorageManager;
 import net.pieroxy.conkw.webapp.servlets.ApiAuthManager;
 import net.pieroxy.conkw.webapp.servlets.ApiManager;
 
@@ -10,6 +11,11 @@ public class Services {
   private CredentialsStore credentialsStore;
   private Config configuration;
   private ApiManager apiManager;
+  private LocalStorageManager localStorageManager;
+
+  public Services(LocalStorageManager localStorageManager) {
+    this.localStorageManager = localStorageManager;
+  }
 
   public ApiAuthManager getApiAuthManager() {
     return apiAuthManager;
@@ -45,5 +51,13 @@ public class Services {
 
   public void close() {
     apiAuthManager.close();
+  }
+
+  public LocalStorageManager getLocalStorageManager() {
+    return localStorageManager;
+  }
+
+  public void setLocalStorageManager(LocalStorageManager localStorageManager) {
+    this.localStorageManager = localStorageManager;
   }
 }
