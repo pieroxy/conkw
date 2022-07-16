@@ -131,6 +131,7 @@ public class ApiAuthManager {
         LOGGER.fine("Password information present: " + pass);
         ChallengeResponse validatedCr = null;
         for (ChallengeResponse cr : challenges) {
+          if (cr.expired()) continue;
           if (getCredentials(cr.getUser()).getId().equals(user)) {
             String sha1 = HashTools.toSHA1(cr.getSaltValue() + getCredentials(cr.getUser()).getSecret());
             if (sha1.equals(pass)) {
