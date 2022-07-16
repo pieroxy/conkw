@@ -2,7 +2,7 @@ import m from 'mithril';
 import { DoLoginEndpointInput, DoLoginEndpointOutput } from '../../auto/pieroxy-conkw';
 import { AppVersion } from '../../auto/version';
 import { Api } from '../../utils/api/Api';
-import { Notification, Notifications, NotificationsClass, NotificationsType } from '../alwayson/Notifications';
+import { Notification, Notifications, NotificationsClass, NotificationsType } from '../../utils/Notifications';
 import { Button } from '../forms/Button';
 import { Form } from '../forms/Form';
 import { PasswordFieldInput } from '../forms/PasswordFieldInput';

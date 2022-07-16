@@ -1,7 +1,7 @@
 import m from 'mithril';
 import { ApiResultCodes, ClientInfo } from '../../auto/pieroxy-conkw';
 import { AppVersion } from '../../auto/version';
-import { Notification, Notifications, NotificationsClass, NotificationsType } from '../../components/alwayson/Notifications';
+import { Notification, Notifications, NotificationsClass, NotificationsType } from '../Notifications';
 import { ApiResponse } from '../types';
 import { ApiOptions } from './ApiOptions';
 
