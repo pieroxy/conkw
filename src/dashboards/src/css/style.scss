@@ -4,6 +4,7 @@ $bg-color: #300a24;
 $bg-color-l1: #401a34;
 $bg-color-l2: #502a44;
 $bg-color-l3: #603a54;
+$bg-color-d1: #200414;
 $primary-color: darkcyan;
 $primary-color-hover: #00adad;
 $text-color: lightgray;
@@ -138,6 +139,7 @@ button:hover {
   top:10px;
   width: 100%;
   box-sizing: border-box;
+  z-index: 1000;
 
   &.closed {
     animation: notification-removal 0.3s linear;
@@ -147,10 +149,11 @@ button:hover {
   .notification {
     background-color: $bg-color-l1;
     border-radius: 5px;
-    padding: 10px 30px;
+    padding: 20px 40px;
     max-width: 50%;
     box-sizing: border-box;
     display: inline-block;
+    font-size: 20px;
 
     .closebtn {
       background-image: url(../img/close-white.png);
@@ -166,6 +169,27 @@ button:hover {
         opacity: 0.8;
         cursor:pointer;
       }
+    }
+  }
+}
+
+.topbar {
+  position:sticky;
+  top:0px;
+  box-sizing: border-box;
+  width:100%;
+  height:3em;
+  background-color: $bg-color-d1;
+  z-index: 100;
+  line-height: 1em;
+  vertical-align: middle;
+
+  > img {
+    height:2em;
+    margin-top:0.5em;
+
+    &.logo {
+      margin-left:2em;
     }
   }
 }
