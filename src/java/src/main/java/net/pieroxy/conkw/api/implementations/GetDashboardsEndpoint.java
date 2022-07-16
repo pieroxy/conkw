@@ -51,9 +51,17 @@ class GetDashboardsInput{
 
 @TypeScriptType
 class GetDashboardsOutput {
-  List<DashboardSummary> list;
+  private List<DashboardSummary> list;
 
   public GetDashboardsOutput(List<DashboardSummary> list) {
+    this.list = list;
+  }
+
+  public List<DashboardSummary> getList() {
+    return list;
+  }
+
+  public void setList(List<DashboardSummary> list) {
     this.list = list;
   }
 }

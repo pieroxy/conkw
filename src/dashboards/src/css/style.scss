@@ -1,9 +1,9 @@
 @use "../../../web/css/fonts.css";
 
 $bg-color: #300a24;
-$bg-color-l1: #401a34;
-$bg-color-l2: #502a44;
-$bg-color-l3: #603a54;
+$bg-color-l1: #360b29;
+$bg-color-l2: #3c0c2d;
+$bg-color-l3: #420e31;
 $bg-color-d1: #200414;
 $primary-color: darkcyan;
 $primary-color-hover: #00adad;
@@ -174,7 +174,7 @@ button:hover {
 }
 
 .topbar {
-  position:sticky;
+  position:fixed;
   top:0px;
   box-sizing: border-box;
   width:100%;
@@ -192,7 +192,50 @@ button:hover {
       margin-left:2em;
     }
   }
+
 }
+
+.vcenteredO {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  flex-direction: column;
+
+  .vcenteredI {
+    display:flex;
+    align-items:center;
+    flex-direction: column;
+  }
+}
+
+.dashboardExplorer {
+  background-color: $bg-color-l1;
+  width:100%;
+  height:100%;
+
+  .list {
+    overflow-y: scroll;
+  }
+}
+
+.toolbar {
+  background-color: $bg-color-l2;
+  height:2em;
+  line-height: 2em;
+  padding:0 10px;
+
+  .right {
+    float:right;
+  }
+
+  button {
+    padding: 3px 10px;
+    font-weight: 700;
+  }
+}
+
+
 
 @keyframes notification-appearance {
 	from {

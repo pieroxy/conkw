@@ -6,9 +6,17 @@ import java.io.File;
 
 @TypeScriptType
 public class DashboardSummary {
-  String name;
+  private String name;
 
   public DashboardSummary(File dashboard) {
     this.name = dashboard.getName();
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 }
