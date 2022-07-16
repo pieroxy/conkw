@@ -131,9 +131,11 @@ button:hover {
 }
 
 .notificationO {
+  animation: notification-appearance 0.3s linear;
+  animation-iteration-count: 1;
   text-align: center;
   position:absolute;
-  top:0px;
+  top:10px;
   width: 100%;
   box-sizing: border-box;
 
@@ -155,6 +157,21 @@ button:hover {
       vertical-align: text-bottom;
       opacity: 0.5;
     }
+    .closebtn:hover {
+      opacity: 0.8;
+      cursor:pointer;
+    }
+  }
+}
+
+@keyframes notification-appearance {
+	from {
+    transform:translate(0,-50px);
+    opacity:0;
+	}
+	to {
+    transform:translate(0,0);
+    opacity:1;
   }
 }
 
