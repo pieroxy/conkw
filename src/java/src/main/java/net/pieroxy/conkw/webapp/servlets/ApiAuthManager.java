@@ -99,6 +99,7 @@ public class ApiAuthManager {
         synchronized (this) {
           this.wait(10000); // No need to save more than once every 10s
         }
+        if (saveThread != Thread.currentThread()) break;
         if (changed) {
           JsonWriter w = JsonHelper.getWriter();
           DslJson<Object> json = JsonHelper.getJson();
@@ -240,6 +241,7 @@ public class ApiAuthManager {
   }
 
   public void close() {
+    LOGGER.info("Shutdown request sent");
     saveThread = null;
     synchronized (this) {
       this.notify();

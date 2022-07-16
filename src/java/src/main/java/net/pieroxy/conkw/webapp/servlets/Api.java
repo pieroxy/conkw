@@ -2,17 +2,15 @@ package net.pieroxy.conkw.webapp.servlets;
 
 import com.dslplatform.json.DslJson;
 import com.dslplatform.json.JsonWriter;
-import net.pieroxy.conkw.config.ApiAuth;
-import net.pieroxy.conkw.config.CredentialsStore;
 import net.pieroxy.conkw.standalone.InstanceId;
 import net.pieroxy.conkw.utils.JsonHelper;
+import net.pieroxy.conkw.utils.Services;
 import net.pieroxy.conkw.webapp.Filter;
 import net.pieroxy.conkw.webapp.model.Response;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -26,21 +24,13 @@ public class Api extends HttpServlet {
   private final static Logger LOGGER = Logger.getLogger(Api.class.getName());
   public static final String SHUTDOWN_PARAMETER = "shutdown";
 
-  private static ApiManager api;
-  private static ApiAuthManager auth;
   private static InstanceId instanceId;
   private static Runnable shutdown;
 
-  public static void setContext(ApiManager api, ApiAuth authConfig, CredentialsStore creds, File dataDir) {
-    Api.api = api;
-    if (auth==null) {
-      auth = new ApiAuthManager();
-    }
-    auth.applyConfig(authConfig, creds, dataDir);
-  }
+  private final Services services;
 
-  public static void close() {
-    auth.close();
+  public Api(Services services) {
+    this.services = services;
   }
 
   public static void configureShutdownHook(InstanceId iid, Runnable shutdown) {
@@ -77,11 +67,11 @@ public class Api extends HttpServlet {
       return;
     }
     String sid = req.getParameter(ApiAuthManager.SID_FIELD);
-    if (!auth.isAuthOk(sid)) {
+    if (!services.getApiAuthManager().isAuthOk(sid)) {
       String user = req.getParameter(ApiAuthManager.USER_FIELD);
       String pass = req.getParameter(ApiAuthManager.PASS_FIELD);
 
-      writeResponse(resp, auth.performAuthentication(user, pass));
+      writeResponse(resp, services.getApiAuthManager().performAuthentication(user, pass));
       return;
     }
 
@@ -89,7 +79,7 @@ public class Api extends HttpServlet {
     final String action = req.getParameter("grabberAction");
     if (action!=null) {
       req.setAttribute(Filter.API_VERB, "grabberAction");
-      String res = api.notifyGrabberAction(action, req.getParameterMap());
+      String res = services.getApiManager().notifyGrabberAction(action, req.getParameterMap());
       try {
         resp.getOutputStream().write(res.getBytes(StandardCharsets.UTF_8));
       } catch (IOException e) {
@@ -102,7 +92,7 @@ public class Api extends HttpServlet {
         writeResponse(resp, Response.getError("Grabbers were not specified"));
       } else {
         GrabberInput.InputHolder in = getInput(grabbers, req);
-        try (Response r = api.buildResponse(now, in.in)) {
+        try (Response r = services.getApiManager().buildResponse(now, in.in)) {
           if (in.errors != null) in.errors.stream().forEach(r::addError);
           writeResponse(resp, r);
         }

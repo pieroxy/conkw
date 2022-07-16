@@ -1,14 +1,14 @@
 package net.pieroxy.conkw.webapp;
 
-import net.pieroxy.conkw.api.implementations.DoLoginEndpoint;
 import net.pieroxy.conkw.config.Config;
 import net.pieroxy.conkw.config.ConfigReader;
 import net.pieroxy.conkw.config.CredentialsStore;
 import net.pieroxy.conkw.config.GrabberConfig;
 import net.pieroxy.conkw.grabbersBase.Grabber;
 import net.pieroxy.conkw.grabbersBase.GrabberListener;
+import net.pieroxy.conkw.utils.Services;
 import net.pieroxy.conkw.utils.config.GrabberConfigReader;
-import net.pieroxy.conkw.webapp.servlets.Api;
+import net.pieroxy.conkw.webapp.servlets.ApiAuthManager;
 import net.pieroxy.conkw.webapp.servlets.ApiManager;
 import net.pieroxy.conkw.webapp.servlets.Emi;
 
@@ -28,18 +28,21 @@ public class Listener implements ServletContextListener {
   private WatchService watchService;
   private ApiManager apiManager;
   private boolean toDestroy = false;
+  private final Services services;
   private final Runnable onDestroy;
   private static String instanceName;
 
-  public Listener(Runnable onDestroy) {
+  public Listener(Services services, Runnable onDestroy) {
+    this.services = services;
     this.onDestroy = onDestroy;
+    services.setApiAuthManager(new ApiAuthManager());
   }
 
   public void loadConfig() {
     Config config = ConfigReader.getConfig();
     instanceName = config.getInstanceName();
     CredentialsStore creds = ConfigReader.getCredentials();
-    DoLoginEndpoint.setCredentials(creds);
+    services.setCredentialsStore(creds);
     try {
       List<Grabber> newg = new ArrayList<>();
       Set<String> newgnames = new HashSet<>();
@@ -118,8 +121,8 @@ public class Listener implements ServletContextListener {
       //   GC shrinks it back closer to whatever is needed.
       System.gc();
 
-      if (apiManager!=null) apiManager.close();
-      Api.setContext(apiManager=new ApiManager(grabbers), config.getApiAuth(), creds.getFor(net.pieroxy.conkw.webapp.servlets.Api.class), ConfigReader.getDataDir());
+      services.getApiAuthManager().applyConfig(config.getApiAuth(), creds.getFor(net.pieroxy.conkw.webapp.servlets.Api.class), ConfigReader.getDataDir());
+      services.setApiManager(new ApiManager(grabbers));
     } catch (Exception e) {
       LOGGER.log(Level.SEVERE, "Error loading and applying configuration.", e);
     }
@@ -148,23 +151,16 @@ public class Listener implements ServletContextListener {
     try {
       toDestroy = true;
       try {
-        if (apiManager!=null) {
-          apiManager.close();
-        }
+        services.close();
       } catch (Exception e) {
-        LOGGER.log(Level.FINE, "", e);
+        LOGGER.log(Level.INFO, "", e);
       }
       try {
         if (watchService!=null) {
           watchService.close();
         }
       } catch (Exception e) {
-        LOGGER.log(Level.FINE, "", e);
-      }
-      try {
-        Api.close();
-      } catch (Exception e) {
-        LOGGER.log(Level.FINE, "", e);
+        LOGGER.log(Level.INFO, "", e);
       }
       if (grabbers!=null) {
         for (Grabber g : grabbers) {
@@ -173,7 +169,7 @@ public class Listener implements ServletContextListener {
               g.dispose();
             }
           } catch (Exception e) {
-            LOGGER.log(Level.FINE, "", e);
+            LOGGER.log(Level.INFO, "", e);
           }
         }
       }

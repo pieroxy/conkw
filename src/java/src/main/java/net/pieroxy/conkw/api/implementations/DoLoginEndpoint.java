@@ -6,21 +6,32 @@ import net.pieroxy.conkw.api.metadata.ApiMethod;
 import net.pieroxy.conkw.api.metadata.Endpoint;
 import net.pieroxy.conkw.api.metadata.TypeScriptType;
 import net.pieroxy.conkw.config.Credentials;
-import net.pieroxy.conkw.config.CredentialsStore;
+import net.pieroxy.conkw.config.HashedSecret;
 import net.pieroxy.conkw.config.UserRole;
+import net.pieroxy.conkw.utils.Services;
 import net.pieroxy.conkw.utils.StringUtil;
 import net.pieroxy.conkw.utils.exceptions.DisplayMessageException;
+import net.pieroxy.conkw.utils.hashing.HashTools;
+
+import java.util.logging.Logger;
 
 @Endpoint(
     method = ApiMethod.POST,
     role = UserRole.ANONYMOUS
 )
 public class DoLoginEndpoint extends AbstractApiEndpoint<DoLoginEndpointInput, DoLoginEndpointOutput> {
-  private static CredentialsStore credentials;
+  private final static Logger LOGGER = Logger.getLogger(DoLoginEndpoint.class.getName());
+
+  private static Services services;
+
+  public DoLoginEndpoint(Services services) {
+    this.services = services;
+  }
 
   @Override
   public DoLoginEndpointOutput process(DoLoginEndpointInput input) throws Exception {
-    for (Credentials c : credentials.getStore().values()) {
+    LOGGER.info("Login request for user " + input.getLogin());
+    for (Credentials c : services.getCredentialsStore().getStore().values()) {
       if (c.getId().equals(input.getLogin())) {
         return authOk(c, input);
       }
@@ -34,6 +45,12 @@ public class DoLoginEndpoint extends AbstractApiEndpoint<DoLoginEndpointInput, D
       if (input.getPassword().equals(c.getSecret())) {
         return buildSession(c);
       }
+    } else if (c.getHashedSecret()!=null) {
+      HashedSecret hs = c.getHashedSecret();
+      String hashed = HashTools.hashPassword(input.getPassword(), hs);
+      if (hashed.equals(hs.getHashedSecret())) {
+        return buildSession(c);
+      }
     }
     throw new DisplayMessageException("Username or password not recognized.");
   }
@@ -45,10 +62,6 @@ public class DoLoginEndpoint extends AbstractApiEndpoint<DoLoginEndpointInput, D
   @Override
   public Class<DoLoginEndpointInput> getType() {
     return DoLoginEndpointInput.class;
-  }
-
-  public static void setCredentials(CredentialsStore store) {
-    credentials = store;
   }
 }
 

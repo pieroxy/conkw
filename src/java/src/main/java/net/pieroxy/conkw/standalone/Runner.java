@@ -4,6 +4,7 @@ import net.pieroxy.conkw.config.Config;
 import net.pieroxy.conkw.config.ConfigReader;
 import net.pieroxy.conkw.utils.FileTools;
 import net.pieroxy.conkw.utils.JsonHelper;
+import net.pieroxy.conkw.utils.Services;
 import net.pieroxy.conkw.utils.hashing.HashTools;
 import net.pieroxy.conkw.utils.logging.GcLogging;
 import net.pieroxy.conkw.utils.logging.LoggingPrintStream;
@@ -201,18 +202,22 @@ public class Runner {
             return;
         }
         saveInstanceId();
+
         Config config = ConfigReader.getConfig();
 
         if (config.getHttpPort() <= 0) throw new Exception("httpPort configured to an invalid value of " + config.getHttpPort());
 
+        Services services = new Services();
+        services.setConfiguration(config);
+
         if (config.disableTomcat()) {
-            Listener listener = new Listener(() -> {});
+            Listener listener = new Listener(services, () -> {});
             listener.contextInitialized(null);
             synchronized (Runner.class) {
                 Runner.class.wait();
             }
         } else {
-            tomcat = buildTomcat(ConfigReader.getWebappDir(), ConfigReader.getUiDir(), config);
+            tomcat = buildTomcat(ConfigReader.getWebappDir(), ConfigReader.getUiDir(), services);
             tomcat.start();
             tomcat.getServer().await();
         }
@@ -253,7 +258,7 @@ public class Runner {
         }
     }
 
-    private static Tomcat buildTomcat(File webappDir, File uiDir, Config config) {
+    private static Tomcat buildTomcat(File webappDir, File uiDir, Services services) {
         Tomcat tomcat = new Tomcat();
 
         String tempDir = System.getProperty("java.io.tmpdir");
@@ -262,11 +267,11 @@ public class Runner {
         }
 
         Connector ctr = new Connector();
-        ctr.setPort(config.getHttpPort());
+        ctr.setPort(services.getConfiguration().getHttpPort());
         tomcat.setConnector(ctr);
         ctr.setProperty("compression", "on");
         ctr.setProperty("compressionMinSize", "512");
-        ctr.setProperty("compressibleMimeType", "text/html, text/css, application/javascript, image/svg+xml" + (config.isEnableApiCompression() ? ", application/json" : ""));
+        ctr.setProperty("compressibleMimeType", "text/html, text/css, application/javascript, image/svg+xml" + (services.getConfiguration().isEnableApiCompression() ? ", application/json" : ""));
 
         LOGGER.info("Configuring app with basedir: " + webappDir.getAbsolutePath());
 
@@ -278,8 +283,8 @@ public class Runner {
         fm.setFilterName("http_log_filter");
         fm.addURLPattern("/*");
 
-        addMainContext(webappDir, tomcat, config, fd, fm);
-        addUiContext(uiDir, tomcat, config, fd, fm);
+        addMainContext(webappDir, tomcat, fd, fm, services);
+        addUiContext(uiDir, tomcat, services.getConfiguration(), fd, fm);
         return tomcat;
     }
 
@@ -312,23 +317,23 @@ public class Runner {
         ctx.addMimeMapping("webmanifest", "application/manifest+json");
     }
 
-    private static void addMainContext(File webappDirLocation, Tomcat tomcat, Config config, FilterDef fd, FilterMap fm) {
+    private static void addMainContext(File webappDirLocation, Tomcat tomcat, FilterDef fd, FilterMap fm, Services services) {
         String contextPath = "";
         StandardContext ctx = (StandardContext) tomcat.addContext(contextPath, webappDirLocation.getAbsolutePath());
 
-        if (!config.isDisableApi()) {
-            tomcat.addServlet(contextPath, "api", new Api());
+        if (!services.getConfiguration().isDisableApi()) {
+            tomcat.addServlet(contextPath, "api", new Api(services));
             ctx.addServletMappingDecoded("/api", "api");
-            tomcat.addServlet(contextPath, "modularApi", new ModularApi());
+            tomcat.addServlet(contextPath, "modularApi", new ModularApi(services));
             ctx.addServletMappingDecoded("/api/*", "modularApi");
         }
 
-        if (!config.isDisableEmi()) {
+        if (!services.getConfiguration().isDisableEmi()) {
             tomcat.addServlet(contextPath, "emi", new Emi());
             ctx.addServletMappingDecoded("/emi", "emi");
         }
 
-        if (!config.isDisableDefaultUI()) {
+        if (!services.getConfiguration().isDisableDefaultUI()) {
             LOGGER.info("Registering default UI");
             ctx.addWelcomeFile("index.html");
             tomcat.addServlet(contextPath, "default", new DefaultServlet());
@@ -337,7 +342,7 @@ public class Runner {
             addMimeTypes(ctx);
         }
 
-        ctx.addApplicationLifecycleListener(new Listener(Runner::listenerShutdownComplete));
+        ctx.addApplicationLifecycleListener(new Listener(services, Runner::listenerShutdownComplete));
         ctx.addFilterDef(fd);
         ctx.addFilterMap(fm);
     }

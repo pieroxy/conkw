@@ -20,9 +20,6 @@ public class ApiManager implements MetaGrabber {
     grabbers.forEach(g -> {allGrabbers.put(g.getName(), g);});
   }
 
-  public void close() {
-  }
-
   public Response buildResponse(long now, Collection<GrabberInput>grabbersRequested) {
     Response r = new Response(grabbersRequested.size());
     r.setInstanceName(Listener.getInstanceName());
