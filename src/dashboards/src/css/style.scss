@@ -139,6 +139,11 @@ button:hover {
   width: 100%;
   box-sizing: border-box;
 
+  &.closed {
+    animation: notification-removal 0.3s linear;
+    animation-iteration-count: 1;
+  }
+
   .notification {
     background-color: $bg-color-l1;
     border-radius: 5px;
@@ -156,10 +161,11 @@ button:hover {
       display: inline-block;
       vertical-align: text-bottom;
       opacity: 0.5;
-    }
-    .closebtn:hover {
-      opacity: 0.8;
-      cursor:pointer;
+
+      &:hover {
+        opacity: 0.8;
+        cursor:pointer;
+      }
     }
   }
 }
@@ -172,6 +178,17 @@ button:hover {
 	to {
     transform:translate(0,0);
     opacity:1;
+  }
+}
+
+@keyframes notification-removal {
+	from {
+    transform:translate(0,0);
+    opacity:1;
+	}
+	to {
+    transform:translate(0,-100px);
+    opacity:0;
   }
 }
 

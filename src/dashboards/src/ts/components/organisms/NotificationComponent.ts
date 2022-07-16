@@ -16,11 +16,15 @@ export class NotificationComponent implements m.ClassComponent<NotificationCompo
     }
   }
 
-  onbeforeremove(_vnode:m.VnodeDOM<NotificationComponentAttrs>) {
+  onbeforeremove(vnode:m.VnodeDOM<NotificationComponentAttrs>) {
     if (this.timeout !== undefined) {
       window.clearTimeout(this.timeout);
       this.timeout = undefined;
     }
+    vnode.dom.classList.add("closed")
+    return new Promise(function(resolve) {
+        vnode.dom.addEventListener("animationend", resolve)
+    })
   }
   
   view({attrs}: m.Vnode<NotificationComponentAttrs>): void | Children {
