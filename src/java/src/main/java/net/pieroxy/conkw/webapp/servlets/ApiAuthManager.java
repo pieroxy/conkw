@@ -13,7 +13,6 @@ import net.pieroxy.conkw.webapp.servlets.auth.ChallengeResponse;
 import net.pieroxy.conkw.webapp.servlets.auth.Session;
 import net.pieroxy.conkw.webapp.servlets.auth.Sessions;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.util.*;
 import java.util.logging.Level;
@@ -121,10 +120,8 @@ public class ApiAuthManager {
     LOGGER.log(Level.INFO, "Stopping save thread.");
   }
 
-  public NeedsAuthResponse performAuthentication(HttpServletRequest req) throws IOException {
+  public NeedsAuthResponse performAuthentication(String user, String pass) throws IOException {
     cleanAuthData();
-    String user = req.getParameter(USER_FIELD);
-    String pass = req.getParameter(PASS_FIELD);
     NeedsAuthResponse response = new NeedsAuthResponse();
 
     LOGGER.fine("Performing authentication");
@@ -145,7 +142,6 @@ public class ApiAuthManager {
         if (validatedCr!=null) {
           LOGGER.fine("Valid CR found");
           String random = HashTools.getRandomSequence(8);
-          addSession(new Session(random, validatedCr.getUser(), authConfig));
           addSession(new Session(random, validatedCr.getUser(), authConfig));
           response.setSessionToken(random);
         } else {
@@ -218,8 +214,7 @@ public class ApiAuthManager {
     challenges = newchallenges;
   }
 
-  private boolean checkRequestAuth(HttpServletRequest req) {
-    String sid = req.getParameter(SID_FIELD);
+  private boolean checkRequestAuth(String sid) {
     if (sid == null) return false;
     if (getUserFromToken(sid) == null) return false;
     return true;
@@ -234,9 +229,9 @@ public class ApiAuthManager {
   }
 
 
-  public boolean isAuthOk(HttpServletRequest req) {
+  public boolean isAuthOk(String sid) {
     if (authConfig!=null && authConfig.isAuth()) {
-      if (!checkRequestAuth(req)) {
+      if (!checkRequestAuth(sid)) {
         return false;
       }
     }

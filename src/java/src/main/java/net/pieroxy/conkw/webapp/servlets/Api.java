@@ -76,8 +76,12 @@ public class Api extends HttpServlet {
       }, 500L);;
       return;
     }
-    if (!auth.isAuthOk(req)) {
-      writeResponse(resp, auth.performAuthentication(req));
+    String sid = req.getParameter(ApiAuthManager.SID_FIELD);
+    if (!auth.isAuthOk(sid)) {
+      String user = req.getParameter(ApiAuthManager.USER_FIELD);
+      String pass = req.getParameter(ApiAuthManager.PASS_FIELD);
+
+      writeResponse(resp, auth.performAuthentication(user, pass));
       return;
     }
 
