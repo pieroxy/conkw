@@ -143,9 +143,9 @@ public class ApiAuthManager {
         }
         if (validatedCr!=null) {
           LOGGER.fine("Valid CR found");
-          String random = HashTools.getRandomSequence(8);
-          addSession(new Session(random, validatedCr.getUser(), authConfig));
-          response.setSessionToken(random);
+          Session session = buildSession(validatedCr.getUser());
+          addSession(session);
+          response.setSessionToken(session.getKey());
         } else {
           LOGGER.fine("No valid CR found");
           response.setErrorMessage("Invalid user/password combination.");
@@ -159,6 +159,11 @@ public class ApiAuthManager {
     }
 
     return response;
+  }
+
+  public Session buildSession(User user) {
+    String random = HashTools.getRandomSequence(8);
+    return new Session(random, user, authConfig);
   }
 
   private void addSession(Session session) {
