@@ -18,7 +18,8 @@ public class CredentialsStore {
     CredentialsStore res = new CredentialsStore();
     res.setStore(new HashMap<>());
     for (Map.Entry<String, Credentials> entry : store.entrySet()) {
-      if (entry.getValue().getAccessibleTo().contains(aClass.getCanonicalName())) {
+      if (entry.getValue().getAccessibleTo()!=null &&
+          entry.getValue().getAccessibleTo().contains(aClass.getCanonicalName())) {
         res.getStore().put(entry.getKey(), entry.getValue());
       }
     }
