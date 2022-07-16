@@ -162,7 +162,7 @@ public class ApiAuthManager {
   }
 
   public Session buildSession(User user) {
-    String random = HashTools.getRandomSequence(8);
+    String random = HashTools.getRandomSequence(32);
     return new Session(random, user, authConfig);
   }
 
