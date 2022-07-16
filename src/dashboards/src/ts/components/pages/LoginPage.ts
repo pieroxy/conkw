@@ -2,6 +2,7 @@ import m from 'mithril';
 import { DoLoginEndpointInput, DoLoginEndpointOutput } from '../../auto/pieroxy-conkw';
 import { AppVersion } from '../../auto/version';
 import { Api } from '../../utils/api/Api';
+import { Auth } from '../../utils/Auth';
 import { Notification, Notifications, NotificationsClass, NotificationsType } from '../../utils/Notifications';
 import { Button } from '../forms/Button';
 import { Form } from '../forms/Form';
@@ -59,8 +60,10 @@ export class LoginPage extends AbstractPage<any> {
                   login:this.username,
                   password:this.password
                 }
-              }).then((_data:DoLoginEndpointOutput) => {
+              }).then((data:DoLoginEndpointOutput) => {
                 Notifications.addNotification(new Notification(NotificationsClass.LOGIN, NotificationsType.SUCCESS, "Welcome", 5))
+                Auth.setAuthToken(data.token);
+                m.route.set("/home");
               })
             },
             form:this.form

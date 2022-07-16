@@ -1,6 +1,12 @@
 export class Auth {
-  // TODO: Implement this
+  private static token?:string;
+
   static isLoggedIn():boolean {
-    return false;
+    return !!this.token;
+  }
+
+  static setAuthToken(token:string) {
+    Auth.token = token;
+    localStorage.setItem("authToken", token);
   }
 }
