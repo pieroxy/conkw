@@ -55,7 +55,8 @@ export class Notification {
 export enum NotificationsType {
   ERROR,
   WARNING,
-  INFO
+  INFO,
+  SUCCESS
 }
 
 export enum NotificationsClass {

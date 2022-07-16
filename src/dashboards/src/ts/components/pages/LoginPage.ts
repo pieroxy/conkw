@@ -60,7 +60,7 @@ export class LoginPage extends AbstractPage<any> {
                   password:this.password
                 }
               }).then((_data:DoLoginEndpointOutput) => {
-                Notifications.addNotification(new Notification(NotificationsClass.LOGIN, NotificationsType.INFO, "Welcome", 5))
+                Notifications.addNotification(new Notification(NotificationsClass.LOGIN, NotificationsType.SUCCESS, "Welcome", 5))
               })
             },
             form:this.form

@@ -31,6 +31,9 @@ export class NotificationComponent implements m.ClassComponent<NotificationCompo
     let n = attrs.notification;
     let icon = "";
     switch (n.type) {
+      case NotificationsType.SUCCESS:
+        icon = "✅";
+        break;
       case NotificationsType.INFO:
         icon = "ℹ️";
         break;
