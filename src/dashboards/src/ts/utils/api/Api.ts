@@ -34,7 +34,7 @@ export class Api {
         case ApiResultCodes.OK:
           return r.content;
         case ApiResultCodes.DISPLAY_ERROR:
-          Notifications.addNotification(new Notification(NotificationsClass.LOGIN, NotificationsType.WARNING, r.message));
+          Notifications.addNotification(new Notification(NotificationsClass.LOGIN, NotificationsType.WARNING, r.message, 10));
           throw "HandledError";
         case ApiResultCodes.TECH_ERROR:
         default:

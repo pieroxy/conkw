@@ -7,10 +7,14 @@ export class Notifications {
     this.content.push(n);
   }
   public static getTopNotification():null|Notification {
-    return this.content.length == 0 ? null : this.content[0];
+    return this.content.length == 0 ? null : Notifications.content[0];
   }
 
-  public static dismiss():void {
+  public static dismiss(notif?:Notification):void {
+    if (Notifications.content.length == 0) return;
+    if (notif) {
+      if (notif !== Notifications.content[0]) return;
+    }
     Notifications.content.pop();
   }
 }
@@ -28,11 +32,16 @@ export class Notification {
   public get clazz(): NotificationsClass {
     return this._clazz;
   }
+  private _timeout: number;
+  public get timeout(): number {
+    return this._timeout;
+  }
 
-  constructor(c: NotificationsClass, type:NotificationsType, content: m.Children) {
+  constructor(c: NotificationsClass, type:NotificationsType, content: m.Children, timeout:number) {
     this._type = type;
     this._content = content;
     this._clazz = c;
+    this._timeout = timeout;
   }
 }
 
