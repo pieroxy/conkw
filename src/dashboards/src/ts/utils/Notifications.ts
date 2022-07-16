@@ -2,20 +2,27 @@ import m from 'mithril';
 
 export class Notifications {
   private static content:Notification[] = [];
+  private static current?:Notification;
 
   public static addNotification(n:Notification):void {
-    this.content.push(n);
+    if (this.current) 
+      this.content.push(n);
+    else 
+      this.current = n;
   }
   public static getTopNotification():null|Notification {
-    return this.content.length == 0 ? null : Notifications.content[0];
+    return this.current||null;
   }
 
   public static dismiss(notif?:Notification):void {
-    if (Notifications.content.length == 0) return;
     if (notif) {
-      if (notif !== Notifications.content[0]) return;
+      if (notif !== Notifications.current) return;
     }
-    Notifications.content.pop();
+    Notifications.current = undefined;
+    setTimeout(() => {
+      Notifications.current = Notifications.content.pop();
+      if (Notifications.current) m.redraw();
+    }, 500);
   }
 }
 
