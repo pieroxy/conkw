@@ -120,7 +120,7 @@ public class ApiAuthManager {
     LOGGER.log(Level.INFO, "Stopping save thread.");
   }
 
-  public NeedsAuthResponse performAuthentication(String user, String pass) throws IOException {
+  public NeedsAuthResponse performAuthentication(String user, String pass) {
     cleanAuthData();
     NeedsAuthResponse response = new NeedsAuthResponse();
 
