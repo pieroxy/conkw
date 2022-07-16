@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 public class DoLoginEndpoint extends AbstractApiEndpoint<DoLoginEndpointInput, DoLoginEndpointOutput> {
   private final static Logger LOGGER = Logger.getLogger(DoLoginEndpoint.class.getName());
 
-  private static Services services;
+  private final Services services;
 
   public DoLoginEndpoint(Services services) {
     this.services = services;
