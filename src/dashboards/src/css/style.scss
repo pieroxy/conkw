@@ -151,21 +151,27 @@ button:hover {
   .notification {
     background-color: $bg-color-l3;
     border-radius: 5px;
-    padding: 20px 40px;
+    padding: 20px 50px;
     max-width: 50%;
     box-sizing: border-box;
     display: inline-block;
     font-size: 20px;
     box-shadow: 2px 2px 15px rgb(0 0 0 / 10%);
+    text-align: left;
 
+    .typeicon {
+      float:left;
+      margin-left:-35px;
+    }
     .closebtn {
       background-image: url(../img/close-white.png);
+      float:right;
+      margin-right:-35px;
       height: 20px;
       width: 20px;
       background-size: contain;
       margin-left:10px;
-      display: inline-block;
-      vertical-align: text-bottom;
+      display: block;
       opacity: 0.5;
 
       &:hover {

@@ -46,11 +46,11 @@ export class NotificationComponent implements m.ClassComponent<NotificationCompo
     }
 
     return m(".notificationO", m(".notification." + n.type, [
-      icon," ",
-      n.content,
+      m(".typeicon", icon),
       m(".closebtn", {
         onclick: () => Notifications.dismiss()
-      })
+      }),
+      n.content,
     ]))
 
   }
