@@ -1,14 +1,14 @@
 import m from 'mithril';
-import { DoLoginEndpointInput, DoLoginEndpointOutput } from '../../auto/pieroxy-conkw';
-import { AppVersion } from '../../auto/version';
-import { Api } from '../../utils/api/Api';
-import { Auth } from '../../utils/Auth';
-import { Notification, Notifications, NotificationsClass, NotificationsType } from '../../utils/Notifications';
-import { Button } from '../forms/Button';
-import { Form } from '../forms/Form';
-import { PasswordFieldInput } from '../forms/PasswordFieldInput';
-import { TextFieldInput } from '../forms/TextFieldInput';
-import { AbstractPage } from './AbstractPage';
+import { DoLoginEndpointInput, DoLoginEndpointOutput } from '../../../auto/pieroxy-conkw';
+import { Api } from '../../../utils/api/Api';
+import { Auth } from '../../../utils/Auth';
+import { Notification, Notifications, NotificationsClass, NotificationsType } from '../../../utils/Notifications';
+import { Button } from '../../forms/Button';
+import { Form } from '../../forms/Form';
+import { PasswordFieldInput } from '../../forms/PasswordFieldInput';
+import { TextFieldInput } from '../../forms/TextFieldInput';
+import { AbstractPage } from '../AbstractPage';
+import { LoginFooter } from './LoginFooter';
 
 export class LoginPage extends AbstractPage<any> {
   username:string="";
@@ -64,11 +64,7 @@ export class LoginPage extends AbstractPage<any> {
           }, "Login")
         ]),
       ]),
-      m(".footer", [
-        m("span", m("a", {href:"/doc/README.html"}, "Documentation")),
-        m("span", m("a", {href:"https://github.com/pieroxy/conkw"}, "Github")),
-        m("span", "Ver: ", AppVersion.MVN_VER, " (", AppVersion.GIT_REV, ", " + AppVersion.GIT_DEPTH + ")")
-      ])
+      m(LoginFooter)
     ]);
   }
 
@@ -81,9 +77,14 @@ export class LoginPage extends AbstractPage<any> {
         password:this.password
       }
     }).then((data:DoLoginEndpointOutput) => {
-      Notifications.addNotification(new Notification(NotificationsClass.LOGIN, NotificationsType.SUCCESS, "Welcome", 5))
-      Auth.setAuthToken(data.token);
-      m.route.set("/home");
+      if (data.passwordMustChangeNow) {
+        Notifications.addNotification(new Notification(NotificationsClass.LOGIN, NotificationsType.SUCCESS, "Welcome to the conkw dashboards", 5))
+        m.route.set("/changepassword/" + this.username);
+      } else {
+        Notifications.addNotification(new Notification(NotificationsClass.LOGIN, NotificationsType.SUCCESS, "Welcome back!", 5))
+        Auth.setAuthToken(data.token);
+        m.route.set("/home");
+      }
     })
   }
 }

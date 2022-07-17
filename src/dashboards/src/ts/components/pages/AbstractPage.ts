@@ -15,7 +15,7 @@ export abstract class AbstractPage<A> implements m.ClassComponent<A> {
     ];
   }
   abstract getPageTitle():string;
-  abstract render(vnode:m.Vnode<A, any>):m.Children;
+  abstract render(vnode:m.Vnode<A>):m.Children;
 }
 
 function renderNotification(): m.Children {

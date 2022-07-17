@@ -18,6 +18,9 @@ import java.util.logging.Logger;
 public class UserService {
   private final static Logger LOGGER = Logger.getLogger(UserService.class.getName());
 
+  public static final int ITERATIONS = 32;
+  public static final String HASH_ALGORITHM = "PBKDF2WithHmacSHA512";
+  public static final int HASH_KEYSIZE = 512;
   public static final String ADMIN_ID="admin";
   public static final String ADMIN_DEFAULT_PASSWORD="password";
   private final File userStorage;
@@ -30,8 +33,10 @@ public class UserService {
   }
 
   private void initialize() {
-    if (userStorage.exists() && userStorage.length()>3) return;
-    if (credsStorage.exists() && credsStorage.length()>3) return;
+    if (userStorage.exists() &&
+        userStorage.length()>3 &&
+        credsStorage.exists() &&
+        credsStorage.length()>3) return;
 
     synchronized (this.userStorage) {
       Users users = new Users();
@@ -105,6 +110,25 @@ public class UserService {
       }
     }
     return new UserLogin(null, true);
+  }
+
+  public void changePassword(User user, String password) {
+    UserCredential uc = new UserCredential();
+    HashedSecret hs = new HashedSecret();
+    hs.setSalt(HashTools.getRandomSequence(8));
+    hs.setIterations(ITERATIONS);
+    hs.setMethod(HASH_ALGORITHM);
+    hs.setKeySize(HASH_KEYSIZE);
+    hs.setHashedSecret(HashTools.hashPassword(password, hs));
+
+    uc.setUserLogin(user.getId());
+    uc.setHashedSecret(hs);
+
+    synchronized (this.credsStorage) {
+      UserCredentials creds = new UserCredentials();
+      creds.getDataByLogin().put(user.getId(), uc);
+      save(creds);
+    }
   }
 }
 

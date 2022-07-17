@@ -1,4 +1,4 @@
-package net.pieroxy.conkw.api.implementations;
+package net.pieroxy.conkw.api.implementations.auth;
 
 import com.dslplatform.json.CompiledJson;
 import net.pieroxy.conkw.api.metadata.AbstractApiEndpoint;
