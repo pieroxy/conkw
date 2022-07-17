@@ -33,21 +33,14 @@ public class JsonHelper {
    */
   public static void writeToFile(Object o, File f) throws IOException {
     try (FileOutputStream fos = new FileOutputStream(f)) {
-      DslJson<Object> json = JsonHelper.getJson();
-      JsonWriter w = JsonHelper.getWriter();
-
-      synchronized (w) {
-        w.reset(fos);
-        json.serialize(w, o);
-        w.flush();
-      }
+      writeToOutputStream(o, fos);
     }
   }
 
   /**
    * Serialize the object provided into the OutputStream provided.
    * @param o
-   * @param f
+   * @param os
    * @throws IOException
    */
   public static void writeToOutputStream(Object o, OutputStream os) throws IOException {
