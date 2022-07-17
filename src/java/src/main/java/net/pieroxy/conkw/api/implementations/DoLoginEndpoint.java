@@ -34,7 +34,7 @@ public class DoLoginEndpoint extends AbstractApiEndpoint<DoLoginEndpointInput, D
   public DoLoginEndpointOutput process(DoLoginEndpointInput input) throws Exception {
     LOGGER.info("Login request for user " + input.getLogin());
     for (Credentials c : services.getCredentialsStore().getStore().values()) {
-      if (c.getId().equals(input.getLogin())) {
+      if (c.getId().equals(input.getLogin()) && c.getRoles()!=null && c.getRoles().size()>0) {
         return authOk(c, input);
       }
     }
