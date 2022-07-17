@@ -10,6 +10,13 @@ $primary-color-hover: #00adad;
 $text-color: lightgray;
 $error-color: #c49d07;
 
+@mixin media-max($_max-width) {
+  @media screen and (max-width: $_max-width) {
+      &{ @content; }
+  }
+}
+
+
 html, body {
   height:100%;
 }
@@ -165,6 +172,12 @@ button {
     font-size: 20px;
     box-shadow: 2px 2px 15px rgb(0 0 0 / 10%);
     text-align: left;
+
+    @include media-max(768px) {
+      width: 95%;
+      max-width: 95%;
+    }
+
 
     .typeicon {
       float:left;
