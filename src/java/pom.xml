@@ -222,7 +222,9 @@
                   <fileset dir="../dashboards/dist/"/>
                 </copy>
                 <echo message="Packaging the web resources." />
+                <delete file="./src/main/resources/webapp-static.zip"/>
                 <zip destfile="./src/main/resources/webapp-static.zip"  basedir="../web/"/>
+                <copy todir="./target/classes/" file="./src/main/resources/webapp-static.zip"/>
               </target>
             </configuration>
             <goals>
