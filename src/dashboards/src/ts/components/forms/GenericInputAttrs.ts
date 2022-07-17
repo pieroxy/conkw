@@ -10,5 +10,6 @@ export interface GenericInputAttrs<T> {
   format?: (s:T) => string,
   parse?: (s:string) => T,
   form?: Form,
-  onchange?: ()=>void
+  onchange?: ()=>void,
+  id?:string
 }

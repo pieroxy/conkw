@@ -15,7 +15,8 @@ export class DashboardExplorerToolbar implements m.ClassComponent<DashboardExplo
         refHolder:this,
         refProperty:"filter",
         form:new Form(),
-        onchange:()=>attrs.filter(this.filter)
+        onchange:()=>attrs.filter(this.filter),
+        onenter:()=>{}
       }),
       m(".right", 
         m(Button, {

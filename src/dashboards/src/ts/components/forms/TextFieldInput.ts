@@ -13,9 +13,17 @@ export class TextFieldInput extends GenericInput<string, TextInputAttrs> {
         this.setValue(e.target.value);
         this.computeErrorState();
       },
-      value: this.getValueAsString()
+      value: this.getValueAsString(),
+      onkeyup: (e: KeyboardEvent) => {
+        if (e && e.keyCode == 13) {
+          attrs.onenter();
+        }
+        return true;
+      }
     }
     if (attrs.placeholder) params.placeholder = attrs.placeholder;
+    if (attrs.id) params.id = attrs.id;
+
     return m(
       "input" + this.getErrorClass(), 
       params
@@ -29,4 +37,5 @@ export class TextFieldInput extends GenericInput<string, TextInputAttrs> {
 
 export interface TextInputAttrs extends GenericInputAttrs<string> {
   placeholder?: string
+  onenter:()=>void;
 }

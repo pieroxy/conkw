@@ -38,33 +38,27 @@ export class LoginPage extends AbstractPage<any> {
             refHolder: this,
             refProperty: "username",
             form:this.form,
-            requiredMessage:"Please enter your login"
+            requiredMessage:"Please enter your login",
+            onenter:()=>{document.getElementById("pass")?.focus();}
           }),
         ]),
         m("", [
           m(".inputlabel", "Password"),
           m(PasswordFieldInput, {
             refHolder: this,
+            id:"pass",
             refProperty: "password",
             form:this.form,
-            requiredMessage:"Please enter your password"
+            requiredMessage:"Please enter your password",
+            onenter:()=>{
+              this.doLogin()
+            }
           }),
         ]),
         m("", [
           m(Button, {
             action:()=>{
-              Api.call<DoLoginEndpointInput, DoLoginEndpointOutput>({
-                method:"POST",
-                endpoint:"DoLogin",
-                body:{
-                  login:this.username,
-                  password:this.password
-                }
-              }).then((data:DoLoginEndpointOutput) => {
-                Notifications.addNotification(new Notification(NotificationsClass.LOGIN, NotificationsType.SUCCESS, "Welcome", 5))
-                Auth.setAuthToken(data.token);
-                m.route.set("/home");
-              })
+              this.doLogin()
             },
             form:this.form
           }, "Login")
@@ -76,5 +70,20 @@ export class LoginPage extends AbstractPage<any> {
         m("span", "Ver: ", AppVersion.MVN_VER, " (", AppVersion.GIT_REV, ", " + AppVersion.GIT_DEPTH + ")")
       ])
     ]);
+  }
+
+  private doLogin() {
+    Api.call<DoLoginEndpointInput, DoLoginEndpointOutput>({
+      method:"POST",
+      endpoint:"DoLogin",
+      body:{
+        login:this.username,
+        password:this.password
+      }
+    }).then((data:DoLoginEndpointOutput) => {
+      Notifications.addNotification(new Notification(NotificationsClass.LOGIN, NotificationsType.SUCCESS, "Welcome", 5))
+      Auth.setAuthToken(data.token);
+      m.route.set("/home");
+    })
   }
 }
