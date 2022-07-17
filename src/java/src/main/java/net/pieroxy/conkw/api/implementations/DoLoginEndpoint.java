@@ -5,15 +5,11 @@ import net.pieroxy.conkw.api.metadata.AbstractApiEndpoint;
 import net.pieroxy.conkw.api.metadata.ApiMethod;
 import net.pieroxy.conkw.api.metadata.Endpoint;
 import net.pieroxy.conkw.api.metadata.TypeScriptType;
-import net.pieroxy.conkw.config.Credentials;
-import net.pieroxy.conkw.config.CredentialsHolder;
-import net.pieroxy.conkw.config.HashedSecret;
+import net.pieroxy.conkw.api.model.User;
+import net.pieroxy.conkw.api.model.UserLogin;
 import net.pieroxy.conkw.config.UserRole;
 import net.pieroxy.conkw.utils.Services;
-import net.pieroxy.conkw.utils.StringUtil;
 import net.pieroxy.conkw.utils.exceptions.DisplayMessageException;
-import net.pieroxy.conkw.utils.hashing.HashTools;
-import net.pieroxy.conkw.webapp.servlets.auth.Session;
 
 import java.util.logging.Logger;
 
@@ -33,33 +29,12 @@ public class DoLoginEndpoint extends AbstractApiEndpoint<DoLoginEndpointInput, D
   @Override
   public DoLoginEndpointOutput process(DoLoginEndpointInput input) throws Exception {
     LOGGER.info("Login request for user " + input.getLogin());
-    for (Credentials c : services.getCredentialsStore().getStore().values()) {
-      if (c.getId().equals(input.getLogin()) && c.getRoles()!=null && c.getRoles().size()>0) {
-        return authOk(c, input);
-      }
+    UserLogin ul = services.getUserService().performAuthentication(input.getLogin(), input.getPassword());
+    if (ul.getUser() != null) {
+      return new DoLoginEndpointOutput(services.getUserSessionService().createSession(ul.getUser()), ul);
+    } else {
+      throw new DisplayMessageException("Username or password not recognized.");
     }
-    throw new DisplayMessageException("Username or password not recognized.");
-  }
-
-  private DoLoginEndpointOutput authOk(Credentials c, DoLoginEndpointInput input) throws DisplayMessageException {
-    if (!StringUtil.isNullOrEmptyTrimmed(c.getSecret())) {
-      // Simple password check
-      if (input.getPassword().equals(c.getSecret())) {
-        return buildSession(c);
-      }
-    } else if (c.getHashedSecret()!=null) {
-      HashedSecret hs = c.getHashedSecret();
-      String hashed = HashTools.hashPassword(input.getPassword(), hs);
-      if (hashed.equals(hs.getHashedSecret())) {
-        return buildSession(c);
-      }
-    }
-    throw new DisplayMessageException("Username or password not recognized.");
-  }
-
-  private DoLoginEndpointOutput buildSession(Credentials c) {
-    Session s = services.getApiAuthManager().buildSession(new CredentialsHolder(c));
-    return new DoLoginEndpointOutput(s.getKey());
   }
 
   @Override
@@ -94,10 +69,14 @@ class DoLoginEndpointInput {
 @TypeScriptType
 @CompiledJson
 class DoLoginEndpointOutput {
-  String token;
+  private String token;
+  private User user;
+  private boolean passwordMustChangeNow;
 
-  public DoLoginEndpointOutput(String token) {
+  public DoLoginEndpointOutput(String token, UserLogin user) {
     this.token = token;
+    this.user = user.getUser();
+    this.passwordMustChangeNow = user.isMustChangePassword();
   }
 
   public DoLoginEndpointOutput() {
@@ -109,5 +88,21 @@ class DoLoginEndpointOutput {
 
   public void setToken(String token) {
     this.token = token;
+  }
+
+  public User getUser() {
+    return user;
+  }
+
+  public void setUser(User user) {
+    this.user = user;
+  }
+
+  public boolean isPasswordMustChangeNow() {
+    return passwordMustChangeNow;
+  }
+
+  public void setPasswordMustChangeNow(boolean passwordMustChangeNow) {
+    this.passwordMustChangeNow = passwordMustChangeNow;
   }
 }

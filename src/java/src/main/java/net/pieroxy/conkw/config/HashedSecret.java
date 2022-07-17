@@ -1,11 +1,15 @@
 package net.pieroxy.conkw.config;
 
+import java.util.Date;
+
 public class HashedSecret {
   private String salt;
   private String hashedSecret;
   private int iterations;
   private int keySize;
   private String method;
+  private String tempPassword;
+  private Date tempPasswordExpiration;
 
   public String getSalt() {
     return salt;
@@ -45,5 +49,21 @@ public class HashedSecret {
 
   public void setMethod(String method) {
     this.method = method;
+  }
+
+  public String getTempPassword() {
+    return tempPassword;
+  }
+
+  public void setTempPassword(String tempPassword) {
+    this.tempPassword = tempPassword;
+  }
+
+  public Date getTempPasswordExpiration() {
+    return tempPasswordExpiration;
+  }
+
+  public void setTempPasswordExpiration(Date tempPasswordExpiration) {
+    this.tempPasswordExpiration = tempPasswordExpiration;
   }
 }
