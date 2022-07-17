@@ -4,14 +4,14 @@ import net.pieroxy.conkw.utils.Utils;
 
 import java.util.Objects;
 
-public class User implements CredentialsProvider {
+public class CredentialsHolder implements CredentialsProvider {
   private Credentials credentials;
   private String credentialsRef;
 
-  public User() {
+  public CredentialsHolder() {
   }
 
-  public User(Credentials credentials) {
+  public CredentialsHolder(Credentials credentials) {
     this.credentials = credentials;
   }
 
@@ -19,7 +19,7 @@ public class User implements CredentialsProvider {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    User user = (User) o;
+    CredentialsHolder user = (CredentialsHolder) o;
     return Utils.objectEquals(credentials, user.credentials) &&
         Utils.objectEquals(credentialsRef, user.credentialsRef);
   }

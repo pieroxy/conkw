@@ -1,17 +1,17 @@
 package net.pieroxy.conkw.webapp.servlets.auth;
 
-import net.pieroxy.conkw.config.User;
+import net.pieroxy.conkw.config.CredentialsHolder;
 
 import java.time.Duration;
 
 public class ChallengeResponse {
   long created = System.currentTimeMillis();
   String saltValue;
-  User user;
+  CredentialsHolder credentialsHolder;
 
-  public ChallengeResponse(String saltValue, User user) {
+  public ChallengeResponse(String saltValue, CredentialsHolder user) {
     this.saltValue = saltValue;
-    this.user = user;
+    this.credentialsHolder = user;
   }
 
   public boolean expired() {
@@ -27,11 +27,11 @@ public class ChallengeResponse {
     this.saltValue = saltValue;
   }
 
-  public User getUser() {
-    return user;
+  public CredentialsHolder getCredentialsHolder() {
+    return credentialsHolder;
   }
 
-  public void setUser(User user) {
-    this.user = user;
+  public void setCredentialsHolder(CredentialsHolder credentialsHolder) {
+    this.credentialsHolder = credentialsHolder;
   }
 }

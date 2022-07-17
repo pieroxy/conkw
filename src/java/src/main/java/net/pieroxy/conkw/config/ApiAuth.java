@@ -8,7 +8,7 @@ public class ApiAuth {
   private boolean auth;
   private CDuration sessionLifetime;
   private CDuration sessionInactivityTimeout;
-  private User[] users;
+  private CredentialsHolder[] credentialsHolders;
 
   public boolean isAuth() {
     return auth;
@@ -18,12 +18,12 @@ public class ApiAuth {
     this.auth = auth;
   }
 
-  public User[] getUsers() {
-    return users;
+  public CredentialsHolder[] getCredentialsHolders() {
+    return credentialsHolders;
   }
 
-  public void setUsers(User[] users) {
-    this.users = users;
+  public void setCredentialsHolders(CredentialsHolder[] credentialsHolders) {
+    this.credentialsHolders = credentialsHolders;
   }
 
   public CDuration getSessionLifetime() {

@@ -2,7 +2,7 @@ package net.pieroxy.conkw.webapp.servlets.auth;
 
 import com.dslplatform.json.CompiledJson;
 import net.pieroxy.conkw.config.ApiAuth;
-import net.pieroxy.conkw.config.User;
+import net.pieroxy.conkw.config.CredentialsHolder;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.duration.CDurationParser;
 
@@ -13,15 +13,15 @@ public class Session {
   private transient CDuration sessionLifetime;
   private transient CDuration sessionInactiveTimeout;
   private String key;
-  private User user;
+  private CredentialsHolder credentialsHolder;
 
   public Session() {
   }
 
-  public Session(String key, User user, ApiAuth config)
+  public Session(String key, CredentialsHolder user, ApiAuth config)
   {
     this.key = key;
-    this.user = user;
+    this.credentialsHolder = user;
     applyConfig(config);
   }
 
@@ -57,12 +57,12 @@ public class Session {
     this.lastAccessed = lastAccessed;
   }
 
-  public User getUser() {
-    return user;
+  public CredentialsHolder getCredentialsHolder() {
+    return credentialsHolder;
   }
 
-  public void setUser(User user) {
-    this.user = user;
+  public void setCredentialsHolder(CredentialsHolder credentialsHolder) {
+    this.credentialsHolder = credentialsHolder;
   }
 
   public String getKey() {
