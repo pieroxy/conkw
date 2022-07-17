@@ -14,6 +14,7 @@ export class TextFieldInput extends GenericInput<string, TextInputAttrs> {
         this.computeErrorState();
       },
       value: this.getValueAsString(),
+      autocapitalize:"none",
       onkeyup: (e: KeyboardEvent) => {
         if (e && e.keyCode == 13) {
           attrs.onenter();

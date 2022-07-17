@@ -17,6 +17,7 @@ export class PasswordFieldInput extends GenericInput<string, TextInputAttrs> {
           this.setValue(e.target.value);
           this.computeErrorState();
         },
+        autocapitalize:"none",
         value: this.getValueAsString(),
         onkeyup: (e: KeyboardEvent) => {
           if (e && e.keyCode == 13) {
