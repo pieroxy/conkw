@@ -28,7 +28,11 @@ public class GetAccessibleClasses {
     }
     ArrayList<Class<?>> classList = new ArrayList<Class<?>>();
     for (String clazz : classes) {
-      classList.add(Class.forName(clazz));
+      try {
+        classList.add(Class.forName(clazz));
+      } catch (ClassNotFoundException  e) {
+        // What to do really?
+      }
     }
 
     return classList;
