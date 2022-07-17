@@ -31,14 +31,6 @@ body {
 @-ms-viewport { width: device-width; }
 html { -webkit-text-size-adjust: 100%; }
 
-input:autofill {
-  background: #fff; /* or any other */
-}
-
-input:focus {
-  outline : none;
-}
-
 * {
   box-sizing: border-box;
 }
@@ -93,18 +85,27 @@ input:focus {
 }
 
 /* Form elements */
-
 input {
   padding:5px;
+  background-color: black;
   font-size: 18px;
   opacity: 0.7;
-  border:2px solid $bg-color;
+  color:#aaa;
+  border:2px solid #444;
   box-shadow: inset 3px 3px 5px rgb(0 0 0 / 20%);
-  background-color: white;
+
+  &:-webkit-autofill::first-line,
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px black inset !important;
+    -webkit-text-fill-color: white !important;
+  }
 }
 
 input:hover {
-  opacity: 0.8;
+  border:2px solid #888;
 }
 
 input.error {
@@ -112,7 +113,8 @@ input.error {
 }
 
 input:focus {
-  border:2px solid lightgray;
+  outline : none;
+  border:2px solid #aaa;
   opacity: 0.9;
   box-shadow: inset 3px 3px 5px rgb(0 0 0 / 40%);
 }
@@ -147,13 +149,14 @@ button:hover {
   }
 
   .notification {
-    background-color: $bg-color-l1;
+    background-color: $bg-color-l3;
     border-radius: 5px;
     padding: 20px 40px;
     max-width: 50%;
     box-sizing: border-box;
     display: inline-block;
     font-size: 20px;
+    box-shadow: 2px 2px 15px rgb(0 0 0 / 10%);
 
     .closebtn {
       background-image: url(../img/close-white.png);
@@ -213,6 +216,7 @@ button:hover {
   background-color: $bg-color-l1;
   width:100%;
   height:100%;
+  box-shadow: 2px 2px 15px rgb(0 0 0 / 10%);
 
   .list {
     overflow-y: scroll;
@@ -232,6 +236,12 @@ button:hover {
   button {
     padding: 3px 10px;
     font-weight: 700;
+  }
+
+  .inputlabel {
+    display: inline-block;
+    padding-right: 10px;
+    font-size: 12px;
   }
 }
 
