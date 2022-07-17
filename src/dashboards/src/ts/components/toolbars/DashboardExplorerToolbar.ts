@@ -2,12 +2,21 @@ import m from 'mithril';
 
 import { Children } from "mithril";
 import { Button } from '../forms/Button';
+import { Form } from '../forms/Form';
+import { TextFieldInput } from '../forms/TextFieldInput';
 
-export class DashboardExplorerToolbar implements m.ClassComponent<any> {
+export class DashboardExplorerToolbar implements m.ClassComponent<DashboardExplorerToolbarAttrs> {
+  private filter:string="";
   
-  view(): void | Children {
+  view({attrs}:m.Vnode<DashboardExplorerToolbarAttrs>): void | Children {
     return m(".toolbar", [
-      m("input"),
+      m(".inputlabel", "Search"),
+      m(TextFieldInput, {
+        refHolder:this,
+        refProperty:"filter",
+        form:new Form(),
+        onchange:()=>attrs.filter(this.filter)
+      }),
       m(".right", 
         m(Button, {
           action:() => {}
@@ -15,4 +24,8 @@ export class DashboardExplorerToolbar implements m.ClassComponent<any> {
       )
     ])
   }
+}
+
+export interface DashboardExplorerToolbarAttrs {
+  filter: (s:string)=>void;
 }
