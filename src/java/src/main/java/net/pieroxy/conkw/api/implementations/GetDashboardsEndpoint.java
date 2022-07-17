@@ -1,5 +1,6 @@
 package net.pieroxy.conkw.api.implementations;
 
+import com.dslplatform.json.CompiledJson;
 import net.pieroxy.conkw.api.metadata.AbstractApiEndpoint;
 import net.pieroxy.conkw.api.metadata.ApiMethod;
 import net.pieroxy.conkw.api.metadata.Endpoint;
@@ -28,6 +29,7 @@ public class GetDashboardsEndpoint extends AbstractApiEndpoint<GetDashboardsInpu
   public GetDashboardsOutput process(GetDashboardsInput input, User user) throws Exception {
     File dir = services.getLocalStorageManager().getDashboardsDir();
     File[] files = dir.listFiles();
+    if (files == null) files = new File[0];
     return new GetDashboardsOutput(Arrays.stream(files).map(DashboardSummary::new).collect(Collectors.toList()));
   }
 
@@ -38,6 +40,7 @@ public class GetDashboardsEndpoint extends AbstractApiEndpoint<GetDashboardsInpu
 }
 
 @TypeScriptType
+@CompiledJson
 class GetDashboardsInput{
   String root;
 
@@ -51,6 +54,7 @@ class GetDashboardsInput{
 }
 
 @TypeScriptType
+@CompiledJson
 class GetDashboardsOutput {
   private List<DashboardSummary> list;
 

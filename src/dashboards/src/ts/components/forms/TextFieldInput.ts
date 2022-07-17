@@ -34,9 +34,15 @@ export class TextFieldInput extends GenericInput<string, TextInputAttrs> {
   isEmpty(): boolean {
     return !this.getValueAsString()
   }
+
+  oncreate(vnode:m.VnodeDOM<TextInputAttrs>) {
+    if (vnode.attrs.focus)
+      (<any>vnode.dom).focus();
+  }
 }
 
 export interface TextInputAttrs extends GenericInputAttrs<string> {
   placeholder?: string
   onenter:()=>void;
+  focus?:boolean;
 }

@@ -52,7 +52,6 @@ export class NotificationComponent implements m.ClassComponent<NotificationCompo
       }),
       n.content,
     ]))
-
   }
 }
 
