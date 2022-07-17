@@ -44,11 +44,11 @@ public class ApiAuthManager {
     Map<String, Session> newsessions = new HashMap<>();
     List<ChallengeResponse> newchallenges = new ArrayList<>();
     Map<String, CredentialsHolder> allUsersToKeep = new HashMap<>();
-    if (authConfig!=null && authConfig.getCredentialsHolders()!=null) {
-      Arrays.stream(authConfig.getCredentialsHolders()).forEach(u -> allUsersToKeep.put(getCredentials(u).getId(), u));
+    if (authConfig!=null && authConfig.getUsers()!=null) {
+      Arrays.stream(authConfig.getUsers()).forEach(u -> allUsersToKeep.put(getCredentials(u).getId(), u));
     }
-    if (newAuth!=null && newAuth.getCredentialsHolders()!=null) {
-      Arrays.stream(newAuth.getCredentialsHolders()).forEach(u -> {
+    if (newAuth!=null && newAuth.getUsers()!=null) {
+      Arrays.stream(newAuth.getUsers()).forEach(u -> {
         Credentials cred = getCredentials(u);
         if (cred!=null) {
           CredentialsHolder current = allUsersToKeep.get(cred.getId());
@@ -179,7 +179,7 @@ public class ApiAuthManager {
   }
 
   private CredentialsHolder getUser(String user) {
-    CredentialsHolder[]users = authConfig.getCredentialsHolders();
+    CredentialsHolder[]users = authConfig.getUsers();
     if (users == null) return null;
     for (CredentialsHolder u : users) {
       Credentials creds = getCredentials(u);
