@@ -31,7 +31,9 @@ public class DoLoginEndpoint extends AbstractApiEndpoint<DoLoginEndpointInput, D
     LOGGER.info("Login request for user " + input.getLogin());
     UserLogin ul = services.getUserService().performAuthentication(input.getLogin(), input.getPassword());
     if (ul.getUser() != null) {
-      return new DoLoginEndpointOutput(services.getUserSessionService().createSession(ul.getUser()), ul);
+      String session = null;
+      if (!ul.isMustChangePassword()) session = services.getUserSessionService().createSession(ul.getUser());
+      return new DoLoginEndpointOutput(session, ul);
     } else {
       throw new DisplayMessageException("Username or password not recognized.");
     }
