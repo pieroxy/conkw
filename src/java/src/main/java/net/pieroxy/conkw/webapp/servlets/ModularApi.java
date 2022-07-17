@@ -9,9 +9,7 @@ import net.pieroxy.conkw.utils.reflection.GetAccessibleClasses;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,24 +30,32 @@ public class ModularApi extends HttpServlet {
 
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
+    processRequest(req, resp, ApiMethod.POST);
+  }
+  @Override
+  protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
+    processRequest(req, resp, ApiMethod.GET);
+  }
+
+  private void processRequest(HttpServletRequest req, HttpServletResponse resp, ApiMethod methodExpected) {
     initialize();
     String endpoint = req.getRequestURI();
     if (endpoint.startsWith("/api/")) endpoint = endpoint.substring(5) + "Endpoint";
     AbstractApiEndpoint ep = endpoints.get(endpoint);
-    if (LOGGER.isLoggable(Level.FINE)) LOGGER.fine("POST API called - " + endpoint + " " + ep);
+    if (LOGGER.isLoggable(Level.FINE)) LOGGER.fine(methodExpected.name() + " API called - " + endpoint + " " + ep);
     if (ep == null) {
       LOGGER.severe("Endpoint " + endpoint + " not found");
       resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
       return;
     }
     Endpoint parameters = ep.getClass().getAnnotation(Endpoint.class);
-    if (parameters.method() != ApiMethod.POST) {
-      LOGGER.severe("Endpoint " + endpoint + " nos accessible through POST");
+    if (parameters.method() != methodExpected) {
+      LOGGER.severe("Endpoint " + endpoint + " nos accessible through " + methodExpected.name());
       resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
       return;
     }
     try {
-      if (LOGGER.isLoggable(Level.FINE)) LOGGER.fine("POST API called - " + endpoint + " " + ep);
+      if (LOGGER.isLoggable(Level.FINE)) LOGGER.fine(methodExpected.name() + " API called - " + endpoint + " " + ep);
       ep.process(req,resp);
     } catch (Exception e) {
       LOGGER.log(Level.SEVERE, "Endpoint " + endpoint + " threw an exception", e);
@@ -57,14 +63,6 @@ public class ModularApi extends HttpServlet {
       return;
     }
   }
-
-  @Override
-  protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-    initialize();
-    resp.setContentType("application/json");
-    resp.getOutputStream().write("{\"code\":\"TECH_ERROR\", \"message\":\"Not implemented yet\"}".getBytes(StandardCharsets.UTF_8));
-  }
-
 
   private void initialize() {
     if (endpoints==null) {
