@@ -1,7 +1,7 @@
 package net.pieroxy.conkw.api.metadata;
 
-import net.pieroxy.conkw.api.model.ApiResultCodes;
 import net.pieroxy.conkw.api.model.ApiResponse;
+import net.pieroxy.conkw.api.model.ApiResultCodes;
 import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.utils.exceptions.ApiError;
 import net.pieroxy.conkw.utils.exceptions.DisplayMessageException;
@@ -36,7 +36,7 @@ public abstract class AbstractApiEndpoint<I,O> {
       JsonHelper.writeToOutputStream(ApiResponse.buildOkResult(output), res.getOutputStream());
     } catch (DisplayMessageException e) {
       res.setContentType(getJsonContentType());
-      getLogger().log(Level.WARNING, "", e);
+      getLogger().log(Level.FINE, "", e);
       JsonHelper.writeToOutputStream(ApiResponse.buildErrResult(ApiResultCodes.DISPLAY_ERROR, e.getMessage()), res.getOutputStream());
     } catch (Exception e) {
       res.setContentType(getJsonContentType());
