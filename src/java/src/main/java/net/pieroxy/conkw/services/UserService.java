@@ -4,8 +4,9 @@ import com.dslplatform.json.CompiledJson;
 import net.pieroxy.conkw.api.model.User;
 import net.pieroxy.conkw.api.model.UserLogin;
 import net.pieroxy.conkw.config.HashedSecret;
-import net.pieroxy.conkw.config.LocalStorageManager;
+import net.pieroxy.conkw.config.UserRole;
 import net.pieroxy.conkw.utils.JsonHelper;
+import net.pieroxy.conkw.utils.Services;
 import net.pieroxy.conkw.utils.StringUtil;
 import net.pieroxy.conkw.utils.hashing.HashTools;
 
@@ -25,10 +26,12 @@ public class UserService {
   public static final String ADMIN_DEFAULT_PASSWORD="password";
   private final File userStorage;
   private final File credsStorage;
+  private final Services services;
 
-  public UserService(LocalStorageManager localStorageManager) {
-    userStorage = new File(localStorageManager.getConfDir(), "users.json");
-    credsStorage = new File(localStorageManager.getConfDir(), "usersCredentials.json");
+  public UserService(Services services) {
+    this.services = services;
+    userStorage = new File(services.getLocalStorageManager().getConfDir(), "users.json");
+    credsStorage = new File(services.getLocalStorageManager().getConfDir(), "usersCredentials.json");
     initialize();
   }
 
@@ -41,6 +44,7 @@ public class UserService {
     synchronized (this.userStorage) {
       Users users = new Users();
       User admin = new User();
+      admin.setRole(UserRole.ADMIN);
       admin.setId(ADMIN_ID);
       users.getDataByLogin().put(ADMIN_ID, admin);
       save(users);
@@ -133,6 +137,18 @@ public class UserService {
 
   public User getUserById(String userid) {
     return readUsers().getDataByLogin().get(userid);
+  }
+
+  /**
+   * Returns the user associated to this session token
+   * @param token
+   * @return null if no session or no user is found
+   */
+  public User getUserBySessionId(String token) {
+    if (StringUtil.isNullOrEmptyTrimmed(token)) return null;
+    UserSessionService.Session session = services.getUserSessionService().getSession(token);
+    if (session==null || StringUtil.isNullOrEmptyTrimmed(session.getUserid())) return null;
+    return getUserById(session.getUserid());
   }
 }
 

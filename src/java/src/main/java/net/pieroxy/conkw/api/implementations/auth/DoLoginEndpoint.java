@@ -27,7 +27,7 @@ public class DoLoginEndpoint extends AbstractApiEndpoint<DoLoginEndpointInput, D
   }
 
   @Override
-  public DoLoginEndpointOutput process(DoLoginEndpointInput input) throws Exception {
+  public DoLoginEndpointOutput process(DoLoginEndpointInput input, User user) throws Exception {
     LOGGER.info("Login request for user " + input.getLogin());
     UserLogin ul = services.getUserService().performAuthentication(input.getLogin(), input.getPassword());
     if (ul.getUser() != null) {

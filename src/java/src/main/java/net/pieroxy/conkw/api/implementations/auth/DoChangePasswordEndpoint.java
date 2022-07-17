@@ -5,6 +5,7 @@ import net.pieroxy.conkw.api.metadata.AbstractApiEndpoint;
 import net.pieroxy.conkw.api.metadata.ApiMethod;
 import net.pieroxy.conkw.api.metadata.Endpoint;
 import net.pieroxy.conkw.api.metadata.TypeScriptType;
+import net.pieroxy.conkw.api.model.User;
 import net.pieroxy.conkw.api.model.UserLogin;
 import net.pieroxy.conkw.config.UserRole;
 import net.pieroxy.conkw.utils.Services;
@@ -22,7 +23,7 @@ public class DoChangePasswordEndpoint extends AbstractApiEndpoint<DoChangePasswo
   }
 
   @Override
-  public DoChangePasswordOutput process(DoChangePasswordInput input) throws Exception {
+  public DoChangePasswordOutput process(DoChangePasswordInput input, User user) throws Exception {
     if (input.getA().trim().length()<8) {
       throw new DisplayMessageException("Passwords should be at least 8 characters.");
     }

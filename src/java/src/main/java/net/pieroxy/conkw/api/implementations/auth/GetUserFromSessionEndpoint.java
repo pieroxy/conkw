@@ -25,7 +25,7 @@ public class GetUserFromSessionEndpoint extends AbstractApiEndpoint<GetUserFromS
   }
 
   @Override
-  public GetUserFromSessionOutput process(GetUserFromSessionInput input) throws Exception {
+  public GetUserFromSessionOutput process(GetUserFromSessionInput input, User user) throws Exception {
     UserSessionService.Session session = services.getUserSessionService().getSession(input.getToken());
     if (session!=null) {
       LOGGER.info("Found user " + session.getUserid());

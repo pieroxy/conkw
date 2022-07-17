@@ -47,6 +47,10 @@ export class Auth {
     localStorage.setItem("authToken", token);
   }
 
+  static getAuthToken():string|undefined {
+    return Auth.token;
+  }
+
   public static getUser():User|undefined {
     return this.user;
   }

@@ -5,6 +5,7 @@ import net.pieroxy.conkw.api.metadata.ApiMethod;
 import net.pieroxy.conkw.api.metadata.Endpoint;
 import net.pieroxy.conkw.api.metadata.TypeScriptType;
 import net.pieroxy.conkw.api.model.DashboardSummary;
+import net.pieroxy.conkw.api.model.User;
 import net.pieroxy.conkw.config.UserRole;
 import net.pieroxy.conkw.utils.Services;
 
@@ -24,7 +25,7 @@ public class GetDashboardsEndpoint extends AbstractApiEndpoint<GetDashboardsInpu
   }
 
   @Override
-  public GetDashboardsOutput process(GetDashboardsInput input) throws Exception {
+  public GetDashboardsOutput process(GetDashboardsInput input, User user) throws Exception {
     File dir = services.getLocalStorageManager().getDashboardsDir();
     File[] files = dir.listFiles();
     return new GetDashboardsOutput(Arrays.stream(files).map(DashboardSummary::new).collect(Collectors.toList()));

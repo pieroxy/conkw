@@ -19,7 +19,7 @@ public class Services {
 
   public Services(LocalStorageManager localStorageManager) {
     this.localStorageManager = localStorageManager;
-    this.userService = new UserService(localStorageManager);
+    this.userService = new UserService(this);
     this.userSessionService = new UserSessionService(localStorageManager);
   }
 

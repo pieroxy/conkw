@@ -1,6 +1,7 @@
 import m from 'mithril';
 import { ApiResultCodes, ClientInfo } from '../../auto/pieroxy-conkw';
 import { AppVersion } from '../../auto/version';
+import { Auth } from '../Auth';
 import { Notification, Notifications, NotificationsClass, NotificationsType } from '../Notifications';
 import { ApiResponse } from '../types';
 import { ApiOptions } from './ApiOptions';
@@ -58,6 +59,7 @@ export class Api {
       "Content-Type": ct,
       "client": JSON.stringify(p.client)
     }
+    if (Auth.getAuthToken()) headers.authToken = Auth.getAuthToken();
 
     this.waiting = true;
     return m.request({
