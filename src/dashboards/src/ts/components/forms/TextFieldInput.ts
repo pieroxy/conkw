@@ -6,17 +6,20 @@ import { GenericInputAttrs } from './GenericInputAttrs';
 import { HtmlInputEvent } from './HtmlInputEvent';
 
 export class TextFieldInput extends GenericInput<string, TextInputAttrs> {
-  render(_vnode: m.Vnode<TextInputAttrs>): void | Children {
+  render({attrs}: m.Vnode<TextInputAttrs>): void | Children {
+    let params:any = {
+      type:"text",
+      oninput: (e:HtmlInputEvent) => {
+        this.setValue(e.target.value);
+        this.computeErrorState();
+      },
+      value: this.getValueAsString()
+    }
+    if (attrs.placeholder) params.placeholder = attrs.placeholder;
     return m(
       "input" + this.getErrorClass(), 
-      {
-        type:"text",
-        oninput: (e:HtmlInputEvent) => {
-          this.setValue(e.target.value);
-          this.computeErrorState();
-        },
-        value: this.getValueAsString()
-      });
+      params
+    );
   }
 
   isEmpty(): boolean {
@@ -25,4 +28,5 @@ export class TextFieldInput extends GenericInput<string, TextInputAttrs> {
 }
 
 export interface TextInputAttrs extends GenericInputAttrs<string> {
+  placeholder?: string
 }
