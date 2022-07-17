@@ -1,3 +1,6 @@
+import m from 'mithril';
+
+import { Notification, Notifications, NotificationsClass, NotificationsType } from "../../utils/Notifications";
 import { GenericInput } from "./GenericInput";
 
 export class Form {
@@ -23,7 +26,7 @@ export class Form {
       }
     }
     if (!res && messages) {
-      alert(messages);
+      Notifications.addNotification(new Notification(NotificationsClass.LOGIN, NotificationsType.ERROR, messages.split("\n").map(s => m("", s)), 1000))
     }
     return res;
   }
