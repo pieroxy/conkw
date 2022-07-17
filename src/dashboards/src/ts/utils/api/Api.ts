@@ -65,7 +65,7 @@ export class Api {
       url: p.url,
       headers: headers,
       body: p.method === 'POST' ? p.content : null,
-      params: p.method === 'GET' ? {input:p.content}:{},
+      params: p.method === 'GET' ? {input:JSON.stringify(p.content)}:{},
     }).then((arg:any) => {
       this.timeout = window.setTimeout(() => {Api.waiting = false;Api.timeout=0;m.redraw()} , 150);
       return arg;

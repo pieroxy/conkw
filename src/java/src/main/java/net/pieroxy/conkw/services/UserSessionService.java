@@ -1,7 +1,6 @@
 package net.pieroxy.conkw.services;
 
 import com.dslplatform.json.CompiledJson;
-import net.pieroxy.conkw.api.metadata.TypeScriptType;
 import net.pieroxy.conkw.api.model.User;
 import net.pieroxy.conkw.config.LocalStorageManager;
 import net.pieroxy.conkw.utils.JsonHelper;
@@ -66,51 +65,50 @@ public class UserSessionService {
       throw new RuntimeException(e);
     }
   }
-}
 
-@TypeScriptType
-@CompiledJson(onUnknown = CompiledJson.Behavior.IGNORE)
-class Sessions {
-  List<Session> sessions;
+  @CompiledJson(onUnknown = CompiledJson.Behavior.IGNORE)
+  public static class Session {
+    private String userid;
+    private String token;
+    private Date expiration;
 
-  public List<Session> getSessions() {
-    return sessions;
+    public String getUserid() {
+      return userid;
+    }
+
+    public void setUserid(String userid) {
+      this.userid = userid;
+    }
+
+    public String getToken() {
+      return token;
+    }
+
+    public void setToken(String token) {
+      this.token = token;
+    }
+
+    public Date getExpiration() {
+      return expiration;
+    }
+
+    public void setExpiration(Date expiration) {
+      this.expiration = expiration;
+    }
   }
 
-  public void setSessions(List<Session> sessions) {
-    this.sessions = sessions;
-  }
-}
 
-@TypeScriptType
-@CompiledJson(onUnknown = CompiledJson.Behavior.IGNORE)
-class Session {
-  private String userid;
-  private String token;
-  private Date expiration;
+  public static @CompiledJson(onUnknown = CompiledJson.Behavior.IGNORE)
+  class Sessions {
+    List<Session> sessions;
 
-  public String getUserid() {
-    return userid;
-  }
+    public List<Session> getSessions() {
+      return sessions;
+    }
 
-  public void setUserid(String userid) {
-    this.userid = userid;
-  }
-
-  public String getToken() {
-    return token;
-  }
-
-  public void setToken(String token) {
-    this.token = token;
-  }
-
-  public Date getExpiration() {
-    return expiration;
-  }
-
-  public void setExpiration(Date expiration) {
-    this.expiration = expiration;
+    public void setSessions(List<Session> sessions) {
+      this.sessions = sessions;
+    }
   }
 }
 

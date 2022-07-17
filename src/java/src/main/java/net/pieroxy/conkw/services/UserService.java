@@ -130,6 +130,10 @@ public class UserService {
       save(creds);
     }
   }
+
+  public User getUserById(String userid) {
+    return readUsers().getDataByLogin().get(userid);
+  }
 }
 
 @CompiledJson(onUnknown = CompiledJson.Behavior.IGNORE)

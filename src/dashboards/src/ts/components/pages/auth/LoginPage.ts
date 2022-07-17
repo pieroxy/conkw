@@ -82,7 +82,7 @@ export class LoginPage extends AbstractPage<any> {
         m.route.set("/changepassword/" + this.username);
       } else {
         Notifications.addNotification(new Notification(NotificationsClass.LOGIN, NotificationsType.SUCCESS, "Welcome back!", 5))
-        Auth.setAuthToken(data.token);
+        Auth.setAuthToken(data.token, data.user);
         m.route.set("/home");
       }
     })

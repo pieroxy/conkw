@@ -1,5 +1,5 @@
 import m from 'mithril';
-import { Auth } from '../../utils/Auth';
+import { Auth, AuthenticationStatus } from '../../utils/Auth';
 import { Notifications } from '../../utils/Notifications';
 import { NotificationComponent } from '../organisms/NotificationComponent';
 import { MainTopBar } from '../toolbars/MainTopBar';
@@ -10,7 +10,7 @@ export abstract class AbstractPage<A> implements m.ClassComponent<A> {
     window.document.title = this.getPageTitle();
     return [
       renderNotification(),
-      Auth.isLoggedIn()?m(MainTopBar):null,
+      Auth.getAuthenticationStatus()===AuthenticationStatus.LOGGED_IN ?m(MainTopBar):null,
       this.render(vnode),
     ];
   }
