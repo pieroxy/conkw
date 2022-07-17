@@ -38,6 +38,7 @@ export class Api {
           throw "HandledError";
         case ApiResultCodes.TECH_ERROR:
         default:
+          Notifications.addNotification(new Notification(NotificationsClass.LOGIN, NotificationsType.ERROR, "The server encountered an error. More informations can probably be found in the logs.", 10));
           throw "HandledError";
       }
     }).catch(() => {
