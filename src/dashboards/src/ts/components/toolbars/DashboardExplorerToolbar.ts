@@ -1,7 +1,7 @@
 import m from 'mithril';
 
 import { Children } from "mithril";
-import { Notification, Notifications, NotificationsClass, NotificationsType } from '../../utils/Notifications';
+import { Dialogs } from '../../utils/Dialogs';
 import { Button } from '../forms/Button';
 import { Form } from '../forms/Form';
 import { TextFieldInput } from '../forms/TextFieldInput';
@@ -22,27 +22,9 @@ export class DashboardExplorerToolbar implements m.ClassComponent<DashboardExplo
       m(".right", 
         m(Button, {
           action:() => {
-            let go=() => {
-              Notifications.dismiss(notif);
+            let go=(_s:string) => {
             };
-            let data={str:""};
-            let notif = new Notification(
-              NotificationsClass.LOGIN, 
-              NotificationsType.INFO, 
-              [
-                m(".inputlabel", "New dashboard name:"),
-                m(TextFieldInput, {
-                  refHolder:data,
-                  refProperty:"str",
-                  onenter:go,
-                  focus:true
-                }),
-                m("", m(".floatright", m(Button, {
-                  action:go
-                }, "Créer"))),
-              ], 
-              -1);
-            Notifications.addNotification(notif)
+            Dialogs.prompt("New dashboard name","",(s) => s,go);
           }
         }, "+")
       )

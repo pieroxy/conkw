@@ -5,13 +5,20 @@ $bg-color-l1: #360b29;
 $bg-color-l2: #3c0c2d;
 $bg-color-l3: #420e31;
 $bg-color-d1: #200414;
-$primary-color: darkcyan;
-$primary-color-hover: #00adad;
+$primary-color: #00abab;
+$primary-color-hover: #00c0c0;
+$secondary-color: #808080;
+$secondary-color-hover: #909090;
 $text-color: lightgray;
 $error-color: #c49d07;
 
 @mixin media-max($_max-width) {
   @media screen and (max-width: $_max-width) {
+      &{ @content; }
+  }
+}
+@mixin media-min($_min-width) {
+  @media screen and (min-width: $_min-width) {
       &{ @content; }
   }
 }
@@ -148,7 +155,14 @@ button {
     padding: 11px 29px 9px 31px;
     box-shadow: inset 3px 3px 10px rgb(0 0 0  / 20%), inset -3px -3px 5px rgb(255 255 255 / 10%);
   }
-  
+
+  &.secondary {
+    background-color: $secondary-color;
+
+    &:hover {
+      background-color: $secondary-color-hover;
+    }
+  }
 }
 
 
@@ -297,6 +311,46 @@ button {
   }
 }
 
+.dialogveil {
+  background-color: rgba(64, 128, 128, 0.3);
+  width:100%;
+  height:100%;
+  z-index:199;
+  position: absolute;
+  top: 0;
+  left: 0;
+  text-align: center;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  .dialogout {
+    background-color: $bg-color-l3;
+    box-shadow: 0 0 50px -10px rgba(0,0,0,0.5);
+    text-align: center;
+    z-index:100;
+    display: inline-block;
+    line-height: normal;
+    vertical-align: middle;
+    vertical-align: -webkit-baseline-middle;
+
+    .dialogin {
+      padding:20px 50px;
+
+      .buttonpanel {
+        margin-top:20px;
+
+        > button {
+          margin:20px;
+        }
+      }
+      
+
+    }
+  }
+}
 
 
 
