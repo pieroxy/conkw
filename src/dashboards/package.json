@@ -11,18 +11,18 @@
   "author": "Pierre Grimaud",
   "license": "GPLv2",
   "dependencies": {
-    "mithril": "^2.2.2"
+    "mithril": "2.2.2"
   },
   "devDependencies": {
-    "@types/mithril": "^2.0.11",
-    "css-loader": "^6.7.1",
-    "html-webpack-plugin": "^5.5.0",
-    "sass": "^1.52.2",
-    "sass-loader": "^13.0.0",
-    "style-loader": "^3.3.1",
-    "ts-loader": "^9.3.0",
-    "typescript": "^4.7.3",
-    "webpack": "^5.73.0",
-    "webpack-cli": "^4.9.2"
+    "@types/mithril": "2.0.11",
+    "css-loader": "6.7.1",
+    "html-webpack-plugin": "5.5.0",
+    "sass": "1.52.2",
+    "sass-loader": "13.0.0",
+    "style-loader": "3.3.1",
+    "ts-loader": "9.3.0",
+    "typescript": "4.7.3",
+    "webpack": "5.73.0",
+    "webpack-cli": "4.9.2"
   }
 }
