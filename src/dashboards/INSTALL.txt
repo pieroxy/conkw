@@ -1,3 +1,5 @@
+Here are the packages installed:
+
 npm init --yes
 npm install typescript --save-dev
 npm install mithril --save
@@ -10,3 +12,6 @@ npm install ts-loader --save-dev
 npm install html-webpack-plugin --save-dev
 npm install style-loader css-loader --save-dev
 npm install sass-loader sass --save-dev
+
+
+In order to make the project bootable, one should run npm ci
