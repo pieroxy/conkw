@@ -17,7 +17,7 @@ export class Button implements m.ClassComponent<ButtonInputAttrs> {
           attrs.action();
         },
         
-      }, children);
+      }, m(".innerbutton", children));
   }
 }
 

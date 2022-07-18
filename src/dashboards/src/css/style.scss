@@ -140,7 +140,7 @@ input:focus {
 }
 
 button {
-  padding: 10px 30px;
+  padding: 3px 20px;
   font-size: 18px;
   border: none;
   background-color: $primary-color;
@@ -148,12 +148,28 @@ button {
   box-shadow: inset 3px 3px 5px rgb(255 255 255 / 10%), inset -3px -3px 5px rgb(0 0 0 / 10%);
   color:black;
 
+  > .innerbutton {
+    padding:3px 10px 0;
+    border:2px solid transparent;
+  }
+
+  &:focus {
+    outline: 2px solid black;
+    box-shadow: 0 0 0 3px white;
+    > .innerbutton {
+      border: 2px dotted rgba(0,0,0,0.3);
+    }
+  }
+
   &:hover {
     background-color: $primary-color-hover;
   }
   &:active {
-    padding: 11px 29px 9px 31px;
     box-shadow: inset 3px 3px 10px rgb(0 0 0  / 20%), inset -3px -3px 5px rgb(255 255 255 / 10%);
+
+    > .innerbutton {
+      transform: translate(1px, 1px);
+    }
   }
 
   &.secondary {
@@ -295,19 +311,19 @@ button {
   }
 
   button {
-    padding: 3px 10px;
+    padding: 0px 5px;
     font-weight: 700;
     vertical-align: middle;
 
-    &:active {
-      padding: 4px 9px 2px 11px;
+    > .innerbutton {
+      padding: 2px 5px 0;
     }
   }
 
   .inputlabel {
     display: inline-block;
     padding-right: 10px;
-    font-size: 12px;
+    font-size: 14px;
   }
 }
 
