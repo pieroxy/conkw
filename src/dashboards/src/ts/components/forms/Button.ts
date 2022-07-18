@@ -7,7 +7,7 @@ export class Button implements m.ClassComponent<ButtonInputAttrs> {
   
   view({attrs,children}: m.Vnode<ButtonInputAttrs>): void | Children {
     return m(
-      "button", 
+      "button" + (attrs.secondary ? ".secondary":""), 
       {
         type:"button",
         onclick: () => {
@@ -24,4 +24,5 @@ export class Button implements m.ClassComponent<ButtonInputAttrs> {
 export interface ButtonInputAttrs {
   action:()=>void;
   form?:Form;
+  secondary?:boolean;
 }
