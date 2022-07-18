@@ -38,11 +38,6 @@ public class DoLoginEndpoint extends AbstractApiEndpoint<DoLoginEndpointInput, D
       throw new DisplayMessageException("Username or password not recognized.");
     }
   }
-
-  @Override
-  public Class<DoLoginEndpointInput> getType() {
-    return DoLoginEndpointInput.class;
-  }
 }
 
 @TypeScriptType

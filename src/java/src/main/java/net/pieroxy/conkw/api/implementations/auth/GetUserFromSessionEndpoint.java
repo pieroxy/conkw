@@ -35,11 +35,6 @@ public class GetUserFromSessionEndpoint extends AbstractApiEndpoint<GetUserFromS
       return new GetUserFromSessionOutput();
     }
   }
-
-  @Override
-  public Class<GetUserFromSessionInput> getType() {
-    return GetUserFromSessionInput.class;
-  }
 }
 
 @TypeScriptType

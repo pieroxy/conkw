@@ -1,4 +1,4 @@
-package net.pieroxy.conkw.api.implementations;
+package net.pieroxy.conkw.api.implementations.dashboards;
 
 import com.dslplatform.json.CompiledJson;
 import net.pieroxy.conkw.api.metadata.AbstractApiEndpoint;
@@ -31,11 +31,6 @@ public class GetDashboardsEndpoint extends AbstractApiEndpoint<GetDashboardsInpu
     File[] files = dir.listFiles();
     if (files == null) files = new File[0];
     return new GetDashboardsOutput(Arrays.stream(files).map(DashboardSummary::new).collect(Collectors.toList()));
-  }
-
-  @Override
-  public Class<GetDashboardsInput> getType() {
-    return GetDashboardsInput.class;
   }
 }
 

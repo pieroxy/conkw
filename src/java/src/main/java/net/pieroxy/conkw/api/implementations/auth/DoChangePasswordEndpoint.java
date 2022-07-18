@@ -38,11 +38,6 @@ public class DoChangePasswordEndpoint extends AbstractApiEndpoint<DoChangePasswo
       throw new DisplayMessageException("The current password is incorrect.");
     }
   }
-
-  @Override
-  public Class<DoChangePasswordInput> getType() {
-    return DoChangePasswordInput.class;
-  }
 }
 
 @TypeScriptType

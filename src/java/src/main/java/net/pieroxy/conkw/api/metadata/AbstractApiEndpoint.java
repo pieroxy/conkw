@@ -12,17 +12,33 @@ import net.pieroxy.conkw.utils.exceptions.SwallowIOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.ParameterizedType;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public abstract class AbstractApiEndpoint<I,O> implements ApiEndpoint {
   private Logger LOGGER = Logger.getLogger(this.getClass().getName());
-  public abstract O process(I input, User user) throws Exception;
-  public abstract Class<I> getType();
+
+  private final Class<I> inputType;
   private UserRole roleAllowed;
+
+  public abstract O process(I input, User user) throws Exception;
+
+  public final Class<I> buildType() {
+    Class<?> subClass = getClass();
+    while (subClass.getSuperclass() != AbstractApiEndpoint.class) {
+      // instance.getClass() is no subclass of classOfInterest or instance is a direct instance of classOfInterest
+      subClass = subClass.getSuperclass();
+      if (subClass == null) throw new IllegalArgumentException();
+    }
+    ParameterizedType parameterizedType = (ParameterizedType) subClass.getGenericSuperclass();
+    LOGGER.warning(parameterizedType.toString());
+    return (Class<I>) parameterizedType.getActualTypeArguments()[0];
+  }
 
   public AbstractApiEndpoint() {
     roleAllowed = this.getClass().getAnnotation(Endpoint.class).role();
+    inputType = buildType();
   }
 
   Logger getLogger() {
@@ -38,9 +54,9 @@ public abstract class AbstractApiEndpoint<I,O> implements ApiEndpoint {
       }
       I input;
       if (req.getMethod().equals("GET")) {
-        input = JsonHelper.readFromString(getType(), req.getParameter("input"));
+        input = JsonHelper.readFromString(inputType, req.getParameter("input"));
       } else if (req.getMethod().equals("POST")) {
-        input = JsonHelper.readFromInputStream(getType(), req.getInputStream());
+        input = JsonHelper.readFromInputStream(inputType, req.getInputStream());
       } else {
         throw new ApiError("Method " + req.getMethod() + " is not accepted");
       }
