@@ -227,6 +227,22 @@ button {
     }
   }
 
+  /* Loader tweaked from https://github.com/lukehaas/css-loaders
+  MIT license */
+  .loader {
+    color: #fff;
+    font-size: 20px;
+    margin: -2em 0px 0 90px;
+    width: 2em;
+    height: 2em;
+    border-radius: 100%;
+    position: relative;
+    text-indent: -9999em;
+    animation: load4 1.3s infinite linear;
+    display: block;
+    transform: scale(0.25);
+    padding: 0;
+  }
 }
 
 .vcenteredO {
@@ -283,6 +299,29 @@ button {
 
 
 
+
+@media screen and (min-width:700px) {
+  .loginpage {
+    flex-direction: row;
+
+    .loginarea2 {
+      border-left:1px solid rgba(255,255,255,0.3);
+      padding-left: 10px;
+      margin-left: 20px;
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+/* Animations */
+
 @keyframes notification-appearance {
 	from {
     transform:translate(0,-50px);
@@ -305,14 +344,30 @@ button {
   }
 }
 
-@media screen and (min-width:700px) {
-  .loginpage {
-    flex-direction: row;
-
-    .loginarea2 {
-      border-left:1px solid rgba(255,255,255,0.3);
-      padding-left: 10px;
-      margin-left: 20px;
-    }
+@keyframes load4 {
+  0%,
+  100% {
+    box-shadow: 0 -3em 0 0.2em, 2em -2em 0 0em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 0;
+  }
+  12.5% {
+    box-shadow: 0 -3em 0 0, 2em -2em 0 0.2em, 3em 0 0 0, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 -1em;
+  }
+  25% {
+    box-shadow: 0 -3em 0 -0.5em, 2em -2em 0 0, 3em 0 0 0.2em, 2em 2em 0 0, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 -1em;
+  }
+  37.5% {
+    box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0em 0 0, 2em 2em 0 0.2em, 0 3em 0 0em, -2em 2em 0 -1em, -3em 0em 0 -1em, -2em -2em 0 -1em;
+  }
+  50% {
+    box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 0em, 0 3em 0 0.2em, -2em 2em 0 0, -3em 0em 0 -1em, -2em -2em 0 -1em;
+  }
+  62.5% {
+    box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 0, -2em 2em 0 0.2em, -3em 0 0 0, -2em -2em 0 -1em;
+  }
+  75% {
+    box-shadow: 0em -3em 0 -1em, 2em -2em 0 -1em, 3em 0em 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0.2em, -2em -2em 0 0;
+  }
+  87.5% {
+    box-shadow: 0em -3em 0 0, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0, -2em -2em 0 0.2em;
   }
 }
