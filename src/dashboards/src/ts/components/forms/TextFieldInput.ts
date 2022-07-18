@@ -16,8 +16,20 @@ export class TextFieldInput extends GenericInput<string, TextInputAttrs> {
       value: this.getValueAsString(),
       autocapitalize:"none",
       onkeyup: (e: KeyboardEvent) => {
-        if (e && e.keyCode == 13) {
-          attrs.onenter();
+        if (e.code) {
+          if (e.code == 'Enter' || e.code == 'NumpadEnter') {
+            attrs.onenter();
+          }
+          if (e.code == 'Escape') {
+            if (attrs.onescape) attrs.onescape();
+          }
+        } else {
+          if (e.keyCode == 13) {
+            attrs.onenter();
+          }
+          if (e.keyCode == 27) {
+            if (attrs.onescape) attrs.onescape();
+          }
         }
         return true;
       }
@@ -44,5 +56,6 @@ export class TextFieldInput extends GenericInput<string, TextInputAttrs> {
 export interface TextInputAttrs extends GenericInputAttrs<string> {
   placeholder?: string
   onenter:()=>void;
+  onescape?:()=>void;
   focus?:boolean;
 }
