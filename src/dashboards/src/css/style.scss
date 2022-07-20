@@ -140,22 +140,31 @@ input {
     box-shadow: 0 0 0 30px black inset !important;
     -webkit-text-fill-color: white !important;
   }
+
+  &:hover {
+    border:2px solid #888;
+  }
+
+  &.error {
+    background-color: $error-color;
+  }
+
+  &:focus {
+    outline : none;
+    border:2px solid #aaa;
+    opacity: 0.9;
+    box-shadow: inset 3px 3px 5px rgb(0 0 0 / 40%);
+  }
+
+  &.searchbg {
+    background-image: url(../img/search.png);
+    background-size: 1em 1em;
+    background-repeat: no-repeat;
+    background-position: 97% 50%;
+  }
 }
 
-input:hover {
-  border:2px solid #888;
-}
 
-input.error {
-  background-color: $error-color;
-}
-
-input:focus {
-  outline : none;
-  border:2px solid #aaa;
-  opacity: 0.9;
-  box-shadow: inset 3px 3px 5px rgb(0 0 0 / 40%);
-}
 
 button {
   padding: 3px 20px;

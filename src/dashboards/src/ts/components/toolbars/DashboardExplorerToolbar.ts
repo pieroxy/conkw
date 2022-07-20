@@ -13,13 +13,13 @@ export class DashboardExplorerToolbar implements m.ClassComponent<DashboardExplo
   
   view({attrs}:m.Vnode<DashboardExplorerToolbarAttrs>): void | Children {
     return m(".toolbar", [
-      m(".inputlabel", "Search"),
       m(TextFieldInput, {
         refHolder:this,
         refProperty:"filter",
         form:new Form(),
         onchange:()=>attrs.filter(this.filter),
-        onenter:()=>{}
+        onenter:()=>{},
+        search:true
       }),
       m(".right", 
         m(Button, {
