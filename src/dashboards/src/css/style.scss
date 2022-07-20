@@ -11,6 +11,8 @@ $secondary-color: #808080;
 $secondary-color-hover: #909090;
 $text-color: lightgray;
 $error-color: #c49d07;
+$scrollbarFg:#55585a;
+$scrollbarBg: #282e31;
 
 @mixin media-max($_max-width) {
   @media screen and (max-width: $_max-width) {
@@ -54,7 +56,24 @@ html { -webkit-text-size-adjust: 100%; }
   float:right;
 }
 
-/* Login page */
+@mixin vScrollableArea() {
+  overflow-y: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: $scrollbarFg $scrollbarBg;
+
+  &::-webkit-scrollbar {
+    width: 11px;
+  }
+  &::-webkit-scrollbar-track {
+    background: $scrollbarBg;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: $scrollbarFg ;
+    border-radius: 6px;
+    border: 3px solid $scrollbarBg;
+  }
+}
+
 
 .loginpage {
   display: flex;
@@ -302,8 +321,8 @@ button {
     box-sizing: border-box;
 
     .list {
-      overflow-y: scroll;
       height:100%;
+      @include vScrollableArea();
 
       .listitem {
         background-color: $bg-color-l2;
