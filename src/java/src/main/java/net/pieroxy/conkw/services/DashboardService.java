@@ -50,7 +50,7 @@ public class DashboardService {
   public List<DashboardSummary> getSummaries() {
     File[] files = folder.listFiles();
     if (files == null) files = new File[0];
-    return Arrays.stream(files).map(this::loadDashboard).map(DashboardSummary::new).collect(Collectors.toList());
+    return Arrays.stream(files).map(this::loadDashboard).map(DashboardSummary::new).sorted().collect(Collectors.toList());
   }
 
   public Dashboard loadDashboard(File f) {

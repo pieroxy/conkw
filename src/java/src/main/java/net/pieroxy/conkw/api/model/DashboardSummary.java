@@ -7,7 +7,7 @@ import java.io.File;
 
 @TypeScriptType
 @CompiledJson
-public class DashboardSummary {
+public class DashboardSummary implements Comparable<DashboardSummary> {
   private String name;
   private String id;
 
@@ -38,5 +38,10 @@ public class DashboardSummary {
 
   public void setId(String id) {
     this.id = id;
+  }
+
+  @Override
+  public int compareTo(DashboardSummary o) {
+    return getName().compareToIgnoreCase(o.getName().toLowerCase());
   }
 }
