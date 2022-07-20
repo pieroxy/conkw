@@ -32,7 +32,6 @@ public abstract class AbstractApiEndpoint<I,O> implements ApiEndpoint {
       if (subClass == null) throw new IllegalArgumentException();
     }
     ParameterizedType parameterizedType = (ParameterizedType) subClass.getGenericSuperclass();
-    LOGGER.warning(parameterizedType.toString());
     return (Class<I>) parameterizedType.getActualTypeArguments()[0];
   }
 

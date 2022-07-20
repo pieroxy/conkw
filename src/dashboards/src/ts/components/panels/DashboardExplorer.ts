@@ -11,6 +11,10 @@ export class DashboardExplorer implements m.ClassComponent<DashboardExplorerAttr
   data:GetDashboardsOutput = {list:[]}
 
   oninit() {
+    this.load();
+  }
+
+  load() {
     Api.call<GetDashboardsInput, GetDashboardsOutput>({
       method:"GET",
       endpoint:"GetDashboards",
@@ -22,22 +26,22 @@ export class DashboardExplorer implements m.ClassComponent<DashboardExplorerAttr
     })
   }
   
-  view({attrs}: m.Vnode<DashboardExplorerAttrs>): void | Children {
+  view({}: m.Vnode<DashboardExplorerAttrs>): void | Children {
     return m(
       ".dashboardExplorer", 
       [
         m(DashboardExplorerToolbar, {
           filter:(s:string) => {
             this.filter.update(s);
-          }
+          },
+          reload:() => this.load()
         }),
-        m(".list", [
-          attrs.dashboards?.list.map(e => this.filter.matchOne([e.name]) ? m("", e.name) : null)
-        ])
+        m(".content", m(".list", [
+          this.data.list.map(e => this.filter.matchOne([e.name]) ? m("", e.name) : null)
+        ]))
       ]);
   }
 }
 
 export interface DashboardExplorerAttrs {
-  dashboards?:GetDashboardsOutput;
 }

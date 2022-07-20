@@ -10,10 +10,7 @@ import net.pieroxy.conkw.api.model.User;
 import net.pieroxy.conkw.config.UserRole;
 import net.pieroxy.conkw.utils.Services;
 
-import java.io.File;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Endpoint(
     method = ApiMethod.GET,
@@ -27,10 +24,7 @@ public class GetDashboardsEndpoint extends AbstractApiEndpoint<GetDashboardsInpu
 
   @Override
   public GetDashboardsOutput process(GetDashboardsInput input, User user) throws Exception {
-    File dir = services.getLocalStorageManager().getDashboardsDir();
-    File[] files = dir.listFiles();
-    if (files == null) files = new File[0];
-    return new GetDashboardsOutput(Arrays.stream(files).map(DashboardSummary::new).collect(Collectors.toList()));
+    return new GetDashboardsOutput(services.getDashboardService().getSummaries());
   }
 }
 

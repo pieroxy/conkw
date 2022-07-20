@@ -294,9 +294,17 @@ button {
   width:100%;
   height:100%;
   box-shadow: 2px 2px 15px rgb(0 0 0 / 10%);
+  position: relative;
 
-  .list {
-    overflow-y: scroll;
+  .content {
+    height: 100%;
+    padding-top: 2em;
+    box-sizing: border-box;
+
+    .list {
+      overflow-y: scroll;
+      height:100%;
+    }
   }
 }
 
@@ -305,6 +313,8 @@ button {
   height:2em;
   line-height: 2em;
   padding:0 10px;
+  position: absolute;
+  width: 100%;
 
   .right {
     float:right;

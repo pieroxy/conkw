@@ -3,12 +3,14 @@ package net.pieroxy.conkw.utils;
 import net.pieroxy.conkw.config.Config;
 import net.pieroxy.conkw.config.CredentialsStore;
 import net.pieroxy.conkw.config.LocalStorageManager;
+import net.pieroxy.conkw.services.DashboardService;
 import net.pieroxy.conkw.services.UserService;
 import net.pieroxy.conkw.services.UserSessionService;
 import net.pieroxy.conkw.webapp.servlets.ApiAuthManager;
 import net.pieroxy.conkw.webapp.servlets.ApiManager;
 
 public class Services {
+  private final DashboardService dashboardService;
   private ApiAuthManager apiAuthManager;
   private CredentialsStore credentialsStore;
   private Config configuration;
@@ -21,6 +23,7 @@ public class Services {
     this.localStorageManager = localStorageManager;
     this.userService = new UserService(this);
     this.userSessionService = new UserSessionService(localStorageManager);
+    this.dashboardService = new DashboardService(localStorageManager);
   }
 
   public ApiAuthManager getApiAuthManager() {
@@ -73,5 +76,9 @@ public class Services {
 
   public UserSessionService getUserSessionService() {
     return userSessionService;
+  }
+
+  public DashboardService getDashboardService() {
+    return dashboardService;
   }
 }

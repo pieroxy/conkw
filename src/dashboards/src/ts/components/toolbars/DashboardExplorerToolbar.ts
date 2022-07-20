@@ -1,6 +1,8 @@
 import m from 'mithril';
 
 import { Children } from "mithril";
+import { CreateNewDashboardInput, CreateNewDashboardOutput } from '../../auto/pieroxy-conkw';
+import { Api } from '../../utils/api/Api';
 import { Dialogs } from '../../utils/Dialogs';
 import { Button } from '../forms/Button';
 import { Form } from '../forms/Form';
@@ -22,7 +24,14 @@ export class DashboardExplorerToolbar implements m.ClassComponent<DashboardExplo
       m(".right", 
         m(Button, {
           action:() => {
-            let go=(_s:string) => {
+            let go=(s:string) => {
+              Api.call<CreateNewDashboardInput, CreateNewDashboardOutput>({
+                method:"POST",
+                endpoint:"CreateNewDashboard",
+                body:{
+                  name:s
+                }
+            }).then(attrs.reload)
             };
             Dialogs.prompt("New dashboard name","",(s) => s,go);
           }
@@ -34,4 +43,5 @@ export class DashboardExplorerToolbar implements m.ClassComponent<DashboardExplo
 
 export interface DashboardExplorerToolbarAttrs {
   filter: (s:string)=>void;
+  reload:()=>void;
 }

@@ -9,12 +9,19 @@ import java.io.File;
 @CompiledJson
 public class DashboardSummary {
   private String name;
+  private String id;
 
   public DashboardSummary(File dashboard) {
+
     this.name = dashboard.getName();
   }
 
   public DashboardSummary() {
+  }
+
+  public DashboardSummary(Dashboard dashboard) {
+    name = dashboard.getName();
+    id = dashboard.getId();
   }
 
   public String getName() {
@@ -23,5 +30,13 @@ public class DashboardSummary {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public String getId() {
+    return id;
+  }
+
+  public void setId(String id) {
+    this.id = id;
   }
 }
