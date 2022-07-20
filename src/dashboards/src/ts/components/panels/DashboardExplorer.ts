@@ -37,7 +37,7 @@ export class DashboardExplorer implements m.ClassComponent<DashboardExplorerAttr
           reload:() => this.load()
         }),
         m(".content", m(".list", [
-          this.data.list.map(e => this.filter.matchOne([e.name]) ? m("", e.name) : null)
+          this.data.list.map(e => this.filter.matchOne([e.name]) ? m(".listitem", e.name) : null)
         ]))
       ]);
   }

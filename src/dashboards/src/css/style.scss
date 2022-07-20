@@ -304,12 +304,27 @@ button {
     .list {
       overflow-y: scroll;
       height:100%;
+
+      .listitem {
+        background-color: $bg-color-l2;
+        border-color: $bg-color-l3 $bg-color $bg-color $bg-color-l3;
+        padding: 8px 12px;
+        overflow: hidden;
+        white-space: pre;
+        margin:3px;
+        border-style: solid;
+        border-width: 1px;
+
+        &:hover {
+          background-color: $bg-color-l3;
+        }
+      }
     }
   }
 }
 
 .toolbar {
-  background-color: $bg-color-l2;
+  background-color: $bg-color-d1;
   height:2em;
   line-height: 2em;
   padding:0 10px;
