@@ -420,6 +420,23 @@ button {
   }
 }
 
+.page {
+  margin-top: 3em;
+
+  .title {
+    font-size: 20px;
+    padding: 10px 30px;
+    font-weight: 700;
+
+    .id {
+      font-size: 10px;
+      font-family: 'Courier New', Courier, monospace;
+      opacity: 0.5;
+      display: inline-block;
+      margin-left: 10px;
+    }
+  }
+}
 
 
 @media screen and (min-width:700px) {

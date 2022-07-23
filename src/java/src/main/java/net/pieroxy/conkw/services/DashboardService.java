@@ -44,13 +44,20 @@ public class DashboardService {
   }
 
   private File getFile(Dashboard d) {
-    return new File(folder, d.getId()+".json");
+    return getFileForId(d.getId());
+  }
+  private File getFileForId(String id) {
+    return new File(folder, id+".json");
   }
 
   public List<DashboardSummary> getSummaries() {
     File[] files = folder.listFiles();
     if (files == null) files = new File[0];
     return Arrays.stream(files).map(this::loadDashboard).map(DashboardSummary::new).sorted().collect(Collectors.toList());
+  }
+
+  public Dashboard getDashboardById(String id) {
+    return loadDashboard(getFileForId(id));
   }
 
   public Dashboard loadDashboard(File f) {

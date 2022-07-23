@@ -5,7 +5,7 @@ import { Auth, AuthenticationStatus } from './Auth';
 
 export class AuthenticatedPageResolver implements m.RouteResolver {
   private comp:m.ComponentTypes;
-  constructor(comp:m.ComponentTypes) {
+  constructor(comp:m.ComponentTypes<any,any>) {
     this.comp = comp;
   }
   onmatch():m.ComponentTypes | void {
