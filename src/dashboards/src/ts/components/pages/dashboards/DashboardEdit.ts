@@ -2,6 +2,10 @@ import m from 'mithril';
 import { Dashboard, GetDashboardInput, GetDashboardOutput } from '../../../auto/pieroxy-conkw';
 import { Api } from '../../../utils/api/Api';
 import { IdAttrs } from '../../../utils/attrs/IdAttrs';
+import { HomeIcon } from '../../../utils/icons/HomeIcon';
+import { RightChevronIcon } from '../../../utils/icons/RightChevronIcon';
+import { Endpoints } from '../../../utils/navigation/Endpoints';
+import { Routing } from '../../../utils/navigation/Routing';
 import { AbstractPage } from '../AbstractPage';
 
 export class DashboardEditPage extends AbstractPage<IdAttrs> {
@@ -25,7 +29,7 @@ export class DashboardEditPage extends AbstractPage<IdAttrs> {
   render(_vnode:m.Vnode<any, any>):m.Children {
     if (!this.dashboard) return m("");
     return m(".dashboard.page", [
-      m(".title", [this.dashboard.name, m(".id", this.dashboard.id)]),
+      m(".title", [m("a", {href:Routing.getRouteAsHref(Endpoints.HOME)}, m(HomeIcon)), m(RightChevronIcon), this.dashboard.name, m(".id", this.dashboard.id)]),
     ]);
   }
 }

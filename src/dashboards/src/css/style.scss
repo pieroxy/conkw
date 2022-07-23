@@ -55,6 +55,35 @@ html { -webkit-text-size-adjust: 100%; }
   float:right;
 }
 
+.icon {
+  width: 40px;
+  height: 40px;
+  vertical-align: middle;
+  margin: 0 10px 10px 10px;
+
+  &.chevron {
+    width: 30px;
+    height: 30px;
+    margin: 0 5px 10px 0;
+
+    path.primary {
+      stroke-width:2;
+    }
+  }
+
+  path.primary {
+    stroke: white;
+    stroke-width:1.5;
+    stroke-linecap:"round";
+    stroke-linejoin:"round";
+  }
+
+  path.secondary {
+    fill:white;
+    opacity: 0.5;
+  }
+}
+
 @mixin vScrollableArea($bg) {
   overflow-y: scroll;
   scrollbar-width: thick;
