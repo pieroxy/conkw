@@ -13,14 +13,6 @@ export class DashboardExplorerToolbar implements m.ClassComponent<DashboardExplo
   
   view({attrs}:m.Vnode<DashboardExplorerToolbarAttrs>): void | Children {
     return m(".toolbar", [
-      m(TextFieldInput, {
-        refHolder:this,
-        refProperty:"filter",
-        form:new Form(),
-        onchange:()=>attrs.filter(this.filter),
-        onenter:()=>{},
-        search:true
-      }),
       m(".right", 
         m(Button, {
           action:() => {
@@ -36,7 +28,18 @@ export class DashboardExplorerToolbar implements m.ClassComponent<DashboardExplo
             Dialogs.prompt("New dashboard name","",(s) => s,go);
           }
         }, "+")
-      )
+      ),
+      m(".title", "Dashboards"),
+      m(TextFieldInput, {
+        refHolder:this,
+        refProperty:"filter",
+        form:new Form(),
+        onchange:()=>attrs.filter(this.filter),
+        onenter:()=>{},
+        search:true,
+        placeholder:"Filter",
+        className:".right.rm10"
+      }),
     ])
   }
 }

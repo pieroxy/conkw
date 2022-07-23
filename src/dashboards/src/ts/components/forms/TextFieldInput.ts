@@ -39,7 +39,7 @@ export class TextFieldInput extends GenericInput<string, TextInputAttrs> {
     if (attrs.id) params.id = attrs.id;
 
     return m(
-      "input" + this.getErrorClass() + (attrs.search ? ".searchbg":""), 
+      "input" + this.getErrorClass() + (attrs.search ? ".searchbg":"") + (attrs.className ? attrs.className:""), 
       params
     );
   }
@@ -60,4 +60,5 @@ export interface TextInputAttrs extends GenericInputAttrs<string> {
   onescape?:()=>void;
   focus?:boolean;
   search?:boolean;
+  className?:string;
 }
