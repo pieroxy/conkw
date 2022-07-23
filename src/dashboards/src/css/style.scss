@@ -484,7 +484,7 @@ button {
 }
 
 .page {
-  margin-top: 3em;
+  margin: 3em 2% 0 2%;
 
   .title {
     font-size: 20px;
@@ -501,6 +501,53 @@ button {
   }
 }
 
+.panel {
+  background-color: $bg-color-l1;
+  box-shadow: 2px 2px 5px rgb(0 0 0 / 30%);
+  padding:10px;
+  width: 350px;
+
+  &.clickable:hover {
+    background-color: $bg-color-l3;
+    cursor: pointer;
+  }
+
+  .line {
+    clear:both;
+
+    .placeholderText {
+      color:rgba(255,255,255,0.1);
+      display: inline-block;
+      width:110px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  
+    .placeholderValue {
+      float: right;
+      color:rgba(255,255,255,0.1);
+      display: block;
+      font-family: 'Courier New', Courier, monospace;
+      width:50px;
+      overflow: hidden;
+    }
+  
+    .placeholderGauge {
+      width: 150px;
+      background-color: $bg-color-l2;
+      height: 0.9em;
+      display: block;
+      margin-left: 5px;
+      margin-bottom: 2px;
+      position: relative;
+      overflow: hidden;
+      float: right;
+      border-left:60px solid rgba(255,255,255,0.1);
+      box-sizing: border-box;
+    }
+  }
+}
 
 @media screen and (min-width:700px) {
   .loginpage {
