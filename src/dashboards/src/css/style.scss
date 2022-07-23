@@ -345,6 +345,11 @@ button {
         &:hover {
           background-color: $bg-color-l3;
         }
+
+        a, a:hover, a:visited, a:active {
+          text-decoration: none;
+          color:white;
+        }
       }
     }
   }
@@ -414,8 +419,6 @@ button {
           margin:20px;
         }
       }
-      
-
     }
   }
 }
