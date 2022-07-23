@@ -5,12 +5,17 @@ import { LoginPage } from './components/pages/auth/LoginPage';
 import { AuthenticatedPageResolver } from './utils/AuthenticatedPageResolver';
 import { ChangePassword } from './components/pages/auth/ChangePassword';
 import { DashboardEditPage } from './components/pages/dashboards/DashboardEdit';
+import { Endpoints } from './utils/navigation/Endpoints';
+import { NewPanelPage } from './components/pages/dashboards/NewPanel';
 
 (function () {
-  m.route(document.body, "/home", {
-    "/home":new AuthenticatedPageResolver(HomePage),
-    "/login":LoginPage,
-    "/dashboards/edit/:id":new AuthenticatedPageResolver(DashboardEditPage),
-    "/changepassword/:id":ChangePassword
-  })
+
+  let routes:m.RouteDefs = {};
+  routes[Endpoints.HOME] = new AuthenticatedPageResolver(HomePage);
+  routes[Endpoints.LOGIN] = LoginPage;
+  routes[Endpoints.DASHBOARD_EDITION] = new AuthenticatedPageResolver(DashboardEditPage);
+  routes[Endpoints.PASSWORD_CHANGE] = ChangePassword;
+  routes[Endpoints.PANEL_NEW] = new AuthenticatedPageResolver(NewPanelPage);
+
+  m.route(document.body, "/home", routes)
 })();

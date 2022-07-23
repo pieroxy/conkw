@@ -13,7 +13,7 @@ export class DashboardExplorerToolbar implements m.ClassComponent<DashboardExplo
   
   view({attrs}:m.Vnode<DashboardExplorerToolbarAttrs>): void | Children {
     return m(".toolbar", [
-      m(".right", 
+      m(".floatright", 
         m(Button, {
           action:() => {
             let go=(s:string) => {
@@ -38,7 +38,7 @@ export class DashboardExplorerToolbar implements m.ClassComponent<DashboardExplo
         onenter:()=>{},
         search:true,
         placeholder:"Filter",
-        className:".right.rm10"
+        className:".floatright.rm10"
       }),
     ])
   }

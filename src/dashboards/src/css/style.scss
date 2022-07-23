@@ -59,6 +59,15 @@ html { -webkit-text-size-adjust: 100%; }
   margin-right: 10px;
 }
 
+a {
+  color:lightgray;
+
+  &:active,&:hover {
+    color:white;
+  } 
+
+}
+
 .icon {
   width: 40px;
   height: 40px;
@@ -75,16 +84,37 @@ html { -webkit-text-size-adjust: 100%; }
     }
   }
 
-  path.primary {
-    stroke: white;
-    stroke-width:1.5;
-    stroke-linecap:"round";
-    stroke-linejoin:"round";
-  }
+  path {
 
-  path.secondary {
-    fill:white;
-    opacity: 0.5;
+    &.primary {
+      stroke: white;
+      stroke-width:1.5;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+    }
+
+    &.primaryfill {
+      fill: white;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+    }
+
+    &.secondary {
+      fill:white;
+      opacity: 0.4;
+    }
+  }
+}
+
+a {
+  &:hover {
+    .icon {
+      path {
+        &.secondary {
+          opacity: 0.6;
+        }
+      }
+    }
   }
 }
 
@@ -395,10 +425,6 @@ button {
   padding:0 10px;
   position: absolute;
   width: 100%;
-
-  .right {
-    float:right;
-  }
 
   button {
     padding: 0px 5px;
