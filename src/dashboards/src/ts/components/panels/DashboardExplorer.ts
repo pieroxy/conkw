@@ -3,6 +3,8 @@ import m from 'mithril';
 import { Children } from "mithril";
 import { GetDashboardsInput, GetDashboardsOutput } from '../../auto/pieroxy-conkw';
 import { Api } from '../../utils/api/Api';
+import { Endpoints } from '../../utils/navigation/Endpoints';
+import { Routing } from '../../utils/navigation/Routing';
 import { TextFilter } from '../../utils/TextFilter';
 import { DashboardExplorerToolbar } from '../toolbars/DashboardExplorerToolbar';
 
@@ -37,7 +39,7 @@ export class DashboardExplorer implements m.ClassComponent<DashboardExplorerAttr
           reload:() => this.load()
         }),
         m(".content", m(".list", [
-          this.data.list.map(e => this.filter.matchOne([e.name]) ? m(".listitem", m("a", {href:"#/dashboards/edit/" + e.id}, e.name)) : null)
+          this.data.list.map(e => this.filter.matchOne([e.name]) ? m(".listitem", m("a", {href:Routing.getRouteAsHref(Endpoints.DASHBOARD_EDITION, {id:e.id})}, e.name)) : null)
         ]))
       ]);
   }

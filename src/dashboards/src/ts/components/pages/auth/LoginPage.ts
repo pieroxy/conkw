@@ -2,6 +2,8 @@ import m from 'mithril';
 import { DoLoginEndpointInput, DoLoginEndpointOutput } from '../../../auto/pieroxy-conkw';
 import { Api } from '../../../utils/api/Api';
 import { Auth } from '../../../utils/Auth';
+import { Endpoints } from '../../../utils/navigation/Endpoints';
+import { Routing } from '../../../utils/navigation/Routing';
 import { Notification, Notifications, NotificationsClass, NotificationsType } from '../../../utils/Notifications';
 import { Button } from '../../forms/Button';
 import { Form } from '../../forms/Form';
@@ -79,11 +81,11 @@ export class LoginPage extends AbstractPage<any> {
     }).then((data:DoLoginEndpointOutput) => {
       if (data.passwordMustChangeNow) {
         Notifications.addNotification(new Notification(NotificationsClass.LOGIN, NotificationsType.SUCCESS, "Welcome to the conkw dashboards", 5))
-        m.route.set("/changepassword/" + this.username);
+        Routing.goToScreen(Endpoints.PASSWORD_CHANGE, {id:this.username});
       } else {
         Notifications.addNotification(new Notification(NotificationsClass.LOGIN, NotificationsType.SUCCESS, "Welcome back!", 5))
         Auth.setAuthToken(data.token, data.user);
-        m.route.set("/home");
+        Routing.goToScreen(Endpoints.HOME);
       }
     })
   }

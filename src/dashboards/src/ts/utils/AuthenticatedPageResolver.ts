@@ -2,6 +2,8 @@ import m = require('mithril');
 import { OfflinePage } from '../components/pages/auth/OfflinePage';
 import { WaitingPage } from '../components/pages/auth/WaitingPage';
 import { Auth, AuthenticationStatus } from './Auth';
+import { Endpoints } from './navigation/Endpoints';
+import { Routing } from './navigation/Routing';
 
 export class AuthenticatedPageResolver implements m.RouteResolver {
   private comp:m.ComponentTypes;
@@ -17,7 +19,7 @@ export class AuthenticatedPageResolver implements m.RouteResolver {
       case AuthenticationStatus.LOGGED_IN:
         return this.comp;
       case AuthenticationStatus.NO_TOKEN:
-        m.route.set("/login");
+        Routing.goToScreen(Endpoints.LOGIN);
         return;
     }
   }

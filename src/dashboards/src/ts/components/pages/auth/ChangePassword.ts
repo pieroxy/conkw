@@ -2,6 +2,8 @@ import m from 'mithril';
 import { DoChangePasswordInput, DoChangePasswordOutput } from '../../../auto/pieroxy-conkw';
 import { Api } from '../../../utils/api/Api';
 import { IdAttrs } from '../../../utils/attrs/IdAttrs';
+import { Endpoints } from '../../../utils/navigation/Endpoints';
+import { Routing } from '../../../utils/navigation/Routing';
 import { Button } from '../../forms/Button';
 import { Form } from '../../forms/Form';
 import { PasswordFieldInput } from '../../forms/PasswordFieldInput';
@@ -88,7 +90,7 @@ export class ChangePassword extends AbstractPage<IdAttrs> {
         b:this.p3
       }
     }).then(() => {
-      m.route.set("/login");
+      Routing.goToScreen(Endpoints.LOGIN);
     })
   }
 }

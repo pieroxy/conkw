@@ -1,7 +1,7 @@
-import m from 'mithril';
-
 import { GetUserFromSessionInput, GetUserFromSessionOutput, User } from "../auto/pieroxy-conkw";
 import { Api } from "./api/Api";
+import { Endpoints } from './navigation/Endpoints';
+import { Routing } from './navigation/Routing';
 
 export class Auth {
   private static token?:string;
@@ -26,7 +26,7 @@ export class Auth {
         if (data.user) {
           this.user = data.user;
           this.token = lst;
-          m.route.set("/home");
+          Routing.goToScreen(Endpoints.HOME);
         } else {
           if (data.invalidSession) {
             localStorage.removeItem("authToken");
