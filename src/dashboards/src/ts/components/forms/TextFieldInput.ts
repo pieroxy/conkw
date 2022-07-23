@@ -12,6 +12,7 @@ export class TextFieldInput extends GenericInput<string, TextInputAttrs> {
       oninput: (e:HtmlInputEvent) => {
         this.setValue(e.target.value);
         this.computeErrorState();
+        if (attrs.onchange) attrs.onchange();
       },
       value: this.getValueAsString(),
       autocapitalize:"none",
