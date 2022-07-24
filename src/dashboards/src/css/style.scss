@@ -428,7 +428,6 @@ button {
   .content {
     @include vScrollableArea($bg-color-l1);
 
-
     .list {
       .listitem {
         background-color: $bg-color-l2;
@@ -439,14 +438,11 @@ button {
         margin:3px;
         border-style: solid;
         border-width: 1px;
+        display: block;
+        cursor: pointer;
   
         &:hover {
           background-color: $bg-color-l3;
-        }
-  
-        a, a:hover, a:visited, a:active {
-          text-decoration: none;
-          color:white;
         }
       }
     }
