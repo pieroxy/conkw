@@ -29,9 +29,7 @@ export class DashboardExplorer implements m.ClassComponent<DashboardExplorerAttr
   }
   
   view({}: m.Vnode<DashboardExplorerAttrs>): void | Children {
-    return m(
-      ".dashboardExplorer", 
-      [
+    return [
         m(DashboardExplorerToolbar, {
           filter:(s:string) => {
             this.filter.update(s);
@@ -41,7 +39,7 @@ export class DashboardExplorer implements m.ClassComponent<DashboardExplorerAttr
         m(".content", m(".list", [
           this.data.list.map(e => this.filter.matchOne([e.name]) ? m(".listitem", m("a", {href:Routing.getRouteAsHref(Endpoints.DASHBOARD_EDITION, {id:e.id})}, e.name)) : null)
         ]))
-      ]);
+      ];
   }
 }
 

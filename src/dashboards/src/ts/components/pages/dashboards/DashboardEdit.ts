@@ -37,7 +37,8 @@ export class DashboardEditPage extends AbstractPage<IdAttrs> {
         m("a.floatright", {title:"New panel", href:Routing.getRouteAsHref(Endpoints.PANEL_NEW, {dashboardId:this.dashboard.id})}, m(NewDocumentIcon)),
         m("a", {title:"Go back Home", href:Routing.getRouteAsHref(Endpoints.HOME)}, m(HomeIcon)),
         m(RightChevronIcon),
-        this.dashboard.name, m(".id", this.dashboard.id)
+        this.dashboard.name, 
+        m(".id", this.dashboard.id)
       ]),
       m(".list", this.dashboard.panels?this.dashboard.panels.map((panel) => m(".panel", [
         panel.title,

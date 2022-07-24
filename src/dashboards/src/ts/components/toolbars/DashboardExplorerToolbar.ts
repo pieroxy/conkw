@@ -4,18 +4,20 @@ import { Children } from "mithril";
 import { CreateNewDashboardInput, CreateNewDashboardOutput } from '../../auto/pieroxy-conkw';
 import { Api } from '../../utils/api/Api';
 import { Dialogs } from '../../utils/Dialogs';
-import { Button } from '../forms/Button';
 import { Form } from '../forms/Form';
 import { TextFieldInput } from '../forms/TextFieldInput';
+import { HomeIcon } from '../icons/HomeIcon';
+import { RoundedPlusIcon } from '../icons/RoundedPlusIcon';
 
 export class DashboardExplorerToolbar implements m.ClassComponent<DashboardExplorerToolbarAttrs> {
   private filter:string="";
   
   view({attrs}:m.Vnode<DashboardExplorerToolbarAttrs>): void | Children {
-    return m(".toolbar", [
+    return m(".title", [
       m(".floatright", 
-        m(Button, {
-          action:() => {
+        m("a", {
+          title:"Create a new dashboard",
+          onclick:() => {
             let go=(s:string) => {
               Api.call<CreateNewDashboardInput, CreateNewDashboardOutput>({
                 method:"POST",
@@ -27,9 +29,8 @@ export class DashboardExplorerToolbar implements m.ClassComponent<DashboardExplo
             };
             Dialogs.prompt("New dashboard name","",(s) => s,go);
           }
-        }, "+")
+        }, m(RoundedPlusIcon))
       ),
-      m(".title", "Dashboards"),
       m(TextFieldInput, {
         refHolder:this,
         refProperty:"filter",
@@ -40,6 +41,8 @@ export class DashboardExplorerToolbar implements m.ClassComponent<DashboardExplo
         placeholder:"Filter",
         className:".floatright.rm10"
       }),
+      m(HomeIcon),
+      "Dashboards",
     ])
   }
 }

@@ -48,6 +48,7 @@ export class EditSimpleGaugeWithValueAndLabelPanel extends AbstractPage<EditPane
             }
           })
         }}, m(SaveIcon)),
+        m("a.floatright.rm10", {title:"New gauge", onclick:()=>{}}, m(RoundedPlusIcon)),
 
         m("a", {title:"Go back Home", href:Routing.getRouteAsHref(Endpoints.HOME)}, m(HomeIcon)),
         m(RightChevronIcon),
@@ -59,7 +60,6 @@ export class EditSimpleGaugeWithValueAndLabelPanel extends AbstractPage<EditPane
         
       }, [
         m(".title", 
-          m("a.floatright", {title:"New gauge", onclick:()=>{}}, m(RoundedPlusIcon)),
           m(TextFieldInput, {
             refHolder:this.panel,
             refProperty:"title",

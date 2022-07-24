@@ -7,23 +7,7 @@ export class HomePage extends AbstractPage<any> {
     return "ConkW - Welcome!";
   }
   render(_vnode:m.Vnode<any, any>):m.Children {
-    return m(
-      ".vcenteredO",
-      {
-        style: {
-          height:"100%",
-          width:"100%"
-        }
-      },
-      m(
-        ".vcenteredI", 
-        {
-          style: {
-            height:"50%",
-            width:"50%"
-          }
-        },
-          m(DashboardExplorer, {})));
+    return m(".page", m(DashboardExplorer));
   }
 }
 
