@@ -35,7 +35,7 @@ public class DashboardService {
     return d;
   }
 
-  private void saveDashboard(Dashboard d) {
+  public void saveDashboard(Dashboard d) {
     try {
       JsonHelper.writeToFile(d, getFile(d));
     } catch (IOException e) {

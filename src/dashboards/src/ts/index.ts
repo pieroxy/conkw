@@ -7,6 +7,7 @@ import { ChangePassword } from './components/pages/auth/ChangePassword';
 import { DashboardEditPage } from './components/pages/dashboards/DashboardEdit';
 import { Endpoints } from './utils/navigation/Endpoints';
 import { NewPanelPage } from './components/pages/dashboards/NewPanel';
+import { EditSimpleGaugeWithValueAndLabelPanel } from './components/pages/dashboards/EditSimpleGaugeWithValueAndLabelPanel';
 
 (function () {
 
@@ -16,6 +17,7 @@ import { NewPanelPage } from './components/pages/dashboards/NewPanel';
   routes[Endpoints.DASHBOARD_EDITION] = new AuthenticatedPageResolver(DashboardEditPage);
   routes[Endpoints.PASSWORD_CHANGE] = ChangePassword;
   routes[Endpoints.PANEL_NEW] = new AuthenticatedPageResolver(NewPanelPage);
+  routes[Endpoints.GAUGE_SIMPLE_VALUE_LABEL_EDIT] = new AuthenticatedPageResolver(EditSimpleGaugeWithValueAndLabelPanel);
 
   m.route(document.body, "/home", routes)
 })();

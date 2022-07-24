@@ -26,7 +26,7 @@ export abstract class GenericInput<VT, T extends GenericInputAttrs<VT>> implemen
     if (vnode.attrs.format) {
       this.convertValueToString = vnode.attrs.format;
     } else {
-      this.convertValueToString = (v) => ""+v;
+      this.convertValueToString = (v) => v ? ""+v : "";
     }
     if (vnode.attrs.parse) {
       this.convertValueFromString = vnode.attrs.parse;

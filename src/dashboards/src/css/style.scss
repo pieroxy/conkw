@@ -507,6 +507,14 @@ button {
   padding:10px;
   width: 350px;
 
+  .id {
+    font-size: 10px;
+    font-family: 'Courier New', Courier, monospace;
+    opacity: 0.5;
+    display: inline-block;
+    margin-left: 10px;
+  }
+
   &.clickable:hover {
     background-color: $bg-color-l3;
     cursor: pointer;
@@ -543,7 +551,7 @@ button {
       position: relative;
       overflow: hidden;
       float: right;
-      border-left:60px solid rgba(255,255,255,0.1);
+      border-left:60px solid rgba(255,255,255,0.05);
       box-sizing: border-box;
     }
   }

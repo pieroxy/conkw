@@ -30,7 +30,7 @@ export class DashboardEditPage extends AbstractPage<IdAttrs> {
     return this.dashboard?this.dashboard.name:"Loading ...";
   }
 
-  render(_vnode:m.Vnode<any, any>):m.Children {
+  render({attrs}:m.Vnode<IdAttrs>):m.Children {
     if (!this.dashboard) return m("");
     return m(".dashboard.page", [
       m(".title", [
@@ -39,6 +39,10 @@ export class DashboardEditPage extends AbstractPage<IdAttrs> {
         m(RightChevronIcon),
         this.dashboard.name, m(".id", this.dashboard.id)
       ]),
+      m(".list", this.dashboard.panels?this.dashboard.panels.map((panel) => m(".panel", [
+        panel.title,
+        m("a.id", {href:Routing.getRouteAsHref(Endpoints.GAUGE_SIMPLE_VALUE_LABEL_EDIT, {dashboardId:attrs.id, panelId:panel.id})}, panel.id)
+      ])):null)
     ]);
   }
 }
