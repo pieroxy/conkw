@@ -35,7 +35,7 @@ body {
   background-color: $bg-color;
   color: $text-color;
   padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-  overflow-y: scroll;
+  overflow: hidden;
   height:100%;
   margin:0;
   padding:0;
@@ -410,7 +410,6 @@ button {
 
 .page {
   margin: 3em 2% 0 2%;
-  @include vScrollableArea($bg-color-l1);
 
   .title {
     font-size: 20px;
@@ -426,24 +425,29 @@ button {
     }
   }
 
-  .list {
-    .listitem {
-      background-color: $bg-color-l2;
-      border-color: $bg-color-l3 $bg-color $bg-color $bg-color-l3;
-      padding: 8px 12px;
-      overflow: hidden;
-      white-space: pre;
-      margin:3px;
-      border-style: solid;
-      border-width: 1px;
+  .content {
+    @include vScrollableArea($bg-color-l1);
 
-      &:hover {
-        background-color: $bg-color-l3;
-      }
 
-      a, a:hover, a:visited, a:active {
-        text-decoration: none;
-        color:white;
+    .list {
+      .listitem {
+        background-color: $bg-color-l2;
+        border-color: $bg-color-l3 $bg-color $bg-color $bg-color-l3;
+        padding: 8px 12px;
+        overflow: hidden;
+        white-space: pre;
+        margin:3px;
+        border-style: solid;
+        border-width: 1px;
+  
+        &:hover {
+          background-color: $bg-color-l3;
+        }
+  
+        a, a:hover, a:visited, a:active {
+          text-decoration: none;
+          color:white;
+        }
       }
     }
   }

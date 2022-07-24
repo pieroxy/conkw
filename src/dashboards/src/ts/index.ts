@@ -19,5 +19,8 @@ import { EditSimpleGaugeWithValueAndLabelPanel } from './components/pages/dashbo
   routes[Endpoints.PANEL_NEW] = new AuthenticatedPageResolver(NewPanelPage);
   routes[Endpoints.GAUGE_SIMPLE_VALUE_LABEL_EDIT] = new AuthenticatedPageResolver(EditSimpleGaugeWithValueAndLabelPanel);
 
-  m.route(document.body, "/home", routes)
+  m.route(document.body, "/home", routes);
+
+  addEventListener('resize', m.redraw);
+
 })();

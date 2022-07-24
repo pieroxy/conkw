@@ -6,8 +6,11 @@ import { MainTopBar } from '../toolbars/MainTopBar';
 
 
 export abstract class AbstractPage<A> implements m.ClassComponent<A> {
+  private static headerHeight:number=-1.01;
+  
   public view(vnode:m.Vnode<A, any>):void|m.Children {
     window.document.title = this.getPageTitle();
+    this.computeHeaderHeight();
     return [
       this.renderNotification(),
       this.renderDialog(),
@@ -15,6 +18,33 @@ export abstract class AbstractPage<A> implements m.ClassComponent<A> {
       this.render(vnode),
     ];
   }
+
+  computeHeaderHeight() {
+    let topbar = document.getElementsByClassName("topbar")[0];
+    if (topbar) {
+      let title = document.querySelector(".page .title");
+      if (title) {
+        let h = window.document.body.clientHeight - (topbar.clientHeight + title.clientHeight + 10);
+        if (h!=AbstractPage.headerHeight) {
+          let lastHeight = AbstractPage.headerHeight;
+          AbstractPage.headerHeight = h;
+          if (lastHeight == -1.01) {
+            document.styleSheets[0].insertRule(".content { height:" + h + "px; }");
+          } else {
+            let csss = document.styleSheets[0].cssRules;
+            for (let i=0 ; i<csss.length ; i++) {
+              let rule = csss[i];
+              if (rule.cssText.replace(/ /g, "").startsWith(".content{height:")) {
+                (<any>rule).style.height = h + "px";
+                return;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
   abstract getPageTitle():string;
   abstract render(vnode:m.Vnode<A>):m.Children;
 
