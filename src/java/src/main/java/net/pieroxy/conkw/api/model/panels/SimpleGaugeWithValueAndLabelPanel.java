@@ -16,5 +16,13 @@ public class SimpleGaugeWithValueAndLabelPanel extends DashboardPanel {
   public DashboardPanelType getDashboardPanelType() {
     return DashboardPanelType.SIMPLE_GAUGE_WITH_VALUE_AND_LABEL;
   }
+
+  public List<SimpleGaugeWithValueAndLabelElement> getContent() {
+    return content;
+  }
+
+  public void setContent(List<SimpleGaugeWithValueAndLabelElement> content) {
+    this.content = content;
+  }
 }
 

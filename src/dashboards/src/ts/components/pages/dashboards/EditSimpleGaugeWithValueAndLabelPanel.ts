@@ -6,10 +6,11 @@ import { Routing } from '../../../utils/navigation/Routing';
 import { AbstractPage } from '../AbstractPage';
 import { GlobalData } from '../../../utils/GlobalData';
 import { Api } from '../../../utils/api/Api';
-import { GetDashboardPanelInput, GetDashboardPanelOutput, SavePanelInput, SavePanelOutput, SimpleGaugeWithValueAndLabelPanel } from '../../../auto/pieroxy-conkw';
+import { ExpressionClass, ExpressionValueType, GetDashboardPanelInput, GetDashboardPanelOutput, SavePanelInput, SavePanelOutput, SimpleGaugeWithValueAndLabelPanel } from '../../../auto/pieroxy-conkw';
 import { TextFieldInput } from '../../forms/TextFieldInput';
 import { SaveIcon } from '../../icons/SaveIcon';
 import { RoundedPlusIcon } from '../../icons/RoundedPlusIcon';
+import { SimpleGaugeWithValueAndLabelElementComponent } from '../../organisms/dashboards/SimpleGaugeWithValueAndLabelElementComponent';
 
 export class EditSimpleGaugeWithValueAndLabelPanel extends AbstractPage<EditPanelAttrs> {
   private panel:SimpleGaugeWithValueAndLabelPanel;
@@ -28,7 +29,7 @@ export class EditSimpleGaugeWithValueAndLabelPanel extends AbstractPage<EditPane
         panelId:attrs.panelId
       }
     }).then((output) => {
-      this.panel = output.panel;
+      this.panel = <SimpleGaugeWithValueAndLabelPanel>output.panel;
       //this.dashboardId = output.dashboardId;
     })
   }
@@ -48,7 +49,45 @@ export class EditSimpleGaugeWithValueAndLabelPanel extends AbstractPage<EditPane
             }
           })
         }}, m(SaveIcon)),
-        m("a.floatright.rm10", {title:"New gauge", onclick:()=>{}}, m(RoundedPlusIcon)),
+        m("a.floatright.rm10", {title:"New gauge", onclick:()=>{
+          if (!this.panel.content) this.panel.content = [];
+          this.panel.content.push({
+            gauge: {
+              min: {
+                clazz: ExpressionClass.LITERAL,
+                type:ExpressionValueType.NUMERIC,
+                value:"0"
+              },
+              max: {
+                clazz: ExpressionClass.LITERAL,
+                type:ExpressionValueType.NUMERIC,
+                value:"100"
+              },
+              value: {
+                clazz: ExpressionClass.LITERAL,
+                type:ExpressionValueType.NUMERIC,
+                directive:"",
+                value:"75"
+              }
+            },
+            label: {
+              value: {
+                clazz: ExpressionClass.LITERAL,
+                type:ExpressionValueType.STRING,
+                value:"The string"
+              }
+            },
+            value: {
+              value: {
+                clazz: ExpressionClass.LITERAL,
+                type:ExpressionValueType.NUMERIC,
+                value:"10000000000"
+              },
+              unit:"S",
+              thousand:1000
+            }
+          })
+        }}, m(RoundedPlusIcon)),
 
         m("a", {title:"Go back Home", href:Routing.getRouteAsHref(Endpoints.HOME)}, m(HomeIcon)),
         m(RightChevronIcon),
@@ -66,14 +105,19 @@ export class EditSimpleGaugeWithValueAndLabelPanel extends AbstractPage<EditPane
             onenter() {},
           })
         ),
-        m("br", {clear:"both"})
+        m("br", {clear:"both"}),
+        (this.panel.content||[]).map(pi => m(SimpleGaugeWithValueAndLabelElementComponent, {
+          currentData:<any>{},
+          parent:null,
+          model:pi
+        }))
       ])
     ]);
   }
-
 }
 
 export interface EditPanelAttrs {
   dashboardId:string;
   panelId:string;
 }
+

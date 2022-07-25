@@ -8,7 +8,6 @@ import net.pieroxy.conkw.api.model.DashboardPanelType;
 @CompiledJson
 public abstract class DashboardPanel {
   public abstract DashboardPanelType getDashboardPanelType();
-
   private String title;
   private String id;
 
