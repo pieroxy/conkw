@@ -3,7 +3,7 @@ package net.pieroxy.conkw.webapp.servlets;
 import net.pieroxy.conkw.grabbersBase.Grabber;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 import net.pieroxy.conkw.webapp.Listener;
-import net.pieroxy.conkw.webapp.model.Response;
+import net.pieroxy.conkw.webapp.model.MetricsApiResponse;
 
 import java.util.Collection;
 import java.util.List;
@@ -20,8 +20,8 @@ public class ApiManager implements MetaGrabber {
     grabbers.forEach(g -> {allGrabbers.put(g.getName(), g);});
   }
 
-  public Response buildResponse(long now, Collection<GrabberInput>grabbersRequested) {
-    Response r = new Response(grabbersRequested.size());
+  public MetricsApiResponse buildResponse(long now, Collection<GrabberInput>grabbersRequested) {
+    MetricsApiResponse r = new MetricsApiResponse(grabbersRequested.size());
     r.setInstanceName(Listener.getInstanceName());
     grabbersRequested.stream().parallel().forEach(
             s -> {

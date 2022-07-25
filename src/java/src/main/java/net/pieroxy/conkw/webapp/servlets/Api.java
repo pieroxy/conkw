@@ -6,7 +6,7 @@ import net.pieroxy.conkw.standalone.InstanceId;
 import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.utils.Services;
 import net.pieroxy.conkw.webapp.Filter;
-import net.pieroxy.conkw.webapp.model.Response;
+import net.pieroxy.conkw.webapp.model.MetricsApiResponse;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -89,10 +89,10 @@ public class Api extends HttpServlet {
       req.setAttribute(Filter.API_VERB, "grabbers");
       String grabbers = req.getParameter("grabbers");
       if (grabbers == null) {
-        writeResponse(resp, Response.getError("Grabbers were not specified"));
+        writeResponse(resp, MetricsApiResponse.getError("Grabbers were not specified"));
       } else {
         GrabberInput.InputHolder in = getInput(grabbers, req);
-        try (Response r = services.getApiManager().buildResponse(now, in.in)) {
+        try (MetricsApiResponse r = services.getApiManager().buildResponse(now, in.in)) {
           if (in.errors != null) in.errors.stream().forEach(r::addError);
           writeResponse(resp, r);
         }

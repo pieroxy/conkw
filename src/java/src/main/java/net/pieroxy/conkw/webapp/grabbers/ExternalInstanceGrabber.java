@@ -10,7 +10,7 @@ import net.pieroxy.conkw.utils.DebugTools;
 import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.utils.StringUtil;
 import net.pieroxy.conkw.utils.exceptions.DisplayMessageException;
-import net.pieroxy.conkw.webapp.model.Response;
+import net.pieroxy.conkw.webapp.model.MetricsApiResponse;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 import net.pieroxy.conkw.webapp.servlets.ApiAuthManager;
 
@@ -58,7 +58,7 @@ public class ExternalInstanceGrabber extends AsyncGrabber<SimpleCollector, Exter
       }
 
 
-      try (Response data = JsonHelper.getJson().deserialize(Response.class, is)) {
+      try (MetricsApiResponse data = JsonHelper.getJson().deserialize(MetricsApiResponse.class, is)) {
         if (canLogFine()) {
           log(Level.FINE, "Time to grab: " + (System.currentTimeMillis()-ms) + "ms");
         }

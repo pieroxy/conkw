@@ -13,7 +13,7 @@ import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.utils.StringUtil;
 import net.pieroxy.conkw.utils.exceptions.DisplayMessageException;
 import net.pieroxy.conkw.utils.prefixeddata.PrefixedDataRecordImpl;
-import net.pieroxy.conkw.webapp.model.Response;
+import net.pieroxy.conkw.webapp.model.MetricsApiResponse;
 import net.pieroxy.conkw.webapp.servlets.ApiAuthManager;
 
 import java.io.InputStream;
@@ -87,7 +87,7 @@ public class ExternalInstanceAggregator<T extends DataRecord> extends AsyncGrabb
                 is = http.getInputStream();
             }
 
-            try (Response data = JsonHelper.getJson().deserialize(Response.class, is)) {
+            try (MetricsApiResponse data = JsonHelper.getJson().deserialize(MetricsApiResponse.class, is)) {
                 if (canLogFine()) {
                     log(Level.FINE, "Time to grab "+endpoint+": " + (System.currentTimeMillis()-begin) + "ms");
                 }

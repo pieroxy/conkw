@@ -13,7 +13,7 @@ import java.util.Map;
 
 @CompiledJson(onUnknown = CompiledJson.Behavior.IGNORE)
 @TypeScriptType
-public class Response implements Closeable {
+public class MetricsApiResponse implements Closeable {
   @JsonAttribute(converter = HashMapStringResponseDataConverter.class)
   private Map<String, ResponseData> metrics;
   private long timestamp;
@@ -25,16 +25,16 @@ public class Response implements Closeable {
   /**
    * This constructor does not initialize the metrics field. Used for JSON.
    */
-  public Response() {
+  public MetricsApiResponse() {
     this.timestamp = System.currentTimeMillis();
   }
 
-  public Response(int numberOfMetrics) {
+  public MetricsApiResponse(int numberOfMetrics) {
     this.timestamp = System.currentTimeMillis();
     metrics = HashMapPool.getInstance().borrow(numberOfMetrics);
   }
 
-  public Response(Response r, int jitter, String[]grabbers) {
+  public MetricsApiResponse(MetricsApiResponse r, int jitter, String[]grabbers) {
     this.timestamp = r.timestamp;
     this.responseJitter = jitter;
     this.errors = r.errors;
@@ -67,8 +67,8 @@ public class Response implements Closeable {
     return res;
   }
 
-  public static Response getError(String message) {
-    Response res = new Response();
+  public static MetricsApiResponse getError(String message) {
+    MetricsApiResponse res = new MetricsApiResponse();
     res.addError(message);
     return res;
   }
