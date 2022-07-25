@@ -292,6 +292,11 @@
           </classesWithAnnotations>
           <outputKind>module</outputKind>
           <mapEnum>asEnum</mapEnum>
+          <optionalProperties>useSpecifiedAnnotations</optionalProperties>
+          <optionalAnnotations>
+            <annotation>net.pieroxy.conkw.api.metadata.OptionalTypeScriptField</annotation>
+          </optionalAnnotations>
+          <optionalPropertiesDeclaration>questionMark</optionalPropertiesDeclaration>
         </configuration>
       </plugin>
     </plugins>
