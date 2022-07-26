@@ -12,6 +12,7 @@ $secondary-color-hover: #909090;
 $text-color: lightgray;
 $error-color: #c49d07;
 $scrollbarFg:#55585a;
+$monospace: 'Courier New', Courier, monospace;
 
 @mixin media-max($_max-width) {
   @media screen and (max-width: $_max-width) {
@@ -57,6 +58,10 @@ html { -webkit-text-size-adjust: 100%; }
 
 .rm10 {
   margin-right: 10px;
+}
+
+.monospace {
+  font-family: $monospace;
 }
 
 a {
@@ -418,7 +423,7 @@ button {
 
     .id {
       font-size: 10px;
-      font-family: 'Courier New', Courier, monospace;
+      font-family: $monospace;
       opacity: 0.5;
       display: inline-block;
       margin-left: 10px;
@@ -454,10 +459,11 @@ button {
   box-shadow: 2px 2px 5px rgb(0 0 0 / 30%);
   padding:10px;
   width: 350px;
+  font-size: 14px;
 
   .id {
     font-size: 10px;
-    font-family: 'Courier New', Courier, monospace;
+    font-family: $monospace;
     opacity: 0.5;
     display: inline-block;
     margin-left: 10px;
@@ -484,7 +490,7 @@ button {
       float: right;
       color:rgba(255,255,255,0.1);
       display: block;
-      font-family: 'Courier New', Courier, monospace;
+      font-family: $monospace;
       width:50px;
       overflow: hidden;
     }
@@ -501,6 +507,41 @@ button {
       float: right;
       border-left:60px solid rgba(255,255,255,0.05);
       box-sizing: border-box;
+    }
+  }
+
+  .simpleGaugeValueLabel {
+    white-space: pre;
+
+    .sgvl-label {
+      white-space: pre;
+      overflow: hidden;
+    }
+    .sgvl-value {
+      white-space: pre;
+      float:right;
+      font-family: $monospace;
+      background-color: $bg-color-l1;
+    }
+    .sgvl-gauge {
+
+      .gauge {
+        width: 150px;
+        background-color: #202040;
+        height: 0.9em;
+        display: block;
+        margin-left: 5px;
+        margin-bottom: 2px;
+        position: relative;
+        overflow: hidden;
+        float: right;
+
+        .gaugethumb {
+          position: absolute;
+          height: 100%;
+          background-color: #00abab;
+        }
+      }
     }
   }
 }
