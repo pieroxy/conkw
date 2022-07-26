@@ -13,10 +13,8 @@ export class DisplayUtils {
       document.body.appendChild(div);
       this.monospaceCharWidth = div.clientWidth;
       document.body.removeChild(div);
-      console.log(this.monospaceCharWidth);
     }
     let res = this.monospaceCharWidth / 100 * fontSizeInPx;
-    console.log("Width for " + fontSizeInPx + " is " + res);
 
     return res;
   }

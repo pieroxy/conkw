@@ -9,7 +9,6 @@ import { DashboardElement, DashboardElementAttrs } from './DashboardElement';
 export class SimpleGaugeWithValueAndLabelElementComponent 
 extends DashboardElement<SimpleGaugeWithValueAndLabelElementAttrs> {
   public view({attrs}:m.Vnode<SimpleGaugeWithValueAndLabelElementAttrs>):m.Children {
-    console.log("calc(100%-"+this.getRemainingWidth(attrs.model)+"px)");
     return m(".simpleGaugeValueLabel", [
       m(".sgvl-gauge", m(SimpleGaugeComponent, {
         currentData:attrs.currentData,
