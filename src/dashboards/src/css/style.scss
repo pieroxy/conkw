@@ -517,6 +517,11 @@ button {
       white-space: pre;
       overflow: hidden;
     }
+    .sgvl-bottom {
+      clear:both;
+      height:0;
+      overflow: hidden;
+    }
     .sgvl-value {
       white-space: pre;
       float:right;

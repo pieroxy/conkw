@@ -29,6 +29,7 @@ extends DashboardElement<SimpleGaugeWithValueAndLabelElementAttrs> {
         model:attrs.model.label,
         parent:this,
       })),
+      m(".sgvl-bottom")
     ])
   }
   getRemainingWidth(model: SimpleGaugeWithValueAndLabelElement) {
