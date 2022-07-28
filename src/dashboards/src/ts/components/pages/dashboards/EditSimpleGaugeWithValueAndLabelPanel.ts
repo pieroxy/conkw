@@ -6,7 +6,7 @@ import { Routing } from '../../../utils/navigation/Routing';
 import { AbstractPage } from '../AbstractPage';
 import { GlobalData } from '../../../utils/GlobalData';
 import { Api } from '../../../utils/api/Api';
-import { ExpressionClass, ExpressionValueType, GetDashboardPanelInput, GetDashboardPanelOutput, SavePanelInput, SavePanelOutput, SimpleGaugeWithValueAndLabelPanel } from '../../../auto/pieroxy-conkw';
+import { ExpressionClass, ExpressionValueType, GetDashboardPanelInput, GetDashboardPanelOutput, SavePanelInput, SavePanelOutput, SimpleGaugeWithValueAndLabelElement, SimpleGaugeWithValueAndLabelPanel } from '../../../auto/pieroxy-conkw';
 import { TextFieldInput } from '../../forms/TextFieldInput';
 import { SaveIcon } from '../../icons/SaveIcon';
 import { RoundedPlusIcon } from '../../icons/RoundedPlusIcon';
@@ -14,6 +14,7 @@ import { SimpleGaugeWithValueAndLabelElementComponent } from '../../organisms/da
 
 export class EditSimpleGaugeWithValueAndLabelPanel extends AbstractPage<EditPanelAttrs> {
   private panel:SimpleGaugeWithValueAndLabelPanel;
+  selected?: SimpleGaugeWithValueAndLabelElement;
   //private dashboardId:string;
 
   getPageTitle(): string {
@@ -95,22 +96,32 @@ export class EditSimpleGaugeWithValueAndLabelPanel extends AbstractPage<EditPane
         m(RightChevronIcon),
         "Edit Panel"
       ]),
-      m(".panel", {
-        
-      }, [
-        m(".title", 
-          m(TextFieldInput, {
-            refHolder:this.panel,
-            refProperty:"title",
-            onenter() {},
-          })
-        ),
-        m("br", {clear:"both"}),
-        (this.panel.content||[]).map(pi => m(SimpleGaugeWithValueAndLabelElementComponent, {
-          currentData:<any>{},
-          parent:null,
-          model:pi
-        }))
+      m(".dualpanel", [
+        m(".panel.editable", {
+          
+        }, [
+          m(".title", 
+            m(TextFieldInput, {
+              refHolder:this.panel,
+              refProperty:"title",
+              onenter() {},
+            })
+          ),
+          m("br", {clear:"both"}),
+          (this.panel.content||[]).map(pi => m(".editableBlock", [
+            m("a.clickableLayer", {
+              onclick:() => {
+                this.selected = pi;
+              }
+            }),
+            m(SimpleGaugeWithValueAndLabelElementComponent, {
+              currentData:<any>{},
+              parent:null,
+              model:pi
+            }),
+          ]))
+        ]),
+        m(".nextToPanel", m(EditSimpleGaugeWithValueAndLabelElementPanel, {element:this.selected}))
       ])
     ]);
   }
@@ -121,3 +132,16 @@ export interface EditPanelAttrs {
   panelId:string;
 }
 
+export class EditSimpleGaugeWithValueAndLabelElementPanel implements m.ClassComponent<EditSimpleGaugeWithValueAndLabelElementPanelAttrs> {
+  view({attrs}: m.Vnode<EditSimpleGaugeWithValueAndLabelElementPanelAttrs, this>): void | m.Children {
+    if (attrs.element) {
+      return m("", "Editing the thing here ", attrs.element?.label.value.value);
+    }
+    return m("");
+  }
+
+}
+
+export interface EditSimpleGaugeWithValueAndLabelElementPanelAttrs {
+  element?:SimpleGaugeWithValueAndLabelElement;
+}

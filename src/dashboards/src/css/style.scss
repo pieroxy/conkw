@@ -460,6 +460,7 @@ button {
   padding:10px;
   width: 350px;
   font-size: 14px;
+  position: relative;
 
   .id {
     font-size: 10px;
@@ -472,6 +473,23 @@ button {
   &.clickable:hover {
     background-color: $bg-color-l3;
     cursor: pointer;
+  }
+
+  .editableBlock {
+    display: grid;
+    grid-template-columns:2;
+
+    .clickableLayer {
+      position:absolute;
+      height:0.9em;
+      width:0.9em;
+      background-color: rgb(255 255 0  / 20%);
+      left:-0.9em;
+
+      &:hover {
+        background-color: rgb(255 255 0  / 40%);
+      }
+    }
   }
 
   .line {
@@ -548,6 +566,23 @@ button {
         }
       }
     }
+  }
+}
+
+.dualpanel {
+  display: grid;
+  grid-template-columns: 2;
+  gap: 10px;
+  grid-auto-rows: 1;
+
+  .panel {
+    grid-column: 1 / 2;
+    grid-row: 1;
+  }
+
+  .nextToPanel {
+    grid-column: 2 / 2;
+    grid-row: 1;
   }
 }
 
