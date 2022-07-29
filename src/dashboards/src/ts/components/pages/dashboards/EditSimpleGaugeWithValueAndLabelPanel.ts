@@ -100,9 +100,7 @@ export class EditSimpleGaugeWithValueAndLabelPanel extends AbstractPage<EditPane
         "Edit Panel"
       ]),
       m(".dualpanel", [
-        m(".panel.editable", {
-          
-        }, [
+        m(".panel.editable", [
           m(".title", 
             m(TextFieldInput, {
               refHolder:this.panel,
