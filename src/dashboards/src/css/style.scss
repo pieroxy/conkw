@@ -194,14 +194,13 @@ a {
 }
 
 /* Form elements */
-input {
+input, select {
   padding:5px;
   background-color: black;
   font-size: 18px;
   opacity: 0.7;
   color:#aaa;
   border:2px solid #444;
-  box-shadow: inset 3px 3px 5px rgb(0 0 0 / 20%);
 
   &:-webkit-autofill::first-line,
   &:-webkit-autofill,
@@ -583,6 +582,29 @@ button {
   .nextToPanel {
     grid-column: 2 / 2;
     grid-row: 1;
+  }
+}
+
+.editionPanel {
+  .group {
+    border: 2px solid rgba(255,255,255,0.2);
+    display: inline-block;
+    padding: 5px;
+    margin: 5px;
+
+    .groupTitle {
+      color: rgba(255,255,255,0.2);
+    }
+
+    .inputWithLabel {
+      display:inline-block;
+
+      .label {
+        display:block;
+        font-size: 12px;
+        color: rgba(255,255,255,0.5);
+      }
+    }
   }
 }
 

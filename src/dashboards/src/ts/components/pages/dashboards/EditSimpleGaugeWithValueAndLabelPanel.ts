@@ -11,6 +11,9 @@ import { TextFieldInput } from '../../forms/TextFieldInput';
 import { SaveIcon } from '../../icons/SaveIcon';
 import { RoundedPlusIcon } from '../../icons/RoundedPlusIcon';
 import { SimpleGaugeWithValueAndLabelElementComponent } from '../../organisms/dashboards/SimpleGaugeWithValueAndLabelElementComponent';
+import { EditSimpleLabelPanel } from '../../panels/dashboardEdition/EditSimpleLabelPanel';
+import { EditSimpleSiLabelPanel } from '../../panels/dashboardEdition/EditSimpleSiLabelPanel';
+import { EditSimpleGaugePanel } from '../../panels/dashboardEdition/EditSimpleGaugePanel';
 
 export class EditSimpleGaugeWithValueAndLabelPanel extends AbstractPage<EditPanelAttrs> {
   private panel:SimpleGaugeWithValueAndLabelPanel;
@@ -135,7 +138,21 @@ export interface EditPanelAttrs {
 export class EditSimpleGaugeWithValueAndLabelElementPanel implements m.ClassComponent<EditSimpleGaugeWithValueAndLabelElementPanelAttrs> {
   view({attrs}: m.Vnode<EditSimpleGaugeWithValueAndLabelElementPanelAttrs, this>): void | m.Children {
     if (attrs.element) {
-      return m("", "Editing the thing here ", attrs.element?.label.value.value);
+      return m(".editionPanel", [
+        m("", "Editing the thing here ", attrs.element?.label.value.value),
+        m(".group", [
+          m(".groupTitle", "The label"),
+          m(EditSimpleLabelPanel, {element:attrs.element.label}),
+        ]),
+        m(".group", [
+          m(".groupTitle", "The value"),
+          m(EditSimpleSiLabelPanel, {element:attrs.element.value}),
+        ]),
+        m(".group", [
+          m(".groupTitle", "The gauge"),
+          m(EditSimpleGaugePanel, {element:attrs.element.gauge}),
+        ])
+      ]);
     }
     return m("");
   }
