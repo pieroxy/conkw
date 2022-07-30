@@ -483,6 +483,13 @@ button {
     cursor: pointer;
   }
 
+  .title {
+    padding: 0;
+    font-weight: 600;
+    color: white;
+    font-size: 14px;
+  }
+  
   .editableBlock {
     display: grid;
     grid-template-columns:2;
