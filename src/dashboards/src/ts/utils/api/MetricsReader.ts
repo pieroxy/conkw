@@ -2,7 +2,9 @@ import { GetGrabbersInput, GetGrabbersOutput, IdLabelPair, MetricsApiResponse } 
 import { Api } from "./Api";
 
 export class MetricsReader {
-  static lastResponse:MetricsApiResponse = {
+  private static GRABBERS_LIST_TTL = 10000;
+
+  private static lastResponse:MetricsApiResponse = {
     errors:[],
     instanceName:"placeholder",
     metrics:{},
@@ -12,10 +14,10 @@ export class MetricsReader {
     strCount:0,
     timestamp:Date.now()
   };
-  static grabbersRequested:Map<string,number> = new Map();
-  static interval?:number;
-  static grabbers:IdLabelPair[] = [];
-  static grabbersLastFetch:number = 0;
+  private static grabbersRequested:Map<string,number> = new Map();
+  private static interval?:number;
+  private static grabbers:IdLabelPair[] = [];
+  private static grabbersLastFetch:number = 0;
 
   public static getLastResponse(grabber:string):MetricsApiResponse {
     MetricsReader.grabbersRequested.set(grabber, Date.now());
@@ -39,7 +41,7 @@ export class MetricsReader {
     //Coming next: Api.call<any,any>()
   }
   static getGrabbers():IdLabelPair[] {
-    if (MetricsReader.grabbersLastFetch < Date.now()-1000) {
+    if (MetricsReader.grabbersLastFetch < Date.now()-MetricsReader.GRABBERS_LIST_TTL) {
       MetricsReader.grabbersLastFetch = Date.now();
       Api.call<GetGrabbersInput, GetGrabbersOutput>({
         method:"GET",
