@@ -14,6 +14,7 @@ import { SimpleGaugeWithValueAndLabelElementComponent } from '../../organisms/da
 import { EditSimpleLabelPanel } from '../../panels/dashboardEdition/EditSimpleLabelPanel';
 import { EditSimpleSiLabelPanel } from '../../panels/dashboardEdition/EditSimpleSiLabelPanel';
 import { EditSimpleGaugePanel } from '../../panels/dashboardEdition/EditSimpleGaugePanel';
+import { MetricsReader } from '../../../utils/api/MetricsReader';
 
 export class EditSimpleGaugeWithValueAndLabelPanel extends AbstractPage<EditPanelAttrs> {
   private panel:SimpleGaugeWithValueAndLabelPanel;
@@ -121,7 +122,7 @@ export class EditSimpleGaugeWithValueAndLabelPanel extends AbstractPage<EditPane
               }
             }),
             m(SimpleGaugeWithValueAndLabelElementComponent, {
-              currentData:<any>{},
+              currentData:MetricsReader.getLastResponse(),
               parent:null,
               model:pi
             }),

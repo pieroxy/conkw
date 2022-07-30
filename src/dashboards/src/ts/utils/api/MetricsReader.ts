@@ -1,8 +1,9 @@
-import { GetGrabbersInput, GetGrabbersOutput, IdLabelPair, MetricsApiResponse } from "../../auto/pieroxy-conkw";
+import { CallApiInput, CallApiOutput, GetGrabbersInput, GetGrabbersOutput, IdLabelPair, MetricsApiResponse } from "../../auto/pieroxy-conkw";
 import { Api } from "./Api";
 
 export class MetricsReader {
   private static GRABBERS_LIST_TTL = 10000;
+  private static GRABBERS_TTL = 5000;
 
   private static lastResponse:MetricsApiResponse = {
     errors:[],
@@ -19,27 +20,37 @@ export class MetricsReader {
   private static grabbers:IdLabelPair[] = [];
   private static grabbersLastFetch:number = 0;
 
-  public static getLastResponse(grabber:string):MetricsApiResponse {
+  public static didReadFromGrabber(grabber:string):void {
     MetricsReader.grabbersRequested.set(grabber, Date.now());
+  }
+
+  public static getLastResponse():MetricsApiResponse {
     if (MetricsReader.interval === undefined) {
       MetricsReader.interval = window.setInterval(() => {MetricsReader.fetch()}, 1000);
     }
     return MetricsReader.lastResponse;
   }
 
-  public static fetch() {
+  public static fetch():void {
     let now = Date.now();
-    let expiredBefore = now - 5000;
+    let expiredBefore = now - MetricsReader.GRABBERS_TTL;
     let it = MetricsReader.grabbersRequested.keys();
     let next;
     while (next = it.next()) {
+      if (next.done) break;
       let age = MetricsReader.grabbersRequested.get(next.value);
       if (age && age<expiredBefore) {
         MetricsReader.grabbersRequested.delete(next.value);
       }
     }
-    //Coming next: Api.call<any,any>()
+
+    Api.call<CallApiInput, CallApiOutput>({
+      method:"GET",
+      body:{grabbers:[...MetricsReader.grabbersRequested.keys()]},
+      endpoint:"CallApi"
+    }).then((o => MetricsReader.lastResponse = o.data))
   }
+
   static getGrabbers():IdLabelPair[] {
     if (MetricsReader.grabbersLastFetch < Date.now()-MetricsReader.GRABBERS_LIST_TTL) {
       MetricsReader.grabbersLastFetch = Date.now();

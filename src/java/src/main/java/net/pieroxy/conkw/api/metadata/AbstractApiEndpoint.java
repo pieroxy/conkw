@@ -12,6 +12,7 @@ import net.pieroxy.conkw.utils.exceptions.SwallowIOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.Closeable;
 import java.lang.reflect.ParameterizedType;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -59,10 +60,17 @@ public abstract class AbstractApiEndpoint<I,O> implements ApiEndpoint {
       } else {
         throw new ApiError("Method " + req.getMethod() + " is not accepted");
       }
-      O output = process(input, user);
       res.setContentType(getContentType());
       res.setStatus(HttpServletResponse.SC_OK);
-      JsonHelper.writeToOutputStream(ApiResponse.buildOkResult(output), res.getOutputStream());
+      O resultObject = process(input, user);
+      JsonHelper.writeToOutputStream(ApiResponse.buildOkResult(resultObject), res.getOutputStream());
+      if (resultObject instanceof Closeable) {
+        try {
+          ((Closeable) resultObject).close();
+        } catch (Exception e) {
+          LOGGER.log(Level.SEVERE, "", e);
+        }
+      }
     } catch (DisplayMessageException e) {
       res.setContentType(getJsonContentType());
       getLogger().log(Level.FINE, "", e);

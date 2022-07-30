@@ -1,28 +1,16 @@
 import m from 'mithril';
 import { DashboardDynamicElement, ExpressionClass, MetricsApiResponse, ValueExpression } from '../../../auto/pieroxy-conkw';
+import { MetricsReader } from '../../../utils/api/MetricsReader';
 
 export abstract class DashboardElement<T extends DashboardElementAttrs> implements m.ClassComponent<T> {
-
-  private parent:DashboardElement<any>|null;
-  private model:DashboardDynamicElement;
-
-  oninit({attrs}:m.Vnode<T>) {
-    this.parent = attrs.parent;
-    this.model = attrs.model;
-  }
-
-  getNamespace():string {
-    if (this.model.namespace) return this.model.namespace;
-    
-    return this.parent ? this.parent.getNamespace() : "namespace not found";
-  }
 
   computeNumericValue(expression:ValueExpression, data:MetricsApiResponse):number {
     switch (expression.clazz) {
       case ExpressionClass.LITERAL:
         return parseFloat(expression.value);
       case ExpressionClass.METRIC:
-        let ns = this.getNamespace();
+        let ns = expression.namespace;
+        MetricsReader.didReadFromGrabber(ns);
         if (data.metrics && data.metrics[ns] && data.metrics[ns].num)
           return data.metrics[ns].num[expression.value];
         else
@@ -36,7 +24,8 @@ export abstract class DashboardElement<T extends DashboardElementAttrs> implemen
       case ExpressionClass.LITERAL:
         return expression.value;
       case ExpressionClass.METRIC:
-        let ns = this.getNamespace();
+        let ns = expression.namespace;
+        MetricsReader.didReadFromGrabber(ns);
         if (data.metrics && data.metrics[ns] && data.metrics[ns].num)
           return data.metrics[ns].str[expression.value];
         else
