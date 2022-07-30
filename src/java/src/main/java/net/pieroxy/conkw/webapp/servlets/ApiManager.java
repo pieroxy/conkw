@@ -5,6 +5,7 @@ import net.pieroxy.conkw.grabbersBase.Grabber;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 import net.pieroxy.conkw.webapp.Listener;
 import net.pieroxy.conkw.webapp.model.MetricsApiResponse;
+import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.util.Collection;
 import java.util.List;
@@ -35,20 +36,21 @@ public class ApiManager implements MetaGrabber {
     MetricsApiResponse r = new MetricsApiResponse(grabbersRequested.size());
     r.setInstanceName(Listener.getInstanceName());
     grabbersRequested.stream().parallel().forEach(
-            s -> {
-              Grabber g = allGrabbers.get(s.getName());
-              if (g == null) {
-                synchronized (r) {
-                  r.addError("Grabber '" + s.getName() + "' not found.");
-                }
-              } else {
-                g.addActiveCollector(s.getParamValue());
-                g.collect();
-                synchronized (r) {
-                  r.add(g.getCollectorToUse(s.getParamValue()).getDataCopy());
-                }
-              }
-            }
+      s -> {
+        Grabber g = allGrabbers.get(s.getName());
+        if (g == null) {
+          synchronized (r) {
+            r.addError("Grabber '" + s.getName() + "' not found.");
+          }
+        } else {
+          g.addActiveCollector(s.getParamValue());
+          g.collect();
+          ResponseData data = g.getCollectorToUse(s.getParamValue()).getDataCopy();
+          synchronized (r) {
+            r.add(data);
+          }
+        }
+      }
     );
     return r;
   }
