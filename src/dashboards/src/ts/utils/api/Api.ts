@@ -29,7 +29,8 @@ export class Api {
       method: options.method,
       content: options.body,
       client:Api.getClientInfo(),
-      url:"/api/" + options.endpoint
+      url:"/api/" + options.endpoint,
+      hideFromSpinner: !!options.hideFromSpinner
     }).then((r:ApiResponse<O>):O => {
       switch (r.code) {
         case ApiResultCodes.OK:
@@ -50,7 +51,7 @@ export class Api {
   private static apiInternal<I,O>(p:ApiParams<I>): Promise<O> {
     var ct = "application/json";
 
-    if (this.timeout) {
+    if (this.timeout && !p.hideFromSpinner) {
       clearTimeout(this.timeout);
       this.timeout = 0;
     }
@@ -61,7 +62,7 @@ export class Api {
     }
     if (Auth.getAuthToken()) headers.authToken = Auth.getAuthToken();
 
-    this.waiting = true;
+    if (!p.hideFromSpinner) this.waiting = true;
     return m.request({
       method: p.method,
       url: p.url,
@@ -69,10 +70,10 @@ export class Api {
       body: p.method === 'POST' ? p.content : null,
       params: p.method === 'GET' ? {input:JSON.stringify(p.content)}:{},
     }).then((arg:any) => {
-      this.timeout = window.setTimeout(() => {Api.waiting = false;Api.timeout=0;m.redraw()} , 150);
+      if (!p.hideFromSpinner) this.timeout = window.setTimeout(() => {Api.waiting = false;Api.timeout=0;m.redraw()} , 150);
       return arg;
     }).catch((msg:string) => {
-      this.timeout = window.setTimeout(() => {Api.waiting = false;Api.timeout=0;m.redraw()} , 150);
+      if (!p.hideFromSpinner) this.timeout = window.setTimeout(() => {Api.waiting = false;Api.timeout=0;m.redraw()} , 150);
       return msg;
     });
   }

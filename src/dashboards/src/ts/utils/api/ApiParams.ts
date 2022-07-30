@@ -5,4 +5,5 @@ export interface ApiParams<T> {
   content: T;
   client:ClientInfo;
   url:string;
+  hideFromSpinner:boolean;
 }

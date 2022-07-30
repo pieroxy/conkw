@@ -47,7 +47,8 @@ export class MetricsReader {
     Api.call<CallApiInput, CallApiOutput>({
       method:"GET",
       body:{grabbers:[...MetricsReader.grabbersRequested.keys()]},
-      endpoint:"CallApi"
+      endpoint:"CallApi",
+      hideFromSpinner:true
     }).then((o => MetricsReader.lastResponse = o.data))
   }
 
@@ -57,7 +58,8 @@ export class MetricsReader {
       Api.call<GetGrabbersInput, GetGrabbersOutput>({
         method:"GET",
         endpoint:"GetGrabbers",
-        body: {}
+        body: {},
+        hideFromSpinner:true
       }).then((out) => {
         MetricsReader.grabbers = out.grabbers;
       })
