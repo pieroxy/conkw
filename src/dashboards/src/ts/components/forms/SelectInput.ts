@@ -31,7 +31,11 @@ export class SelectInput extends GenericInput<string, SelectInputAttrs> {
     return m(
       "select" + this.getErrorClass() + (attrs.className ? attrs.className:""), 
       params,
-      attrs.values.map(v => m("option", {value:v.id}, v.label))
+      attrs.values.map(v => {
+        let options:any = {value:v.id};
+        if (v.id === attrs.refHolder[attrs.refProperty]) options["selected"] = true;
+        return m("option", options, v.label)
+      })
     );
   }
 
