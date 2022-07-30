@@ -58,19 +58,19 @@ export class EditSimpleGaugeWithValueAndLabelPanel extends AbstractPage<EditPane
           this.panel.content.push({
             gauge: {
               min: {
-                grabber:"",
+                namespace:"",
                 clazz: ExpressionClass.LITERAL,
                 type:ExpressionValueType.NUMERIC,
                 value:"0"
               },
               max: {
-                grabber:"",
+                namespace:"",
                 clazz: ExpressionClass.LITERAL,
                 type:ExpressionValueType.NUMERIC,
                 value:"100"
               },
               value: {
-                grabber:"",
+                namespace:"",
                 clazz: ExpressionClass.LITERAL,
                 type:ExpressionValueType.NUMERIC,
                 directive:"",
@@ -79,7 +79,7 @@ export class EditSimpleGaugeWithValueAndLabelPanel extends AbstractPage<EditPane
             },
             label: {
               value: {
-                grabber:"",
+                namespace:"",
                 clazz: ExpressionClass.LITERAL,
                 type:ExpressionValueType.STRING,
                 value:"The string"
@@ -87,7 +87,7 @@ export class EditSimpleGaugeWithValueAndLabelPanel extends AbstractPage<EditPane
             },
             value: {
               value: {
-                grabber:"",
+                namespace:"",
                 clazz: ExpressionClass.LITERAL,
                 type:ExpressionValueType.NUMERIC,
                 value:"10000000000"

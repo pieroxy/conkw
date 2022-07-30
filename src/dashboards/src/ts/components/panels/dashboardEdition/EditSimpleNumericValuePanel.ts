@@ -14,7 +14,7 @@ export class EditSimpleNumericValuePanel implements m.ClassComponent<EditSimpleN
           onenter:()=>{},
           className:".grabberList",
           refHolder:attrs.element,
-          refProperty:"grabber",
+          refProperty:"namespace",
           values:MetricsReader.getGrabbers()
         }),
       ]),

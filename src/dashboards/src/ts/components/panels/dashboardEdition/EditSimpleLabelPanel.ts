@@ -14,7 +14,7 @@ export class EditSimpleLabelPanel implements m.ClassComponent<EditSimpleLabelPan
           onenter:()=>{},
           className:".grabberList",
           refHolder:attrs.element,
-          refProperty:"grabber",
+          refProperty:"namespace",
           values:MetricsReader.getGrabbers()
         }),
       ]),

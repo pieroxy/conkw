@@ -22,17 +22,25 @@ export abstract class DashboardElement<T extends DashboardElementAttrs> implemen
       case ExpressionClass.LITERAL:
         return parseFloat(expression.value);
       case ExpressionClass.METRIC:
-        return data.metrics[this.getNamespace()].num[expression.value];
+        let ns = this.getNamespace();
+        if (data.metrics && data.metrics[ns] && data.metrics[ns].num)
+          return data.metrics[ns].num[expression.value];
+        else
+          return NaN;
     }
     return -1.02;
   }
 
-  computeTextValue(expression:ValueExpression, data:MetricsApiResponse):string {
+  computeTextValue(expression:ValueExpression, data:MetricsApiResponse):string|null {
     switch (expression.clazz) {
       case ExpressionClass.LITERAL:
         return expression.value;
       case ExpressionClass.METRIC:
-        return data.metrics[this.getNamespace()].str[expression.value];
+        let ns = this.getNamespace();
+        if (data.metrics && data.metrics[ns] && data.metrics[ns].num)
+          return data.metrics[ns].str[expression.value];
+        else
+          return null;
     }
     return "-1.03";
   }

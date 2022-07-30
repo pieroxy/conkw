@@ -7,7 +7,7 @@ import net.pieroxy.conkw.api.metadata.TypeScriptType;
 @CompiledJson
 @TypeScriptType
 public class ValueExpression {
-  private String grabber;
+  private String namespace;
   private ExpressionClass clazz;
   private ExpressionValueType type;
   @OptionalTypeScriptField
@@ -46,11 +46,11 @@ public class ValueExpression {
     this.value = value;
   }
 
-  public String getGrabber() {
-    return grabber;
+  public String getNamespace() {
+    return namespace;
   }
 
-  public void setGrabber(String grabber) {
-    this.grabber = grabber;
+  public void setNamespace(String namespace) {
+    this.namespace = namespace;
   }
 }
