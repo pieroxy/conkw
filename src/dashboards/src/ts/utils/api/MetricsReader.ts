@@ -66,4 +66,28 @@ export class MetricsReader {
     }
     return MetricsReader.grabbers;
   }
+
+  static getNumMetricsList(namespace: string): string[] {
+    return this.getMetricsList(namespace, "num");
+  }
+
+  static getStrMetricsList(namespace: string): string[] {
+    return this.getMetricsList(namespace, "str");
+  }
+
+  private static getMetricsList(namespace: string, space:"num"|"str"): string[] {
+    let rd = this.lastResponse.metrics[namespace];
+    if (!rd) return [];
+    var name, result = [];
+    let obj = rd[space];
+    if (!obj) return [];    
+
+    for (name in obj) {
+        if (obj.hasOwnProperty(name)) {
+            result.push(name);
+        }
+    }
+    return result.sort();
+  }
+
 }

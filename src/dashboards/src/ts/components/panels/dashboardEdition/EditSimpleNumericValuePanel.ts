@@ -3,6 +3,7 @@ import { ExpressionClass, ExpressionValueType, ValueExpression } from '../../../
 import { MetricsReader } from '../../../utils/api/MetricsReader';
 import { SelectInput } from '../../forms/SelectInput';
 import { TextFieldInput } from '../../forms/TextFieldInput';
+import { TextFieldInputWithSearch } from '../../forms/TextFieldInputWithSearch';
 
 export class EditSimpleNumericValuePanel implements m.ClassComponent<EditSimpleNumericValuePanelAttrs> {
   view({attrs}: m.Vnode<EditSimpleNumericValuePanelAttrs>): void | m.Children {
@@ -33,11 +34,18 @@ export class EditSimpleNumericValuePanel implements m.ClassComponent<EditSimpleN
       ]),
       m(".inputWithLabel", [
         m(".label", "Value"),
+        attrs.element.clazz === ExpressionClass.METRIC ?
+        m(TextFieldInputWithSearch, {
+          onenter:()=>{},
+          refHolder:attrs.element,
+          refProperty:"value",
+          values:MetricsReader.getNumMetricsList(attrs.element.namespace)
+        }) : 
         m(TextFieldInput, {
           onenter:()=>{},
           refHolder:attrs.element,
           refProperty:"value",
-        }),
+        })
       ])
     ];
   }

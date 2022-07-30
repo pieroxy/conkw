@@ -235,7 +235,36 @@ input, select {
   }
 }
 
+.textInputWithList {
+  position: relative;
 
+  .textInputList {
+    position: absolute;
+    top:33px;
+    background-color: black;
+    color:white;
+    z-index: 100;
+    border-style: solid;
+    border-color: #aaa;
+    border-width: 0 2px 2px 2px;
+    max-height:200px;
+    overflow-y: auto;
+
+    > * {
+      padding:3px 10px;
+      cursor: pointer;
+      
+      &:hover {
+        background-color: $secondary-color-hover;
+        color:black;
+      }
+      &.highlighted {
+        background-color: $secondary-color-hover;
+        color:black;
+      }
+    }
+  }
+}
 
 button {
   padding: 3px 20px;
@@ -489,7 +518,7 @@ button {
     color: white;
     font-size: 14px;
   }
-  
+
   .editableBlock {
     display: grid;
     grid-template-columns:2;
