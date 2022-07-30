@@ -1,5 +1,6 @@
 package net.pieroxy.conkw.webapp.servlets;
 
+import net.pieroxy.conkw.api.model.IdLabelPair;
 import net.pieroxy.conkw.grabbersBase.Grabber;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 import net.pieroxy.conkw.webapp.Listener;
@@ -9,6 +10,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class ApiManager implements MetaGrabber {
   private final static Logger LOGGER = Logger.getLogger(Api.class.getName());
@@ -18,6 +20,15 @@ public class ApiManager implements MetaGrabber {
   public ApiManager(List<Grabber> grabbers) {
     allGrabbers = HashMapPool.getInstance().borrow(grabbers.size());
     grabbers.forEach(g -> {allGrabbers.put(g.getName(), g);});
+  }
+
+
+  public List<IdLabelPair> getGrabbersList() {
+    return allGrabbers
+        .entrySet()
+        .stream()
+        .map(entry -> new IdLabelPair(entry.getKey(), entry.getKey() + ": " + entry.getValue().getClass().getSimpleName()))
+        .collect(Collectors.toList());
   }
 
   public MetricsApiResponse buildResponse(long now, Collection<GrabberInput>grabbersRequested) {

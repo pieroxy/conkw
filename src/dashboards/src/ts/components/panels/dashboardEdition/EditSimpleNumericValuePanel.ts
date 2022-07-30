@@ -1,5 +1,6 @@
 import m from 'mithril';
 import { ExpressionClass, ExpressionValueType, ValueExpression } from '../../../auto/pieroxy-conkw';
+import { MetricsReader } from '../../../utils/api/MetricsReader';
 import { SelectInput } from '../../forms/SelectInput';
 import { TextFieldInput } from '../../forms/TextFieldInput';
 
@@ -7,6 +8,16 @@ export class EditSimpleNumericValuePanel implements m.ClassComponent<EditSimpleN
   view({attrs}: m.Vnode<EditSimpleNumericValuePanelAttrs>): void | m.Children {
     attrs.element.type = ExpressionValueType.NUMERIC;
     return [
+      m(".inputWithLabel", [
+        m(".label", "Grabber"),
+        m(SelectInput, {
+          onenter:()=>{},
+          className:".grabberList",
+          refHolder:attrs.element,
+          refProperty:"grabber",
+          values:MetricsReader.getGrabbers()
+        }),
+      ]),
       m(".inputWithLabel", [
         m(".label", "Class"),
         m(SelectInput, {

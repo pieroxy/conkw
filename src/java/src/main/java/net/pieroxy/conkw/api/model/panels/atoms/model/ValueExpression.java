@@ -7,6 +7,7 @@ import net.pieroxy.conkw.api.metadata.TypeScriptType;
 @CompiledJson
 @TypeScriptType
 public class ValueExpression {
+  private String grabber;
   private ExpressionClass clazz;
   private ExpressionValueType type;
   @OptionalTypeScriptField
@@ -43,5 +44,13 @@ public class ValueExpression {
 
   public void setValue(String value) {
     this.value = value;
+  }
+
+  public String getGrabber() {
+    return grabber;
+  }
+
+  public void setGrabber(String grabber) {
+    this.grabber = grabber;
   }
 }

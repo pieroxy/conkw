@@ -1,5 +1,6 @@
 import m from 'mithril';
 import { DynamicLabel, ExpressionClass, ExpressionValueType } from '../../../auto/pieroxy-conkw';
+import { MetricsReader } from '../../../utils/api/MetricsReader';
 import { SelectInput } from '../../forms/SelectInput';
 import { TextFieldInput } from '../../forms/TextFieldInput';
 
@@ -7,6 +8,16 @@ export class EditSimpleLabelPanel implements m.ClassComponent<EditSimpleLabelPan
   view({attrs}: m.Vnode<EditSimpleLabelPanelAttrs>): void | m.Children {
     attrs.element.value.type = ExpressionValueType.STRING;
     return [
+      m(".inputWithLabel", [
+        m(".label", "Grabber"),
+        m(SelectInput, {
+          onenter:()=>{},
+          className:".grabberList",
+          refHolder:attrs.element,
+          refProperty:"grabber",
+          values:MetricsReader.getGrabbers()
+        }),
+      ]),
       m(".inputWithLabel", [
         m(".label", "Class"),
         m(SelectInput, {
