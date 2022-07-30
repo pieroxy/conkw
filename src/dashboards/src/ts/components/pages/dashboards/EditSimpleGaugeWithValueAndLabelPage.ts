@@ -16,7 +16,7 @@ import { EditSimpleSiLabelPanel } from '../../panels/dashboardEdition/EditSimple
 import { EditSimpleGaugePanel } from '../../panels/dashboardEdition/EditSimpleGaugePanel';
 import { MetricsReader } from '../../../utils/api/MetricsReader';
 
-export class EditSimpleGaugeWithValueAndLabelPanel extends AbstractPage<EditPanelAttrs> {
+export class EditSimpleGaugeWithValueAndLabelPage extends AbstractPage<EditPanelAttrs> {
   private panel:SimpleGaugeWithValueAndLabelPanel;
   selected?: SimpleGaugeWithValueAndLabelElement;
   //private dashboardId:string;
