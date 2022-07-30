@@ -80,7 +80,7 @@ export class MetricsReader {
     if (!rd) return [];
     var name, result = [];
     let obj = rd[space];
-    if (!obj) return [];    
+    if (!obj) return [];
 
     for (name in obj) {
         if (obj.hasOwnProperty(name)) {

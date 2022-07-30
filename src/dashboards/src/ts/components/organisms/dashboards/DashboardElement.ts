@@ -10,7 +10,7 @@ export abstract class DashboardElement<T extends DashboardElementAttrs> implemen
         return parseFloat(expression.value);
       case ExpressionClass.METRIC:
         let ns = expression.namespace;
-        MetricsReader.didReadFromGrabber(ns);
+        if (ns) MetricsReader.didReadFromGrabber(ns);
         if (data.metrics && data.metrics[ns] && data.metrics[ns].num)
           return data.metrics[ns].num[expression.value];
         else
@@ -25,7 +25,7 @@ export abstract class DashboardElement<T extends DashboardElementAttrs> implemen
         return expression.value;
       case ExpressionClass.METRIC:
         let ns = expression.namespace;
-        MetricsReader.didReadFromGrabber(ns);
+        if (ns) MetricsReader.didReadFromGrabber(ns);
         if (data.metrics && data.metrics[ns] && data.metrics[ns].num)
           return data.metrics[ns].str[expression.value];
         else

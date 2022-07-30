@@ -3,6 +3,7 @@ import { DynamicLabel, ExpressionClass, ExpressionValueType } from '../../../aut
 import { MetricsReader } from '../../../utils/api/MetricsReader';
 import { SelectInput } from '../../forms/SelectInput';
 import { TextFieldInput } from '../../forms/TextFieldInput';
+import { TextFieldInputWithSearch } from '../../forms/TextFieldInputWithSearch';
 
 export class EditSimpleLabelPanel implements m.ClassComponent<EditSimpleLabelPanelAttrs> {
   view({attrs}: m.Vnode<EditSimpleLabelPanelAttrs>): void | m.Children {
@@ -13,7 +14,7 @@ export class EditSimpleLabelPanel implements m.ClassComponent<EditSimpleLabelPan
         m(SelectInput, {
           onenter:()=>{},
           className:".grabberList",
-          refHolder:attrs.element,
+          refHolder:attrs.element.value,
           refProperty:"namespace",
           values:MetricsReader.getGrabbers()
         }),
@@ -33,13 +34,21 @@ export class EditSimpleLabelPanel implements m.ClassComponent<EditSimpleLabelPan
       ]),
       m(".inputWithLabel", [
         m(".label", "Value"),
+        attrs.element.value.clazz === ExpressionClass.METRIC ?
+        m(TextFieldInputWithSearch, {
+          onenter:()=>{},
+          refHolder:attrs.element.value,
+          refProperty:"value",
+          values:MetricsReader.getStrMetricsList(attrs.element.value.namespace),
+          spellcheck:false
+        }) : 
         m(TextFieldInput, {
           onenter:()=>{},
           refHolder:attrs.element.value,
           refProperty:"value",
-          spellcheck:true
-        }),
-      ])
+          spellcheck:false
+        })
+      ]),
     ];
   }
 
