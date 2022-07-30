@@ -1,5 +1,5 @@
 import m from 'mithril';
-import { Dashboard, GetDashboardInput, GetDashboardOutput } from '../../../auto/pieroxy-conkw';
+import { Dashboard, GetDashboardInput, GetDashboardOutput, SimpleGaugeWithValueAndLabelPanel } from '../../../auto/pieroxy-conkw';
 import { Api } from '../../../utils/api/Api';
 import { IdAttrs } from '../../../utils/attrs/IdAttrs';
 import { HomeIcon } from '../../icons/HomeIcon';
@@ -9,6 +9,7 @@ import { Routing } from '../../../utils/navigation/Routing';
 import { AbstractPage } from '../AbstractPage';
 import { NewDocumentIcon } from '../../icons/NewDocumentIcon';
 import { GlobalData } from '../../../utils/GlobalData';
+import { ViewSimpleGaugeWithValueAndLabelPanel } from '../../panels/dashboards/SimpleGaugeWithValueAndLabelPanel';
 
 export class DashboardEditPage extends AbstractPage<IdAttrs> {
   private dashboard : Dashboard;
@@ -40,9 +41,9 @@ export class DashboardEditPage extends AbstractPage<IdAttrs> {
         this.dashboard.name, 
         m(".id", this.dashboard.id)
       ]),
-      m(".list", this.dashboard.panels?this.dashboard.panels.map((panel) => m(".panel", [
-        panel.title,
-        m("a.id", {href:Routing.getRouteAsHref(Endpoints.GAUGE_SIMPLE_VALUE_LABEL_EDIT, {dashboardId:attrs.id, panelId:panel.id})}, panel.id)
+      m(".list", this.dashboard.panels?this.dashboard.panels.map((panel) => m(".ediatblepanel", [
+        m("a.id", {href:Routing.getRouteAsHref(Endpoints.GAUGE_SIMPLE_VALUE_LABEL_EDIT, {dashboardId:attrs.id, panelId:panel.id})}, panel.id),
+        m(ViewSimpleGaugeWithValueAndLabelPanel, {element:<SimpleGaugeWithValueAndLabelPanel>panel})
       ])):null)
     ]);
   }

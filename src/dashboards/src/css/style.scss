@@ -453,13 +453,12 @@ button {
   }
 }
 
-.panel {
-  background-color: $bg-color-l1;
-  box-shadow: 2px 2px 5px rgb(0 0 0 / 30%);
-  padding:10px;
-  width: 350px;
-  font-size: 14px;
-  position: relative;
+.ediatblepanel {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  float: left;
+  clear: both;
+  margin: 5px;
+  background-color: $bg-color-l3;
 
   .id {
     font-size: 10px;
@@ -468,6 +467,16 @@ button {
     display: inline-block;
     margin-left: 10px;
   }
+}
+
+.panel {
+  background-color: $bg-color-l1;
+  box-shadow: 2px 2px 5px rgb(0 0 0 / 30%);
+  padding:10px;
+  width: 350px;
+  font-size: 14px;
+  position: relative;
+  margin:5px;
 
   &.clickable:hover {
     background-color: $bg-color-l3;
