@@ -109,6 +109,7 @@ class PromptDialog<T> extends DialogRender {
         onenter:() => {ok()},
         onescape:() => Dialogs.dismiss(),
         focus:true,
+        spellcheck:false
       }),
       m(".buttonpanel", [
         m(Button, {

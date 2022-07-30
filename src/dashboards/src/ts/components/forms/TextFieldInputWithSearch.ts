@@ -4,7 +4,7 @@ import { Children } from "mithril";
 import { TextFilter } from '../../utils/TextFilter';
 import { GenericInput } from './GenericInput';
 import { HtmlInputEvent } from './HtmlInputEvent';
-import { TextInputAttrs } from './TextFieldInput';
+import { VisibleTextInputAttrs } from './TextFieldInput';
 
 export class TextFieldInputWithSearch extends GenericInput<string, TextInputWithSearchAttrs> {
   private showList = false;
@@ -71,6 +71,7 @@ export class TextFieldInputWithSearch extends GenericInput<string, TextInputWith
     }
     if (attrs.placeholder) params.placeholder = attrs.placeholder;
     if (attrs.id) params.id = attrs.id;
+    if (attrs.spellcheck !== undefined) params.spellcheck = !!attrs.spellcheck;
     let tf = new TextFilter(this.getValueAsString());
     let idx=0;
     this.listDisplayed = [];
@@ -92,7 +93,11 @@ export class TextFieldInputWithSearch extends GenericInput<string, TextInputWith
           })
         })
       ):null,
-      m("input" + this.getErrorClass() + (attrs.search ? ".searchbg":"") + (attrs.className ? attrs.className:""), params)
+      m("input" 
+        + this.getErrorClass() 
+        + (attrs.search ? ".searchbg":"") 
+        + (attrs.className ? attrs.className:""), 
+        params)
     ]);
   }
   onenter(attrs: TextInputWithSearchAttrs) {
@@ -110,7 +115,7 @@ export class TextFieldInputWithSearch extends GenericInput<string, TextInputWith
   }
 }
 
-export interface TextInputWithSearchAttrs extends TextInputAttrs {
+export interface TextInputWithSearchAttrs extends VisibleTextInputAttrs {
   values:string[];
 }
 
@@ -119,7 +124,6 @@ class TextFieldInputWithSearchListItem implements m.ClassComponent<TextFieldInpu
     if (vnode.attrs.highlighted) {
       let e = document.getElementById("list_item_"+vnode.attrs.value);
       if (e) {
-        console.log("siv2 " + vnode.attrs.value);
         (<any>e).scrollIntoViewIfNeeded();
         }
     }

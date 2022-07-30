@@ -41,7 +41,8 @@ export class LoginPage extends AbstractPage<any> {
             refProperty: "username",
             form:this.form,
             requiredMessage:"Please enter your login",
-            onenter:()=>{document.getElementById("pass")?.focus();}
+            onenter:()=>{document.getElementById("pass")?.focus();},
+            spellcheck:false
           }),
         ]),
         m("", [

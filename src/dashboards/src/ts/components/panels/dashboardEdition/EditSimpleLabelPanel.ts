@@ -37,6 +37,7 @@ export class EditSimpleLabelPanel implements m.ClassComponent<EditSimpleLabelPan
           onenter:()=>{},
           refHolder:attrs.element.value,
           refProperty:"value",
+          spellcheck:true
         }),
       ])
     ];

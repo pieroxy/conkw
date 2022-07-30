@@ -39,7 +39,8 @@ export class DashboardExplorerToolbar implements m.ClassComponent<DashboardExplo
         onenter:()=>{},
         search:true,
         placeholder:"Filter",
-        className:".floatright.rm10"
+        className:".floatright.rm10",
+        spellcheck:false
       }),
       m(HomeIcon),
       "Dashboards",

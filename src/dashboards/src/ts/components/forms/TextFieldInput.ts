@@ -5,8 +5,8 @@ import { GenericInput } from './GenericInput';
 import { GenericInputAttrs } from './GenericInputAttrs';
 import { HtmlInputEvent } from './HtmlInputEvent';
 
-export class TextFieldInput extends GenericInput<string, TextInputAttrs> {
-  render({attrs}: m.Vnode<TextInputAttrs>): void | Children {
+export class TextFieldInput extends GenericInput<string, VisibleTextInputAttrs> {
+  render({attrs}: m.Vnode<VisibleTextInputAttrs>): void | Children {
     let params:any = {
       type:"text",
       oninput: (e:HtmlInputEvent) => {
@@ -37,6 +37,7 @@ export class TextFieldInput extends GenericInput<string, TextInputAttrs> {
     }
     if (attrs.placeholder) params.placeholder = attrs.placeholder;
     if (attrs.id) params.id = attrs.id;
+    if (attrs.spellcheck !== undefined) params.spellcheck = !!attrs.spellcheck;
 
     return m(
       "input" + this.getErrorClass() + (attrs.search ? ".searchbg":"") + (attrs.className ? attrs.className:""), 
@@ -48,7 +49,7 @@ export class TextFieldInput extends GenericInput<string, TextInputAttrs> {
     return !this.getValueAsString()
   }
 
-  oncreate(vnode:m.VnodeDOM<TextInputAttrs>) {
+  oncreate(vnode:m.VnodeDOM<VisibleTextInputAttrs>) {
     if (vnode.attrs.focus)
       (<any>vnode.dom).focus();
   }
@@ -59,6 +60,10 @@ export interface TextInputAttrs extends GenericInputAttrs<string> {
   onenter:()=>void;
   onescape?:()=>void;
   focus?:boolean;
-  search?:boolean;
   className?:string;
+}
+
+export interface VisibleTextInputAttrs extends TextInputAttrs {
+  spellcheck:boolean;
+  search?:boolean;
 }

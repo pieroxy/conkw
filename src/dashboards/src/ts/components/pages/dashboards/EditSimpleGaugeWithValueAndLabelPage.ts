@@ -112,6 +112,7 @@ export class EditSimpleGaugeWithValueAndLabelPage extends AbstractPage<EditPanel
               refHolder:this.panel,
               refProperty:"title",
               onenter() {},
+              spellcheck:true
             })
           ),
           m("br", {clear:"both"}),

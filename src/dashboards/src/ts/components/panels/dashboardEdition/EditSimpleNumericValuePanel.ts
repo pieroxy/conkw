@@ -39,12 +39,14 @@ export class EditSimpleNumericValuePanel implements m.ClassComponent<EditSimpleN
           onenter:()=>{},
           refHolder:attrs.element,
           refProperty:"value",
-          values:MetricsReader.getNumMetricsList(attrs.element.namespace)
+          values:MetricsReader.getNumMetricsList(attrs.element.namespace),
+          spellcheck:false
         }) : 
         m(TextFieldInput, {
           onenter:()=>{},
           refHolder:attrs.element,
           refProperty:"value",
+          spellcheck:false
         })
       ])
     ];

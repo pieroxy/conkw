@@ -28,7 +28,8 @@ export class EditSimpleSiLabelPanel implements m.ClassComponent<EditSimpleSiLabe
           refProperty:"unit",
           params: {
             size:3
-          }
+          },
+          spellcheck:false
         }),
       ]),
     ];

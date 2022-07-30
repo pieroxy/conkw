@@ -61,9 +61,7 @@ export class ChangePassword extends AbstractPage<IdAttrs> {
             refProperty: "p3",
             form:this.form,
             requiredMessage:"Please enter your new password twice",
-            onenter:()=>{
-              this.doChangePassword(attrs.id);
-            }
+            onenter:()=>{this.doChangePassword(attrs.id);}
           }),
         ]),
         m("", [
