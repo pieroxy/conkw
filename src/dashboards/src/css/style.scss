@@ -486,6 +486,13 @@ button {
   }
 }
 
+.content.dashboardContent {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  overflow: hidden;
+}
+
 .panel {
   background-color: $bg-color-l1;
   box-shadow: 2px 2px 5px rgb(0 0 0 / 30%);
@@ -535,7 +542,7 @@ button {
       height:0.9em;
       width:0.9em;
       background-color: rgb(255 255 0  / 20%);
-      left:-0.9em;
+      left:-0.4em;
 
       &:hover {
         background-color: rgb(255 255 0  / 40%);

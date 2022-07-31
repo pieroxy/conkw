@@ -33,7 +33,7 @@ export class DashboardEditPage extends AbstractPage<IdAttrs> {
 
   render({attrs}:m.Vnode<IdAttrs>):m.Children {
     if (!this.dashboard) return m("");
-    return m(".dashboard.page", [
+    return m(".page", [
       m(".title", [
         m("a.floatright", {title:"New panel", href:Routing.getRouteAsHref(Endpoints.PANEL_NEW, {dashboardId:this.dashboard.id})}, m(NewDocumentIcon)),
         m("a", {title:"Go back Home", href:Routing.getRouteAsHref(Endpoints.HOME)}, m(HomeIcon)),
@@ -41,12 +41,13 @@ export class DashboardEditPage extends AbstractPage<IdAttrs> {
         this.dashboard.name, 
         m(".id", this.dashboard.id)
       ]),
-      m(".dashboardContent", this.dashboard.panels?this.dashboard.panels.map((panel) => 
-        m(ViewSimpleGaugeWithValueAndLabelPanel, {
-          element:<SimpleGaugeWithValueAndLabelPanel>panel,
-          editLink:Routing.getRouteAsHref(Endpoints.GAUGE_SIMPLE_VALUE_LABEL_EDIT, {dashboardId:attrs.id, panelId:panel.id})
-        }))
-      :null)
+      m(".content.dashboardContent", this.dashboard.panels?this.dashboard.panels.map((panel) => 
+          m(ViewSimpleGaugeWithValueAndLabelPanel, {
+            element:<SimpleGaugeWithValueAndLabelPanel>panel,
+            editLink:Routing.getRouteAsHref(Endpoints.GAUGE_SIMPLE_VALUE_LABEL_EDIT, {dashboardId:attrs.id, panelId:panel.id})
+          }))
+        :null
+      )
     ]);
   }
 }
