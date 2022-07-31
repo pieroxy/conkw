@@ -252,7 +252,8 @@ input, select {
     border-color: #aaa;
     border-width: 0 2px 2px 2px;
     max-height:200px;
-    overflow-y: auto;
+    @include vScrollableArea("black");
+
 
     > * {
       padding:3px 10px;
