@@ -13,8 +13,8 @@ export abstract class GenericInput<VT, T extends GenericInputAttrs<VT>> implemen
   private refProperty:string|number;
   private requiredMessage?:string;
   private highilighted:boolean=false;
-  private convertValueToString:(value:VT)=>string;
-  private convertValueFromString:(value:String) => VT;
+  convertValueToString:(value:VT)=>string;
+  convertValueFromString:(value:String) => VT;
 
   protected form:Form
 
@@ -23,15 +23,19 @@ export abstract class GenericInput<VT, T extends GenericInputAttrs<VT>> implemen
   }
 
   oninit(vnode: Vnode<T>) {
-    if (vnode.attrs.format) {
-      this.convertValueToString = vnode.attrs.format;
-    } else {
-      this.convertValueToString = (v) => v ? ""+v : "";
+    if (!this.convertValueToString) {
+      if (vnode.attrs.format) {
+        this.convertValueToString = vnode.attrs.format;
+      } else {
+        this.convertValueToString = (v) => v ? ""+v : "";
+      }
     }
-    if (vnode.attrs.parse) {
-      this.convertValueFromString = vnode.attrs.parse;
-    } else {
-      this.convertValueFromString = (s) => <VT><any>s;
+    if (!this.convertValueFromString) {
+      if (vnode.attrs.parse) {
+        this.convertValueFromString = vnode.attrs.parse;
+      } else {
+        this.convertValueFromString = (s) => <VT><any>s;
+      }
     }
     this.refHolder = vnode.attrs.refHolder;
     this.refProperty = vnode.attrs.refProperty;

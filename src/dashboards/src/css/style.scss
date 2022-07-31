@@ -198,7 +198,6 @@ input, select {
   padding:5px;
   background-color: black;
   font-size: 18px;
-  opacity: 0.7;
   color:#aaa;
   border:2px solid #444;
 
@@ -223,8 +222,7 @@ input, select {
   &:focus {
     outline : none;
     border:2px solid #aaa;
-    opacity: 0.9;
-    box-shadow: inset 3px 3px 5px rgb(0 0 0 / 40%);
+    color:white
   }
 
   &.searchbg {
@@ -236,6 +234,37 @@ input, select {
 
   &:disabled {
     opacity: 0.4;
+  }
+}
+
+input.checkbox {
+  width:1em;
+  height:1em;
+  margin-right:8px;
+
+  &::after {
+    background-color: black;
+    opacity: 1;
+    border:2px solid #444;
+    display: block;
+    position:relative;
+    width:1em;
+    height:1em;
+    content:"";
+  }
+
+  &:hover::after {
+    border:2px solid #888;
+  }
+
+  &:focus::after {
+    border:2px solid #aaa;
+    opacity: 0.9;
+  }
+
+  &:checked::after {
+    text-align: center;
+    content:"✔"
   }
 }
 
@@ -655,6 +684,7 @@ button {
     display: inline-block;
     padding: 5px;
     margin: 5px;
+    vertical-align: top;
 
     .groupTitle {
       color: rgba(255,255,255,0.2);
