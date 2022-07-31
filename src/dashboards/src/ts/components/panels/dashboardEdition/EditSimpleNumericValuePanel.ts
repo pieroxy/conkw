@@ -10,16 +10,6 @@ export class EditSimpleNumericValuePanel implements m.ClassComponent<EditSimpleN
     attrs.element.type = ExpressionValueType.NUMERIC;
     return [
       m(".inputWithLabel", [
-        m(".label", "Grabber"),
-        m(SelectInput, {
-          onenter:()=>{},
-          className:".grabberList",
-          refHolder:attrs.element,
-          refProperty:"namespace",
-          values:MetricsReader.getGrabbers()
-        }),
-      ]),
-      m(".inputWithLabel", [
         m(".label", "Class"),
         m(SelectInput, {
           onenter:()=>{},
@@ -30,6 +20,17 @@ export class EditSimpleNumericValuePanel implements m.ClassComponent<EditSimpleN
             {id:ExpressionClass.METRIC, label:"Simple metric"},
             {id:ExpressionClass.EXPRESSION, label:"Expression"},
           ]
+        }),
+      ]),
+      m(".inputWithLabel", [
+        m(".label", "Grabber"),
+        m(SelectInput, {
+          onenter:()=>{},
+          className:".grabberList",
+          refHolder:attrs.element,
+          refProperty:"namespace",
+          values:MetricsReader.getGrabbers(),
+          disabled: attrs.element.clazz == ExpressionClass.LITERAL
         }),
       ]),
       m(".inputWithLabel", [

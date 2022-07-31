@@ -38,6 +38,7 @@ export class TextFieldInput extends GenericInput<string, VisibleTextInputAttrs> 
     if (attrs.placeholder) params.placeholder = attrs.placeholder;
     if (attrs.id) params.id = attrs.id;
     if (attrs.spellcheck !== undefined) params.spellcheck = !!attrs.spellcheck;
+    if (attrs.disabled) params.disabled = !!attrs.disabled;
 
     return m(
       "input" + this.getErrorClass() + (attrs.search ? ".searchbg":"") + (attrs.className ? attrs.className:""), 

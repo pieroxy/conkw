@@ -233,6 +233,10 @@ input, select {
     background-repeat: no-repeat;
     background-position: 97% 50%;
   }
+
+  &:disabled {
+    opacity: 0.4;
+  }
 }
 
 .textInputWithList {

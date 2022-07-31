@@ -72,6 +72,7 @@ export class TextFieldInputWithSearch extends GenericInput<string, TextInputWith
     if (attrs.placeholder) params.placeholder = attrs.placeholder;
     if (attrs.id) params.id = attrs.id;
     if (attrs.spellcheck !== undefined) params.spellcheck = !!attrs.spellcheck;
+    if (attrs.disabled) params.disabled = !!attrs.disabled;
     let tf = new TextFilter(this.getValueAsString());
     let idx=0;
     this.listDisplayed = [];

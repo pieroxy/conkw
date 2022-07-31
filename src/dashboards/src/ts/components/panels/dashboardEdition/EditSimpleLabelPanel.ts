@@ -10,16 +10,6 @@ export class EditSimpleLabelPanel implements m.ClassComponent<EditSimpleLabelPan
     attrs.element.value.type = ExpressionValueType.STRING;
     return [
       m(".inputWithLabel", [
-        m(".label", "Grabber"),
-        m(SelectInput, {
-          onenter:()=>{},
-          className:".grabberList",
-          refHolder:attrs.element.value,
-          refProperty:"namespace",
-          values:MetricsReader.getGrabbers()
-        }),
-      ]),
-      m(".inputWithLabel", [
         m(".label", "Class"),
         m(SelectInput, {
           onenter:()=>{},
@@ -30,6 +20,17 @@ export class EditSimpleLabelPanel implements m.ClassComponent<EditSimpleLabelPan
             {id:ExpressionClass.METRIC, label:"Simple metric"},
             {id:ExpressionClass.EXPRESSION, label:"Expression"},
           ]
+        }),
+      ]),
+      m(".inputWithLabel", [
+        m(".label", "Grabber"),
+        m(SelectInput, {
+          onenter:()=>{},
+          className:".grabberList",
+          refHolder:attrs.element.value,
+          refProperty:"namespace",
+          values:MetricsReader.getGrabbers(),
+          disabled:attrs.element.value.clazz == ExpressionClass.LITERAL
         }),
       ]),
       m(".inputWithLabel", [

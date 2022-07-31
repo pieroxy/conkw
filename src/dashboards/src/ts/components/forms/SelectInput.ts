@@ -27,6 +27,7 @@ export class SelectInput extends GenericInput<string, SelectInputAttrs> {
       }
     }
     if (attrs.id) params.id = attrs.id;
+    if (attrs.disabled) params.disabled = !!attrs.disabled;
 
     return m(
       "select" + this.getErrorClass() + (attrs.className ? attrs.className:""), 

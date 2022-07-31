@@ -11,5 +11,6 @@ export interface GenericInputAttrs<T> {
   parse?: (s:string) => T,
   form?: Form,
   onchange?: ()=>void,
-  id?:string
+  id?:string,
+  disabled?:boolean
 }
