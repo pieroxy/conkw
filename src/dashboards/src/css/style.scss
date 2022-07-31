@@ -486,22 +486,6 @@ button {
   }
 }
 
-.editablepanel {
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  float: left;
-  clear: both;
-  margin: 5px;
-  background-color: $bg-color-l3;
-
-  .id {
-    font-size: 10px;
-    font-family: $monospace;
-    opacity: 0.5;
-    display: inline-block;
-    margin-left: 10px;
-  }
-}
-
 .panel {
   background-color: $bg-color-l1;
   box-shadow: 2px 2px 5px rgb(0 0 0 / 30%);
@@ -514,6 +498,25 @@ button {
   &.clickable:hover {
     background-color: $bg-color-l3;
     cursor: pointer;
+  }
+
+  a.editLink {
+    position:absolute;
+    right:0;
+    top:0;
+    display:none;
+  }
+
+  &:hover {
+    a.editLink {
+      display: block;
+      opacity: 50%;
+
+      &:hover {
+        opacity: 100%;
+      }
+    }
+  
   }
 
   .title {
