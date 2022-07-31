@@ -41,7 +41,7 @@ export class DashboardEditPage extends AbstractPage<IdAttrs> {
         this.dashboard.name, 
         m(".id", this.dashboard.id)
       ]),
-      m(".list", this.dashboard.panels?this.dashboard.panels.map((panel) => m(".ediatblepanel", [
+      m(".list", this.dashboard.panels?this.dashboard.panels.map((panel) => m(".editablepanel", [
         m("a.id", {href:Routing.getRouteAsHref(Endpoints.GAUGE_SIMPLE_VALUE_LABEL_EDIT, {dashboardId:attrs.id, panelId:panel.id})}, panel.id),
         m(ViewSimpleGaugeWithValueAndLabelPanel, {element:<SimpleGaugeWithValueAndLabelPanel>panel})
       ])):null)
