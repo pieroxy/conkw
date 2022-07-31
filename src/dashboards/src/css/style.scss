@@ -537,6 +537,10 @@ button {
       &:hover {
         background-color: rgb(255 255 0  / 40%);
       }
+
+      &.editing {
+        background-color: rgb(255 255 0  / 60%);
+      }
     }
   }
 

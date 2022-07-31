@@ -117,7 +117,7 @@ export class EditSimpleGaugeWithValueAndLabelPage extends AbstractPage<EditPanel
           ),
           m("br", {clear:"both"}),
           (this.panel.content||[]).map(pi => m(".editableBlock", [
-            m("a.clickableLayer", {
+            m("a.clickableLayer" + (this.selected === pi ? ".editing":""), {
               onclick:() => {
                 this.selected = pi;
               }
@@ -144,7 +144,6 @@ export class EditSimpleGaugeWithValueAndLabelElementPanel implements m.ClassComp
   view({attrs}: m.Vnode<EditSimpleGaugeWithValueAndLabelElementPanelAttrs, this>): void | m.Children {
     if (attrs.element) {
       return m(".editionPanel", [
-        m("", "Editing the thing here ", attrs.element?.label.value.value),
         m(".group", [
           m(".groupTitle", "The label"),
           m(EditSimpleLabelPanel, {element:attrs.element.label}),
