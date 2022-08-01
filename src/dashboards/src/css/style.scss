@@ -189,9 +189,10 @@ a {
       }
 
       svg.icon {
-        width:1.1em;
-        height:1.1em;
+        width:1em;
+        height:1em;
         display:inline;
+        vertical-align: top;
   
         path.primaryfill {
           fill:#836c7c;
