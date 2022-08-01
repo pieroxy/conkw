@@ -175,18 +175,30 @@ a {
   .footer {
     position: absolute;
     bottom: 10px;
-    color: gray;
+    color: #836c7c;
     text-align: center;
+    display: flex;
 
     > span {
       padding:0 20px;
-      border-left:1px solid gray;
+      border-left:1px solid #836c7c;
       display: inline-block;
 
       a, a:visited, a:active {
-        color:gray;
+        color:#836c7c;
+      }
+
+      svg.icon {
+        width:1.1em;
+        height:1.1em;
+        display:inline;
+  
+        path.primaryfill {
+          fill:#836c7c;
+        }
       }
     }
+  
     > span:first-child {
       border-left:0px;
     }
