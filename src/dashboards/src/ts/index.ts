@@ -8,6 +8,8 @@ import { DashboardEditPage } from './components/pages/dashboards/DashboardEdit';
 import { Endpoints } from './utils/navigation/Endpoints';
 import { NewPanelPage } from './components/pages/dashboards/NewPanel';
 import { EditSimpleGaugeWithValueAndLabelPage } from './components/pages/dashboards/EditSimpleGaugeWithValueAndLabelPage';
+import { ProfilePage } from './components/pages/auth/ProfilePage';
+import { AlertsPage } from './components/pages/alerts/AlertsPage';
 
 (function () {
 
@@ -18,8 +20,10 @@ import { EditSimpleGaugeWithValueAndLabelPage } from './components/pages/dashboa
   routes[Endpoints.PASSWORD_CHANGE] = ChangePassword;
   routes[Endpoints.PANEL_NEW] = new AuthenticatedPageResolver(NewPanelPage);
   routes[Endpoints.GAUGE_SIMPLE_VALUE_LABEL_EDIT] = new AuthenticatedPageResolver(EditSimpleGaugeWithValueAndLabelPage);
+  routes[Endpoints.PROFILE] = new AuthenticatedPageResolver(ProfilePage);
+  routes[Endpoints.ALERTS] = new AuthenticatedPageResolver(AlertsPage);
 
-  m.route(document.body, "/home", routes);
+  m.route(document.body, Endpoints.HOME, routes);
 
   addEventListener('resize', m.redraw);
 

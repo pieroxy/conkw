@@ -47,6 +47,12 @@ export class Auth {
     localStorage.setItem("authToken", token);
   }
 
+  static clearAuthToken() {
+    Auth.token = undefined;
+    Auth.user = undefined;
+    localStorage.removeItem("authToken");
+  }
+
   static getAuthToken():string|undefined {
     return Auth.token;
   }

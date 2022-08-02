@@ -422,6 +422,7 @@ button {
   line-height: 1em;
   vertical-align: middle;
   padding:0 2em;
+  overflow: hidden;
 
   > img {
     height:2em;
@@ -452,6 +453,15 @@ button {
 
   .pages {
     float: right;
+
+    a {
+      padding:0 10px;
+      display: inline-block;
+
+      &.selected {
+        background-color: #044;
+      }
+    }
   }
 }
 
