@@ -4,5 +4,7 @@ export enum Endpoints {
   DASHBOARD_EDITION="/dashboards/edit/:id",
   PANEL_NEW="/dashboards/newPanel/:dashboardId",
   PASSWORD_CHANGE="/changepassword/:id",
-  GAUGE_SIMPLE_VALUE_LABEL_EDIT="/dashboards/editPanel/simpleGauge/:dashboardId/:panelId"
+  GAUGE_SIMPLE_VALUE_LABEL_EDIT="/dashboards/editPanel/simpleGauge/:dashboardId/:panelId",
+  PROFILE="/profile/",
+  ALERTS="/alerts/"
 }

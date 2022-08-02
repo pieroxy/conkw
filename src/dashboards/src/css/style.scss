@@ -73,7 +73,7 @@ a {
 
 }
 
-.icon {
+svg.icon {
   width: 40px;
   height: 40px;
   vertical-align: middle;
@@ -89,7 +89,7 @@ a {
     }
   }
 
-  path {
+  > * {
 
     &.primary {
       stroke: white;
@@ -113,8 +113,8 @@ a {
 
 a {
   &:hover {
-    .icon {
-      path {
+    svg.icon {
+      > * {
         &.secondary {
           opacity: 0.6;
         }
@@ -421,14 +421,11 @@ button {
   z-index: 100;
   line-height: 1em;
   vertical-align: middle;
+  padding:0 2em;
 
   > img {
     height:2em;
     margin-top:0.5em;
-
-    &.logo {
-      margin-left:2em;
-    }
   }
 
   /* Loader tweaked from https://github.com/lukehaas/css-loaders
@@ -436,16 +433,25 @@ button {
   .loader {
     color: #fff;
     font-size: 20px;
-    margin: -2em 0px 0 90px;
     width: 2em;
     height: 2em;
     border-radius: 100%;
     position: relative;
     text-indent: -9999em;
     animation: load4 1.3s infinite linear;
-    display: block;
+    display: inline-block;
     transform: scale(0.25);
     padding: 0;
+    vertical-align: bottom;
+  }
+
+  .icon {
+    vertical-align: top;
+    margin-top: 7px;
+  }
+
+  .pages {
+    float: right;
   }
 }
 
