@@ -18,9 +18,9 @@ export class NewPanelPage extends AbstractPage<NewPanelPageAttrs> {
     let id = attrs.dashboardId;
     return m(".page", [
       m(".title", [
-        m("a", {title:"Go back Home", href:Routing.getRouteAsHref(Endpoints.HOME)}, m(HomeIcon)),
+        m("a", {title:"Go back Home", onclick:()=>Routing.goToScreen(Endpoints.HOME)}, m(HomeIcon)),
         m(RightChevronIcon),
-        m("a", {href:Routing.getRouteAsHref(Endpoints.DASHBOARD_EDITION, {id:id})}, GlobalData.getDashboardTitle(id)),
+        m("a", {onclick:()=>Routing.goToScreen(Endpoints.DASHBOARD_EDITION, {id:id})}, GlobalData.getDashboardTitle(id)),
         m(RightChevronIcon),
         "Panel"
       ]),

@@ -35,8 +35,8 @@ export class DashboardEditPage extends AbstractPage<IdAttrs> {
     if (!this.dashboard) return m("");
     return m(".page", [
       m(".title", [
-        m("a.floatright", {title:"New panel", href:Routing.getRouteAsHref(Endpoints.PANEL_NEW, {dashboardId:this.dashboard.id})}, m(NewDocumentIcon)),
-        m("a", {title:"Go back Home", href:Routing.getRouteAsHref(Endpoints.HOME)}, m(HomeIcon)),
+        m("a.floatright", {title:"New panel", onclick:()=>Routing.goToScreen(Endpoints.PANEL_NEW, {dashboardId:this.dashboard.id})}, m(NewDocumentIcon)),
+        m("a", {title:"Go back Home", onclick:()=>Routing.goToScreen(Endpoints.HOME)}, m(HomeIcon)),
         m(RightChevronIcon),
         this.dashboard.name, 
         m(".id", this.dashboard.id)

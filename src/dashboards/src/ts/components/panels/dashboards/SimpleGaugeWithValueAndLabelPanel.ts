@@ -8,7 +8,7 @@ export class ViewSimpleGaugeWithValueAndLabelPanel implements m.ClassComponent<S
   view({attrs}: m.Vnode<SimpleGaugeWithValueAndLabelPanelAttrs>): void | m.Children {
     return m(".panel", [
       m("a.editLink", {
-        href:attrs.editLink
+        onclick:() => m.route.set(attrs.editLink)
       }, m(EditDocumentIcon)),
       m(".title", attrs.element.title),
       m("br", {clear:"both"}),

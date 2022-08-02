@@ -42,7 +42,7 @@ export class MainTopBar implements m.ClassComponent<any> {
 class TopBarPageIcon implements m.ClassComponent<TopBarPageIconAttrs> {
   view({attrs}:m.Vnode<TopBarPageIconAttrs>) {
     return m("a", {
-      className:attrs.route.startsWith(m.route.get())?"selected":"",
+      className:m.route.get().startsWith(attrs.route)?"selected":"",
       onclick:() => { m.route.set(attrs.route); return false; }
     }, m(attrs.icon));
 
