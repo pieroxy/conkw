@@ -111,6 +111,14 @@ svg.icon {
   }
 }
 
+svg.logofull {
+  width: 300px;
+
+  path {
+    fill: white;
+  }
+}
+
 a {
   &:hover {
     svg.icon {

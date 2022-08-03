@@ -8,6 +8,7 @@ import { Button } from '../../forms/Button';
 import { Form } from '../../forms/Form';
 import { PasswordFieldInput } from '../../forms/PasswordFieldInput';
 import { TextFieldInput } from '../../forms/TextFieldInput';
+import { LogoFullIcon } from '../../icons/LogoFull';
 import { AbstractPage } from '../AbstractPage';
 import { LoginFooter } from './LoginFooter';
 
@@ -22,14 +23,9 @@ export class LoginPage extends AbstractPage<any> {
   }
   render():m.Children {
     return m(".loginpage", [
-      m(".loginarea1", [
-        m("img", {
-          src:"/images/logo-white-400.png",
-          style: {
-            opacity:0.4,
-            width:"300px"
-          }
-        }),
+      m(".loginarea1", {style:{opacity:"40%"}}
+      ,[
+        m(LogoFullIcon),
       ]),
       m(".loginarea2", [
         m(".title", "Please log in"),
