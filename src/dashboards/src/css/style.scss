@@ -424,9 +424,8 @@ button {
   padding:0 2em;
   overflow: hidden;
 
-  > img {
-    height:2em;
-    margin-top:0.5em;
+  .logo {
+    opacity: 50%;
   }
 
   /* Loader tweaked from https://github.com/lukehaas/css-loaders
@@ -443,7 +442,8 @@ button {
     display: inline-block;
     transform: scale(0.25);
     padding: 0;
-    vertical-align: bottom;
+    vertical-align: top;
+    margin-top: 7px;
   }
 
   .icon {

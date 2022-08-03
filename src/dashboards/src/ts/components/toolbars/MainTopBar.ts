@@ -7,15 +7,14 @@ import { Endpoints } from '../../utils/navigation/Endpoints';
 import { Routing } from '../../utils/navigation/Routing';
 import { AlertsIcon } from '../icons/AlertsIcon';
 import { DashboardIcon } from '../icons/DashboardIcon';
+import { LogoCIcon } from '../icons/LogoC';
 import { ProfileIcon } from '../icons/ProfileIcon';
 
 export class MainTopBar implements m.ClassComponent<any> {
   
   view(): void | Children {
     return m(".topbar", [
-      m("img.logo", {
-        src:"/images/medium_logo_transparent_50prc.png"
-      }),
+      m("span.logo", m(LogoCIcon)),
       Auth.getAuthenticationStatus() != AuthenticationStatus.LOGGED_IN ? null :
       m(".pages", [
         m(TopBarPageIcon, {
