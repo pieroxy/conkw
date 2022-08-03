@@ -211,6 +211,13 @@
                 <replace dir="../web/doc/" token=".md&quot;" value=".html&quot;">
                   <include name="**/*.html"/>
                 </replace>
+                <java classname="net.pieroxy.conkw.api.GenerateTsStubs">
+                  <arg value="../dashboards/src/ts/auto/ApiEndpoints.ts"/>
+                  <classpath>
+                    <pathelement location="target/conkw-core-1.0-SNAPSHOT.jar"/>
+                  </classpath>
+                </java>
+
                 <echo message="Building dashboards." />
                 <copy todir="../dashboards/src/ts/auto/">
                   <fileset dir="../../src/java/target/typescript-generator/"/>
