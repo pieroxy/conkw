@@ -1,8 +1,7 @@
 import m from 'mithril';
 
 import { Children } from "mithril";
-import { CreateNewDashboardInput, CreateNewDashboardOutput } from '../../auto/pieroxy-conkw';
-import { Api } from '../../utils/api/Api';
+import { ApiEndpoints } from '../../auto/ApiEndpoints';
 import { Dialogs } from '../../utils/Dialogs';
 import { Form } from '../forms/Form';
 import { TextFieldInput } from '../forms/TextFieldInput';
@@ -19,13 +18,10 @@ export class DashboardExplorerToolbar implements m.ClassComponent<DashboardExplo
           title:"Create a new dashboard",
           onclick:() => {
             let go=(s:string) => {
-              Api.call<CreateNewDashboardInput, CreateNewDashboardOutput>({
-                method:"POST",
-                endpoint:"CreateNewDashboard",
-                body:{
+              ApiEndpoints.CreateNewDashboard.call({
                   name:s
                 }
-            }).then(attrs.reload)
+              ).then(attrs.reload)
             };
             Dialogs.prompt("New dashboard name","",(s) => s,go);
           }

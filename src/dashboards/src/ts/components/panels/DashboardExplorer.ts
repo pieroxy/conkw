@@ -1,8 +1,8 @@
 import m from 'mithril';
 
 import { Children } from "mithril";
-import { GetDashboardsInput, GetDashboardsOutput } from '../../auto/pieroxy-conkw';
-import { Api } from '../../utils/api/Api';
+import { ApiEndpoints } from '../../auto/ApiEndpoints';
+import { GetDashboardsOutput } from '../../auto/pieroxy-conkw';
 import { Endpoints } from '../../utils/navigation/Endpoints';
 import { Routing } from '../../utils/navigation/Routing';
 import { TextFilter } from '../../utils/TextFilter';
@@ -17,13 +17,10 @@ export class DashboardExplorer implements m.ClassComponent<DashboardExplorerAttr
   }
 
   load() {
-    Api.call<GetDashboardsInput, GetDashboardsOutput>({
-      method:"GET",
-      endpoint:"GetDashboards",
-      body:{
+    ApiEndpoints.GetDashboards.call({
         root:""
       }
-    }).then((data) => {
+    ).then((data) => {
       this.data = data;
     })
   }

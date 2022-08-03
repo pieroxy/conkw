@@ -1,5 +1,5 @@
-import { GetUserFromSessionInput, GetUserFromSessionOutput, User } from "../auto/pieroxy-conkw";
-import { Api } from "./api/Api";
+import { ApiEndpoints } from "../auto/ApiEndpoints";
+import { User } from "../auto/pieroxy-conkw";
 import { Endpoints } from './navigation/Endpoints';
 import { Routing } from './navigation/Routing';
 
@@ -15,13 +15,10 @@ export class Auth {
       let lst = localStorateToken;
       if (this.askedForToken) return AuthenticationStatus.CHECKING_IN_PROGRESS;
       this.askedForToken = true;
-      Api.call<GetUserFromSessionInput, GetUserFromSessionOutput>({
-        method:"GET",
-        endpoint:"GetUserFromSession",
-        body:{
+      ApiEndpoints.GetUserFromSession.call({
           token:localStorateToken
         }
-      }).then((data) => {
+      ).then((data) => {
         this.askedForToken = false;
         if (data.user) {
           this.user = data.user;

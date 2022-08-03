@@ -5,8 +5,8 @@ import { Endpoints } from '../../../utils/navigation/Endpoints';
 import { Routing } from '../../../utils/navigation/Routing';
 import { AbstractPage } from '../AbstractPage';
 import { GlobalData } from '../../../utils/GlobalData';
-import { Api } from '../../../utils/api/Api';
-import { DashboardPanelType, NewPanelInput, NewPanelOutput } from '../../../auto/pieroxy-conkw';
+import { DashboardPanelType } from '../../../auto/pieroxy-conkw';
+import { ApiEndpoints } from '../../../auto/ApiEndpoints';
 
 export class NewPanelPage extends AbstractPage<NewPanelPageAttrs> {
 
@@ -26,14 +26,11 @@ export class NewPanelPage extends AbstractPage<NewPanelPageAttrs> {
       ]),
       m(".panel.clickable", {
         onclick:() => {
-          Api.call<NewPanelInput,NewPanelOutput>({
-            method:"POST",
-            endpoint:"NewPanel",
-            body:{
+          ApiEndpoints.NewPanel.call({
               dashboardId:attrs.dashboardId,
               type:DashboardPanelType.SIMPLE_GAUGE_WITH_VALUE_AND_LABEL
             }
-          }).then((output) => {
+          ).then((output) => {
             Routing.goToScreen(Endpoints.GAUGE_SIMPLE_VALUE_LABEL_EDIT, {dashboardId:attrs.dashboardId, panelId:output.panelId})
           });
         }

@@ -1,4 +1,5 @@
-import { CallApiInput, CallApiOutput, GetGrabbersInput, GetGrabbersOutput, IdLabelPair, MetricsApiResponse } from "../../auto/pieroxy-conkw";
+import { ApiEndpoints } from "../../auto/ApiEndpoints";
+import { CallApiInput, CallApiOutput, IdLabelPair, MetricsApiResponse } from "../../auto/pieroxy-conkw";
 import { Api } from "./Api";
 
 export class MetricsReader {
@@ -55,12 +56,7 @@ export class MetricsReader {
   static getGrabbers():IdLabelPair[] {
     if (MetricsReader.grabbersLastFetch < Date.now()-MetricsReader.GRABBERS_LIST_TTL) {
       MetricsReader.grabbersLastFetch = Date.now();
-      Api.call<GetGrabbersInput, GetGrabbersOutput>({
-        method:"GET",
-        endpoint:"GetGrabbers",
-        body: {},
-        hideFromSpinner:true
-      }).then((out) => {
+      ApiEndpoints.GetGrabbers.call({}).then((out) => {
         MetricsReader.grabbers = out.grabbers;
       })
     }

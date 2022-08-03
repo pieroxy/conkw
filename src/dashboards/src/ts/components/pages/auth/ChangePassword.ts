@@ -1,6 +1,5 @@
 import m from 'mithril';
-import { DoChangePasswordInput, DoChangePasswordOutput } from '../../../auto/pieroxy-conkw';
-import { Api } from '../../../utils/api/Api';
+import { ApiEndpoints } from '../../../auto/ApiEndpoints';
 import { IdAttrs } from '../../../utils/attrs/IdAttrs';
 import { Endpoints } from '../../../utils/navigation/Endpoints';
 import { Routing } from '../../../utils/navigation/Routing';
@@ -78,16 +77,13 @@ export class ChangePassword extends AbstractPage<IdAttrs> {
   }
 
   private doChangePassword(login:string) {
-    Api.call<DoChangePasswordInput, DoChangePasswordOutput>({
-      method:"POST",
-      endpoint:"DoChangePassword",
-      body:{
+    ApiEndpoints.DoChangePassword.call({
         login:login,
         actual:this.p1,
         a:this.p2,
         b:this.p3
       }
-    }).then(() => {
+    ).then(() => {
       Routing.goToScreen(Endpoints.LOGIN);
     })
   }

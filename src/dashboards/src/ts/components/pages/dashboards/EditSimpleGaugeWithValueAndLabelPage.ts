@@ -5,8 +5,7 @@ import { Endpoints } from '../../../utils/navigation/Endpoints';
 import { Routing } from '../../../utils/navigation/Routing';
 import { AbstractPage } from '../AbstractPage';
 import { GlobalData } from '../../../utils/GlobalData';
-import { Api } from '../../../utils/api/Api';
-import { ExpressionClass, ExpressionValueType, GetDashboardPanelInput, GetDashboardPanelOutput, SavePanelInput, SavePanelOutput, SimpleGaugeWithValueAndLabelElement, SimpleGaugeWithValueAndLabelPanel } from '../../../auto/pieroxy-conkw';
+import { ExpressionClass, ExpressionValueType, SimpleGaugeWithValueAndLabelElement, SimpleGaugeWithValueAndLabelPanel } from '../../../auto/pieroxy-conkw';
 import { TextFieldInput } from '../../forms/TextFieldInput';
 import { SaveIcon } from '../../icons/SaveIcon';
 import { RoundedPlusIcon } from '../../icons/RoundedPlusIcon';
@@ -15,6 +14,7 @@ import { EditSimpleLabelPanel } from '../../panels/dashboardEdition/EditSimpleLa
 import { EditSimpleSiLabelPanel } from '../../panels/dashboardEdition/EditSimpleSiLabelPanel';
 import { EditSimpleGaugePanel } from '../../panels/dashboardEdition/EditSimpleGaugePanel';
 import { MetricsReader } from '../../../utils/api/MetricsReader';
+import { ApiEndpoints } from '../../../auto/ApiEndpoints';
 
 export class EditSimpleGaugeWithValueAndLabelPage extends AbstractPage<EditPanelAttrs> {
   private panel:SimpleGaugeWithValueAndLabelPanel;
@@ -26,14 +26,11 @@ export class EditSimpleGaugeWithValueAndLabelPage extends AbstractPage<EditPanel
   }
 
   oninit({attrs}:m.Vnode<EditPanelAttrs>) {
-    Api.call<GetDashboardPanelInput, GetDashboardPanelOutput>({
-      method:"GET",
-      endpoint:"GetDashboardPanel",
-      body:{
+    ApiEndpoints.GetDashboardPanel.call({
         dashboardId:attrs.dashboardId,
         panelId:attrs.panelId
       }
-    }).then((output) => {
+    ).then((output) => {
       this.panel = <SimpleGaugeWithValueAndLabelPanel>output.panel;
       //this.dashboardId = output.dashboardId;
     })
@@ -45,14 +42,11 @@ export class EditSimpleGaugeWithValueAndLabelPage extends AbstractPage<EditPanel
     return m(".page", [
       m(".title", [
         m("a.floatright", {title:"Save panel", onclick:()=>{
-          Api.call<SavePanelInput, SavePanelOutput>({
-            method:"POST",
-            endpoint:"SavePanel",
-            body:{
+          ApiEndpoints.SavePanel.call({
               dashboardId:id,
               panel:this.panel
             }
-          })
+          )
         }}, m(SaveIcon)),
         m("a.floatright.rm10", {title:"New gauge", onclick:()=>{
           if (!this.panel.content) this.panel.content = [];

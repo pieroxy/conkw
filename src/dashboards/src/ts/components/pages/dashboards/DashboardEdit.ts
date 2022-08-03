@@ -1,6 +1,5 @@
 import m from 'mithril';
-import { Dashboard, GetDashboardInput, GetDashboardOutput, SimpleGaugeWithValueAndLabelPanel } from '../../../auto/pieroxy-conkw';
-import { Api } from '../../../utils/api/Api';
+import { Dashboard, SimpleGaugeWithValueAndLabelPanel } from '../../../auto/pieroxy-conkw';
 import { IdAttrs } from '../../../utils/attrs/IdAttrs';
 import { HomeIcon } from '../../icons/HomeIcon';
 import { RightChevronIcon } from '../../icons/RightChevronIcon';
@@ -10,18 +9,16 @@ import { AbstractPage } from '../AbstractPage';
 import { NewDocumentIcon } from '../../icons/NewDocumentIcon';
 import { GlobalData } from '../../../utils/GlobalData';
 import { ViewSimpleGaugeWithValueAndLabelPanel } from '../../panels/dashboards/SimpleGaugeWithValueAndLabelPanel';
+import { ApiEndpoints } from '../../../auto/ApiEndpoints';
 
 export class DashboardEditPage extends AbstractPage<IdAttrs> {
   private dashboard : Dashboard;
 
   oninit({attrs}:m.Vnode<IdAttrs>) {
-    Api.call<GetDashboardInput, GetDashboardOutput>({
-      method:"GET",
-      endpoint:"GetDashboard",
-      body:{
+    ApiEndpoints.GetDashboard.call({
         id:attrs.id
       }
-    }).then((response) => {
+    ).then((response) => {
       this.dashboard = response.dashboard;
       GlobalData.setDashboardTitle(this.dashboard.id, this.dashboard.name);
     })

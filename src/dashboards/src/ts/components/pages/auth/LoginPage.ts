@@ -1,6 +1,5 @@
 import m from 'mithril';
-import { DoLoginEndpointInput, DoLoginEndpointOutput } from '../../../auto/pieroxy-conkw';
-import { Api } from '../../../utils/api/Api';
+import { ApiEndpoints } from '../../../auto/ApiEndpoints';
 import { Auth } from '../../../utils/Auth';
 import { Endpoints } from '../../../utils/navigation/Endpoints';
 import { Routing } from '../../../utils/navigation/Routing';
@@ -72,14 +71,11 @@ export class LoginPage extends AbstractPage<any> {
   }
 
   private doLogin() {
-    Api.call<DoLoginEndpointInput, DoLoginEndpointOutput>({
-      method:"POST",
-      endpoint:"DoLogin",
-      body:{
+    ApiEndpoints.DoLogin.call({
         login:this.username,
         password:this.password
       }
-    }).then((data:DoLoginEndpointOutput) => {
+    ).then((data) => {
       if (data.passwordMustChangeNow) {
         Notifications.addNotification(new Notification(NotificationsClass.LOGIN, NotificationsType.SUCCESS, "Welcome to the conkw dashboards", 5))
         Routing.goToScreen(Endpoints.PASSWORD_CHANGE, {id:this.username});
