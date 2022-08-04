@@ -10,6 +10,7 @@ import { NewDocumentIcon } from '../../icons/NewDocumentIcon';
 import { GlobalData } from '../../../utils/GlobalData';
 import { ViewSimpleGaugeWithValueAndLabelPanel } from '../../panels/dashboards/SimpleGaugeWithValueAndLabelPanel';
 import { ApiEndpoints } from '../../../auto/ApiEndpoints';
+import { Link } from '../../atoms/Link';
 
 export class DashboardEditPage extends AbstractPage<IdAttrs> {
   private dashboard : Dashboard;
@@ -32,8 +33,8 @@ export class DashboardEditPage extends AbstractPage<IdAttrs> {
     if (!this.dashboard) return m("");
     return m(".page", [
       m(".title", [
-        m("a.floatright", {title:"New panel", onclick:()=>Routing.goToScreen(Endpoints.PANEL_NEW, {dashboardId:this.dashboard.id})}, m(NewDocumentIcon)),
-        m("a", {title:"Go back Home", onclick:()=>Routing.goToScreen(Endpoints.HOME)}, m(HomeIcon)),
+        m(Link, {className:"floatright", tooltip:"New panel", target:Routing.getRoute(Endpoints.PANEL_NEW, {dashboardId:this.dashboard.id})}, m(NewDocumentIcon)),
+        m(Link, {tooltip:"Go back Home", target:Endpoints.HOME}, m(HomeIcon)),
         m(RightChevronIcon),
         this.dashboard.name, 
         m(".id", this.dashboard.id)
@@ -41,7 +42,7 @@ export class DashboardEditPage extends AbstractPage<IdAttrs> {
       m(".content.dashboardContent", this.dashboard.panels?this.dashboard.panels.map((panel) => 
           m(ViewSimpleGaugeWithValueAndLabelPanel, {
             element:<SimpleGaugeWithValueAndLabelPanel>panel,
-            editLink:Routing.getRouteAsHref(Endpoints.GAUGE_SIMPLE_VALUE_LABEL_EDIT, {dashboardId:attrs.id, panelId:panel.id})
+            editLink:Routing.getRoute(Endpoints.GAUGE_SIMPLE_VALUE_LABEL_EDIT, {dashboardId:attrs.id, panelId:panel.id})
           }))
         :null
       )

@@ -15,6 +15,7 @@ import { EditSimpleSiLabelPanel } from '../../panels/dashboardEdition/EditSimple
 import { EditSimpleGaugePanel } from '../../panels/dashboardEdition/EditSimpleGaugePanel';
 import { MetricsReader } from '../../../utils/api/MetricsReader';
 import { ApiEndpoints } from '../../../auto/ApiEndpoints';
+import { Link } from '../../atoms/Link';
 
 export class EditSimpleGaugeWithValueAndLabelPage extends AbstractPage<EditPanelAttrs> {
   private panel:SimpleGaugeWithValueAndLabelPanel;
@@ -93,9 +94,9 @@ export class EditSimpleGaugeWithValueAndLabelPage extends AbstractPage<EditPanel
           })
         }}, m(RoundedPlusIcon)),
 
-        m("a", {title:"Go back Home", onclick:()=>Routing.goToScreen(Endpoints.HOME)}, m(HomeIcon)),
+        m(Link, {tooltip:"Go back Home", target:Endpoints.HOME}, m(HomeIcon)),
         m(RightChevronIcon),
-        m("a", {onclick:()=>Routing.goToScreen(Endpoints.DASHBOARD_EDITION, {id:id})}, GlobalData.getDashboardTitle(id)),
+        m(Link, {target:Routing.getRoute(Endpoints.DASHBOARD_EDITION, {id:id})}, GlobalData.getDashboardTitle(id)),
         m(RightChevronIcon),
         "Edit Panel"
       ]),
