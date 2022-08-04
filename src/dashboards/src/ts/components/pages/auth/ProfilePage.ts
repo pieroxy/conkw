@@ -2,6 +2,8 @@ import m from 'mithril';
 import { AbstractPage } from '../AbstractPage';
 import { Button } from '../../forms/Button';
 import { Auth } from '../../../utils/Auth';
+import { Routing } from '../../../utils/navigation/Routing';
+import { Endpoints } from '../../../utils/navigation/Endpoints';
 
 export class ProfilePage extends AbstractPage<any> {
 
@@ -10,9 +12,26 @@ export class ProfilePage extends AbstractPage<any> {
   }
 
   render():m.Children {
-    return m(".page", m(Button, {
-      action:Auth.clearAuthToken
-    }, "Logout"))
+    return m(".page", [
+      m(".title", "Informations"),
+      m("", "Soon informations about you here"),
+      m("hr"),
+      m(".title", "Password"),
+      m(Button, {
+        action:() => {
+          let id = Auth.getUser()?.id;
+          if (!id) return;
+          Routing.goToScreen(Endpoints.PASSWORD_CHANGE, {id:id});
+        },
+        secondary:true
+      }, "Change password"),
+      m("hr"),
+      m(".title", "Sessions"),
+      m(Button, {
+        action:Auth.clearAuthToken,
+        secondary:true
+      }, "Logout")
+    ])
   }
 }
 

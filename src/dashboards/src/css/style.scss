@@ -161,6 +161,11 @@ a {
   height: 100%;
   flex-direction: column;
 
+  .title {
+    font-size: 50px;
+    font-weight: 200;
+  }
+
   .loginarea2 {
     display:flex;
     align-items:center;
@@ -172,11 +177,6 @@ a {
   
     .inputlabel {
       color:#999;
-    }
-  
-    .title {
-      font-size: 50px;
-      font-weight: 200;
     }
   }
 
@@ -514,6 +514,10 @@ button {
 
 .page {
   margin: 3em 2% 0 2%;
+
+  hr {
+    border: 1px solid rgba(255,255,255,0.2);
+  }
 
   .title {
     font-size: 20px;
