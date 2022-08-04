@@ -10,6 +10,7 @@ import { NewPanelPage } from './components/pages/dashboards/NewPanel';
 import { EditSimpleGaugeWithValueAndLabelPage } from './components/pages/dashboards/EditSimpleGaugeWithValueAndLabelPage';
 import { ProfilePage } from './components/pages/auth/ProfilePage';
 import { AlertsPage } from './components/pages/alerts/AlertsPage';
+import { SettingsPage } from './components/pages/settings/Settings';
 
 (function () {
 
@@ -22,6 +23,7 @@ import { AlertsPage } from './components/pages/alerts/AlertsPage';
   routes[Endpoints.GAUGE_SIMPLE_VALUE_LABEL_EDIT] = new AuthenticatedPageResolver(EditSimpleGaugeWithValueAndLabelPage);
   routes[Endpoints.PROFILE] = new AuthenticatedPageResolver(ProfilePage);
   routes[Endpoints.ALERTS] = new AuthenticatedPageResolver(AlertsPage);
+  routes[Endpoints.SETTINGS] = new AuthenticatedPageResolver(SettingsPage);
 
   m.route(document.body, Endpoints.HOME, routes);
 

@@ -1,14 +1,17 @@
 import m from 'mithril';
 
 import { Children } from "mithril";
+import { UserRole } from '../../auto/pieroxy-conkw';
 import { Api } from '../../utils/api/Api';
 import { Auth, AuthenticationStatus } from '../../utils/Auth';
 import { Endpoints } from '../../utils/navigation/Endpoints';
 import { Routing } from '../../utils/navigation/Routing';
+import { Link } from '../atoms/Link';
 import { AlertsIcon } from '../icons/AlertsIcon';
 import { DashboardIcon } from '../icons/DashboardIcon';
 import { LogoCIcon } from '../icons/LogoC';
 import { ProfileIcon } from '../icons/ProfileIcon';
+import { SettingsIcon } from '../icons/SettingsIcon';
 
 export class MainTopBar implements m.ClassComponent<any> {
   
@@ -32,6 +35,12 @@ export class MainTopBar implements m.ClassComponent<any> {
           icon:ProfileIcon,
           name:"You"
         }),
+        Auth.getUser()?.role !== UserRole.ADMIN ? null :
+        m(TopBarPageIcon, {
+          route:Routing.getRoute(Endpoints.SETTINGS),
+          icon:SettingsIcon,
+          name:"Server settings"
+        }),
       ]),
       Api.isWaiting() ? m(".loader", "Waiting") : null,
     ])
@@ -40,16 +49,17 @@ export class MainTopBar implements m.ClassComponent<any> {
 
 class TopBarPageIcon implements m.ClassComponent<TopBarPageIconAttrs> {
   view({attrs}:m.Vnode<TopBarPageIconAttrs>) {
-    return m("a", {
+    return m(Link, {
       className:m.route.get().startsWith(attrs.route)?"selected":"",
-      onclick:() => { m.route.set(attrs.route); return false; }
+      target:attrs.route,
+      tooltip:attrs.name
     }, m(attrs.icon));
 
   }
 }
 
 interface TopBarPageIconAttrs {
-  name:String;
+  name:string;
   icon:m.ComponentTypes<any,any>;
   route:string;
 }

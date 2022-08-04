@@ -1,8 +1,7 @@
 import m = require('mithril');
-import { Endpoints } from "./Endpoints";
 
 export class Routing {
-  public static getRoute(target:Endpoints, params?:{[id:string]:string|number}):string {
+  public static getRoute(target:string, params?:{[id:string]:string|number}):string {
     let res:string = target + "/";
     if (params) {
       let props = Object.getOwnPropertyNames(params);
@@ -17,11 +16,11 @@ export class Routing {
     return res.substring(0, res.length-1);
   }
 
-  public static getRouteAsHref(target:Endpoints, params?:{[id:string]:string|number}) {
+  public static getRouteAsHref(target:string, params?:{[id:string]:string|number}) {
     return "#" + this.getRoute(target, params);
   }
 
-  public static goToScreen(target:Endpoints, params?:{[id:string]:string|number}, avoidHistory?:boolean) {
+  public static goToScreen(target:string, params?:{[id:string]:string|number}, avoidHistory?:boolean) {
     let route = this.getRoute(target, params);
     m.route.set(route, null, {replace:!!avoidHistory});
   }

@@ -6,5 +6,6 @@ export enum Endpoints {
   PASSWORD_CHANGE="/profile/changepassword/:id",
   GAUGE_SIMPLE_VALUE_LABEL_EDIT="/dashboards/editPanel/simpleGauge/:dashboardId/:panelId",
   PROFILE="/profile/",
+  SETTINGS="/settings/",
   ALERTS="/alerts/"
 }
