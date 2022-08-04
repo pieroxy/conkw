@@ -1,7 +1,7 @@
 import m from "mithril"
-import { Button } from "../components/forms/Button";
-import { Form } from "../components/forms/Form";
-import { TextFieldInput } from "../components/forms/TextFieldInput";
+import { Button } from "../components/atoms/forms/Button";
+import { Form } from "../components/atoms/forms/Form";
+import { TextFieldInput } from "../components/atoms/forms/TextFieldInput";
 
 export class Dialogs {
   private static current:DialogRender[] = [];

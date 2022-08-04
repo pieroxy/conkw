@@ -1,6 +1,6 @@
 import m from 'mithril';
 import { AbstractPage } from '../AbstractPage';
-import { Button } from '../../forms/Button';
+import { Button } from '../../atoms/forms/Button';
 import { Auth } from '../../../utils/Auth';
 import { Routing } from '../../../utils/navigation/Routing';
 import { Endpoints } from '../../../utils/navigation/Endpoints';

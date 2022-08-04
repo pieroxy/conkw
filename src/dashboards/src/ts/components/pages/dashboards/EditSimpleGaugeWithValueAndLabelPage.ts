@@ -6,7 +6,7 @@ import { Routing } from '../../../utils/navigation/Routing';
 import { AbstractPage } from '../AbstractPage';
 import { GlobalData } from '../../../utils/GlobalData';
 import { ExpressionClass, ExpressionValueType, SimpleGaugeWithValueAndLabelElement, SimpleGaugeWithValueAndLabelPanel } from '../../../auto/pieroxy-conkw';
-import { TextFieldInput } from '../../forms/TextFieldInput';
+import { TextFieldInput } from '../../atoms/forms/TextFieldInput';
 import { SaveIcon } from '../../icons/SaveIcon';
 import { RoundedPlusIcon } from '../../icons/RoundedPlusIcon';
 import { SimpleGaugeWithValueAndLabelElementComponent } from '../../organisms/dashboards/SimpleGaugeWithValueAndLabelElementComponent';

@@ -1,7 +1,7 @@
 import m from 'mithril';
 
 import { Children } from "mithril";
-import { TextFilter } from '../../utils/TextFilter';
+import { TextFilter } from '../../../utils/TextFilter';
 import { GenericInput } from './GenericInput';
 import { HtmlInputEvent } from './HtmlInputEvent';
 import { VisibleTextInputAttrs } from './TextFieldInput';

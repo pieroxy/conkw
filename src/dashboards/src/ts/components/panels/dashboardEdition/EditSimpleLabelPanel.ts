@@ -1,10 +1,10 @@
 import m from 'mithril';
 import { DynamicLabel, ExpressionClass, ExpressionValueType } from '../../../auto/pieroxy-conkw';
 import { MetricsReader } from '../../../utils/api/MetricsReader';
-import { CheckboxInput } from '../../forms/CheckboxInput';
-import { SelectInput } from '../../forms/SelectInput';
-import { TextFieldInput } from '../../forms/TextFieldInput';
-import { TextFieldInputWithSearch } from '../../forms/TextFieldInputWithSearch';
+import { CheckboxInput } from '../../atoms/forms/CheckboxInput';
+import { SelectInput } from '../../atoms/forms/SelectInput';
+import { TextFieldInput } from '../../atoms/forms/TextFieldInput';
+import { TextFieldInputWithSearch } from '../../atoms/forms/TextFieldInputWithSearch';
 
 export class EditSimpleLabelPanel implements m.ClassComponent<EditSimpleLabelPanelAttrs> {
   view({attrs}: m.Vnode<EditSimpleLabelPanelAttrs>): void | m.Children {

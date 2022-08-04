@@ -4,9 +4,9 @@ import { IdAttrs } from '../../../utils/attrs/IdAttrs';
 import { Auth, AuthenticationStatus } from '../../../utils/Auth';
 import { Endpoints } from '../../../utils/navigation/Endpoints';
 import { Routing } from '../../../utils/navigation/Routing';
-import { Button } from '../../forms/Button';
-import { Form } from '../../forms/Form';
-import { PasswordFieldInput } from '../../forms/PasswordFieldInput';
+import { Button } from '../../atoms/forms/Button';
+import { Form } from '../../atoms/forms/Form';
+import { PasswordFieldInput } from '../../atoms/forms/PasswordFieldInput';
 import { AbstractPage } from '../AbstractPage';
 import { LoginFooter } from './LoginFooter';
 

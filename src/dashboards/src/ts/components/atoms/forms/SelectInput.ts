@@ -1,7 +1,7 @@
 import m from 'mithril';
 
 import { Children } from "mithril";
-import { IdLabelPair } from '../../auto/pieroxy-conkw';
+import { IdLabelPair } from '../../../auto/pieroxy-conkw';
 import { GenericInput } from './GenericInput';
 import { GenericInputAttrs } from './GenericInputAttrs';
 import { HtmlInputEvent } from './HtmlInputEvent';

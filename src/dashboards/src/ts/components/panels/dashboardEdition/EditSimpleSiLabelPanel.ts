@@ -1,7 +1,7 @@
 import m from 'mithril';
 import { SiPrefixedValue } from '../../../auto/pieroxy-conkw';
-import { SelectInput } from '../../forms/SelectInput';
-import { TextFieldInput } from '../../forms/TextFieldInput';
+import { SelectInput } from '../../atoms/forms/SelectInput';
+import { TextFieldInput } from '../../atoms/forms/TextFieldInput';
 import { EditSimpleNumericValuePanel } from './EditSimpleNumericValuePanel';
 
 export class EditSimpleSiLabelPanel implements m.ClassComponent<EditSimpleSiLabelPanelAttrs> {

@@ -1,6 +1,6 @@
 import m from 'mithril';
 
-import { Notification, Notifications, NotificationsClass, NotificationsType } from "../../utils/Notifications";
+import { Notification, Notifications, NotificationsClass, NotificationsType } from "../../../utils/Notifications";
 import { GenericInput } from "./GenericInput";
 
 export class Form {

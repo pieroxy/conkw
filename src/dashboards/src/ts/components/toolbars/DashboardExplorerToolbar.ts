@@ -3,8 +3,8 @@ import m from 'mithril';
 import { Children } from "mithril";
 import { ApiEndpoints } from '../../auto/ApiEndpoints';
 import { Dialogs } from '../../utils/Dialogs';
-import { Form } from '../forms/Form';
-import { TextFieldInput } from '../forms/TextFieldInput';
+import { Form } from '../atoms/forms/Form';
+import { TextFieldInput } from '../atoms/forms/TextFieldInput';
 import { HomeIcon } from '../icons/HomeIcon';
 import { RoundedPlusIcon } from '../icons/RoundedPlusIcon';
 
