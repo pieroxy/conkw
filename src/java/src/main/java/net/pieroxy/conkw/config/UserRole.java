@@ -5,9 +5,9 @@ import java.util.Set;
 
 public enum UserRole {
   ANONYMOUS,
-  VIEWER,
-  DESIGNER(VIEWER),
-  ADMIN(DESIGNER,VIEWER);
+  VIEWER(ANONYMOUS),
+  DESIGNER(VIEWER, ANONYMOUS),
+  ADMIN(DESIGNER, VIEWER, ANONYMOUS);
 
   private Set<UserRole> contains;
   UserRole(UserRole...roles) {
