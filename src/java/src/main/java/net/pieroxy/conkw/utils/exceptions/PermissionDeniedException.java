@@ -6,6 +6,6 @@ import net.pieroxy.conkw.config.UserRole;
 
 public class PermissionDeniedException extends Exception {
   public PermissionDeniedException(ApiEndpoint endpoint, User user, UserRole roleNeeded) {
-    super("Endpoint " + endpoint.getClass().getSimpleName() + " could not be accessed by " + user.getId() + " because it needs the role " + roleNeeded.name());
+    super("Endpoint " + (endpoint==null ? "null" : endpoint.getClass().getSimpleName()) + " could not be accessed by " + (user == null ? "<anonymous>" : user.getId()) + " because it needs the role " + (roleNeeded == null ? "null":roleNeeded.name()));
   }
 }
