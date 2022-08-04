@@ -5,9 +5,10 @@ export class Notifications {
   private static current?:Notification;
 
   public static addNotification(n:Notification):void {
-    if (this.current) 
+    if (this.current) {
       this.content.push(n);
-    else 
+      this.dismiss();
+    } else 
       this.current = n;
   }
   public static getTopNotification():null|Notification {
