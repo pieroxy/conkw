@@ -30,7 +30,7 @@ public class GetAccessibleClasses {
     for (String clazz : classes) {
       try {
         classList.add(Class.forName(clazz));
-      } catch (ClassNotFoundException  e) {
+      } catch (Throwable  e) {
         // What to do really?
       }
     }

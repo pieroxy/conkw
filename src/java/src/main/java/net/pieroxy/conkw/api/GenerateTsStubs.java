@@ -11,6 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class GenerateTsStubs {
     private static BufferedWriter writer;
@@ -39,12 +40,16 @@ public class GenerateTsStubs {
         List<Class<?>> allclasses = GetAccessibleClasses.getClasses("net.pieroxy.conkw");
         for (Class c : allclasses) {
             if (ApiEndpoint.class.isAssignableFrom(c) && c.isAnnotationPresent(Endpoint.class)) {
+                System.out.println("Processing " + c.getName());
                 Endpoint endpoint = (Endpoint)c.getAnnotation(Endpoint.class);
                 String input = getType(c,0);
                 String output = getType(c, 1);
                 String name = c.getSimpleName().substring(0, c.getSimpleName().length() - "Endpoint".length());
+                List<String> toImport = new ArrayList<>();
+                if (!input.equals("any")) toImport.add(input);
+                if (!output.equals("any")) toImport.add(output);
 
-                write("import { "+input+","+output+" } from \"./pieroxy-conkw\";");
+                write("import { "+toImport.stream().collect(Collectors.joining(","))+" } from \"./pieroxy-conkw\";");
                 writeLater("    public static "+name+" = {");
                 writeLater("        call:(input:"+input+"):Promise<"+output+"> => {");
                 writeLater("            return Api.call<"+input+", "+output+">({");
@@ -63,24 +68,6 @@ public class GenerateTsStubs {
 
         writer.close();
     }
-/*
-
-  public static DoChangePassword = {
-    method:"POST",
-    role:"ANONYMOUS",
-    call:(input:DoChangePasswordInput):Promise<DoChangePasswordOutput> => {
-      return Api.call<DoChangePasswordInput, DoChangePasswordOutput>({
-        method:"POST",
-        body:input,
-        endpoint:"DoChangePassword"
-      });
-    }
-  }
-
- */
-
-
-
 
     private static String getType(Class subClass, int i) {
         while (subClass.getSuperclass() != AbstractApiEndpoint.class) {
@@ -89,6 +76,8 @@ public class GenerateTsStubs {
             if (subClass == null) throw new IllegalArgumentException();
         }
         ParameterizedType parameterizedType = (ParameterizedType) subClass.getGenericSuperclass();
-        return ((Class)parameterizedType.getActualTypeArguments()[i]).getSimpleName();
+        String res = ((Class)parameterizedType.getActualTypeArguments()[i]).getSimpleName();
+        if (res.equals("Object")) res = "any";
+        return res;
     }
 }
