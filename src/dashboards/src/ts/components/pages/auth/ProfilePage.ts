@@ -8,6 +8,7 @@ import { ApiEndpoints } from '../../../auto/ApiEndpoints';
 import { GetAllUserSessionsOutput } from '../../../auto/pieroxy-conkw';
 import { Link } from '../../atoms/Link';
 import { DeleteIcon } from '../../atoms/icons/DeleteIcon';
+import { DateUtils } from '../../../utils/DateUtils';
 
 export class ProfilePage extends AbstractPage<any> {
   private sessions:GetAllUserSessionsOutput;
@@ -44,8 +45,8 @@ export class ProfilePage extends AbstractPage<any> {
       m("table", [
         m("tr", [m("th", "Last seen"), m("th", "Created"), m("th", "From IP"), m("th", "From Browser"), m("th")]),
         this.sessions.sessions.map(s => m("tr", [
-          m("td", s.token === Auth.getAuthToken() ? "This session" : (s.lastUsed+"")),
-          m("td", s.creation),
+          m("td", s.token === Auth.getAuthToken() ? "This session" : DateUtils.formatRoughDate(""+s.lastUsed)),
+          m("td", DateUtils.formatRoughDate(""+s.creation)),
           m("td", s.ip),
           m("td", s.userAgent),
           m("td", m(Link, {target:()=>{ApiEndpoints.RemoveSession.call({token:s.token}).then(()=>{this.load()})}, }, m(DeleteIcon))),
