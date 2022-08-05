@@ -211,10 +211,12 @@
                 <replace dir="../web/doc/" token=".md&quot;" value=".html&quot;">
                   <include name="**/*.html"/>
                 </replace>
-                <java classname="net.pieroxy.conkw.api.GenerateTsStubs">
+                <echo message="Generating Api Stubs." />
+                <java classname="net.pieroxy.conkw.api.GenerateTsStubs" logError="Yes" errorproperty="err">
                   <arg value="../dashboards/src/ts/auto/ApiEndpoints.ts"/>
                   <classpath>
-                    <pathelement location="target/conkw-core-1.0-SNAPSHOT.jar"/>
+                    <pathelement location="target/classes"/>
+                    <pathelement location="${user.home}/.m2/repository/javax/servlet/servlet-api/2.5/servlet-api-2.5.jar"/>
                   </classpath>
                 </java>
 
