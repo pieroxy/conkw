@@ -135,6 +135,18 @@ a {
   }
 }
 
+table.sessions {
+  border-collapse: collapse;
+  td, th {
+    padding: 0 15px;
+    text-align: left;
+  }
+
+  tr:hover {
+    background-color: $bg-color-l3;
+  }
+}
+
 @mixin vScrollableArea($bg) {
   overflow-y: scroll;
   scrollbar-width: thick;
@@ -517,6 +529,12 @@ button {
 
   hr {
     border: 1px solid rgba(255,255,255,0.2);
+  }
+
+  .subtitle {
+    font-weight: 200;
+    font-size: 24px;
+    padding: 10px 0;
   }
 
   .title {

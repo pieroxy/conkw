@@ -28,11 +28,12 @@ export class ProfilePage extends AbstractPage<any> {
 
   render():m.Children {
     return m(".page", [
-      m(".title", "Informations"),
+      m(".title", "All about you"),
       m(".content", [
+        m(".subtitle", "Informations"),
         m("", "Soon informations about you here"),
         m("hr"),
-        m(".title", "Password"),
+        m(".subtitle", "Password"),
         m(Button, {
           action:() => {
             let id = Auth.getUser()?.id;
@@ -42,12 +43,12 @@ export class ProfilePage extends AbstractPage<any> {
           secondary:true
         }, "Change password"),
         m("hr"),
-        m(".title", "Sessions"),
+        m(".subtitle", "Sessions"),
         !this.sessions ? m("", "Loading...") : 
-        m("table", [
+        m("table.sessions", [
           m("tr", [m("th", "Last seen"), m("th", "Created"), m("th", "From IP"), m("th", "From Browser"), m("th")]),
           this.sessions.sessions.map(s => m("tr", [
-            m("td", s.token === Auth.getAuthToken() ? "This session" : DateUtils.formatRoughDate(""+s.lastUsed)),
+            m("td", s.token === Auth.getAuthToken() ? m("i", "This session") : DateUtils.formatRoughDate(""+s.lastUsed)),
             m("td", DateUtils.formatRoughDate(""+s.creation)),
             m("td", s.ip),
             m("td", {title:s.userAgent}, UserAgentUtils.getDescription(s.userAgent)),
