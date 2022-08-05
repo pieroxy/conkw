@@ -6,7 +6,8 @@ export class Link implements m.ClassComponent<LinkAttrs> {
     return m("a", {
       href:"#",
       onclick:() => {
-        Routing.goToScreen(attrs.target)
+        if (typeof attrs.target === "string") Routing.goToScreen(attrs.target);
+        else if (typeof attrs.target === "function") attrs.target();
         return false;
       },
       className:attrs.className ? attrs.className : "",
@@ -16,7 +17,7 @@ export class Link implements m.ClassComponent<LinkAttrs> {
 }
 
 export interface LinkAttrs {
-  target:string, // This is the route to get to
+  target:string|(()=>void), // This is the route to get to
   className?:string,
   tooltip?:string,
 }
