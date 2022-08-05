@@ -41,6 +41,7 @@ public class Runner {
     private final static String GIT_REV;
     private final static String MVN_VER;
     private static boolean tomcatShutdownRequested = false;
+    private static Services services;
 
     static {
         GIT_REV = readResourceFileAsString("GIT_REV");
@@ -208,7 +209,7 @@ public class Runner {
 
         if (config.getHttpPort() <= 0) throw new Exception("httpPort configured to an invalid value of " + config.getHttpPort());
 
-        Services services = new Services(new LocalStorageManager(ConfigReader.getHomeDir()));
+        services = new Services(new LocalStorageManager(ConfigReader.getHomeDir()));
         services.setConfiguration(config);
 
         if (config.disableTomcat()) {
@@ -257,6 +258,7 @@ public class Runner {
         } catch (LifecycleException e) {
             LOGGER.log(Level.SEVERE, "Destroying Tomcat" + e);
         }
+        services.dispose();
     }
 
     private static Tomcat buildTomcat(File webappDir, File uiDir, Services services) {

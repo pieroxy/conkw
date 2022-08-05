@@ -26,6 +26,10 @@ public class Services {
     this.dashboardService = new DashboardService(localStorageManager);
   }
 
+  public void dispose() {
+    userSessionService.dispose();
+  }
+
   public ApiAuthManager getApiAuthManager() {
     return apiAuthManager;
   }

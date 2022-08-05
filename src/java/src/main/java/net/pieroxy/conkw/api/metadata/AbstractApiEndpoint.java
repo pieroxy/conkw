@@ -22,6 +22,8 @@ public abstract class AbstractApiEndpoint<I,O> implements ApiEndpoint {
 
   private final Class<I> inputType;
   private UserRole roleAllowed;
+  private String userAgent;
+  private String ipAdress;
 
   public abstract O process(I input, User user) throws Exception;
 
@@ -47,6 +49,8 @@ public abstract class AbstractApiEndpoint<I,O> implements ApiEndpoint {
 
   public void process(HttpServletRequest req, HttpServletResponse res, User user) {
     try {
+      userAgent = req.getHeader("User-Agent");
+      ipAdress = req.getRemoteAddr();
       UserRole ur = UserRole.ANONYMOUS;
       if (user!=null && user.getRole()!=null) ur = user.getRole();
       if (!ur.doesRoleContains(roleAllowed)) {
@@ -91,5 +95,13 @@ public abstract class AbstractApiEndpoint<I,O> implements ApiEndpoint {
   }
   private String getJsonContentType() {
     return "application/json";
+  }
+
+  public String getUserAgent() {
+    return userAgent;
+  }
+
+  public String getIpAdress() {
+    return ipAdress;
   }
 }
