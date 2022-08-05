@@ -6,6 +6,8 @@ import { Routing } from '../../../utils/navigation/Routing';
 import { Endpoints } from '../../../utils/navigation/Endpoints';
 import { ApiEndpoints } from '../../../auto/ApiEndpoints';
 import { GetAllUserSessionsOutput } from '../../../auto/pieroxy-conkw';
+import { Link } from '../../atoms/Link';
+import { DeleteIcon } from '../../atoms/icons/DeleteIcon';
 
 export class ProfilePage extends AbstractPage<any> {
   private sessions:GetAllUserSessionsOutput;
@@ -46,7 +48,7 @@ export class ProfilePage extends AbstractPage<any> {
           m("td", s.creation),
           m("td", s.ip),
           m("td", s.userAgent),
-          m("td", m(Button, {action:()=>{}, secondary:true}, "Remove")),
+          m("td", m(Link, {target:()=>{ApiEndpoints.RemoveSession.call({token:s.token}).then(()=>{this.load()})}, }, m(DeleteIcon))),
         ]))
       ])
     ])
