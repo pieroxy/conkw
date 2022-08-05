@@ -1,14 +1,14 @@
 import m from 'mithril';
-import { HomeIcon } from '../../icons/HomeIcon';
-import { RightChevronIcon } from '../../icons/RightChevronIcon';
+import { HomeIcon } from '../../atoms/icons/HomeIcon';
+import { RightChevronIcon } from '../../atoms/icons/RightChevronIcon';
 import { Endpoints } from '../../../utils/navigation/Endpoints';
 import { Routing } from '../../../utils/navigation/Routing';
 import { AbstractPage } from '../AbstractPage';
 import { GlobalData } from '../../../utils/GlobalData';
 import { ExpressionClass, ExpressionValueType, SimpleGaugeWithValueAndLabelElement, SimpleGaugeWithValueAndLabelPanel } from '../../../auto/pieroxy-conkw';
 import { TextFieldInput } from '../../atoms/forms/TextFieldInput';
-import { SaveIcon } from '../../icons/SaveIcon';
-import { RoundedPlusIcon } from '../../icons/RoundedPlusIcon';
+import { SaveIcon } from '../../atoms/icons/SaveIcon';
+import { RoundedPlusIcon } from '../../atoms/icons/RoundedPlusIcon';
 import { SimpleGaugeWithValueAndLabelElementComponent } from '../../organisms/dashboards/SimpleGaugeWithValueAndLabelElementComponent';
 import { EditSimpleLabelPanel } from '../../panels/dashboardEdition/EditSimpleLabelPanel';
 import { EditSimpleSiLabelPanel } from '../../panels/dashboardEdition/EditSimpleSiLabelPanel';

@@ -2,7 +2,7 @@ import m from 'mithril';
 import { SimpleGaugeWithValueAndLabelPanel } from '../../../auto/pieroxy-conkw';
 import { MetricsReader } from '../../../utils/api/MetricsReader';
 import { Link } from '../../atoms/Link';
-import { EditDocumentIcon } from '../../icons/EditDocumentIcon';
+import { EditDocumentIcon } from '../../atoms/icons/EditDocumentIcon';
 import { SimpleGaugeWithValueAndLabelElementComponent } from '../../organisms/dashboards/SimpleGaugeWithValueAndLabelElementComponent';
 
 export class ViewSimpleGaugeWithValueAndLabelPanel implements m.ClassComponent<SimpleGaugeWithValueAndLabelPanelAttrs> {

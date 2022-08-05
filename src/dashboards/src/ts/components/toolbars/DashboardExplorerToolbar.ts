@@ -5,8 +5,8 @@ import { ApiEndpoints } from '../../auto/ApiEndpoints';
 import { Dialogs } from '../../utils/Dialogs';
 import { Form } from '../atoms/forms/Form';
 import { TextFieldInput } from '../atoms/forms/TextFieldInput';
-import { HomeIcon } from '../icons/HomeIcon';
-import { RoundedPlusIcon } from '../icons/RoundedPlusIcon';
+import { HomeIcon } from '../atoms/icons/HomeIcon';
+import { RoundedPlusIcon } from '../atoms/icons/RoundedPlusIcon';
 
 export class DashboardExplorerToolbar implements m.ClassComponent<DashboardExplorerToolbarAttrs> {
   private filter:string="";

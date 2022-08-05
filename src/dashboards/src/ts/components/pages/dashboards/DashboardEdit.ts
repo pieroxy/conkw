@@ -1,12 +1,12 @@
 import m from 'mithril';
 import { Dashboard, SimpleGaugeWithValueAndLabelPanel } from '../../../auto/pieroxy-conkw';
 import { IdAttrs } from '../../../utils/attrs/IdAttrs';
-import { HomeIcon } from '../../icons/HomeIcon';
-import { RightChevronIcon } from '../../icons/RightChevronIcon';
+import { HomeIcon } from '../../atoms/icons/HomeIcon';
+import { RightChevronIcon } from '../../atoms/icons/RightChevronIcon';
 import { Endpoints } from '../../../utils/navigation/Endpoints';
 import { Routing } from '../../../utils/navigation/Routing';
 import { AbstractPage } from '../AbstractPage';
-import { NewDocumentIcon } from '../../icons/NewDocumentIcon';
+import { NewDocumentIcon } from '../../atoms/icons/NewDocumentIcon';
 import { GlobalData } from '../../../utils/GlobalData';
 import { ViewSimpleGaugeWithValueAndLabelPanel } from '../../panels/dashboards/SimpleGaugeWithValueAndLabelPanel';
 import { ApiEndpoints } from '../../../auto/ApiEndpoints';

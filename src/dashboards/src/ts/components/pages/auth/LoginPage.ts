@@ -8,7 +8,7 @@ import { Button } from '../../atoms/forms/Button';
 import { Form } from '../../atoms/forms/Form';
 import { PasswordFieldInput } from '../../atoms/forms/PasswordFieldInput';
 import { TextFieldInput } from '../../atoms/forms/TextFieldInput';
-import { LogoFullIcon } from '../../icons/LogoFull';
+import { LogoFullIcon } from '../../atoms/icons/LogoFull';
 import { AbstractPage } from '../AbstractPage';
 import { LoginFooter } from './LoginFooter';
 

@@ -1,6 +1,6 @@
 import m from 'mithril';
 import { AppVersion } from '../../../auto/version';
-import { MithrilIcon } from '../../icons/MithrilIcon';
+import { MithrilIcon } from '../../atoms/icons/MithrilIcon';
 
 export class LoginFooter implements m.ClassComponent {
   view() {
