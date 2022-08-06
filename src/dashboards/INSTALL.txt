@@ -1,17 +1,30 @@
+# Install this project for DEV 
+
+## Download npm dependencies:
+
+$ npm ci
+
+## Use webpack watch mode
+
+echo "DIST_WATCH_MODE=/the/dir/where/watch/should/output" > .env
+
+# Reference
+
 Here are the packages installed:
 
-npm init --yes
-npm install typescript --save-dev
-npm install mithril --save
-npm install @types/mithril --save-dev
-npm install @types/mithril-global --save-dev
+* npm init --yes
+* npm install typescript --save-dev
+* npm install mithril --save
+* npm install @types/mithril --save-dev
 
-# webpack
-npm install webpack webpack-cli --save-dev
-npm install ts-loader --save-dev
-npm install html-webpack-plugin --save-dev
-npm install style-loader css-loader --save-dev
-npm install sass-loader sass --save-dev
+## webpack
+
+* npm install webpack webpack-cli --save-dev
+* npm install ts-loader --save-dev
+* npm install html-webpack-plugin --save-dev
+* npm install style-loader css-loader --save-dev
+* npm install sass-loader sass --save-dev
 
 
-In order to make the project bootable, one should run npm ci
+
+

@@ -6,7 +6,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack --mode development",
     "build": "webpack --mode production",
-    "watch": "webpack --watch --mode development"
+    "watch": "webpack --watch --mode development -o $(cat .env | grep DIST_WATCH_MODE | cut -d = -f 2)"
   },
   "keywords": [],
   "author": "Pierre Grimaud",
