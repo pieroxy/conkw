@@ -198,11 +198,20 @@ table.sessions {
     color: #836c7c;
     text-align: center;
     display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
 
     > span {
       padding:0 20px;
       border-left:1px solid #836c7c;
       display: inline-block;
+
+      @include media-max(768px) {
+        border-left-width: 0;
+        font-size: 12px;
+      }
+    
 
       a, a:visited, a:active {
         color:#836c7c;
@@ -459,6 +468,11 @@ button {
   vertical-align: middle;
   padding:0 2em;
   overflow: hidden;
+
+  @include media-max(768px) {
+    padding:0 5px;
+  }
+
 
   .logo {
     opacity: 50%;
