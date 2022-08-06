@@ -7,11 +7,13 @@ module.exports = {
     rules: [
       {
         test: /\.ts$/,
+        include: path.resolve(__dirname, 'src/ts'),
         use: 'ts-loader',
         exclude: /node_modules/,
       },
       {
         test: /\.s[ac]ss$/i,
+        include: path.resolve(__dirname, 'src/css'),
         use: [
           // Creates `style` nodes from JS strings
           "style-loader",
