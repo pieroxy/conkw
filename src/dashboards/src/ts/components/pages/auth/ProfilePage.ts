@@ -10,6 +10,7 @@ import { Link } from '../../atoms/Link';
 import { DeleteIcon } from '../../atoms/icons/DeleteIcon';
 import { DateUtils } from '../../../utils/DateUtils';
 import { UserAgentUtils } from '../../../utils/UserAgentUtils';
+import { LogoutIcon } from '../../atoms/icons/LogoutIcon';
 
 export class ProfilePage extends AbstractPage<any> {
   private sessions:GetAllUserSessionsOutput;
@@ -32,6 +33,16 @@ export class ProfilePage extends AbstractPage<any> {
       m(".content", [
         m(".subtitle", "Informations"),
         m("", "Soon informations about you here"),
+        m(Button, {
+          action:() => {
+            ApiEndpoints.RemoveSession.call({token:Auth.getAuthToken()||""}).then(()=>{this.load()})
+          },
+          secondary:true
+        }, m("", [
+          m(LogoutIcon),
+          "Sign out"
+        ])),
+
         m("hr"),
         m(".subtitle", "Password"),
         m(Button, {

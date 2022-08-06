@@ -85,7 +85,7 @@ svg.icon {
     margin: 0 10px 10px 10px;
 
     path.primary {
-      stroke-width:1.5;
+      stroke-width:2;
     }
   }
 
@@ -371,6 +371,18 @@ button {
 
     &:hover {
       background-color: $secondary-color-hover;
+    }
+  }
+
+  svg.icon {
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
+    margin:0 10px 0 0;
+
+    *.primary {
+      stroke-width:2;
+      stroke:black;
     }
   }
 }
