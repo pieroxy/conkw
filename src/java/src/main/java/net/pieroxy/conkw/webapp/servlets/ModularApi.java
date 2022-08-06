@@ -4,8 +4,12 @@ import net.pieroxy.conkw.api.metadata.AbstractApiEndpoint;
 import net.pieroxy.conkw.api.metadata.ApiEndpoint;
 import net.pieroxy.conkw.api.metadata.ApiMethod;
 import net.pieroxy.conkw.api.metadata.Endpoint;
+import net.pieroxy.conkw.api.model.ApiResponse;
+import net.pieroxy.conkw.api.model.ApiResultCodes;
 import net.pieroxy.conkw.api.model.User;
+import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.utils.Services;
+import net.pieroxy.conkw.utils.exceptions.SwallowIOException;
 import net.pieroxy.conkw.utils.reflection.GetAccessibleClasses;
 
 import javax.servlet.http.HttpServlet;
@@ -21,6 +25,7 @@ import java.util.stream.Collectors;
 
 public class ModularApi extends HttpServlet {
   private final static Logger LOGGER = Logger.getLogger(ModularApi.class.getName());
+  private final static String AUTH_TOKEN_NAME = "authToken";
 
   Map<String, ApiEndpoint> endpoints;
 
@@ -58,7 +63,13 @@ public class ModularApi extends HttpServlet {
     }
     try {
       if (LOGGER.isLoggable(Level.FINE)) LOGGER.fine(methodExpected.name() + " API called - " + endpoint + " " + ep);
-      ep.process(req, resp, getUser(req));
+      User user = getUser(req);
+      if (user == null && req.getHeader(AUTH_TOKEN_NAME)!=null) {
+        // Session token needs to be invalidated on the client side
+        SwallowIOException.run(() -> JsonHelper.writeToOutputStream(ApiResponse.buildErrResult(ApiResultCodes.GO_TO_LOGIN, "Please sign in again."), resp.getOutputStream()));
+      } else {
+        ep.process(req, resp, getUser(req));
+      }
     } catch (Exception e) {
       LOGGER.log(Level.SEVERE, "Endpoint " + endpoint + " threw an exception", e);
       resp.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -67,7 +78,7 @@ public class ModularApi extends HttpServlet {
   }
 
   private User getUser(HttpServletRequest req) {
-    String id = req.getHeader("authToken");
+    String id = req.getHeader(AUTH_TOKEN_NAME);
     return services.getUserService().getUserBySessionId(id);
   }
 

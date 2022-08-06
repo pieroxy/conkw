@@ -2,6 +2,7 @@ import m from 'mithril';
 import { ApiResultCodes, ClientInfo } from '../../auto/pieroxy-conkw';
 import { AppVersion } from '../../auto/version';
 import { Auth } from '../Auth';
+import { Endpoints } from '../navigation/Endpoints';
 import { Notification, Notifications, NotificationsClass, NotificationsType } from '../Notifications';
 import { ApiResponse } from '../types';
 import { ApiOptions } from './ApiOptions';
@@ -34,6 +35,10 @@ export class Api {
     }).then((r:ApiResponse<O>):O => {
       switch (r.code) {
         case ApiResultCodes.OK:
+          return r.content;
+        case ApiResultCodes.GO_TO_LOGIN:
+          Auth.clearAuthToken(); // The token might be invalid
+          m.route.set(Endpoints.LOGIN);
           return r.content;
         case ApiResultCodes.DISPLAY_ERROR:
           Notifications.addNotification(new Notification(NotificationsClass.LOGIN, NotificationsType.WARNING, r.message, 10));
