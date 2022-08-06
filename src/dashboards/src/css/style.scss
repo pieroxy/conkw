@@ -137,6 +137,8 @@ a {
 
 table.sessions {
   border-collapse: collapse;
+
+
   td, th {
     padding: 0 15px;
     text-align: left;
@@ -145,6 +147,15 @@ table.sessions {
   tr:hover {
     background-color: $bg-color-l3;
   }
+
+  @include media-max(768px) {
+    font-size: 13px;
+
+    td, th {
+      padding: 0 5px;
+    }
+  }
+
 }
 
 @mixin vScrollableArea($bg) {
