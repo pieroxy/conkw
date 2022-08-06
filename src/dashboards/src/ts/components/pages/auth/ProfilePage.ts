@@ -25,6 +25,7 @@ export class ProfilePage extends AbstractPage<any> {
 
   oninit() {
     this.load();
+    this.refreshData = this.load;
   }
 
   render():m.Children {

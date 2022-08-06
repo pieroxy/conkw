@@ -14,7 +14,7 @@ export abstract class AbstractPage<A> implements m.ClassComponent<A> {
     return [
       this.renderNotification(),
       this.renderDialog(),
-      m(MainTopBar),
+      m(MainTopBar, {refreshData:this.refreshData}),
       this.render(vnode),
     ];
   }
@@ -47,6 +47,7 @@ export abstract class AbstractPage<A> implements m.ClassComponent<A> {
 
   abstract getPageTitle():string;
   abstract render(vnode:m.Vnode<A>):m.Children;
+  refreshData?:()=>void = undefined;
 
   private renderNotification(): m.Children {
     let n = Notifications.getTopNotification();

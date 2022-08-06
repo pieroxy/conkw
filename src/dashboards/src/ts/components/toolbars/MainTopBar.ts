@@ -12,10 +12,11 @@ import { DashboardIcon } from '../atoms/icons/DashboardIcon';
 import { LogoCIcon } from '../atoms/icons/LogoC';
 import { ProfileIcon } from '../atoms/icons/ProfileIcon';
 import { SettingsIcon } from '../atoms/icons/SettingsIcon';
+import { RefreshIcon } from '../atoms/icons/RefreshIcon';
 
-export class MainTopBar implements m.ClassComponent<any> {
+export class MainTopBar implements m.ClassComponent<MainTopBarAttrs> {
   
-  view(): void | Children {
+  view({attrs}:m.Vnode<MainTopBarAttrs>): void | Children {
     return m(".topbar", [
       m("span.logo", m(LogoCIcon)),
       Auth.getAuthenticationStatus() != AuthenticationStatus.LOGGED_IN ? null :
@@ -42,7 +43,8 @@ export class MainTopBar implements m.ClassComponent<any> {
           name:"Server settings"
         }),
       ]),
-      Api.isWaiting() ? m(".loader", "Waiting") : null,
+      Api.isWaiting() ? m(".loader", "Waiting") : 
+      (attrs.refreshData ? m(Link, {target:attrs.refreshData}, m(RefreshIcon)) : null),
     ])
   }
 }
@@ -62,4 +64,8 @@ interface TopBarPageIconAttrs {
   name:string;
   icon:m.ComponentTypes<any,any>;
   route:string;
+}
+
+interface MainTopBarAttrs {
+  refreshData?:() => void;
 }
