@@ -16,14 +16,14 @@ export class NotificationComponent implements m.ClassComponent<NotificationCompo
     }
   }
 
-  onbeforeremove(vnode:m.VnodeDOM<NotificationComponentAttrs>) {
+  onbeforeremove({dom}:m.VnodeDOM<NotificationComponentAttrs>) {
     if (this.timeout !== undefined) {
       window.clearTimeout(this.timeout);
       this.timeout = undefined;
     }
-    vnode.dom.classList.add("closed")
+    dom.classList.add("closed")
     return new Promise(function(resolve) {
-        vnode.dom.addEventListener("animationend", resolve)
+        dom.addEventListener("animationend", resolve)
     })
   }
   
@@ -44,8 +44,10 @@ export class NotificationComponent implements m.ClassComponent<NotificationCompo
         icon = "⛔";
         break;
     }
+    let ad = n.alreadyDisplayed;
+    n.alreadyDisplayed = true; 
 
-    return m(".notificationO", m(".notification." + n.type, [
+    return m(".notificationO" + (ad?"":".appear"), m(".notification." + n.type, [
       m(".typeicon", icon),
       m(".closebtn", {
         onclick: () => Notifications.dismiss()

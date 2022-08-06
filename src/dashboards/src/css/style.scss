@@ -389,7 +389,6 @@ button {
 
 
 .notificationO {
-  animation: notification-appearance 0.3s linear;
   animation-iteration-count: 1;
   text-align: center;
   position:absolute;
@@ -398,6 +397,10 @@ button {
   box-sizing: border-box;
   z-index: 1000;
   height:0px;
+
+  &.appear {
+    animation: notification-appearance 0.3s linear;
+  }
 
   &.closed {
     animation: notification-removal 0.3s linear;

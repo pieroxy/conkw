@@ -28,6 +28,7 @@ export class Notifications {
 }
 
 export class Notification {
+  public alreadyDisplayed = false;
   private _content: m.Children;
   public get content(): m.Children {
     return this._content;
