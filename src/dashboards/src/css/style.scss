@@ -397,6 +397,7 @@ button {
   width: 100%;
   box-sizing: border-box;
   z-index: 1000;
+  height:0px;
 
   &.closed {
     animation: notification-removal 0.3s linear;
