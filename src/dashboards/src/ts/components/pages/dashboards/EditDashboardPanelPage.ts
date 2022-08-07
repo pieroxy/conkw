@@ -108,20 +108,23 @@ export interface EditPanelAttrs {
 export class EditSimpleGaugeWithValueAndLabelElementPanel implements m.ClassComponent<EditSimpleGaugeWithValueAndLabelElementPanelAttrs> {
   view({attrs}: m.Vnode<EditSimpleGaugeWithValueAndLabelElementPanelAttrs, this>): void | m.Children {
     if (attrs.element) {
-      return m(".editionPanel", [
-        m(".group", [
-          m(".groupTitle", "The label"),
-          m(EditSimpleLabelPanel, {element:attrs.element.label}),
-        ]),
-        m(".group", [
-          m(".groupTitle", "The value"),
-          m(EditSimpleSiLabelPanel, {element:attrs.element.value}),
-        ]),
-        m(".group", [
-          m(".groupTitle", "The gauge"),
-          m(EditSimpleGaugePanel, {element:attrs.element.gauge}),
+      return [
+        m(".title", ["Edit ", m("i", attrs.element.label.value.value)]),
+        m(".editionPanel", [
+          m(".group", [
+            m(".groupTitle", "The label"),
+            m(EditSimpleLabelPanel, {element:attrs.element.label}),
+          ]),
+          m(".group", [
+            m(".groupTitle", "The value"),
+            m(EditSimpleSiLabelPanel, {element:attrs.element.value}),
+          ]),
+          m(".group", [
+            m(".groupTitle", "The gauge"),
+            m(EditSimpleGaugePanel, {element:attrs.element.gauge}),
+          ])
         ])
-      ]);
+      ];
     }
     return m("");
   }
