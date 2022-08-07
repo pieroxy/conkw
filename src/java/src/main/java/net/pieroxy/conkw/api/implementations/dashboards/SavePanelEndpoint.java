@@ -25,7 +25,11 @@ public class SavePanelEndpoint extends AbstractApiEndpoint<SavePanelInput, SaveP
   @Override
   public SavePanelOutput process(SavePanelInput input, User user) throws Exception {
     Dashboard dashboard = services.getDashboardService().getDashboardById(input.getDashboardId());
-    dashboard.replacePanel(input.getPanel());
+    DashboardPanel panel = dashboard.getPanel(input.getPanel().getId());
+    if (panel == null)
+      dashboard.addPanel(input.getPanel());
+    else
+      dashboard.replacePanel(input.getPanel());
     services.getDashboardService().saveDashboard(dashboard);
     return new SavePanelOutput();
   }

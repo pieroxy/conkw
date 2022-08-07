@@ -3,6 +3,7 @@ package net.pieroxy.conkw.api;
 import net.pieroxy.conkw.api.metadata.AbstractApiEndpoint;
 import net.pieroxy.conkw.api.metadata.ApiEndpoint;
 import net.pieroxy.conkw.api.metadata.Endpoint;
+import net.pieroxy.conkw.api.metadata.TypeScriptType;
 import net.pieroxy.conkw.utils.reflection.GetAccessibleClasses;
 
 import java.io.BufferedWriter;
@@ -76,8 +77,15 @@ public class GenerateTsStubs {
             if (subClass == null) throw new IllegalArgumentException();
         }
         ParameterizedType parameterizedType = (ParameterizedType) subClass.getGenericSuperclass();
-        String res = ((Class)parameterizedType.getActualTypeArguments()[i]).getSimpleName();
-        if (res.equals("Object")) res = "any";
+        Class clazz = ((Class)parameterizedType.getActualTypeArguments()[i]);
+        String res;
+        if (clazz == Object.class) {
+            res = "any";
+        } else {
+            res = clazz.getSimpleName();
+            if (clazz.getAnnotation(TypeScriptType.class) == null)
+                throw new RuntimeException(subClass.getName() + " uses parameter that is not a TypeScriptType");
+        }
         return res;
     }
 }

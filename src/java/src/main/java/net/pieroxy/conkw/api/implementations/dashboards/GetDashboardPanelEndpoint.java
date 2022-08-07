@@ -11,6 +11,8 @@ import net.pieroxy.conkw.api.model.panels.DashboardPanel;
 import net.pieroxy.conkw.config.UserRole;
 import net.pieroxy.conkw.utils.Services;
 
+import java.util.ArrayList;
+
 @Endpoint(
     method = ApiMethod.GET,
     role = UserRole.DESIGNER)
@@ -24,7 +26,13 @@ public class GetDashboardPanelEndpoint extends AbstractApiEndpoint<GetDashboardP
   @Override
   public GetDashboardPanelOutput process(GetDashboardPanelInput input, User user) throws Exception {
     Dashboard dashboard = services.getDashboardService().getDashboardById(input.getDashboardId());
-    DashboardPanel panel = dashboard.getPanel(input.getPanelId());
+    DashboardPanel panel;
+    if (input.getPanelId().equals("0")) {
+      panel = new DashboardPanel();
+      panel.setContent(new ArrayList<>());
+    } else {
+      panel = dashboard.getPanel(input.getPanelId());
+    }
     return new GetDashboardPanelOutput(dashboard.getId(), panel);
   }
 }

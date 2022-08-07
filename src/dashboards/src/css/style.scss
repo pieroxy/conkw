@@ -138,7 +138,6 @@ a {
 table.sessions {
   border-collapse: collapse;
 
-
   td, th {
     padding: 0 15px;
     text-align: left;
@@ -681,42 +680,6 @@ button {
       &.editing {
         background-color: rgb(255 255 0  / 60%);
       }
-    }
-  }
-
-  .line {
-    clear:both;
-
-    .placeholderText {
-      color:rgba(255,255,255,0.1);
-      display: inline-block;
-      width:110px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-  
-    .placeholderValue {
-      float: right;
-      color:rgba(255,255,255,0.1);
-      display: block;
-      font-family: $monospace;
-      width:50px;
-      overflow: hidden;
-    }
-  
-    .placeholderGauge {
-      width: 150px;
-      background-color: $bg-color-l2;
-      height: 0.9em;
-      display: block;
-      margin-left: 5px;
-      margin-bottom: 2px;
-      position: relative;
-      overflow: hidden;
-      float: right;
-      border-left:60px solid rgba(255,255,255,0.05);
-      box-sizing: border-box;
     }
   }
 

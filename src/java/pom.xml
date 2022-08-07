@@ -212,7 +212,7 @@
                   <include name="**/*.html"/>
                 </replace>
                 <echo message="Generating Api Stubs." />
-                <java classname="net.pieroxy.conkw.api.GenerateTsStubs" logError="Yes" errorproperty="err">
+                <java failonerror="Yes" classname="net.pieroxy.conkw.api.GenerateTsStubs" logError="Yes" errorproperty="err">
                   <arg value="../dashboards/src/ts/auto/ApiEndpoints.ts"/>
                   <classpath>
                     <pathelement location="target/classes"/>

@@ -39,6 +39,5 @@ export abstract class DashboardElement<T extends DashboardElementAttrs> implemen
 
 export interface DashboardElementAttrs {
   currentData:MetricsApiResponse;
-  parent:DashboardElement<any>|null;
   model:DashboardDynamicElement;
 }

@@ -13,12 +13,10 @@ extends DashboardElement<SimpleGaugeWithValueAndLabelElementAttrs> {
       m(".sgvl-gauge", m(SimpleGaugeComponent, {
         currentData:attrs.currentData,
         model:attrs.model.gauge,
-        parent:this,
       })),
       m(".sgvl-value", m(ValueWithUnitComponent, {
         currentData:attrs.currentData,
         model:attrs.model.value,
-        parent:this,
       })),
       m(".sgvl-label", {
         style: {
@@ -27,7 +25,6 @@ extends DashboardElement<SimpleGaugeWithValueAndLabelElementAttrs> {
       }, m(TextLabelComponent, {
         currentData:attrs.currentData,
         model:attrs.model.label,
-        parent:this,
       })),
       m(".sgvl-bottom")
     ])

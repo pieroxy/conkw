@@ -6,11 +6,11 @@ import { AuthenticatedPageResolver } from './utils/AuthenticatedPageResolver';
 import { ChangePassword } from './components/pages/auth/ChangePassword';
 import { DashboardEditPage } from './components/pages/dashboards/DashboardEdit';
 import { Endpoints } from './utils/navigation/Endpoints';
-import { NewPanelPage } from './components/pages/dashboards/NewPanel';
-import { EditSimpleGaugeWithValueAndLabelPage } from './components/pages/dashboards/EditSimpleGaugeWithValueAndLabelPage';
+import { NewPanelItemPage } from './components/pages/dashboards/NewPanelItemPage';
 import { ProfilePage } from './components/pages/auth/ProfilePage';
 import { AlertsPage } from './components/pages/alerts/AlertsPage';
 import { SettingsPage } from './components/pages/settings/Settings';
+import { EditDashboardPanelPage } from './components/pages/dashboards/EditDashboardPanelPage';
 
 (function () {
 
@@ -19,8 +19,8 @@ import { SettingsPage } from './components/pages/settings/Settings';
   routes[Endpoints.LOGIN] = LoginPage;
   routes[Endpoints.DASHBOARD_EDITION] = new AuthenticatedPageResolver(DashboardEditPage);
   routes[Endpoints.PASSWORD_CHANGE] = ChangePassword;
-  routes[Endpoints.PANEL_NEW] = new AuthenticatedPageResolver(NewPanelPage);
-  routes[Endpoints.GAUGE_SIMPLE_VALUE_LABEL_EDIT] = new AuthenticatedPageResolver(EditSimpleGaugeWithValueAndLabelPage);
+  routes[Endpoints.ITEM_NEW] = new AuthenticatedPageResolver(NewPanelItemPage);
+  routes[Endpoints.DASHBOARD_PANEL_EDIT] = new AuthenticatedPageResolver(EditDashboardPanelPage);
   routes[Endpoints.PROFILE] = new AuthenticatedPageResolver(ProfilePage);
   routes[Endpoints.ALERTS] = new AuthenticatedPageResolver(AlertsPage);
   routes[Endpoints.SETTINGS] = new AuthenticatedPageResolver(SettingsPage);

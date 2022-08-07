@@ -2,9 +2,9 @@ export enum Endpoints {
   HOME="/dashboards",
   LOGIN="/login",
   DASHBOARD_EDITION="/dashboards/edit/:id",
-  PANEL_NEW="/dashboards/newPanel/:dashboardId",
+  ITEM_NEW="/dashboards/newItem/:dashboardId/:panelId",
   PASSWORD_CHANGE="/profile/changepassword/:id",
-  GAUGE_SIMPLE_VALUE_LABEL_EDIT="/dashboards/editPanel/simpleGauge/:dashboardId/:panelId",
+  DASHBOARD_PANEL_EDIT="/dashboards/editPanel/:dashboardId/:panelId",
   PROFILE="/profile/",
   SETTINGS="/settings/",
   ALERTS="/alerts/"

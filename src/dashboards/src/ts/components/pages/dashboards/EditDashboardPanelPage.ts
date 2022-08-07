@@ -5,22 +5,20 @@ import { Endpoints } from '../../../utils/navigation/Endpoints';
 import { Routing } from '../../../utils/navigation/Routing';
 import { AbstractPage } from '../AbstractPage';
 import { GlobalData } from '../../../utils/GlobalData';
-import { ExpressionClass, ExpressionValueType, SimpleGaugeWithValueAndLabelElement, SimpleGaugeWithValueAndLabelPanel } from '../../../auto/pieroxy-conkw';
+import { DashboardPanel, SimpleGaugeWithValueAndLabelElement, TopLevelPanelElement, TopLevelPanelElementEnum } from '../../../auto/pieroxy-conkw';
 import { TextFieldInput } from '../../atoms/forms/TextFieldInput';
 import { SaveIcon } from '../../atoms/icons/SaveIcon';
 import { RoundedPlusIcon } from '../../atoms/icons/RoundedPlusIcon';
-import { SimpleGaugeWithValueAndLabelElementComponent } from '../../organisms/dashboards/SimpleGaugeWithValueAndLabelElementComponent';
 import { EditSimpleLabelPanel } from '../../panels/dashboardEdition/EditSimpleLabelPanel';
 import { EditSimpleSiLabelPanel } from '../../panels/dashboardEdition/EditSimpleSiLabelPanel';
 import { EditSimpleGaugePanel } from '../../panels/dashboardEdition/EditSimpleGaugePanel';
-import { MetricsReader } from '../../../utils/api/MetricsReader';
 import { ApiEndpoints } from '../../../auto/ApiEndpoints';
 import { Link } from '../../atoms/Link';
+import { ViewDashboardPanel } from '../../panels/dashboards/ViewDashboardPanel';
 
-export class EditSimpleGaugeWithValueAndLabelPage extends AbstractPage<EditPanelAttrs> {
-  private panel:SimpleGaugeWithValueAndLabelPanel;
-  selected?: SimpleGaugeWithValueAndLabelElement;
-  //private dashboardId:string;
+export class EditDashboardPanelPage extends AbstractPage<EditPanelAttrs> {
+  private panel:DashboardPanel;
+  selected?: TopLevelPanelElement;
 
   getPageTitle(): string {
     return "New panel";
@@ -32,8 +30,7 @@ export class EditSimpleGaugeWithValueAndLabelPage extends AbstractPage<EditPanel
         panelId:attrs.panelId
       }
     ).then((output) => {
-      this.panel = <SimpleGaugeWithValueAndLabelPanel>output.panel;
-      //this.dashboardId = output.dashboardId;
+      this.panel = output.panel;
     })
   }
   
@@ -49,51 +46,11 @@ export class EditSimpleGaugeWithValueAndLabelPage extends AbstractPage<EditPanel
             }
           )
         }}, m(SaveIcon)),
-        m("a.floatright.rm10", {title:"New gauge", onclick:()=>{
-          if (!this.panel.content) this.panel.content = [];
-          this.panel.content.push({
-            gauge: {
-              min: {
-                namespace:"",
-                clazz: ExpressionClass.LITERAL,
-                type:ExpressionValueType.NUMERIC,
-                value:"0"
-              },
-              max: {
-                namespace:"",
-                clazz: ExpressionClass.LITERAL,
-                type:ExpressionValueType.NUMERIC,
-                value:"100"
-              },
-              value: {
-                namespace:"",
-                clazz: ExpressionClass.LITERAL,
-                type:ExpressionValueType.NUMERIC,
-                directive:"",
-                value:"75"
-              }
-            },
-            label: {
-              value: {
-                namespace:"",
-                clazz: ExpressionClass.LITERAL,
-                type:ExpressionValueType.STRING,
-                value:"The string"
-              }
-            },
-            value: {
-              value: {
-                namespace:"",
-                clazz: ExpressionClass.LITERAL,
-                type:ExpressionValueType.NUMERIC,
-                value:"10000000000"
-              },
-              unit:"S",
-              thousand:1000
-            }
-          })
-        }}, m(RoundedPlusIcon)),
-
+        m(Link, {
+          className:"floatright rm10", 
+          tooltip:"New gauge", 
+          target:Routing.getRoute(Endpoints.ITEM_NEW, {dashboardId:attrs.dashboardId, panelId:attrs.panelId})
+        }, m(RoundedPlusIcon)),
         m(Link, {tooltip:"Go back Home", target:Endpoints.HOME}, m(HomeIcon)),
         m(RightChevronIcon),
         m(Link, {target:Routing.getRoute(Endpoints.DASHBOARD_EDITION, {id:id})}, GlobalData.getDashboardTitle(id)),
@@ -117,17 +74,24 @@ export class EditSimpleGaugeWithValueAndLabelPage extends AbstractPage<EditPanel
                 this.selected = pi;
               }
             }),
-            m(SimpleGaugeWithValueAndLabelElementComponent, {
-              currentData:MetricsReader.getLastResponse(),
-              parent:null,
-              model:pi
-            }),
+            ViewDashboardPanel.getDashboardPanel(pi)
           ]))
         ]),
-        m(".nextToPanel", m(EditSimpleGaugeWithValueAndLabelElementPanel, {element:this.selected}))
+        m(".nextToPanel", EditDashboardPanelPage.getDashboardPanelEditableView(this.selected))
       ])
     ]);
   }
+
+  public static getDashboardPanelEditableView(element?:TopLevelPanelElement):m.Children {
+    if (!element) return null;
+    switch (element.type) {
+      case TopLevelPanelElementEnum.SIMPLE_GAUGE:
+        return m(EditSimpleGaugeWithValueAndLabelElementPanel, {element:<SimpleGaugeWithValueAndLabelElement>element})
+      default:
+        return m("", "Unknown element type " + element.type);
+    }
+  }
+
 }
 
 export interface EditPanelAttrs {
