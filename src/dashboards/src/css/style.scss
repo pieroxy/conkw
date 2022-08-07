@@ -308,37 +308,39 @@ input, select {
   &:disabled {
     opacity: 0.4;
   }
-}
 
-input.checkbox {
-  width:1em;
-  height:1em;
-  margin-right:8px;
-
-  &::after {
-    background-color: black;
-    opacity: 1;
-    border:2px solid #444;
-    display: block;
-    position:relative;
+  &.checkbox {
     width:1em;
     height:1em;
-    content:"";
+    background-color: black;
+    border: 2px solid #444;
+    vertical-align: text-bottom;
+ 
+    appearance: none;
+    --webkit-appearance:none;;
+  
+    &:hover {
+      border:2px solid #888;
+    }
+  
+    &:focus {
+      border:2px solid #eee;
+      opacity: 0.9;
+    }
+  
+    &:checked {
+      background-image: url(data:image/svg+xml,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cpath%20d%3D%22M17.0001%209L10%2016L7%2013%22%20stroke%3D%22%23ffffff%22%20stroke-width%3D%224.0%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%0A%3C%2Fsvg%3E);
+      background-repeat: no-repeat;
+      background-size: 1em 1em;
+      background-position: -1px;
+    }
   }
+}
 
-  &:hover::after {
-    border:2px solid #888;
-  }
-
-  &:focus::after {
-    border:2px solid #aaa;
-    opacity: 0.9;
-  }
-
-  &:checked::after {
-    text-align: center;
-    content:"✔"
-  }
+label.checkbox {
+  margin-right:10px;
+  position: relative;
+  white-space: nowrap;
 }
 
 .textInputWithList {
