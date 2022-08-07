@@ -35,11 +35,9 @@ export class EditDashboardPanelPage extends AbstractPage<EditPanelAttrs> {
     ApiEndpoints.GetDashboardPanel.call({
       dashboardId:dashboardId,
       panelId:panelId
-    }
-  ).then((output) => {
-    this.panel = output.panel;
-  });
-
+    }).then((output) => {
+      this.panel = output.panel;
+    });
   }
   
   render({attrs}:m.Vnode<EditPanelAttrs>):m.Children {
