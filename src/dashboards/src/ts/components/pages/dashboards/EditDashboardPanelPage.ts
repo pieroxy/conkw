@@ -27,14 +27,19 @@ export class EditDashboardPanelPage extends AbstractPage<EditPanelAttrs> {
   }
 
   oninit({attrs}:m.Vnode<EditPanelAttrs>) {
-    ApiEndpoints.GetDashboardPanel.call({
-        dashboardId:attrs.dashboardId,
-        panelId:attrs.panelId
-      }
-    ).then((output) => {
-      this.panel = output.panel;
-    });
     this.dashboardId = attrs.dashboardId;
+    this.reload(attrs.dashboardId, attrs.panelId);
+  }
+
+  reload(dashboardId:string, panelId:string) {
+    ApiEndpoints.GetDashboardPanel.call({
+      dashboardId:dashboardId,
+      panelId:panelId
+    }
+  ).then((output) => {
+    this.panel = output.panel;
+  });
+
   }
   
   render({attrs}:m.Vnode<EditPanelAttrs>):m.Children {
@@ -89,7 +94,13 @@ export class EditDashboardPanelPage extends AbstractPage<EditPanelAttrs> {
 
   public getDashboardPanelEditableView(element?:TopLevelPanelElement):m.Children {
     if (!this.panel) return null;
-    if (!element) return m(NewPanelItemComponent, {dashboardId:this.dashboardId, panelId:this.panel.id});
+    if (!element) {
+      return m(NewPanelItemComponent, {
+        dashboardId:this.dashboardId, 
+        panelId:this.panel.id,
+        refreshData:() => this.reload(this.dashboardId,this.panel.id)
+      });
+    }
     switch (element.type) {
       case TopLevelPanelElementEnum.SIMPLE_GAUGE:
         return m(EditSimpleGaugeWithValueAndLabelElementPanel, {element:<SimpleGaugeWithValueAndLabelElement>element})

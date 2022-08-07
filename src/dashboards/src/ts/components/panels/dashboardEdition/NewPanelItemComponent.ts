@@ -1,6 +1,4 @@
 import m from 'mithril';
-import { Endpoints } from '../../../utils/navigation/Endpoints';
-import { Routing } from '../../../utils/navigation/Routing';
 import { ApiEndpoints } from '../../../auto/ApiEndpoints';
 import { SimpleGaugeWithValueAndLabelElementComponent } from '../../organisms/dashboards/SimpleGaugeWithValueAndLabelElementComponent';
 import { ExpressionClass, ExpressionValueType, SimpleGaugeWithValueAndLabelElement, TopLevelPanelElementEnum } from '../../../auto/pieroxy-conkw';
@@ -17,8 +15,8 @@ export class NewPanelItemComponent implements m.ClassComponent<NewPanelItemCompo
               panelId:attrs.panelId,
               type:TopLevelPanelElementEnum.SIMPLE_GAUGE
             }
-          ).then((output) => {
-            Routing.goToScreen(Endpoints.DASHBOARD_PANEL_EDIT, {dashboardId:output.dashboardId, panelId:output.panelId})
+          ).then(() => {
+            attrs.refreshData();
           });
         }
       }, [
@@ -87,4 +85,5 @@ export class NewPanelItemComponent implements m.ClassComponent<NewPanelItemCompo
 export interface NewPanelItemComponentAttrs {
   dashboardId:string;
   panelId:string;
+  refreshData:()=>void;
 }
