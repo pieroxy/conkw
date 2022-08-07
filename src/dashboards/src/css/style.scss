@@ -636,6 +636,12 @@ button {
     cursor: pointer;
   }
 
+  &.editable {
+    input.panelTitle {
+      width:50%
+    }
+  }
+
   a.editLink {
     position:absolute;
     right:0;

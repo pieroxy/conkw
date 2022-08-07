@@ -1,31 +1,14 @@
 import m from 'mithril';
-import { HomeIcon } from '../../atoms/icons/HomeIcon';
-import { RightChevronIcon } from '../../atoms/icons/RightChevronIcon';
 import { Endpoints } from '../../../utils/navigation/Endpoints';
 import { Routing } from '../../../utils/navigation/Routing';
-import { AbstractPage } from '../AbstractPage';
-import { GlobalData } from '../../../utils/GlobalData';
 import { ApiEndpoints } from '../../../auto/ApiEndpoints';
-import { Link } from '../../atoms/Link';
 import { SimpleGaugeWithValueAndLabelElementComponent } from '../../organisms/dashboards/SimpleGaugeWithValueAndLabelElementComponent';
 import { ExpressionClass, ExpressionValueType, SimpleGaugeWithValueAndLabelElement, TopLevelPanelElementEnum } from '../../../auto/pieroxy-conkw';
 
-export class NewPanelItemPage extends AbstractPage<NewPanelPageAttrs> {
+export class NewPanelItemComponent implements m.ClassComponent<NewPanelItemComponentAttrs> {
 
-  getPageTitle(): string {
-    return "New panel";
-  }
-  
-  render({attrs}:m.Vnode<NewPanelPageAttrs>):m.Children {
-    let id = attrs.dashboardId;
-    return m(".page", [
-      m(".title", [
-        m(Link, {tooltip:"Go back Home", target:Endpoints.HOME}, m(HomeIcon)),
-        m(RightChevronIcon),
-        m(Link, {target:Routing.getRoute(Endpoints.DASHBOARD_EDITION, {id:id})}, GlobalData.getDashboardTitle(id)),
-        m(RightChevronIcon),
-        "Panel"
-      ]),
+  view({attrs}:m.Vnode<NewPanelItemComponentAttrs>):m.Children {
+    return [
       m(".panel.clickable", {
         onclick:() => {
           ApiEndpoints.NewPanelItem.call({
@@ -39,6 +22,7 @@ export class NewPanelItemPage extends AbstractPage<NewPanelPageAttrs> {
         }
       }, [
         m(".title", "Simple gauge with value and label"),
+        m("br"),
         m(SimpleGaugeWithValueAndLabelElementComponent, 
         {
           currentData:{
@@ -95,11 +79,11 @@ export class NewPanelItemPage extends AbstractPage<NewPanelPageAttrs> {
         }),
         m("br", {clear:"both"})
       ])
-    ]);
+    ];
   }
 }
 
-export interface NewPanelPageAttrs {
+export interface NewPanelItemComponentAttrs {
   dashboardId:string;
   panelId:string;
 }

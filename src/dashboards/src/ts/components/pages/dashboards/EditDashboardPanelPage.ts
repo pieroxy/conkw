@@ -15,9 +15,11 @@ import { EditSimpleGaugePanel } from '../../panels/dashboardEdition/EditSimpleGa
 import { ApiEndpoints } from '../../../auto/ApiEndpoints';
 import { Link } from '../../atoms/Link';
 import { ViewDashboardPanel } from '../../panels/dashboards/ViewDashboardPanel';
+import { NewPanelItemComponent } from '../../panels/dashboardEdition/NewPanelItemComponent';
 
 export class EditDashboardPanelPage extends AbstractPage<EditPanelAttrs> {
   private panel:DashboardPanel;
+  private dashboardId:string;
   selected?: TopLevelPanelElement;
 
   getPageTitle(): string {
@@ -31,7 +33,8 @@ export class EditDashboardPanelPage extends AbstractPage<EditPanelAttrs> {
       }
     ).then((output) => {
       this.panel = output.panel;
-    })
+    });
+    this.dashboardId = attrs.dashboardId;
   }
   
   render({attrs}:m.Vnode<EditPanelAttrs>):m.Children {
@@ -46,11 +49,6 @@ export class EditDashboardPanelPage extends AbstractPage<EditPanelAttrs> {
             }
           )
         }}, m(SaveIcon)),
-        m(Link, {
-          className:"floatright rm10", 
-          tooltip:"New gauge", 
-          target:Routing.getRoute(Endpoints.ITEM_NEW, {dashboardId:attrs.dashboardId, panelId:attrs.panelId})
-        }, m(RoundedPlusIcon)),
         m(Link, {tooltip:"Go back Home", target:Endpoints.HOME}, m(HomeIcon)),
         m(RightChevronIcon),
         m(Link, {target:Routing.getRoute(Endpoints.DASHBOARD_EDITION, {id:id})}, GlobalData.getDashboardTitle(id)),
@@ -60,7 +58,14 @@ export class EditDashboardPanelPage extends AbstractPage<EditPanelAttrs> {
       m(".dualpanel.content", [
         m(".panel.editable", [
           m(".title", 
+            m(Link, {
+              className:"floatright rm10", 
+              tooltip:"New gauge", 
+              target:()=>this.selected = undefined
+            }, m(RoundedPlusIcon)),
+  
             m(TextFieldInput, {
+              className:".panelTitle",
               refHolder:this.panel,
               refProperty:"title",
               onenter() {},
@@ -77,13 +82,14 @@ export class EditDashboardPanelPage extends AbstractPage<EditPanelAttrs> {
             ViewDashboardPanel.getDashboardPanel(pi)
           ]))
         ]),
-        m(".nextToPanel", EditDashboardPanelPage.getDashboardPanelEditableView(this.selected))
+        m(".nextToPanel", this.getDashboardPanelEditableView(this.selected))
       ])
     ]);
   }
 
-  public static getDashboardPanelEditableView(element?:TopLevelPanelElement):m.Children {
-    if (!element) return null;
+  public getDashboardPanelEditableView(element?:TopLevelPanelElement):m.Children {
+    if (!this.panel) return null;
+    if (!element) return m(NewPanelItemComponent, {dashboardId:this.dashboardId, panelId:this.panel.id});
     switch (element.type) {
       case TopLevelPanelElementEnum.SIMPLE_GAUGE:
         return m(EditSimpleGaugeWithValueAndLabelElementPanel, {element:<SimpleGaugeWithValueAndLabelElement>element})
