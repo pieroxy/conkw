@@ -1,5 +1,6 @@
 import { ApiEndpoints } from "../../auto/ApiEndpoints";
 import { CallApiInput, CallApiOutput, IdLabelPair, MetricsApiResponse } from "../../auto/pieroxy-conkw";
+import { Auth, AuthenticationStatus } from "../Auth";
 import { Api } from "./Api";
 
 export class MetricsReader {
@@ -43,6 +44,13 @@ export class MetricsReader {
       if (age && age<expiredBefore) {
         MetricsReader.grabbersRequested.delete(next.value);
       }
+    }
+
+    if (Auth.getAuthenticationStatus() !== AuthenticationStatus.LOGGED_IN ||
+        MetricsReader.grabbersRequested.size < 1) {
+        window.clearInterval(MetricsReader.interval);
+        MetricsReader.interval = undefined;
+        return;
     }
 
     Api.call<CallApiInput, CallApiOutput>({
