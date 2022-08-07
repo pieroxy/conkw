@@ -111,14 +111,6 @@ svg.icon {
   }
 }
 
-svg.logofull {
-  width: 300px;
-
-  path {
-    fill: white;
-  }
-}
-
 a {
   &:hover {
     svg.icon {
@@ -175,7 +167,6 @@ table.sessions {
   }
 }
 
-
 .loginpage {
   display: flex;
   align-items: center;
@@ -183,15 +174,45 @@ table.sessions {
   height: 100%;
   flex-direction: column;
 
+  @include media-min(700px) {
+    flex-direction: row;
+  }
+
   .title {
     font-size: 50px;
     font-weight: 200;
+    text-align: center;
+
+    @include media-max(900px) {
+      font-size: 30px;
+    }
   }
 
+  .loginarea1 {
+    svg.logofull {
+      opacity: 40%;
+      width: 300px;
+
+      @include media-max(700px) {
+        width: 200px;
+      }
+  
+      path {
+        fill: white;
+      }
+    }
+  }
+  
   .loginarea2 {
     display:flex;
     align-items:center;
     flex-direction: column;
+
+    @include media-min(700px) {
+      border-left:1px solid rgba(255,255,255,0.3);
+      padding-left: 10px;
+      margin-left: 20px;
+    }
   
     > div {
       margin:10px;
@@ -573,14 +594,14 @@ button {
 
   .subtitle {
     font-weight: 200;
-    font-size: 24px;
+    font-size: 32px;
     padding: 10px 0;
   }
 
   .title {
-    font-size: 20px;
+    font-size: 32px;
     padding: 10px 30px;
-    font-weight: 700;
+    font-weight: 400;
 
     .id {
       font-size: 10px;
@@ -775,17 +796,6 @@ button {
   }
 }
 
-@media screen and (min-width:700px) {
-  .loginpage {
-    flex-direction: row;
-
-    .loginarea2 {
-      border-left:1px solid rgba(255,255,255,0.3);
-      padding-left: 10px;
-      margin-left: 20px;
-    }
-  }
-}
 
 
 

@@ -9,6 +9,7 @@ export class NewPanelItemComponent implements m.ClassComponent<NewPanelItemCompo
 
   view({attrs}:m.Vnode<NewPanelItemComponentAttrs>):m.Children {
     return [
+      m(".title", "Add items to the panel on your left:"),
       m(".panel.clickable", {
         onclick:() => {
           ApiEndpoints.NewPanelItem.call({

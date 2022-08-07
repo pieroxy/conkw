@@ -7,6 +7,7 @@ import { Routing } from '../../../utils/navigation/Routing';
 import { Button } from '../../atoms/forms/Button';
 import { Form } from '../../atoms/forms/Form';
 import { PasswordFieldInput } from '../../atoms/forms/PasswordFieldInput';
+import { LogoFullIcon } from '../../atoms/icons/LogoFull';
 import { AbstractPage } from '../AbstractPage';
 import { LoginFooter } from './LoginFooter';
 
@@ -19,16 +20,7 @@ export class ChangePassword extends AbstractPage<IdAttrs> {
       Auth.getAuthenticationStatus() === AuthenticationStatus.LOGGED_IN ?
       m(".loginarea1", m(ChangePasswordForm, {id:attrs.id})) :
       [
-        m(".loginarea1", [
-        
-          m("img", {
-            src:"/images/logo-white-400.png",
-            style: {
-              opacity:0.4,
-              width:"300px"
-            }
-          }),
-        ]),
+        m(".loginarea1", m(LogoFullIcon)),
         m(".loginarea2", [
           m(ChangePasswordForm, {id:attrs.id})
         ]),

@@ -23,10 +23,7 @@ export class LoginPage extends AbstractPage<any> {
   }
   render():m.Children {
     return m(".loginpage", [
-      m(".loginarea1", {style:{opacity:"40%"}}
-      ,[
-        m(LogoFullIcon),
-      ]),
+      m(".loginarea1", m(LogoFullIcon)),
       m(".loginarea2", [
         m(".title", "Please log in"),
         m("", [
