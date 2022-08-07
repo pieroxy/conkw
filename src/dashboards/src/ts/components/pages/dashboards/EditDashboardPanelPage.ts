@@ -55,7 +55,7 @@ export class EditDashboardPanelPage extends AbstractPage<EditPanelAttrs> {
         m(RightChevronIcon),
         m(Link, {target:Routing.getRoute(Endpoints.DASHBOARD_EDITION, {id:id})}, GlobalData.getDashboardTitle(id)),
         m(RightChevronIcon),
-        "Edit Panel"
+        this.panel ? this.panel.title : "Edit Panel"
       ]),
       m(".dualpanel.content", [
         m(".panel.editable", [
