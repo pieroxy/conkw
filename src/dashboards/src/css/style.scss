@@ -758,7 +758,23 @@ button {
         float: right;
         margin-left: 5px;
         margin-bottom: 2px;
+
+        &.cw-stale {
+          opacity: 30%;
+        }
       }
+    }
+  }
+
+  .cw-stale {
+    color: #846f7e!important;
+
+    &.gaugethumb, .gaugethumb {
+      background-color: #4e334e!important;
+    }
+
+    canvas {
+      opacity: 30%;
     }
   }
 }

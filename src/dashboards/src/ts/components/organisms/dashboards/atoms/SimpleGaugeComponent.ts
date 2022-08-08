@@ -16,7 +16,7 @@ export class SimpleGaugeComponent extends DashboardElement<SimpleGaugeAttrs> {
       value = Math.sin((this.fakeSeed++)/10)*50+50;
     }
     
-    return m(".gauge", [
+    return m(".gauge" + this.getStaleClass(attrs.model.value, attrs.model.staleDelay), [
       errorElement,
       m(".gaugethumb", {
         style: {

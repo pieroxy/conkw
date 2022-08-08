@@ -8,7 +8,7 @@ export class ValueWithUnitComponent extends DashboardElement<ValueWithUnitAttrs>
     let value = this.computeNumericValue(attrs.model.value, attrs.currentData.rawData);
     let unit = attrs.model.unit;
     
-    return m(".silabel", NumberUtils.getSI(value) + unit);
+    return m(".silabel" + this.getStaleClass(attrs.model.value, attrs.model.staleDelay), NumberUtils.getSI(value) + unit);
   }
 }
 

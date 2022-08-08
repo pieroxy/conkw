@@ -175,7 +175,7 @@ export class EditSimpleGaugeWithValueAndLabelElementPanel implements m.ClassComp
             m(".groupTitle", "The gauge"),
             m(EditSimpleGaugePanel, {element:attrs.element.gauge}),
           ])
-        ])
+        ]),
       ];
     }
     return m("");

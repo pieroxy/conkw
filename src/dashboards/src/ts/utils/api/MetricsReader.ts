@@ -53,10 +53,10 @@ export class MetricsReader {
     }
 
     if (Auth.getAuthenticationStatus() !== AuthenticationStatus.LOGGED_IN ||
-        MetricsReader.grabbersRequested.size < 1) {
-        window.clearInterval(MetricsReader.interval);
-        MetricsReader.interval = undefined;
-        return;
+      MetricsReader.grabbersRequested.size < 1) {
+      window.clearInterval(MetricsReader.interval);
+      MetricsReader.interval = undefined;
+      return;
     }
 
     Api.call<CallApiInput, CallApiOutput>({
@@ -93,11 +93,21 @@ export class MetricsReader {
     if (!obj) return [];
 
     for (name in obj) {
-        if (obj.hasOwnProperty(name)) {
-            result.push(name);
-        }
+      if (obj.hasOwnProperty(name)) {
+        result.push(name);
+      }
     }
     return result.sort();
   }
 
+  public static getMetricAge(namespace:string, metric:string):number {
+    var now = Date.now() / 1000;
+    let data = this.lastResponse.rawData.metrics[namespace];
+    if (!data) return Number.MAX_SAFE_INTEGER;
+    var mlv = data.num["ts:" + metric];
+    if (mlv === undefined) mlv = data.timestamp;
+    if (mlv === undefined) mlv = this.lastResponse.rawData.timestamp;
+    if (mlv === undefined) mlv = Date.now();
+    return now - mlv / 1000;
+  }
 }

@@ -32,7 +32,7 @@ export class GaugeWithHistoryComponent extends DashboardElement<GaugeWithHistory
       height:((attrs.model.nbLinesHeight||1)-0.1)+"em"
     }
 
-    return m("canvas", {
+    return m("canvas" + this.getStaleClass(attrs.model.value, attrs.model.staleDelay), {
       style:style
     });
   }

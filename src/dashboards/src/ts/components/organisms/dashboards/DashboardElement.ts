@@ -35,6 +35,16 @@ export abstract class DashboardElement<T extends DashboardElementAttrs> implemen
     return "-1.03";
   }
 
+  getStaleClass(expression:ValueExpression, staleDelay:number):string {
+    let acs = "";
+    if (expression.clazz === ExpressionClass.METRIC) {
+      if (MetricsReader.getMetricAge(expression.namespace, expression.value) > staleDelay) {
+        acs = ".cw-stale";
+      }
+    }
+    return acs;
+  }
+
   abstract view(vnode: m.Vnode<T>): m.Children;
 }
 

@@ -51,6 +51,19 @@ export class EditSimpleLabelPanel implements m.ClassComponent<EditSimpleLabelPan
           spellcheck:false
         })
       ]),
+      m(".inputWithLabel", [
+        m(".label", "Stale after (s)"),
+        m(TextFieldInput, {
+          onenter:()=>{},
+          refHolder:attrs.element,
+          refProperty:"staleDelay",
+          spellcheck:false,
+          params: {
+            size:3
+          }
+        }),
+      ]),
+
       m("br"),
       m(CheckboxInput, {
         refHolder:this,

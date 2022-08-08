@@ -32,6 +32,19 @@ export class EditSimpleSiLabelPanel implements m.ClassComponent<EditSimpleSiLabe
           spellcheck:false
         }),
       ]),
+      m(".inputWithLabel", [
+        m(".label", "Stale after (s)"),
+        m(TextFieldInput, {
+          onenter:()=>{},
+          refHolder:attrs.element,
+          refProperty:"staleDelay",
+          spellcheck:false,
+          params: {
+            size:3
+          }
+        })
+      ])
+
     ];
   }
 

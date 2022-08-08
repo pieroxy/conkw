@@ -27,6 +27,7 @@ public class GaugeWithHistoryElement extends TopLevelPanelElement {
         label.getValue().setValue("The label");
         label.getValue().setType(ExpressionValueType.STRING);
         label.getValue().setClazz(ExpressionClass.LITERAL);
+        label.setStaleDelay(5);
 
         value = new SiPrefixedValue();
         value.setValue(new ValueExpression());
@@ -35,6 +36,7 @@ public class GaugeWithHistoryElement extends TopLevelPanelElement {
         value.getValue().setClazz(ExpressionClass.LITERAL);
         value.setUnit("%");
         value.setThousand(1000);
+        value.setStaleDelay(5);
 
         gauge = new GaugeWithHistory();
         gauge.setMin(new ValueExpression());
@@ -50,6 +52,7 @@ public class GaugeWithHistoryElement extends TopLevelPanelElement {
         gauge.getValue().setType(ExpressionValueType.NUMERIC);
         gauge.getValue().setClazz(ExpressionClass.LITERAL);
         gauge.setNbLinesHeight(2);
+        gauge.setStaleDelay(5);
     }
 
 
