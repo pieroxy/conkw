@@ -7,33 +7,33 @@ import { HtmlInputEvent } from './HtmlInputEvent';
 
 export class TextFieldInput extends GenericInput<string, VisibleTextInputAttrs> {
   render({attrs}: m.Vnode<VisibleTextInputAttrs>): void | Children {
-    let params:any = {
-      type:"text",
-      oninput: (e:HtmlInputEvent) => {
-        this.setValue(e.target.value);
-        this.computeErrorState();
-        if (attrs.onchange) attrs.onchange();
-      },
-      value: this.getValueAsString(),
-      autocapitalize:"none",
-      onkeyup: (e: KeyboardEvent) => {
-        if (e.code) {
-          if (e.code == 'Enter' || e.code == 'NumpadEnter') {
-            attrs.onenter();
-          }
-          if (e.code == 'Escape') {
-            if (attrs.onescape) attrs.onescape();
-          }
-        } else {
-          if (e.keyCode == 13) {
-            attrs.onenter();
-          }
-          if (e.keyCode == 27) {
-            if (attrs.onescape) attrs.onescape();
-          }
+    let params:any = attrs.params;
+    if (!params) params = {};
+    params.type="text";
+    params.oninput= (e:HtmlInputEvent) => {
+      this.setValue(e.target.value);
+      this.computeErrorState();
+      if (attrs.onchange) attrs.onchange();
+    },
+    params.value= this.getValueAsString(),
+    params.autocapitalize="none",
+    params.onkeyup= (e: KeyboardEvent) => {
+      if (e.code) {
+        if (e.code == 'Enter' || e.code == 'NumpadEnter') {
+          attrs.onenter();
         }
-        return true;
+        if (e.code == 'Escape') {
+          if (attrs.onescape) attrs.onescape();
+        }
+      } else {
+        if (e.keyCode == 13) {
+          attrs.onenter();
+        }
+        if (e.keyCode == 27) {
+          if (attrs.onescape) attrs.onescape();
+        }
       }
+      return true;
     }
     if (attrs.placeholder) params.placeholder = attrs.placeholder;
     if (attrs.id) params.id = attrs.id;
