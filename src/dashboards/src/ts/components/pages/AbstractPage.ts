@@ -12,11 +12,19 @@ export abstract class AbstractPage<A> implements m.ClassComponent<A> {
     window.document.title = this.getPageTitle();
     this.computeHeaderHeight();
     return [
+      this.renderJsAccessibleColors(),
       this.renderNotification(),
       this.renderDialog(),
       m(MainTopBar, {refreshData:this.refreshData}),
       this.render(vnode),
     ];
+  }
+
+  renderJsAccessibleColors(): m.Children {
+    return m(".colorSetForJs", [
+      m("#gaugeDefaultColor"),
+      m("#gaugeDefaultBackground"),
+    ])
   }
 
   computeHeaderHeight() {

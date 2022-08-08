@@ -1,5 +1,6 @@
 import m from 'mithril';
 import { SimpleGauge } from '../../../../auto/pieroxy-conkw';
+import { ColorUtils } from '../../../../utils/ColorUtils';
 import { NumberUtils } from '../../../../utils/NumberUtils';
 import { DashboardElement, DashboardElementAttrs } from '../DashboardElement';
 
@@ -7,7 +8,7 @@ export class GaugeWithHistoryComponent extends DashboardElement<GaugeWithHistory
   private canvas:HTMLCanvasElement;
   private w:number;
   private h:number;
-  private colors = ["#383"];
+  private colors = [ColorUtils.getGaugeDefaultColor()];
   private fakeSeed=0;
   private iteration=-1;
 
@@ -37,7 +38,7 @@ export class GaugeWithHistoryComponent extends DashboardElement<GaugeWithHistory
     this.scroll();
 
     var bottom = 0;
-    var bgColor = "#3e233e";
+    var bgColor = ColorUtils.getGaugeDefaultBackground();
 
     if (metricGap) {
         bgColor = "red";
@@ -71,7 +72,7 @@ export class GaugeWithHistoryComponent extends DashboardElement<GaugeWithHistory
     this.h = this.canvas.height = this.canvas.scrollHeight;
     var ctx = this.canvas.getContext('2d');
     if (!ctx) return;
-    ctx.fillStyle = "#3e233e";
+    ctx.fillStyle = ColorUtils.getGaugeDefaultBackground();
     ctx.fillRect(0,0,this.w,this.h)
   }
 
