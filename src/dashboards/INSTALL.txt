@@ -24,6 +24,7 @@ Here are the packages installed:
 * npm install html-webpack-plugin --save-dev
 * npm install style-loader css-loader --save-dev
 * npm install sass-loader sass --save-dev
+* npm install mini-css-extract-plugin --save-dev
 
 
 
