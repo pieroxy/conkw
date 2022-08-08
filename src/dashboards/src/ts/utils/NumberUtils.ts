@@ -23,6 +23,7 @@ export class NumberUtils {
   }
 
   public static getSI(i:number):string {
+    if (isNaN(i)) return "   - ";
     if (i < 1000) return NumberUtils.getNumberOfDigits(i) + " ";
     i /= 1000;
     if (i < 1000) return NumberUtils.getNumberOfDigits(i) + "K";
