@@ -9,10 +9,12 @@ export class GaugeWithHistoryComponent extends DashboardElement<GaugeWithHistory
   private h:number;
   private colors = ["green"];
   private fakeSeed=0;
+  private iteration=-1;
 
   public view({attrs}:m.Vnode<GaugeWithHistoryAttrs>):m.Children {
 
-    if (this.canvas) {
+    if (this.canvas && (attrs.currentData.iteration!=this.iteration)) {
+      this.iteration = attrs.currentData.iteration
       let min = this.computeNumericValue(attrs.model.min, attrs.currentData.rawData);
       let max = this.computeNumericValue(attrs.model.max, attrs.currentData.rawData);
       let value = this.computeNumericValue(attrs.model.value, attrs.currentData.rawData);

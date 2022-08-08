@@ -106,11 +106,11 @@ export class NewPanelItemComponent implements m.ClassComponent<NewPanelItemCompo
       }
     }
   }
-  
+
   getFakeHistoryGaugeData(): GaugeWithHistoryLineComponentAttrs {
     return {
       currentData:{
-        iteration:1,
+        iteration:new Date().getSeconds(),
         rawData:{
           metrics: {},
           timestamp: 0,
