@@ -19,7 +19,8 @@ export class MetricsReader {
       strCount:0,
       timestamp:Date.now()
     },
-    iteration:0
+    iteration:0,
+    metricGap:true,
   };
   private static grabbersRequested:Map<string,number> = new Map();
   private static interval?:number;
@@ -63,7 +64,7 @@ export class MetricsReader {
       body:{grabbers:[...MetricsReader.grabbersRequested.keys()]},
       endpoint:"CallApi",
       hideFromSpinner:true
-    }).then((o => MetricsReader.lastResponse = {rawData:o.data, iteration:this.iteration++}))
+    }).then((o => MetricsReader.lastResponse = {rawData:o.data, iteration:this.iteration++, metricGap:false}))
   }
 
   static getGrabbers():IdLabelPair[] {

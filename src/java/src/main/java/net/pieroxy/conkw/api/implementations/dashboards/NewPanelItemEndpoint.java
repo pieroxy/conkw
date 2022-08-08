@@ -8,6 +8,7 @@ import net.pieroxy.conkw.api.metadata.TypeScriptType;
 import net.pieroxy.conkw.api.model.Dashboard;
 import net.pieroxy.conkw.api.model.User;
 import net.pieroxy.conkw.api.model.panels.DashboardPanel;
+import net.pieroxy.conkw.api.model.panels.GaugeWithHistoryElement;
 import net.pieroxy.conkw.api.model.panels.SimpleGaugeWithValueAndLabelElement;
 import net.pieroxy.conkw.api.model.panels.atoms.model.TopLevelPanelElementEnum;
 import net.pieroxy.conkw.config.UserRole;
@@ -46,12 +47,23 @@ public class NewPanelItemEndpoint extends AbstractApiEndpoint<NewPanelItemInput,
 
         String newId = null;
         switch (input.getType()) {
-            case SIMPLE_GAUGE:
+            case SIMPLE_GAUGE: {
                 SimpleGaugeWithValueAndLabelElement elem = new SimpleGaugeWithValueAndLabelElement();
                 elem.initialize();
                 panel.addContent(elem);
                 services.getDashboardService().saveDashboard(dashboard);
                 break;
+            }
+            case GAUGE_WITH_HISTORY:
+            {
+                GaugeWithHistoryElement elem = new GaugeWithHistoryElement();
+                elem.initialize();
+                panel.addContent(elem);
+                services.getDashboardService().saveDashboard(dashboard);
+                break;
+            }
+            default:
+                throw new RuntimeException("Item of type " + input.getType() + " not implemented yet");
         }
         return null;
     }

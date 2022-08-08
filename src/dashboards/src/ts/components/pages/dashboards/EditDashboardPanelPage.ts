@@ -5,7 +5,7 @@ import { Endpoints } from '../../../utils/navigation/Endpoints';
 import { Routing } from '../../../utils/navigation/Routing';
 import { AbstractPage } from '../AbstractPage';
 import { GlobalData } from '../../../utils/GlobalData';
-import { DashboardPanel, SimpleGaugeWithValueAndLabelElement, TopLevelPanelElement, TopLevelPanelElementEnum } from '../../../auto/pieroxy-conkw';
+import { DashboardPanel, GaugeWithHistoryElement, SimpleGaugeWithValueAndLabelElement, TopLevelPanelElement, TopLevelPanelElementEnum } from '../../../auto/pieroxy-conkw';
 import { TextFieldInput } from '../../atoms/forms/TextFieldInput';
 import { SaveIcon } from '../../atoms/icons/SaveIcon';
 import { RoundedPlusIcon } from '../../atoms/icons/RoundedPlusIcon';
@@ -102,6 +102,8 @@ export class EditDashboardPanelPage extends AbstractPage<EditPanelAttrs> {
     switch (element.type) {
       case TopLevelPanelElementEnum.SIMPLE_GAUGE:
         return m(EditSimpleGaugeWithValueAndLabelElementPanel, {element:<SimpleGaugeWithValueAndLabelElement>element})
+      case TopLevelPanelElementEnum.GAUGE_WITH_HISTORY:
+        return m(EditGaugeWithHistoryLinePanel, {element:<GaugeWithHistoryElement>element})
       default:
         return m("", "Unknown element type " + element.type);
     }
@@ -112,6 +114,38 @@ export class EditDashboardPanelPage extends AbstractPage<EditPanelAttrs> {
 export interface EditPanelAttrs {
   dashboardId:string;
   panelId:string;
+}
+
+export class EditGaugeWithHistoryLinePanel implements m.ClassComponent<EditGaugeWithHistoryLinePanelAttrs> {
+  view({attrs}: m.Vnode<EditGaugeWithHistoryLinePanelAttrs, this>): void | m.Children {
+    if (attrs.element) {
+      return [
+        m(".title", ["Edit ", m("i", attrs.element.label.value.value)]),
+        m(".editionPanel", [
+          m(".group", [
+            m(".groupTitle", "The label"),
+            m(EditSimpleLabelPanel, {element:attrs.element.label}),
+          ]),
+          m(".group", [
+            m(".groupTitle", "The value"),
+            m(EditSimpleSiLabelPanel, {element:attrs.element.value}),
+          ]),
+          m(".group", [
+            m(".groupTitle", "The gauge"),
+            m(EditSimpleGaugePanel, {element:attrs.element.gauge}),
+          ]),
+          m(TextFieldInput, {
+            onenter:()=>{},
+            refHolder:attrs.element,
+            refProperty:"lines",
+            spellcheck:false,
+          })
+        ])
+      ];
+    }
+    return m("");
+  }
+
 }
 
 export class EditSimpleGaugeWithValueAndLabelElementPanel implements m.ClassComponent<EditSimpleGaugeWithValueAndLabelElementPanelAttrs> {
@@ -142,4 +176,8 @@ export class EditSimpleGaugeWithValueAndLabelElementPanel implements m.ClassComp
 
 export interface EditSimpleGaugeWithValueAndLabelElementPanelAttrs {
   element?:SimpleGaugeWithValueAndLabelElement;
+}
+
+export interface EditGaugeWithHistoryLinePanelAttrs {
+  element?:GaugeWithHistoryElement;
 }

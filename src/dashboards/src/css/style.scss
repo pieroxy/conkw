@@ -749,6 +749,12 @@ button {
           background-color: #00abab;
         }
       }
+
+      canvas {
+        width: 150px;
+        height: 0.9em;
+        float: right;
+      }
     }
   }
 }
