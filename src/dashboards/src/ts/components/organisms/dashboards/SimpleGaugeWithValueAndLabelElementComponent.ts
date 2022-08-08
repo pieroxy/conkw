@@ -1,7 +1,7 @@
 import m from 'mithril';
 import { SimpleGaugeWithValueAndLabelElement } from '../../../auto/pieroxy-conkw';
 import { DisplayUtils } from '../../../utils/DisplayUtils';
-import { SimpleGaugeComponent } from './atoms/SimpleGauge';
+import { SimpleGaugeComponent } from './atoms/SimpleGaugeComponent';
 import { TextLabelComponent } from './atoms/TextLabel';
 import { ValueWithUnitComponent } from './atoms/ValueWithUnit';
 import { DashboardElement, DashboardElementAttrs } from './DashboardElement';

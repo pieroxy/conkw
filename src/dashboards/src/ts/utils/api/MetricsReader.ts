@@ -1,32 +1,37 @@
 import { ApiEndpoints } from "../../auto/ApiEndpoints";
-import { CallApiInput, CallApiOutput, IdLabelPair, MetricsApiResponse } from "../../auto/pieroxy-conkw";
+import { CallApiInput, CallApiOutput, IdLabelPair } from "../../auto/pieroxy-conkw";
 import { Auth, AuthenticationStatus } from "../Auth";
 import { Api } from "./Api";
+import { CurrentData } from "./CurrentData";
 
 export class MetricsReader {
   private static GRABBERS_LIST_TTL = 10000;
   private static GRABBERS_TTL = 5000;
 
-  private static lastResponse:MetricsApiResponse = {
-    errors:[],
-    instanceName:"placeholder",
-    metrics:{},
-    needsAuthentication:false,
-    numCount:0,
-    responseJitter:0,
-    strCount:0,
-    timestamp:Date.now()
+  private static lastResponse:CurrentData = {
+    rawData: {
+      errors:[],
+      instanceName:"placeholder",
+      metrics:{},
+      needsAuthentication:false,
+      numCount:0,
+      responseJitter:0,
+      strCount:0,
+      timestamp:Date.now()
+    },
+    iteration:0
   };
   private static grabbersRequested:Map<string,number> = new Map();
   private static interval?:number;
   private static grabbers:IdLabelPair[] = [];
   private static grabbersLastFetch:number = 0;
+  private static iteration=1;
 
   public static didReadFromGrabber(grabber:string):void {
     MetricsReader.grabbersRequested.set(grabber, Date.now());
   }
 
-  public static getLastResponse():MetricsApiResponse {
+  public static getLastResponse():CurrentData {
     if (MetricsReader.interval === undefined) {
       MetricsReader.interval = window.setInterval(() => {MetricsReader.fetch()}, 1000);
     }
@@ -58,7 +63,7 @@ export class MetricsReader {
       body:{grabbers:[...MetricsReader.grabbersRequested.keys()]},
       endpoint:"CallApi",
       hideFromSpinner:true
-    }).then((o => MetricsReader.lastResponse = o.data))
+    }).then((o => MetricsReader.lastResponse = {rawData:o.data, iteration:this.iteration++}))
   }
 
   static getGrabbers():IdLabelPair[] {
@@ -80,7 +85,7 @@ export class MetricsReader {
   }
 
   private static getMetricsList(namespace: string, space:"num"|"str"): string[] {
-    let rd = this.lastResponse.metrics[namespace];
+    let rd = this.lastResponse.rawData.metrics[namespace];
     if (!rd) return [];
     var name, result = [];
     let obj = rd[space];

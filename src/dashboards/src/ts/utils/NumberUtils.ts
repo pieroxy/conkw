@@ -34,4 +34,16 @@ export class NumberUtils {
     return NumberUtils.getNumberOfDigits(i) + "T";
   }
 
+  public static computePercentage(value:number, min:number, max:number, log:boolean):number {
+    var posprc = (value - min) * 100 / (max - min);
+    if (posprc < 0) posprc = 0;
+    if (posprc > 100) posprc = 100;
+    if (log) {
+        posprc = posprc * 0.99 + 1;
+        posprc = Math.log10(posprc) * 50;
+        posprc = (posprc - 1) * 100 / 99;
+    }
+
+    return posprc;
+  }
 }

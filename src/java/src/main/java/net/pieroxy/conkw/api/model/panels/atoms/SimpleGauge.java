@@ -10,6 +10,7 @@ import net.pieroxy.conkw.api.model.panels.atoms.model.ValueExpression;
 public class SimpleGauge extends DashboardDynamicValue {
   private ValueExpression max;
   private ValueExpression min;
+  private boolean logarithmic;
 
   public ValueExpression getMax() {
     return max;
@@ -25,5 +26,13 @@ public class SimpleGauge extends DashboardDynamicValue {
 
   public void setMin(ValueExpression min) {
     this.min = min;
+  }
+
+  public boolean isLogarithmic() {
+    return logarithmic;
+  }
+
+  public void setLogarithmic(boolean logarithmic) {
+    this.logarithmic = logarithmic;
   }
 }

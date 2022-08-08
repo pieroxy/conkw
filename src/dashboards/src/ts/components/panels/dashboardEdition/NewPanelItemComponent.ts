@@ -25,14 +25,17 @@ export class NewPanelItemComponent implements m.ClassComponent<NewPanelItemCompo
         m(SimpleGaugeWithValueAndLabelElementComponent, 
         {
           currentData:{
-            metrics: {},
-            timestamp: 0,
-            instanceName: "string",
-            responseJitter: 0,
-            needsAuthentication: false,
-            errors: [],
-            numCount: 0,
-            strCount: 0,
+            iteration:1,
+            rawData:{
+              metrics: {},
+              timestamp: 0,
+              instanceName: "string",
+              responseJitter: 0,
+              needsAuthentication: false,
+              errors: [],
+              numCount: 0,
+              strCount: 0,
+            }
           },
           model: <SimpleGaugeWithValueAndLabelElement>{ 
             gauge: {
