@@ -25,6 +25,10 @@ export class Notifications {
       if (Notifications.current) m.redraw();
     }, 500);
   }
+  static dismissClass(clazz: NotificationsClass) {
+    if (clazz !== Notifications.current?.clazz) return;
+    Notifications.dismiss();
+  }
 }
 
 export class Notification {
@@ -63,4 +67,6 @@ export enum NotificationsType {
 
 export enum NotificationsClass {
   LOGIN,
+  SERVER_RESPONSE,
+  SERVER_UNREACHABLE
 }

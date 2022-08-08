@@ -11,7 +11,8 @@ public enum ApiResultCodes {
   OK(0),
   GO_TO_LOGIN(1),
   DISPLAY_ERROR(2),
-  TECH_ERROR(3);
+  TECH_ERROR(3),
+  SERVER_UNREACHABLE(4);
 
   final int value;
 
