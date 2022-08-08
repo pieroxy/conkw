@@ -144,7 +144,8 @@ export class NewPanelItemComponent implements m.ClassComponent<NewPanelItemCompo
             type:ExpressionValueType.NUMERIC,
             directive:"",
             value:"75"
-          }
+          },
+          nbLinesHeight:2
         },
         label: {
           value: {

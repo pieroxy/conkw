@@ -134,13 +134,22 @@ export class EditGaugeWithHistoryLinePanel implements m.ClassComponent<EditGauge
             m(".groupTitle", "The gauge"),
             m(EditSimpleGaugePanel, {element:attrs.element.gauge}),
           ]),
-          m(TextFieldInput, {
-            onenter:()=>{},
-            refHolder:attrs.element,
-            refProperty:"lines",
-            spellcheck:false,
-          })
-        ])
+          m(".group", [
+            m(".groupTitle", "Specific properties"),
+              m(".inputWithLabel", [
+                m(".label", "Gauge number of lines:"),
+                m(TextFieldInput, {
+                  onenter:()=>{},
+                  refHolder:attrs.element.gauge,
+                  refProperty:"nbLinesHeight",
+                  spellcheck:false,
+                  params: {
+                    size:3
+                  }
+                })
+              ])
+            ]),
+          ])
       ];
     }
     return m("");

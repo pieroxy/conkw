@@ -1,5 +1,5 @@
 import m from 'mithril';
-import { SimpleGauge } from '../../../../auto/pieroxy-conkw';
+import { GaugeWithHistory } from '../../../../auto/pieroxy-conkw';
 import { ColorUtils } from '../../../../utils/ColorUtils';
 import { NumberUtils } from '../../../../utils/NumberUtils';
 import { DashboardElement, DashboardElementAttrs } from '../DashboardElement';
@@ -27,8 +27,14 @@ export class GaugeWithHistoryComponent extends DashboardElement<GaugeWithHistory
 
       this.update(min, max, [value], log, attrs.currentData.metricGap);
     }
-    
-    return m("canvas");
+
+    let style= {
+      height:((attrs.model.nbLinesHeight||1)-0.1)+"em"
+    }
+
+    return m("canvas", {
+      style:style
+    });
   }
 
   update(min: number, max: number, values: number[], log: boolean, metricGap: boolean) {
@@ -66,8 +72,8 @@ export class GaugeWithHistoryComponent extends DashboardElement<GaugeWithHistory
 */
   }
 
-  oncreate(vnode:m.VnodeDOM<GaugeWithHistoryAttrs>) {
-    this.canvas = <HTMLCanvasElement>vnode.dom;
+  oncreate({dom}:m.VnodeDOM<GaugeWithHistoryAttrs>) {
+    this.canvas = <HTMLCanvasElement>dom;
     this.w = this.canvas.width = this.canvas.scrollWidth;
     this.h = this.canvas.height = this.canvas.scrollHeight;
     var ctx = this.canvas.getContext('2d');
@@ -88,5 +94,5 @@ export class GaugeWithHistoryComponent extends DashboardElement<GaugeWithHistory
 }
 
 export interface GaugeWithHistoryAttrs extends DashboardElementAttrs {
-  model:SimpleGauge;
+  model:GaugeWithHistory;
 }

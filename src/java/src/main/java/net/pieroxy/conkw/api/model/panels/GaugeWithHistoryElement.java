@@ -3,8 +3,8 @@ package net.pieroxy.conkw.api.model.panels;
 import com.dslplatform.json.CompiledJson;
 import net.pieroxy.conkw.api.metadata.TypeScriptType;
 import net.pieroxy.conkw.api.model.panels.atoms.DynamicLabel;
+import net.pieroxy.conkw.api.model.panels.atoms.GaugeWithHistory;
 import net.pieroxy.conkw.api.model.panels.atoms.SiPrefixedValue;
-import net.pieroxy.conkw.api.model.panels.atoms.SimpleGauge;
 import net.pieroxy.conkw.api.model.panels.atoms.model.*;
 
 @CompiledJson
@@ -13,7 +13,7 @@ public class GaugeWithHistoryElement extends TopLevelPanelElement {
     TopLevelPanelElementEnum type;
     private DynamicLabel label;
     private SiPrefixedValue value;
-    private SimpleGauge gauge;
+    private GaugeWithHistory gauge;
     private int lines;
 
     public GaugeWithHistoryElement() {
@@ -36,7 +36,7 @@ public class GaugeWithHistoryElement extends TopLevelPanelElement {
         value.setUnit("%");
         value.setThousand(1000);
 
-        gauge = new SimpleGauge();
+        gauge = new GaugeWithHistory();
         gauge.setMin(new ValueExpression());
         gauge.getMin().setValue("0");
         gauge.getMin().setType(ExpressionValueType.NUMERIC);
@@ -49,6 +49,7 @@ public class GaugeWithHistoryElement extends TopLevelPanelElement {
         gauge.getValue().setValue("35");
         gauge.getValue().setType(ExpressionValueType.NUMERIC);
         gauge.getValue().setClazz(ExpressionClass.LITERAL);
+        gauge.setNbLinesHeight(2);
     }
 
 
@@ -77,11 +78,11 @@ public class GaugeWithHistoryElement extends TopLevelPanelElement {
         this.value = value;
     }
 
-    public SimpleGauge getGauge() {
+    public GaugeWithHistory getGauge() {
         return gauge;
     }
 
-    public void setGauge(SimpleGauge gauge) {
+    public void setGauge(GaugeWithHistory gauge) {
         this.gauge = gauge;
     }
 
