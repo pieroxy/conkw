@@ -734,7 +734,7 @@ button {
 
       .gauge {
         width: 150px;
-        background-color: #202040;
+        background-color: #80ffff19;
         height: 0.9em;
         display: block;
         margin-left: 5px;
@@ -746,7 +746,7 @@ button {
         .gaugethumb {
           position: absolute;
           height: 100%;
-          background-color: #00abab;
+          background-color: #383;
         }
       }
 
@@ -754,6 +754,8 @@ button {
         width: 150px;
         height: 0.9em;
         float: right;
+        margin-left: 5px;
+        margin-bottom: 2px;
       }
     }
   }

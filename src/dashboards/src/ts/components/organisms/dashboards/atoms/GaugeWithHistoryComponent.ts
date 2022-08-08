@@ -7,7 +7,7 @@ export class GaugeWithHistoryComponent extends DashboardElement<GaugeWithHistory
   private canvas:HTMLCanvasElement;
   private w:number;
   private h:number;
-  private colors = ["green"];
+  private colors = ["#383"];
   private fakeSeed=0;
   private iteration=-1;
 
@@ -37,7 +37,7 @@ export class GaugeWithHistoryComponent extends DashboardElement<GaugeWithHistory
     this.scroll();
 
     var bottom = 0;
-    var bgColor = "#000";
+    var bgColor = "#3e233e";
 
     if (metricGap) {
         bgColor = "red";
@@ -55,7 +55,6 @@ export class GaugeWithHistoryComponent extends DashboardElement<GaugeWithHistory
         ctx.fillRect(this.w-1, this.h-hpx-bottom, 1, hpx);
         bottom += hpx;
     }
-    console.log(`${this.w} ${this.h} ${metricGap} ${JSON.stringify(values)} ${min} ${max} ${bottom}`)
 /*
     if (max != this.maxValue && this.maxValue!=-1) {
         this.scroll();
@@ -70,6 +69,10 @@ export class GaugeWithHistoryComponent extends DashboardElement<GaugeWithHistory
     this.canvas = <HTMLCanvasElement>vnode.dom;
     this.w = this.canvas.width = this.canvas.scrollWidth;
     this.h = this.canvas.height = this.canvas.scrollHeight;
+    var ctx = this.canvas.getContext('2d');
+    if (!ctx) return;
+    ctx.fillStyle = "#3e233e";
+    ctx.fillRect(0,0,this.w,this.h)
   }
 
   scroll() {
