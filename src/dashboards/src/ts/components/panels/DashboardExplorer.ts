@@ -34,7 +34,7 @@ export class DashboardExplorer implements m.ClassComponent<DashboardExplorerAttr
           reload:() => this.load()
         }),
         m(".content", m(".list", [
-          this.data.list.map(e => this.filter.matchOne([e.name]) ? m("a.listitem", {onclick:() => Routing.goToScreen(Endpoints.DASHBOARD_EDITION, {id:e.id})}, e.name) : null)
+          this.data.list.map(e => this.filter.matchOne([e.name]) ? m("a.listitem", {onclick:() => Routing.goToScreen(Endpoints.DASHBOARD_VIEW, {id:e.id})}, e.name) : null)
         ]))
       ];
   }

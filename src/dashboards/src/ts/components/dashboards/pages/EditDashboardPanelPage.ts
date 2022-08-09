@@ -54,7 +54,7 @@ export class EditDashboardPanelPage extends AbstractPage<EditPanelAttrs> {
         }}, m(SaveIcon)),
         m(Link, {tooltip:"Go back Home", target:Endpoints.HOME}, m(HomeIcon)),
         m(RightChevronIcon),
-        m(Link, {target:Routing.getRoute(Endpoints.DASHBOARD_EDITION, {id:id})}, GlobalData.getDashboardTitle(id)),
+        m(Link, {target:Routing.getRoute(Endpoints.DASHBOARD_VIEW, {id:id})}, GlobalData.getDashboardTitle(id)),
         m(RightChevronIcon),
         this.panel ? this.panel.title : "Edit Panel"
       ]),

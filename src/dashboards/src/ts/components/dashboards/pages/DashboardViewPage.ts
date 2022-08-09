@@ -12,7 +12,7 @@ import { ApiEndpoints } from '../../../auto/ApiEndpoints';
 import { Link } from '../../atoms/Link';
 import { ViewDashboardPanel } from '../../panels/ViewDashboardPanel';
 
-export class DashboardEditPage extends AbstractPage<IdAttrs> {
+export class DashboardViewPage extends AbstractPage<IdAttrs> {
   private dashboard : Dashboard;
 
   oninit({attrs}:m.Vnode<IdAttrs>) {
