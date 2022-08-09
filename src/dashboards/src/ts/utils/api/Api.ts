@@ -50,7 +50,8 @@ export class Api {
           Notifications.addNotification(new Notification(NotificationsClass.SERVER_RESPONSE, NotificationsType.ERROR, "The server encountered an error. More informations can probably be found in the logs.", 10));
           throw "HandledError";
         case ApiResultCodes.SERVER_UNREACHABLE:
-          Notifications.addNotification(new Notification(NotificationsClass.SERVER_UNREACHABLE, NotificationsType.ERROR, ["The server could not be reached. Is it running? Is your network connection ok?"], 5));
+          if (options.redrawOnError) m.redraw();
+          if (!options.hideFromSpinner) Notifications.addNotification(new Notification(NotificationsClass.SERVER_UNREACHABLE, NotificationsType.ERROR, ["The server could not be reached. Is it running? Is your network connection ok?"], 5));
           throw "HandledError";
         default:
           Notifications.addNotification(new Notification(NotificationsClass.SERVER_UNREACHABLE, NotificationsType.ERROR, "An unknown error has occured.", 5));

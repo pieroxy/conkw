@@ -3,4 +3,5 @@ export interface ApiOptions<T> {
   endpoint:string;
   body:T;
   hideFromSpinner?:boolean;
+  redrawOnError?:boolean;
 }

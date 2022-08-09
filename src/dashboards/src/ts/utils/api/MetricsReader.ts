@@ -63,7 +63,8 @@ export class MetricsReader {
       method:"GET",
       body:{grabbers:[...MetricsReader.grabbersRequested.keys()]},
       endpoint:"CallApi",
-      hideFromSpinner:true
+      hideFromSpinner:true,
+      redrawOnError:true
     }).then((o => MetricsReader.lastResponse = {rawData:o.data, iteration:this.iteration++, metricGap:false}))
   }
 
