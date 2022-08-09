@@ -3,19 +3,19 @@ import { HomeIcon } from '../../atoms/icons/HomeIcon';
 import { RightChevronIcon } from '../../atoms/icons/RightChevronIcon';
 import { Endpoints } from '../../../utils/navigation/Endpoints';
 import { Routing } from '../../../utils/navigation/Routing';
-import { AbstractPage } from '../AbstractPage';
+import { AbstractPage } from '../../pages/AbstractPage';
 import { GlobalData } from '../../../utils/GlobalData';
 import { DashboardPanel, GaugeWithHistoryElement, SimpleGaugeWithValueAndLabelElement, TopLevelPanelElement, TopLevelPanelElementEnum } from '../../../auto/pieroxy-conkw';
 import { TextFieldInput } from '../../atoms/forms/TextFieldInput';
 import { SaveIcon } from '../../atoms/icons/SaveIcon';
 import { RoundedPlusIcon } from '../../atoms/icons/RoundedPlusIcon';
-import { EditSimpleLabelPanel } from '../../panels/dashboardEdition/EditSimpleLabelPanel';
-import { EditSimpleSiLabelPanel } from '../../panels/dashboardEdition/EditSimpleSiLabelPanel';
-import { EditSimpleGaugePanel } from '../../panels/dashboardEdition/EditSimpleGaugePanel';
+import { EditSimpleLabelPanel } from '../../dashboardEdition/EditSimpleLabelPanel';
+import { EditSimpleSiLabelPanel } from '../../dashboardEdition/EditSimpleSiLabelPanel';
+import { EditSimpleGaugePanel } from '../../dashboardEdition/EditSimpleGaugePanel';
 import { ApiEndpoints } from '../../../auto/ApiEndpoints';
 import { Link } from '../../atoms/Link';
-import { ViewDashboardPanel } from '../../panels/dashboards/ViewDashboardPanel';
-import { NewPanelItemComponent } from '../../panels/dashboardEdition/NewPanelItemComponent';
+import { NewPanelItemComponent } from '../../dashboardEdition/NewPanelItemComponent';
+import { ViewDashboardPanel } from '../../panels/ViewDashboardPanel';
 
 export class EditDashboardPanelPage extends AbstractPage<EditPanelAttrs> {
   private panel:DashboardPanel;

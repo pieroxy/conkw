@@ -1,7 +1,7 @@
 import m from 'mithril';
-import { GaugeWithHistory } from '../../../../auto/pieroxy-conkw';
-import { ColorUtils } from '../../../../utils/ColorUtils';
-import { NumberUtils } from '../../../../utils/NumberUtils';
+import { GaugeWithHistory } from '../../../auto/pieroxy-conkw';
+import { ColorUtils } from '../../../utils/ColorUtils';
+import { NumberUtils } from '../../../utils/NumberUtils';
 import { DashboardElement, DashboardElementAttrs } from '../DashboardElement';
 
 export class GaugeWithHistoryComponent extends DashboardElement<GaugeWithHistoryAttrs> {

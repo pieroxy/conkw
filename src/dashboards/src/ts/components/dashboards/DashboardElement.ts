@@ -1,7 +1,7 @@
 import m from 'mithril';
-import { DashboardDynamicElement, ExpressionClass, MetricsApiResponse, ValueExpression } from '../../../auto/pieroxy-conkw';
-import { CurrentData } from '../../../utils/api/CurrentData';
-import { MetricsReader } from '../../../utils/api/MetricsReader';
+import { DashboardDynamicElement, ExpressionClass, MetricsApiResponse, ValueExpression } from '../../auto/pieroxy-conkw';
+import { CurrentData } from '../../utils/api/CurrentData';
+import { MetricsReader } from '../../utils/api/MetricsReader';
 
 export abstract class DashboardElement<T extends DashboardElementAttrs> implements m.ClassComponent<T> {
 

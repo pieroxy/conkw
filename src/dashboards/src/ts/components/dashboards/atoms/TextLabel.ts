@@ -1,5 +1,5 @@
 import m from 'mithril';
-import { DynamicLabel } from '../../../../auto/pieroxy-conkw';
+import { DynamicLabel } from '../../../auto/pieroxy-conkw';
 import { DashboardElement, DashboardElementAttrs } from '../DashboardElement';
 
 export class TextLabelComponent extends DashboardElement<TextLabelAttrs> {

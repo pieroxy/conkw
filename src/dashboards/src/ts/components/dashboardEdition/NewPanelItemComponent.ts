@@ -1,8 +1,8 @@
 import m from 'mithril';
-import { ApiEndpoints } from '../../../auto/ApiEndpoints';
-import { SimpleGaugeWithValueAndLabelElementAttrs, SimpleGaugeWithValueAndLabelElementComponent } from '../../organisms/dashboards/SimpleGaugeWithValueAndLabelElementComponent';
-import { ExpressionClass, ExpressionValueType, GaugeWithHistoryElement, SimpleGaugeWithValueAndLabelElement, TopLevelPanelElementEnum } from '../../../auto/pieroxy-conkw';
-import { GaugeWithHistoryLineComponent, GaugeWithHistoryLineComponentAttrs } from '../../organisms/dashboards/GaugeWithHistoryLineComponent';
+import { ApiEndpoints } from '../../auto/ApiEndpoints';
+import { ExpressionClass, ExpressionValueType, GaugeWithHistoryElement, SimpleGaugeWithValueAndLabelElement, TopLevelPanelElementEnum } from '../../auto/pieroxy-conkw';
+import { GaugeWithHistoryLineComponent, GaugeWithHistoryLineComponentAttrs } from '../dashboards/panelitems/GaugeWithHistoryLineComponent';
+import { SimpleGaugeWithValueAndLabelElementAttrs, SimpleGaugeWithValueAndLabelElementComponent } from '../dashboards/panelitems/SimpleGaugeWithValueAndLabelElementComponent';
 
 export class NewPanelItemComponent implements m.ClassComponent<NewPanelItemComponentAttrs> {
 

@@ -1,10 +1,10 @@
 import m from 'mithril';
-import { DashboardPanel, GaugeWithHistoryElement, SimpleGaugeWithValueAndLabelElement, TopLevelPanelElement, TopLevelPanelElementEnum } from '../../../auto/pieroxy-conkw';
-import { MetricsReader } from '../../../utils/api/MetricsReader';
-import { Link } from '../../atoms/Link';
-import { EditDocumentIcon } from '../../atoms/icons/EditDocumentIcon';
-import { SimpleGaugeWithValueAndLabelElementComponent } from '../../organisms/dashboards/SimpleGaugeWithValueAndLabelElementComponent';
-import { GaugeWithHistoryLineComponent } from '../../organisms/dashboards/GaugeWithHistoryLineComponent';
+import { DashboardPanel, GaugeWithHistoryElement, SimpleGaugeWithValueAndLabelElement, TopLevelPanelElement, TopLevelPanelElementEnum } from '../../auto/pieroxy-conkw';
+import { MetricsReader } from '../../utils/api/MetricsReader';
+import { EditDocumentIcon } from '../atoms/icons/EditDocumentIcon';
+import { Link } from '../atoms/Link';
+import { GaugeWithHistoryLineComponent } from '../dashboards/panelitems/GaugeWithHistoryLineComponent';
+import { SimpleGaugeWithValueAndLabelElementComponent } from '../dashboards/panelitems/SimpleGaugeWithValueAndLabelElementComponent';
 
 export class ViewDashboardPanel implements m.ClassComponent<SimpleGaugeWithValueAndLabelPanelAttrs> {
   view({attrs}: m.Vnode<SimpleGaugeWithValueAndLabelPanelAttrs>): void | m.Children {

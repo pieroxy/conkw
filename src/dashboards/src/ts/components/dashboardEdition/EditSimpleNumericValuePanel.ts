@@ -1,9 +1,9 @@
 import m from 'mithril';
-import { ExpressionClass, ExpressionValueType, ValueExpression } from '../../../auto/pieroxy-conkw';
-import { MetricsReader } from '../../../utils/api/MetricsReader';
-import { SelectInput } from '../../atoms/forms/SelectInput';
-import { TextFieldInput } from '../../atoms/forms/TextFieldInput';
-import { TextFieldInputWithSearch } from '../../atoms/forms/TextFieldInputWithSearch';
+import { ExpressionClass, ExpressionValueType, ValueExpression } from '../../auto/pieroxy-conkw';
+import { MetricsReader } from '../../utils/api/MetricsReader';
+import { SelectInput } from '../atoms/forms/SelectInput';
+import { TextFieldInput } from '../atoms/forms/TextFieldInput';
+import { TextFieldInputWithSearch } from '../atoms/forms/TextFieldInputWithSearch';
 
 export class EditSimpleNumericValuePanel implements m.ClassComponent<EditSimpleNumericValuePanelAttrs> {
   view({attrs}: m.Vnode<EditSimpleNumericValuePanelAttrs>): void | m.Children {

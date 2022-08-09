@@ -5,12 +5,12 @@ import { HomeIcon } from '../../atoms/icons/HomeIcon';
 import { RightChevronIcon } from '../../atoms/icons/RightChevronIcon';
 import { Endpoints } from '../../../utils/navigation/Endpoints';
 import { Routing } from '../../../utils/navigation/Routing';
-import { AbstractPage } from '../AbstractPage';
+import { AbstractPage } from '../../pages/AbstractPage';
 import { NewDocumentIcon } from '../../atoms/icons/NewDocumentIcon';
 import { GlobalData } from '../../../utils/GlobalData';
 import { ApiEndpoints } from '../../../auto/ApiEndpoints';
 import { Link } from '../../atoms/Link';
-import { ViewDashboardPanel } from '../../panels/dashboards/ViewDashboardPanel';
+import { ViewDashboardPanel } from '../../panels/ViewDashboardPanel';
 
 export class DashboardEditPage extends AbstractPage<IdAttrs> {
   private dashboard : Dashboard;

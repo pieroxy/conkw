@@ -4,12 +4,12 @@ import { HomePage } from './components/pages/HomePage';
 import { LoginPage } from './components/pages/auth/LoginPage';
 import { AuthenticatedPageResolver } from './utils/AuthenticatedPageResolver';
 import { ChangePassword } from './components/pages/auth/ChangePassword';
-import { DashboardEditPage } from './components/pages/dashboards/DashboardEdit';
+import { DashboardEditPage } from './components/dashboards/pages/DashboardEdit';
 import { Endpoints } from './utils/navigation/Endpoints';
 import { ProfilePage } from './components/pages/auth/ProfilePage';
 import { AlertsPage } from './components/pages/alerts/AlertsPage';
 import { SettingsPage } from './components/pages/settings/Settings';
-import { EditDashboardPanelPage } from './components/pages/dashboards/EditDashboardPanelPage';
+import { EditDashboardPanelPage } from './components/dashboards/pages/EditDashboardPanelPage';
 
 (function () {
 

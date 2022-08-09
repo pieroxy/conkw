@@ -1,10 +1,10 @@
 import m from 'mithril';
 import { GaugeWithHistoryElement, SimpleGaugeWithValueAndLabelElement } from '../../../auto/pieroxy-conkw';
 import { DisplayUtils } from '../../../utils/DisplayUtils';
-import { GaugeWithHistoryComponent } from './atoms/GaugeWithHistoryComponent';
-import { TextLabelComponent } from './atoms/TextLabel';
-import { ValueWithUnitComponent } from './atoms/ValueWithUnit';
-import { DashboardElement, DashboardElementAttrs } from './DashboardElement';
+import { GaugeWithHistoryComponent } from '../atoms/GaugeWithHistoryComponent';
+import { TextLabelComponent } from '../atoms/TextLabel';
+import { ValueWithUnitComponent } from '../atoms/ValueWithUnit';
+import { DashboardElement, DashboardElementAttrs } from '../DashboardElement';
 
 export class GaugeWithHistoryLineComponent 
 extends DashboardElement<GaugeWithHistoryLineComponentAttrs> {
