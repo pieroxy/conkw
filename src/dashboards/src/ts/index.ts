@@ -8,7 +8,7 @@ import { Endpoints } from './utils/navigation/Endpoints';
 import { ProfilePage } from './components/pages/auth/ProfilePage';
 import { AlertsPage } from './components/pages/alerts/AlertsPage';
 import { SettingsPage } from './components/pages/settings/Settings';
-import { EditDashboardPanelPage } from './components/dashboards/pages/EditDashboardPanelPage';
+import { DashboardPanelEditPage } from './components/dashboards/pages/DashboardPanelEditPage';
 import { DashboardViewPage } from './components/dashboards/pages/DashboardViewPage';
 
 (function () {
@@ -18,7 +18,7 @@ import { DashboardViewPage } from './components/dashboards/pages/DashboardViewPa
   routes[Endpoints.LOGIN] = LoginPage;
   routes[Endpoints.DASHBOARD_VIEW] = new AuthenticatedPageResolver(DashboardViewPage);
   routes[Endpoints.PASSWORD_CHANGE] = ChangePassword;
-  routes[Endpoints.DASHBOARD_PANEL_EDIT] = new AuthenticatedPageResolver(EditDashboardPanelPage);
+  routes[Endpoints.DASHBOARD_PANEL_EDIT] = new AuthenticatedPageResolver(DashboardPanelEditPage);
   routes[Endpoints.PROFILE] = new AuthenticatedPageResolver(ProfilePage);
   routes[Endpoints.ALERTS] = new AuthenticatedPageResolver(AlertsPage);
   routes[Endpoints.SETTINGS] = new AuthenticatedPageResolver(SettingsPage);

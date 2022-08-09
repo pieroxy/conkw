@@ -17,7 +17,7 @@ import { Link } from '../../atoms/Link';
 import { NewPanelItemComponent } from '../../dashboardEdition/NewPanelItemComponent';
 import { ViewDashboardPanel } from '../../panels/ViewDashboardPanel';
 
-export class EditDashboardPanelPage extends AbstractPage<EditPanelAttrs> {
+export class DashboardPanelEditPage extends AbstractPage<EditPanelAttrs> {
   private panel:DashboardPanel;
   private dashboardId:string;
   selected?: TopLevelPanelElement;
