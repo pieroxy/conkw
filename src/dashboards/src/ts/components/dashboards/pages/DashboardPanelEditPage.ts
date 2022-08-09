@@ -9,13 +9,13 @@ import { DashboardPanel, GaugeWithHistoryElement, SimpleGaugeWithValueAndLabelEl
 import { TextFieldInput } from '../../atoms/forms/TextFieldInput';
 import { SaveIcon } from '../../atoms/icons/SaveIcon';
 import { RoundedPlusIcon } from '../../atoms/icons/RoundedPlusIcon';
-import { EditSimpleLabelPanel } from '../../dashboardEdition/EditSimpleLabelPanel';
-import { EditSimpleSiLabelPanel } from '../../dashboardEdition/EditSimpleSiLabelPanel';
-import { EditSimpleGaugePanel } from '../../dashboardEdition/EditSimpleGaugePanel';
+import { EditSimpleGaugePanel } from '../edition/atoms/EditSimpleGaugePanel';
 import { ApiEndpoints } from '../../../auto/ApiEndpoints';
 import { Link } from '../../atoms/Link';
-import { NewPanelItemComponent } from '../../dashboardEdition/NewPanelItemComponent';
+import { NewPanelItemComponent } from '../edition/NewPanelItemComponent';
 import { ViewDashboardPanel } from '../../panels/ViewDashboardPanel';
+import { EditSimpleLabelPanel } from '../edition/atoms/EditSimpleLabelPanel';
+import { EditSimpleSiLabelPanel } from '../edition/atoms/EditSimpleSiLabelPanel';
 
 export class DashboardPanelEditPage extends AbstractPage<EditPanelAttrs> {
   private panel:DashboardPanel;

@@ -1,7 +1,7 @@
 import m from 'mithril';
-import { SimpleGauge } from '../../../auto/pieroxy-conkw';
-import { NumberUtils } from '../../../utils/NumberUtils';
-import { DashboardElement, DashboardElementAttrs } from '../DashboardElement';
+import { SimpleGauge } from '../../../../auto/pieroxy-conkw';
+import { NumberUtils } from '../../../../utils/NumberUtils';
+import { DashboardElement, DashboardElementAttrs } from '../../DashboardElement';
 
 export class SimpleGaugeComponent extends DashboardElement<SimpleGaugeAttrs> {
   private fakeSeed=0;

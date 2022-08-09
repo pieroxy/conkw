@@ -3,8 +3,8 @@ import { DashboardPanel, GaugeWithHistoryElement, SimpleGaugeWithValueAndLabelEl
 import { MetricsReader } from '../../utils/api/MetricsReader';
 import { EditDocumentIcon } from '../atoms/icons/EditDocumentIcon';
 import { Link } from '../atoms/Link';
-import { GaugeWithHistoryLineComponent } from '../dashboards/panelitems/GaugeWithHistoryLineComponent';
-import { SimpleGaugeWithValueAndLabelElementComponent } from '../dashboards/panelitems/SimpleGaugeWithValueAndLabelElementComponent';
+import { GaugeWithHistoryLineComponent } from '../dashboards/view/panelitems/GaugeWithHistoryLineComponent';
+import { SimpleGaugeWithValueAndLabelElementComponent } from '../dashboards/view/panelitems/SimpleGaugeWithValueAndLabelElementComponent';
 
 export class ViewDashboardPanel implements m.ClassComponent<SimpleGaugeWithValueAndLabelPanelAttrs> {
   view({attrs}: m.Vnode<SimpleGaugeWithValueAndLabelPanelAttrs>): void | m.Children {

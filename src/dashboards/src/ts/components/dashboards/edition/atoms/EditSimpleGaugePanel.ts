@@ -1,6 +1,6 @@
 import m from 'mithril';
-import { SimpleGauge } from '../../auto/pieroxy-conkw';
-import { TextFieldInput } from '../atoms/forms/TextFieldInput';
+import { SimpleGauge } from '../../../../auto/pieroxy-conkw';
+import { TextFieldInput } from '../../../atoms/forms/TextFieldInput';
 import { EditSimpleNumericValuePanel } from './EditSimpleNumericValuePanel';
 
 export class EditSimpleGaugePanel implements m.ClassComponent<EditSimpleGaugePanelAttrs> {
