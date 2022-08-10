@@ -81,6 +81,8 @@ public class SimpleGaugeWithValueAndLabelElement extends TopLevelPanelElement {
     gauge.getValue().setValue("35");
     gauge.getValue().setType(ExpressionValueType.NUMERIC);
     gauge.getValue().setClazz(ExpressionClass.LITERAL);
+
+    this.valueIsGauge = true;
   }
 
   public boolean isValueIsGauge() {
