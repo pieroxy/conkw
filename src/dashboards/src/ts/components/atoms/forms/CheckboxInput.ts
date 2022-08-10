@@ -8,17 +8,26 @@ import { HtmlInputEvent } from './HtmlInputEvent';
 export class CheckboxInput extends GenericInput<boolean, CheckboxInputAttrs> {
   private attrs: CheckboxInputAttrs;
 
+  oninit() {
+    this.convertValueFromString = (s:string):boolean => {
+      return s === "true";
+    }
+    this.convertValueToString = (s:boolean):string => {
+      return s ? "true" : "false";
+    }
+  }
+
   render({attrs,children}: m.Vnode<CheckboxInputAttrs>): Children {
     this.attrs = attrs;
     let params:any = {
       type:"checkbox",
       oninput: (e:HtmlInputEvent) => {
-        this.setValue(e.target.value);
+        this.setValue(""+(<HTMLInputElement>e.target).checked);
         this.computeErrorState();
         if (attrs.onchange) attrs.onchange();
       },
-      value: this.getValueAsString()
     }
+    if (attrs.refHolder[attrs.refProperty]) params.checked="true";
 
     return m(
       "label.checkbox" + this.getErrorClass(), 
