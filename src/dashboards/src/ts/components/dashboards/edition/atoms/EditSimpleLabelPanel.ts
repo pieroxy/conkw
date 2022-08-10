@@ -68,7 +68,7 @@ export class EditSimpleLabelPanel implements m.ClassComponent<EditSimpleLabelPan
       m(CheckboxInput, {
         refHolder:this,
         refProperty:"tooltip"
-      }, "Tooptip"),
+      }, "Tooltip"),
       m(CheckboxInput, {
         refHolder:this,
         refProperty:"tooltip"
