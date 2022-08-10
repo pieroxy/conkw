@@ -2,15 +2,19 @@ import m from 'mithril';
 import { ExpressionClass, SimpleGaugeWithValueAndLabelElement } from '../../../../auto/pieroxy-conkw';
 import { CheckboxInput } from '../../../atoms/forms/CheckboxInput';
 import { TextFieldInput } from '../../../atoms/forms/TextFieldInput';
-import { EditSimpleGaugePanel } from '../atoms/EditSimpleGaugePanel';
 import { EditSimpleLabelPanel } from '../atoms/EditSimpleLabelPanel';
+import { EditSimpleNumericValuePanel } from '../atoms/EditSimpleNumericValuePanel';
 import { EditSimpleSiLabelPanel } from '../atoms/EditSimpleSiLabelPanel';
 
 export class EditSimpleGaugeWithValueAndLabelElementPanel implements m.ClassComponent<EditSimpleGaugeWithValueAndLabelElementPanelAttrs> {
   private labelIsStatic:boolean;
+  private maxIsStatic:boolean;
+  private minIsStatic:boolean;
 
   view({attrs}: m.Vnode<EditSimpleGaugeWithValueAndLabelElementPanelAttrs, this>): void | m.Children {
     this.labelIsStatic = attrs.element?.label.value.clazz === ExpressionClass.LITERAL;
+    this.minIsStatic = attrs.element?.gauge.min.clazz === ExpressionClass.LITERAL;
+    this.maxIsStatic = attrs.element?.gauge.max.clazz === ExpressionClass.LITERAL;
     if (attrs.element?.valueIsGauge) {
       // Every change ends up in a redraw, so it is easier to make this update here.
       // Will (should?) move it when the refacto simplifications are done.
@@ -38,6 +42,28 @@ export class EditSimpleGaugeWithValueAndLabelElementPanel implements m.ClassComp
                 }
               }
             }, "Label is static"),
+            m(CheckboxInput, {
+              refHolder:this,
+              refProperty:"minIsStatic",
+              onchange:() => {
+                if (this.minIsStatic) {
+                  element.gauge.min.clazz = ExpressionClass.LITERAL;
+                } else {
+                  element.gauge.min.clazz = ExpressionClass.METRIC;
+                }
+              }
+            }, "Min is static"),
+            m(CheckboxInput, {
+              refHolder:this,
+              refProperty:"maxIsStatic",
+              onchange:() => {
+                if (this.maxIsStatic) {
+                  element.gauge.max.clazz = ExpressionClass.LITERAL;
+                } else {
+                  element.gauge.max.clazz = ExpressionClass.METRIC;
+                }
+              }
+            }, "Max is static"),
             m(CheckboxInput, {
               refHolder:attrs.element,
               refProperty:"valueIsGauge",
@@ -79,12 +105,66 @@ export class EditSimpleGaugeWithValueAndLabelElementPanel implements m.ClassComp
                 m(".groupTitle", "The value"),
                 m(EditSimpleSiLabelPanel, {element:attrs.element.value}),
               ]),
+            this.minIsStatic ?
+              m(".inputWithLabel", [
+                m(".label", "Minimum"),
+                m(TextFieldInput, {
+                  onenter:()=>{},
+                  refHolder:element.gauge.min,
+                  refProperty:"value",
+                  spellcheck:false,
+                  params: {
+                    size:10
+                  }
+                })
+              ])
+            :
+              m(".group", [
+                m(".groupTitle", "Minimum"),
+                m(EditSimpleNumericValuePanel, {element:attrs.element.gauge.min}),
+              ]),
+      
+            this.maxIsStatic ?
+              m(".inputWithLabel", [
+                m(".label", "Maximum"),
+                m(TextFieldInput, {
+                  onenter:()=>{},
+                  refHolder:element.gauge.max,
+                  refProperty:"value",
+                  spellcheck:false,
+                  params: {
+                    size:10
+                  }
+                })
+              ])
+            :
+              m(".group", [
+                m(".groupTitle", "Minimum"),
+                m(EditSimpleNumericValuePanel, {element:attrs.element.gauge.max}),
+              ]),
+            m(".inputWithLabel", [
+              m(".label", "Stale after (s)"),
+              m(TextFieldInput, {
+                onenter:()=>{},
+                refHolder:attrs.element.gauge,
+                refProperty:"staleDelay",
+                spellcheck:false,
+                params: {
+                  size:3
+                },
+                onchange() {
+                  element.value.staleDelay = element.gauge.staleDelay
+                }
+              })
+            ])
+        
+      
+          ]),
+          m(".group", [
+            m(".groupTitle", "Gauge value"),
+            m(EditSimpleNumericValuePanel, {element:attrs.element.gauge.value}),
           ]),
 
-          m(".group", [
-            m(".groupTitle", "The gauge"),
-            m(EditSimpleGaugePanel, {element:attrs.element.gauge}),
-          ])
         ]),
       ];
     }
