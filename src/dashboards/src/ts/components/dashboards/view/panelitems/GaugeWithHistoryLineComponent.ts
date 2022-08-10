@@ -1,5 +1,5 @@
 import m from 'mithril';
-import { GaugeWithHistoryElement, SimpleGaugeWithValueAndLabelElement } from '../../../../auto/pieroxy-conkw';
+import { GaugeWithHistoryElement } from '../../../../auto/pieroxy-conkw';
 import { DisplayUtils } from '../../../../utils/DisplayUtils';
 import { GaugeWithHistoryComponent } from '../atoms/GaugeWithHistoryComponent';
 import { TextLabelComponent } from '../atoms/TextLabel';
@@ -29,7 +29,7 @@ extends DashboardElement<GaugeWithHistoryLineComponentAttrs> {
       m(".sgvl-bottom")
     ])
   }
-  getRemainingWidth(model: SimpleGaugeWithValueAndLabelElement) {
+  getRemainingWidth(model: GaugeWithHistoryElement) {
     return 155 + (5+model.value.unit.length)*DisplayUtils.getMonospaceCharWidth(14);
   }
 }

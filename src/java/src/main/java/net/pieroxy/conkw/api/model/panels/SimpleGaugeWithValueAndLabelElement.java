@@ -14,6 +14,7 @@ public class SimpleGaugeWithValueAndLabelElement extends TopLevelPanelElement {
   private DynamicLabel label;
   private SiPrefixedValue value;
   private SimpleGauge gauge;
+  private boolean valueIsGauge;
 
   public SimpleGaugeWithValueAndLabelElement() {
     this.type = TopLevelPanelElementEnum.SIMPLE_GAUGE;
@@ -80,5 +81,13 @@ public class SimpleGaugeWithValueAndLabelElement extends TopLevelPanelElement {
     gauge.getValue().setValue("35");
     gauge.getValue().setType(ExpressionValueType.NUMERIC);
     gauge.getValue().setClazz(ExpressionClass.LITERAL);
+  }
+
+  public boolean isValueIsGauge() {
+    return valueIsGauge;
+  }
+
+  public void setValueIsGauge(boolean valueIsGauge) {
+    this.valueIsGauge = valueIsGauge;
   }
 }
