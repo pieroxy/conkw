@@ -71,7 +71,7 @@ export class EditSimpleGaugeWithValueAndLabelElementPanel implements m.ClassComp
           ]),
           m("br"),
           m(".group", [
-            m(".groupTitle", "Definition"),
+            m(".groupTitle", "Simple Definition"),
             this.labelIsStatic ?
               m(".inputWithLabel", [
                 m(".label", "Label"),
@@ -82,12 +82,8 @@ export class EditSimpleGaugeWithValueAndLabelElementPanel implements m.ClassComp
                   spellcheck:false
                 })
               ])
-            : 
-              m(".group", [
-                m(".groupTitle", "The label"),
-                m(EditSimpleLabelPanel, {element:attrs.element.label}),
-              ]),
-              attrs.element.valueIsGauge ?
+            : null,
+            attrs.element.valueIsGauge ?
               m(".inputWithLabel", [
                 m(".label", "Unit"),
                 m(TextFieldInput, {
@@ -100,11 +96,7 @@ export class EditSimpleGaugeWithValueAndLabelElementPanel implements m.ClassComp
                   }
                 })
               ])
-            :
-              m(".group", [
-                m(".groupTitle", "The value"),
-                m(EditSimpleSiLabelPanel, {element:attrs.element.value}),
-              ]),
+            : null,
             this.minIsStatic ?
               m(".inputWithLabel", [
                 m(".label", "Minimum"),
@@ -118,11 +110,7 @@ export class EditSimpleGaugeWithValueAndLabelElementPanel implements m.ClassComp
                   }
                 })
               ])
-            :
-              m(".group", [
-                m(".groupTitle", "Minimum"),
-                m(EditSimpleNumericValuePanel, {element:attrs.element.gauge.min}),
-              ]),
+            : null,
       
             this.maxIsStatic ?
               m(".inputWithLabel", [
@@ -137,11 +125,7 @@ export class EditSimpleGaugeWithValueAndLabelElementPanel implements m.ClassComp
                   }
                 })
               ])
-            :
-              m(".group", [
-                m(".groupTitle", "Minimum"),
-                m(EditSimpleNumericValuePanel, {element:attrs.element.gauge.max}),
-              ]),
+            : null,
             m(".inputWithLabel", [
               m(".label", "Stale after (s)"),
               m(TextFieldInput, {
@@ -157,13 +141,32 @@ export class EditSimpleGaugeWithValueAndLabelElementPanel implements m.ClassComp
                 }
               })
             ])
-        
-      
           ]),
           m(".group", [
             m(".groupTitle", "Gauge value"),
             m(EditSimpleNumericValuePanel, {element:attrs.element.gauge.value}),
           ]),
+          this.labelIsStatic ? null :
+            m(".group", [
+              m(".groupTitle", "The label"),
+              m(EditSimpleLabelPanel, {element:attrs.element.label}),
+            ]),
+            attrs.element.valueIsGauge ? null :
+            m(".group", [
+              m(".groupTitle", "The value"),
+              m(EditSimpleSiLabelPanel, {element:attrs.element.value}),
+            ]),
+          this.minIsStatic ? null :
+            m(".group", [
+              m(".groupTitle", "Minimum"),
+              m(EditSimpleNumericValuePanel, {element:attrs.element.gauge.min}),
+            ]),
+    
+          this.maxIsStatic ? null :
+            m(".group", [
+              m(".groupTitle", "Minimum"),
+              m(EditSimpleNumericValuePanel, {element:attrs.element.gauge.max}),
+            ]),
 
         ]),
       ];
