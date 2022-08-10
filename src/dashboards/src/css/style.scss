@@ -720,6 +720,11 @@ button {
     .sgvl-label {
       white-space: pre;
       overflow: hidden;
+
+      .label {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
     .sgvl-bottom {
       clear:both;
