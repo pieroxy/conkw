@@ -44,7 +44,7 @@ public class UserSessionService implements Runnable {
     while (saveThread == Thread.currentThread()) {
       try {
         synchronized (this) {
-          this.wait(10000);
+          this.wait(60*60*1000);
         }
       } catch (InterruptedException e) {
       }
