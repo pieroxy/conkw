@@ -1,7 +1,6 @@
 import m from 'mithril';
 import { DynamicLabel, ExpressionClass, ExpressionValueType } from '../../../../auto/pieroxy-conkw';
 import { MetricsReader } from '../../../../utils/api/MetricsReader';
-import { CheckboxInput } from '../../../atoms/forms/CheckboxInput';
 import { SelectInput } from '../../../atoms/forms/SelectInput';
 import { TextFieldInput } from '../../../atoms/forms/TextFieldInput';
 import { TextFieldInputWithSearch } from '../../../atoms/forms/TextFieldInputWithSearch';
@@ -63,20 +62,6 @@ export class EditSimpleLabelPanel implements m.ClassComponent<EditSimpleLabelPan
           }
         }),
       ]),
-
-      m("br"),
-      m(CheckboxInput, {
-        refHolder:this,
-        refProperty:"tooltip"
-      }, "Tooltip"),
-      m(CheckboxInput, {
-        refHolder:this,
-        refProperty:"tooltip"
-      }, "Stale"),
-      m(CheckboxInput, {
-        refHolder:this,
-        refProperty:"tooltip"
-      }, "Error"),
     ];
   }
 
