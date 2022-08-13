@@ -1,11 +1,12 @@
 import m from 'mithril';
-import { DashboardDynamicElement, ExpressionClass, MetricsApiResponse, ValueExpression } from '../../auto/pieroxy-conkw';
+import { DashboardDynamicElement, ExpressionClass, MetricsApiResponse, ValueExpression, WarningDirective } from '../../auto/pieroxy-conkw';
 import { CurrentData } from '../../utils/api/CurrentData';
 import { MetricsReader } from '../../utils/api/MetricsReader';
 
 export abstract class DashboardElement<T extends DashboardElementAttrs> implements m.ClassComponent<T> {
 
   computeNumericValue(expression:ValueExpression, data:MetricsApiResponse):number {
+    if (!expression) return NaN;
     switch (expression.clazz) {
       case ExpressionClass.LITERAL:
         return parseFloat(expression.value);
@@ -43,6 +44,20 @@ export abstract class DashboardElement<T extends DashboardElementAttrs> implemen
       }
     }
     return acs;
+  }
+
+  getValueWarningClass(error: ValueExpression | undefined, value: number, limitValue:number) {
+    if (!error) return "";
+    let warning = false;
+    switch (error.directive) {
+      case WarningDirective.VALUEABOVE:
+        warning = value > limitValue;
+        break;
+      case WarningDirective.VALUEBELOW:
+        warning = value < limitValue;
+        break;
+    }
+    return warning ? ".cw-error" : "";
   }
 
   abstract view(vnode: m.Vnode<T>): m.Children;

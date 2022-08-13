@@ -11,8 +11,12 @@ export class ValueWithUnitComponent extends DashboardElement<ValueWithUnitAttrs>
     if (attrs.currentData.useFakeDemoData) {
       value = attrs.currentData.useFakeDemoData.value;
     }
+    let warnValue = attrs.model.error===undefined ? NaN : this.computeNumericValue(attrs.model.error, attrs.currentData.rawData);
+    let className = ".silabel";
+    className += this.getStaleClass(attrs.model.value, attrs.model.staleDelay);
+    className += this.getValueWarningClass(attrs.model.error, value, warnValue);
 
-    return m(".silabel" + this.getStaleClass(attrs.model.value, attrs.model.staleDelay), NumberUtils.getSI(value) + unit);
+    return m(className, NumberUtils.getSI(value) + unit);
   }
 }
 

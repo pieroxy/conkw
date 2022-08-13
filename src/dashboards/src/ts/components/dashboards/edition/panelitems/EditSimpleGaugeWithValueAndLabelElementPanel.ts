@@ -1,6 +1,7 @@
 import m from 'mithril';
-import { ExpressionClass, SimpleGaugeWithValueAndLabelElement } from '../../../../auto/pieroxy-conkw';
+import { ExpressionClass, ExpressionValueType, SimpleGaugeWithValueAndLabelElement, WarningDirective } from '../../../../auto/pieroxy-conkw';
 import { CheckboxInput } from '../../../atoms/forms/CheckboxInput';
+import { SelectInput } from '../../../atoms/forms/SelectInput';
 import { TextFieldInput } from '../../../atoms/forms/TextFieldInput';
 import { EditSimpleLabelPanel } from '../atoms/EditSimpleLabelPanel';
 import { EditSimpleNumericValuePanel } from '../atoms/EditSimpleNumericValuePanel';
@@ -10,24 +11,42 @@ export class EditSimpleGaugeWithValueAndLabelElementPanel implements m.ClassComp
   private labelIsStatic:boolean;
   private maxIsStatic:boolean;
   private minIsStatic:boolean;
+  private thresholdIsStatic:boolean;
 
   view({attrs}: m.Vnode<EditSimpleGaugeWithValueAndLabelElementPanelAttrs, this>): void | m.Children {
-    this.labelIsStatic = attrs.element?.label.value.clazz === ExpressionClass.LITERAL;
-    this.minIsStatic = attrs.element?.gauge.min.clazz === ExpressionClass.LITERAL;
-    this.maxIsStatic = attrs.element?.gauge.max.clazz === ExpressionClass.LITERAL;
-    if (attrs.element?.valueIsGauge) {
-      // Every change ends up in a redraw, so it is easier to make this update here.
-      // Will (should?) move it when the refacto simplifications are done.
-      attrs.element.value.value.clazz = attrs.element.gauge.value.clazz;
-      attrs.element.value.value.namespace = attrs.element.gauge.value.namespace;
-      attrs.element.value.value.type = attrs.element.gauge.value.type;
-      attrs.element.value.value.value = attrs.element.gauge.value.value;
-    }
-
     if (attrs.element) {
       let element = attrs.element;
+
+      if (!element.gauge.error) {
+        element.gauge.error = {
+          clazz:ExpressionClass.LITERAL,
+          namespace:"",
+          type:ExpressionValueType.NUMERIC,
+          value:"0",
+          directive:WarningDirective.VALUEABOVE
+        }
+      }
+
+      if (element.gauge.error.directive === WarningDirective.VALUEBELOW && this.thresholdIsStatic) {
+        element.value.error = element.gauge.error;
+      }
+      
+      this.labelIsStatic = element.label.value.clazz === ExpressionClass.LITERAL;
+      this.minIsStatic = element.gauge.min.clazz === ExpressionClass.LITERAL;
+      this.maxIsStatic = element.gauge.max.clazz === ExpressionClass.LITERAL;
+      this.thresholdIsStatic = element.gauge.error?.clazz === ExpressionClass.LITERAL;
+      if (element.valueIsGauge) {
+        // Every change ends up in a redraw, so it is easier to make this update here.
+        // Will (should?) move it when the refacto simplifications are done.
+        element.value.value.clazz = element.gauge.value.clazz;
+        element.value.value.namespace = element.gauge.value.namespace;
+        element.value.value.type = element.gauge.value.type;
+        element.value.value.value = element.gauge.value.value;
+      }
+  
+  
       return [
-        m(".title", ["Edit ", m("i", attrs.element.label.value.value)]),
+        m(".title", ["Edit ", m("i", element.label.value.value)]),
         m(".editionPanel", [
           m(".group", [
             m(".groupTitle", "Simplifications"),
@@ -65,9 +84,13 @@ export class EditSimpleGaugeWithValueAndLabelElementPanel implements m.ClassComp
               }
             }, "Max is static"),
             m(CheckboxInput, {
-              refHolder:attrs.element,
+              refHolder:element,
               refProperty:"valueIsGauge",
             }, "Simple value"),
+            m(CheckboxInput, {
+              refHolder:this,
+              refProperty:"thresholdIsStatic",
+            }, "Threshold is static"),
           ]),
           m("br"),
           m(".group", [
@@ -83,7 +106,7 @@ export class EditSimpleGaugeWithValueAndLabelElementPanel implements m.ClassComp
                 })
               ])
             : null,
-            attrs.element.valueIsGauge ?
+            element.valueIsGauge ?
               m(".inputWithLabel", [
                 m(".label", "Unit"),
                 m(TextFieldInput, {
@@ -130,7 +153,7 @@ export class EditSimpleGaugeWithValueAndLabelElementPanel implements m.ClassComp
               m(".label", "Stale after (s)"),
               m(TextFieldInput, {
                 onenter:()=>{},
-                refHolder:attrs.element.gauge,
+                refHolder:element.gauge,
                 refProperty:"staleDelay",
                 spellcheck:false,
                 params: {
@@ -140,7 +163,30 @@ export class EditSimpleGaugeWithValueAndLabelElementPanel implements m.ClassComp
                   element.value.staleDelay = element.gauge.staleDelay
                 }
               })
-            ])
+            ]),
+            !this.thresholdIsStatic ? null : [
+              m(".inputWithLabel", [
+                m(".label", "Threshold"),
+                m(SelectInput, {
+                  onenter:()=>{},
+                  refHolder:element.gauge.error,
+                  refProperty:"directive",
+                  values:[
+                    {id:WarningDirective.VALUEABOVE,label:"Value is above"},
+                    {id:WarningDirective.VALUEBELOW,label:"Value is below"}
+                  ]
+                }),
+                m(TextFieldInput, {
+                  onenter:()=>{},
+                  refHolder:element.gauge.error,
+                  refProperty:"value",
+                  spellcheck:false,
+                  params: {
+                    size:5
+                  },
+                })
+              ]),
+            ]
           ]),
           m(".group", [
             m(".groupTitle", "Gauge value"),
@@ -171,7 +217,7 @@ export class EditSimpleGaugeWithValueAndLabelElementPanel implements m.ClassComp
         ]),
       ];
     }
-    return m("");
+    return m("Loading ...");
   }
 
 }

@@ -14,6 +14,7 @@ $error-color: #c49d07;
 $scrollbarFg:#55585a;
 $monospace: 'Courier New', Courier, monospace;
 $gauge-default-color: #383;
+$gauge-error-color: #822;
 $gauge-default-background: #3e233e;
 
 @mixin media-max($_max-width) {
@@ -736,6 +737,12 @@ button {
       float:right;
       font-family: $monospace;
       background-color: $bg-color-l1;
+
+      .silabel {
+        &.cw-error {
+          background-color:$gauge-error-color;
+        }
+      }
     }
     .sgvl-gauge {
 
@@ -754,6 +761,22 @@ button {
           position: absolute;
           height: 100%;
           background-color: $gauge-default-color;
+        }
+
+        &.cw-error .gaugethumb {
+          background-color: $gauge-error-color;
+        }
+
+        .gaugewarningright {
+          float:right;
+          height:100%;
+          background-color: #4e132e;
+        }
+
+        .gaugewarningleft {
+          position: absolute;
+          height:100%;
+          border-right: 1px solid black;
         }
       }
 
