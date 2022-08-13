@@ -9,7 +9,6 @@ export class GaugeWithHistoryComponent extends DashboardElement<GaugeWithHistory
   private w:number;
   private h:number;
   private colors = [ColorUtils.getGaugeDefaultColor()];
-  private fakeSeed=0;
   private iteration=-1;
 
   public view({attrs}:m.Vnode<GaugeWithHistoryAttrs>):m.Children {
@@ -22,9 +21,9 @@ export class GaugeWithHistoryComponent extends DashboardElement<GaugeWithHistory
       let log = attrs.model.logarithmic;
 
       if (attrs.currentData.useFakeDemoData) {
-        value = Math.sin((this.fakeSeed++)/10)*50+50;
+        value = attrs.currentData.useFakeDemoData.value;
       }
-
+  
       this.update(min, max, [value], log, attrs.currentData.metricGap);
     }
 

@@ -61,7 +61,9 @@ export class NewPanelItemComponent implements m.ClassComponent<NewPanelItemCompo
           strCount: 0,
         },
         metricGap:false,
-        useFakeDemoData:true
+        useFakeDemoData:{
+          value: this.getValue()
+        }
       },
       model: <SimpleGaugeWithValueAndLabelElement>{ 
         gauge: {
@@ -122,7 +124,9 @@ export class NewPanelItemComponent implements m.ClassComponent<NewPanelItemCompo
           strCount: 0,
         },
         metricGap:false,
-        useFakeDemoData:true
+        useFakeDemoData:{
+          value: this.getValue()
+        }
       },
       model: <GaugeWithHistoryElement>{ 
         gauge: {
@@ -167,6 +171,9 @@ export class NewPanelItemComponent implements m.ClassComponent<NewPanelItemCompo
         }
       }
     }
+  }
+  getValue(): number {
+    return (Math.sin(Date.now()/3000)*0.5+0.5)*100;
   }
 }
 

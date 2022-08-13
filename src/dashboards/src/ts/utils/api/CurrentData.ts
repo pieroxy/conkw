@@ -4,5 +4,5 @@ export class CurrentData {
   rawData:MetricsApiResponse;
   iteration:number;
   metricGap:boolean;
-  useFakeDemoData?:boolean
+  useFakeDemoData?:{value:number}
 }
