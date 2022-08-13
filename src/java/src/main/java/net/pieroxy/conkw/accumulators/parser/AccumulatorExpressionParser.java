@@ -1,6 +1,8 @@
 package net.pieroxy.conkw.accumulators.parser;
 
-import net.pieroxy.conkw.accumulators.*;
+import net.pieroxy.conkw.accumulators.Accumulator;
+import net.pieroxy.conkw.accumulators.AccumulatorProvider;
+import net.pieroxy.conkw.accumulators.MultiAccumulator;
 import net.pieroxy.conkw.accumulators.implementations.*;
 import net.pieroxy.conkw.pub.mdlog.DataRecord;
 
@@ -13,8 +15,8 @@ import java.util.Map;
 public class AccumulatorExpressionParser<T extends DataRecord> {
     private static final Map<String, Class<? extends Accumulator<? extends DataRecord>>> accumulatorsByName = new HashMap();
 
-    public Accumulator<T> parse(String expr) {
-        return parseAccumulator(expr, new int[]{0});
+    public RootAccumulator<T> parse(String expr) {
+        return new RootAccumulator<>("root", parseAccumulator(expr, new int[]{0}));
     }
 
     private AccumulatorProvider<T> parseAccumulatorProvider(String expr, int[]index) {

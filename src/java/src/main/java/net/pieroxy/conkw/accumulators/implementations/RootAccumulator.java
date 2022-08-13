@@ -13,6 +13,7 @@ public class RootAccumulator<T extends DataRecord> implements Accumulator<T> {
   final Accumulator<T> accumulator;
   long lastResetTime;
   long lastPeriod = 0;
+  long lastPoint = 0;
 
   public RootAccumulator(String rootName, Accumulator<T> acc) {
     this.rootName = rootName;
@@ -30,6 +31,7 @@ public class RootAccumulator<T extends DataRecord> implements Accumulator<T> {
 
   @Override
   public synchronized double add(T line) {
+    lastPoint = System.currentTimeMillis();
     return accumulator.add(line);
   }
 
@@ -71,5 +73,9 @@ public class RootAccumulator<T extends DataRecord> implements Accumulator<T> {
 
   public Accumulator<T> getFreshInstance() {
     return new RootAccumulator<T>(rootName, accumulator.getFreshInstance());
+  }
+
+  public long getLastPoint() {
+    return lastPoint;
   }
 }

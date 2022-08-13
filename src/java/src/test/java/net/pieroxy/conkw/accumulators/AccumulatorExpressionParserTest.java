@@ -9,7 +9,7 @@ import net.pieroxy.conkw.pub.mdlog.GenericLogRecord;
 
 public class AccumulatorExpressionParserTest extends ConkwTestCase {
     public void testSum() {
-        Accumulator a = new AccumulatorExpressionParser().parse("sum(aa,1000)");
+        Accumulator a = getParsedAccumulator(new AccumulatorExpressionParser().parse("sum(aa,1000)"));
         assertNotNull(a);
         assertEquals(SumAccumulator.class, a.getClass());
         SumAccumulator sa = (SumAccumulator) a;
@@ -30,7 +30,7 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
     }
 
     public void testCount() {
-        Accumulator a = new AccumulatorExpressionParser().parse("count()");
+        Accumulator a = getParsedAccumulator(new AccumulatorExpressionParser().parse("count()"));
         assertNotNull(a);
         assertEquals(SimpleCounter.class, a.getClass());
 
@@ -43,7 +43,7 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
     }
 
     public void testNamed() {
-        Accumulator a = new AccumulatorExpressionParser().parse("name(toto,count())");
+        Accumulator a = getParsedAccumulator(new AccumulatorExpressionParser().parse("name(toto,count())"));
         assertNotNull(a);
         assertEquals(NamedAccumulator.class, a.getClass());
 
@@ -64,7 +64,7 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
     }
 
     public void testMulti() {
-        Accumulator a = new AccumulatorExpressionParser().parse("multi([count(),sum(aa,0)])");
+        Accumulator a = getParsedAccumulator(new AccumulatorExpressionParser().parse("multi([count(),sum(aa,0)])"));
         assertNotNull(a);
         assertEquals(MultiAccumulator.class, a.getClass());
 
@@ -88,7 +88,7 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
     }
 
     public void testStringKey() {
-        Accumulator a = new AccumulatorExpressionParser().parse("stringkey(uri,count())");
+        Accumulator a = getParsedAccumulator(new AccumulatorExpressionParser().parse("stringkey(uri,count())"));
         assertNotNull(a);
         assertEquals(StringKeyAccumulator.class, a.getClass());
 
@@ -112,7 +112,7 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
     }
 
     public void testStableKey() {
-        Accumulator a = new AccumulatorExpressionParser().parse("stablekey(uri,count(),3)");
+        Accumulator a = getParsedAccumulator(new AccumulatorExpressionParser().parse("stablekey(uri,count(),3)"));
         assertNotNull(a);
         assertEquals(StableKeyAccumulator.class, a.getClass());
 
@@ -141,7 +141,7 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
     }
 
     public void testSimpleLog10Histogram() {
-        Accumulator a = new AccumulatorExpressionParser().parse("loghist(size,10,3000)");
+        Accumulator a = getParsedAccumulator(new AccumulatorExpressionParser().parse("loghist(size,10,3000)"));
         assertNotNull(a);
         assertEquals(SimpleLogHistogram.class, a.getClass());
 
@@ -173,7 +173,7 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
     }
 
     public void testSimpleLog2Histogram() {
-        Accumulator a = new AccumulatorExpressionParser().parse("loghist(size,2,3000)");
+        Accumulator a = getParsedAccumulator(new AccumulatorExpressionParser().parse("loghist(size,2,3000)"));
         assertNotNull(a);
         assertEquals(SimpleLogHistogram.class, a.getClass());
 
@@ -215,7 +215,7 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
     }
 
     public void testSimpleLog125Histogram() {
-        Accumulator a = new AccumulatorExpressionParser().parse("log125hist(size,10,500)");
+        Accumulator a = getParsedAccumulator(new AccumulatorExpressionParser().parse("log125hist(size,10,500)"));
         assertNotNull(a);
         assertEquals(Simple125Histogram.class, a.getClass());
 
@@ -259,5 +259,12 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
                 (ParseException e) -> {
                     assertEquals(39, e.getPosition());
                 });
+    }
+
+    private <T extends DataRecord> Accumulator<T> getParsedAccumulator(Accumulator<T> acc) {
+        if (acc instanceof RootAccumulator) {
+            return ((RootAccumulator<T>) acc).getAccumulator();
+        }
+        return acc;
     }
 }

@@ -2,6 +2,7 @@ package net.pieroxy.conkw.webapp.grabbers.clustering;
 
 import net.pieroxy.conkw.accumulators.Accumulator;
 import net.pieroxy.conkw.accumulators.AccumulatorCollector;
+import net.pieroxy.conkw.accumulators.implementations.RootAccumulator;
 import net.pieroxy.conkw.accumulators.parser.AccumulatorExpressionParser;
 import net.pieroxy.conkw.config.Credentials;
 import net.pieroxy.conkw.config.CredentialsProvider;
@@ -121,7 +122,8 @@ public class ExternalInstanceAggregator<T extends DataRecord> extends AsyncGrabb
     @Override
     public AccumulatorCollector<T> parseCollector(String param) {
         // There is a cache, so there is probably no need to optimize this.
-        return (AccumulatorCollector<T>) new AccumulatorExpressionParser().parse(param);
+        RootAccumulator res = new AccumulatorExpressionParser().parse(param);
+        return new AccumulatorCollector<>(this, param, "", res);
     }
 
     @Override
@@ -142,13 +144,13 @@ public class ExternalInstanceAggregator<T extends DataRecord> extends AsyncGrabb
     }
 
     public static class ExternalInstanceAggregatorConfig<T extends DataRecord> implements CredentialsProvider {
-        private Accumulator accumulator;
+        private RootAccumulator accumulator;
         private Credentials credentials;
         private String credentialsRef;
         private List<ExternalInstanceAggregatorConfigEndpoint> endpoints;
 
 
-        public Accumulator getAccumulator() {
+        public RootAccumulator getAccumulator() {
             return accumulator;
         }
 
@@ -162,7 +164,7 @@ public class ExternalInstanceAggregator<T extends DataRecord> extends AsyncGrabb
             return credentialsRef;
         }
 
-        public void setAccumulator(Accumulator accumulator) {
+        public void setAccumulator(RootAccumulator accumulator) {
             this.accumulator = accumulator;
         }
 

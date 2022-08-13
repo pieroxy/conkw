@@ -19,10 +19,10 @@ public class AccumulatorCollector<T extends DataRecord> implements Collector {
 
   Collection<String> errors = new ArrayList<>();
 
-  public AccumulatorCollector(Grabber g, String configKey, String metricName, Accumulator<T> accumulator) {
+  public AccumulatorCollector(Grabber g, String configKey, String metricName, RootAccumulator<T> accumulator) {
     grabber = g;
     this.configKey = configKey;
-    this.accumulator = new RootAccumulator<T>(metricName, accumulator);
+    this.accumulator = accumulator;
     this.sc = new SimpleTransientCollector(g, "");
   }
 
@@ -35,7 +35,7 @@ public class AccumulatorCollector<T extends DataRecord> implements Collector {
       rd.getNum().entrySet().forEach(entry -> res.addMetric(entry.getKey(), entry.getValue()));
       rd.getStr().entrySet().forEach(entry -> res.addMetric(entry.getKey(), entry.getValue()));
       rd.getErrors().forEach(entry -> res.addError(entry));
-      res.setTimestamp(sc.getTimestamp());
+      res.setTimestamp(accumulator.getLastPoint());
       res.setElapsedToGrab(accumulator.getLastPeriod());
       errors.forEach(res::addError);
     }

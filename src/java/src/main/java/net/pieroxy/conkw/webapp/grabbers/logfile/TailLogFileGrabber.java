@@ -2,16 +2,19 @@ package net.pieroxy.conkw.webapp.grabbers.logfile;
 
 import net.pieroxy.conkw.accumulators.Accumulator;
 import net.pieroxy.conkw.accumulators.AccumulatorCollector;
+import net.pieroxy.conkw.accumulators.implementations.RootAccumulator;
 import net.pieroxy.conkw.accumulators.parser.AccumulatorExpressionParser;
 import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
 import net.pieroxy.conkw.pub.mdlog.DataRecord;
-import net.pieroxy.conkw.webapp.grabbers.logfile.listeners.LogListener;
 import net.pieroxy.conkw.pub.mdlog.LogParser;
+import net.pieroxy.conkw.webapp.grabbers.logfile.listeners.LogListener;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class TailLogFileGrabber<T extends DataRecord> extends AsyncGrabber<AccumulatorCollector<T>, TailLogFileGrabber.TailLogFileGrabberConfig<T>> implements LogListener<T> {
+public class TailLogFileGrabber<T extends DataRecord>
+        extends AsyncGrabber<AccumulatorCollector<T>, TailLogFileGrabber.TailLogFileGrabberConfig<T>>
+        implements LogListener<T> {
     private final static Logger LOGGER = Logger.getLogger(TailLogFileGrabber.class.getName());
 
     private RealTimeLogFileReader<T> reader;
@@ -41,7 +44,8 @@ public class TailLogFileGrabber<T extends DataRecord> extends AsyncGrabber<Accum
     @Override
     public AccumulatorCollector<T> parseCollector(String param) {
         // There is a cache, so there is probably no need to optimize this.
-        return (AccumulatorCollector<T>) new AccumulatorExpressionParser().parse(param);
+        RootAccumulator res = new AccumulatorExpressionParser().parse(param);
+        return new AccumulatorCollector<>(this, param, "", res);
     }
 
     @Override
@@ -61,8 +65,9 @@ public class TailLogFileGrabber<T extends DataRecord> extends AsyncGrabber<Accum
 
     @Override
     public synchronized void newLine(long time, T line) {
-        synchronized (getConfig().getAccumulator()) {
-            getConfig().getAccumulator().add(line);
+        Accumulator<T> accumulator = getConfig().getAccumulator();
+        synchronized (accumulator) {
+            accumulator.add(line);
             line.close();
         }
     }
@@ -70,7 +75,7 @@ public class TailLogFileGrabber<T extends DataRecord> extends AsyncGrabber<Accum
     public static class TailLogFileGrabberConfig<T extends DataRecord> {
         private String filename;
         private String parserClassName;
-        private Accumulator accumulator;
+        private RootAccumulator accumulator;
 
         public String getFilename() {
             return filename;
@@ -88,11 +93,11 @@ public class TailLogFileGrabber<T extends DataRecord> extends AsyncGrabber<Accum
             this.parserClassName = parserClassName;
         }
 
-        public Accumulator<T> getAccumulator() {
+        public RootAccumulator<T> getAccumulator() {
             return accumulator;
         }
 
-        public void setAccumulator(Accumulator accumulator) {
+        public void setAccumulator(RootAccumulator accumulator) {
             this.accumulator = accumulator;
         }
     }
