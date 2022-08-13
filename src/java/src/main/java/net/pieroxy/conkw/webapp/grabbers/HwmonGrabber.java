@@ -5,7 +5,8 @@ import net.pieroxy.conkw.collectors.SimpleTransientCollector;
 import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
 import net.pieroxy.conkw.utils.PerformanceTools;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
@@ -87,13 +88,17 @@ public class HwmonGrabber extends AsyncGrabber<SimpleCollector, HwmonGrabber.Hwm
                 for (Map.Entry<String, FileObject> datafile : hwmon.getValue().children.entrySet()) {
                     try {
                         if (canLogFiner()) log(Level.FINER, "Going for data file " + datafile.getKey());
-                        if (datafile.getKey().endsWith("_label")) {
-                            String label = PerformanceTools.readAllAsString(datafile.getValue().file, buffer);
-                            c.collect(datafile.getValue().metricName, label);
-                        } else {
-                            File data = datafile.getValue().file;
-                            long value = PerformanceTools.parseLongInFile(data, buffer);
-                            addMetric(c, datafile.getValue().category, datafile.getValue().metricName, datafile.getKey(), value);
+                        File data = datafile.getValue().file;
+                        try {
+                            if (datafile.getKey().endsWith("_label")) {
+                                String label = PerformanceTools.readAllAsString(data, buffer);
+                                c.collect(datafile.getValue().metricName, label);
+                            } else {
+                                long value = PerformanceTools.parseLongInFile(data, buffer);
+                                addMetric(c, datafile.getValue().category, datafile.getValue().metricName, datafile.getKey(), value);
+                            }
+                        } catch (IOException e) {
+                            log(Level.INFO, "Could not read file " + data + " " + e.getMessage());
                         }
                     } catch (Exception e) {
                         log(Level.INFO, "", e);

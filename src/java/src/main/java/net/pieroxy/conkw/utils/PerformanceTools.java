@@ -2,7 +2,9 @@ package net.pieroxy.conkw.utils;
 
 import net.pieroxy.conkw.webapp.grabbers.procgrabber.ProcessStat;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 public class PerformanceTools {
@@ -110,7 +112,7 @@ public class PerformanceTools {
     }
   }
 
-  public static long parseLongInFile(File file, byte[]babuffer) {
+  public static long parseLongInFile(File file, byte[]babuffer) throws IOException {
     try (FileInputStream fis = new FileInputStream(file)) {
       int pos=0,read=0;
       while (read!=-1) {
@@ -125,6 +127,8 @@ public class PerformanceTools {
         else break;
       }
       return extracted;
+    } catch (IOException e) {
+      throw e;
     } catch (Exception e) {
       throw new RuntimeException(e);
     }

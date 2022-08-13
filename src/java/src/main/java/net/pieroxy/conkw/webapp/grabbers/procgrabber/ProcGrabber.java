@@ -2,14 +2,16 @@ package net.pieroxy.conkw.webapp.grabbers.procgrabber;
 
 import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.collectors.SimpleTransientCollector;
+import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
 import net.pieroxy.conkw.grabbersBase.PartiallyExtractableConfig;
 import net.pieroxy.conkw.utils.ExternalBinaryRunner;
 import net.pieroxy.conkw.utils.PerformanceTools;
-import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 
-import java.io.*;
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -267,12 +269,16 @@ public class ProcGrabber extends AsyncGrabber<SimpleCollector, ProcGrabber.ProcG
     }
     if (BAT_present) {
       if ((BAT_counter++%10)==0) {
-        long full = PerformanceTools.parseLongInFile(BAT_FULL, babuffer1k);
-        long now = PerformanceTools.parseLongInFile(BAT_NOW, babuffer1k);
-        long plugged = PerformanceTools.parseLongInFile(BAT_AC, babuffer1k);
-        c.collect("bat_exists", 1);
-        c.collect("bat_prc", BAT_prc = now*100./full);
-        c.collect("bat_plugged", BAT_plugged = plugged);
+        try {
+          long full = PerformanceTools.parseLongInFile(BAT_FULL, babuffer1k);
+          long now = PerformanceTools.parseLongInFile(BAT_NOW, babuffer1k);
+          long plugged = PerformanceTools.parseLongInFile(BAT_AC, babuffer1k);
+          c.collect("bat_exists", 1);
+          c.collect("bat_prc", BAT_prc = now * 100. / full);
+          c.collect("bat_plugged", BAT_plugged = plugged);
+        } catch (IOException e) {
+          c.addError(e.getMessage());
+        }
       } else {
         c.collect("bat_exists", 1);
         c.collect("bat_prc", BAT_prc);
