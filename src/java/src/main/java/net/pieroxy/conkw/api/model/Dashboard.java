@@ -3,6 +3,7 @@ package net.pieroxy.conkw.api.model;
 import com.dslplatform.json.CompiledJson;
 import net.pieroxy.conkw.api.metadata.TypeScriptType;
 import net.pieroxy.conkw.api.model.panels.DashboardPanel;
+import net.pieroxy.conkw.utils.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,8 +47,11 @@ public class Dashboard {
    */
   public String addPanel(DashboardPanel panel) {
     panel.setId(UUID.randomUUID().toString());
+    if (StringUtil.isNullOrEmptyTrimmed(panel.getTitle())) {
+      panel.setTitle("Panel " + (panels.size()+1) + " title");
+    }
     if (panels == null) panels = new ArrayList<>();
-    panels.add(0, panel);
+    panels.add(panel);
     return panel.getId();
   }
 

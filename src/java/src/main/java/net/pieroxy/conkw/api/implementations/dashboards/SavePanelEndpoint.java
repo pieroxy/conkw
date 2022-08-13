@@ -10,6 +10,7 @@ import net.pieroxy.conkw.api.model.User;
 import net.pieroxy.conkw.api.model.panels.DashboardPanel;
 import net.pieroxy.conkw.config.UserRole;
 import net.pieroxy.conkw.utils.Services;
+import net.pieroxy.conkw.utils.exceptions.DisplayMessageException;
 
 @Endpoint(
     method = ApiMethod.POST,
@@ -27,7 +28,7 @@ public class SavePanelEndpoint extends AbstractApiEndpoint<SavePanelInput, SaveP
     Dashboard dashboard = services.getDashboardService().getDashboardById(input.getDashboardId());
     DashboardPanel panel = dashboard.getPanel(input.getPanel().getId());
     if (panel == null)
-      dashboard.addPanel(input.getPanel());
+      throw new DisplayMessageException("Panel not found.");
     else
       dashboard.replacePanel(input.getPanel());
     services.getDashboardService().saveDashboard(dashboard);

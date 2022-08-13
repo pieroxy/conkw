@@ -30,6 +30,8 @@ public class GetDashboardPanelEndpoint extends AbstractApiEndpoint<GetDashboardP
     if (input.getPanelId().equals("0")) {
       panel = new DashboardPanel();
       panel.setContent(new ArrayList<>());
+      dashboard.addPanel(panel);
+      services.getDashboardService().saveDashboard(dashboard);
     } else {
       panel = dashboard.getPanel(input.getPanelId());
     }
