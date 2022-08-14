@@ -6,8 +6,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.logging.Logger;
 
 public class PerformanceTools {
+  private static final Logger LOGGER = Logger.getLogger(PerformanceTools.class.getName());
 
   public static void parseLongInString(String line, int[]positions, long[]result) {
     int ct=0;
@@ -188,10 +190,37 @@ public class PerformanceTools {
     }
   }
 
-    public static String readAllAsString(File name, byte[]buffer) throws IOException {
-      FileInputStream fis = new FileInputStream(name);
-      int i = fis.read(buffer);
-      if (i>0) return new String(buffer, 0, i, StandardCharsets.UTF_8);
-      return "";
+  public static String readAllAsString(File name, byte[]buffer) throws IOException {
+    FileInputStream fis = new FileInputStream(name);
+    int i = fis.read(buffer);
+    if (i>0) return new String(buffer, 0, i, StandardCharsets.UTF_8);
+    return "";
+  }
+
+  /**
+   * Reads the file provided in the byte array provided and returns the number of bytes read. If the byte array is too
+   * small, reallocate a bigger byte array and replaces the reference in the {@link ByteArrayHolder}.
+   * @param name
+   * @param buffer
+   * @return the number of bytes read
+   * @throws IOException
+   */
+  public static int readAllAsByteArray(File name, ByteArrayHolder buffer) throws IOException {
+    FileInputStream fis = new FileInputStream(name);
+    int i=0;
+    int totalRead = 0;
+    while ((i = fis.read(buffer.data, totalRead, buffer.data.length-totalRead))>-1) {
+      totalRead += i;
+      if (totalRead == buffer.data.length) {
+        buffer.data = new byte[buffer.data.length*2];
+        LOGGER.info("Enlarging buffer to " + buffer.data.length + " for file " + name.getAbsolutePath());
+        return readAllAsByteArray(name, buffer);
+      }
     }
+    return totalRead;
+  }
+
+  public static class ByteArrayHolder {
+    public byte[]data;
+  }
 }

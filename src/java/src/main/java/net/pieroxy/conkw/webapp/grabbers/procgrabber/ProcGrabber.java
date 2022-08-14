@@ -216,6 +216,7 @@ public class ProcGrabber extends AsyncGrabber<SimpleCollector, ProcGrabber.ProcG
     extract(c,"battery", this::getBattery, CDuration.FIVE_SECONDS);
     extract(c,"mdstat", this::grabMdstat, CDuration.ONE_MINUTE);
     extract(c,"hostname", this::getHostname, CDuration.ONE_HOUR);
+    extract(c,"cpufreq", this::getCpuFreq, CDuration.ZERO);
 
     if (canLogFiner()) {
       log(Level.FINER, "ProcGrabber usage: ");
@@ -226,6 +227,64 @@ public class ProcGrabber extends AsyncGrabber<SimpleCollector, ProcGrabber.ProcG
       log(Level.FINER, "   blockDeviceSectorSize: " + blockDeviceSectorSize.size());
       log(Level.FINER, "            procStatFile: " + procStatFile.size());
       log(Level.FINER, "            blockDevices: " + blockDevices.size());
+    }
+  }
+
+  PerformanceTools.ByteArrayHolder cpuinfoba = null;
+  File cpuinfofile = null;
+  private void getCpuFreq(SimpleCollector c) {
+    if (cpuinfoba == null) {
+      cpuinfoba = new PerformanceTools.ByteArrayHolder();
+      cpuinfoba.data = new byte[1024];
+      cpuinfofile = new File("/proc/cpuinfo");
+    }
+    try {
+      int nbbytes = PerformanceTools.readAllAsByteArray(cpuinfofile, cpuinfoba);
+      byte[]data=cpuinfoba.data;
+      int procNum=0;
+      int i;
+      for (i=0 ; i<nbbytes-6 ; i++) {
+        if (data[i] == 'c' &&
+            data[i+1] == 'p' &&
+            data[i+2] == 'u' &&
+            data[i+3] == ' ' &&
+            data[i+4] == 'M' &&
+            data[i+5] == 'H' &&
+            data[i+6] == 'z') {
+          i+=6;
+          while(data[i++]!=':');
+          i++;
+          double freq = 0;
+          int todivide=1;
+          boolean done = false;
+          boolean commafound = false;
+          while (true) {
+            freq *= 10;
+            switch (data[i]) {
+              case '0' : break;
+              case '1' : freq+=1; break;
+              case '2' : freq+=2; break;
+              case '3' : freq+=3; break;
+              case '4' : freq+=4; break;
+              case '5' : freq+=5; break;
+              case '6' : freq+=6; break;
+              case '7' : freq+=7; break;
+              case '8' : freq+=8; break;
+              case '9' : freq+=9; break;
+              case '.' : commafound = true; break;
+              default: done = true;
+            }
+            if (done) break;
+            i++;
+            if (commafound) todivide*=10;
+          }
+          freq = freq*1e5 / todivide;
+          c.collect("cpu_" + procNum++ + "_freq", freq);
+          computeAutoMaxMinAbsolute(c, "cpu_freq", freq);
+        }
+      }
+    } catch (IOException e) {
+      c.addError("Could not read file " + cpuinfofile.getAbsolutePath() + ": " + e.getMessage());
     }
   }
 

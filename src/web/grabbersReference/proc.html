@@ -130,6 +130,12 @@
                 <cw-label style="width: 70px; text-align:right" cw-ns="proc" cw-value="m:str::pid_top3cpu"></cw-label>
                 <cw-label style="width:150px" cw-ns="proc" cw-value="m:str::top3cpu"></cw-label>
                 <BR/>
+                <div cw-ns="proc" cw-multinode-from="l:num::0" cw-multinode-to="m:num::nbcpu_threads" cw-multinode-pattern="#">
+                    <label style="display:inline-block;width:50px;">Cpu #</label>
+                    <cw-label cw-ns="proc" cw-value="m:num:si:cpu_#_freq"></cw-label>Hz
+                    <gauge cw-ns="proc" cw-min="l:num::0" cw-max="m:num::max$cpu_freq" cw-gauge0="#5b5:m:num:mhz:cpu_#_freq"></gauge>
+                    <BR/>
+                </div>
             </div>
 
             <div id="hdd io" class="cw-block">

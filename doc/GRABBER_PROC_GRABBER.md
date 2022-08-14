@@ -44,6 +44,14 @@ For memory usage:
 * `str.pid_top1mem` the process ID of the process #1
 * And so on with 2 and 3.
 
+### cpufreq
+
+Extracts the frequency in hz per logical processor.
+
+It produces, from 0 to n-1 (where n is the value of `nbcpu_threads` extracted by the `nbcpu` extraction):
+
+* `num.cpu_0_freq` The frequency in Hz of the core specified.
+
 ### uptime
 Extracts hostname and load average, as viewed in `/proc/uptime` and `/proc/loadavg`.
 
