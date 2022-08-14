@@ -1,11 +1,13 @@
 import m from 'mithril';
 import { ExpressionClass, ExpressionValueType, SimpleGaugeWithValueAndLabelElement, WarningDirective } from '../../../../auto/pieroxy-conkw';
+import { ModelUtils } from '../../../../utils/ModelUtils';
 import { CheckboxInput } from '../../../atoms/forms/CheckboxInput';
 import { SelectInput } from '../../../atoms/forms/SelectInput';
 import { TextFieldInput } from '../../../atoms/forms/TextFieldInput';
 import { EditSimpleLabelPanel } from '../atoms/EditSimpleLabelPanel';
 import { EditSimpleNumericValuePanel } from '../atoms/EditSimpleNumericValuePanel';
 import { EditSimpleSiLabelPanel } from '../atoms/EditSimpleSiLabelPanel';
+import { EditThresoldPanel } from '../atoms/EditThresholdPanel';
 
 export class EditSimpleGaugeWithValueAndLabelElementPanel implements m.ClassComponent<EditSimpleGaugeWithValueAndLabelElementPanelAttrs> {
   private labelIsStatic:boolean;
@@ -26,22 +28,27 @@ export class EditSimpleGaugeWithValueAndLabelElementPanel implements m.ClassComp
           directive:WarningDirective.VALUEABOVE
         }
       }
+      if (!element.value.error) {
+        element.value.error = {
+          clazz:ExpressionClass.LITERAL,
+          namespace:"",
+          type:ExpressionValueType.NUMERIC,
+          value:"0",
+          directive:WarningDirective.VALUEABOVE
+        }
+      }
 
-      if (element.gauge.error.directive === WarningDirective.VALUEBELOW && this.thresholdIsStatic) {
-        element.value.error = element.gauge.error;
+      if (this.thresholdIsStatic) {
+        ModelUtils.copyValueExpression(element.gauge.error, element.value.error);
       }
       
       this.labelIsStatic = element.label.value.clazz === ExpressionClass.LITERAL;
       this.minIsStatic = element.gauge.min.clazz === ExpressionClass.LITERAL;
       this.maxIsStatic = element.gauge.max.clazz === ExpressionClass.LITERAL;
-      this.thresholdIsStatic = element.gauge.error?.clazz === ExpressionClass.LITERAL;
       if (element.valueIsGauge) {
         // Every change ends up in a redraw, so it is easier to make this update here.
         // Will (should?) move it when the refacto simplifications are done.
-        element.value.value.clazz = element.gauge.value.clazz;
-        element.value.value.namespace = element.gauge.value.namespace;
-        element.value.value.type = element.gauge.value.type;
-        element.value.value.value = element.gauge.value.value;
+        ModelUtils.copyValueExpression(element.gauge.value, element.value.value);
       }
   
   
@@ -90,7 +97,12 @@ export class EditSimpleGaugeWithValueAndLabelElementPanel implements m.ClassComp
             m(CheckboxInput, {
               refHolder:this,
               refProperty:"thresholdIsStatic",
-            }, "Threshold is static"),
+              onchange:() => {
+                if (this.thresholdIsStatic) {
+                  element.value.error = element.gauge.error;
+                }
+              }
+            }, "Threshold is simple"),
           ]),
           m("br"),
           m(".group", [
@@ -213,6 +225,14 @@ export class EditSimpleGaugeWithValueAndLabelElementPanel implements m.ClassComp
               m(".groupTitle", "Minimum"),
               m(EditSimpleNumericValuePanel, {element:attrs.element.gauge.max}),
             ]),
+
+          this.thresholdIsStatic ? null : 
+            m(".group",
+              m(".groupTitle", "Threshold for the gauge"),
+              m(EditThresoldPanel, {element:element.gauge.error}),
+              m(".groupTitle", "Threshold for the value"),
+              m(EditThresoldPanel, {element:element.value.error})
+            )
 
         ]),
       ];
