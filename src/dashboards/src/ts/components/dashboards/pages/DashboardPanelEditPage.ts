@@ -11,7 +11,7 @@ import { SaveIcon } from '../../atoms/icons/SaveIcon';
 import { RoundedPlusIcon } from '../../atoms/icons/RoundedPlusIcon';
 import { ApiEndpoints } from '../../../auto/ApiEndpoints';
 import { Link } from '../../atoms/Link';
-import { NewPanelItemComponent } from '../edition/NewPanelItemComponent';
+import { NewPanelItemComponent } from '../edition/newitems/NewPanelItemComponent';
 import { ViewDashboardPanel } from '../../panels/ViewDashboardPanel';
 import { EditSimpleGaugeWithValueAndLabelElementPanel } from '../edition/panelitems/EditSimpleGaugeWithValueAndLabelElementPanel';
 import { EditGaugeWithHistoryLinePanel } from '../edition/panelitems/EditGaugeWithHistoryLinePanel';
@@ -95,7 +95,7 @@ export class DashboardPanelEditPage extends AbstractPage<EditPanelAttrs> {
       return m(NewPanelItemComponent, {
         dashboardId:this.dashboardId, 
         panelId:this.panel.id,
-        refreshData:() => this.reload(this.dashboardId,this.panel.id)
+        addNewItem:(e) => this.panel.content.push(e)
       });
     }
     switch (element.type) {

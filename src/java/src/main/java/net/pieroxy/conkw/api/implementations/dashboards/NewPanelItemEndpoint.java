@@ -10,6 +10,7 @@ import net.pieroxy.conkw.api.model.User;
 import net.pieroxy.conkw.api.model.panels.DashboardPanel;
 import net.pieroxy.conkw.api.model.panels.GaugeWithHistoryElement;
 import net.pieroxy.conkw.api.model.panels.SimpleGaugeWithValueAndLabelElement;
+import net.pieroxy.conkw.api.model.panels.atoms.model.TopLevelPanelElement;
 import net.pieroxy.conkw.api.model.panels.atoms.model.TopLevelPanelElementEnum;
 import net.pieroxy.conkw.config.UserRole;
 import net.pieroxy.conkw.utils.Services;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 @Endpoint(
         method = ApiMethod.POST,
         role = UserRole.DESIGNER)
-public class NewPanelItemEndpoint extends AbstractApiEndpoint<NewPanelItemInput, Object> {
+public class NewPanelItemEndpoint extends AbstractApiEndpoint<NewPanelItemInput, NewPanelItemOutput> {
     private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
     private final Services services;
 
@@ -31,7 +32,7 @@ public class NewPanelItemEndpoint extends AbstractApiEndpoint<NewPanelItemInput,
     }
 
     @Override
-    public Object process(NewPanelItemInput input, User user) throws Exception {
+    public NewPanelItemOutput process(NewPanelItemInput input, User user) throws Exception {
         Dashboard dashboard = services.getDashboardService().getDashboardById(input.getDashboardId());
         if (dashboard == null) {
             LOGGER.warning("Dashboard " + input.getDashboardId() + " not found");
@@ -45,27 +46,14 @@ public class NewPanelItemEndpoint extends AbstractApiEndpoint<NewPanelItemInput,
         }
         DashboardPanel panel = panels.get(0);
 
-        String newId = null;
         switch (input.getType()) {
-            case SIMPLE_GAUGE: {
-                SimpleGaugeWithValueAndLabelElement elem = new SimpleGaugeWithValueAndLabelElement();
-                elem.initialize();
-                panel.addContent(elem);
-                services.getDashboardService().saveDashboard(dashboard);
-                break;
-            }
+            case SIMPLE_GAUGE:
+                return new NewPanelItemOutput(new SimpleGaugeWithValueAndLabelElement());
             case GAUGE_WITH_HISTORY:
-            {
-                GaugeWithHistoryElement elem = new GaugeWithHistoryElement();
-                elem.initialize();
-                panel.addContent(elem);
-                services.getDashboardService().saveDashboard(dashboard);
-                break;
-            }
+                return new NewPanelItemOutput(new GaugeWithHistoryElement());
             default:
                 throw new RuntimeException("Item of type " + input.getType() + " not implemented yet");
         }
-        return null;
     }
 }
 
@@ -99,5 +87,26 @@ class NewPanelItemInput {
 
     public void setType(TopLevelPanelElementEnum type) {
         this.type = type;
+    }
+}
+
+@CompiledJson
+@TypeScriptType
+class NewPanelItemOutput {
+    TopLevelPanelElement element;
+
+    public NewPanelItemOutput(TopLevelPanelElement element) {
+        this.element = element;
+    }
+
+    public NewPanelItemOutput() {
+    }
+
+    public TopLevelPanelElement getElement() {
+        return element;
+    }
+
+    public void setElement(TopLevelPanelElement element) {
+        this.element = element;
     }
 }
