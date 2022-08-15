@@ -240,6 +240,7 @@ public class AccumulatorExpressionParser<T extends DataRecord> {
         register(StableKeyAccumulator.class);
         register(SimpleLogHistogram.class);
         register(Simple125Histogram.class);
+        register(SimpleLinearHistogram.class);
     }
 }
 

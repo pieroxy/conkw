@@ -213,6 +213,47 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         assertMapContains(data.getValues(), "above.histValue", 1d);
         assertMapContains(data.getDimensions(), "histValues", "1,2,4,8,16,32,64,128,256,512,1024,2048,above");
     }
+    public void testSimpleLinearHistogram() {
+        Accumulator a = getParsedAccumulator(new AccumulatorExpressionParser().parse("linearhist(size,0,100,10)"));
+        assertNotNull(a);
+        assertEquals(SimpleLinearHistogram.class, a.getClass());
+
+        SimpleLinearHistogram na = (SimpleLinearHistogram)a;
+        assertEquals(10, na.getThresholds().size());
+        assertEquals("size", na.getValueKey());
+
+        DataRecord lr = new GenericLogRecord().addValue("size", 0.5);
+        for (int i=0 ; i<10 ; i++) a.add(lr);
+        lr = new GenericLogRecord().addValue("size", 0.7);
+        for (int i=0 ; i<9 ; i++) a.add(lr);
+        lr = new GenericLogRecord().addValue("size", 55);
+        for (int i=0 ; i<8 ; i++) a.add(lr);
+        lr = new GenericLogRecord().addValue("size", 15);
+        for (int i=0 ; i<7 ; i++) a.add(lr);
+        lr = new GenericLogRecord().addValue("size", 10);
+        for (int i=0 ; i<6 ; i++) a.add(lr);
+        lr = new GenericLogRecord().addValue("size", 99);
+        for (int i=0 ; i<4 ; i++) a.add(lr);
+        lr = new GenericLogRecord().addValue("size", 2500);
+        for (int i=0 ; i<1 ; i++) a.add(lr);
+        lr = new GenericLogRecord().addValue("size", -5);
+        for (int i=0 ; i<123 ; i++) a.add(lr);
+        Data data = new Data();
+        a.prepareNewSession();
+        a.log("", data);
+        assertMapContains(data.getValues(), "0.histValue", 123d);
+        assertMapContains(data.getValues(), "10.histValue", 25d);
+        assertMapContains(data.getValues(), "20.histValue", 7d);
+        assertMapContains(data.getValues(), "30.histValue", 0d);
+        assertMapContains(data.getValues(), "40.histValue", 0d);
+        assertMapContains(data.getValues(), "50.histValue", 0d);
+        assertMapContains(data.getValues(), "60.histValue", 8d);
+        assertMapContains(data.getValues(), "70.histValue", 0d);
+        assertMapContains(data.getValues(), "80.histValue", 0d);
+        assertMapContains(data.getValues(), "90.histValue", 0d);
+        assertMapContains(data.getValues(), "above.histValue", 5d);
+        assertMapContains(data.getDimensions(), "histValues", "0,10,20,30,40,50,60,70,80,90,above");
+    }
 
     public void testSimpleLog125Histogram() {
         Accumulator a = getParsedAccumulator(new AccumulatorExpressionParser().parse("log125hist(size,10,500)"));
