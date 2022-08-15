@@ -11,7 +11,7 @@
         // If not specified, devices will be guessed.
         /* "blockDevices":"sda" */
       },
-      "defaultAccumulator":"name(cpufreqhisto,regexpMultiValue(/cpu_[0-9]*_freq_prc/,loghist(value,2,100)))"
+      "defaultAccumulator":"name(cpufreqhisto,regexpMultiValue(/cpu_[0-9]*_freq_prc/,linearhist(value,25,100,3)))"
     },
     //SYS
     {

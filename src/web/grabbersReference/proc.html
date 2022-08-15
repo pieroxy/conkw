@@ -138,6 +138,7 @@
                     <gauge cw-ns="proc" cw-min="l:num::0" cw-max="m:num::max$cpu_freq" cw-gauge0="#5b5:m:num:mhz:cpu_#_freq"></gauge>
                     <BR/>
                 </div>
+                <heading>Repartition by % of the max freq</heading>
                 <div cw-ns="proc" cw-multinode-in="m:str::cpufreqhisto.histValues" cw-multinode-pattern="#">
                     <br><cw-label cw-prop-title="#" style="width:140px">#</cw-label><cw-label cw-ns="proc" style="width:50px" cw-value="m:num:si:cpufreqhisto.#.histValue"></cw-label><gauge cw-ns="proc" cw-prop-title="m:num:si:cpufreqhisto.#.histValue" cw-gauge0="default:m:num::cpufreqhisto.#.histValue" cw-min="l:num::0" cw-max="m:num::nbcpu_threads"></gauge>
                 </div>
