@@ -15,6 +15,10 @@ export class EditSimpleGaugeWithValueAndLabelElementPanel implements m.ClassComp
   private minIsStatic:boolean;
   private thresholdIsStatic:boolean;
 
+  oninit({attrs}: m.Vnode<EditSimpleGaugeWithValueAndLabelElementPanelAttrs, this>):void {
+    this.thresholdIsStatic = !attrs.element?.value.error || JSON.stringify(attrs.element?.gauge.error) === JSON.stringify(attrs.element?.value.error)
+  }
+
   view({attrs}: m.Vnode<EditSimpleGaugeWithValueAndLabelElementPanelAttrs, this>): void | m.Children {
     if (attrs.element) {
       let element = attrs.element;
