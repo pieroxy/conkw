@@ -7,8 +7,6 @@ import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 
 import java.time.Duration;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -67,15 +65,23 @@ public abstract class SimpleGrabber<T extends Collector, C> extends Grabber<T, C
     }
   }
 
-  protected void computeAutoMaxMinAbsolute(T c, String metricName, double value) {
+  /**
+   *
+   * @param c
+   * @param metricName
+   * @param value
+   * @return The current maximum for the value provided
+   */
+  protected double computeAutoMaxMinAbsolute(T c, String metricName, double value) {
+    double res = value;
     c.collect(metricName, value);
     {
       LongHolder lh = maxValuesLastComputed.get(metricName);
       if (lh == null) {
         maxValuesLastComputed.put(metricName, new LongHolder(System.currentTimeMillis()));
       } else {
-        double mv = getMaxComputer().getMax(this, metricName, value);
-        c.collect("max$" + metricName, mv);
+        res = getMaxComputer().getMax(this, metricName, value);
+        c.collect("max$" + metricName, res);
         lh.value = System.currentTimeMillis();
       }
     }
@@ -91,6 +97,7 @@ public abstract class SimpleGrabber<T extends Collector, C> extends Grabber<T, C
         lh.value = System.currentTimeMillis();
       }
     }
+    return res;
   }
 
   @Override

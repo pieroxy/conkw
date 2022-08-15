@@ -129,13 +129,19 @@
                 <cw-label cw-ns="proc" cw-value="m:num:prc:prc_top3cpu"></cw-label>
                 <cw-label style="width: 70px; text-align:right" cw-ns="proc" cw-value="m:str::pid_top3cpu"></cw-label>
                 <cw-label style="width:150px" cw-ns="proc" cw-value="m:str::top3cpu"></cw-label>
-                <BR/>
+            </div>
+            <div id="cpu" class="cw-block">
+                <heading>CPU freq by core</heading>
                 <div cw-ns="proc" cw-multinode-from="l:num::0" cw-multinode-to="m:num::nbcpu_threads" cw-multinode-pattern="#">
                     <label style="display:inline-block;width:50px;">Cpu #</label>
                     <cw-label cw-ns="proc" cw-value="m:num:si:cpu_#_freq"></cw-label>Hz
                     <gauge cw-ns="proc" cw-min="l:num::0" cw-max="m:num::max$cpu_freq" cw-gauge0="#5b5:m:num:mhz:cpu_#_freq"></gauge>
                     <BR/>
                 </div>
+                <div cw-ns="proc" cw-multinode-in="m:str::cpufreqhisto.histValues" cw-multinode-pattern="#">
+                    <br><cw-label cw-prop-title="#" style="width:140px">#</cw-label><cw-label cw-ns="proc" style="width:50px" cw-value="m:num:si:cpufreqhisto.#.histValue"></cw-label><gauge cw-ns="proc" cw-prop-title="m:num:si:cpufreqhisto.#.histValue" cw-gauge0="default:m:num::cpufreqhisto.#.histValue" cw-min="l:num::0" cw-max="m:num::nbcpu_threads"></gauge>
+                </div>
+
             </div>
 
             <div id="hdd io" class="cw-block">

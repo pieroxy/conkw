@@ -10,7 +10,8 @@
         // List here the block devices of your machine, to monitor I/O, separated by a comma
         // If not specified, devices will be guessed.
         /* "blockDevices":"sda" */
-      }
+      },
+      "defaultAccumulator":"name(cpufreqhisto,regexpMultiValue(/cpu_[0-9]*_freq_prc/,loghist(value,2,100)))"
     },
     //SYS
     {

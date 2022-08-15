@@ -278,8 +278,9 @@ public class ProcGrabber extends AsyncGrabber<SimpleCollector, ProcGrabber.ProcG
             if (commafound) todivide*=10;
           }
           freq = freq*1e5 / todivide;
-          c.collect("cpu_" + procNum++ + "_freq", freq);
-          computeAutoMaxMinAbsolute(c, "cpu_freq", freq);
+          c.collect("cpu_" + procNum + "_freq", freq);
+          double maximum = computeAutoMaxMinAbsolute(c, "cpu_freq", freq);
+          c.collect("cpu_" + procNum++ + "_freq_prc", freq*100/maximum);
         }
       }
     } catch (IOException e) {

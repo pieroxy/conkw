@@ -2,6 +2,7 @@ package net.pieroxy.conkw.collectors;
 
 import net.pieroxy.conkw.accumulators.implementations.RootAccumulator;
 import net.pieroxy.conkw.grabbersBase.Grabber;
+import net.pieroxy.conkw.pub.mdlog.GenericLogRecord;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.util.Collection;
@@ -50,6 +51,9 @@ public class SimpleCollector implements Collector {
     @Override
     public synchronized void collect(String metric, double value) {
         collectionInProgress.addMetric(metric, value);
+        if (accumulator!=null) {
+            accumulator.add(new GenericLogRecord().addValue(metric, value));
+        }
     }
 
     @Override
