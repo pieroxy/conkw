@@ -1,7 +1,6 @@
 package net.pieroxy.conkw.webapp.grabbers;
 
 import net.pieroxy.conkw.collectors.SimpleCollector;
-import net.pieroxy.conkw.collectors.SimpleTransientCollector;
 import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
 import net.pieroxy.conkw.utils.PerformanceTools;
 
@@ -20,7 +19,7 @@ public class HwmonGrabber extends AsyncGrabber<SimpleCollector, HwmonGrabber.Hwm
     private Map<String, StringBuilder> categories;
 
     public SimpleCollector getDefaultCollector() {
-        return new SimpleTransientCollector(this, DEFAULT_CONFIG_KEY);
+        return new SimpleCollector(this, DEFAULT_CONFIG_KEY);
     }
 
     @Override

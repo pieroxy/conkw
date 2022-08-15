@@ -1,22 +1,25 @@
 package net.pieroxy.conkw.webapp.grabbers;
 
 import net.pieroxy.conkw.collectors.SimpleCollector;
-import net.pieroxy.conkw.collectors.SimpleTransientCollector;
 import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
 import net.pieroxy.conkw.grabbersBase.PartiallyExtractableConfig;
 import net.pieroxy.conkw.utils.OsCheck;
 import net.pieroxy.conkw.utils.duration.CDuration;
 
-import javax.management.*;
-import java.io.*;
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
+import java.io.File;
+import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
 import java.net.UnknownHostException;
-import java.nio.file.*;
+import java.nio.file.FileStore;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -40,7 +43,7 @@ public class JavaSystemViewGrabber extends AsyncGrabber<SimpleCollector, JavaSys
   }
 
   public SimpleCollector getDefaultCollector() {
-    return new SimpleTransientCollector(this, DEFAULT_CONFIG_KEY);
+    return new SimpleCollector(this, DEFAULT_CONFIG_KEY);
   }
 
   @Override

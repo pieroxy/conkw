@@ -2,7 +2,7 @@ package net.pieroxy.conkw.webapp.grabbers;
 
 import com.dslplatform.json.DslJson;
 import com.dslplatform.json.JsonWriter;
-import net.pieroxy.conkw.collectors.SimpleTransientCollector;
+import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.grabbersBase.Grabber;
 import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
@@ -14,7 +14,7 @@ import java.time.Duration;
 import java.util.Date;
 import java.util.logging.Level;
 
-public class ExternalMetricsGrabber extends Grabber<SimpleTransientCollector, ExternalMetricsGrabber.ExternalMetricsGrabberConfig> {
+public class ExternalMetricsGrabber extends Grabber<SimpleCollector, ExternalMetricsGrabber.ExternalMetricsGrabberConfig> {
 
   private ResponseData globalData = null;
   private boolean changed;
@@ -22,7 +22,7 @@ public class ExternalMetricsGrabber extends Grabber<SimpleTransientCollector, Ex
   private long lastCollection;
 
   @Override
-  public synchronized void collect(SimpleTransientCollector c) {
+  public synchronized void collect(SimpleCollector c) {
     if (System.currentTimeMillis() - lastCollection < 900) {
       // Last collection was less than 1s ago.
       // Testing with 900ms to avoid threshold effects.
@@ -47,8 +47,8 @@ public class ExternalMetricsGrabber extends Grabber<SimpleTransientCollector, Ex
   }
 
   @Override
-  public SimpleTransientCollector getDefaultCollector() {
-    return new SimpleTransientCollector(this, DEFAULT_CONFIG_KEY);
+  public SimpleCollector getDefaultCollector() {
+    return new SimpleCollector(this, DEFAULT_CONFIG_KEY);
   }
 
   public void addMetric(String name, double value) {

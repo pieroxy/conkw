@@ -3,7 +3,6 @@ package net.pieroxy.conkw.grabbersBase;
 import com.dslplatform.json.DslJson;
 import com.dslplatform.json.JsonWriter;
 import net.pieroxy.conkw.collectors.SimpleCollector;
-import net.pieroxy.conkw.collectors.SimpleTransientCollector;
 import net.pieroxy.conkw.pub.misc.ConkwCloseable;
 import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.utils.Utils;
@@ -42,7 +41,7 @@ public abstract class TimeThrottledGrabber<C extends TimeThrottledGrabber.TimeTh
 
   @Override
   public SimpleCollector getDefaultCollector() {
-    SimpleTransientCollector res = new SimpleTransientCollector(this, DEFAULT_CONFIG_KEY);
+    SimpleCollector res = new SimpleCollector(this, DEFAULT_CONFIG_KEY);
     res.setTimestamp(0);
     res.collectionDone();
     return res;
@@ -117,7 +116,7 @@ public abstract class TimeThrottledGrabber<C extends TimeThrottledGrabber.TimeTh
           String configKey = entry.getKey();
           ResponseData rd = entry.getValue();
           lastGrabHadErrors = lastGrabHadErrors || rd.getErrors().size() > 0;
-          SimpleTransientCollector c = new SimpleTransientCollector(this, configKey);
+          SimpleCollector c = new SimpleCollector(this, configKey);
           c.copyDataFrom(rd);
           collectorsStore.put(configKey, c);
           c.collectionDone();
@@ -188,7 +187,7 @@ public abstract class TimeThrottledGrabber<C extends TimeThrottledGrabber.TimeTh
   private SimpleCollector getOrCreateCollector(SimpleCollector c) {
     SimpleCollector collector = collectorsStore.get(c.getConfigKey());
     if (collector == null) {
-      collector = new SimpleTransientCollector(this, c.getConfigKey());
+      collector = new SimpleCollector(this, c.getConfigKey());
       collector.setTimestamp(0);
       collector.collectionDone();
       if (canLogFine()) log(Level.FINE, "Creating collector for config " + c.getConfigKey());

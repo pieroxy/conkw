@@ -2,11 +2,9 @@ package net.pieroxy.conkw.webapp.grabbers.http;
 
 import net.pieroxy.conkw.ConkwTestCase;
 import net.pieroxy.conkw.collectors.SimpleCollector;
-import net.pieroxy.conkw.collectors.SimpleTransientCollector;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
 import java.util.ArrayList;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class HttpEndpointGrabberTest extends ConkwTestCase {
@@ -14,7 +12,7 @@ public class HttpEndpointGrabberTest extends ConkwTestCase {
         HttpEndpointGrabber grabber = new HttpEndpointGrabber();
         grabber.setName("testg");
 
-        SimpleCollector sc = new SimpleTransientCollector(grabber, "");
+        SimpleCollector sc = new SimpleCollector(grabber, "");
 
         HttpEndpointGrabber.EndPointMonitoringConfig conf = new HttpEndpointGrabber.EndPointMonitoringConfig();
         conf.setId("ex");

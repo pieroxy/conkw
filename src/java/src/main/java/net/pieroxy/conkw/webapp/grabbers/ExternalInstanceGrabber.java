@@ -1,7 +1,6 @@
 package net.pieroxy.conkw.webapp.grabbers;
 
 import net.pieroxy.conkw.collectors.SimpleCollector;
-import net.pieroxy.conkw.collectors.SimpleTransientCollector;
 import net.pieroxy.conkw.config.Credentials;
 import net.pieroxy.conkw.config.CredentialsProvider;
 import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
@@ -30,7 +29,7 @@ public class ExternalInstanceGrabber extends AsyncGrabber<SimpleCollector, Exter
 
   @Override
   public SimpleCollector getDefaultCollector() {
-    return new SimpleTransientCollector(this, DEFAULT_CONFIG_KEY);
+    return new SimpleCollector(this, DEFAULT_CONFIG_KEY);
   }
 
   @Override

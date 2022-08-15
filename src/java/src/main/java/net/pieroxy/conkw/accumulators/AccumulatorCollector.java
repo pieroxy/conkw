@@ -2,7 +2,7 @@ package net.pieroxy.conkw.accumulators;
 
 import net.pieroxy.conkw.accumulators.implementations.RootAccumulator;
 import net.pieroxy.conkw.collectors.Collector;
-import net.pieroxy.conkw.collectors.SimpleTransientCollector;
+import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.grabbersBase.Grabber;
 import net.pieroxy.conkw.pub.mdlog.DataRecord;
 import net.pieroxy.conkw.webapp.model.ResponseData;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class AccumulatorCollector<T extends DataRecord> implements Collector {
-  final SimpleTransientCollector sc;
+  final SimpleCollector sc;
 
   private final RootAccumulator<T> accumulator;
   private final Grabber grabber;
@@ -23,7 +23,7 @@ public class AccumulatorCollector<T extends DataRecord> implements Collector {
     grabber = g;
     this.configKey = configKey;
     this.accumulator = accumulator;
-    this.sc = new SimpleTransientCollector(g, "");
+    this.sc = new SimpleCollector(g, "");
   }
 
   @Override

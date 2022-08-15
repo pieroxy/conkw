@@ -1,7 +1,6 @@
 package net.pieroxy.conkw.webapp.grabbers;
 
 import net.pieroxy.conkw.collectors.SimpleCollector;
-import net.pieroxy.conkw.collectors.SimpleTransientCollector;
 import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
 import net.pieroxy.conkw.utils.ExternalBinaryRunner;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
@@ -24,7 +23,7 @@ public class LmSensorsGrabber extends AsyncGrabber<SimpleCollector, LmSensorsGra
   }
 
   public SimpleCollector getDefaultCollector() {
-    return new SimpleTransientCollector(this, DEFAULT_CONFIG_KEY);
+    return new SimpleCollector(this, DEFAULT_CONFIG_KEY);
   }
 
   @Override
