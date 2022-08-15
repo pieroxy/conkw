@@ -15,6 +15,8 @@ public class GaugeWithHistoryElement extends TopLevelPanelElement {
     private DynamicLabel label;
     private SiPrefixedValue value;
     private GaugeWithHistory gauge;
+    private boolean valueIsGauge;
+
     public GaugeWithHistoryElement() {
         this.type = TopLevelPanelElementEnum.GAUGE_WITH_HISTORY;
     }
@@ -50,5 +52,13 @@ public class GaugeWithHistoryElement extends TopLevelPanelElement {
 
     public void setGauge(GaugeWithHistory gauge) {
         this.gauge = gauge;
+    }
+
+    public boolean isValueIsGauge() {
+        return valueIsGauge;
+    }
+
+    public void setValueIsGauge(boolean valueIsGauge) {
+        this.valueIsGauge = valueIsGauge;
     }
 }
