@@ -52,17 +52,11 @@ export class GaugeWithHistoryComponent extends DashboardElement<GaugeWithHistory
       ctx.fillStyle = ColorUtils.getGaugeDefaultBackground();
       ctx.fillRect(this.w-1, 0, 1, this.h);
 
-      if (!isNaN(errorValue)) {
+      if (!isNaN(errorValue) && errorAbove) {
         var posprc = NumberUtils.computePercentage(errorValue, min, max, log);
         var hpx = posprc*this.h/100;
-        console.log("Errt = " + hpx);
-        if (errorAbove) {
-          ctx.fillStyle = ColorUtils.getGaugeErrorThumb();
-          ctx.fillRect(this.w-1, 0, 1, this.h-hpx);
-        } else {
-          ctx.fillStyle = "rgba(0,0,0,0.3)";
-          ctx.fillRect(this.w-1, this.h-hpx, 1, 1);
-        }
+        ctx.fillStyle = ColorUtils.getGaugeErrorThumb();
+        ctx.fillRect(this.w-1, 0, 1, this.h-hpx);
       }
 
       for (var i = 0; i < this.colors.length; i++) {
@@ -74,6 +68,14 @@ export class GaugeWithHistoryComponent extends DashboardElement<GaugeWithHistory
           ctx.fillRect(this.w-1, this.h-hpx-bottom, 1, hpx);
           bottom += hpx;
       }
+
+      if (!isNaN(errorValue) && !errorAbove) {
+        var posprc = NumberUtils.computePercentage(errorValue, min, max, log);
+        var hpx = posprc*this.h/100;
+        ctx.fillStyle = "rgba(0,0,0,0.3)";
+        ctx.fillRect(this.w-1, this.h-hpx, 1, 1);
+      }
+
     }
   }
 
