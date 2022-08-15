@@ -18,7 +18,7 @@ public class OSHITester {
   public static void main(String[]args) throws InterruptedException {
     OshiGrabber grabber = new OshiGrabber();
     grabber.initializeGrabber(new File("."));
-    SimpleCollector sc = new SimpleCollector(grabber, "");
+    SimpleCollector sc = new SimpleCollector(grabber, "", null);
     grabber.grabSync(sc);
     Thread.sleep(1000);
     grabber.grabSync(sc);

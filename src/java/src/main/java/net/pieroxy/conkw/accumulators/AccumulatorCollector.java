@@ -23,7 +23,7 @@ public class AccumulatorCollector<T extends DataRecord> implements Collector {
     grabber = g;
     this.configKey = configKey;
     this.accumulator = accumulator;
-    this.sc = new SimpleCollector(g, "");
+    this.sc = new SimpleCollector(g, "", null);
   }
 
   @Override

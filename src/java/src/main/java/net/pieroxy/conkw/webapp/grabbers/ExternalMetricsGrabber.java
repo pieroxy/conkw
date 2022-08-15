@@ -48,7 +48,7 @@ public class ExternalMetricsGrabber extends Grabber<SimpleCollector, ExternalMet
 
   @Override
   public SimpleCollector getDefaultCollector() {
-    return new SimpleCollector(this, DEFAULT_CONFIG_KEY);
+    return new SimpleCollector(this, DEFAULT_CONFIG_KEY, getDefaultAccumulator());
   }
 
   public void addMetric(String name, double value) {

@@ -12,7 +12,7 @@ public class HttpEndpointGrabberTest extends ConkwTestCase {
         HttpEndpointGrabber grabber = new HttpEndpointGrabber();
         grabber.setName("testg");
 
-        SimpleCollector sc = new SimpleCollector(grabber, "");
+        SimpleCollector sc = new SimpleCollector(grabber, "", null);
 
         HttpEndpointGrabber.EndPointMonitoringConfig conf = new HttpEndpointGrabber.EndPointMonitoringConfig();
         conf.setId("ex");

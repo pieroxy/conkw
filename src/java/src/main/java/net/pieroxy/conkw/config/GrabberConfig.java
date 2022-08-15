@@ -12,6 +12,8 @@ public class GrabberConfig {
   private String logLevel;
   private Object config;
 
+  private String defaultAccumulator;
+
   // Old properties that cannot be used anymore (move to new configuration)
   private String extract;
   private Map<String, String> parameters;
@@ -72,5 +74,13 @@ public class GrabberConfig {
 
   public void setExtract(String extract) {
     this.extract = extract;
+  }
+
+  public String getDefaultAccumulator() {
+    return defaultAccumulator;
+  }
+
+  public void setDefaultAccumulator(String defaultAccumulator) {
+    this.defaultAccumulator = defaultAccumulator;
   }
 }

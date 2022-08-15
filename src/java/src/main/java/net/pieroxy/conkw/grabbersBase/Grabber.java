@@ -1,5 +1,6 @@
 package net.pieroxy.conkw.grabbersBase;
 
+import net.pieroxy.conkw.accumulators.implementations.RootAccumulator;
 import net.pieroxy.conkw.collectors.Collector;
 import net.pieroxy.conkw.collectors.EmptyCollector;
 import net.pieroxy.conkw.config.Credentials;
@@ -29,6 +30,7 @@ public abstract class Grabber<T extends Collector, C> {
   private Level logLevel;
 
   Map<String, TimedData<T>> extractedByConfiguration = new HashMap<>();
+  private RootAccumulator defaultAccumulator;
   private long lastConfigPurge;
   private CredentialsStore credentials;
 
@@ -208,5 +210,13 @@ public abstract class Grabber<T extends Collector, C> {
     storageFolder = new File(homeDir, "data");
     tmpFolder = new File(homeDir, "tmp");
     if (name == null) setName(getDefaultName());
+  }
+
+  public RootAccumulator getDefaultAccumulator() {
+    return defaultAccumulator;
+  }
+
+  public void setDefaultAccumulator(RootAccumulator defaultAccumulator) {
+    this.defaultAccumulator = defaultAccumulator;
   }
 }

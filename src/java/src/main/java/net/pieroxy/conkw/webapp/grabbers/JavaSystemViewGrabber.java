@@ -43,7 +43,7 @@ public class JavaSystemViewGrabber extends AsyncGrabber<SimpleCollector, JavaSys
   }
 
   public SimpleCollector getDefaultCollector() {
-    return new SimpleCollector(this, DEFAULT_CONFIG_KEY);
+    return new SimpleCollector(this, DEFAULT_CONFIG_KEY, getDefaultAccumulator());
   }
 
   @Override

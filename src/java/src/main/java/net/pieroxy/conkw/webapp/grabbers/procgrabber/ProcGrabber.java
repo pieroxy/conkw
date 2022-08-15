@@ -56,7 +56,7 @@ public class ProcGrabber extends AsyncGrabber<SimpleCollector, ProcGrabber.ProcG
   private int nbThreads;
 
   public SimpleCollector getDefaultCollector() {
-    return new SimpleCollector(this, DEFAULT_CONFIG_KEY);
+    return new SimpleCollector(this, DEFAULT_CONFIG_KEY, getDefaultAccumulator());
   }
 
   @Override

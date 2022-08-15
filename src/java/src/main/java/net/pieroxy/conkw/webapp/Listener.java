@@ -1,5 +1,6 @@
 package net.pieroxy.conkw.webapp;
 
+import net.pieroxy.conkw.accumulators.parser.AccumulatorExpressionParser;
 import net.pieroxy.conkw.config.Config;
 import net.pieroxy.conkw.config.ConfigReader;
 import net.pieroxy.conkw.config.CredentialsStore;
@@ -71,6 +72,7 @@ public class Listener implements ServletContextListener {
           if (defaultConf == null && gc.getConfig()!=null) {
             throw new RuntimeException("Grabber " + g.getGrabberFQN() + " did not provide a default configuration but the config file has one.");
           }
+          g.setDefaultAccumulator(new AccumulatorExpressionParser().parse( gc.getDefaultAccumulator()));
           g.setConfig(GrabberConfigReader.fillObject(g.getDefaultConfig(), gc.getConfig()), creds.getFor(g.getClass()));
           if (gc.getParameters()!=null || gc.getNamedParameters()!=null || gc.getExtract()!=null) {
             throw new RuntimeException("Grabber " + g.getGrabberFQN() + " uses the old configuration. The properties 'parameters', 'namedParameters' and 'extract' cannot be used anymore in a grabber configuration section. Please refer to the documentation to see how to configure your grabber.");

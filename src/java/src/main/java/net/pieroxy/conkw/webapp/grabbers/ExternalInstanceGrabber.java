@@ -29,7 +29,7 @@ public class ExternalInstanceGrabber extends AsyncGrabber<SimpleCollector, Exter
 
   @Override
   public SimpleCollector getDefaultCollector() {
-    return new SimpleCollector(this, DEFAULT_CONFIG_KEY);
+    return new SimpleCollector(this, DEFAULT_CONFIG_KEY, getDefaultAccumulator());
   }
 
   @Override

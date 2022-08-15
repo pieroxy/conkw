@@ -1,5 +1,6 @@
 package net.pieroxy.conkw.collectors;
 
+import net.pieroxy.conkw.accumulators.implementations.RootAccumulator;
 import net.pieroxy.conkw.grabbersBase.Grabber;
 import net.pieroxy.conkw.webapp.model.ResponseData;
 
@@ -11,18 +12,21 @@ import static net.pieroxy.conkw.utils.pools.hashmap.HashMapPool.SIZE_UNKNOWN;
 public class SimpleCollector implements Collector {
     private ResponseData collectionInProgress;
     private ResponseData completedCollection;
+    private RootAccumulator accumulator;
     private final String configKey;
     protected Grabber<?, ?> grabber;
 
-    public SimpleCollector(Grabber<?, ?> g, String configKey) {
+    public SimpleCollector(Grabber<?, ?> g, String configKey, RootAccumulator accumulator) {
         this.grabber = g;
         this.completedCollection = new ResponseData(g, System.currentTimeMillis(), SIZE_UNKNOWN, SIZE_UNKNOWN);
         this.collectionInProgress = new ResponseData(g, System.currentTimeMillis(), SIZE_UNKNOWN, SIZE_UNKNOWN);
         this.configKey = configKey;
+        this.accumulator = accumulator;
     }
 
     @Override
     public synchronized void collectionDone() {
+        if (accumulator!=null) accumulator.prepareNewSession();
         try (ResponseData tmp = completedCollection) {
             if (tmp == null) {
                 grabber.log(Level.WARNING, "completedCollection is null");
@@ -35,6 +39,10 @@ public class SimpleCollector implements Collector {
                 collectionInProgress = new ResponseData(grabber, System.currentTimeMillis(), tmp.getNumSize(), tmp.getStrSize());
             }
         }
+    }
+
+    public RootAccumulator getAccumulator() {
+        return accumulator;
     }
 
     // Writing
@@ -110,7 +118,12 @@ public class SimpleCollector implements Collector {
 
     @Override
     public synchronized ResponseData getDataCopy() {
-        return new ResponseData(completedCollection);
+        ResponseData res = new ResponseData(completedCollection);
+        if (accumulator!=null) {
+            accumulator.log("", res);
+            res.setTimestamp(Math.max(res.getTimestamp(), accumulator.getLastPoint()));
+        }
+        return res;
     }
 
     @Override
