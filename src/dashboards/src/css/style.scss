@@ -150,6 +150,19 @@ table.sessions {
     }
   }
 
+  svg.icon {
+    width: 1.3em;
+    height: 1.3em;
+    vertical-align: bottom;
+    margin: 0;
+  
+    > * {
+  
+      &.primary {
+        stroke-width:0.1em;
+      }
+    }
+  }
 }
 
 @mixin vScrollableArea($bg) {
