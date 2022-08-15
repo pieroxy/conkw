@@ -1,6 +1,5 @@
 package net.pieroxy.conkw.webapp.grabbers.logfile;
 
-import net.pieroxy.conkw.accumulators.Accumulator;
 import net.pieroxy.conkw.accumulators.AccumulatorCollector;
 import net.pieroxy.conkw.accumulators.implementations.RootAccumulator;
 import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
@@ -51,26 +50,17 @@ public class FakeGeneratedLogFileGrabber extends AsyncGrabber<AccumulatorCollect
 
     @Override
     public AccumulatorCollector<ResponseData> getDefaultCollector() {
-        return new AccumulatorCollector<>(this, DEFAULT_CONFIG_KEY, "default", new RootAccumulator<>("default",getConfig().getAccumulator()));
+        return new AccumulatorCollector<>(this, DEFAULT_CONFIG_KEY, "default", new RootAccumulator<>("default",getDefaultAccumulator()));
     }
 
     public static class FakeGeneratedLogFileGrabberConfig {
-        private Accumulator accumulator;
         private List<FakeGeneratedLogFileGrabberConfigRequest> traffic;
 
         public FakeGeneratedLogFileGrabberConfig() {
         }
 
-        public Accumulator getAccumulator() {
-            return accumulator;
-        }
-
         public List<FakeGeneratedLogFileGrabberConfigRequest> getTraffic() {
             return traffic;
-        }
-
-        public void setAccumulator(Accumulator accumulator) {
-            this.accumulator = accumulator;
         }
 
         public void setTraffic(List<FakeGeneratedLogFileGrabberConfigRequest> traffic) {

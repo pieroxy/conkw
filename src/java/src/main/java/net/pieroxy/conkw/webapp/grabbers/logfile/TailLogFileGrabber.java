@@ -55,7 +55,7 @@ public class TailLogFileGrabber<T extends DataRecord>
 
     @Override
     public AccumulatorCollector<T> getDefaultCollector() {
-        return new AccumulatorCollector<T>(this, DEFAULT_CONFIG_KEY, "default", getConfig().getAccumulator());
+        return new AccumulatorCollector<T>(this, DEFAULT_CONFIG_KEY, "default", getDefaultAccumulator());
     }
 
     @Override
@@ -65,7 +65,7 @@ public class TailLogFileGrabber<T extends DataRecord>
 
     @Override
     public synchronized void newLine(long time, T line) {
-        Accumulator<T> accumulator = getConfig().getAccumulator();
+        Accumulator<T> accumulator = getDefaultAccumulator();
         synchronized (accumulator) {
             accumulator.add(line);
             line.close();
@@ -75,8 +75,6 @@ public class TailLogFileGrabber<T extends DataRecord>
     public static class TailLogFileGrabberConfig<T extends DataRecord> {
         private String filename;
         private String parserClassName;
-        private RootAccumulator accumulator;
-
         public String getFilename() {
             return filename;
         }
@@ -91,14 +89,6 @@ public class TailLogFileGrabber<T extends DataRecord>
 
         public void setParserClassName(String parserClassName) {
             this.parserClassName = parserClassName;
-        }
-
-        public RootAccumulator<T> getAccumulator() {
-            return accumulator;
-        }
-
-        public void setAccumulator(RootAccumulator accumulator) {
-            this.accumulator = accumulator;
         }
     }
 }

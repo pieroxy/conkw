@@ -140,19 +140,14 @@ public class ExternalInstanceAggregator<T extends DataRecord> extends AsyncGrabb
 
     @Override
     public AccumulatorCollector<T> getDefaultCollector() {
-        return new AccumulatorCollector<T>(this, DEFAULT_CONFIG_KEY, "default", getConfig().getAccumulator());
+        return new AccumulatorCollector<T>(this, DEFAULT_CONFIG_KEY, "default", getDefaultAccumulator());
     }
 
     public static class ExternalInstanceAggregatorConfig<T extends DataRecord> implements CredentialsProvider {
-        private RootAccumulator accumulator;
         private Credentials credentials;
         private String credentialsRef;
         private List<ExternalInstanceAggregatorConfigEndpoint> endpoints;
 
-
-        public RootAccumulator getAccumulator() {
-            return accumulator;
-        }
 
         @Override
         public Credentials getCredentials() {
@@ -162,10 +157,6 @@ public class ExternalInstanceAggregator<T extends DataRecord> extends AsyncGrabb
         @Override
         public String getCredentialsRef() {
             return credentialsRef;
-        }
-
-        public void setAccumulator(RootAccumulator accumulator) {
-            this.accumulator = accumulator;
         }
 
         public void setCredentials(Credentials credentials) {
