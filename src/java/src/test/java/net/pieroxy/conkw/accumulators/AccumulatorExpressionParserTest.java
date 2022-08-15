@@ -251,6 +251,34 @@ public class AccumulatorExpressionParserTest extends ConkwTestCase {
         assertMapContains(data.getDimensions(), "histValues", "10,20,50,100,200,500,above");
     }
 
+    public void testRegexpParser() {
+        Accumulator a = getParsedAccumulator(new AccumulatorExpressionParser().parse("regexpMultiValue(/.*abc./,multi([count(),sum(value,0)]))"));
+        assertNotNull(a);
+        assertEquals(RegexpAccumulator.class, a.getClass());
+
+        RegexpAccumulator na = (RegexpAccumulator)a;
+        assertEquals(".*abc.", na.getPattern().pattern());
+
+        a.add(new GenericLogRecord().addValue("size", 0.5));
+        a.add(new GenericLogRecord()
+                .addValue("abc1", 1)
+                .addValue("abc2", 2)
+                .addValue("abc3", 3)
+                .addValue("bbc30", 30)
+                .addValue("abc4", 4)
+                .addValue("tutuabc4titi", 40)
+                .addValue("tutuabcX", 41)
+                .addValue("abc5", 5));
+
+        Data data = new Data();
+        a.prepareNewSession();
+        a.log("", data);
+
+        assertMapContains(data.getValues(), "count", 6d);
+        assertMapContains(data.getValues(), "value.sum", 56d);
+
+    }
+
     // TODO Needs some more cases
     public void testParsingErrors() {
         assertThrows(

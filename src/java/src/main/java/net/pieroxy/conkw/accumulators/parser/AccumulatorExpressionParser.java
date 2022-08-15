@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class AccumulatorExpressionParser<T extends DataRecord> {
     private static final Map<String, Class<? extends Accumulator<? extends DataRecord>>> accumulatorsByName = new HashMap();
@@ -80,8 +81,25 @@ public class AccumulatorExpressionParser<T extends DataRecord> {
                 return parseArray(ParamType.ACCUMULATOR, expr, idx);
             case ARRAY_OF_NUMBERS:
                 return parseArray(ParamType.NUMBER, expr, idx);
+            case REGEXP:
+                return parseRegexp(expr, idx);
         }
         return null;
+    }
+
+    private Pattern parseRegexp(String expr, int[] idx) {
+        StringBuilder regexp = new StringBuilder();
+        if (expr.charAt(idx[0])!='/') throw new ParseException("Expected '/'", expr, idx);
+        idx[0]++;
+        int context=0;
+
+        while (true) {
+            char c = expr.charAt(idx[0]++);
+            if (context == 0 && c=='/') break;
+            regexp.append(c);
+        }
+
+        return Pattern.compile(regexp.toString());
     }
 
     private Object parseArray(ParamType param, String expr, int[] index) {
@@ -193,6 +211,7 @@ public class AccumulatorExpressionParser<T extends DataRecord> {
             if (type.equals(Double.class)) return ParamType.NUMBER;
             if (type.equals(Double.TYPE)) return ParamType.NUMBER;
             if (type.equals(String.class)) return ParamType.STRING;
+            if (type.equals(Pattern.class)) return ParamType.REGEXP;
             if (type.equals(Accumulator.class)) return ParamType.ACCUMULATOR;
             if (type.equals(AccumulatorProvider.class)) return ParamType.ACCUMULATOR_PROVIDER;
         }
@@ -211,6 +230,7 @@ public class AccumulatorExpressionParser<T extends DataRecord> {
 
     static {
         register(SumAccumulator.class);
+        register(RegexpAccumulator.class);
         register(SimpleCounter.class);
         register(MultiAccumulator.class);
         register(NamedAccumulator.class);
