@@ -1,5 +1,5 @@
 import m from 'mithril';
-import { GaugeWithHistory } from '../../../../auto/pieroxy-conkw';
+import { GaugeWithHistory, WarningDirective } from '../../../../auto/pieroxy-conkw';
 import { ColorUtils } from '../../../../utils/ColorUtils';
 import { NumberUtils } from '../../../../utils/NumberUtils';
 import { DashboardElement, DashboardElementAttrs } from '../../DashboardElement';
@@ -18,13 +18,14 @@ export class GaugeWithHistoryComponent extends DashboardElement<GaugeWithHistory
       let min = this.computeNumericValue(attrs.model.min, attrs.currentData.rawData);
       let max = this.computeNumericValue(attrs.model.max, attrs.currentData.rawData);
       let value = this.computeNumericValue(attrs.model.value, attrs.currentData.rawData);
+      let error = attrs.model.error ? this.computeNumericValue(attrs.model.error, attrs.currentData.rawData) : NaN;
       let log = attrs.model.logarithmic;
 
       if (attrs.currentData.useFakeDemoData) {
         value = attrs.currentData.useFakeDemoData.value;
       }
   
-      this.update(min, max, [value], log, attrs.currentData.metricGap);
+      this.update(min, max, [value], log, attrs.currentData.metricGap, error, attrs.model.error?.directive === WarningDirective.VALUEABOVE);
     }
 
     let style= {
@@ -36,39 +37,44 @@ export class GaugeWithHistoryComponent extends DashboardElement<GaugeWithHistory
     });
   }
 
-  update(min: number, max: number, values: number[], log: boolean, metricGap: boolean) {
+  update(min: number, max: number, values: number[], log: boolean, metricGap: boolean, errorValue:number, errorAbove:boolean) {
     var ctx = this.canvas.getContext('2d');
     if (!ctx) return;
 
     this.scroll();
 
     var bottom = 0;
-    var bgColor = ColorUtils.getGaugeDefaultBackground();
 
     if (metricGap) {
-        bgColor = "red";
-    }
+      ctx.fillStyle = "#888";
+      ctx.fillRect(this.w-1, 0, 1, this.h);
+    } else {
+      ctx.fillStyle = ColorUtils.getGaugeDefaultBackground();
+      ctx.fillRect(this.w-1, 0, 1, this.h);
 
-    ctx.fillStyle = bgColor;
-    ctx.fillRect(this.w-1, 0, 1, this.h);
-
-    for (var i = 0; i < this.colors.length; i++) {
-        var value = values[i];
-        ctx.fillStyle = this.colors[i];
-        var posprc = NumberUtils.computePercentage(value, min, max, log);
+      if (!isNaN(errorValue)) {
+        var posprc = NumberUtils.computePercentage(errorValue, min, max, log);
         var hpx = posprc*this.h/100;
+        console.log("Errt = " + hpx);
+        if (errorAbove) {
+          ctx.fillStyle = ColorUtils.getGaugeErrorThumb();
+          ctx.fillRect(this.w-1, 0, 1, this.h-hpx);
+        } else {
+          ctx.fillStyle = "rgba(0,0,0,0.3)";
+          ctx.fillRect(this.w-1, this.h-hpx, 1, 1);
+        }
+      }
 
-        ctx.fillRect(this.w-1, this.h-hpx-bottom, 1, hpx);
-        bottom += hpx;
+      for (var i = 0; i < this.colors.length; i++) {
+          var value = values[i];
+          ctx.fillStyle = this.colors[i];
+          var posprc = NumberUtils.computePercentage(value, min, max, log);
+          var hpx = posprc*this.h/100;
+
+          ctx.fillRect(this.w-1, this.h-hpx-bottom, 1, hpx);
+          bottom += hpx;
+      }
     }
-/*
-    if (max != this.maxValue && this.maxValue!=-1) {
-        this.scroll();
-        ctx.fillStyle = "orange";
-        ctx.fillRect(this.w-1, 0, 1, this.h);
-        this.maxValue = max;
-    }
-*/
   }
 
   oncreate({dom}:m.VnodeDOM<GaugeWithHistoryAttrs>) {

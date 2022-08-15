@@ -23,6 +23,15 @@ export class EditGaugeWithHistoryLinePanel implements m.ClassComponent<EditGauge
     if (attrs.element) {
       let element = attrs.element;
 
+      if (!element.gauge.error) {
+        element.gauge.error = {
+          clazz:ExpressionClass.LITERAL,
+          namespace:"",
+          type:ExpressionValueType.NUMERIC,
+          value:"0",
+          directive:WarningDirective.VALUEABOVE
+        }
+      }
       if (!element.value.error) {
         element.value.error = {
           clazz:ExpressionClass.LITERAL,
@@ -33,10 +42,13 @@ export class EditGaugeWithHistoryLinePanel implements m.ClassComponent<EditGauge
         }
       }
 
+      if (this.thresholdIsStatic) {
+        ModelUtils.copyValueExpression(element.gauge.error, element.value.error);
+      }
+
       this.labelIsStatic = element.label.value.clazz === ExpressionClass.LITERAL;
       this.minIsStatic = element.gauge.min.clazz === ExpressionClass.LITERAL;
       this.maxIsStatic = element.gauge.max.clazz === ExpressionClass.LITERAL;
-      this.thresholdIsStatic = element.value.error.clazz === ExpressionClass.LITERAL;
       if (element.valueIsGauge) {
         // Every change ends up in a redraw, so it is easier to make this update here.
         // Will (should?) move it when the refacto simplifications are done.
@@ -173,7 +185,7 @@ export class EditGaugeWithHistoryLinePanel implements m.ClassComponent<EditGauge
                 m(".label", "Threshold"),
                 m(SelectInput, {
                   onenter:()=>{},
-                  refHolder:element.value.error,
+                  refHolder:element.gauge.error,
                   refProperty:"directive",
                   values:[
                     {id:WarningDirective.VALUEABOVE,label:"Value is above"},
@@ -182,7 +194,7 @@ export class EditGaugeWithHistoryLinePanel implements m.ClassComponent<EditGauge
                 }),
                 m(TextFieldInput, {
                   onenter:()=>{},
-                  refHolder:element.value.error,
+                  refHolder:element.gauge.error,
                   refProperty:"value",
                   spellcheck:false,
                   params: {

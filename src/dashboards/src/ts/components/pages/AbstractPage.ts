@@ -23,6 +23,8 @@ export abstract class AbstractPage<A> implements m.ClassComponent<A> {
   renderJsAccessibleColors(): m.Children {
     return m(".colorSetForJs", [
       m("#gaugeDefaultColor"),
+      m("#gaugeErrorColor"),
+      m("#gaugeErrorThumb"),
       m("#gaugeDefaultBackground"),
     ])
   }
