@@ -52,7 +52,9 @@ public class SimpleCollector implements Collector {
     public synchronized void collect(String metric, double value) {
         collectionInProgress.addMetric(metric, value);
         if (accumulator!=null) {
-            accumulator.add(new GenericLogRecord().addValue(metric, value));
+            try (GenericLogRecord glr = new GenericLogRecord().addValue(metric, value)) {
+                accumulator.add(glr);
+            }
         }
     }
 

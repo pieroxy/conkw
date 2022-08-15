@@ -1,11 +1,21 @@
 package net.pieroxy.conkw.pub.mdlog;
 
-import java.util.HashMap;
+import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
+
 import java.util.Map;
 
 public class GenericLogRecord implements DataRecord {
-    private final Map<String, String> dims = new HashMap<>();
-    private final Map<String, Double> vals = new HashMap<>();
+    private Map<String, String> dims;
+    private Map<String, Double> vals;
+
+    public GenericLogRecord() {
+        this(-1,-1);
+    }
+
+    public GenericLogRecord(int dimsSize, int valsSize) {
+        dims = HashMapPool.getInstance().borrow(dimsSize);
+        vals = HashMapPool.getInstance().borrow(valsSize);
+    }
 
     @Override
     public Map<String, String> getDimensions() {
@@ -29,6 +39,9 @@ public class GenericLogRecord implements DataRecord {
 
     @Override
     public void close() {
-
+        HashMapPool.getInstance().giveBack(dims);
+        HashMapPool.getInstance().giveBack(vals);
+        dims=null;
+        vals=null;
     }
 }
