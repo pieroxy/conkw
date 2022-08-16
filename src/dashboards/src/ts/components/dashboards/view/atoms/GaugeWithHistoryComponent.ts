@@ -48,6 +48,12 @@ export class GaugeWithHistoryComponent extends DashboardElement<GaugeWithHistory
     if (metricGap) {
       ctx.fillStyle = "#888";
       ctx.fillRect(this.w-1, 0, 1, this.h);
+      this.scroll();
+      ctx.fillStyle = "#888";
+      ctx.fillRect(this.w-1, 0, 1, this.h);
+      this.scroll();
+      ctx.fillStyle = "#888";
+      ctx.fillRect(this.w-1, 0, 1, this.h);
     } else {
       ctx.fillStyle = ColorUtils.getGaugeDefaultBackground();
       ctx.fillRect(this.w-1, 0, 1, this.h);
