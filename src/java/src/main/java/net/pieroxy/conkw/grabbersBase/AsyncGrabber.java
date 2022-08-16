@@ -128,6 +128,10 @@ public abstract class AsyncGrabber<T extends Collector, C> extends SimpleGrabber
         } else {
           // Pause the grabbers after 5s of inactivity.
           if (canLogFine()) this.log(Level.FINE, "Avoid run because of no activity for " + getName());
+          getActiveCollectors().forEach(sc -> {
+            sc.collectionDone(); // We still need to mark the collection being done to avoid data piling up.
+          });
+
         }
       } catch (Exception e) {
         log(Level.SEVERE, "Grabbing " + getName(), e);
