@@ -1,6 +1,12 @@
 import m = require('mithril');
 
 export class Routing {
+  public static DEBUG:false=false;
+
+  static refreshRoute() {
+    Routing.goToScreen(m.route.get());
+  }
+
   public static getRoute(target:string, params?:{[id:string]:string|number}):string {
     let res:string = target + "/";
     if (params) {
@@ -21,6 +27,7 @@ export class Routing {
   }
 
   public static goToScreen(target:string, params?:{[id:string]:string|number}, avoidHistory?:boolean) {
+    if (Routing.DEBUG) console.log("Going to route " + target);
     let route = this.getRoute(target, params);
     m.route.set(route, null, {replace:!!avoidHistory});
   }

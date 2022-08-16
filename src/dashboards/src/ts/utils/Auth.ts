@@ -1,6 +1,5 @@
 import { ApiEndpoints } from "../auto/ApiEndpoints";
 import { User } from "../auto/pieroxy-conkw";
-import { Endpoints } from './navigation/Endpoints';
 import { Routing } from './navigation/Routing';
 
 export class Auth {
@@ -23,12 +22,12 @@ export class Auth {
         if (data.user) {
           this.user = data.user;
           this.token = lst;
-          Routing.goToScreen(Endpoints.HOME);
         } else {
           if (data.invalidSession) {
             localStorage.removeItem("authToken");
           }
         }
+        Routing.refreshRoute();
       }).catch(() => {
         this.askedForToken = false;
       })
