@@ -7,6 +7,7 @@ import { CurrentData } from "./CurrentData";
 export class MetricsReader {
   private static GRABBERS_LIST_TTL = 10000;
   private static GRABBERS_TTL = 5; // 5 iterations
+  private static DEBUG = false;
 
   private static lastResponse:CurrentData = {
     rawData: {
@@ -37,6 +38,7 @@ export class MetricsReader {
   public static getLastResponse():CurrentData {
     if (MetricsReader.interval === undefined) {
       MetricsReader.interval = window.setInterval(() => {MetricsReader.fetchRAF()}, 1000);
+      if (MetricsReader.DEBUG) console.log("Starting metrics fetch timer");
     }
     return MetricsReader.lastResponse;
   }
@@ -61,6 +63,8 @@ export class MetricsReader {
     if (Auth.getAuthenticationStatus() !== AuthenticationStatus.LOGGED_IN ||
       MetricsReader.grabbersRequested.size < 1) {
       window.clearInterval(MetricsReader.interval);
+      if (MetricsReader.DEBUG) console.log("Stopping metrics fetch timer");
+      this.iteration++;
       MetricsReader.interval = undefined;
       return;
     }
