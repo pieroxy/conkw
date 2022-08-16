@@ -58,6 +58,7 @@ export class Api {
           throw "HandledError";
       }
     }).catch((_e) => {
+      if (options.onerror) options.onerror();
       return new Promise(()=>{});
     });
   }

@@ -4,4 +4,5 @@ export interface ApiOptions<T> {
   body:T;
   hideFromSpinner?:boolean;
   redrawOnError?:boolean;
+  onerror?:()=>void
 }

@@ -6,7 +6,7 @@ import { CurrentData } from "./CurrentData";
 
 export class MetricsReader {
   private static GRABBERS_LIST_TTL = 10000;
-  private static GRABBERS_TTL = 5000;
+  private static GRABBERS_TTL = 5; // 5 iterations
 
   private static lastResponse:CurrentData = {
     rawData: {
@@ -28,21 +28,26 @@ export class MetricsReader {
   private static grabbers:IdLabelPair[] = [];
   private static grabbersLastFetch:number = 0;
   private static iteration=1;
+  private static lastIteration=0;
 
   public static didReadFromGrabber(grabber:string):void {
-    MetricsReader.grabbersRequested.set(grabber, Date.now());
+    MetricsReader.grabbersRequested.set(grabber, this.iteration);
   }
 
   public static getLastResponse():CurrentData {
     if (MetricsReader.interval === undefined) {
-      MetricsReader.interval = window.setInterval(() => {MetricsReader.fetch()}, 1000);
+      MetricsReader.interval = window.setInterval(() => {MetricsReader.fetchRAF()}, 1000);
     }
     return MetricsReader.lastResponse;
   }
-
+  public static fetchRAF():void {
+    window.requestAnimationFrame(()=>{MetricsReader.fetch()});
+  }
   public static fetch():void {
-    let now = Date.now();
-    let expiredBefore = now - MetricsReader.GRABBERS_TTL;
+    if (MetricsReader.lastIteration == MetricsReader.iteration) return;
+    MetricsReader.lastIteration = MetricsReader.iteration
+    let iteration = this.iteration;
+    let expiredBefore = iteration - MetricsReader.GRABBERS_TTL;
     let it = MetricsReader.grabbersRequested.keys();
     let next;
     while (next = it.next()) {
@@ -65,10 +70,15 @@ export class MetricsReader {
       body:{grabbers:[...MetricsReader.grabbersRequested.keys()]},
       endpoint:"CallApi",
       hideFromSpinner:true,
-      redrawOnError:true
+      redrawOnError:true,
+      onerror:()=>{
+        MetricsReader.iteration++;
+      }
     }).then((o => {
       let now = Date.now();
-      MetricsReader.lastResponse = {rawData:o.data, iteration:this.iteration++, metricGap:now-this.lastResponseTime>5000};
+      MetricsReader.iteration++;
+  
+      MetricsReader.lastResponse = {rawData:o.data, iteration:iteration, metricGap:now-this.lastResponseTime>5000};
       this.lastResponseTime = now;
     }))
   }
