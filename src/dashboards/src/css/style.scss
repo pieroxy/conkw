@@ -15,6 +15,7 @@ $scrollbarFg:#55585a;
 $monospace: 'Courier New', Courier, monospace;
 $gauge-default-color: #383;
 $gauge-error-color: #822;
+$gauge-error-thumb: #4e132e;
 $gauge-default-background: #3e233e;
 
 @mixin media-max($_max-width) {
@@ -769,6 +770,7 @@ button {
         position: relative;
         overflow: hidden;
         float: right;
+        border: 1px solid #544;
 
         .gaugethumb {
           position: absolute;
@@ -783,7 +785,7 @@ button {
         .gaugewarningright {
           float:right;
           height:100%;
-          background-color: #4e132e;
+          background-color: $gauge-error-thumb;
         }
 
         .gaugewarningleft {
@@ -799,6 +801,7 @@ button {
         float: right;
         margin-left: 5px;
         margin-bottom: 2px;
+        border: 1px solid #544;
 
         &.cw-stale {
           opacity: 30%;
@@ -931,6 +934,14 @@ button {
   
   #gaugeDefaultColor {
     color: $gauge-default-color;
+  }
+  
+  #gaugeErrorColor {
+    color: $gauge-error-color;
+  }
+  
+  #gaugeErrorThumb {
+    color: $gauge-error-thumb;
   }
   
   #gaugeDefaultBackground {
