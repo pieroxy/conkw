@@ -22,10 +22,6 @@ export class Routing {
     return res.substring(0, res.length-1);
   }
 
-  public static getRouteAsHref(target:string, params?:{[id:string]:string|number}) {
-    return "#" + this.getRoute(target, params);
-  }
-
   public static goToScreen(target:string, params?:{[id:string]:string|number}, avoidHistory?:boolean) {
     if (Routing.DEBUG) console.log("Going to route " + target);
     let route = this.getRoute(target, params);
