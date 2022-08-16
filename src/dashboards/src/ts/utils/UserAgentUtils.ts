@@ -1,5 +1,6 @@
 export class UserAgentUtils {
   public static getDescription(ua:string):string {
+    if (!ua) return "Unknown";
     return UserAgentUtils.getBrowser(ua) + " / " + UserAgentUtils.getOS(ua);
   }
   static getBrowser(ua: string):string {
