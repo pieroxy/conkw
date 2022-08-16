@@ -47,10 +47,10 @@ public class Dashboard {
    */
   public String addPanel(DashboardPanel panel) {
     panel.setId(UUID.randomUUID().toString());
+    if (panels == null) panels = new ArrayList<>();
     if (StringUtil.isNullOrEmptyTrimmed(panel.getTitle())) {
       panel.setTitle("Panel " + (panels.size()+1) + " title");
     }
-    if (panels == null) panels = new ArrayList<>();
     panels.add(panel);
     return panel.getId();
   }
