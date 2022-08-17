@@ -18,8 +18,9 @@ public class HwmonGrabber extends AsyncGrabber<SimpleCollector, HwmonGrabber.Hwm
     private Set<Pattern> include;
     private Map<String, StringBuilder> categories;
 
-    public SimpleCollector getDefaultCollector() {
-        return new SimpleCollector(this, DEFAULT_CONFIG_KEY, getDefaultAccumulator());
+    @Override
+    public SimpleCollector getDefaultCollector(boolean includeAccumulatorIfAny) {
+        return new SimpleCollector(this, DEFAULT_CONFIG_KEY, includeAccumulatorIfAny ? getDefaultAccumulator() : null);
     }
 
     @Override

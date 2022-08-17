@@ -32,7 +32,7 @@ public abstract class SimpleGrabber<T extends Collector, C> extends Grabber<T, C
             log(Level.FINER,now + " Grabbing " + extractName + " cached on " + cached.getTimestamp() + " with delay " + delay.asMilliseconds());
         }
         try (T tmp = cached) {
-          cached = getDefaultCollector();
+          cached = getDefaultCollector(false);
           method.extract(cached);
           cached.collectionDone();
           cachedResponses.put(extractName, cached);

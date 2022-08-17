@@ -49,7 +49,7 @@ public class FakeGeneratedLogFileGrabber extends AsyncGrabber<AccumulatorCollect
     }
 
     @Override
-    public AccumulatorCollector<ResponseData> getDefaultCollector() {
+    public AccumulatorCollector<ResponseData> getDefaultCollector(boolean dontcare) {
         return new AccumulatorCollector<>(this, DEFAULT_CONFIG_KEY, "default", new RootAccumulator<>("default",getDefaultAccumulator()));
     }
 

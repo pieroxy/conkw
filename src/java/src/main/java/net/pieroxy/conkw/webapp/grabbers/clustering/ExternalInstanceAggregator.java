@@ -139,8 +139,8 @@ public class ExternalInstanceAggregator<T extends DataRecord> extends AsyncGrabb
     }
 
     @Override
-    public AccumulatorCollector<T> getDefaultCollector() {
-        return new AccumulatorCollector<T>(this, DEFAULT_CONFIG_KEY, "default", getDefaultAccumulator());
+    public AccumulatorCollector<T> getDefaultCollector(boolean includeAccumulatorIfAny) {
+        return new AccumulatorCollector<T>(this, DEFAULT_CONFIG_KEY, "default", includeAccumulatorIfAny ? getDefaultAccumulator() : null);
     }
 
     public static class ExternalInstanceAggregatorConfig<T extends DataRecord> implements CredentialsProvider {

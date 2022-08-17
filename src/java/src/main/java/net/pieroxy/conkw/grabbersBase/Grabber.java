@@ -40,7 +40,7 @@ public abstract class Grabber<T extends Collector, C> {
   public abstract void collect(T c);
   public abstract void dispose();
   public abstract String getDefaultName();
-  public abstract T getDefaultCollector();
+  public abstract T getDefaultCollector(boolean includeAccumulatorIfAny);
 
   /**
    * Override if you want to provide configuration options.
@@ -126,7 +126,7 @@ public abstract class Grabber<T extends Collector, C> {
     Map<String, TimedData<T>> nm = new HashMap<>(extractedByConfiguration);
     TimedData<T> created;
     if (param == null || param.equals(DEFAULT_CONFIG_KEY)) {
-      nm.put(DEFAULT_CONFIG_KEY, created = new TimedData(getDefaultCollector()));
+      nm.put(DEFAULT_CONFIG_KEY, created = new TimedData(getDefaultCollector(true)));
     } else {
       nm.put(param, created = new TimedData(parseCollector(param)));
     }

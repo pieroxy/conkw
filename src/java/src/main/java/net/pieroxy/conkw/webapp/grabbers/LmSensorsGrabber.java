@@ -22,8 +22,9 @@ public class LmSensorsGrabber extends AsyncGrabber<SimpleCollector, LmSensorsGra
     return true;
   }
 
-  public SimpleCollector getDefaultCollector() {
-    return new SimpleCollector(this, DEFAULT_CONFIG_KEY, getDefaultAccumulator());
+  @Override
+  public SimpleCollector getDefaultCollector(boolean includeAccumulatorIfAny) {
+    return new SimpleCollector(this, DEFAULT_CONFIG_KEY, includeAccumulatorIfAny ? getDefaultAccumulator() : null);
   }
 
   @Override

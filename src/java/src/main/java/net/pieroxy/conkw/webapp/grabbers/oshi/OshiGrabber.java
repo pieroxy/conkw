@@ -40,8 +40,8 @@ public class OshiGrabber extends AsyncGrabber<SimpleCollector, OshiGrabber.OshiG
   }
 
   @Override
-  public SimpleCollector getDefaultCollector() {
-    return new SimpleCollector(this, DEFAULT_CONFIG_KEY, getDefaultAccumulator());
+  public SimpleCollector getDefaultCollector(boolean includeAccumulatorIfAny) {
+    return new SimpleCollector(this, DEFAULT_CONFIG_KEY, includeAccumulatorIfAny ? getDefaultAccumulator() : null);
   }
 
   @Override

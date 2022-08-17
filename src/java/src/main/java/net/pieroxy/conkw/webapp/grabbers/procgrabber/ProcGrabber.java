@@ -55,8 +55,9 @@ public class ProcGrabber extends AsyncGrabber<SimpleCollector, ProcGrabber.ProcG
   private int nbCores;
   private int nbThreads;
 
-  public SimpleCollector getDefaultCollector() {
-    return new SimpleCollector(this, DEFAULT_CONFIG_KEY, getDefaultAccumulator());
+  @Override
+  public SimpleCollector getDefaultCollector(boolean includeAccumulatorIfAny) {
+    return new SimpleCollector(this, DEFAULT_CONFIG_KEY, includeAccumulatorIfAny ? getDefaultAccumulator() : null);
   }
 
   @Override
@@ -205,6 +206,7 @@ public class ProcGrabber extends AsyncGrabber<SimpleCollector, ProcGrabber.ProcG
     if (disabled) {
       return;
     }
+    extract(c,"cpufreq", this::getCpuFreq, CDuration.ZERO);
     extract(c,"processes", this::grabProcesses, CDuration.ZERO);
     extract(c,"uptime", this::grabUptimeAndLoad, CDuration.ZERO);
     extract(c,"cpu", this::grabCpuUsage, CDuration.ZERO);
@@ -215,7 +217,6 @@ public class ProcGrabber extends AsyncGrabber<SimpleCollector, ProcGrabber.ProcG
     extract(c,"battery", this::getBattery, CDuration.FIVE_SECONDS);
     extract(c,"mdstat", this::grabMdstat, CDuration.ONE_MINUTE);
     extract(c,"hostname", this::getHostname, CDuration.ONE_HOUR);
-    extract(c,"cpufreq", this::getCpuFreq, CDuration.ZERO);
 
     if (canLogFiner()) {
       log(Level.FINER, "ProcGrabber usage: ");

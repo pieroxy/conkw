@@ -40,8 +40,8 @@ public abstract class TimeThrottledGrabber<C extends TimeThrottledGrabber.TimeTh
 
 
   @Override
-  public SimpleCollector getDefaultCollector() {
-    SimpleCollector res = new SimpleCollector(this, DEFAULT_CONFIG_KEY, getDefaultAccumulator());
+  public SimpleCollector getDefaultCollector(boolean includeAccumulatorIfAny) {
+    SimpleCollector res = new SimpleCollector(this, DEFAULT_CONFIG_KEY, includeAccumulatorIfAny ? getDefaultAccumulator() : null);
     res.setTimestamp(0);
     res.collectionDone();
     return res;
