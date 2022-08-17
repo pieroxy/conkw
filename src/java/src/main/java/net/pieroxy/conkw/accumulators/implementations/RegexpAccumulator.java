@@ -5,9 +5,12 @@ import net.pieroxy.conkw.pub.mdlog.DataRecord;
 import net.pieroxy.conkw.pub.mdlog.GenericLogRecord;
 import net.pieroxy.conkw.utils.prefixeddata.PrefixedDataRecord;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 public class RegexpAccumulator implements Accumulator<DataRecord> {
+    private static final Logger LOGGER = Logger.getLogger(RegexpAccumulator.class.getName());
     public static final String NAME = "regexpMultiValue";
 
     private final Pattern pattern;
@@ -20,18 +23,20 @@ public class RegexpAccumulator implements Accumulator<DataRecord> {
 
     @Override
     public double add(DataRecord line) {
-        DataRecord tmpLine = new GenericLogRecord();
-        return line
+        try (DataRecord tmpLine = new GenericLogRecord()) {
+            return line
                 .getValues()
                 .keySet()
                 .stream()
                 .filter(s -> pattern.matcher(s).matches())
                 .map(key -> {
+                    if (LOGGER.isLoggable(Level.FINER)) LOGGER.finer("Found " + key);
                     tmpLine.getValues().clear();
                     tmpLine.getValues().put("value", line.getValues().get(key));
                     accumulator.add(tmpLine);
                     return 1;
                 }).count();
+        }
     }
 
     @Override
