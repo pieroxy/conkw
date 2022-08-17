@@ -67,6 +67,7 @@ export class DefaultGaugeWithHistoryLine {
   }
 
   static build(element:any):GaugeWithHistoryElement {
+    element.valueIsGauge=true;
     element.label= {
       staleDelay:5,
       value: {
