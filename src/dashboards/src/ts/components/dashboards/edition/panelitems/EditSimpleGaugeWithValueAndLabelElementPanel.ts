@@ -29,7 +29,7 @@ export class EditSimpleGaugeWithValueAndLabelElementPanel implements m.ClassComp
           namespace:"",
           type:ExpressionValueType.NUMERIC,
           value:"0",
-          directive:WarningDirective.VALUEABOVE
+          directive:{test:WarningDirective.VALUEABOVE}
         }
       }
       if (!element.value.error) {
@@ -38,7 +38,7 @@ export class EditSimpleGaugeWithValueAndLabelElementPanel implements m.ClassComp
           namespace:"",
           type:ExpressionValueType.NUMERIC,
           value:"0",
-          directive:WarningDirective.VALUEABOVE
+          directive:{test:WarningDirective.VALUEABOVE}
         }
       }
 
@@ -54,7 +54,8 @@ export class EditSimpleGaugeWithValueAndLabelElementPanel implements m.ClassComp
         // Will (should?) move it when the refacto simplifications are done.
         ModelUtils.copyValueExpression(element.gauge.value, element.value.value);
       }
-  
+      if (!element.gauge.error.directive) element.gauge.error.directive = {};
+
   
       return [
         m(".title", ["Edit ", m("i", element.label.value.value)]),
@@ -185,8 +186,8 @@ export class EditSimpleGaugeWithValueAndLabelElementPanel implements m.ClassComp
                 m(".label", "Threshold"),
                 m(SelectInput, {
                   onenter:()=>{},
-                  refHolder:element.gauge.error,
-                  refProperty:"directive",
+                  refHolder:element.gauge.error.directive,
+                  refProperty:"test",
                   values:[
                     {id:WarningDirective.VALUEABOVE,label:"Value is above"},
                     {id:WarningDirective.VALUEBELOW,label:"Value is below"}

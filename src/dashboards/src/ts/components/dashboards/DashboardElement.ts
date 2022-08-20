@@ -1,5 +1,5 @@
 import m from 'mithril';
-import { DashboardDynamicElement, ExpressionClass, MetricsApiResponse, ValueExpression, WarningDirective } from '../../auto/pieroxy-conkw';
+import { DashboardDynamicElement, ExpressionClass, MetricsApiResponse, NumberDirective, NumberOperator, ValueExpression, WarningDirective } from '../../auto/pieroxy-conkw';
 import { CurrentData } from '../../utils/api/CurrentData';
 import { MetricsReader } from '../../utils/api/MetricsReader';
 
@@ -7,18 +7,33 @@ export abstract class DashboardElement<T extends DashboardElementAttrs> implemen
 
   computeNumericValue(expression:ValueExpression, data:MetricsApiResponse):number {
     if (!expression) return NaN;
+    let result = -1.02;
     switch (expression.clazz) {
       case ExpressionClass.LITERAL:
-        return parseFloat(expression.value);
+        result = parseFloat(expression.value);
+        break;
       case ExpressionClass.METRIC:
         let ns = expression.namespace;
         if (ns) MetricsReader.didReadFromGrabber(ns);
         if (data.metrics && data.metrics[ns] && data.metrics[ns].num)
-          return data.metrics[ns].num[expression.value];
+          result = data.metrics[ns].num[expression.value];
         else
-          return NaN;
+          result = NaN;
+        break;
     }
-    return -1.02;
+    return this.applyNumericTransform(result, expression.directive);
+  }
+
+  applyNumericTransform(result: number, directive?: NumberDirective): number {
+    if (directive?.operator && directive.value !== undefined) {
+      switch (directive.operator) {
+        case NumberOperator.MULT:
+          return result * directive.value;
+        case NumberOperator.MULT:
+          return result / directive.value;
+      }
+    }
+    return result;
   }
 
   computeTextValue(expression:ValueExpression, data:MetricsApiResponse):string|null {
@@ -49,7 +64,7 @@ export abstract class DashboardElement<T extends DashboardElementAttrs> implemen
   getValueWarningClass(error: ValueExpression | undefined, value: number, limitValue:number) {
     if (!error) return "";
     let warning = false;
-    switch (error.directive) {
+    switch (error.directive?.test) {
       case WarningDirective.VALUEABOVE:
         warning = value > limitValue;
         break;

@@ -16,8 +16,8 @@ export class SimpleGaugeComponent extends DashboardElement<SimpleGaugeAttrs> {
       value = attrs.currentData.useFakeDemoData.value;
     }
     let warnValue = model.error===undefined ? NaN : this.computeNumericValue(model.error, attrs.currentData.rawData);
-    let above = model.error && model.error.directive === WarningDirective.VALUEABOVE;
-    let below = model.error && model.error.directive === WarningDirective.VALUEBELOW;
+    let above = model.error && model.error.directive?.test === WarningDirective.VALUEABOVE;
+    let below = model.error && model.error.directive?.test === WarningDirective.VALUEBELOW;
     let className = ".gauge";
     className += this.getStaleClass(model.value, attrs.model.staleDelay);
     className += this.getValueWarningClass(model.error, value, warnValue);

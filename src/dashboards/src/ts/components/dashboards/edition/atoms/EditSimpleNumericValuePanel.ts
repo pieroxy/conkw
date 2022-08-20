@@ -1,5 +1,5 @@
 import m from 'mithril';
-import { ExpressionClass, ExpressionValueType, ValueExpression } from '../../../../auto/pieroxy-conkw';
+import { ExpressionClass, ExpressionValueType, NumberOperator, ValueExpression } from '../../../../auto/pieroxy-conkw';
 import { MetricsReader } from '../../../../utils/api/MetricsReader';
 import { SelectInput } from '../../../atoms/forms/SelectInput';
 import { TextFieldInput } from '../../../atoms/forms/TextFieldInput';
@@ -8,6 +8,12 @@ import { TextFieldInputWithSearch } from '../../../atoms/forms/TextFieldInputWit
 export class EditSimpleNumericValuePanel implements m.ClassComponent<EditSimpleNumericValuePanelAttrs> {
   view({attrs}: m.Vnode<EditSimpleNumericValuePanelAttrs>): void | m.Children {
     attrs.element.type = ExpressionValueType.NUMERIC;
+    if (!attrs.element.directive) {
+      attrs.element.directive = {
+        operator:NumberOperator.MULT,
+        value:1
+      }
+    }
     return [
       m(".inputWithLabel", [
         m(".label", "Class"),
@@ -48,6 +54,27 @@ export class EditSimpleNumericValuePanel implements m.ClassComponent<EditSimpleN
           refHolder:attrs.element,
           refProperty:"value",
           spellcheck:false
+        })
+      ]),
+      m(".inputWithLabel", [
+        m(".label", "Value Transformation"),
+        m(SelectInput, {
+          onenter:()=>{},
+          refHolder:attrs.element.directive,
+          refProperty:"operator",
+          values:[
+            {id:NumberOperator.DIV, label:"/"},
+            {id:NumberOperator.MULT, label:"*"},
+          ]
+        }),
+        m(TextFieldInput, {
+          onenter:()=>{},
+          refHolder:attrs.element.directive,
+          refProperty:"value",
+          spellcheck:false,
+          params: {
+            size:4
+          }
         })
       ])
     ];

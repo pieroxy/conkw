@@ -11,7 +11,7 @@ public class ValueExpression {
   private ExpressionClass clazz;
   private ExpressionValueType type;
   @OptionalTypeScriptField
-  private String directive;
+  private NumberDirective directive;
   private String value;
 
   public ExpressionClass getClazz() {
@@ -30,11 +30,11 @@ public class ValueExpression {
     this.type = type;
   }
 
-  public String getDirective() {
+  public NumberDirective getDirective() {
     return directive;
   }
 
-  public void setDirective(String directive) {
+  public void setDirective(NumberDirective directive) {
     this.directive = directive;
   }
 

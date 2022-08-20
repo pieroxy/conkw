@@ -39,7 +39,7 @@ export class DefaultGaugeWithHistoryLine {
             namespace:"",
             clazz: ExpressionClass.LITERAL,
             type:ExpressionValueType.NUMERIC,
-            directive:"",
+            directive:{},
             value:"75"
           },
           nbLinesHeight:2
@@ -66,7 +66,8 @@ export class DefaultGaugeWithHistoryLine {
     }
   }
 
-  static build(element:any):GaugeWithHistoryElement {
+  static build(_element:any):GaugeWithHistoryElement {
+    let element : GaugeWithHistoryElement = _element;
     element.valueIsGauge=true;
     element.label= {
       staleDelay:5,
@@ -115,7 +116,9 @@ export class DefaultGaugeWithHistoryLine {
         namespace:"",
         type:ExpressionValueType.NUMERIC,
         value:"75",
-        directive:WarningDirective.VALUEABOVE
+        directive:{
+          test:WarningDirective.VALUEABOVE
+        }
       }
     };
     element.type=TopLevelPanelElementEnum.GAUGE_WITH_HISTORY;

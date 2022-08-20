@@ -39,7 +39,7 @@ export class DefaultSimpleGaugeWithValueAndLabelLine {
             namespace:"",
             clazz: ExpressionClass.LITERAL,
             type:ExpressionValueType.NUMERIC,
-            directive:"",
+            directive:{},
             value:"75"
           }
         },
@@ -65,7 +65,8 @@ export class DefaultSimpleGaugeWithValueAndLabelLine {
     }
   }
 
-  static build(element:any):SimpleGaugeWithValueAndLabelElement {
+  static build(_element:any):SimpleGaugeWithValueAndLabelElement {
+    let element:SimpleGaugeWithValueAndLabelElement=_element;
     element.valueIsGauge=true,
     element.label= {
       staleDelay:5,
@@ -113,7 +114,9 @@ export class DefaultSimpleGaugeWithValueAndLabelLine {
         namespace:"",
         type:ExpressionValueType.NUMERIC,
         value:"75",
-        directive:WarningDirective.VALUEABOVE
+        directive:{
+          test:WarningDirective.VALUEABOVE
+        }
       }
     };
     element.type=TopLevelPanelElementEnum.SIMPLE_GAUGE;

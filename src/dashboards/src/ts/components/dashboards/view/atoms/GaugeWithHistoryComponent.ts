@@ -25,7 +25,7 @@ export class GaugeWithHistoryComponent extends DashboardElement<GaugeWithHistory
         value = attrs.currentData.useFakeDemoData.value;
       }
   
-      this.update(min, max, [value], log, attrs.currentData.metricGap, error, attrs.model.error?.directive === WarningDirective.VALUEABOVE);
+      this.update(min, max, [value], log, attrs.currentData.metricGap, error, attrs.model.error?.directive?.test === WarningDirective.VALUEABOVE);
     }
 
     let style= {

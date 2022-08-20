@@ -9,6 +9,7 @@ import { EditSimpleNumericValuePanelAttrs } from './EditSimpleNumericValuePanel'
 export class EditThresoldPanel implements m.ClassComponent<EditSimpleNumericValuePanelAttrs> {
   view({attrs}: m.Vnode<EditSimpleNumericValuePanelAttrs>): void | m.Children {
     attrs.element.type = ExpressionValueType.NUMERIC;
+    if (!attrs.element.directive) attrs.element.directive = {};
     return [
       m(".inputWithLabel", [
         m(".label", "Class"),
@@ -38,8 +39,8 @@ export class EditThresoldPanel implements m.ClassComponent<EditSimpleNumericValu
         m(".label", "Directive"),
         m(SelectInput, {
           onenter:()=>{},
-          refHolder:attrs.element,
-          refProperty:"directive",
+          refHolder:attrs.element.directive,
+          refProperty:"test",
           values:[
             {id:WarningDirective.VALUEABOVE,label:"Value is above"},
             {id:WarningDirective.VALUEBELOW,label:"Value is below"},
