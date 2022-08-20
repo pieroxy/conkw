@@ -2,8 +2,10 @@ import m from 'mithril';
 import { ApiEndpoints } from '../../../../auto/ApiEndpoints';
 import { TopLevelPanelElement, TopLevelPanelElementEnum } from '../../../../auto/pieroxy-conkw';
 import { GaugeWithHistoryLineComponent } from '../../view/panelitems/GaugeWithHistoryLineComponent';
+import { LabelAndValueComponent } from '../../view/panelitems/LabelAndValueComponent';
 import { SimpleGaugeWithValueAndLabelElementComponent } from '../../view/panelitems/SimpleGaugeWithValueAndLabelElementComponent';
 import { DefaultGaugeWithHistoryLine } from './DefaultGaugeWithHistoryLine';
+import { DefaultLabelAndValueLine } from './DefaultLabelAndValueLine';
 import { DefaultSimpleGaugeWithValueAndLabelLine } from './DefaultSimpleGaugeWithValueAndLabelLine';
 
 export class NewPanelItemComponent implements m.ClassComponent<NewPanelItemComponentAttrs> {
@@ -25,6 +27,22 @@ export class NewPanelItemComponent implements m.ClassComponent<NewPanelItemCompo
         m(".title", "Simple gauge with value and label"),
         m("br"),
         m(SimpleGaugeWithValueAndLabelElementComponent, DefaultSimpleGaugeWithValueAndLabelLine.getFakeData(this.getValue())),
+        m("br", {clear:"both"})
+      ]),
+      m(".panel.clickable", {
+        onclick:() => {
+          ApiEndpoints.NewPanelItem.call({
+            dashboardId:attrs.dashboardId,
+            panelId:attrs.panelId,
+            type:TopLevelPanelElementEnum.LABEL_VALUE
+          }).then((out) => {
+            attrs.addNewItem(DefaultGaugeWithHistoryLine.build(out.element))
+          });
+        }
+      }, [
+        m(".title", "Label and value"),
+        m("br"),
+        m(LabelAndValueComponent, DefaultLabelAndValueLine.getFakeData(this.getValue())),
         m("br", {clear:"both"})
       ]),
       m(".panel.clickable", {

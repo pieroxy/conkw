@@ -1,9 +1,10 @@
 import m from 'mithril';
-import { DashboardPanel, GaugeWithHistoryElement, SimpleGaugeWithValueAndLabelElement, TopLevelPanelElement, TopLevelPanelElementEnum } from '../../auto/pieroxy-conkw';
+import { DashboardPanel, GaugeWithHistoryElement, LabelAndValueElement, SimpleGaugeWithValueAndLabelElement, TopLevelPanelElement, TopLevelPanelElementEnum } from '../../auto/pieroxy-conkw';
 import { MetricsReader } from '../../utils/api/MetricsReader';
 import { EditDocumentIcon } from '../atoms/icons/EditDocumentIcon';
 import { Link } from '../atoms/Link';
 import { GaugeWithHistoryLineComponent } from '../dashboards/view/panelitems/GaugeWithHistoryLineComponent';
+import { LabelAndValueComponent } from '../dashboards/view/panelitems/LabelAndValueComponent';
 import { SimpleGaugeWithValueAndLabelElementComponent } from '../dashboards/view/panelitems/SimpleGaugeWithValueAndLabelElementComponent';
 
 export class ViewDashboardPanel implements m.ClassComponent<SimpleGaugeWithValueAndLabelPanelAttrs> {
@@ -30,6 +31,11 @@ export class ViewDashboardPanel implements m.ClassComponent<SimpleGaugeWithValue
         return m(GaugeWithHistoryLineComponent, {
           currentData:MetricsReader.getLastResponse(),
           model:<GaugeWithHistoryElement>element
+        });
+      case TopLevelPanelElementEnum.LABEL_VALUE:
+        return m(LabelAndValueComponent, {
+          currentData:MetricsReader.getLastResponse(),
+          model:<LabelAndValueElement>element
         });
       default:
         return m("", "Unknown element type " + element.type);

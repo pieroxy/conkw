@@ -5,7 +5,7 @@ import { Endpoints } from '../../../utils/navigation/Endpoints';
 import { Routing } from '../../../utils/navigation/Routing';
 import { AbstractPage } from '../../pages/AbstractPage';
 import { GlobalData } from '../../../utils/GlobalData';
-import { DashboardPanel, GaugeWithHistoryElement, SimpleGaugeWithValueAndLabelElement, TopLevelPanelElement, TopLevelPanelElementEnum } from '../../../auto/pieroxy-conkw';
+import { DashboardPanel, GaugeWithHistoryElement, LabelAndValueElement, SimpleGaugeWithValueAndLabelElement, TopLevelPanelElement, TopLevelPanelElementEnum } from '../../../auto/pieroxy-conkw';
 import { TextFieldInput } from '../../atoms/forms/TextFieldInput';
 import { SaveIcon } from '../../atoms/icons/SaveIcon';
 import { RoundedPlusIcon } from '../../atoms/icons/RoundedPlusIcon';
@@ -15,6 +15,7 @@ import { NewPanelItemComponent } from '../edition/newitems/NewPanelItemComponent
 import { ViewDashboardPanel } from '../../panels/ViewDashboardPanel';
 import { EditSimpleGaugeWithValueAndLabelElementPanel } from '../edition/panelitems/EditSimpleGaugeWithValueAndLabelElementPanel';
 import { EditGaugeWithHistoryLinePanel } from '../edition/panelitems/EditGaugeWithHistoryLinePanel';
+import { EditLabelAndValuePanel } from '../edition/panelitems/EditLabelAndValuePanel';
 
 export class DashboardPanelEditPage extends AbstractPage<EditPanelAttrs> {
   private panel:DashboardPanel;
@@ -103,6 +104,8 @@ export class DashboardPanelEditPage extends AbstractPage<EditPanelAttrs> {
         return m(EditSimpleGaugeWithValueAndLabelElementPanel, {element:<SimpleGaugeWithValueAndLabelElement>element})
       case TopLevelPanelElementEnum.GAUGE_WITH_HISTORY:
         return m(EditGaugeWithHistoryLinePanel, {element:<GaugeWithHistoryElement>element})
+      case TopLevelPanelElementEnum.LABEL_VALUE:
+        return m(EditLabelAndValuePanel, {element:<LabelAndValueElement>element})
       default:
         return m("", "Unknown element type " + element.type);
     }

@@ -9,6 +9,7 @@ import net.pieroxy.conkw.api.model.Dashboard;
 import net.pieroxy.conkw.api.model.User;
 import net.pieroxy.conkw.api.model.panels.DashboardPanel;
 import net.pieroxy.conkw.api.model.panels.toplevel.GaugeWithHistoryElement;
+import net.pieroxy.conkw.api.model.panels.toplevel.LabelAndValueElement;
 import net.pieroxy.conkw.api.model.panels.toplevel.SimpleGaugeWithValueAndLabelElement;
 import net.pieroxy.conkw.api.model.panels.atoms.model.TopLevelPanelElement;
 import net.pieroxy.conkw.api.model.panels.atoms.model.TopLevelPanelElementEnum;
@@ -51,6 +52,8 @@ public class NewPanelItemEndpoint extends AbstractApiEndpoint<NewPanelItemInput,
                 return new NewPanelItemOutput(new SimpleGaugeWithValueAndLabelElement());
             case GAUGE_WITH_HISTORY:
                 return new NewPanelItemOutput(new GaugeWithHistoryElement());
+            case LABEL_VALUE:
+                return new NewPanelItemOutput(new LabelAndValueElement());
             default:
                 throw new RuntimeException("Item of type " + input.getType() + " not implemented yet");
         }

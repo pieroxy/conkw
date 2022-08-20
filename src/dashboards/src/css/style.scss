@@ -810,6 +810,36 @@ button {
     }
   }
 
+  .simpleValueLabel {
+    white-space: pre;
+
+    .cw-label {
+      white-space: pre;
+      overflow: hidden;
+      float:left;
+      width:49%;
+      text-align: right;
+
+      .label {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+    .cw-value {
+      white-space: pre;
+      overflow: hidden;
+      float:right;
+      width:49%;
+      font-family: $monospace;
+    }
+    
+    .cw-bottom {
+      clear:both;
+      height:0;
+      overflow: hidden;
+    }
+  }
+
   .cw-stale {
     color: #846f7e!important;
 
