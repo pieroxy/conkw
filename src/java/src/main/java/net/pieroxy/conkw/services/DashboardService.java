@@ -63,7 +63,8 @@ public class DashboardService {
   public Dashboard loadDashboard(File f) {
     try {
       return JsonHelper.readFromFile(Dashboard.class, f);
-    } catch (IOException e) {
+    } catch (Exception e) {
+      LOGGER.severe("Could not read dashboard " + f.getAbsolutePath());
       throw new RuntimeException(e);
     }
   }
