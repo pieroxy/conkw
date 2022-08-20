@@ -2,8 +2,8 @@ import m from 'mithril';
 import { ExpressionClass, ExpressionValueType, LabelAndValueElement, WarningDirective } from '../../../../auto/pieroxy-conkw';
 import { CheckboxInput } from '../../../atoms/forms/CheckboxInput';
 import { TextFieldInput } from '../../../atoms/forms/TextFieldInput';
+import { EditMultiTypeValuePanel } from '../atoms/EditMultiTypeValuePanel';
 import { EditSimpleLabelPanel } from '../atoms/EditSimpleLabelPanel';
-import { EditSimpleNumericValuePanel } from '../atoms/EditSimpleNumericValuePanel';
 
 export class EditLabelAndValuePanel implements m.ClassComponent<EditLabelAndValuePanelAttrs> {
   private labelIsStatic:boolean;
@@ -60,7 +60,7 @@ export class EditLabelAndValuePanel implements m.ClassComponent<EditLabelAndValu
           ]),
           m(".group", [
             m(".groupTitle", "Value"),
-            m(EditSimpleNumericValuePanel, {element:attrs.element.value.value}),
+            m(EditMultiTypeValuePanel, {element:attrs.element.value.value}),
           ]),
           this.labelIsStatic ? null :
             m(".group", [
