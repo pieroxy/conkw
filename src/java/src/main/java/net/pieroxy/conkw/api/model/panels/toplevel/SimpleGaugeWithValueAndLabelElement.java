@@ -1,4 +1,4 @@
-package net.pieroxy.conkw.api.model.panels;
+package net.pieroxy.conkw.api.model.panels.toplevel;
 
 import com.dslplatform.json.CompiledJson;
 import net.pieroxy.conkw.api.metadata.TypeScriptType;
