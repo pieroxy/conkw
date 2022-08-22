@@ -55,8 +55,8 @@ export class EditGaugeWithHistoryLinePanel implements m.ClassComponent<EditGauge
         ModelUtils.copyValueExpression(element.gauge.value, element.value.value);
       }
       if (!element.gauge.error.directive) element.gauge.error.directive = {};
-  
-  
+      if (!element.value.value.directive) attrs.element.value.value.directive = {};
+
       return [
         m(".title", ["Edit ", m("i", element.label.value.value)]),
         m(".editionPanel", [
@@ -128,7 +128,7 @@ export class EditGaugeWithHistoryLinePanel implements m.ClassComponent<EditGauge
                 m(".label", "Unit"),
                 m(TextFieldInput, {
                   onenter:()=>{},
-                  refHolder:element.value,
+                  refHolder:element.value.value.directive,
                   refProperty:"unit",
                   spellcheck:false,
                   params: {

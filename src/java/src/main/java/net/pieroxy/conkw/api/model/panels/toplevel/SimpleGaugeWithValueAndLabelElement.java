@@ -3,8 +3,8 @@ package net.pieroxy.conkw.api.model.panels.toplevel;
 import com.dslplatform.json.CompiledJson;
 import net.pieroxy.conkw.api.metadata.TypeScriptType;
 import net.pieroxy.conkw.api.model.panels.atoms.DynamicLabel;
-import net.pieroxy.conkw.api.model.panels.atoms.SiPrefixedValue;
 import net.pieroxy.conkw.api.model.panels.atoms.SimpleGauge;
+import net.pieroxy.conkw.api.model.panels.atoms.model.DashboardDynamicValue;
 import net.pieroxy.conkw.api.model.panels.atoms.model.TopLevelPanelElement;
 import net.pieroxy.conkw.api.model.panels.atoms.model.TopLevelPanelElementEnum;
 
@@ -13,7 +13,7 @@ import net.pieroxy.conkw.api.model.panels.atoms.model.TopLevelPanelElementEnum;
 public class SimpleGaugeWithValueAndLabelElement extends TopLevelPanelElement {
   TopLevelPanelElementEnum type;
   private DynamicLabel label;
-  private SiPrefixedValue value;
+  private DashboardDynamicValue value;
   private SimpleGauge gauge;
   private boolean valueIsGauge;
 
@@ -29,11 +29,11 @@ public class SimpleGaugeWithValueAndLabelElement extends TopLevelPanelElement {
     this.label = label;
   }
 
-  public SiPrefixedValue getValue() {
+  public DashboardDynamicValue getValue() {
     return value;
   }
 
-  public void setValue(SiPrefixedValue value) {
+  public void setValue(DashboardDynamicValue value) {
     this.value = value;
   }
 

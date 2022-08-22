@@ -1,5 +1,5 @@
 import m from 'mithril';
-import { SimpleGaugeWithValueAndLabelElement } from '../../../../auto/pieroxy-conkw';
+import { DashboardDynamicValue, SimpleGaugeWithValueAndLabelElement } from '../../../../auto/pieroxy-conkw';
 import { DisplayUtils } from '../../../../utils/DisplayUtils';
 import { SimpleGaugeComponent } from '../atoms/SimpleGaugeComponent';
 import { TextLabelComponent } from '../atoms/TextLabel';
@@ -30,7 +30,10 @@ extends DashboardElement<SimpleGaugeWithValueAndLabelElementAttrs> {
     ])
   }
   getRemainingWidth(model: SimpleGaugeWithValueAndLabelElement) {
-    return 155 + (5+model.value.unit.length)*DisplayUtils.getMonospaceCharWidth(14);
+    return 155 + (5+this.getUnitWidth(model.value))*DisplayUtils.getMonospaceCharWidth(14);
+  }
+  getUnitWidth(v:DashboardDynamicValue):number {
+    return v.value.directive?.unit?.length || 0;
   }
 }
 

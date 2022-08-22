@@ -55,6 +55,7 @@ export class EditSimpleGaugeWithValueAndLabelElementPanel implements m.ClassComp
         ModelUtils.copyValueExpression(element.gauge.value, element.value.value);
       }
       if (!element.gauge.error.directive) element.gauge.error.directive = {};
+      if (!element.value.value.directive) attrs.element.value.value.directive = {};
 
   
       return [
@@ -128,7 +129,7 @@ export class EditSimpleGaugeWithValueAndLabelElementPanel implements m.ClassComp
                 m(".label", "Unit"),
                 m(TextFieldInput, {
                   onenter:()=>{},
-                  refHolder:element.value,
+                  refHolder:element.value.value.directive,
                   refProperty:"unit",
                   spellcheck:false,
                   params: {

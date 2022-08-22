@@ -4,7 +4,7 @@ import com.dslplatform.json.CompiledJson;
 import net.pieroxy.conkw.api.metadata.TypeScriptType;
 import net.pieroxy.conkw.api.model.panels.atoms.DynamicLabel;
 import net.pieroxy.conkw.api.model.panels.atoms.GaugeWithHistory;
-import net.pieroxy.conkw.api.model.panels.atoms.SiPrefixedValue;
+import net.pieroxy.conkw.api.model.panels.atoms.model.DashboardDynamicValue;
 import net.pieroxy.conkw.api.model.panels.atoms.model.TopLevelPanelElement;
 import net.pieroxy.conkw.api.model.panels.atoms.model.TopLevelPanelElementEnum;
 
@@ -13,7 +13,7 @@ import net.pieroxy.conkw.api.model.panels.atoms.model.TopLevelPanelElementEnum;
 public class GaugeWithHistoryElement extends TopLevelPanelElement {
     TopLevelPanelElementEnum type;
     private DynamicLabel label;
-    private SiPrefixedValue value;
+    private DashboardDynamicValue value;
     private GaugeWithHistory gauge;
     private boolean valueIsGauge;
 
@@ -38,11 +38,11 @@ public class GaugeWithHistoryElement extends TopLevelPanelElement {
         this.label = label;
     }
 
-    public SiPrefixedValue getValue() {
+    public DashboardDynamicValue getValue() {
         return value;
     }
 
-    public void setValue(SiPrefixedValue value) {
+    public void setValue(DashboardDynamicValue value) {
         this.value = value;
     }
 

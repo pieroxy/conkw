@@ -1,11 +1,14 @@
 import m from 'mithril';
-import { SiPrefixedValue } from '../../../../auto/pieroxy-conkw';
+import { DashboardDynamicValue } from '../../../../auto/pieroxy-conkw';
 import { SelectInput } from '../../../atoms/forms/SelectInput';
 import { TextFieldInput } from '../../../atoms/forms/TextFieldInput';
 import { EditSimpleNumericValuePanel } from './EditSimpleNumericValuePanel';
 
 export class EditSimpleSiLabelPanel implements m.ClassComponent<EditSimpleSiLabelPanelAttrs> {
+  
   view({attrs}: m.Vnode<EditSimpleSiLabelPanelAttrs>): void | m.Children {
+    if (!attrs.element.value.directive) attrs.element.value.directive = {};
+
     return [
       m(EditSimpleNumericValuePanel, {element:attrs.element.value}),
       m(".inputWithLabel", [
@@ -24,7 +27,7 @@ export class EditSimpleSiLabelPanel implements m.ClassComponent<EditSimpleSiLabe
         m(".label", "Unit"),
         m(TextFieldInput, {
           onenter:()=>{},
-          refHolder:attrs.element,
+          refHolder:attrs.element.value.directive,
           refProperty:"unit",
           params: {
             size:3
@@ -51,5 +54,5 @@ export class EditSimpleSiLabelPanel implements m.ClassComponent<EditSimpleSiLabe
 }
 
 export interface EditSimpleSiLabelPanelAttrs {
-  element:SiPrefixedValue;
+  element:DashboardDynamicValue;
 }

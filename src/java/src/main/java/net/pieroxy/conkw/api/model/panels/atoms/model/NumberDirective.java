@@ -15,6 +15,11 @@ public class NumberDirective {
   private NumberFormat format;
   @OptionalTypeScriptField
   private WarningDirective test;
+  @OptionalTypeScriptField
+  private String unit;
+  @OptionalTypeScriptField
+  private int thousand;
+
 
   public NumberOperator getOperator() {
     return operator;
@@ -46,5 +51,21 @@ public class NumberDirective {
 
   public void setTest(WarningDirective test) {
     this.test = test;
+  }
+
+  public String getUnit() {
+    return unit;
+  }
+
+  public void setUnit(String unit) {
+    this.unit = unit;
+  }
+
+  public int getThousand() {
+    return thousand;
+  }
+
+  public void setThousand(int thousand) {
+    this.thousand = thousand;
   }
 }

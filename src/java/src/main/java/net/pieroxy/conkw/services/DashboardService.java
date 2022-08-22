@@ -23,7 +23,6 @@ public class DashboardService {
       folder.mkdir();
       LOGGER.info("Created the dashboard directory.");
     }
-
   }
 
   public Dashboard createNewDashboard(String name) {

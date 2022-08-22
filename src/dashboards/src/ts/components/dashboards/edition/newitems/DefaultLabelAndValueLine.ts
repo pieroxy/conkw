@@ -35,10 +35,11 @@ export class DefaultLabelAndValueLine {
             namespace:"",
             clazz: ExpressionClass.LITERAL,
             type:ExpressionValueType.NUMERIC,
-            value:"75"
+            value:"75",
+            directive:{
+              unit:"%",
+            }
           },
-          unit:"%",
-          thousand:1000
         }
       }
     }
@@ -57,8 +58,6 @@ export class DefaultLabelAndValueLine {
     };
     element.value= {
       staleDelay:5,
-      thousand:1000,
-      unit:"",
       value: {
         clazz:ExpressionClass.LITERAL,
         type:ExpressionValueType.NUMERIC,

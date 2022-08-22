@@ -30,7 +30,7 @@ extends DashboardElement<GaugeWithHistoryLineComponentAttrs> {
     ])
   }
   getRemainingWidth(model: GaugeWithHistoryElement) {
-    return 155 + (5+model.value.unit.length)*DisplayUtils.getMonospaceCharWidth(14);
+    return 155 + (5+(model.value.value.directive?.unit?.length||0))*DisplayUtils.getMonospaceCharWidth(14);
   }
 }
 
