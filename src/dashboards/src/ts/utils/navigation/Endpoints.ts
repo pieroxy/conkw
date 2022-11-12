@@ -6,5 +6,6 @@ export enum Endpoints {
   DASHBOARD_PANEL_EDIT="/dashboards/editPanel/:dashboardId/:panelId",
   PROFILE="/profile/",
   SETTINGS="/settings/",
-  ALERTS="/alerts/"
+  ALERTS="/alerts/",
+  EXTRACTORS_LIST="/extractors/list/",
 }

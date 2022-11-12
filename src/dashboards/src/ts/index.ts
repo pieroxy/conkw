@@ -10,6 +10,7 @@ import { AlertsPage } from './components/pages/alerts/AlertsPage';
 import { SettingsPage } from './components/pages/settings/Settings';
 import { DashboardPanelEditPage } from './components/dashboards/pages/DashboardPanelEditPage';
 import { DashboardViewPage } from './components/dashboards/pages/DashboardViewPage';
+import { ExtractorsListPage } from './components/pages/extractors/ExtractorsList';
 
 (function () {
 
@@ -21,6 +22,7 @@ import { DashboardViewPage } from './components/dashboards/pages/DashboardViewPa
   routes[Endpoints.DASHBOARD_PANEL_EDIT] = new AuthenticatedPageResolver(DashboardPanelEditPage);
   routes[Endpoints.PROFILE] = new AuthenticatedPageResolver(ProfilePage);
   routes[Endpoints.ALERTS] = new AuthenticatedPageResolver(AlertsPage);
+  routes[Endpoints.EXTRACTORS_LIST] = new AuthenticatedPageResolver(ExtractorsListPage);
   routes[Endpoints.SETTINGS] = new AuthenticatedPageResolver(SettingsPage);
 
   m.route(document.body, Endpoints.HOME, routes);
