@@ -11,6 +11,7 @@ import { DeleteIcon } from '../../atoms/icons/DeleteIcon';
 import { DateUtils } from '../../../utils/DateUtils';
 import { UserAgentUtils } from '../../../utils/UserAgentUtils';
 import { LogoutIcon } from '../../atoms/icons/LogoutIcon';
+import { ShieldCheckIcon } from '../../atoms/icons/ShieldCheck';
 
 export class ProfilePage extends AbstractPage<any> {
   private sessions:GetAllUserSessionsOutput;
@@ -53,7 +54,7 @@ export class ProfilePage extends AbstractPage<any> {
             Routing.goToScreen(Endpoints.PASSWORD_CHANGE, {id:id});
           },
           secondary:true
-        }, "Change password"),
+        }, m(ShieldCheckIcon), "Change password"),
         m("hr"),
         m(".subtitle", "Sessions"),
         !this.sessions ? m("", "Loading...") : 
