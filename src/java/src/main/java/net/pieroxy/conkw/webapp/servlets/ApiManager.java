@@ -2,6 +2,7 @@ package net.pieroxy.conkw.webapp.servlets;
 
 import net.pieroxy.conkw.api.model.IdLabelPair;
 import net.pieroxy.conkw.grabbersBase.Grabber;
+import net.pieroxy.conkw.utils.Services;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 import net.pieroxy.conkw.webapp.Listener;
 import net.pieroxy.conkw.webapp.model.MetricsApiResponse;
@@ -15,20 +16,19 @@ import java.util.stream.Collectors;
 
 public class ApiManager implements MetaGrabber {
   private final static Logger LOGGER = Logger.getLogger(Api.class.getName());
+  private final Services services;
 
-  private Map<String, Grabber> allGrabbers;
 
-  public ApiManager(List<Grabber> grabbers) {
-    allGrabbers = HashMapPool.getInstance().borrow(grabbers.size());
-    grabbers.forEach(g -> {allGrabbers.put(g.getName(), g);});
+  public ApiManager(Services services) {
+    this.services = services;
   }
 
 
   public List<IdLabelPair> getGrabbersList() {
-    return allGrabbers
-        .entrySet()
-        .stream()
-        .map(entry -> new IdLabelPair(entry.getKey(), entry.getKey() + ": " + entry.getValue().getClass().getSimpleName()))
+    return services
+        .getGrabbersService()
+        .getAllGrabbers()
+        .map(grabber -> new IdLabelPair(grabber.getName(), grabber.getName() + ": " + grabber.getClass().getSimpleName()))
         .collect(Collectors.toList());
   }
 
@@ -37,7 +37,7 @@ public class ApiManager implements MetaGrabber {
     r.setInstanceName(Listener.getInstanceName());
     grabbersRequested.stream().parallel().forEach(
       s -> {
-        Grabber g = allGrabbers.get(s.getName());
+        Grabber g = services.getGrabbersService().getGrabberByName(s.getName());
         if (g == null) {
           synchronized (r) {
             r.addError("Grabber '" + s.getName() + "' not found.");
@@ -57,7 +57,7 @@ public class ApiManager implements MetaGrabber {
 
   public String notifyGrabberAction(String action, Map<String, String[]> parameterMap) {
     final StringBuilder res = new StringBuilder();
-    allGrabbers.values().forEach((g) -> {
+    services.getGrabbersService().getAllGrabbers().forEach((g) -> {
       if (g.getName().equals(action)) {
         res.append(g.processAction(parameterMap));
       }

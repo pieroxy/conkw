@@ -25,7 +25,6 @@ import java.util.logging.Logger;
 public class Listener implements ServletContextListener {
   private final static Logger LOGGER = Logger.getLogger(Listener.class.getName());
 
-  private List<Grabber> grabbers;
   private WatchService watchService;
   private ApiManager apiManager;
   private boolean toDestroy = false;
@@ -40,6 +39,11 @@ public class Listener implements ServletContextListener {
   }
 
   public void loadConfig() {
+    if (services.getGrabbersService().count()>0) {
+      LOGGER.info("Reloading configuration.");
+    } else {
+      LOGGER.info("Loading configuration.");
+    }
     Config config = ConfigReader.getConfig();
     instanceName = config.getInstanceName();
     CredentialsStore creds = ConfigReader.getCredentials();
@@ -104,19 +108,7 @@ public class Listener implements ServletContextListener {
         }
       });
 
-      Collection<Grabber> old= grabbers;
-      if (old!=null) {
-        LOGGER.info("Reloading configuration.");
-        // this is a hot swap :
-        // Start threads and all.
-        // Stupid? Maybe there is no UI... newg.forEach((gr) -> gr.grab());
-        // Replace the grabbers.
-        grabbers = newg;
-        // Recycle the old grabbers.
-        old.forEach((gr) -> gr.dispose());
-      } else {
-        grabbers = newg;
-      }
+      services.getGrabbersService().replaceGrabbers(newg);
       // This forces newly generated garbage to be recycled. Benefits:
       // - The user expects some slowliness when reloading the configuration, so the cost is low.
       // - The heap size by default (when the JVM starts) is around 1GB, which is 20x what this program needs. Forcing a
@@ -124,7 +116,7 @@ public class Listener implements ServletContextListener {
       System.gc();
 
       services.getApiAuthManager().applyConfig(config.getApiAuth(), creds.getFor(net.pieroxy.conkw.webapp.servlets.Api.class), ConfigReader.getDataDir());
-      services.setApiManager(new ApiManager(grabbers));
+      services.setApiManager(new ApiManager(services));
     } catch (Exception e) {
       LOGGER.log(Level.SEVERE, "Error loading and applying configuration.", e);
     }
@@ -164,17 +156,7 @@ public class Listener implements ServletContextListener {
       } catch (Exception e) {
         LOGGER.log(Level.INFO, "", e);
       }
-      if (grabbers!=null) {
-        for (Grabber g : grabbers) {
-          try {
-            if (g!=null) {
-              g.dispose();
-            }
-          } catch (Exception e) {
-            LOGGER.log(Level.INFO, "", e);
-          }
-        }
-      }
+      this.services.getGrabbersService().destroy();
     } catch (Exception e) {
       LOGGER.log(Level.WARNING, "While shutting down", e);
     } finally {

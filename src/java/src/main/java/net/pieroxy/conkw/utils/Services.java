@@ -4,6 +4,7 @@ import net.pieroxy.conkw.config.Config;
 import net.pieroxy.conkw.config.CredentialsStore;
 import net.pieroxy.conkw.config.LocalStorageManager;
 import net.pieroxy.conkw.services.DashboardService;
+import net.pieroxy.conkw.services.GrabbersService;
 import net.pieroxy.conkw.services.UserService;
 import net.pieroxy.conkw.services.UserSessionService;
 import net.pieroxy.conkw.webapp.servlets.ApiAuthManager;
@@ -18,12 +19,14 @@ public class Services {
   private LocalStorageManager localStorageManager;
   private final UserService userService;
   private final UserSessionService userSessionService;
+  private final GrabbersService grabbersService;
 
   public Services(LocalStorageManager localStorageManager) {
     this.localStorageManager = localStorageManager;
     this.userService = new UserService(this);
     this.userSessionService = new UserSessionService(localStorageManager);
     this.dashboardService = new DashboardService(localStorageManager);
+    this.grabbersService = new GrabbersService();
   }
 
   public void dispose() {
@@ -84,5 +87,9 @@ public class Services {
 
   public DashboardService getDashboardService() {
     return dashboardService;
+  }
+
+  public GrabbersService getGrabbersService() {
+    return grabbersService;
   }
 }
