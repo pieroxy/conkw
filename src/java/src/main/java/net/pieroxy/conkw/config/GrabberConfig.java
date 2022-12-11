@@ -1,6 +1,7 @@
 package net.pieroxy.conkw.config;
 
 import com.dslplatform.json.CompiledJson;
+import net.pieroxy.conkw.api.metadata.TypeScriptType;
 
 import java.util.Map;
 
@@ -15,8 +16,11 @@ public class GrabberConfig {
   private String defaultAccumulator;
 
   // Old properties that cannot be used anymore (move to new configuration)
+  @Deprecated
   private String extract;
+  @Deprecated
   private Map<String, String> parameters;
+  @Deprecated
   private Map<String, Map<String, String>> namedParameters;
   // End of old properties
 
