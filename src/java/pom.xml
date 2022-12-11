@@ -306,6 +306,9 @@
             <annotation>net.pieroxy.conkw.api.metadata.OptionalTypeScriptField</annotation>
           </optionalAnnotations>
           <optionalPropertiesDeclaration>questionMark</optionalPropertiesDeclaration>
+          <excludePropertyAnnotations>
+            <annotation>java.lang.Deprecated</annotation>
+          </excludePropertyAnnotations>
         </configuration>
       </plugin>
     </plugins>
