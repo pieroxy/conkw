@@ -9,15 +9,20 @@ export abstract class AbstractPage<A> implements m.ClassComponent<A> {
   private static headerHeight:number=-1.01;
   
   public view(vnode:m.Vnode<A, any>):void|m.Children {
-    window.document.title = this.getPageTitle();
-    this.computeHeaderHeight();
-    return [
-      this.renderJsAccessibleColors(),
-      this.renderNotification(),
-      this.renderDialog(),
-      m(MainTopBar, {refreshData:this.refreshData}),
-      this.render(vnode),
-    ];
+    try {
+      window.document.title = this.getPageTitle();
+      this.computeHeaderHeight();
+      return [
+        this.renderJsAccessibleColors(),
+        this.renderNotification(),
+        this.renderDialog(),
+        m(MainTopBar, {refreshData:this.refreshData}),
+        this.render(vnode),
+      ];
+    } catch (e) {
+      console.log(e);
+      return m("", "Something bad happened. More details can be found in the console.")
+    }
   }
 
   renderJsAccessibleColors(): m.Children {
