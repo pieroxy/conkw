@@ -219,4 +219,8 @@ public abstract class Grabber<T extends Collector, C> {
   public void setDefaultAccumulator(RootAccumulator defaultAccumulator) {
     this.defaultAccumulator = defaultAccumulator;
   }
+
+  public Level getLogLevel() {
+    return logLevel;
+  }
 }
