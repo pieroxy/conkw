@@ -16,7 +16,7 @@ export class ExtractorsListPage extends AbstractPage<any> {
   }
 
   oninit() {
-    ApiEndpoints.GetGrabbersDetail.call({}).then(response => this.configurations = response.configs);
+    ApiEndpoints.GetGrabbersSummary.call({}).then(response => this.configurations = response.configs);
   }
 
   getSimpleImplementation(implementation:string):m.Children {

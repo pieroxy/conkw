@@ -17,29 +17,29 @@ import java.util.stream.Collectors;
 @Endpoint(
     method = ApiMethod.GET,
     role = UserRole.ADMIN)
-public class GetGrabbersDetailEndpoint  extends AbstractApiEndpoint<Object, GetGrabbersDetailOutput> {
+public class GetGrabbersSummaryEndpoint extends AbstractApiEndpoint<Object, GetGrabbersSummaryOutput> {
 
   private final Services services;
 
-  public GetGrabbersDetailEndpoint(Services services) {
+  public GetGrabbersSummaryEndpoint(Services services) {
     this.services = services;
   }
 
   @Override
-  public GetGrabbersDetailOutput process(Object input, User user) throws Exception {
-    return new GetGrabbersDetailOutput(services.getConfiguration().getGrabbers());
+  public GetGrabbersSummaryOutput process(Object input, User user) throws Exception {
+    return new GetGrabbersSummaryOutput(services.getConfiguration().getGrabbers());
   }
 }
 
 @CompiledJson
 @TypeScriptType
-class GetGrabbersDetailOutput {
+class GetGrabbersSummaryOutput {
   List<GrabberConfig> configs;
 
-  public GetGrabbersDetailOutput() {
+  public GetGrabbersSummaryOutput() {
   }
 
-  public GetGrabbersDetailOutput(GrabberConfig[]configs) {
+  public GetGrabbersSummaryOutput(GrabberConfig[]configs) {
     this.configs = Arrays.stream(configs).collect(Collectors.toList());
   }
 
