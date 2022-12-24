@@ -5,7 +5,6 @@ import net.pieroxy.conkw.api.metadata.TypeScriptType;
 
 import java.util.Map;
 
-@CompiledJson(onUnknown = CompiledJson.Behavior.FAIL)
 public class GrabberConfig {
   private String implementation;
   private String name;

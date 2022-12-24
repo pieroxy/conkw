@@ -34,20 +34,61 @@ public class GetGrabbersSummaryEndpoint extends AbstractApiEndpoint<Object, GetG
 @CompiledJson
 @TypeScriptType
 class GetGrabbersSummaryOutput {
-  List<GrabberConfig> configs;
+  List<GrabberConfigSummary> configs;
 
   public GetGrabbersSummaryOutput() {
   }
 
   public GetGrabbersSummaryOutput(GrabberConfig[]configs) {
-    this.configs = Arrays.stream(configs).collect(Collectors.toList());
+    this.configs = Arrays.stream(configs).map(GrabberConfigSummary::new).collect(Collectors.toList());
   }
 
-  public List<GrabberConfig> getConfigs() {
+  public List<GrabberConfigSummary> getConfigs() {
     return configs;
   }
 
-  public void setConfigs(List<GrabberConfig> configs) {
+  public void setConfigs(List<GrabberConfigSummary> configs) {
     this.configs = configs;
+  }
+}
+
+@CompiledJson
+@TypeScriptType
+class GrabberConfigSummary {
+  private String implementation;
+  private String name;
+  private String logLevel;
+
+  public GrabberConfigSummary() {
+  }
+
+  public GrabberConfigSummary(GrabberConfig config) {
+    this.implementation = config.getImplementation();
+    this.logLevel = config.getLogLevel();
+    this.name = config.getName();
+  }
+
+  public String getImplementation() {
+    return implementation;
+  }
+
+  public void setImplementation(String implementation) {
+    this.implementation = implementation;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getLogLevel() {
+    return logLevel;
+  }
+
+  public void setLogLevel(String logLevel) {
+    this.logLevel = logLevel;
   }
 }

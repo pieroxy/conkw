@@ -1,6 +1,6 @@
 import m from 'mithril';
 import { ApiEndpoints } from '../../../auto/ApiEndpoints';
-import { GrabberConfig } from '../../../auto/pieroxy-conkw';
+import { GrabberConfigSummary } from '../../../auto/pieroxy-conkw';
 import { Endpoints } from '../../../utils/navigation/Endpoints';
 import { HomeIcon } from '../../atoms/icons/HomeIcon';
 import { NewDocumentIcon } from '../../atoms/icons/NewDocumentIcon';
@@ -9,7 +9,7 @@ import { Link } from '../../atoms/Link';
 import { AbstractPage } from '../AbstractPage';
 
 export class ExtractorsListPage extends AbstractPage<any> {
-  configurations:GrabberConfig[] = [];
+  configurations:GrabberConfigSummary[] = [];
 
   getPageTitle(): string {
     return "Not yet";
