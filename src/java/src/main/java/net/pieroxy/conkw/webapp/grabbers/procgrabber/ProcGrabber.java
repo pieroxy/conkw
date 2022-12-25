@@ -1,5 +1,6 @@
 package net.pieroxy.conkw.webapp.grabbers.procgrabber;
 
+import net.pieroxy.conkw.api.metadata.grabberConfig.ConfigField;
 import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
 import net.pieroxy.conkw.grabbersBase.PartiallyExtractableConfig;
@@ -639,6 +640,11 @@ public class ProcGrabber extends AsyncGrabber<SimpleCollector, ProcGrabber.ProcG
 
   public static class ProcGrabberConfig extends PartiallyExtractableConfig {
     private List<String> blockDevices;
+
+    @ConfigField(
+        label = "Location of the mdstat file to monitor",
+        defaultValue = MDSTAT_FILE
+    )
     private String mdstatFile;
 
     public List<String> getBlockDevices() {
