@@ -2,6 +2,7 @@ import m from 'mithril';
 import { ApiEndpoints } from '../../../auto/ApiEndpoints';
 import { GrabberConfigDetail } from '../../../auto/pieroxy-conkw';
 import { Endpoints } from '../../../utils/navigation/Endpoints';
+import { SelectInput } from '../../atoms/forms/SelectInput';
 import { HomeIcon } from '../../atoms/icons/HomeIcon';
 import { RightChevronIcon } from '../../atoms/icons/RightChevronIcon';
 import { Link } from '../../atoms/Link';
@@ -28,7 +29,29 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
         m(RightChevronIcon),
         "Grabbers", 
       ]),
-      m(".content", m("", this.configuration.detailsMetadata.className)
+      !this.configuration ? "" : m(".content", 
+        m("", "Configuration for " + this.configuration.implementation),
+        m("table", [
+          m("tr", [
+            m("td", "Log level"),
+            m("td", m(SelectInput, {
+              refHolder:this.configuration,
+              refProperty:"logLevel",
+              onenter:()=>{},
+              values:[
+                {id:"OFF", label:"OFF"},
+                {id:"SEVERE", label:"SEVERE"},
+                {id:"WARNING", label:"WARNING"},
+                {id:"INFO", label:"INFO"},
+                {id:"CONFIG", label:"CONFIG"},
+                {id:"FINE", label:"FINE"},
+                {id:"FINER", label:"FINER"},
+                {id:"FINEST", label:"FINEST"},
+                {id:"ALL", label:"ALL"},
+              ]
+            }))
+          ])
+        ])
       )
     ]);
   }

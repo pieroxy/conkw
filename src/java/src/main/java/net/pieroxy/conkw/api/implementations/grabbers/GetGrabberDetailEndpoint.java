@@ -100,6 +100,7 @@ class GrabberConfigDetail{
   public GrabberConfigDetail(GrabberConfig config) {
     this.implementation = config.getImplementation();
     this.logLevel = config.getLogLevel();
+    if (logLevel == null) logLevel = Grabber.DEFAULT_LOG_LEVEL.getName();
     this.name = config.getName();
     this.details = config.getConfig();
     try {
