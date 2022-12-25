@@ -1,3 +1,5 @@
+import m = require('mithril');
+
 export class DisplayUtils {
   private static monospaceCharWidth?:number = undefined;
 
@@ -17,5 +19,11 @@ export class DisplayUtils {
     let res = this.monospaceCharWidth / 100 * fontSizeInPx;
 
     return res;
+  }
+
+  public static getSimpleClassNameWithTooltip(cn:string):m.Children {
+    let index = cn.lastIndexOf(".");
+    if (index < 1) return cn;
+    return m("span", {title:cn}, cn.substring(index+1));
   }
 }

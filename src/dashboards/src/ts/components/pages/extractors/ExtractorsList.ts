@@ -1,6 +1,7 @@
 import m from 'mithril';
 import { ApiEndpoints } from '../../../auto/ApiEndpoints';
 import { GrabberConfigSummary } from '../../../auto/pieroxy-conkw';
+import { DisplayUtils } from '../../../utils/DisplayUtils';
 import { Endpoints } from '../../../utils/navigation/Endpoints';
 import { Routing } from '../../../utils/navigation/Routing';
 import { HomeIcon } from '../../atoms/icons/HomeIcon';
@@ -20,12 +21,6 @@ export class ExtractorsListPage extends AbstractPage<any> {
     ApiEndpoints.GetGrabbersSummary.call({}).then(response => this.configurations = response.configs);
   }
 
-  getSimpleImplementation(implementation:string):m.Children {
-    let index = implementation.lastIndexOf(".");
-    if (index < 1) return implementation;
-    return m("span", {title:implementation}, implementation.substring(index+1));
-  }
-
   render():m.Children {
     return m(".page", [
       m(".title", [
@@ -39,7 +34,7 @@ export class ExtractorsListPage extends AbstractPage<any> {
           className:config.implementation,
           name:config.name,
         })}, [
-          m("span", this.getSimpleImplementation(config.implementation)),
+          m("span", DisplayUtils.getSimpleClassNameWithTooltip(config.implementation)),
           m("span.rm10.lm10", config.name ? m("span.highlighted", config.name) : m("span.lowlighted", "default name")),
           config.logLevel ? " - " + config.logLevel : null,
         ]))
