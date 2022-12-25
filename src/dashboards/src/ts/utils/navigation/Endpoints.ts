@@ -8,4 +8,5 @@ export enum Endpoints {
   SETTINGS="/settings/",
   ALERTS="/alerts/",
   EXTRACTORS_LIST="/extractors/list/",
+  EXTRACTOR_DETAIL="/extractors/detail/:className/:name",
 }

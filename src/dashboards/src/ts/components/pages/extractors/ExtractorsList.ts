@@ -2,6 +2,7 @@ import m from 'mithril';
 import { ApiEndpoints } from '../../../auto/ApiEndpoints';
 import { GrabberConfigSummary } from '../../../auto/pieroxy-conkw';
 import { Endpoints } from '../../../utils/navigation/Endpoints';
+import { Routing } from '../../../utils/navigation/Routing';
 import { HomeIcon } from '../../atoms/icons/HomeIcon';
 import { NewDocumentIcon } from '../../atoms/icons/NewDocumentIcon';
 import { RightChevronIcon } from '../../atoms/icons/RightChevronIcon';
@@ -34,12 +35,15 @@ export class ExtractorsListPage extends AbstractPage<any> {
         "Grabbers", 
       ]),
       m(".content", m(".list", this.configurations.map((config) => 
-        m(".listitem", [
+        m("a.listitem", {onclick:() => Routing.goToScreen(Endpoints.EXTRACTOR_DETAIL, {
+          className:config.implementation,
+          name:config.name,
+        })}, [
           m("span", this.getSimpleImplementation(config.implementation)),
           m("span.rm10.lm10", config.name ? m("span.highlighted", config.name) : m("span.lowlighted", "default name")),
           config.logLevel ? " - " + config.logLevel : null,
-        ])
-      )))
+        ]))
+      ))
     ]);
   }
 }

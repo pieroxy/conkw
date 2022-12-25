@@ -1,6 +1,7 @@
 package net.pieroxy.conkw.grabbersBase;
 
 import net.pieroxy.conkw.accumulators.implementations.RootAccumulator;
+import net.pieroxy.conkw.api.metadata.AbstractApiEndpoint;
 import net.pieroxy.conkw.collectors.Collector;
 import net.pieroxy.conkw.collectors.EmptyCollector;
 import net.pieroxy.conkw.config.Credentials;
@@ -9,6 +10,7 @@ import net.pieroxy.conkw.config.CredentialsStore;
 import net.pieroxy.conkw.utils.TimedData;
 
 import java.io.File;
+import java.lang.reflect.ParameterizedType;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -53,6 +55,13 @@ public abstract class Grabber<T extends Collector, C> {
 
   public C getConfig() {
     return config;
+  }
+
+  public Class<C> getConfigClass() {
+    Class<?> subClass = getClass();
+    ParameterizedType parameterizedType = (ParameterizedType) subClass.getGenericSuperclass();
+    return (Class<C>) parameterizedType.getActualTypeArguments()[1];
+
   }
 
   public void setConfig(C config, CredentialsStore credentials) {
