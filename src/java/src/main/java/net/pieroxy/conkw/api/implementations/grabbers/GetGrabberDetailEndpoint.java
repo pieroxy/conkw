@@ -3,6 +3,8 @@ package net.pieroxy.conkw.api.implementations.grabbers;
 import com.dslplatform.json.CompiledJson;
 import com.dslplatform.json.NonNull;
 import net.pieroxy.conkw.api.metadata.*;
+import net.pieroxy.conkw.api.metadata.grabberConfig.ConfigurationObjectMetadata;
+import net.pieroxy.conkw.api.metadata.grabberConfig.ConfigurationObjectMetadataBuilder;
 import net.pieroxy.conkw.api.model.User;
 import net.pieroxy.conkw.config.GrabberConfig;
 import net.pieroxy.conkw.config.UserRole;
@@ -44,8 +46,10 @@ public class GetGrabberDetailEndpoint extends AbstractApiEndpoint<GetGrabberDeta
       grabber = services
           .getGrabbersService()
           .getAllGrabbers()
-          .filter(c -> c.getClass().getName().equals(input.getImplementation()) &&
-              Utils.objectEquals(c.getName(), input.getName())
+          .filter(c -> c.getClass().getName().equals(input.getImplementation()))
+          .filter(c->
+              Utils.objectEquals(c.getName(), input.getName()) ||
+                  (StringUtil.isNullOrEmptyTrimmed(input.getName()) && c.getName().equals(c.getDefaultName()))
           )
           .collect(UtilityCollectors.getOneItemOrNull());
     } catch (Exception e) {
