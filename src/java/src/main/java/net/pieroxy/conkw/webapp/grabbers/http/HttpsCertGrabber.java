@@ -14,6 +14,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -38,7 +39,7 @@ public class HttpsCertGrabber extends TimeThrottledGrabber<HttpsCertGrabber.Http
       cn = args[2];
     }
     Date expiresOn = null;
-    expiresOn = getExpirationDate(cn);
+    expiresOn = new HttpsCertGrabber().getExpirationDate(cn);
 
     if (expiresOn!=null) {
       Date now = new Date();
@@ -49,7 +50,7 @@ public class HttpsCertGrabber extends TimeThrottledGrabber<HttpsCertGrabber.Http
     }
   }
 
-  private static Date getExpirationDate(String cn) throws IOException, CertificateParsingException {
+  private Date getExpirationDate(String cn) throws IOException, CertificateParsingException {
     // without a trust manager, i was having problems of
     // sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
     // the code below was taken from
@@ -87,12 +88,14 @@ public class HttpsCertGrabber extends TimeThrottledGrabber<HttpsCertGrabber.Http
       sc.init(null, trustAllCerts, new java.security.SecureRandom());
       HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
     } catch (Exception e) {
-      System.out.println("could not install trust manager.. continuing here; it may not be necessary");
+      log(Level.WARNING, "could not install trust manager.. continuing here; it may not be necessary");
     }
 
 
     URL url=new URL("https://"+ cn);
     HttpsURLConnection conn= (HttpsURLConnection)url.openConnection();
+    conn.setConnectTimeout(1000);
+    conn.setReadTimeout(1000);
     conn.connect();
     Certificate[] certs = conn.getServerCertificates();
     for(Certificate c:certs){
