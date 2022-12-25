@@ -70,7 +70,7 @@ public class Listener implements ServletContextListener {
             }
             g.setLogLevel(logLevel);
           } else {
-            g.setLogLevel(Level.INFO);
+            g.setLogLevel(Grabber.DEFAULT_LOG_LEVEL);
           }
           Object defaultConf = g.getDefaultConfig();
           if (defaultConf == null && gc.getConfig()!=null) {

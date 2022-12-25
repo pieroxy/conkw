@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public abstract class Grabber<T extends Collector, C> {
+  public static final Level DEFAULT_LOG_LEVEL = Level.INFO;
   private Logger LOGGER = createLogger();
   private static final long CONF_EXPIRATION_MS = 10000; // 10s
   private final Collector EMPTY_COLLECTOR = new EmptyCollector(this);
