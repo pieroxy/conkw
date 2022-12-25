@@ -20,7 +20,7 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
   oninit({attrs}:m.Vnode<ExtractorDetailPageAttrs>) {
     ApiEndpoints.GetGrabberDetail.call({
       implementation:attrs.className,
-      name:attrs.name
+      name:attrs.name.substring(2)
     }).then(response => this.configuration = response.config);
   }
 
