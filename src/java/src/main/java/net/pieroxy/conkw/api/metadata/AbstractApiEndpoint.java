@@ -43,7 +43,7 @@ public abstract class AbstractApiEndpoint<I,O> implements ApiEndpoint {
     inputType = buildType();
   }
 
-  Logger getLogger() {
+  protected Logger getLogger() {
     return LOGGER;
   }
 
