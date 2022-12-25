@@ -7,12 +7,15 @@ import net.pieroxy.conkw.api.model.User;
 import net.pieroxy.conkw.config.GrabberConfig;
 import net.pieroxy.conkw.config.UserRole;
 import net.pieroxy.conkw.grabbersBase.Grabber;
+import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.utils.Services;
 import net.pieroxy.conkw.utils.StringUtil;
 import net.pieroxy.conkw.utils.Utils;
+import net.pieroxy.conkw.utils.exceptions.DisplayMessageException;
 import net.pieroxy.conkw.utils.streams.UtilityCollectors;
 
 import java.util.Arrays;
+import java.util.logging.Level;
 
 @Endpoint(
     method = ApiMethod.GET,
@@ -26,16 +29,30 @@ public class GetGrabberDetailEndpoint extends AbstractApiEndpoint<GetGrabberDeta
 
   @Override
   public GetGrabberDetailOutput process(GetGrabberDetailInput input, User user) throws Exception {
-    GrabberConfig config = Arrays.stream(services
-        .getConfiguration().getGrabbers())
-        .filter(c -> c.getImplementation().equals(input.getImplementation()) &&
-            (
-                (StringUtil.isNullOrEmptyTrimmed(c.getName()) && StringUtil.isNullOrEmptyTrimmed(input.getName()))
-                ||
-                Utils.objectEquals(c.getName(), input.getName())
-            ))
-        .collect(UtilityCollectors.getOneItemOrNull());
-    return new GetGrabberDetailOutput(config);
+    GrabberConfig config = null;
+    Grabber grabber = null;
+    try {
+      config = Arrays.stream(services
+          .getConfiguration().getGrabbers())
+          .filter(c -> c.getImplementation().equals(input.getImplementation()))
+          .filter(c -> (
+                  (StringUtil.isNullOrEmptyTrimmed(c.getName()) && StringUtil.isNullOrEmptyTrimmed(input.getName()))
+                      ||
+                      Utils.objectEquals(c.getName(), input.getName())
+              ))
+          .collect(UtilityCollectors.getOneItemOrNull());
+      grabber = services
+          .getGrabbersService()
+          .getAllGrabbers()
+          .filter(c -> c.getClass().getName().equals(input.getImplementation()) &&
+              Utils.objectEquals(c.getName(), input.getName())
+          )
+          .collect(UtilityCollectors.getOneItemOrNull());
+    } catch (Exception e) {
+      super.getLogger().log(Level.SEVERE, "Could not load grabber from " + JsonHelper.toString(input), e);
+    }
+    if (config == null || grabber == null) throw new DisplayMessageException("This grabber could not be loaded.");
+    return new GetGrabberDetailOutput(config, grabber);
   }
 }
 
@@ -72,8 +89,8 @@ class GetGrabberDetailOutput {
   public GetGrabberDetailOutput() {
   }
 
-  public GetGrabberDetailOutput(GrabberConfig config) {
-    this.config = new GrabberConfigDetail(config);
+  public GetGrabberDetailOutput(GrabberConfig config, Grabber grabber) {
+    this.config = new GrabberConfigDetail(config, grabber);
   }
 
   public GrabberConfigDetail getConfig() {
@@ -90,6 +107,7 @@ class GetGrabberDetailOutput {
 class GrabberConfigDetail{
   private String implementation;
   private String name;
+  private String defaultName;
   private String logLevel;
   private Object details;
   private ConfigurationObjectMetadata detailsMetadata;
@@ -97,12 +115,13 @@ class GrabberConfigDetail{
   public GrabberConfigDetail() {
   }
 
-  public GrabberConfigDetail(GrabberConfig config) {
+  public GrabberConfigDetail(GrabberConfig config, Grabber grabber) {
     this.implementation = config.getImplementation();
     this.logLevel = config.getLogLevel();
     if (logLevel == null) logLevel = Grabber.DEFAULT_LOG_LEVEL.getName();
     this.name = config.getName();
     this.details = config.getConfig();
+    this.defaultName = grabber.getDefaultName();
     try {
       this.detailsMetadata = ConfigurationObjectMetadataBuilder.buildMetadata(((Grabber)Class.forName(config.getImplementation()).newInstance()).getConfigClass());
     } catch (Exception e) {
@@ -148,5 +167,13 @@ class GrabberConfigDetail{
 
   public void setDetailsMetadata(ConfigurationObjectMetadata detailsMetadata) {
     this.detailsMetadata = detailsMetadata;
+  }
+
+  public String getDefaultName() {
+    return defaultName;
+  }
+
+  public void setDefaultName(String defaultName) {
+    this.defaultName = defaultName;
   }
 }

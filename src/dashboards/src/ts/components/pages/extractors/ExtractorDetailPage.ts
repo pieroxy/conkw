@@ -3,6 +3,7 @@ import { ApiEndpoints } from '../../../auto/ApiEndpoints';
 import { GrabberConfigDetail } from '../../../auto/pieroxy-conkw';
 import { Endpoints } from '../../../utils/navigation/Endpoints';
 import { SelectInput } from '../../atoms/forms/SelectInput';
+import { TextFieldInput } from '../../atoms/forms/TextFieldInput';
 import { HomeIcon } from '../../atoms/icons/HomeIcon';
 import { RightChevronIcon } from '../../atoms/icons/RightChevronIcon';
 import { Link } from '../../atoms/Link';
@@ -49,6 +50,19 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
                 {id:"FINEST", label:"FINEST"},
                 {id:"ALL", label:"ALL"},
               ]
+            }))
+          ]),
+          m("tr", [
+            m("td", "Default name"),
+            m("td", this.configuration.defaultName)
+          ]),
+          m("tr", [
+            m("td", "Name"),
+            m("td", m(TextFieldInput, {
+              onenter:()=>{},
+              refHolder:this.configuration,
+              refProperty:"name",
+              spellcheck:true
             }))
           ])
         ])
