@@ -2,6 +2,7 @@ package net.pieroxy.conkw.grabbersBase;
 
 import net.pieroxy.conkw.accumulators.implementations.RootAccumulator;
 import net.pieroxy.conkw.api.metadata.AbstractApiEndpoint;
+import net.pieroxy.conkw.api.metadata.grabberConfig.GrabberConfigMessage;
 import net.pieroxy.conkw.collectors.Collector;
 import net.pieroxy.conkw.collectors.EmptyCollector;
 import net.pieroxy.conkw.config.Credentials;
@@ -56,6 +57,15 @@ public abstract class Grabber<T extends Collector, C> {
 
   public C getConfig() {
     return config;
+  }
+
+  /**
+   * This method is a utility to allow the UI to test a given configuration. If no {@link GrabberConfigMessage} with
+   * the flag isError set to true is returned, the configuration is deemed valid to be saved.
+   * @param config the configuration to be tested
+   */
+  public List<GrabberConfigMessage> validateConfiguration(C config) {
+    return null;
   }
 
   public Class<C> getConfigClass() {
