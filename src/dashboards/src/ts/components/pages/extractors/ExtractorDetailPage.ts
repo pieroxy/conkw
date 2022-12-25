@@ -1,6 +1,7 @@
 import m from 'mithril';
 import { ApiEndpoints } from '../../../auto/ApiEndpoints';
 import { GrabberConfigDetail } from '../../../auto/pieroxy-conkw';
+import { DisplayUtils } from '../../../utils/DisplayUtils';
 import { Endpoints } from '../../../utils/navigation/Endpoints';
 import { SelectInput } from '../../atoms/forms/SelectInput';
 import { TextFieldInput } from '../../atoms/forms/TextFieldInput';
@@ -23,12 +24,14 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
     }).then(response => this.configuration = response.config);
   }
 
-  render():m.Children {
+  render({attrs}:m.Vnode<ExtractorDetailPageAttrs>):m.Children {
     return m(".page", [
       m(".title", [
         m(Link, {tooltip:"Go back Home", target:Endpoints.HOME}, m(HomeIcon)),
         m(RightChevronIcon),
-        "Grabbers", 
+        m(Link, {target:Endpoints.EXTRACTORS_LIST}, "Grabbers"),
+        m(RightChevronIcon),
+        DisplayUtils.getSimpleClassNameWithTooltip(attrs.className)
       ]),
       !this.configuration ? "" : m(".content", 
         m("", "Configuration for " + this.configuration.implementation),
