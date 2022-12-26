@@ -3,6 +3,8 @@ import { ApiEndpoints } from '../../../auto/ApiEndpoints';
 import { ConfigurationObjectFieldMetadata, ConfigurationObjectFieldType, GrabberConfigDetail } from '../../../auto/pieroxy-conkw';
 import { DisplayUtils } from '../../../utils/DisplayUtils';
 import { Endpoints } from '../../../utils/navigation/Endpoints';
+import { Notification, Notifications, NotificationsClass, NotificationsType } from '../../../utils/Notifications';
+import { Button } from '../../atoms/forms/Button';
 import { SelectInput } from '../../atoms/forms/SelectInput';
 import { TextFieldInput } from '../../atoms/forms/TextFieldInput';
 import { HomeIcon } from '../../atoms/icons/HomeIcon';
@@ -94,12 +96,51 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
             ]))
           ]);
       }
+    } else { // field.list is true
+      let count=1;
+      return m("tr", [
+        m("td", {colspan:2}, [
+          m("", [
+            field.label,
+            m(".spacer"),
+            m(Button, {
+              action:()=>{
+                let array = holder[field.name];
+                if (!array) {
+                  array = holder[field.name] = [];
+                }
+                switch (field.type) {
+                  case ConfigurationObjectFieldType.STRING:
+                    array.push("");
+                    break;
+                  default:
+                    Notifications.addNotification(new Notification(NotificationsClass.LOGIN, NotificationsType.ERROR, "Not implemented yet!", 5))
+                    return;
+                }
+              },
+              secondary:true
+            }, "Add")
+          ]),
+          m("table", 
+            ((<[]>holder[field.name])||[]).map(e => {
+              let ifield = <ConfigurationObjectFieldMetadata>JSON.parse(JSON.stringify(field));
+              ifield.list = false;
+              ifield.label = "Item #" + count++;
+              return [
+                this.generateField(e, ifield)
+              ];
+            })
+          )
+        ]),
+
+      ]);
+
     }
     return m("tr", [
       m("td", field.label),
       m("td", "Not implemented yet")
     ])
-}
+  }
 }
 
 export interface ExtractorDetailPageAttrs {
