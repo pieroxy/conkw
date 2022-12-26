@@ -1,6 +1,6 @@
 import m from 'mithril';
 import { ApiEndpoints } from '../../../auto/ApiEndpoints';
-import { GrabberConfigDetail } from '../../../auto/pieroxy-conkw';
+import { ConfigurationObjectFieldMetadata, ConfigurationObjectFieldType, GrabberConfigDetail } from '../../../auto/pieroxy-conkw';
 import { DisplayUtils } from '../../../utils/DisplayUtils';
 import { Endpoints } from '../../../utils/navigation/Endpoints';
 import { SelectInput } from '../../atoms/forms/SelectInput';
@@ -34,8 +34,11 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
         DisplayUtils.getSimpleClassNameWithTooltip(attrs.className)
       ]),
       !this.configuration ? "" : m(".content", 
-        m("", "Configuration for " + this.configuration.implementation),
-        m("table", [
+        m("table.grabberconfig", [
+          m("tr", [
+            m("td", "Configuration for class"),
+            m("td.monospace", m.trust(this.configuration.implementation.replace(/\./g, ".<span style='width:0px;overflow:hidden;display:inline-block;'> </span>"))),
+          ]),
           m("tr", [
             m("td", "Log level"),
             m("td", m(SelectInput, {
@@ -67,11 +70,36 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
               refProperty:"name",
               spellcheck:true
             }))
-          ])
+          ]),
+          this.configuration.detailsMetadata.fields.map(md => this.generateField(this.configuration.details, md))
         ])
       )
     ]);
   }
+
+  generateField(holder:any, field:ConfigurationObjectFieldMetadata):m.Children {
+    if (!field.list) {
+      switch (field.type) {
+        case ConfigurationObjectFieldType.STRING:
+          return m("tr", [
+            m("td", field.label),
+            m("td", m(TextFieldInput, {
+              onenter:()=>{},
+              refHolder:holder,
+              refProperty:"name",
+              spellcheck:false
+            }), !field.defaultValue ? null:m(".defaultValue", [
+              "Default: ",
+              m("span.monospace", field.defaultValue)
+            ]))
+          ]);
+      }
+    }
+    return m("tr", [
+      m("td", field.label),
+      m("td", "Not implemented yet")
+    ])
+}
 }
 
 export interface ExtractorDetailPageAttrs {

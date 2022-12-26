@@ -138,6 +138,20 @@ a {
   }
 }
 
+table.grabberconfig {
+  border-collapse: collapse;
+
+  td {
+    vertical-align: top;
+    padding: 5px 10px;
+    border-top: 1px solid rgba(255,255,255,0.2);
+
+    .defaultValue {
+      opacity: 50%;
+    }
+  }
+}
+
 table.sessions {
   border-collapse: collapse;
 
