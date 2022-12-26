@@ -97,49 +97,52 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
           ]);
       }
     } else { // field.list is true
-      let count=1;
-      return m("tr", [
-        m("td", {colspan:2}, [
-          m("", [
-            field.label,
-            m(".spacer"),
-            m(Button, {
-              action:()=>{
-                let array = holder[field.name];
-                if (!array) {
-                  array = holder[field.name] = [];
-                }
-                switch (field.type) {
-                  case ConfigurationObjectFieldType.STRING:
-                    array.push("");
-                    break;
-                  default:
-                    Notifications.addNotification(new Notification(NotificationsClass.LOGIN, NotificationsType.ERROR, "Not implemented yet!", 5))
-                    return;
-                }
-              },
-              secondary:true
-            }, "Add")
-          ]),
-          m("table", 
-            ((<[]>holder[field.name])||[]).map(e => {
-              let ifield = <ConfigurationObjectFieldMetadata>JSON.parse(JSON.stringify(field));
-              ifield.list = false;
-              ifield.label = "Item #" + count++;
-              return [
-                this.generateField(e, ifield)
-              ];
-            })
-          )
-        ]),
-
-      ]);
-
+      return this.generateList(holder, field);
     }
     return m("tr", [
       m("td", field.label),
       m("td", "Not implemented yet")
     ])
+  }
+  
+  generateList(holder: any, field: ConfigurationObjectFieldMetadata): m.Children {
+    let count=1;
+    return m("tr", [
+      m("td", {colspan:2}, [
+        m("", [
+          field.label,
+          m(".spacer"),
+          m(Button, {
+            action:()=>{
+              let array = holder[field.name];
+              if (!array) {
+                array = holder[field.name] = [];
+              }
+              switch (field.type) {
+                case ConfigurationObjectFieldType.STRING:
+                  array.push("");
+                  break;
+                default:
+                  Notifications.addNotification(new Notification(NotificationsClass.LOGIN, NotificationsType.ERROR, "Not implemented yet!", 5))
+                  return;
+              }
+            },
+            secondary:true
+          }, "Add")
+        ]),
+        m("table", 
+          ((<[]>holder[field.name])||[]).map(e => {
+            let ifield = <ConfigurationObjectFieldMetadata>JSON.parse(JSON.stringify(field));
+            ifield.list = false;
+            ifield.label = "Item #" + count++;
+            return [
+              this.generateField(e, ifield)
+            ];
+          })
+        )
+      ]),
+  
+    ]);
   }
 }
 
@@ -147,3 +150,4 @@ export interface ExtractorDetailPageAttrs {
   className:string;
   name:string;
 }
+
