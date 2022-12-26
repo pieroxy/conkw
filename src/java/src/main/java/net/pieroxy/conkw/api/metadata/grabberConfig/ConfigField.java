@@ -11,5 +11,5 @@ import java.lang.annotation.Target;
 
 public @interface ConfigField {
   String label();
-  String defaultValue();
+  String defaultValue() default "";
 }
