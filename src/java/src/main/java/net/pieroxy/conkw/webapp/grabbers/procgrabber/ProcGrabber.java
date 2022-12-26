@@ -639,6 +639,9 @@ public class ProcGrabber extends AsyncGrabber<SimpleCollector, ProcGrabber.ProcG
   }
 
   public static class ProcGrabberConfig extends PartiallyExtractableConfig {
+    @ConfigField(
+            label = "List of block devices to monitor. Leave empty for auto detection."
+    )
     private List<String> blockDevices;
 
     @ConfigField(

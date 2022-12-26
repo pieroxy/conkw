@@ -32,7 +32,7 @@ public class ConfigurationObjectMetadataBuilder {
     res.setDefaultValue(annotation.defaultValue());
     res.setList(f.getType().isAssignableFrom(List.class));
     if (res.isList()) {
-      res.setType(inferType(((ParameterizedType)f.getType().getGenericSuperclass()).getActualTypeArguments()[0].getClass()));
+      res.setType(inferType((Class<?>)((ParameterizedType)f.getGenericType()).getActualTypeArguments()[0]));
     } else {
       res.setType(inferType(f.getType()));
     }
