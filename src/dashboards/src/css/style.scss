@@ -155,6 +155,10 @@ table.grabberconfig {
       opacity: 50%;
     }
   }
+
+  table {
+    border-collapse: collapse;
+  }
 }
 
 table.sessions {
