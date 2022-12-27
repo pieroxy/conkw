@@ -8,8 +8,7 @@ import java.util.List;
 
 public class PartiallyExtractableConfig {
   @ConfigField(
-          label="List the active extractions. Have a look at the grabber documentation for the list of available values.",
-          listItemLabel = "Value",
+          label="List the active extractions. Have a look at the grabber documentation for details about all of those values",
           listOfChoicesFunc = "getListOfExtractableValues"
   )
   private List<String> toExtract;
