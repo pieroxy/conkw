@@ -114,12 +114,18 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
           m("", [
             field.label
           ]),
-          m(MultipleSelectInput, {
-            refHolder:holder,
-            refProperty:field.name,
-            onenter:()=>{},
-            values:field.possibleValues
-          })
+          m(".hsplit50", [
+            m(MultipleSelectInput, {
+              refHolder:holder,
+              refProperty:field.name,
+              onenter:()=>{},
+              values:field.possibleValues
+            }),
+            m("", [
+              "Values: ",
+              (holder[field.name] && holder[field.name].length) ? (<string[]>holder[field.name]).map(v => m("span.monospace.rm10.lm10", v+" ")) : "None selected"
+            ])
+          ])
         ]),
 
       ])       

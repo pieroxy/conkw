@@ -143,6 +143,13 @@ a {
   }
 }
 
+.hsplit50 { 
+  > * {
+    display:inline-block;
+    width:49%;
+  }
+}
+
 table.grabberconfig {
   border-collapse: collapse;
 
