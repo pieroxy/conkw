@@ -118,7 +118,7 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
             refHolder:holder,
             refProperty:field.name,
             onenter:()=>{},
-            values:field.possibleValues.map(s => { return {id:s, label:s}})
+            values:field.possibleValues
           })
         ]),
 

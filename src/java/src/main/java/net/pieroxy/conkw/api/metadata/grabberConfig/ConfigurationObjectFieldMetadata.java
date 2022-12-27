@@ -2,6 +2,7 @@ package net.pieroxy.conkw.api.metadata.grabberConfig;
 
 import com.dslplatform.json.CompiledJson;
 import net.pieroxy.conkw.api.metadata.TypeScriptType;
+import net.pieroxy.conkw.api.model.IdLabelPair;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ public class ConfigurationObjectFieldMetadata {
   private ConfigurationObjectFieldType type;
   private boolean isList;
   private String listItemsName;
-  private String[] possibleValues;
+  private IdLabelPair[] possibleValues;
   private String name;
   private String label;
   private String defaultValue;
@@ -73,11 +74,11 @@ public class ConfigurationObjectFieldMetadata {
     this.listItemsName = listItemsName;
   }
 
-  public String[] getPossibleValues() {
+  public IdLabelPair[] getPossibleValues() {
     return possibleValues;
   }
 
-  public void setPossibleValues(String[] possibleValues) {
+  public void setPossibleValues(IdLabelPair[] possibleValues) {
     this.possibleValues = possibleValues;
   }
 }

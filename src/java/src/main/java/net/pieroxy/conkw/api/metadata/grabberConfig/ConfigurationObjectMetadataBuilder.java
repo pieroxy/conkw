@@ -1,12 +1,15 @@
 package net.pieroxy.conkw.api.metadata.grabberConfig;
 
+import net.pieroxy.conkw.api.model.IdLabelPair;
 import net.pieroxy.conkw.utils.StringUtil;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class ConfigurationObjectMetadataBuilder {
   private static final Logger LOGGER = Logger.getLogger(ConfigurationObjectMetadataBuilder.class.getName());
@@ -42,10 +45,10 @@ public class ConfigurationObjectMetadataBuilder {
         res.setListItemsName(annotation.listItemLabel());
       }
       if (annotation.listOfChoices().length>0) {
-        res.setPossibleValues(annotation.listOfChoices());
+        res.setPossibleValues(Arrays.stream(annotation.listOfChoices()).map(s -> new IdLabelPair(s,s)).collect(Collectors.toList()).toArray(new IdLabelPair[0]));
       } else if (annotation.listOfChoicesFunc().length()>0) {
         try {
-          res.setPossibleValues((String[])f.getDeclaringClass().getDeclaredMethod(annotation.listOfChoicesFunc()).invoke(context.newInstance()));
+          res.setPossibleValues((IdLabelPair[])f.getDeclaringClass().getDeclaredMethod(annotation.listOfChoicesFunc()).invoke(context.newInstance()));
         } catch (Exception e) {
           throw new RuntimeException("Could not invoke method for list of values. Analyzing class " + context.getName() + " and field " + f);
         }

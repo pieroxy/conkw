@@ -1,6 +1,7 @@
 package net.pieroxy.conkw.webapp.grabbers.procgrabber;
 
 import net.pieroxy.conkw.api.metadata.grabberConfig.ConfigField;
+import net.pieroxy.conkw.api.model.IdLabelPair;
 import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
 import net.pieroxy.conkw.grabbersBase.PartiallyExtractableConfig;
@@ -646,19 +647,19 @@ public class ProcGrabber extends AsyncGrabber<SimpleCollector, ProcGrabber.ProcG
     private List<String> blockDevices;
 
     @Override
-    public String[] getListOfExtractableValues() {
-      return new String[] {
-        "cpufreq",
-        "processes",
-        "uptime",
-        "cpu",
-        "nbcpu",
-        "mem",
-        "bdio",
-        "net",
-        "battery",
-        "mdstat",
-        "hostname",
+    public IdLabelPair[] getListOfExtractableValues() {
+      return new IdLabelPair[] {
+        new IdLabelPair("cpufreq", "CPU Frequencies"),
+        new IdLabelPair("processes", "Top 3 processes (cpu, ram)"),
+        new IdLabelPair("uptime", "Host uptime"),
+        new IdLabelPair("cpu", "CPU infos"),
+        new IdLabelPair("nbcpu", "Nb of CPUs"),
+        new IdLabelPair("mem", "RAM infos"),
+        new IdLabelPair("bdio", "Block devices I/Os"),
+        new IdLabelPair("net", "Nework infos"),
+        new IdLabelPair("battery", "Battery infos"),
+        new IdLabelPair("mdstat", "Raid arrays (mdadm) infos"),
+        new IdLabelPair("hostname", "Host name"),
       };
     }
 
