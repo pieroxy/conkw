@@ -10,6 +10,7 @@ import java.util.List;
 public class ConfigurationObjectFieldMetadata {
   private ConfigurationObjectFieldType type;
   private boolean isList;
+  private String listItemsName;
   private String name;
   private String label;
   private String defaultValue;
@@ -61,5 +62,13 @@ public class ConfigurationObjectFieldMetadata {
 
   public void setDefaultValue(String defaultValue) {
     this.defaultValue = defaultValue;
+  }
+
+  public String getListItemsName() {
+    return listItemsName;
+  }
+
+  public void setListItemsName(String listItemsName) {
+    this.listItemsName = listItemsName;
   }
 }

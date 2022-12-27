@@ -134,7 +134,8 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
           ((<[]>holder[field.name])||[]).map(e => {
             let ifield = <ConfigurationObjectFieldMetadata>JSON.parse(JSON.stringify(field));
             ifield.list = false;
-            ifield.label = "Item #" + count++;
+            let itemLabel = field.listItemsName || "Item"
+            ifield.label = itemLabel + " #" + count++;
             return [
               this.generateField(e, ifield)
             ];

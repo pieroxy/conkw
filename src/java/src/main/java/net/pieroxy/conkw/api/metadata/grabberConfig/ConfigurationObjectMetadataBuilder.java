@@ -1,5 +1,7 @@
 package net.pieroxy.conkw.api.metadata.grabberConfig;
 
+import net.pieroxy.conkw.utils.StringUtil;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
@@ -36,6 +38,9 @@ public class ConfigurationObjectMetadataBuilder {
     res.setList(f.getType().isAssignableFrom(List.class));
     if (res.isList()) {
       res.setType(inferType(annotation, (Class<?>)((ParameterizedType)f.getGenericType()).getActualTypeArguments()[0], context));
+      if (!StringUtil.isNullOrEmptyTrimmed(annotation.listItemLabel())) {
+        res.setListItemsName(annotation.listItemLabel());
+      }
     } else {
       res.setType(inferType(annotation, f.getType(), context));
     }

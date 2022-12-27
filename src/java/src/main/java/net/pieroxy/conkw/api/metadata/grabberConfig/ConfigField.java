@@ -12,10 +12,13 @@ import java.lang.annotation.Target;
 public @interface ConfigField {
   String label();
   String defaultValue() default "";
+  /**
+   * Applicable only to List fields
+   */
+  String listItemLabel() default "";
 
   /**
    * Applicable only to String fields
-   * @return
    */
   boolean isDelay() default false;
 }
