@@ -9,18 +9,21 @@ import java.util.logging.Logger;
 public class ConfigurationObjectMetadataBuilder {
   private static final Logger LOGGER = Logger.getLogger(ConfigurationObjectMetadataBuilder.class.getName());
 
-  public static ConfigurationObjectMetadata buildMetadata(Class c) {
-    ConfigurationObjectMetadata result = new ConfigurationObjectMetadata(c.getName());
+  public static ConfigurationObjectMetadata buildMetadata(Class orig) {
+    ConfigurationObjectMetadata result = new ConfigurationObjectMetadata(orig.getName());
 
-
-    for (Field f : c.getDeclaredFields()) {
-      ConfigField annotation = f.getAnnotation(ConfigField.class);
-      if (LOGGER.isLoggable(Level.FINE)) LOGGER.fine("Field " + f.getName() + " gives annotation " + annotation);
-      if (annotation!=null) {
-        result.getFields().add(getField(annotation, f, c));
+    Class c = orig;
+    while (c != Object.class) {
+      for (Field f : c.getDeclaredFields()) {
+        ConfigField annotation = f.getAnnotation(ConfigField.class);
+        if (LOGGER.isLoggable(Level.FINE)) LOGGER.fine("Field " + f.getName() + " gives annotation " + annotation);
+        if (annotation!=null) {
+          result.getFields().add(getField(annotation, f, c));
+        }
       }
+      c = c.getSuperclass();
     }
-    if (LOGGER.isLoggable(Level.FINE)) LOGGER.fine("Fields " + result.getFields().size());
+    if (LOGGER.isLoggable(Level.FINE)) LOGGER.fine("Fields for " + orig.getName() + " " + result.getFields().size());
 
     return result;
   }
