@@ -17,7 +17,7 @@ public class ConfigurationObjectMetadataBuilder {
       ConfigField annotation = f.getAnnotation(ConfigField.class);
       if (LOGGER.isLoggable(Level.FINE)) LOGGER.fine("Field " + f.getName() + " gives annotation " + annotation);
       if (annotation!=null) {
-        result.getFields().add(getField(annotation, f));
+        result.getFields().add(getField(annotation, f, c));
       }
     }
     if (LOGGER.isLoggable(Level.FINE)) LOGGER.fine("Fields " + result.getFields().size());
@@ -25,22 +25,28 @@ public class ConfigurationObjectMetadataBuilder {
     return result;
   }
 
-  private static ConfigurationObjectFieldMetadata getField(ConfigField annotation, Field f) {
+  private static ConfigurationObjectFieldMetadata getField(ConfigField annotation, Field f, Class context) {
     ConfigurationObjectFieldMetadata res = new ConfigurationObjectFieldMetadata();
     res.setName(f.getName());
     res.setLabel(annotation.label());
     res.setDefaultValue(annotation.defaultValue());
     res.setList(f.getType().isAssignableFrom(List.class));
     if (res.isList()) {
-      res.setType(inferType((Class<?>)((ParameterizedType)f.getGenericType()).getActualTypeArguments()[0]));
+      res.setType(inferType(annotation, (Class<?>)((ParameterizedType)f.getGenericType()).getActualTypeArguments()[0], context));
     } else {
-      res.setType(inferType(f.getType()));
+      res.setType(inferType(annotation, f.getType(), context));
     }
     return res;
   }
 
-  private static ConfigurationObjectFieldType inferType(Class c) {
-    if (c == String.class) return ConfigurationObjectFieldType.STRING;
+  private static ConfigurationObjectFieldType inferType(ConfigField annotation, Class c, Class context) {
+    if (c == String.class) {
+      if (annotation.isDelay()) {
+        return ConfigurationObjectFieldType.DELAY;
+      }
+      return ConfigurationObjectFieldType.STRING;
+    }
+    if (annotation.isDelay()) throw new RuntimeException("Delay cannot be true for fields other than String. Analyzing class " + context.getName());
     if (c == Integer.class || c == Integer.TYPE ||
         c == Long.class || c == Long.TYPE ||
         c == Float.class || c == Float.TYPE ||

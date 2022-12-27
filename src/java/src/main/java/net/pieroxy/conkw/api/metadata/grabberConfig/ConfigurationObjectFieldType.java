@@ -9,5 +9,6 @@ public enum ConfigurationObjectFieldType {
   NUMBER,
   STRING,
   BOOLEAN,
-  OBJECT
+  OBJECT,
+  DELAY
 }
