@@ -1,12 +1,14 @@
 package net.pieroxy.conkw.webapp.grabbers.procgrabber;
 
 import net.pieroxy.conkw.api.metadata.grabberConfig.ConfigField;
+import net.pieroxy.conkw.api.metadata.grabberConfig.GrabberConfigMessage;
 import net.pieroxy.conkw.api.model.IdLabelPair;
 import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
 import net.pieroxy.conkw.grabbersBase.PartiallyExtractableConfig;
 import net.pieroxy.conkw.utils.ExternalBinaryRunner;
 import net.pieroxy.conkw.utils.PerformanceTools;
+import net.pieroxy.conkw.utils.StringUtil;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.pools.hashmap.HashMapPool;
 
@@ -67,6 +69,18 @@ public class ProcGrabber extends AsyncGrabber<SimpleCollector, ProcGrabber.ProcG
     ProcGrabberConfig res = new ProcGrabberConfig();
     res.setMdstatFile(MDSTAT_FILE);
     return res;
+  }
+
+  @Override
+  public List<GrabberConfigMessage> validateConfiguration(ProcGrabberConfig config) {
+    List<GrabberConfigMessage> result = new ArrayList<>();
+    if (!StringUtil.isNullOrEmptyTrimmed(config.getMdstatFile())) {
+      File f = new File(config.getMdstatFile());
+      if (!f.exists() || !f.isFile()) {
+        result.add(new GrabberConfigMessage(false, "mdstatFile", "The provided path for the mdstat file does not point to a regular file."));
+      }
+    }
+    return result;
   }
 
   @Override

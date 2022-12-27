@@ -1,6 +1,6 @@
 import m from 'mithril';
 import { ApiEndpoints } from '../../../auto/ApiEndpoints';
-import { ConfigurationObjectFieldMetadata, ConfigurationObjectFieldType, GrabberConfigDetail } from '../../../auto/pieroxy-conkw';
+import { ConfigurationObjectFieldMetadata, ConfigurationObjectFieldType, GetGrabberDetailOutput } from '../../../auto/pieroxy-conkw';
 import { DisplayUtils } from '../../../utils/DisplayUtils';
 import { Endpoints } from '../../../utils/navigation/Endpoints';
 import { Notification, Notifications, NotificationsClass, NotificationsType } from '../../../utils/Notifications';
@@ -14,7 +14,7 @@ import { Link } from '../../atoms/Link';
 import { AbstractPage } from '../AbstractPage';
 
 export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> {
-  configuration:GrabberConfigDetail;
+  configuration:GetGrabberDetailOutput;
 
   getPageTitle(): string {
     return "Edit grabber";
@@ -24,12 +24,18 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
     ApiEndpoints.GetGrabberDetail.call({
       implementation:attrs.className,
       name:attrs.name.substring(2)
-    }).then(response => this.configuration = response.config);
+    }).then(response => this.configuration = response);
   }
 
   render({attrs}:m.Vnode<ExtractorDetailPageAttrs>):m.Children {
     return m(".page", [
       m(".title", [
+        m("span.floatright", m(Button, { action:() => {
+          ApiEndpoints.TestGrabberConfiguration.call({
+            configuration:this.configuration.config,
+            grabberImplementation:attrs.className
+          })
+        }}, "Save")),
         m(Link, {tooltip:"Go back Home", target:Endpoints.HOME}, m(HomeIcon)),
         m(RightChevronIcon),
         m(Link, {target:Endpoints.EXTRACTORS_LIST}, "Grabbers"),
@@ -40,7 +46,7 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
         m("table.grabberconfig", [
           m("tr", [
             m("td", "Configuration for class"),
-            m("td.monospace", m.trust(this.configuration.implementation.replace(/\./g, ".<span style='width:0px;overflow:hidden;display:inline-block;'> </span>"))),
+            m("td.monospace", m.trust(this.configuration.config.implementation.replace(/\./g, ".<span style='width:0px;overflow:hidden;display:inline-block;'> </span>"))),
           ]),
           m("tr", [
             m("td", "Log level"),
@@ -74,7 +80,7 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
               spellcheck:true
             }))
           ]),
-          this.configuration.detailsMetadata.fields.map(md => this.generateField(this.configuration.details, md))
+          this.configuration.detailsMetadata.fields.map(md => this.generateField(this.configuration.config.config, md))
         ])
       )
     ]);
@@ -89,7 +95,7 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
             m("td", m(TextFieldInput, {
               onenter:()=>{},
               refHolder:holder,
-              refProperty:"name",
+              refProperty:field.name,
               spellcheck:false
             }), !field.defaultValue ? null:m(".defaultValue", [
               "Default: ",

@@ -2,7 +2,10 @@ package net.pieroxy.conkw.api.implementations.grabbers;
 
 import com.dslplatform.json.CompiledJson;
 import com.dslplatform.json.NonNull;
-import net.pieroxy.conkw.api.metadata.*;
+import net.pieroxy.conkw.api.metadata.AbstractApiEndpoint;
+import net.pieroxy.conkw.api.metadata.ApiMethod;
+import net.pieroxy.conkw.api.metadata.Endpoint;
+import net.pieroxy.conkw.api.metadata.TypeScriptType;
 import net.pieroxy.conkw.api.metadata.grabberConfig.ConfigurationObjectMetadata;
 import net.pieroxy.conkw.api.metadata.grabberConfig.ConfigurationObjectMetadataBuilder;
 import net.pieroxy.conkw.api.model.User;
@@ -90,11 +93,20 @@ class GetGrabberDetailInput {
 class GetGrabberDetailOutput {
   private GrabberConfigDetail config;
 
+  private String defaultName;
+  private ConfigurationObjectMetadata detailsMetadata;
+
   public GetGrabberDetailOutput() {
   }
 
   public GetGrabberDetailOutput(GrabberConfig config, Grabber grabber) {
-    this.config = new GrabberConfigDetail(config, grabber);
+    this.defaultName = grabber.getDefaultName();
+    this.config = new GrabberConfigDetail(config);
+    try {
+      this.detailsMetadata = ConfigurationObjectMetadataBuilder.buildMetadata(((Grabber)Class.forName(config.getImplementation()).newInstance()).getConfigClass());
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
   }
 
   public GrabberConfigDetail getConfig() {
@@ -104,65 +116,13 @@ class GetGrabberDetailOutput {
   public void setConfig(GrabberConfigDetail config) {
     this.config = config;
   }
-}
 
-@CompiledJson
-@TypeScriptType
-class GrabberConfigDetail{
-  private String implementation;
-  private String name;
-  private String defaultName;
-  private String logLevel;
-  private Object details;
-  private ConfigurationObjectMetadata detailsMetadata;
-
-  public GrabberConfigDetail() {
+  public String getDefaultName() {
+    return defaultName;
   }
 
-  public GrabberConfigDetail(GrabberConfig config, Grabber grabber) {
-    this.implementation = config.getImplementation();
-    this.logLevel = config.getLogLevel();
-    if (logLevel == null) logLevel = Grabber.DEFAULT_LOG_LEVEL.getName();
-    this.name = config.getName();
-    this.details = config.getConfig();
-    this.defaultName = grabber.getDefaultName();
-    try {
-      this.detailsMetadata = ConfigurationObjectMetadataBuilder.buildMetadata(((Grabber)Class.forName(config.getImplementation()).newInstance()).getConfigClass());
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-  }
-
-  public String getImplementation() {
-    return implementation;
-  }
-
-  public void setImplementation(String implementation) {
-    this.implementation = implementation;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public String getLogLevel() {
-    return logLevel;
-  }
-
-  public void setLogLevel(String logLevel) {
-    this.logLevel = logLevel;
-  }
-
-  public Object getDetails() {
-    return details;
-  }
-
-  public void setDetails(Object details) {
-    this.details = details;
+  public void setDefaultName(String defaultName) {
+    this.defaultName = defaultName;
   }
 
   public ConfigurationObjectMetadata getDetailsMetadata() {
@@ -172,12 +132,5 @@ class GrabberConfigDetail{
   public void setDetailsMetadata(ConfigurationObjectMetadata detailsMetadata) {
     this.detailsMetadata = detailsMetadata;
   }
-
-  public String getDefaultName() {
-    return defaultName;
-  }
-
-  public void setDefaultName(String defaultName) {
-    this.defaultName = defaultName;
-  }
 }
+
