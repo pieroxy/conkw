@@ -20,7 +20,7 @@ public class ConfigurationObjectMetadataBuilder {
         ConfigField annotation = f.getAnnotation(ConfigField.class);
         if (LOGGER.isLoggable(Level.FINE)) LOGGER.fine("Field " + f.getName() + " gives annotation " + annotation);
         if (annotation!=null) {
-          result.getFields().add(getField(annotation, f, c));
+          result.getFields().add(getField(annotation, f, orig));
         }
       }
       c = c.getSuperclass();
@@ -40,6 +40,15 @@ public class ConfigurationObjectMetadataBuilder {
       res.setType(inferType(annotation, (Class<?>)((ParameterizedType)f.getGenericType()).getActualTypeArguments()[0], context));
       if (!StringUtil.isNullOrEmptyTrimmed(annotation.listItemLabel())) {
         res.setListItemsName(annotation.listItemLabel());
+      }
+      if (annotation.listOfChoices().length>0) {
+        res.setPossibleValues(annotation.listOfChoices());
+      } else if (annotation.listOfChoicesFunc().length()>0) {
+        try {
+          res.setPossibleValues((String[])f.getDeclaringClass().getDeclaredMethod(annotation.listOfChoicesFunc()).invoke(context.newInstance()));
+        } catch (Exception e) {
+          throw new RuntimeException("Could not invoke method for list of values. Analyzing class " + context.getName() + " and field " + f);
+        }
       }
     } else {
       res.setType(inferType(annotation, f.getType(), context));

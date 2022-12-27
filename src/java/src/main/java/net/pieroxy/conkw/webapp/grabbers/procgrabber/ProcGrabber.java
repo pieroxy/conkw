@@ -645,6 +645,23 @@ public class ProcGrabber extends AsyncGrabber<SimpleCollector, ProcGrabber.ProcG
     )
     private List<String> blockDevices;
 
+    @Override
+    public String[] getListOfExtractableValues() {
+      return new String[] {
+        "cpufreq",
+        "processes",
+        "uptime",
+        "cpu",
+        "nbcpu",
+        "mem",
+        "bdio",
+        "net",
+        "battery",
+        "mdstat",
+        "hostname",
+      };
+    }
+
     @ConfigField(
         label = "Location of the mdstat file to monitor",
         defaultValue = MDSTAT_FILE

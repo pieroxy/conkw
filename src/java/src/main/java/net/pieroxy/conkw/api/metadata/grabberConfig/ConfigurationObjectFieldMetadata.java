@@ -11,6 +11,7 @@ public class ConfigurationObjectFieldMetadata {
   private ConfigurationObjectFieldType type;
   private boolean isList;
   private String listItemsName;
+  private String[] possibleValues;
   private String name;
   private String label;
   private String defaultValue;
@@ -70,5 +71,13 @@ public class ConfigurationObjectFieldMetadata {
 
   public void setListItemsName(String listItemsName) {
     this.listItemsName = listItemsName;
+  }
+
+  public String[] getPossibleValues() {
+    return possibleValues;
+  }
+
+  public void setPossibleValues(String[] possibleValues) {
+    this.possibleValues = possibleValues;
   }
 }

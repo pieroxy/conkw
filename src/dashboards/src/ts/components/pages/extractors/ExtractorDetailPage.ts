@@ -5,6 +5,7 @@ import { DisplayUtils } from '../../../utils/DisplayUtils';
 import { Endpoints } from '../../../utils/navigation/Endpoints';
 import { Notification, Notifications, NotificationsClass, NotificationsType } from '../../../utils/Notifications';
 import { Button } from '../../atoms/forms/Button';
+import { MultipleSelectInput } from '../../atoms/forms/MultipleSelectInput';
 import { SelectInput } from '../../atoms/forms/SelectInput';
 import { TextFieldInput } from '../../atoms/forms/TextFieldInput';
 import { HomeIcon } from '../../atoms/icons/HomeIcon';
@@ -107,43 +108,59 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
   
   generateList(holder: any, field: ConfigurationObjectFieldMetadata): m.Children {
     let count=1;
-    return m("tr", [
-      m("td", {colspan:2}, [
-        m("", [
-          field.label,
-          m(".spacer"),
-          m(Button, {
-            action:()=>{
-              let array = holder[field.name];
-              if (!array) {
-                array = holder[field.name] = [];
-              }
-              switch (field.type) {
-                case ConfigurationObjectFieldType.STRING:
-                  array.push("");
-                  break;
-                default:
-                  Notifications.addNotification(new Notification(NotificationsClass.LOGIN, NotificationsType.ERROR, "Not implemented yet!", 5))
-                  return;
-              }
-            },
-            secondary:true
-          }, "Add")
-        ]),
-        m("table", 
-          ((<[]>holder[field.name])||[]).map(e => {
-            let ifield = <ConfigurationObjectFieldMetadata>JSON.parse(JSON.stringify(field));
-            ifield.list = false;
-            let itemLabel = field.listItemsName || "Item"
-            ifield.label = itemLabel + " #" + count++;
-            return [
-              this.generateField(e, ifield)
-            ];
+    if (field.possibleValues && field.possibleValues.length) {
+      return m("tr", [
+        m("td", {colspan:2}, [
+          m("", [
+            field.label
+          ]),
+          m(MultipleSelectInput, {
+            refHolder:holder,
+            refProperty:field.name,
+            onenter:()=>{},
+            values:field.possibleValues.map(s => { return {id:s, label:s}})
           })
-        )
-      ]),
-  
-    ]);
+        ]),
+
+      ])       
+    } else {
+      return m("tr", [
+        m("td", {colspan:2}, [
+          m("", [
+            field.label,
+            m(".spacer"),
+            m(Button, {
+              action:()=>{
+                let array = holder[field.name];
+                if (!array) {
+                  array = holder[field.name] = [];
+                }
+                switch (field.type) {
+                  case ConfigurationObjectFieldType.STRING:
+                    array.push("");
+                    break;
+                  default:
+                    Notifications.addNotification(new Notification(NotificationsClass.LOGIN, NotificationsType.ERROR, "Not implemented yet!", 5))
+                    return;
+                }
+              },
+              secondary:true
+            }, "Add")
+          ]),
+          m("table", 
+            ((<[]>holder[field.name])||[]).map(e => {
+              let ifield = <ConfigurationObjectFieldMetadata>JSON.parse(JSON.stringify(field));
+              ifield.list = false;
+              let itemLabel = field.listItemsName || "Item"
+              ifield.label = itemLabel + " #" + count++;
+              return [
+                this.generateField(e, ifield)
+              ];
+            })
+          )
+        ]),
+      ]);
+    }
   }
 }
 

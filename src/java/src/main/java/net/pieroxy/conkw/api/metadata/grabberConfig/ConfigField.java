@@ -16,6 +16,8 @@ public @interface ConfigField {
    * Applicable only to List fields
    */
   String listItemLabel() default "";
+  String[]listOfChoices() default {};
+  String listOfChoicesFunc() default "";
 
   /**
    * Applicable only to String fields
