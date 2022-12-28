@@ -183,6 +183,7 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
               onenter:()=>{},
               values:field.possibleValues
             }),
+            m("", {style:{position:"absolute"}}, this.getWarningIcon(field.name)),
             m("", [
               "Values: ",
               (holder[field.name] && holder[field.name].length) ? (<string[]>holder[field.name]).map(v => m("span.monospace.rm10.lm10", v+" ")) : "None selected"
