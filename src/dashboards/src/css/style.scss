@@ -105,6 +105,70 @@ svg.icon {
     }
   }
 
+  &.info {
+    > * {
+      &.primary {
+        stroke: #44f;
+      }
+  
+      &.primaryfill {
+        fill: #44f;
+      }
+  
+      &.secondary {
+        fill:#44f;
+      }
+    }
+  }
+
+  &.ok {
+    > * {
+      &.primary {
+        stroke: #0a0;
+      }
+  
+      &.primaryfill {
+        fill: #0a0;
+      }
+  
+      &.secondary {
+        fill:#0a0;
+      }
+    }
+  }
+
+  &.warning {
+    > * {
+      &.primary {
+        stroke: #fa4;
+      }
+  
+      &.primaryfill {
+        fill: #fa4;
+      }
+  
+      &.secondary {
+        fill:#fa4;
+      }
+    }
+  }
+
+  &.error {
+    > * {
+      &.primary {
+        stroke: #f00;
+      }
+  
+      &.primaryfill {
+        fill: #f00;
+      }
+  
+      &.secondary {
+        fill:#f00;
+      }
+    }
+  }
+
   > * {
 
     &.primary {
@@ -165,6 +229,20 @@ table.grabberconfig {
 
   table {
     border-collapse: collapse;
+  }
+
+  svg.icon {
+    margin:0px;
+    height:33px;
+  }
+}
+
+table.grabbermessages {
+  svg.icon {
+    width: 1.3em;
+    height: 1.3em;
+    vertical-align: bottom;
+    margin: 0;
   }
 }
 

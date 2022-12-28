@@ -1,6 +1,7 @@
 package net.pieroxy.conkw.api.implementations.grabbers;
 
 import com.dslplatform.json.CompiledJson;
+import com.dslplatform.json.NonNull;
 import net.pieroxy.conkw.api.metadata.AbstractApiEndpoint;
 import net.pieroxy.conkw.api.metadata.ApiMethod;
 import net.pieroxy.conkw.api.metadata.Endpoint;
@@ -21,14 +22,33 @@ public class TestGrabberConfigurationEndpoint extends AbstractApiEndpoint<TestGr
     public TestGrabberConfigurationOutput process(TestGrabberConfigurationInput input, User user) throws Exception {
         Grabber grabber = (Grabber)Class.forName(input.getGrabberImplementation()).newInstance();
         Object config = GrabberConfigReader.fillObject(grabber.getDefaultConfig(), input.getConfiguration().getConfig());
-        return new TestGrabberConfigurationOutput(grabber.validateConfiguration(config));
+        TestGrabberConfigurationOutput result = new TestGrabberConfigurationOutput(grabber.validateConfiguration(config));
+        if (!input.isForceSave()) {
+            if (!result.getMessages().isEmpty()) {
+                // We don't save if there are any message
+                return result;
+            }
+        }
+        if (result.getMessages()
+                .stream()
+                .filter(GrabberConfigMessage::isError)
+                .count() > 0) {
+            // We never save if there are errors reported
+            return result;
+        }
+        result.setSaved(true);
+        return result;
     }
 }
 
 @CompiledJson
 @TypeScriptType
 class TestGrabberConfigurationInput {
+    @NonNull
     private String grabberImplementation;
+    @NonNull
+    private boolean forceSave;
+    @NonNull
     private GrabberConfigDetail configuration;
 
     public String getGrabberImplementation() {
@@ -46,13 +66,23 @@ class TestGrabberConfigurationInput {
     public void setConfiguration(GrabberConfigDetail configuration) {
         this.configuration = configuration;
     }
+
+    public boolean isForceSave() {
+        return forceSave;
+    }
+
+    public void setForceSave(boolean forceSave) {
+        this.forceSave = forceSave;
+    }
 }
 
 
 @CompiledJson
 @TypeScriptType
 class TestGrabberConfigurationOutput {
-    List<GrabberConfigMessage> messages;
+    private List<GrabberConfigMessage> messages;
+    @NonNull
+    private boolean isSaved;
 
     public TestGrabberConfigurationOutput() {
     }
@@ -67,5 +97,13 @@ class TestGrabberConfigurationOutput {
 
     public void setMessages(List<GrabberConfigMessage> messages) {
         this.messages = messages;
+    }
+
+    public boolean isSaved() {
+        return isSaved;
+    }
+
+    public void setSaved(boolean saved) {
+        isSaved = saved;
     }
 }

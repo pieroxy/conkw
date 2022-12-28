@@ -1,8 +1,9 @@
 import m from 'mithril';
 import { ApiEndpoints } from '../../../auto/ApiEndpoints';
-import { ConfigurationObjectFieldMetadata, ConfigurationObjectFieldType, GetGrabberDetailOutput } from '../../../auto/pieroxy-conkw';
+import { ConfigurationObjectFieldMetadata, ConfigurationObjectFieldType, GetGrabberDetailOutput, GrabberConfigMessage, TestGrabberConfigurationOutput } from '../../../auto/pieroxy-conkw';
 import { DisplayUtils } from '../../../utils/DisplayUtils';
 import { Endpoints } from '../../../utils/navigation/Endpoints';
+import { Routing } from '../../../utils/navigation/Routing';
 import { Notification, Notifications, NotificationsClass, NotificationsType } from '../../../utils/Notifications';
 import { Button } from '../../atoms/forms/Button';
 import { MultipleSelectInput } from '../../atoms/forms/MultipleSelectInput';
@@ -10,11 +11,15 @@ import { SelectInput } from '../../atoms/forms/SelectInput';
 import { TextFieldInput } from '../../atoms/forms/TextFieldInput';
 import { HomeIcon } from '../../atoms/icons/HomeIcon';
 import { RightChevronIcon } from '../../atoms/icons/RightChevronIcon';
+import { StatusErrorIcon } from '../../atoms/icons/StatusErrorIcon';
+import { StatusOkIcon } from '../../atoms/icons/StatusOkIcon';
+import { StatusWarningIcon } from '../../atoms/icons/StatusWarningIcon';
 import { Link } from '../../atoms/Link';
 import { AbstractPage } from '../AbstractPage';
 
 export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> {
   configuration:GetGrabberDetailOutput;
+  messages:GrabberConfigMessage[];
 
   getPageTitle(): string {
     return "Edit grabber";
@@ -33,8 +38,9 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
         m("span.floatright", m(Button, { action:() => {
           ApiEndpoints.TestGrabberConfiguration.call({
             configuration:this.configuration.config,
-            grabberImplementation:attrs.className
-          })
+            grabberImplementation:attrs.className,
+            forceSave:false
+          }).then(output => this.handleSaveResult(attrs.className, output));
         }}, "Save")),
         m(Link, {tooltip:"Go back Home", target:Endpoints.HOME}, m(HomeIcon)),
         m(RightChevronIcon),
@@ -42,7 +48,7 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
         m(RightChevronIcon),
         DisplayUtils.getSimpleClassNameWithTooltip(attrs.className)
       ]),
-      !this.configuration ? "" : m(".content", 
+      !this.configuration ? "" : m(".content",
         m("table.grabberconfig", [
           m("tr", [
             m("td", "Configuration for class"),
@@ -65,11 +71,8 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
                 {id:"FINEST", label:"FINEST"},
                 {id:"ALL", label:"ALL"},
               ]
-            }))
-          ]),
-          m("tr", [
-            m("td", "Default name"),
-            m("td", this.configuration.defaultName)
+            }),
+            this.getWarningIcon("logLevel"))
           ]),
           m("tr", [
             m("td", "Name"),
@@ -78,12 +81,63 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
               refHolder:this.configuration,
               refProperty:"name",
               spellcheck:true
-            }))
+            }),
+            this.getWarningIcon("name"),
+            m(".defaultValue", [
+              "Default: ",
+              m("span.monospace", this.configuration.defaultName)
+            ])
+            )
           ]),
           this.configuration.detailsMetadata.fields.map(md => this.generateField(this.configuration.config.config, md))
         ])
       )
     ]);
+  }
+  handleSaveResult(implementation:string, output: TestGrabberConfigurationOutput): any {
+    if (output.saved) {
+      Routing.goToScreen(Endpoints.EXTRACTORS_LIST);
+    } else {
+      this.messages = output.messages;
+      let errs = this.messages.filter(m => m.error).length;
+      let warns = this.messages.filter(m => !m.error).length;
+      if (errs) {
+        Notifications.addNotification(new Notification(
+          NotificationsClass.SERVER_RESPONSE,
+          NotificationsType.ERROR,
+          "The grabber returned errors. Please fix those and try again.",
+          3
+        ))
+      }
+      if (warns) {
+        Notifications.addNotification(new Notification(
+          NotificationsClass.SERVER_RESPONSE,
+          NotificationsType.WARNING,
+          [
+            "The grabber returned warnings. If you're ok with them, click here: ",
+            m(Button, {
+              action:() => {
+                ApiEndpoints.TestGrabberConfiguration.call({
+                  configuration:this.configuration.config,
+                  grabberImplementation:implementation,
+                  forceSave:false
+                }).then(output => this.handleSaveResult(implementation,output))
+      
+              }
+            }, "Save anyways")
+          ],
+          12
+        ))
+      }
+    }
+  }
+  getWarningIcon(name: string): m.Children {
+    if (!this.messages) return null;
+    let msg = this.messages.filter(m => m.fieldName === name);
+    if (msg && msg.length) {
+      return m("span", {title:msg[0].message}, msg[0].error ? m(StatusErrorIcon) : m(StatusWarningIcon));
+    }
+    return m(StatusOkIcon);
   }
 
   generateField(holder:any, field:ConfigurationObjectFieldMetadata):m.Children {
@@ -97,7 +151,9 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
               refHolder:holder,
               refProperty:field.name,
               spellcheck:false
-            }), !field.defaultValue ? null:m(".defaultValue", [
+            }), 
+            this.getWarningIcon(field.name), 
+            !field.defaultValue ? null:m(".defaultValue", [
               "Default: ",
               m("span.monospace", field.defaultValue)
             ]))
