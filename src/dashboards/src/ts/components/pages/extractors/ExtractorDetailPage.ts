@@ -72,7 +72,7 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
                 {id:"ALL", label:"ALL"},
               ]
             }),
-            this.getWarningIcon("logLevel"))
+            this.getWarningIcon("", "logLevel"))
           ]),
           m("tr", [
             m("td", "Name"),
@@ -82,14 +82,14 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
               refProperty:"name",
               spellcheck:true
             }),
-            this.getWarningIcon("name"),
+            this.getWarningIcon("", "name"),
             m(".defaultValue", [
               "Default: ",
               m("span.monospace", this.configuration.defaultName)
             ])
             )
           ]),
-          this.configuration.detailsMetadata.fields.map(md => this.generateField(this.configuration.config.config, md))
+          this.configuration.detailsMetadata.fields.map(md => this.generateField("", this.configuration.config.config, md))
         ])
       )
     ]);
@@ -131,16 +131,16 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
       }
     }
   }
-  getWarningIcon(name: string): m.Children {
+  getWarningIcon(prefix:string, name: string): m.Children {
     if (!this.messages) return null;
-    let msg = this.messages.filter(m => m.fieldName === name);
+    let msg = this.messages.filter(m => m.fieldName === (prefix+name));
     if (msg && msg.length) {
       return m("span", {title:msg[0].message}, msg[0].error ? m(StatusErrorIcon) : m(StatusWarningIcon));
     }
     return m(StatusOkIcon);
   }
 
-  generateField(holder:any, field:ConfigurationObjectFieldMetadata):m.Children {
+  generateField(namePrefix:string, holder:any, field:ConfigurationObjectFieldMetadata):m.Children {
     if (!field.list) {
       switch (field.type) {
         case ConfigurationObjectFieldType.STRING:
@@ -152,7 +152,7 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
               refProperty:field.name,
               spellcheck:false
             }), 
-            this.getWarningIcon(field.name), 
+            this.getWarningIcon(namePrefix, field.name), 
             !field.defaultValue ? null:m(".defaultValue", [
               "Default: ",
               m("span.monospace", field.defaultValue)
@@ -160,7 +160,7 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
           ]);
       }
     } else { // field.list is true
-      return this.generateList(holder, field);
+      return this.generateList(namePrefix, holder, field);
     }
     return m("tr", [
       m("td", field.label),
@@ -168,7 +168,7 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
     ])
   }
   
-  generateList(holder: any, field: ConfigurationObjectFieldMetadata): m.Children {
+  generateList(namePrefix:string, holder: any, field: ConfigurationObjectFieldMetadata): m.Children {
     let count=1;
     if (field.possibleValues && field.possibleValues.length) {
       return m("tr", [
@@ -183,7 +183,7 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
               onenter:()=>{},
               values:field.possibleValues
             }),
-            m("", {style:{position:"absolute"}}, this.getWarningIcon(field.name)),
+            m("", {style:{position:"absolute"}}, this.getWarningIcon(namePrefix, field.name)),
             m("", [
               "Values: ",
               (holder[field.name] && holder[field.name].length) ? (<string[]>holder[field.name]).map(v => m("span.monospace.rm10.lm10", v+" ")) : "None selected"
@@ -193,6 +193,7 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
 
       ])       
     } else {
+      let array = (<[]>holder[field.name])||[];
       return m("tr", [
         m("td", {colspan:2}, [
           m("", [
@@ -215,16 +216,17 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
               },
               secondary:true
             }, "Add"),
-            this.getWarningIcon(field.name)
+            this.getWarningIcon(namePrefix, field.name)
           ]),
           m("table", 
-            ((<[]>holder[field.name])||[]).map(e => {
+            array.map((_e, idx) => {
               let ifield = <ConfigurationObjectFieldMetadata>JSON.parse(JSON.stringify(field));
               ifield.list = false;
               let itemLabel = field.listItemsName || "Item"
               ifield.label = itemLabel + " #" + count++;
+              ifield.name = ""+idx;
               return [
-                this.generateField(e, ifield)
+                this.generateField(namePrefix + field.name + ".", array, ifield),
               ];
             })
           )
