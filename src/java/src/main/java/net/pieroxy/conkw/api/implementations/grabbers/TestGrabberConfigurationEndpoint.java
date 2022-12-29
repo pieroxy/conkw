@@ -10,16 +10,25 @@ import net.pieroxy.conkw.api.metadata.grabberConfig.GrabberConfigMessage;
 import net.pieroxy.conkw.api.model.User;
 import net.pieroxy.conkw.config.UserRole;
 import net.pieroxy.conkw.grabbersBase.Grabber;
+import net.pieroxy.conkw.utils.Services;
 import net.pieroxy.conkw.utils.Utils;
 import net.pieroxy.conkw.utils.config.GrabberConfigReader;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 
 @Endpoint(
         method = ApiMethod.POST,
         role = UserRole.ADMIN)
 public class TestGrabberConfigurationEndpoint extends AbstractApiEndpoint<TestGrabberConfigurationInput, TestGrabberConfigurationOutput> {
+
+    private final Services services;
+
+    public TestGrabberConfigurationEndpoint(Services services) {
+        this.services = services;
+    }
+
     @Override
     public TestGrabberConfigurationOutput process(TestGrabberConfigurationInput input, User user) throws Exception {
         Grabber grabber = (Grabber)Class.forName(input.getGrabberImplementation()).newInstance();
@@ -28,6 +37,13 @@ public class TestGrabberConfigurationEndpoint extends AbstractApiEndpoint<TestGr
 
         if (Utils.objectEquals(input.getConfiguration().getLogLevel(), Level.OFF.getName())) {
             result.getMessages().add(new GrabberConfigMessage(false, "logLevel", "No matter what happens with this grabber, nothing will end up in the logs."));
+        }
+        if (!Objects.equals(input.getGrabberName(), input.getConfiguration().getName())) {
+            // Grabber name is about to change
+            Grabber already = services.getGrabbersService().getGrabberByName(input.getConfiguration().getName());
+            if (already != null) {
+                result.getMessages().add(new GrabberConfigMessage(true, "name", "There is already a grabber named " + input.getConfiguration().getName() + ". Names must be unique."));
+            }
         }
         if (!input.isForceSave()) {
             if (!result.getMessages().isEmpty()) {
@@ -52,6 +68,8 @@ public class TestGrabberConfigurationEndpoint extends AbstractApiEndpoint<TestGr
 class TestGrabberConfigurationInput {
     @NonNull
     private String grabberImplementation;
+    @NonNull
+    private String grabberName;
     @NonNull
     private boolean forceSave;
     @NonNull
@@ -79,6 +97,15 @@ class TestGrabberConfigurationInput {
 
     public void setForceSave(boolean forceSave) {
         this.forceSave = forceSave;
+    }
+
+    @NonNull
+    public String getGrabberName() {
+        return grabberName;
+    }
+
+    public void setGrabberName(@NonNull String grabberName) {
+        this.grabberName = grabberName;
     }
 }
 

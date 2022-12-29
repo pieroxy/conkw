@@ -38,9 +38,10 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
         m("span.floatright", m(Button, { action:() => {
           ApiEndpoints.TestGrabberConfiguration.call({
             configuration:this.configuration.config,
+            grabberName:attrs.name,
             grabberImplementation:attrs.className,
             forceSave:false
-          }).then(output => this.handleSaveResult(attrs.className, output));
+          }).then(output => this.handleSaveResult(attrs.className, attrs.name, output));
         }}, "Save")),
         m(Link, {tooltip:"Go back Home", target:Endpoints.HOME}, m(HomeIcon)),
         m(RightChevronIcon),
@@ -78,7 +79,7 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
             m("td", "Name"),
             m("td", m(TextFieldInput, {
               onenter:()=>{},
-              refHolder:this.configuration,
+              refHolder:this.configuration.config,
               refProperty:"name",
               spellcheck:true
             }),
@@ -94,7 +95,7 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
       )
     ]);
   }
-  handleSaveResult(implementation:string, output: TestGrabberConfigurationOutput): any {
+  handleSaveResult(implementation:string, name:string, output: TestGrabberConfigurationOutput): any {
     if (output.saved) {
       Routing.goToScreen(Endpoints.EXTRACTORS_LIST);
     } else {
@@ -120,8 +121,9 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
                 ApiEndpoints.TestGrabberConfiguration.call({
                   configuration:this.configuration.config,
                   grabberImplementation:implementation,
+                  grabberName:name,
                   forceSave:false
-                }).then(output => this.handleSaveResult(implementation,output))
+                }).then(output => this.handleSaveResult(implementation,name,output))
       
               }
             }, "Save anyways")
