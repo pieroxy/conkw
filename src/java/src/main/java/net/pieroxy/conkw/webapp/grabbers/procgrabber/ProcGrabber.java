@@ -80,6 +80,15 @@ public class ProcGrabber extends AsyncGrabber<SimpleCollector, ProcGrabber.ProcG
         result.add(new GrabberConfigMessage(false, "mdstatFile", "The provided path for the mdstat file does not point to a regular file."));
       }
     }
+    if (config.blockDevices!=null && config.blockDevices.size()>0) {
+      for (int i=0 ; i<config.blockDevices.size() ; i++) {
+        String bd = "/sys/block/"+config.blockDevices.get(i);
+        File f = new File(bd);
+        if (!f.exists() || !f.isDirectory()) {
+          result.add(new GrabberConfigMessage(false, "blockDevices."+i, bd + " could not be found."));
+        }
+      }
+    }
     return result;
   }
 
