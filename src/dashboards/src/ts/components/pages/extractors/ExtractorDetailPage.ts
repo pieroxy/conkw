@@ -57,7 +57,7 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
           m("tr", [
             m("td", "Log level"),
             m("td", m(SelectInput, {
-              refHolder:this.configuration,
+              refHolder:this.configuration.config,
               refProperty:"logLevel",
               onenter:()=>{},
               values:[
