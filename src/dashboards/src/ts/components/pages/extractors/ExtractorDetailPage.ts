@@ -77,17 +77,18 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
           ]),
           m("tr", [
             m("td", "Name"),
-            m("td", m(TextFieldInput, {
-              onenter:()=>{},
-              refHolder:this.configuration.config,
-              refProperty:"name",
-              spellcheck:true
-            }),
-            this.getWarningIcon("", "name"),
-            m(".defaultValue", [
-              "Default: ",
-              m("span.monospace", this.configuration.defaultName)
-            ])
+            m("td", 
+              m(TextFieldInput, {
+                onenter:()=>{},
+                refHolder:this.configuration.config,
+                refProperty:"name",
+                spellcheck:true
+              }),
+              this.getWarningIcon("", "name"),
+              m(".defaultValue", [
+                "Default: ",
+                m("span.monospace", this.configuration.defaultName)
+              ])
             )
           ]),
           this.configuration.detailsMetadata.fields.map(md => this.generateField("", this.configuration.config.config, md))
