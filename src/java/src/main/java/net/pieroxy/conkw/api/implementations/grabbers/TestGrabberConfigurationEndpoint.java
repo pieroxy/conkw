@@ -10,9 +10,11 @@ import net.pieroxy.conkw.api.metadata.grabberConfig.GrabberConfigMessage;
 import net.pieroxy.conkw.api.model.User;
 import net.pieroxy.conkw.config.UserRole;
 import net.pieroxy.conkw.grabbersBase.Grabber;
+import net.pieroxy.conkw.utils.Utils;
 import net.pieroxy.conkw.utils.config.GrabberConfigReader;
 
 import java.util.List;
+import java.util.logging.Level;
 
 @Endpoint(
         method = ApiMethod.POST,
@@ -23,6 +25,10 @@ public class TestGrabberConfigurationEndpoint extends AbstractApiEndpoint<TestGr
         Grabber grabber = (Grabber)Class.forName(input.getGrabberImplementation()).newInstance();
         Object config = GrabberConfigReader.fillObject(grabber.getDefaultConfig(), input.getConfiguration().getConfig());
         TestGrabberConfigurationOutput result = new TestGrabberConfigurationOutput(grabber.validateConfiguration(config));
+
+        if (Utils.objectEquals(input.getConfiguration().getLogLevel(), Level.OFF.getName())) {
+            result.getMessages().add(new GrabberConfigMessage(false, "logLevel", "No matter what happens with this grabber, nothing will end up in the logs."));
+        }
         if (!input.isForceSave()) {
             if (!result.getMessages().isEmpty()) {
                 // We don't save if there are any message
