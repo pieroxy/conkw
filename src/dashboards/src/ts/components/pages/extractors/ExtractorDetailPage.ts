@@ -214,7 +214,8 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
                 }
               },
               secondary:true
-            }, "Add")
+            }, "Add"),
+            this.getWarningIcon(field.name)
           ]),
           m("table", 
             ((<[]>holder[field.name])||[]).map(e => {
