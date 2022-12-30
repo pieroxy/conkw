@@ -476,6 +476,15 @@ input, select {
   margin-top: 1px;
 }
 
+.inputStatusLabel {
+  position: absolute;
+  background-color: #500;
+  border: 3px solid #800;
+  opacity: 1;
+  z-index: 1000;
+  padding: 5px;
+}
+
 label.checkbox {
   margin-right:10px;
   position: relative;

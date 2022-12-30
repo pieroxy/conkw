@@ -39,12 +39,22 @@ export class TextFieldInput extends GenericInput<string, VisibleTextInputAttrs> 
     if (attrs.id) params.id = attrs.id;
     if (attrs.spellcheck !== undefined) params.spellcheck = !!attrs.spellcheck;
     if (attrs.disabled) params.disabled = !!attrs.disabled;
+    if (attrs.status) {
+      params.onfocus = () => {this.status = attrs.status;};
+      params.onblur = () => {this.status = undefined;};
+    }
 
-    return [m(
-      "input" + this.getErrorClass() + (attrs.search ? ".searchbg":"") + (attrs.className ? attrs.className:""), 
-      params
-    ),
-    this.getStatusIcon(attrs.status)];
+    return [
+      m(
+        "input" + this.getErrorClass() + (attrs.search ? ".searchbg":"") + (attrs.className ? attrs.className:""), 
+        params
+      ),
+      this.getStatusIcon(attrs.status),
+      (this.status && this.status.message) ? [
+        m("br"),
+        m(".inputStatusLabel", this.status.message)
+      ] : null
+    ];
   }
 
   isEmpty(): boolean {

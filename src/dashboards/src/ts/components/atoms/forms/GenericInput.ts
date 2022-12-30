@@ -18,6 +18,8 @@ export abstract class GenericInput<VT, T extends GenericInputAttrs<VT>> implemen
   private refProperty:string|number;
   private requiredMessage?:string;
   private highilighted:boolean=false;
+  protected status?:StatusMessageInterface;
+
   convertValueToString:(value:VT)=>string;
   convertValueFromString:(value:String) => VT;
 
