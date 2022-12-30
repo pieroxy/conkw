@@ -2,6 +2,10 @@ import m from 'mithril';
 
 import { Children } from "mithril";
 import { Notification, Notifications, NotificationsType } from '../../utils/Notifications';
+import { StatusErrorIcon } from '../atoms/icons/StatusErrorIcon';
+import { StatusInfoIcon } from '../atoms/icons/StatusInfoIcon';
+import { StatusOkIcon } from '../atoms/icons/StatusOkIcon';
+import { StatusWarningIcon } from '../atoms/icons/StatusWarningIcon';
 
 export class NotificationComponent implements m.ClassComponent<NotificationComponentAttrs> {
   private timeout?:number = undefined;
@@ -29,19 +33,19 @@ export class NotificationComponent implements m.ClassComponent<NotificationCompo
   
   view({attrs}: m.Vnode<NotificationComponentAttrs>): void | Children {
     let n = attrs.notification;
-    let icon = "";
+    let icon:m.Children = "";
     switch (n.type) {
       case NotificationsType.SUCCESS:
-        icon = "✅";
+        icon = m(StatusOkIcon);
         break;
       case NotificationsType.INFO:
-        icon = "ℹ️";
+        icon = m(StatusInfoIcon);
         break;
       case NotificationsType.WARNING:
-        icon = "⚠️";
+        icon = m(StatusWarningIcon);
         break;
       case NotificationsType.ERROR:
-        icon = "⛔";
+        icon = m(StatusErrorIcon);
         break;
     }
     let ad = n.alreadyDisplayed;
