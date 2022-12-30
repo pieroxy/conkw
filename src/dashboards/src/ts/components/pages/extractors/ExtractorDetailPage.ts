@@ -5,6 +5,7 @@ import { DisplayUtils } from '../../../utils/DisplayUtils';
 import { Endpoints } from '../../../utils/navigation/Endpoints';
 import { Routing } from '../../../utils/navigation/Routing';
 import { Notification, Notifications, NotificationsClass, NotificationsType } from '../../../utils/Notifications';
+import { Status, StatusMessageInterface } from '../../../utils/types';
 import { Button } from '../../atoms/forms/Button';
 import { MultipleSelectInput } from '../../atoms/forms/MultipleSelectInput';
 import { SelectInput } from '../../atoms/forms/SelectInput';
@@ -82,9 +83,9 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
                 onenter:()=>{},
                 refHolder:this.configuration.config,
                 refProperty:"name",
-                spellcheck:true
+                spellcheck:true,
+                status:this.getStatus("", "name")
               }),
-              this.getWarningIcon("", "name"),
               m(".defaultValue", [
                 "Default: ",
                 m("span.monospace", this.configuration.defaultName)
@@ -109,7 +110,8 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
           NotificationsType.ERROR,
           "The grabber returned errors. Please fix those and try again.",
           3
-        ))
+        ));
+        return;
       }
       if (warns) {
         Notifications.addNotification(new Notification(
@@ -142,6 +144,14 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
     }
     return m(StatusOkIcon);
   }
+  getStatus(prefix:string, name: string): undefined|StatusMessageInterface {
+    if (!this.messages) return undefined;
+    let msg = this.messages.filter(m => m.fieldName === (prefix+name));
+    if (msg && msg.length) {
+      return {message:msg[0].message, status: msg[0].error ? Status.ERROR : Status.WARNING};
+    }
+    return {status:Status.OK, message:""};
+  }
 
   generateField(namePrefix:string, holder:any, field:ConfigurationObjectFieldMetadata):m.Children {
     if (!field.list) {
@@ -153,9 +163,9 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
               onenter:()=>{},
               refHolder:holder,
               refProperty:field.name,
-              spellcheck:false
+              spellcheck:false,
+              status:this.getStatus(namePrefix, field.name)
             }), 
-            this.getWarningIcon(namePrefix, field.name), 
             !field.defaultValue ? null:m(".defaultValue", [
               "Default: ",
               m("span.monospace", field.defaultValue)
