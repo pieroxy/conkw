@@ -40,9 +40,13 @@ public class TestGrabberConfigurationEndpoint extends AbstractApiEndpoint<TestGr
         }
         if (!Objects.equals(input.getGrabberName(), input.getConfiguration().getName())) {
             // Grabber name is about to change
-            Grabber already = services.getGrabbersService().getGrabberByName(input.getConfiguration().getName());
+            String newName = input.getConfiguration().getName();
+            if (newName.contains(",")) {
+                result.getMessages().add(new GrabberConfigMessage(true, "name", "Grabber name cannot contain ',' (comma)."));
+            }
+            Grabber already = services.getGrabbersService().getGrabberByName(newName);
             if (already != null) {
-                result.getMessages().add(new GrabberConfigMessage(true, "name", "There is already a grabber named " + input.getConfiguration().getName() + ". Names must be unique."));
+                result.getMessages().add(new GrabberConfigMessage(true, "name", "There is already a grabber named " + newName + ". Names must be unique."));
             }
         }
         if (!input.isForceSave()) {
