@@ -82,10 +82,14 @@ public class ProcGrabber extends AsyncGrabber<SimpleCollector, ProcGrabber.ProcG
     }
     if (config.blockDevices!=null && config.blockDevices.size()>0) {
       for (int i=0 ; i<config.blockDevices.size() ; i++) {
-        String bd = "/sys/block/"+config.blockDevices.get(i);
-        File f = new File(bd);
-        if (!f.exists() || !f.isDirectory()) {
-          result.add(new GrabberConfigMessage(false, "blockDevices."+i, bd + " could not be found."));
+        if (StringUtil.isNullOrEmptyTrimmed(config.blockDevices.get(i))) {
+          result.add(new GrabberConfigMessage(true, "blockDevices." + i, "Please specify a block device name (eg: sda, nvme0n1, ...)"));
+        } else {
+          String bd = "/sys/block/" + config.blockDevices.get(i);
+          File f = new File(bd);
+          if (!f.exists() || !f.isDirectory()) {
+            result.add(new GrabberConfigMessage(false, "blockDevices." + i, bd + " could not be found."));
+          }
         }
       }
     }
