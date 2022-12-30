@@ -40,10 +40,11 @@ export class TextFieldInput extends GenericInput<string, VisibleTextInputAttrs> 
     if (attrs.spellcheck !== undefined) params.spellcheck = !!attrs.spellcheck;
     if (attrs.disabled) params.disabled = !!attrs.disabled;
 
-    return m(
+    return [m(
       "input" + this.getErrorClass() + (attrs.search ? ".searchbg":"") + (attrs.className ? attrs.className:""), 
       params
-    );
+    ),
+    this.getStatusIcon(attrs.status)];
   }
 
   isEmpty(): boolean {

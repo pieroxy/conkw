@@ -1,4 +1,5 @@
 import m = require('mithril');
+import { StatusMessageInterface } from '../../../utils/types';
 
 import { Form } from "./Form";
 
@@ -12,5 +13,6 @@ export interface GenericInputAttrs<T> {
   form?: Form,
   onchange?: ()=>void,
   id?:string,
-  disabled?:boolean
+  disabled?:boolean,
+  status?:StatusMessageInterface
 }

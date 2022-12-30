@@ -1,6 +1,11 @@
 import m from 'mithril';
 
 import { _NoLifecycle, Vnode, Children } from "mithril";
+import { Status, StatusMessageInterface } from '../../../utils/types';
+import { StatusErrorIcon } from '../icons/StatusErrorIcon';
+import { StatusInfoIcon } from '../icons/StatusInfoIcon';
+import { StatusOkIcon } from '../icons/StatusOkIcon';
+import { StatusWarningIcon } from '../icons/StatusWarningIcon';
 import { Form } from './Form';
 import { GenericInputAttrs } from "./GenericInputAttrs";
 
@@ -20,6 +25,22 @@ export abstract class GenericInput<VT, T extends GenericInputAttrs<VT>> implemen
 
   getErrorClass() {
     return this.highilighted ? ".error" : "";
+  }
+
+  getStatusIcon(status?: StatusMessageInterface): m.Children {
+    if (status) {
+      switch (status.status) {
+        case Status.ERROR:
+          return m(".inputStatusIcon.inputTextStatusIcon", {title:status.message}, m(StatusErrorIcon));
+        case Status.INFO:
+          return m(".inputStatusIcon.inputTextStatusIcon", {title:status.message}, m(StatusInfoIcon));
+        case Status.WARNING:
+          return m(".inputStatusIcon.inputTextStatusIcon", {title:status.message}, m(StatusWarningIcon));
+        case Status.OK:
+          return m(".inputStatusIcon.inputTextStatusIcon", {title:status.message}, m(StatusOkIcon));
+      }
+    }
+    return null;
   }
 
   oninit(vnode: Vnode<T>) {

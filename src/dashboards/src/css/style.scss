@@ -469,6 +469,13 @@ input, select {
   }
 }
 
+.inputStatusIcon {
+  position: absolute;
+  display: inline;
+  margin-left: -37px;
+  margin-top: 1px;
+}
+
 label.checkbox {
   margin-right:10px;
   position: relative;
