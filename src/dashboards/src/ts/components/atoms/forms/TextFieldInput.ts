@@ -49,7 +49,7 @@ export class TextFieldInput extends GenericInput<string, VisibleTextInputAttrs> 
         "input" + this.getErrorClass() + (attrs.search ? ".searchbg":"") + (attrs.className ? attrs.className:""), 
         params
       ),
-      this.getStatusIcon(attrs.status),
+      this.getStatusIcon("inputTextStatusIcon", attrs.status),
       (this.status && this.status.message) ? [
         m("br"),
         m(".inputStatusLabel", this.status.message)

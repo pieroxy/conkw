@@ -29,15 +29,18 @@ export class SelectInput extends GenericInput<string, SelectInputAttrs> {
     if (attrs.id) params.id = attrs.id;
     if (attrs.disabled) params.disabled = !!attrs.disabled;
 
-    return m(
-      "select" + this.getErrorClass() + (attrs.className ? attrs.className:""), 
-      params,
-      attrs.values.map(v => {
-        let options:any = {value:v.id};
-        if (v.id === attrs.refHolder[attrs.refProperty]) options["selected"] = true;
-        return m("option", options, v.label)
-      })
-    );
+    return [
+      m(
+        "select" + this.getErrorClass() + (attrs.className ? attrs.className:""), 
+        params,
+        attrs.values.map(v => {
+          let options:any = {value:v.id};
+          if (v.id === attrs.refHolder[attrs.refProperty]) options["selected"] = true;
+          return m("option", options, v.label)
+        })
+      ),
+      this.getStatusIcon("selectStatusIcon", attrs.status),
+    ];
   }
 
   isEmpty(): boolean {

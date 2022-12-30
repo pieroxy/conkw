@@ -29,17 +29,17 @@ export abstract class GenericInput<VT, T extends GenericInputAttrs<VT>> implemen
     return this.highilighted ? ".error" : "";
   }
 
-  getStatusIcon(status?: StatusMessageInterface): m.Children {
+  getStatusIcon(cssClass:string, status?: StatusMessageInterface): m.Children {
     if (status) {
       switch (status.status) {
         case Status.ERROR:
-          return m(".inputStatusIcon.inputTextStatusIcon", {title:status.message}, m(StatusErrorIcon));
+          return m(".inputStatusIcon." + cssClass, {title:status.message}, m(StatusErrorIcon));
         case Status.INFO:
-          return m(".inputStatusIcon.inputTextStatusIcon", {title:status.message}, m(StatusInfoIcon));
+          return m(".inputStatusIcon." + cssClass, {title:status.message}, m(StatusInfoIcon));
         case Status.WARNING:
-          return m(".inputStatusIcon.inputTextStatusIcon", {title:status.message}, m(StatusWarningIcon));
+          return m(".inputStatusIcon." + cssClass, {title:status.message}, m(StatusWarningIcon));
         case Status.OK:
-          return m(".inputStatusIcon.inputTextStatusIcon", {title:status.message}, m(StatusOkIcon));
+          return m(".inputStatusIcon." + cssClass, {title:status.message}, m(StatusOkIcon));
       }
     }
     return null;

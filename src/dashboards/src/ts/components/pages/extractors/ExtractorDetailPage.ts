@@ -72,9 +72,9 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
                 {id:"FINER", label:"FINER"},
                 {id:"FINEST", label:"FINEST"},
                 {id:"ALL", label:"ALL"},
-              ]
-            }),
-            this.getWarningIcon("", "logLevel"))
+              ],
+              status:this.getStatus("", "logLevel")
+            }))
           ]),
           m("tr", [
             m("td", "Name"),
@@ -194,9 +194,9 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
               refHolder:holder,
               refProperty:field.name,
               onenter:()=>{},
-              values:field.possibleValues
+              values:field.possibleValues,
+              status:this.getStatus("", "logLevel")
             }),
-            m("", {style:{position:"absolute"}}, this.getWarningIcon(namePrefix, field.name)),
             m("", [
               "Values: ",
               (holder[field.name] && holder[field.name].length) ? (<string[]>holder[field.name]).map(v => m("span.monospace.rm10.lm10", v+" ")) : "None selected"
@@ -229,7 +229,7 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
               },
               secondary:true
             }, "Add"),
-            this.getWarningIcon(namePrefix, field.name)
+            array.length ? null : this.getWarningIcon(namePrefix, field.name)
           ]),
           m("table", 
             array.map((_e, idx) => {

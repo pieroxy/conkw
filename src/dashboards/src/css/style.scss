@@ -472,8 +472,11 @@ input, select {
 .inputStatusIcon {
   position: absolute;
   display: inline;
-  margin-left: -37px;
   margin-top: 1px;
+
+  &.inputTextStatusIcon {
+    margin-left: -37px;
+  }
 }
 
 .inputStatusLabel {
