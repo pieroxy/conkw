@@ -1,8 +1,10 @@
 package net.pieroxy.conkw.utils;
 
+import com.dslplatform.json.CompiledJson;
 import com.dslplatform.json.DslJson;
 import com.dslplatform.json.JsonWriter;
 import com.dslplatform.json.runtime.Settings;
+import net.pieroxy.conkw.api.metadata.TypeScriptType;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -129,5 +131,10 @@ public class JsonHelper {
    */
   public static <T> T clone(T config) throws Exception {
     return (T)readFromString(config.getClass(), toString(config));
+  }
+
+  @CompiledJson
+  @TypeScriptType
+  public static class EmptyObject {
   }
 }
