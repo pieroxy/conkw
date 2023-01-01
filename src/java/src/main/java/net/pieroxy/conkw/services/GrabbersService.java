@@ -38,7 +38,7 @@ public class GrabbersService {
     this.grabbersByName = HashMapPool.getInstance().borrow(grabbers.size());
     grabbers.forEach(g -> this.grabbersByName.put(g.getName(), g));
 
-    oldGrabbers.forEach((gr) -> gr.dispose());
+    oldGrabbers.forEach(this::dispose);
   }
 
 
@@ -166,10 +166,22 @@ public class GrabbersService {
     for (int i=0 ; i<grabbers.size() ; i++) {
       if (grabbers.get(i).getName().equals(grabberName)) {
         LOGGER.info("Grabber " + grabberName + " replaced");
-        grabbers.set(i, g);
+        dispose(grabbers.set(i, g));
         return;
       }
     }
     throw new RuntimeException("Something weird happened.");
+  }
+
+  private void dispose(Grabber grabber) {
+    if (grabber == null) return;
+    new Thread(() -> {
+      try {Thread.sleep(500);} catch (Exception e) {} // Give a bit of time to the grabber instance
+      try {
+        grabber.dispose();
+      } catch (Exception e) {
+        LOGGER.log(Level.WARNING, "Failed disposing a grabber (" + grabber.getName() + ")", e);
+      }
+    }).start();
   }
 }
