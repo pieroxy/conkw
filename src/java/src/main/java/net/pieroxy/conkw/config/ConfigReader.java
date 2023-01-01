@@ -2,12 +2,16 @@ package net.pieroxy.conkw.config;
 
 import com.dslplatform.json.DslJson;
 import com.dslplatform.json.runtime.Settings;
+import net.pieroxy.conkw.grabbersBase.Grabber;
 import net.pieroxy.conkw.utils.RemoveJsonCommentsInputStream;
+import net.pieroxy.conkw.utils.StringUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 public class ConfigReader {
@@ -15,6 +19,8 @@ public class ConfigReader {
     public static final String NAME = "config.jsonc";
     public static final String CREDS_NAME = "credentials.jsonc";
     public static final String LOGGING_NAME = "logging.properties";
+
+    private static Map<String,String> defaultNames = new HashMap<>();
 
     private static File home;
 
@@ -31,7 +37,27 @@ public class ConfigReader {
             throw new RuntimeException("Unable to parse config file " + getConfigFile().getAbsolutePath() + ": " + e.getMessage(), e);
         }
 
+        Arrays.stream(config.getGrabbers()).forEach(c -> {
+            if (StringUtil.isNullOrEmptyTrimmed(c.getName())) {
+                c.setName(getDefaultName(c.getImplementation()));
+            }
+        });
+
         return config;
+    }
+
+    public static String getDefaultName(String grabberImplementation) {
+        String res = defaultNames.get(grabberImplementation);
+        if (res == null) {
+            Map<String,String> ndn = new HashMap<>(defaultNames);
+            try {
+                ndn.put(grabberImplementation, res = ((Grabber)Class.forName(grabberImplementation).newInstance()).getDefaultName());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            defaultNames = ndn;
+        }
+        return res;
     }
 
     public static CredentialsStore getCredentials() {
