@@ -125,7 +125,7 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
                   configuration:this.configuration.config,
                   grabberImplementation:implementation,
                   grabberName:name,
-                  forceSave:false
+                  forceSave:true
                 }).then(output => this.handleSaveResult(implementation,name,output))
       
               }
