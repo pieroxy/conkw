@@ -38,6 +38,7 @@ public class GenerateTsStubs {
         writeLater("export class ApiEndpoints {");
 
         Map<String, ApiEndpoint> newEp = new HashMap<>();
+        Set<String> toImport = new HashSet<>();
         List<Class<?>> allclasses = GetAccessibleClasses.getClasses("net.pieroxy.conkw");
         for (Class c : allclasses) {
             if (ApiEndpoint.class.isAssignableFrom(c) && c.isAnnotationPresent(Endpoint.class)) {
@@ -46,11 +47,9 @@ public class GenerateTsStubs {
                 String input = getType(c,0);
                 String output = getType(c, 1);
                 String name = c.getSimpleName().substring(0, c.getSimpleName().length() - "Endpoint".length());
-                List<String> toImport = new ArrayList<>();
                 if (!input.equals("any")) toImport.add(input);
                 if (!output.equals("any")) toImport.add(output);
 
-                write("import { "+toImport.stream().collect(Collectors.joining(","))+" } from \"./pieroxy-conkw\";");
                 writeLater("    public static "+name+" = {");
                 writeLater("        call:(input:"+input+"):Promise<"+output+"> => {");
                 writeLater("            return Api.call<"+input+", "+output+">({");
@@ -64,6 +63,7 @@ public class GenerateTsStubs {
             }
         }
 
+        write("import { "+toImport.stream().collect(Collectors.joining(","))+" } from \"./pieroxy-conkw\";");
         for (String s : later) write(s);
         write("}");
 
