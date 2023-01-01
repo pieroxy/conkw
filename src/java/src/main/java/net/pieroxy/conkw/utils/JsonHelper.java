@@ -26,14 +26,20 @@ public class JsonHelper {
   }
 
   /**
-   * Serialize the object provided into the file provided.
-   * @param o
-   * @param f
+   * Serialize the object provided into the file provided in a "safe" way. Will first write into a temp file
+   * then will rename the temp file to the final file. This way, even if there is a loss of power or the process
+   * is terminated during write, either the old or the new version is there, no a partially generated one.
+   * @param o the object to be serialized.
+   * @param f the file it needs to be written in.
    * @throws IOException
    */
   public static void writeToFile(Object o, File f) throws IOException {
-    try (FileOutputStream fos = new FileOutputStream(f)) {
+    File tmpFile = new File(f.getAbsolutePath()+".tmp");
+    try (FileOutputStream fos = new FileOutputStream(tmpFile)) {
       writeToOutputStream(o, fos);
+    }
+    if (!tmpFile.renameTo(f)) {
+      throw new IOException("Renaming of file " + tmpFile.getAbsolutePath() + " failed.");
     }
   }
 
