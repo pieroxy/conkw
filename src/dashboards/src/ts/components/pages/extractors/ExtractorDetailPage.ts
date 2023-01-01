@@ -126,7 +126,10 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
                   grabberImplementation:implementation,
                   grabberName:name,
                   forceSave:true
-                }).then(output => this.handleSaveResult(implementation,name,output))
+                }).then(output => {
+                  this.handleSaveResult(implementation,name,output);
+                  Notifications.dismiss();
+                })
       
               }
             }, "Save anyways")
