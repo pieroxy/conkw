@@ -11,17 +11,21 @@ import net.pieroxy.conkw.api.model.User;
 import net.pieroxy.conkw.config.UserRole;
 import net.pieroxy.conkw.grabbersBase.Grabber;
 import net.pieroxy.conkw.utils.Services;
+import net.pieroxy.conkw.utils.StringUtil;
 import net.pieroxy.conkw.utils.Utils;
 import net.pieroxy.conkw.utils.config.GrabberConfigReader;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Endpoint(
         method = ApiMethod.POST,
         role = UserRole.ADMIN)
 public class TestGrabberConfigurationEndpoint extends AbstractApiEndpoint<TestGrabberConfigurationInput, TestGrabberConfigurationOutput> {
+    private static Logger LOGGER = Logger.getLogger(TestGrabberConfigurationEndpoint.class.getName());
+
 
     private final Services services;
 
@@ -41,12 +45,18 @@ public class TestGrabberConfigurationEndpoint extends AbstractApiEndpoint<TestGr
         if (!Objects.equals(input.getGrabberName(), input.getConfiguration().getName())) {
             // Grabber name is about to change
             String newName = input.getConfiguration().getName();
+            if (newName == null) newName = "";
+            LOGGER.info("Logger is about to be renamed : '" + input.getGrabberName() + "' >> '" + newName + "'");
             if (newName.contains(",")) {
                 result.getMessages().add(new GrabberConfigMessage(true, "name", "Grabber name cannot contain ',' (comma)."));
             }
-            Grabber already = services.getGrabbersService().getGrabberByName(newName);
-            if (already != null) {
-                result.getMessages().add(new GrabberConfigMessage(true, "name", "There is already a grabber named " + newName + ". Names must be unique."));
+            if (StringUtil.isNullOrEmptyTrimmed(newName)) {
+                result.getMessages().add(new GrabberConfigMessage(true, "name", "Grabber name cannot be empty."));
+            } else {
+                Grabber already = services.getGrabbersService().getGrabberByName(newName);
+                if (already != null) {
+                    result.getMessages().add(new GrabberConfigMessage(true, "name", "There is already a grabber named " + newName + ". Names must be unique."));
+                }
             }
         }
         if (!input.isForceSave()) {

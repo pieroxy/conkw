@@ -32,7 +32,7 @@ export class ExtractorsListPage extends AbstractPage<any> {
       m(".content", m(".list", this.configurations.map((config) => 
         m("a.listitem", {onclick:() => Routing.goToScreen(Endpoints.EXTRACTOR_DETAIL, {
           className:config.implementation,
-          name:"n:"+(config.name||""),
+          name:config.name,
         })}, [
           m("span", DisplayUtils.getSimpleClassNameWithTooltip(config.implementation)),
           m("span.rm10.lm10", config.name ? m("span.highlighted", config.name) : m("span.lowlighted", "default name")),
