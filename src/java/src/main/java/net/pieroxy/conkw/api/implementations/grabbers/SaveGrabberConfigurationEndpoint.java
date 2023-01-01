@@ -8,6 +8,7 @@ import net.pieroxy.conkw.api.metadata.Endpoint;
 import net.pieroxy.conkw.api.metadata.TypeScriptType;
 import net.pieroxy.conkw.api.metadata.grabberConfig.GrabberConfigMessage;
 import net.pieroxy.conkw.api.model.User;
+import net.pieroxy.conkw.config.ConfigReader;
 import net.pieroxy.conkw.config.GrabberConfig;
 import net.pieroxy.conkw.config.UserRole;
 import net.pieroxy.conkw.grabbersBase.Grabber;
@@ -86,6 +87,7 @@ public class SaveGrabberConfigurationEndpoint extends AbstractApiEndpoint<SaveGr
         config.setImplementation(configuration.getImplementation());
         config.setConfig(configuration.getConfig());
         services.getGrabbersService().updateGrabberConfig(grabberName, config);
+        ConfigReader.updateGrabberConfig(grabberName, config);
     }
 }
 

@@ -3,11 +3,13 @@ package net.pieroxy.conkw.config;
 import com.dslplatform.json.DslJson;
 import com.dslplatform.json.runtime.Settings;
 import net.pieroxy.conkw.grabbersBase.Grabber;
+import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.utils.RemoveJsonCommentsInputStream;
 import net.pieroxy.conkw.utils.StringUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -148,5 +150,27 @@ public class ConfigReader {
 
     public static void defineHomeDirectory(String home) {
         ConfigReader.home = new File(home);
+    }
+
+    public static void updateGrabberConfig(String grabberName, GrabberConfig grabberConfig) {
+        Config config = getConfig();
+        GrabberConfig[] grabbers = config.getGrabbers();
+        for (int i=0 ; i<grabbers.length ; i++) {
+            LOGGER.info("Checking grabber " + grabbers[i].getName());
+            if (grabbers[i].getName().equals(grabberName)) {
+                grabbers[i] = grabberConfig;
+                writeConfig(config);
+                return;
+            }
+        }
+        throw new RuntimeException("Something weird happened. The config for grabber " + grabberName + " could not be found.");
+    }
+
+    private static void writeConfig(Config config)  {
+        try {
+            JsonHelper.writeToFile(config, getConfigFile());
+        } catch (IOException e) {
+            throw new RuntimeException("Could not write to " + getConfigFile().getAbsolutePath(), e);
+        }
     }
 }
