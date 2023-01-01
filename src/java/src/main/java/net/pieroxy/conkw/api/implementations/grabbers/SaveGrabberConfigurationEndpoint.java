@@ -24,21 +24,21 @@ import java.util.logging.Logger;
 @Endpoint(
         method = ApiMethod.POST,
         role = UserRole.ADMIN)
-public class TestGrabberConfigurationEndpoint extends AbstractApiEndpoint<TestGrabberConfigurationInput, TestGrabberConfigurationOutput> {
-    private static Logger LOGGER = Logger.getLogger(TestGrabberConfigurationEndpoint.class.getName());
+public class SaveGrabberConfigurationEndpoint extends AbstractApiEndpoint<SaveGrabberConfigurationInput, SaveGrabberConfigurationOutput> {
+    private static Logger LOGGER = Logger.getLogger(SaveGrabberConfigurationEndpoint.class.getName());
 
 
     private final Services services;
 
-    public TestGrabberConfigurationEndpoint(Services services) {
+    public SaveGrabberConfigurationEndpoint(Services services) {
         this.services = services;
     }
 
     @Override
-    public TestGrabberConfigurationOutput process(TestGrabberConfigurationInput input, User user) throws Exception {
+    public SaveGrabberConfigurationOutput process(SaveGrabberConfigurationInput input, User user) throws Exception {
         Grabber grabber = (Grabber)Class.forName(input.getGrabberImplementation()).newInstance();
         Object config = GrabberConfigReader.fillObject(grabber.getDefaultConfig(), input.getConfiguration().getConfig());
-        TestGrabberConfigurationOutput result = new TestGrabberConfigurationOutput(grabber.validateConfiguration(config));
+        SaveGrabberConfigurationOutput result = new SaveGrabberConfigurationOutput(grabber.validateConfiguration(config));
 
         if (Utils.objectEquals(input.getConfiguration().getLogLevel(), Level.OFF.getName())) {
             result.getMessages().add(new GrabberConfigMessage(false, "logLevel", "No matter what happens with this grabber, nothing will end up in the logs."));
@@ -91,7 +91,7 @@ public class TestGrabberConfigurationEndpoint extends AbstractApiEndpoint<TestGr
 
 @CompiledJson
 @TypeScriptType
-class TestGrabberConfigurationInput {
+class SaveGrabberConfigurationInput {
     @NonNull
     private String grabberImplementation;
     @NonNull
@@ -138,15 +138,15 @@ class TestGrabberConfigurationInput {
 
 @CompiledJson
 @TypeScriptType
-class TestGrabberConfigurationOutput {
+class SaveGrabberConfigurationOutput {
     private List<GrabberConfigMessage> messages;
     @NonNull
     private boolean isSaved;
 
-    public TestGrabberConfigurationOutput() {
+    public SaveGrabberConfigurationOutput() {
     }
 
-    public TestGrabberConfigurationOutput(List<GrabberConfigMessage> messages) {
+    public SaveGrabberConfigurationOutput(List<GrabberConfigMessage> messages) {
         this.messages = messages;
     }
 

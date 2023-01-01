@@ -1,6 +1,6 @@
 import m from 'mithril';
 import { ApiEndpoints } from '../../../auto/ApiEndpoints';
-import { ConfigurationObjectFieldMetadata, ConfigurationObjectFieldType, GetGrabberDetailOutput, GrabberConfigMessage, TestGrabberConfigurationOutput } from '../../../auto/pieroxy-conkw';
+import { ConfigurationObjectFieldMetadata, ConfigurationObjectFieldType, GetGrabberDetailOutput, GrabberConfigMessage, SaveGrabberConfigurationOutput } from '../../../auto/pieroxy-conkw';
 import { DisplayUtils } from '../../../utils/DisplayUtils';
 import { Endpoints } from '../../../utils/navigation/Endpoints';
 import { Routing } from '../../../utils/navigation/Routing';
@@ -37,7 +37,7 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
     return m(".page", [
       m(".title", [
         m("span.floatright", m(Button, { action:() => {
-          ApiEndpoints.TestGrabberConfiguration.call({
+          ApiEndpoints.SaveGrabberConfiguration.call({
             configuration:this.configuration.config,
             grabberName:attrs.name,
             grabberImplementation:attrs.className,
@@ -97,7 +97,7 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
       )
     ]);
   }
-  handleSaveResult(implementation:string, name:string, output: TestGrabberConfigurationOutput): any {
+  handleSaveResult(implementation:string, name:string, output: SaveGrabberConfigurationOutput): any {
     if (output.saved) {
       Routing.goToScreen(Endpoints.EXTRACTORS_LIST);
     } else {
@@ -121,7 +121,7 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
             "The grabber returned warnings. If you're ok with them, click here: ",
             m(Button, {
               action:() => {
-                ApiEndpoints.TestGrabberConfiguration.call({
+                ApiEndpoints.SaveGrabberConfiguration.call({
                   configuration:this.configuration.config,
                   grabberImplementation:implementation,
                   grabberName:name,
