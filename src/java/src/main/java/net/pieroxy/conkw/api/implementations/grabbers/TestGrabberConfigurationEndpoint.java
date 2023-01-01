@@ -8,6 +8,7 @@ import net.pieroxy.conkw.api.metadata.Endpoint;
 import net.pieroxy.conkw.api.metadata.TypeScriptType;
 import net.pieroxy.conkw.api.metadata.grabberConfig.GrabberConfigMessage;
 import net.pieroxy.conkw.api.model.User;
+import net.pieroxy.conkw.config.GrabberConfig;
 import net.pieroxy.conkw.config.UserRole;
 import net.pieroxy.conkw.grabbersBase.Grabber;
 import net.pieroxy.conkw.utils.Services;
@@ -73,7 +74,18 @@ public class TestGrabberConfigurationEndpoint extends AbstractApiEndpoint<TestGr
             return result;
         }
         result.setSaved(true);
+        saveGrabberConfig(input.getGrabberName(), grabber, input.getConfiguration());
         return result;
+    }
+
+    private void saveGrabberConfig(String grabberName, Grabber grabber, GrabberConfigDetail configuration) throws InstantiationException, IllegalAccessException {
+        GrabberConfig config = new GrabberConfig();
+        config.setName(configuration.getName());
+        config.setDefaultAccumulator(configuration.getDefaultAccumulator());
+        config.setLogLevel(configuration.getLogLevel());
+        config.setImplementation(configuration.getImplementation());
+        config.setConfig(configuration.getConfig());
+        services.getGrabbersService().updateGrabberConfig(grabberName, config);
     }
 }
 

@@ -83,50 +83,7 @@ public class GrabbersService {
       Set<String> newgnames = new HashSet<>();
       Emi.clearGrabbers();
       for (GrabberConfig gc : config.getGrabbers()) {
-        try {
-          Grabber g = (Grabber) Class.forName(gc.getImplementation()).newInstance();
-
-          // Name
-          if (gc.getName() != null) {
-            g.setName(gc.getName());
-          }
-          // logLevel
-          String llas = gc.getLogLevel();
-          if (llas != null) {
-            Level logLevel = Level.parse(llas);
-            if (logLevel == null) {
-              logLevel = Level.INFO;
-              LOGGER.severe("Could not parse log level " + llas + ". Using INFO.");
-            }
-            g.setLogLevel(logLevel);
-          } else {
-            g.setLogLevel(Grabber.DEFAULT_LOG_LEVEL);
-          }
-          Object defaultConf = g.getDefaultConfig();
-          if (defaultConf == null && gc.getConfig()!=null) {
-            throw new RuntimeException("Grabber " + g.getGrabberFQN() + " did not provide a default configuration but the config file has one.");
-          }
-          g.setDefaultAccumulator(new AccumulatorExpressionParser().parse( gc.getDefaultAccumulator()));
-          g.setConfig(GrabberConfigReader.fillObject(g.getDefaultConfig(), gc.getConfig()), creds.getFor(g.getClass()));
-          if (gc.getParameters()!=null || gc.getNamedParameters()!=null || gc.getExtract()!=null) {
-            throw new RuntimeException("Grabber " + g.getGrabberFQN() + " uses the old configuration. The properties 'parameters', 'namedParameters' and 'extract' cannot be used anymore in a grabber configuration section. Please refer to the documentation to see how to configure your grabber.");
-          }
-
-          g.initializeGrabber(ConfigReader.getHomeDir());
-
-          if (g.getName() == null) {
-            throw new IllegalArgumentException("Grabber name must be defined for grabber " + g.getClass().getName());
-          } else {
-            if (newgnames.contains(g.getName())) {
-              throw new IllegalArgumentException("At least two grabbers share the same name: " + g.getName());
-            } else {
-              newg.add(g);
-              newgnames.add(g.getName());
-            }
-          }
-        } catch (Exception e) {
-          LOGGER.log(Level.SEVERE, "Initializing grabber " + gc.getImplementation() + " with name " + gc.getName(), e);
-        }
+        newg.add(instanciateGrabber(creds, newgnames, gc));
       }
 
       newg.forEach((gr) -> {
@@ -150,5 +107,69 @@ public class GrabbersService {
     } catch (Exception e) {
       LOGGER.log(Level.SEVERE, "Error loading and applying configuration.", e);
     }
+  }
+
+  private Grabber instanciateGrabber(CredentialsStore creds, Set<String> newgnames, GrabberConfig gc) {
+    try {
+      Grabber g = (Grabber) Class.forName(gc.getImplementation()).newInstance();
+
+      // Name
+      if (gc.getName() != null) {
+        g.setName(gc.getName());
+      }
+      // logLevel
+      String llas = gc.getLogLevel();
+      if (llas != null) {
+        Level logLevel = Level.parse(llas);
+        if (logLevel == null) {
+          logLevel = Level.INFO;
+          LOGGER.severe("Could not parse log level " + llas + ". Using INFO.");
+        }
+        g.setLogLevel(logLevel);
+      } else {
+        g.setLogLevel(Grabber.DEFAULT_LOG_LEVEL);
+      }
+      Object defaultConf = g.getDefaultConfig();
+      if (defaultConf == null && gc.getConfig()!=null) {
+        throw new RuntimeException("Grabber " + g.getGrabberFQN() + " did not provide a default configuration but the config file has one.");
+      }
+      g.setDefaultAccumulator(new AccumulatorExpressionParser().parse( gc.getDefaultAccumulator()));
+      g.setConfig(GrabberConfigReader.fillObject(g.getDefaultConfig(), gc.getConfig()), creds.getFor(g.getClass()));
+      if (gc.getParameters()!=null || gc.getNamedParameters()!=null || gc.getExtract()!=null) {
+        throw new RuntimeException("Grabber " + g.getGrabberFQN() + " uses the old configuration. The properties 'parameters', 'namedParameters' and 'extract' cannot be used anymore in a grabber configuration section. Please refer to the documentation to see how to configure your grabber.");
+      }
+
+      g.initializeGrabber(ConfigReader.getHomeDir());
+
+      if (g.getName() == null) {
+        throw new IllegalArgumentException("Grabber name must be defined for grabber " + g.getClass().getName());
+      } else {
+        if (newgnames.contains(g.getName())) {
+          throw new IllegalArgumentException("At least two grabbers share the same name: " + g.getName());
+        } else {
+          newgnames.add(g.getName());
+          return g;
+        }
+      }
+    } catch (Exception e) {
+      LOGGER.log(Level.SEVERE, "Initializing grabber " + gc.getImplementation() + " with name " + gc.getName(), e);
+      throw new RuntimeException(e);
+    }
+  }
+
+  public void updateGrabberConfig(String grabberName, GrabberConfig config) {
+    Set<String> grabbersNames = new HashSet<>();
+    CredentialsStore creds = ConfigReader.getCredentials();
+    getAllGrabbers().forEach(g -> grabbersNames.add(g.getName()));
+    grabbersNames.remove(grabberName);
+    Grabber g = instanciateGrabber(creds, grabbersNames, config);
+    for (int i=0 ; i<grabbers.size() ; i++) {
+      if (grabbers.get(i).getName().equals(grabberName)) {
+        LOGGER.info("Grabber " + grabberName + " replaced");
+        grabbers.set(i, g);
+        return;
+      }
+    }
+    throw new RuntimeException("Something weird happened.");
   }
 }
