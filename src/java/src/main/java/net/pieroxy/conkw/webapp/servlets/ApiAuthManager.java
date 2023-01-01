@@ -45,7 +45,14 @@ public class ApiAuthManager {
     List<ChallengeResponse> newchallenges = new ArrayList<>();
     Map<String, CredentialsHolder> allUsersToKeep = new HashMap<>();
     if (authConfig!=null && authConfig.getUsers()!=null) {
-      Arrays.stream(authConfig.getUsers()).forEach(u -> allUsersToKeep.put(getCredentials(u).getId(), u));
+      Arrays.stream(authConfig.getUsers()).forEach(u -> {
+        Credentials creds = getCredentials(u);
+        if (creds==null) {
+          LOGGER.warning("API auth references credentials " + u.getCredentialsRef() + " which could not be found.");
+        } else {
+          allUsersToKeep.put(creds.getId(), u);
+        }
+      });
     }
     if (newAuth!=null && newAuth.getUsers()!=null) {
       Arrays.stream(newAuth.getUsers()).forEach(u -> {
