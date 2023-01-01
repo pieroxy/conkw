@@ -26,7 +26,7 @@ public class Services {
     this.userService = new UserService(this);
     this.userSessionService = new UserSessionService(localStorageManager);
     this.dashboardService = new DashboardService(localStorageManager);
-    this.grabbersService = new GrabbersService();
+    this.grabbersService = new GrabbersService(this);
   }
 
   public void dispose() {
