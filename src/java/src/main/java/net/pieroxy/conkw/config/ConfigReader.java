@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ConfigReader {
@@ -156,7 +157,7 @@ public class ConfigReader {
         Config config = getConfig();
         GrabberConfig[] grabbers = config.getGrabbers();
         for (int i=0 ; i<grabbers.length ; i++) {
-            LOGGER.info("Checking grabber " + grabbers[i].getName());
+            if (LOGGER.isLoggable(Level.FINE)) LOGGER.fine("Checking grabber " + grabbers[i].getName());
             if (grabbers[i].getName().equals(grabberName)) {
                 grabbers[i] = grabberConfig;
                 writeConfig(config);
