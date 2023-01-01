@@ -88,6 +88,7 @@ public class SaveGrabberConfigurationEndpoint extends AbstractApiEndpoint<SaveGr
         config.setConfig(configuration.getConfig());
         services.getGrabbersService().updateGrabberConfig(grabberName, config);
         ConfigReader.updateGrabberConfig(grabberName, config);
+        services.setConfiguration(ConfigReader.getConfig());
     }
 }
 
