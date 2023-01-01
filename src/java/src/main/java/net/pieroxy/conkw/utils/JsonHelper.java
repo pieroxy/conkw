@@ -115,4 +115,13 @@ public class JsonHelper {
       return "Could not serialize object.";
     }
   }
+
+  /**
+   * This method is pretty memory intensive, and so should seldom be used.
+   * @param config
+   * @return a clone of the input object, as per the JSON annotations. Some fields may be omitted.
+   */
+  public static <T> T clone(T config) throws Exception {
+    return (T)readFromString(config.getClass(), toString(config));
+  }
 }
