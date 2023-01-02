@@ -10,6 +10,7 @@ import { Button } from '../../atoms/forms/Button';
 import { MultipleSelectInput } from '../../atoms/forms/MultipleSelectInput';
 import { SelectInput } from '../../atoms/forms/SelectInput';
 import { TextFieldInput } from '../../atoms/forms/TextFieldInput';
+import { DeleteIcon } from '../../atoms/icons/DeleteIcon';
 import { HomeIcon } from '../../atoms/icons/HomeIcon';
 import { RightChevronIcon } from '../../atoms/icons/RightChevronIcon';
 import { StatusErrorIcon } from '../../atoms/icons/StatusErrorIcon';
@@ -156,12 +157,15 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
     return {status:Status.OK, message:""};
   }
 
-  generateField(namePrefix:string, holder:any, field:ConfigurationObjectFieldMetadata):m.Children {
+  generateField(namePrefix:string, holder:any, field:ConfigurationObjectFieldMetadata, ondelete?:()=>void):m.Children {
     if (!field.list) {
       switch (field.type) {
         case ConfigurationObjectFieldType.STRING:
           return m("tr", [
-            m("td", field.label),
+            m("td", [
+              field.label,
+              ondelete ? m(Link, {target:ondelete}, m(DeleteIcon)) : null
+            ]),
             m("td", m(TextFieldInput, {
               onenter:()=>{},
               refHolder:holder,
@@ -179,7 +183,10 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
       return this.generateList(namePrefix, holder, field);
     }
     return m("tr", [
-      m("td", field.label),
+      m("td", [
+        field.label,
+        ondelete ? m(Link, {target:ondelete}, m(DeleteIcon)) : null
+      ]),
       m("td", "Not implemented yet")
     ])
   }
@@ -242,7 +249,9 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
               ifield.label = itemLabel + " #" + count++;
               ifield.name = ""+idx;
               return [
-                this.generateField(namePrefix + field.name + ".", array, ifield),
+                this.generateField(namePrefix + field.name + ".", array, ifield, ()=>{
+                  array.splice(idx, 1);
+                }),
               ];
             })
           )
