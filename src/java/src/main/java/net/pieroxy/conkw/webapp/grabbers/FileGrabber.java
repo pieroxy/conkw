@@ -1,5 +1,7 @@
 package net.pieroxy.conkw.webapp.grabbers;
 
+import net.pieroxy.conkw.api.metadata.grabberConfig.ConfigField;
+import net.pieroxy.conkw.api.metadata.grabberConfig.GrabberConfigMessage;
 import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
 
@@ -9,6 +11,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 
@@ -73,11 +76,26 @@ public class FileGrabber extends AsyncGrabber<SimpleCollector, FileGrabber.FileG
   }
 
   @Override
+  public List<GrabberConfigMessage> validateConfiguration(FileGrabberConfig config) {
+    List<GrabberConfigMessage> result = super.validateConfiguration(config);
+    File f = new File(config.getFile());
+    if (!f.exists()) {
+      result.add(new GrabberConfigMessage(false, "file", config.getFile() + " does not exist."));
+    } else if (!f.isFile()) {
+      result.add(new GrabberConfigMessage(false, "file", config.getFile() + " is not a regular file."));
+    }
+    return result;
+  }
+
+  @Override
   public String getDefaultName() {
     return "file";
   }
 
   public static class FileGrabberConfig {
+    @ConfigField(
+            label = "File to monitor for metrics"
+    )
     String file;
 
     public String getFile() {
