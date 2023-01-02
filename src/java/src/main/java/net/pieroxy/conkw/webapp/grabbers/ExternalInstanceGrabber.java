@@ -1,5 +1,7 @@
 package net.pieroxy.conkw.webapp.grabbers;
 
+import net.pieroxy.conkw.api.metadata.grabberConfig.ConfigField;
+import net.pieroxy.conkw.api.metadata.grabberConfig.GrabberConfigMessage;
 import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.config.Credentials;
 import net.pieroxy.conkw.config.CredentialsProvider;
@@ -15,8 +17,10 @@ import net.pieroxy.conkw.webapp.servlets.ApiAuthManager;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.List;
 import java.util.logging.Level;
 
 public class ExternalInstanceGrabber extends AsyncGrabber<SimpleCollector, ExternalInstanceGrabber.ExternalInstanceGrabberConfig> {
@@ -86,6 +90,18 @@ public class ExternalInstanceGrabber extends AsyncGrabber<SimpleCollector, Exter
     }
   }
 
+  @Override
+  public List<GrabberConfigMessage> validateConfiguration(ExternalInstanceGrabberConfig config) {
+    List<GrabberConfigMessage> result =  super.validateConfiguration(config);
+
+    try {
+      URL url = new URL(config.getUrl());
+    } catch (MalformedURLException e) {
+      result.add(new GrabberConfigMessage(true, "url", "Is not a valid URL."));
+    }
+
+    return result;
+  }
 
   @Override
   public String getDefaultName() {
@@ -93,9 +109,16 @@ public class ExternalInstanceGrabber extends AsyncGrabber<SimpleCollector, Exter
   }
 
   public static class ExternalInstanceGrabberConfig implements CredentialsProvider {
+    @ConfigField(
+            label = "URL of the metrics to ingest"
+    )
     private String url;
     private Credentials credentials;
+    @ConfigField(
+            label = "Credentials to be used (if the endpoint is authenticated)"
+    )
     private String credentialsRef;
+
 
     public String getUrl() {
       return url;
