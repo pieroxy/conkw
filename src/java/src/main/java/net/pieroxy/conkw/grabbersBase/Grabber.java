@@ -1,7 +1,6 @@
 package net.pieroxy.conkw.grabbersBase;
 
 import net.pieroxy.conkw.accumulators.implementations.RootAccumulator;
-import net.pieroxy.conkw.api.metadata.AbstractApiEndpoint;
 import net.pieroxy.conkw.api.metadata.grabberConfig.GrabberConfigMessage;
 import net.pieroxy.conkw.collectors.Collector;
 import net.pieroxy.conkw.collectors.EmptyCollector;
@@ -65,7 +64,7 @@ public abstract class Grabber<T extends Collector, C> {
    * @param config the configuration to be tested
    */
   public List<GrabberConfigMessage> validateConfiguration(C config) {
-    return null;
+    return new ArrayList<>();
   }
 
   public Class<C> getConfigClass() {

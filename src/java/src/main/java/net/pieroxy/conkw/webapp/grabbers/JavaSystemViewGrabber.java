@@ -1,9 +1,13 @@
 package net.pieroxy.conkw.webapp.grabbers;
 
+import net.pieroxy.conkw.api.metadata.grabberConfig.ConfigField;
+import net.pieroxy.conkw.api.metadata.grabberConfig.GrabberConfigMessage;
+import net.pieroxy.conkw.api.model.IdLabelPair;
 import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
 import net.pieroxy.conkw.grabbersBase.PartiallyExtractableConfig;
 import net.pieroxy.conkw.utils.OsCheck;
+import net.pieroxy.conkw.utils.StringUtil;
 import net.pieroxy.conkw.utils.duration.CDuration;
 
 import javax.management.MBeanServer;
@@ -193,8 +197,45 @@ public class JavaSystemViewGrabber extends AsyncGrabber<SimpleCollector, JavaSys
     return NAME;
   }
 
+  @Override
+  public List<GrabberConfigMessage> validateConfiguration(JavaSystemViewGrabberConfig config) {
+    List<GrabberConfigMessage> result = super.validateConfiguration(config);
+    if (config.mountPoints!=null && config.mountPoints.size()>0) {
+      for (int i=0 ; i<config.mountPoints.size() ; i++) {
+        if (StringUtil.isNullOrEmptyTrimmed(config.mountPoints.get(i))) {
+          result.add(new GrabberConfigMessage(true, "mountPoints." + i, "Please specify a mount point (eg: C:, /mnt/ftp, ...)"));
+        } else {
+          String bd = config.mountPoints.get(i);
+          File f = new File(bd);
+          if (!f.exists()) {
+            result.add(new GrabberConfigMessage(false, "mountPoints." + i, bd + " could not be found."));
+          } else if (!f.isDirectory()) {
+            result.add(new GrabberConfigMessage(false, "mountPoints." + i, bd + " is not a directory."));
+          }
+        }
+      }
+    }
+
+    return result;
+  }
+
+
   public static class JavaSystemViewGrabberConfig extends PartiallyExtractableConfig {
+    @ConfigField(
+            label = "List of mount points for free space monitoring. Leave empty for auto detection.",
+            listItemLabel = "Mount point"
+    )
     List<String>mountPoints;
+
+    @Override
+    public IdLabelPair[] getListOfExtractableValues() {
+      return new IdLabelPair[] {
+              new IdLabelPair("sys", "Static informations about the system"),
+              new IdLabelPair("cpu", "CPU usage metrics"),
+              new IdLabelPair("mem", "Memory usage metrics"),
+              new IdLabelPair("freespace", "Disk space informations"),
+      };
+    }
 
     public List<String> getMountPoints() {
       return mountPoints;

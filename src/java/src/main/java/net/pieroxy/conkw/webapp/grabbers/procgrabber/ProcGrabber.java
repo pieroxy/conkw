@@ -73,7 +73,7 @@ public class ProcGrabber extends AsyncGrabber<SimpleCollector, ProcGrabber.ProcG
 
   @Override
   public List<GrabberConfigMessage> validateConfiguration(ProcGrabberConfig config) {
-    List<GrabberConfigMessage> result = new ArrayList<>();
+    List<GrabberConfigMessage> result = super.validateConfiguration(config);
     if (!StringUtil.isNullOrEmptyTrimmed(config.getMdstatFile())) {
       File f = new File(config.getMdstatFile());
       if (!f.exists() || !f.isFile()) {
