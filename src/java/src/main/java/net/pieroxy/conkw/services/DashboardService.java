@@ -18,7 +18,7 @@ public class DashboardService {
   private final File folder;
 
   public DashboardService(LocalStorageManager localStorageManager) {
-    folder = localStorageManager.getDashboardsDir();
+    folder = localStorageManager.getWebappDataDir();
     if (!folder.exists()) {
       folder.mkdir();
       LOGGER.info("Created the dashboard directory.");

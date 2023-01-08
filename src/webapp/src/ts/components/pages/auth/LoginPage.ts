@@ -70,7 +70,7 @@ export class LoginPage extends AbstractPage<any> {
       }
     ).then((data) => {
       if (data.passwordMustChangeNow) {
-        Notifications.addNotification(new Notification(NotificationsClass.LOGIN, NotificationsType.SUCCESS, "Welcome to the conkw dashboards", 5))
+        Notifications.addNotification(new Notification(NotificationsClass.LOGIN, NotificationsType.SUCCESS, "Welcome to conkw.", 5))
         Routing.goToScreen(Endpoints.PASSWORD_CHANGE, {id:this.username});
       } else {
         Notifications.addNotification(new Notification(NotificationsClass.LOGIN, NotificationsType.SUCCESS, "Welcome back!", 5))

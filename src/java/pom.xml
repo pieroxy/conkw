@@ -206,29 +206,29 @@
                 <echo file="src/main/resources/GIT_REV">${GIT_REV}</echo>
                 <echo file="src/main/resources/GIT_DEPTH">${GIT_DEPTH}</echo>
                 <echo file="../web/version.js">window.MVN_VER="${project.version}";window.GIT_REV="${GIT_REV}";window.GIT_DEPTH=${GIT_DEPTH};</echo>
-                <echo file="../dashboards/src/ts/auto/version.ts">export class AppVersion { public static MVN_VER="${project.version}";public static GIT_REV="${GIT_REV}";public static GIT_DEPTH=${GIT_DEPTH} }</echo>
+                <echo file="../webapp/src/ts/auto/version.ts">export class AppVersion { public static MVN_VER="${project.version}";public static GIT_REV="${GIT_REV}";public static GIT_DEPTH=${GIT_DEPTH} }</echo>
                 <echo message="Fixing documentation links." />
                 <replace dir="../web/doc/" token=".md&quot;" value=".html&quot;">
                   <include name="**/*.html"/>
                 </replace>
                 <echo message="Generating Api Stubs." />
                 <java failonerror="Yes" classname="net.pieroxy.conkw.api.GenerateTsStubs" logError="Yes" errorproperty="err">
-                  <arg value="../dashboards/src/ts/auto/ApiEndpoints.ts"/>
+                  <arg value="../webapp/src/ts/auto/ApiEndpoints.ts"/>
                   <classpath>
                     <pathelement location="target/classes"/>
                     <pathelement location="${user.home}/.m2/repository/javax/servlet/servlet-api/2.5/servlet-api-2.5.jar"/>
                   </classpath>
                 </java>
 
-                <echo message="Building dashboards." />
-                <copy todir="../dashboards/src/ts/auto/">
+                <echo message="Building webapp." />
+                <copy todir="../webapp/src/ts/auto/">
                   <fileset dir="../../src/java/target/typescript-generator/"/>
                 </copy>
-                <delete failonerror="false"><fileset dir="../dashboards/dist/"/></delete>
-                <exec failonerror="true" executable="../dashboards/build.sh" dir="../dashboards"/>
-                <delete failonerror="false"><fileset dir="../web/dashboards/"/></delete>
-                <copy todir="../web/dashboards/">
-                  <fileset dir="../dashboards/dist/"/>
+                <delete failonerror="false"><fileset dir="../webapp/dist/"/></delete>
+                <exec failonerror="true" executable="../webapp/build.sh" dir="../webapp"/>
+                <delete failonerror="false"><fileset dir="../web/webapp/"/></delete>
+                <copy todir="../web/webapp/">
+                  <fileset dir="../webapp/dist/"/>
                 </copy>
                 <echo message="Packaging the web resources." />
                 <delete file="./src/main/resources/webapp-static.zip"/>

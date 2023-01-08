@@ -37,8 +37,8 @@ public class LocalStorageManager {
     return new File(getHomeDir(), "ui");
   }
 
-  public File getDashboardsDir() {
-    return new File(getHomeDir(), "data/dashboards");
+  public File getWebappDataDir() {
+    return new File(getHomeDir(), "data/webapp");
   }
 
   public File getHomeDir() {

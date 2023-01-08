@@ -1,4 +1,4 @@
-package net.pieroxy.conkw.api.implementations.dashboards;
+package net.pieroxy.conkw.api.implementations.webapp;
 
 import com.dslplatform.json.CompiledJson;
 import net.pieroxy.conkw.api.metadata.AbstractApiEndpoint;
