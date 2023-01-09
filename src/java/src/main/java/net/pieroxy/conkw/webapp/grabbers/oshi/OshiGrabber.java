@@ -1,5 +1,7 @@
 package net.pieroxy.conkw.webapp.grabbers.oshi;
 
+import net.pieroxy.conkw.api.metadata.grabberConfig.ConfigField;
+import net.pieroxy.conkw.api.model.IdLabelPair;
 import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.grabbersBase.AsyncGrabber;
 import net.pieroxy.conkw.grabbersBase.PartiallyExtractableConfig;
@@ -565,8 +567,54 @@ public class OshiGrabber extends AsyncGrabber<SimpleCollector, OshiGrabber.OshiG
   }
 
   public static class OshiGrabberConfig extends PartiallyExtractableConfig {
+    @ConfigField(
+        label = "Delay for static data (Vendor, serial numbers, etc)",
+        defaultValue = "1d"
+    )
     private CDuration staticDataDelay;
+    @ConfigField(
+        label = "Delay for detailed data - data expensive to extract (Processes, services, sessions, ...)",
+        defaultValue = "1m"
+    )
     private CDuration detailedDataDelay;
+
+
+    @Override
+    public IdLabelPair[] getListOfExtractableValues() {
+      return new IdLabelPair[] {
+        new IdLabelPair("sensors", "Fans, Voltages and temperatures"),
+        new IdLabelPair("memory", "RAM metrics"),
+        new IdLabelPair("physicalmemory", "Physical memory (RAM) infos"),
+        new IdLabelPair("virtualmemory", "Swap memory metrics"),
+        new IdLabelPair("computer", "Computer infos (Serial, manufacturer, ...)"),
+        new IdLabelPair("baseboard", "Motherboard infos (Serial, manufacturer, ...)"),
+        new IdLabelPair("firmware", "Firmware infos (Date, manufacturer, ...)"),
+        new IdLabelPair("cpu", "CPU metrics (nb procs, load avg, ...)"),
+        new IdLabelPair("cpubycore", "CPU usage metrics, by core"),
+        new IdLabelPair("cpuident", "CPU infos (architecture, name, vendor, ...)"),
+        new IdLabelPair("displays", "Displays infos (Serial, manufacturer, ...)"),
+        new IdLabelPair("disksio", "Block devices I/O metrics (read/write, aggregated and by disk)"),
+        new IdLabelPair("disksinfos", "Block devices infos and metrics (Serial, total reads/write, ...)"),
+        new IdLabelPair("graphicscards", "Graphics card infos (Name, vendor, ...)"),
+        new IdLabelPair("nics", "Nic infos and metrics (Total bw, name, ..."),
+        new IdLabelPair("netbw", "Network bandwidth metrics"),
+        new IdLabelPair("battery", "Battery metrics"),
+        new IdLabelPair("psus", "PSUs infos and metrics (Manufacturer, amps, ...)"),
+        new IdLabelPair("soundcards", "Soundcards names and manufacturers"),
+        new IdLabelPair("usb", "List all USB devices (Serial, vendor, ...)"),
+        new IdLabelPair("os", "Operating system infos and metrics (manufacturer, bitness, ...)"),
+        new IdLabelPair("filestores", "List mount points (type, free space, ...)"),
+        new IdLabelPair("tcpv4", "TCP (ipv4) metrics"),
+        new IdLabelPair("tcpv6", "TCP (ipv4) metrics"),
+        new IdLabelPair("udpv4", "UDP (ipv6) metrics"),
+        new IdLabelPair("udpv6", "UDP (ipv6) metrics"),
+        new IdLabelPair("sessions", "List sessions for all users"),
+        new IdLabelPair("shortsessions", "List the number of sessions by user"),
+        new IdLabelPair("netp", "Network parameters (DNS, gateway, domain, ...)"),
+        new IdLabelPair("processes", "List all system processes (CPU, network, command line, ...)"),
+        new IdLabelPair("services", "List all services running (name, state)"),
+      };
+    }
 
     public CDuration getStaticDataDelay() {
       return staticDataDelay;
