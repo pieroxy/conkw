@@ -40,7 +40,7 @@ Metrics:
 * `num.sensors_fan_speed_*` The fan speed in RPM for the fan number `*`.
 * `num.sensors_fan_count` The number of fans reported.
 * `num.sensors_cputemp` The CPU temperature in degree Celsuis.
-* `num.sensors_cpuvolt` The CPu input coltage, in Volts.
+* `num.sensors_cpuvolt` The CPU input voltage, in Volts.
 
 ### memory
 Metrics, in bytes:
