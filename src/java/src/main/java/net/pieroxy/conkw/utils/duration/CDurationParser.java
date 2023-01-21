@@ -24,11 +24,15 @@ public class CDurationParser {
     } else if (s.endsWith("y")) {
       return new CDuration(parse(s, 1)*31536000);
     }
-    throw new RuntimeException("CDuration not recognized: " + s);
+    return new CDuration(-1);
   }
 
   private static long parse(String s, int suffixSize) {
-    return Long.parseLong(s.substring(0, s.length()-suffixSize));
+    try {
+      return Long.parseLong(s.substring(0, s.length()-suffixSize));
+    } catch (Exception e) {
+      return -1;
+    }
   }
 
   static String toString(CDuration d) {
