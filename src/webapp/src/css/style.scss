@@ -469,6 +469,13 @@ input, select {
   }
 }
 
+table.delayInput {
+  td {
+    vertical-align: top;
+    padding:0
+  }
+}
+
 .inputStatusIcon {
   position: absolute;
   display: inline;

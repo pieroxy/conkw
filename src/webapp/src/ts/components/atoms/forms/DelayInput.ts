@@ -3,7 +3,6 @@ import m from 'mithril';
 import { Children } from "mithril";
 import { StatusMessageInterface } from '../../../utils/types';
 import { Form } from './Form';
-import { GenericInput } from './GenericInput';
 import { SelectInput } from './SelectInput';
 import { NumberFieldInput } from './TextFieldInput';
 
@@ -12,42 +11,45 @@ export class DelayInput implements m.ClassComponent<DelayInputAttrs> {
   unit:string;
 
   view({attrs}: m.Vnode<DelayInputAttrs>): void | Children {
-    return m("span", attrs.params, [
-      m(NumberFieldInput, {
-        refHolder: this,
-        refProperty: "number",
-        requiredMessage: attrs.requiredMessage,
-        form: attrs.form,
-        disabled:attrs.disabled,
-        params:{size:3},
-        onenter:()=>{},
-        spellcheck:false,
-        onchange:()=>{
-          attrs.refHolder[attrs.refProperty] = this.number+this.unit;
-        },
-        status:attrs.status
-      }),
-      m(SelectInput, {
-        onenter:()=>{},
-        values:[
-          {id:"ms", label:"milliseconds"},
-          {id:"s", label:"seconds"},
-          {id:"m", label:"minutes"},
-          {id:"h", label:"hours"},
-          {id:"d", label:"days"},
-          {id:"y", label:"years"},
-        ],
-        refHolder: this,
-        refProperty: "unit",
-        requiredMessage: attrs.requiredMessage,
-        form: attrs.form,
-        onchange:()=>{
-          attrs.refHolder[attrs.refProperty] = this.number+this.unit;
-        },
-        disabled:attrs.disabled,
-      }),
-      GenericInput.getStatusIcon("inputTextStatusIcon", attrs.status),
-    ]);
+    return m("table.delayInput", attrs.params, m("tr", [ 
+      m("td",
+        m(NumberFieldInput, {
+          refHolder: this,
+          refProperty: "number",
+          requiredMessage: attrs.requiredMessage,
+          form: attrs.form,
+          disabled:attrs.disabled,
+          params:{size:3},
+          onenter:()=>{},
+          spellcheck:false,
+          onchange:()=>{
+            attrs.refHolder[attrs.refProperty] = this.number+this.unit;
+          },
+          status:attrs.status
+        })
+      ),
+      m("td", 
+        m(SelectInput, {
+          onenter:()=>{},
+          values:[
+            {id:"ms", label:"milliseconds"},
+            {id:"s", label:"seconds"},
+            {id:"m", label:"minutes"},
+            {id:"h", label:"hours"},
+            {id:"d", label:"days"},
+            {id:"y", label:"years"},
+          ],
+          refHolder: this,
+          refProperty: "unit",
+          requiredMessage: attrs.requiredMessage,
+          form: attrs.form,
+          onchange:()=>{
+            attrs.refHolder[attrs.refProperty] = this.number+this.unit;
+          },
+          disabled:attrs.disabled,
+        })
+      )
+    ]));
   }
 
   oninit({attrs}: m.Vnode<DelayInputAttrs>) {
