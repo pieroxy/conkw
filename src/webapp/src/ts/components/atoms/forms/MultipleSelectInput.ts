@@ -39,7 +39,7 @@ export class MultipleSelectInput extends GenericInput<string, SelectInputAttrs> 
           return m("option", options, v.label)
         })
       ),
-      this.getStatusIcon("selectStatusIcon", attrs.status),
+      GenericInput.getStatusIcon("selectStatusIcon", attrs.status),
     ]
   }
 

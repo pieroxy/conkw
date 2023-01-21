@@ -5,9 +5,9 @@ import { GenericInput } from './GenericInput';
 import { HtmlInputEvent } from './HtmlInputEvent';
 import { TextInputAttrs } from './TextFieldInput';
 
-export class PasswordFieldInput extends GenericInput<string, TextInputAttrs> {
+export class PasswordFieldInput extends GenericInput<string, TextInputAttrs<string>> {
   
-  render({attrs}: m.Vnode<TextInputAttrs>): void | Children {
+  render({attrs}: m.Vnode<TextInputAttrs<string>>): void | Children {
     return m(
       "input" + this.getErrorClass(), 
       {

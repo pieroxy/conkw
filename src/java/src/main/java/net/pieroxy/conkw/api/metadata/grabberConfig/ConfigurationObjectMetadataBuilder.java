@@ -2,6 +2,7 @@ package net.pieroxy.conkw.api.metadata.grabberConfig;
 
 import net.pieroxy.conkw.api.model.IdLabelPair;
 import net.pieroxy.conkw.utils.StringUtil;
+import net.pieroxy.conkw.utils.duration.CDuration;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -61,12 +62,11 @@ public class ConfigurationObjectMetadataBuilder {
 
   private static ConfigurationObjectFieldType inferType(ConfigField annotation, Class c, Class context) {
     if (c == String.class) {
-      if (annotation.isDelay()) {
-        return ConfigurationObjectFieldType.DELAY;
-      }
       return ConfigurationObjectFieldType.STRING;
     }
-    if (annotation.isDelay()) throw new RuntimeException("Delay cannot be true for fields other than String. Analyzing class " + context.getName());
+    if (c == CDuration.class) {
+      return ConfigurationObjectFieldType.DELAY;
+    }
     if (c == Integer.class || c == Integer.TYPE ||
         c == Long.class || c == Long.TYPE ||
         c == Float.class || c == Float.TYPE ||

@@ -7,6 +7,7 @@ import { Routing } from '../../../utils/navigation/Routing';
 import { Notification, Notifications, NotificationsClass, NotificationsType } from '../../../utils/Notifications';
 import { Status, StatusMessageInterface } from '../../../utils/types';
 import { Button } from '../../atoms/forms/Button';
+import { DelayInput } from '../../atoms/forms/DelayInput';
 import { MultipleSelectInput } from '../../atoms/forms/MultipleSelectInput';
 import { SelectInput } from '../../atoms/forms/SelectInput';
 import { TextFieldInput } from '../../atoms/forms/TextFieldInput';
@@ -178,6 +179,22 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
               m("span.monospace", field.defaultValue)
             ]))
           ]);
+        case ConfigurationObjectFieldType.DELAY:
+          return m("tr", [
+            m("td", [
+              field.label,
+              ondelete ? m(Link, {target:ondelete}, m(DeleteIcon)) : null
+            ]),
+            m("td", m(DelayInput, {
+              refHolder:holder,
+              refProperty:field.name,
+              status:this.getStatus(namePrefix, field.name),
+            }),
+            !field.defaultValue ? null:m(".defaultValue", [
+              "Default: ",
+              m("span.monospace", field.defaultValue)
+            ]))
+          ]);
       }
     } else { // field.list is true
       return this.generateList(namePrefix, holder, field);
@@ -187,7 +204,7 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
         field.label,
         ondelete ? m(Link, {target:ondelete}, m(DeleteIcon)) : null
       ]),
-      m("td", "Not implemented yet")
+      m("td", "Not implemented yet: " + field.type)
     ])
   }
   

@@ -29,7 +29,7 @@ export abstract class GenericInput<VT, T extends GenericInputAttrs<VT>> implemen
     return this.highilighted ? ".error" : "";
   }
 
-  getStatusIcon(cssClass:string, status?: StatusMessageInterface): m.Children {
+  public static getStatusIcon(cssClass:string, status?: StatusMessageInterface): m.Children {
     if (status) {
       switch (status.status) {
         case Status.ERROR:

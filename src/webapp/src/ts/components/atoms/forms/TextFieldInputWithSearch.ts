@@ -116,7 +116,7 @@ export class TextFieldInputWithSearch extends GenericInput<string, TextInputWith
   }
 }
 
-export interface TextInputWithSearchAttrs extends VisibleTextInputAttrs {
+export interface TextInputWithSearchAttrs extends VisibleTextInputAttrs<string> {
   values:string[];
 }
 

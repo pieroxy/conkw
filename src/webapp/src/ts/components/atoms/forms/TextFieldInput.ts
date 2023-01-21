@@ -5,8 +5,8 @@ import { GenericInput } from './GenericInput';
 import { GenericInputAttrs } from './GenericInputAttrs';
 import { HtmlInputEvent } from './HtmlInputEvent';
 
-export class TextFieldInput extends GenericInput<string, VisibleTextInputAttrs> {
-  render({attrs}: m.Vnode<VisibleTextInputAttrs>): void | Children {
+export class GenericTextFieldInput<T> extends GenericInput<T, VisibleTextInputAttrs<T>> {
+  render({attrs}: m.Vnode<VisibleTextInputAttrs<T>>): void | Children {
     let params:any = attrs.params;
     if (!params) params = {};
     params.type="text";
@@ -49,7 +49,7 @@ export class TextFieldInput extends GenericInput<string, VisibleTextInputAttrs> 
         "input" + this.getErrorClass() + (attrs.search ? ".searchbg":"") + (attrs.className ? attrs.className:""), 
         params
       ),
-      this.getStatusIcon("inputTextStatusIcon", attrs.status),
+      GenericInput.getStatusIcon("inputTextStatusIcon", attrs.status),
       (this.status && this.status.message) ? [
         m("br"),
         m(".inputStatusLabel", this.status.message)
@@ -61,13 +61,13 @@ export class TextFieldInput extends GenericInput<string, VisibleTextInputAttrs> 
     return !this.getValueAsString()
   }
 
-  oncreate(vnode:m.VnodeDOM<VisibleTextInputAttrs>) {
+  oncreate(vnode:m.VnodeDOM<VisibleTextInputAttrs<T>>) {
     if (vnode.attrs.focus)
       (<any>vnode.dom).focus();
   }
 }
 
-export interface TextInputAttrs extends GenericInputAttrs<string> {
+export interface TextInputAttrs<T> extends GenericInputAttrs<T> {
   placeholder?: string
   onenter:()=>void;
   onescape?:()=>void;
@@ -75,7 +75,13 @@ export interface TextInputAttrs extends GenericInputAttrs<string> {
   className?:string;
 }
 
-export interface VisibleTextInputAttrs extends TextInputAttrs {
+export interface VisibleTextInputAttrs<T> extends TextInputAttrs<T> {
   spellcheck:boolean;
   search?:boolean;
+}
+
+export class TextFieldInput extends GenericTextFieldInput<string> {
+}
+
+export class NumberFieldInput extends GenericTextFieldInput<number> {
 }

@@ -18,9 +18,4 @@ public @interface ConfigField {
   String listItemLabel() default "";
   String[]listOfChoices() default {};
   String listOfChoicesFunc() default "";
-
-  /**
-   * Applicable only to String fields
-   */
-  boolean isDelay() default false;
 }
