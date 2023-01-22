@@ -78,7 +78,7 @@ public class YahooFinanceGrabber extends TimeThrottledGrabber<YahooFinanceGrabbe
     }
   }
 
-  public static class YahooFinanceGrabberConfig extends TimeThrottledGrabber.TimeThrottledGrabberConfig {
+  public static class YahooFinanceGrabberConfig extends TimeThrottledGrabber.SimpleTimeThrottledGrabberConfig {
     private String symbol,region,key;
 
     @Override

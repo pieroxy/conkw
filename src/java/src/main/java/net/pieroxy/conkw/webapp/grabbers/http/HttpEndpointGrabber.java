@@ -123,7 +123,7 @@ public class HttpEndpointGrabber extends TimeThrottledGrabber<HttpEndpointGrabbe
         return res;
     }
 
-    public static class HttpEndpointGrabberConfig extends TimeThrottledGrabber.TimeThrottledGrabberConfig implements Hashable {
+    public static class HttpEndpointGrabberConfig extends TimeThrottledGrabber.SimpleTimeThrottledGrabberConfig implements Hashable {
         List<EndPointMonitoringConfig> endpoints;
 
         @Override

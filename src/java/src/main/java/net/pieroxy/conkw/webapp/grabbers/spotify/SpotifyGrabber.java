@@ -324,7 +324,7 @@ public class SpotifyGrabber extends TimeThrottledGrabber<SpotifyGrabber.SpotifyG
     return "client_id="+ getConfig().getClientId()+"&client_secret="+ getConfig().getClientSecret()+"&grant_type=authorization_code&code="+ URLEncoder.encode(AUTH_CODE, StandardCharsets.UTF_8.toString())+"&redirect_uri="+URLEncoder.encode(getConfig().getRedirectUri(), StandardCharsets.UTF_8.toString());
   }
 
-  public static class SpotifyGrabberConfig extends TimeThrottledGrabber.TimeThrottledGrabberConfig {
+  public static class SpotifyGrabberConfig extends TimeThrottledGrabber.SimpleTimeThrottledGrabberConfig {
     private String clientId;
     private String clientSecret;
     private String redirectUri;

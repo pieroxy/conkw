@@ -401,7 +401,7 @@ public class OpenWeatherMapGrabber extends TimeThrottledGrabber<OpenWeatherMapGr
     return "align.svg";
   }
 
-  public static class OpenWeatherMapGrabberConfig extends TimeThrottledGrabber.TimeThrottledGrabberConfig  {
+  public static class OpenWeatherMapGrabberConfig extends TimeThrottledGrabber.PartiallyExtractableTimeThrottledGrabberConfig {
     private Double lon;
     private Double lat;
     private String token;

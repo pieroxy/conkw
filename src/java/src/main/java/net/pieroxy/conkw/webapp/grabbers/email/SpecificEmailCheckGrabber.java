@@ -143,7 +143,7 @@ public class SpecificEmailCheckGrabber extends TimeThrottledGrabber<SpecificEmai
         }
     }
 
-    public static class SpecificEmailCheckGrabberConfig extends TimeThrottledGrabber.TimeThrottledGrabberConfig {
+    public static class SpecificEmailCheckGrabberConfig extends TimeThrottledGrabber.SimpleTimeThrottledGrabberConfig {
         String folder;
         Pattern subjectRegexp;
         Pattern bodyRegexp;

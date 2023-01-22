@@ -86,7 +86,7 @@ public class LatestUnreadMailsGrabber extends TimeThrottledGrabber<LatestUnreadM
         log(Level.FINE, "Done grabbing mails in " + (System.currentTimeMillis() - now) + "ms.");
     }
 
-    public static class LatestUnreadMailsGrabberConfig extends TimeThrottledGrabber.TimeThrottledGrabberConfig {
+    public static class LatestUnreadMailsGrabberConfig extends TimeThrottledGrabber.SimpleTimeThrottledGrabberConfig {
         private Double maxMessages;
         private List<ImapConfig> accounts;
 

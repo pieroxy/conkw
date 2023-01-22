@@ -276,7 +276,39 @@ public abstract class TimeThrottledGrabber<C extends TimeThrottledGrabber.TimeTh
     }
   }
 
-  public abstract static class TimeThrottledGrabberConfig extends PartiallyExtractableConfig implements Hashable {
+  public interface TimeThrottledGrabberConfig extends Hashable {
+    CDuration getTtl();
+    CDuration getErrorTtl();
+  }
+
+  public abstract static class SimpleTimeThrottledGrabberConfig implements TimeThrottledGrabberConfig {
+    @ConfigField(
+        label = "Delay between to fetch"
+    )
+    CDuration ttl;
+    @ConfigField(
+        label = "Delay between to fetch if an error occured"
+    )
+    CDuration errorTtl;
+
+    public CDuration getTtl() {
+      return ttl;
+    }
+
+    public void setTtl(CDuration ttl) {
+      this.ttl = ttl;
+    }
+
+    public CDuration getErrorTtl() {
+      return errorTtl;
+    }
+
+    public void setErrorTtl(CDuration errorTtl) {
+      this.errorTtl = errorTtl;
+    }
+  }
+
+  public abstract static class PartiallyExtractableTimeThrottledGrabberConfig extends PartiallyExtractableConfig implements TimeThrottledGrabberConfig {
     @ConfigField(
         label = "Delay between to fetch"
     )

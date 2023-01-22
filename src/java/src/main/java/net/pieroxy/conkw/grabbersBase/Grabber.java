@@ -161,6 +161,9 @@ public abstract class Grabber<T extends Collector, C> {
   }
 
   protected boolean shouldExtract(String value) {
+    if (!(config instanceof PartiallyExtractableConfig)) {
+      throw new RuntimeException("Method cannot be called on another class than PartiallyExtractableConfig");
+    }
     return extract.isEmpty() || extract.contains(value);
   }
 

@@ -76,7 +76,7 @@ public class BingNewsGrabber extends TimeThrottledGrabber<BingNewsGrabber.BingNe
     }
   }
 
-  public static class BingNewsGrabberConfig extends TimeThrottledGrabber.TimeThrottledGrabberConfig {
+  public static class BingNewsGrabberConfig extends TimeThrottledGrabber.SimpleTimeThrottledGrabberConfig {
     private String countrycode;
     private String key;
 

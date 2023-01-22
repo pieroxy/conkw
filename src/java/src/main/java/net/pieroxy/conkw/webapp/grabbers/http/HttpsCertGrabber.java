@@ -164,7 +164,7 @@ public class HttpsCertGrabber extends TimeThrottledGrabber<HttpsCertGrabber.Http
 
 
 
-  public static class HttpsCertGrabberConfig extends TimeThrottledGrabber.TimeThrottledGrabberConfig {
+  public static class HttpsCertGrabberConfig extends TimeThrottledGrabber.SimpleTimeThrottledGrabberConfig {
     @ConfigField(
         label="Domain names to check certs on",
         listItemLabel = "Domain"
