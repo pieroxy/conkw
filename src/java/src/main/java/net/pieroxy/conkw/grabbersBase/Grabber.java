@@ -71,7 +71,6 @@ public abstract class Grabber<T extends Collector, C> {
     Class<?> subClass = getClass();
     ParameterizedType parameterizedType = (ParameterizedType) subClass.getGenericSuperclass();
     return (Class<C>) parameterizedType.getActualTypeArguments()[1];
-
   }
 
   public void setConfig(C config, CredentialsStore credentials) {

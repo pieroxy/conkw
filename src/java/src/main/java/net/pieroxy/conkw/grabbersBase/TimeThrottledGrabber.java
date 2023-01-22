@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 import java.util.Map;
 import java.util.logging.Level;
@@ -45,6 +46,13 @@ public abstract class TimeThrottledGrabber<C extends TimeThrottledGrabber.TimeTh
     res.setTimestamp(0);
     res.collectionDone();
     return res;
+  }
+
+  @Override
+  public Class<C> getConfigClass() {
+    Class<?> subClass = getClass();
+    ParameterizedType parameterizedType = (ParameterizedType) subClass.getGenericSuperclass();
+    return (Class<C>) parameterizedType.getActualTypeArguments()[0];
   }
 
   /**

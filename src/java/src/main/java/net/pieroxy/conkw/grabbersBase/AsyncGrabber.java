@@ -42,6 +42,12 @@ public abstract class AsyncGrabber<T extends Collector, C> extends SimpleGrabber
   }
 
   @Override
+  public C getConfig() {
+    // As we have the same number of parameters and in the same order as Grabber, we can get away with this.
+    return super.getConfig();
+  }
+
+  @Override
   public final void collect(T c) {
     lastGrab = System.currentTimeMillis();
 
