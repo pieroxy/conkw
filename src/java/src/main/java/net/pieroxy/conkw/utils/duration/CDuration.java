@@ -2,7 +2,6 @@ package net.pieroxy.conkw.utils.duration;
 
 public final class CDuration {
   private final long milliseconds;
-  private final boolean invalid;
   public static final CDuration ZERO = CDurationParser.parse("0m");
   public static final CDuration FIVE_SECONDS = CDurationParser.parse("5s");
   public static final CDuration ONE_MINUTE = CDurationParser.parse("1m");
@@ -11,13 +10,11 @@ public final class CDuration {
   public static final CDuration ONE_DAY = CDurationParser.parse("1d");
 
   public CDuration(long numberOfSeconds) {
-    this.invalid = numberOfSeconds < 0;
-    this.milliseconds = Math.abs(numberOfSeconds) * 1000;
+    this.milliseconds = numberOfSeconds * 1000;
   }
 
   public CDuration(long number, boolean isMilliseconds) {
-    this.invalid = number < 0;
-    this.milliseconds = isMilliseconds ? Math.abs(number) : Math.abs(number * 1000);
+    this.milliseconds = isMilliseconds ? (number) : (number * 1000);
   }
 
   public boolean isExpired(long sinceInMilliseconds, long nowInMilliseconds) {
@@ -41,10 +38,6 @@ public final class CDuration {
   }
   public long asYears() {
     return milliseconds/31536000000l;
-  }
-
-  public boolean isValid() {
-    return !invalid;
   }
 
   @Override
