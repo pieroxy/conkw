@@ -1,11 +1,14 @@
 package net.pieroxy.conkw.utils.config;
 
 import net.pieroxy.conkw.ConkwTestCase;
+import net.pieroxy.conkw.api.model.panels.atoms.model.NumberFormat;
 import net.pieroxy.conkw.utils.JsonHelper;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GrabberConfigReaderTest extends ConkwTestCase {
 
@@ -297,6 +300,13 @@ public class GrabberConfigReaderTest extends ConkwTestCase {
         assertEquals(CustomObject.class, o.getObject().getClass());
         assertNotNull(o.getObject().getDuration());
         assertEquals(3, o.getObject().getDuration().asDays());
+        assertThrows(()-> {
+            parseandFillInCustomProperty("{\"version\":7, \"object\":{" +
+                    "\"object\":{" +
+                    "\"duration\":\"a3d\"" +
+                    "}}}",
+                7, ObjectWithCustomField.class);
+        }, RuntimeException.class, null);
     }
 
     public void testExistingValues() {
@@ -307,7 +317,7 @@ public class GrabberConfigReaderTest extends ConkwTestCase {
         ObjectWithSimpleFields o = new ObjectWithSimpleFields();
         o.setDoubleValue(365.);
         o.setStringValue("abc123");
-        GrabberConfigReader.fillObject(o, data.object);
+        GrabberConfigReader.fillObject(o, data.object, null);
 
         assertEquals(365., o.getDoubleValue());
         assertEquals("abc123", o.getStringValue());
@@ -315,60 +325,107 @@ public class GrabberConfigReaderTest extends ConkwTestCase {
 
     public void testCustomFieldWithErrors() {
         assertThrows(() -> parseandFillInCustomProperty("{\"version\":7, \"object\":{" +
-                    "\"object\":{" +
-                    "\"doubleValue\":123," +
-                    "\"doubleList\":[]," +
-                    "\"subObject\":{\"doublevalue\":2e200,\"doubleList\":[1,-100000000000000000000]}," +
-                    "\"customList\":[" +
-                    "{\"doubleValue\":31,\"doubleList\":[1,null,-100]}," +
-                    "{\"subObject\":{\"doubleValue\":2e210,\"doubleList\":[1,-1000000000000000000]}}" +
-                    "]}}}",
-                7, ObjectWithCustomField.class),
+                "\"object\":{" +
+                "\"doubleValue\":123," +
+                "\"doubleList\":[]," +
+                // Next line, doubleValue should have a capitalized V
+                "\"subObject\":{\"doublevalue\":2e200,\"doubleList\":[1,-100000000000000000000]}," +
+                "\"customList\":[" +
+                "{\"doubleValue\":31,\"doubleList\":[1,null,-100]}," +
+                "{\"subObject\":{\"doubleValue\":2e210,\"doubleList\":[1,-1000000000000000000]}}" +
+                "]}}}",
+            7, ObjectWithCustomField.class),
             RuntimeException.class, null);
         assertThrows(() -> parseandFillInCustomProperty("{\"version\":7, \"object\":{" +
-                    "\"object\":{" +
-                    "\"doubleValue\":123," +
-                    "\"doubleList\":true," +
-                    "\"subObject\":{\"doubleValue\":2e200,\"doubleList\":[1,-100000000000000000000]}," +
-                    "\"customList\":[" +
-                    "{\"doubleValue\":31,\"doubleList\":[1,null,-100]}," +
-                    "{\"subObject\":{\"doubleValue\":2e210,\"doubleList\":[1,-1000000000000000000]}}" +
-                    "]}}}",
-                7, ObjectWithCustomField.class),
+                "\"object\":{" +
+                "\"doubleValue\":123," +
+                "\"doubleList\":true," + // Should be a list
+                "\"subObject\":{\"doubleValue\":2e200,\"doubleList\":[1,-100000000000000000000]}," +
+                "\"customList\":[" +
+                "{\"doubleValue\":31,\"doubleList\":[1,null,-100]}," +
+                "{\"subObject\":{\"doubleValue\":2e210,\"doubleList\":[1,-1000000000000000000]}}" +
+                "]}}}",
+            7, ObjectWithCustomField.class),
             RuntimeException.class, null);
         assertThrows(() -> parseandFillInCustomProperty("{\"version\":7, \"object\":{" +
-                    "\"object\":{" +
-                    "\"doubleValue\":123," +
-                    "\"doubleList\":[]," +
-                    "\"subObject\":{\"doubleValue\":2e200,\"doubleList\":[1,-100000000000000000000]}," +
-                    "\"customList\":[" +
-                    "{\"doubleValues\":31,\"doubleList\":[1,null,-100]}," +
-                    "{\"subObject\":{\"doubleValue\":2e210,\"doubleList\":[1,-1000000000000000000]}}" +
-                    "]}}}",
-                7, ObjectWithCustomField.class),
+                "\"object\":{" +
+                "\"doubleValue\":123," +
+                "\"doubleList\":[]," +
+                "\"subObject\":{\"doubleValue\":2e200,\"doubleList\":[1,-100000000000000000000]}," +
+                "\"customList\":[" +
+                "{\"doubleValues\":31,\"doubleList\":[1,null,-100]}," + // This property doesn't exist
+                "{\"subObject\":{\"doubleValue\":2e210,\"doubleList\":[1,-1000000000000000000]}}" +
+                "]}}}",
+            7, ObjectWithCustomField.class),
             RuntimeException.class, null);
         assertThrows(() -> parseandFillInCustomProperty("{\"version\":7, \"object\":{" +
-                    "\"object\":{" +
-                    "\"doubleValue\":123," +
-                    "\"doubleList\":[]," +
-                    "\"subObject\":{\"doubleValue\":2e200,\"doubleList\":[1,-100000000000000000000]}," +
-                    "\"customList\":[" +
-                    "{\"doubleValue\":31,\"doubleList\":[1,null,-100]}," +
-                    "{\"subObject\":{\"doubleValues\":2e210,\"doubleList\":[1,-1000000000000000000]}}" +
-                    "]}}}",
-                7, ObjectWithCustomField.class),
+                "\"object\":{" +
+                "\"doubleValue\":123," +
+                "\"doubleList\":[]," +
+                "\"subObject\":{\"doubleValue\":2e200,\"doubleList\":[1,-100000000000000000000]}," +
+                "\"customList\":[" +
+                "{\"doubleValue\":31,\"doubleList\":[1,null,-100]}," +
+                // next line: doubleValues doesn't exist
+                "{\"subObject\":{\"doubleValues\":2e210,\"doubleList\":[1,-1000000000000000000]}}" +
+                "]}}}",
+            7, ObjectWithCustomField.class),
             RuntimeException.class, null);
         assertThrows(() -> parseandFillInCustomProperty("{\"version\":7, \"object\":{" +
-                    "\"object\":{" +
-                    "\"doubleValue\":123," +
-                    "\"doubleList\":[]," +
-                    "\"subObject\":{\"doubleValue\":2e200,\"doubleList\":[1,-100000000000000000000]}," +
-                    "\"customList\":[" +
-                    "\"Dude !\"," +
-                    "{\"subObject\":{\"doubleValue\":2e210,\"doubleList\":[1,-1000000000000000000]}}" +
-                    "]}}}",
-                7, ObjectWithCustomField.class),
+                "\"object\":{" +
+                "\"doubleValue\":123," +
+                "\"doubleList\":[]," +
+                "\"subObject\":{\"doubleValue\":2e200,\"doubleList\":[1,-100000000000000000000]}," +
+                "\"customList\":[" +
+                "\"Dude !\"," + // Not valid
+                "{\"subObject\":{\"doubleValue\":2e210,\"doubleList\":[1,-1000000000000000000]}}" +
+                "]}}}",
+            7, ObjectWithCustomField.class),
             RuntimeException.class, null);
+    }
+    public void testCustomFieldWithErrorReport() {
+        List<ParsingError> errors;
+        errors=failParsing("{\"version\":7, \"object\":{" +
+                "\"object\":{" +
+                "\"duration\":\"3s\"" +
+                "}}}",
+            ObjectWithCustomField.class);
+        assertEquals(0, errors.size());
+        errors=failParsing("{\"version\":7, \"object\":{" +
+                "\"object\":{" +
+                "\"duration\":\"a3s\"" +
+                "}}}",
+            ObjectWithCustomField.class);
+        assertEquals(1, errors.size());
+        assertEquals("object.duration", errors.get(0).getFieldName());
+        assertEquals("\"a3\" is not a number", errors.get(0).getMessage());
+
+        errors=failParsing("{\"version\":7, \"object\":{" +
+                "\"object\":{" +
+                "\"url\":\"a3s\"" +
+                "}}}",
+            ObjectWithCustomField.class);
+        assertEquals(1, errors.size());
+        assertEquals("object.url", errors.get(0).getFieldName());
+        assertEquals("URL could not be parsed: no protocol: a3s", errors.get(0).getMessage());
+
+        errors=failParsing("{\"version\":7, \"object\":{" +
+                "\"object\":{" +
+                "\"pattern\":\"[\"" +
+                "}}}",
+            ObjectWithCustomField.class);
+        assertEquals(1, errors.size());
+        assertEquals("object.pattern", errors.get(0).getFieldName());
+        assertStartsWith("Unclosed character class near index 0", errors.get(0).getMessage());
+
+        errors=failParsing("{\"version\":7, \"object\":{" +
+                "\"object\":{" +
+                "\"accumulator\":\"[\"" +
+                "}}}",
+            ObjectWithCustomField.class);
+        assertEquals(1, errors.size());
+        assertEquals("object.accumulator", errors.get(0).getFieldName());
+        assertStartsWith("Unknown accumulator ''", errors.get(0).getMessage());
+
     }
 
     public void testSuperClassFields() {
@@ -398,8 +455,22 @@ public class GrabberConfigReaderTest extends ConkwTestCase {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        GrabberConfigReader.fillObject(o, data.object);
+        GrabberConfigReader.fillObject(o, data.object, null);
         return o;
+    }
+
+    private List<ParsingError> failParsing(String s, Class type) {
+        TestModel data = parseJson(s);
+
+        List<ParsingError> errors = new ArrayList<>();
+        Object o;
+        try {
+            o = type.newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        GrabberConfigReader.fillObject(o, data.object, errors);
+        return errors;
     }
 
 }

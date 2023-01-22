@@ -89,4 +89,9 @@ public abstract class ConkwTestCase extends TestCase {
         void inspect(T exception);
     }
 
+    public void assertStartsWith(String prefix, String fullString) {
+        if (fullString.startsWith(prefix)) return;
+        fail("Expected a to start with b.\na="+fullString+"\nb="+prefix);
+    }
+
 }

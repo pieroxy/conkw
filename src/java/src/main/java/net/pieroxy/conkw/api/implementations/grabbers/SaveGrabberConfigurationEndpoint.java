@@ -12,11 +12,14 @@ import net.pieroxy.conkw.config.ConfigReader;
 import net.pieroxy.conkw.config.GrabberConfig;
 import net.pieroxy.conkw.config.UserRole;
 import net.pieroxy.conkw.grabbersBase.Grabber;
+import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.utils.Services;
 import net.pieroxy.conkw.utils.StringUtil;
 import net.pieroxy.conkw.utils.Utils;
 import net.pieroxy.conkw.utils.config.GrabberConfigReader;
+import net.pieroxy.conkw.utils.config.ParsingError;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -38,8 +41,10 @@ public class SaveGrabberConfigurationEndpoint extends AbstractApiEndpoint<SaveGr
     @Override
     public SaveGrabberConfigurationOutput process(SaveGrabberConfigurationInput input, User user) throws Exception {
         Grabber grabber = (Grabber)Class.forName(input.getGrabberImplementation()).newInstance();
-        Object config = GrabberConfigReader.fillObject(grabber.getDefaultConfig(), input.getConfiguration().getConfig());
+        List<ParsingError> errors = new ArrayList<>();
+        Object config = GrabberConfigReader.fillObject(grabber.getDefaultConfig(), input.getConfiguration().getConfig(), errors);
         SaveGrabberConfigurationOutput result = new SaveGrabberConfigurationOutput(grabber.validateConfiguration(config));
+        errors.forEach(e -> result.getMessages().add(new GrabberConfigMessage(true, e.getFieldName(), e.getMessage())));
 
         if (Utils.objectEquals(input.getConfiguration().getLogLevel(), Level.OFF.getName())) {
             result.getMessages().add(new GrabberConfigMessage(false, "logLevel", "No matter what happens with this grabber, nothing will end up in the logs."));

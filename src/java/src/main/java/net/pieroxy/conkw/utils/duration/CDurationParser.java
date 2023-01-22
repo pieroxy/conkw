@@ -28,7 +28,12 @@ public class CDurationParser {
   }
 
   private static long parse(String s, int suffixSize) {
-    return Long.parseLong(s.substring(0, s.length()-suffixSize));
+    s = s.substring(0, s.length()-suffixSize);
+    try {
+      return Long.parseLong(s);
+    } catch (NumberFormatException e) {
+      throw new RuntimeException("\""+s+"\" is not a number");
+    }
   }
 
   static String toString(CDuration d) {

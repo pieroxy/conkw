@@ -1,8 +1,11 @@
 package net.pieroxy.conkw.utils.config;
 
+import net.pieroxy.conkw.accumulators.implementations.RootAccumulator;
 import net.pieroxy.conkw.utils.duration.CDuration;
 
+import java.net.URL;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class CustomObject {
   private Double doubleValue;
@@ -10,6 +13,9 @@ public class CustomObject {
   private CustomObject subObject;
   private List<CustomObject> customList;
   private CDuration duration;
+  private Pattern pattern;
+  private RootAccumulator accumulator;
+  private URL url;
 
   public Double getDoubleValue() {
     return doubleValue;
@@ -49,5 +55,29 @@ public class CustomObject {
 
   public void setDuration(CDuration duration) {
     this.duration = duration;
+  }
+
+  public Pattern getPattern() {
+    return pattern;
+  }
+
+  public void setPattern(Pattern pattern) {
+    this.pattern = pattern;
+  }
+
+  public RootAccumulator getAccumulator() {
+    return accumulator;
+  }
+
+  public void setAccumulator(RootAccumulator accumulator) {
+    this.accumulator = accumulator;
+  }
+
+  public URL getUrl() {
+    return url;
+  }
+
+  public void setUrl(URL url) {
+    this.url = url;
   }
 }

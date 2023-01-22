@@ -5,10 +5,7 @@ import net.pieroxy.conkw.accumulators.parser.AccumulatorExpressionParser;
 import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.duration.CDurationParser;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
@@ -28,35 +25,54 @@ public class GrabberConfigReader {
             try {
                 return new URL(dat);
             } catch (MalformedURLException e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException("URL could not be parsed: " + e.getMessage());
             }
         });
     }
 
-    public static <T> T fillObject(T container, Object json) {
+    /**
+     * Handle basic datatypes along with Pattern, CDuration, URL, RootAccumulator objects, parsed from their String
+     * representation.
+     * @param container The object supposed to be filled
+     * @param json The data to fill the object with
+     * @param errorReport If provided, converters errors will be logged in this list and will not throw.
+     * @param <T> The type of the object being passed as a first parameter.
+     * @return The container passed as a parameter, for convenience
+     */
+    public static <T> T fillObject(T container, Object json, List<ParsingError> errorReport) {
+        return fillObjectInternal("", container, json, errorReport);
+    }
+    private static <T> T fillObjectInternal(String name, T container, Object json, List<ParsingError> errorReport) {
         if (container == null || json == null) return container;
         if (LOGGER.isLoggable(Level.FINE)) {
             LOGGER.fine("Instance is " + json);
             LOGGER.fine("Class is " + json.getClass().getName());
         }
         if (json instanceof Map) {
-            fillMap(container, (Map<String, ?>)json);
+            fillMap(name, container, (Map<String, ?>)json, errorReport);
             return container;
         } else {
             throw new RuntimeException(json.getClass().getName() + " is not a Map");
         }
     }
 
-    private static void fillMap(Object src, Map<String, ?> json) {
+    private static void fillMap(String name, Object src, Map<String, ?> json, List<ParsingError> errorReport) {
         json.keySet().stream().forEach(s -> {
             Object value = json.get(s);
             if (value != null) {
                 try {
                     Method m = getSetter(src, s);
-                    m.invoke(src, buildObject(value, m.getGenericParameterTypes()[0]));
+                    String newName;
+                    if (name.length()==0) {
+                        newName = s;
+                    } else {
+                        newName = name + "." + s;
+                    }
+                    Object builtValue = buildObject(newName, value, m.getGenericParameterTypes()[0], errorReport);
+                    if (builtValue!=null) m.invoke(src, builtValue);
                 } catch (RuntimeException e) {
                     throw e;
-                } catch (Exception e) {
+                } catch (IllegalAccessException|InvocationTargetException e) {
                     throw new RuntimeException("Could not access field " + s + ". Please ensure both the containing class and the setter are public.", e);
                 }
             }
@@ -67,7 +83,7 @@ public class GrabberConfigReader {
         return t == Double.class || t == Boolean.class || t == String.class;
     }
 
-    private static Object buildObject(Object value, Type genericType) {
+    private static Object buildObject(String name, Object value, Type genericType, List<ParsingError> errorReport) {
         String reason = "";
         if (value == null) return null;
         else if (value instanceof Number) {
@@ -97,7 +113,7 @@ public class GrabberConfigReader {
                 if (pt.getRawType() == List.class) {
                     Type listOf = pt.getActualTypeArguments()[0];
                         List res = new ArrayList(list.size());
-                        list.forEach(e -> res.add(buildObject(e, listOf)));
+                        list.forEach(e -> res.add(buildObject(name, e, listOf, errorReport)));
                         return res;
                 } else {
                     reason = "*not* a list : " + pt.getRawType();
@@ -109,7 +125,7 @@ public class GrabberConfigReader {
             if (genericType instanceof Class) { // We have a custom object here, handled as a JavaBean
                 try {
                     Object res = ((Class)genericType).newInstance();
-                    fillObject(res, value);
+                    fillObjectInternal(name, res, value, errorReport);
                     return res;
                 } catch (Exception e) {
                     throw new RuntimeException("Could not instantiate "+genericType+".", e);
@@ -122,7 +138,8 @@ public class GrabberConfigReader {
                     Map<Object, Object> valueMap = (Map<Object, Object>) value;
                     Map res = new HashMap();
                     valueMap.entrySet().forEach((Map.Entry e) -> {
-                        res.put(buildObject(e.getKey(), keys), buildObject(e.getValue(), values));
+                        Object key = buildObject(name, e.getKey(), keys, errorReport);
+                        res.put(key, buildObject(name+"."+key, e.getValue(), values, errorReport));
                     });
                     return res;
                 } else {
@@ -133,7 +150,16 @@ public class GrabberConfigReader {
             }
 
         } else if (value instanceof String && customStringConverters.containsKey(genericType)) { // We have a custom converter
-            return customStringConverters.get(genericType).convert((String)value);
+            try {
+                return customStringConverters.get(genericType).convert((String) value);
+            } catch (Exception e) {
+                if (errorReport!=null) {
+                    errorReport.add(new ParsingError(name, e.getMessage()));
+                    return null;
+                } else {
+                    throw e;
+                }
+            }
         } else {
             throw new RuntimeException("Could not coerce value of type " + (value == null ? "<null>" : value.getClass().getName()) + " to " + genericType.getTypeName() + " because no converter could be found.");
         }

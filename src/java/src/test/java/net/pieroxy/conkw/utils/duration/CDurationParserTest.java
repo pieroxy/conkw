@@ -21,10 +21,10 @@ public class CDurationParserTest extends ConkwTestCase {
         assertEquals(365*8*24*60*60*1000l, CDurationParser.parse("8y").asMilliseconds());
     }
     public void testFail() {
-        assertThrows(() -> CDurationParser.parse("8ay"), NumberFormatException.class, null);
+        assertThrows(() -> CDurationParser.parse("8ay"), RuntimeException.class, null);
         assertThrows(() -> CDurationParser.parse("8a"), RuntimeException.class, null);
-        assertThrows(() -> CDurationParser.parse("a8y"), NumberFormatException.class, null);
-        assertThrows(() -> CDurationParser.parse("ay"), NumberFormatException.class, null);
-        assertThrows(() -> CDurationParser.parse("s"), NumberFormatException.class, null);
+        assertThrows(() -> CDurationParser.parse("a8y"), RuntimeException.class, null);
+        assertThrows(() -> CDurationParser.parse("ay"), RuntimeException.class, null);
+        assertThrows(() -> CDurationParser.parse("s"), RuntimeException.class, null);
     }
 }
