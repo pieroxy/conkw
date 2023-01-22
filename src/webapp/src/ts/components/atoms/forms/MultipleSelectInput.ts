@@ -35,7 +35,8 @@ export class MultipleSelectInput extends GenericInput<string, SelectInputAttrs> 
         params,
         attrs.values.map(v => {
           let options:any = {value:v.id};
-          if (v.id === attrs.refHolder[attrs.refProperty]) options["selected"] = true;
+          let values:string[]=attrs.refHolder[attrs.refProperty];
+          if (values && values.includes(v.id)) options["selected"] = true;
           return m("option", options, v.label)
         })
       ),
