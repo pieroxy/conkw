@@ -38,7 +38,6 @@ public class ConfigurationObjectMetadataBuilder {
     ConfigurationObjectFieldMetadata res = new ConfigurationObjectFieldMetadata();
     res.setName(f.getName());
     res.setLabel(annotation.label());
-    res.setDefaultValue(annotation.defaultValue());
     res.setList(f.getType().isAssignableFrom(List.class));
     if (res.isList()) {
       res.setType(inferType(annotation, (Class<?>)((ParameterizedType)f.getGenericType()).getActualTypeArguments()[0], context));

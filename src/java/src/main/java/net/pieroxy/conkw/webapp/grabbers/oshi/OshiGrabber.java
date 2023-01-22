@@ -568,13 +568,11 @@ public class OshiGrabber extends AsyncGrabber<SimpleCollector, OshiGrabber.OshiG
 
   public static class OshiGrabberConfig extends PartiallyExtractableConfig {
     @ConfigField(
-        label = "Delay for static data (Vendor, serial numbers, etc)",
-        defaultValue = "1d"
+        label = "Delay for static data (Vendor, serial numbers, etc)"
     )
     private CDuration staticDataDelay;
     @ConfigField(
-        label = "Delay for detailed data - data expensive to extract (Processes, services, sessions, ...)",
-        defaultValue = "1m"
+        label = "Delay for detailed data - data expensive to extract (Processes, services, sessions, ...)"
     )
     private CDuration detailedDataDelay;
 

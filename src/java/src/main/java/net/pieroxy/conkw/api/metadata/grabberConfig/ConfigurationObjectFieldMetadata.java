@@ -15,7 +15,6 @@ public class ConfigurationObjectFieldMetadata {
   private IdLabelPair[] possibleValues;
   private String name;
   private String label;
-  private String defaultValue;
   private List<ConfigurationObjectFieldMetadata> subFields; // Only used when type = OBJECT
 
   public ConfigurationObjectFieldType getType() {
@@ -56,14 +55,6 @@ public class ConfigurationObjectFieldMetadata {
 
   public void setLabel(String label) {
     this.label = label;
-  }
-
-  public String getDefaultValue() {
-    return defaultValue;
-  }
-
-  public void setDefaultValue(String defaultValue) {
-    this.defaultValue = defaultValue;
   }
 
   public String getListItemsName() {

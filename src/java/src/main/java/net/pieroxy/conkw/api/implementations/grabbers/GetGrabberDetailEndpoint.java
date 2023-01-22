@@ -92,6 +92,7 @@ class GetGrabberDetailInput {
 @CompiledJson
 class GetGrabberDetailOutput {
   private GrabberConfigDetail config;
+  private Object defaultConfig;
 
   private String defaultName;
   private ConfigurationObjectMetadata detailsMetadata;
@@ -100,7 +101,9 @@ class GetGrabberDetailOutput {
   }
 
   public GetGrabberDetailOutput(GrabberConfig config, Grabber grabber) {
+
     this.defaultName = grabber.getDefaultName();
+    this.defaultConfig = grabber.getDefaultConfig();
     this.config = new GrabberConfigDetail(config);
     try {
       this.detailsMetadata = ConfigurationObjectMetadataBuilder.buildMetadata(((Grabber)Class.forName(config.getImplementation()).newInstance()).getConfigClass());
@@ -131,6 +134,14 @@ class GetGrabberDetailOutput {
 
   public void setDetailsMetadata(ConfigurationObjectMetadata detailsMetadata) {
     this.detailsMetadata = detailsMetadata;
+  }
+
+  public Object getDefaultConfig() {
+    return defaultConfig;
+  }
+
+  public void setDefaultConfig(Object defaultConfig) {
+    this.defaultConfig = defaultConfig;
   }
 }
 

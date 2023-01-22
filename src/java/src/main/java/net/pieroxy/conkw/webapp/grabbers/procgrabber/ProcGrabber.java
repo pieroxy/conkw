@@ -691,8 +691,7 @@ public class ProcGrabber extends AsyncGrabber<SimpleCollector, ProcGrabber.ProcG
     }
 
     @ConfigField(
-        label = "Location of the mdstat file to monitor",
-        defaultValue = MDSTAT_FILE
+        label = "Location of the mdstat file to monitor"
     )
     private String mdstatFile;
 

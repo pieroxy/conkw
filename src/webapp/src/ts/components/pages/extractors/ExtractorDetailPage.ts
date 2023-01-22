@@ -94,7 +94,7 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
               ])
             )
           ]),
-          this.configuration.detailsMetadata.fields.map(md => this.generateField("", this.configuration.config.config, md))
+          this.configuration.detailsMetadata.fields.map(md => this.generateField("", this.configuration.config.config, this.configuration.defaultConfig, md))
         ])
       )
     ]);
@@ -158,7 +158,7 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
     return {status:Status.OK, message:""};
   }
 
-  generateField(namePrefix:string, holder:any, field:ConfigurationObjectFieldMetadata, ondelete?:()=>void):m.Children {
+  generateField(namePrefix:string, holder:any, defaultHolder:any, field:ConfigurationObjectFieldMetadata, ondelete?:()=>void):m.Children {
     if (!field.list) {
       switch (field.type) {
         case ConfigurationObjectFieldType.STRING:
@@ -174,9 +174,9 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
               spellcheck:false,
               status:this.getStatus(namePrefix, field.name)
             }), 
-            !field.defaultValue ? null:m(".defaultValue", [
+            !defaultHolder[field.name] ? null:m(".defaultValue", [
               "Default: ",
-              m("span.monospace", field.defaultValue)
+              m("span.monospace", defaultHolder[field.name])
             ]))
           ]);
         case ConfigurationObjectFieldType.DELAY:
@@ -190,9 +190,9 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
               refProperty:field.name,
               status:this.getStatus(namePrefix, field.name),
             }),
-            !field.defaultValue ? null:m(".defaultValue", [
+            !defaultHolder[field.name] ? null:m(".defaultValue", [
               "Default: ",
-              m("span.monospace", field.defaultValue)
+              m("span.monospace", defaultHolder[field.name])
             ]))
           ]);
       }
@@ -266,7 +266,7 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
               ifield.label = itemLabel + " #" + count++;
               ifield.name = ""+idx;
               return [
-                this.generateField(namePrefix + field.name + ".", array, ifield, ()=>{
+                this.generateField(namePrefix + field.name + ".", array, {}, ifield, ()=>{
                   array.splice(idx, 1);
                 }),
               ];
