@@ -14,7 +14,7 @@ export class ExtractorsListPage extends AbstractPage<any> {
   configurations:GrabberConfigSummary[] = [];
 
   getPageTitle(): string {
-    return "Not yet";
+    return "Extractors configured";
   }
 
   oninit() {
