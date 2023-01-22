@@ -1,5 +1,6 @@
 package net.pieroxy.conkw.webapp.grabbers.http;
 
+import net.pieroxy.conkw.api.metadata.grabberConfig.ConfigField;
 import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.grabbersBase.TimeThrottledGrabber;
 import net.pieroxy.conkw.utils.duration.CDuration;
@@ -132,6 +133,7 @@ public class HttpsCertGrabber extends TimeThrottledGrabber<HttpsCertGrabber.Http
   public HttpsCertGrabberConfig getDefaultConfig() {
     HttpsCertGrabberConfig conf = new HttpsCertGrabberConfig();
     conf.setTtl(CDurationParser.parse("3h"));
+    conf.setErrorTtl(CDurationParser.parse("3h"));
     return conf;
   }
 
@@ -160,7 +162,13 @@ public class HttpsCertGrabber extends TimeThrottledGrabber<HttpsCertGrabber.Http
     res.collect("alldomains", getDomainsAsString());
   }
 
+
+
   public static class HttpsCertGrabberConfig extends TimeThrottledGrabber.TimeThrottledGrabberConfig {
+    @ConfigField(
+        label="Domain names to check certs on",
+        listItemLabel = "Domain"
+    )
     List<String>domains;
 
     public List<String> getDomains() {

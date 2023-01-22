@@ -2,6 +2,7 @@ package net.pieroxy.conkw.grabbersBase;
 
 import com.dslplatform.json.DslJson;
 import com.dslplatform.json.JsonWriter;
+import net.pieroxy.conkw.api.metadata.grabberConfig.ConfigField;
 import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.pub.misc.ConkwCloseable;
 import net.pieroxy.conkw.utils.JsonHelper;
@@ -276,7 +277,13 @@ public abstract class TimeThrottledGrabber<C extends TimeThrottledGrabber.TimeTh
   }
 
   public abstract static class TimeThrottledGrabberConfig extends PartiallyExtractableConfig implements Hashable {
+    @ConfigField(
+        label = "Delay between to fetch"
+    )
     CDuration ttl;
+    @ConfigField(
+        label = "Delay between to fetch if an error occured"
+    )
     CDuration errorTtl;
 
     public CDuration getTtl() {
