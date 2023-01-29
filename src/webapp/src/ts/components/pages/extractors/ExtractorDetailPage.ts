@@ -7,6 +7,7 @@ import { Routing } from '../../../utils/navigation/Routing';
 import { Notification, Notifications, NotificationsClass, NotificationsType } from '../../../utils/Notifications';
 import { Status, StatusMessageInterface } from '../../../utils/types';
 import { Button } from '../../atoms/forms/Button';
+import { DefaultValueCheckbox } from '../../atoms/forms/DefaultValueCheckbox';
 import { DelayInput } from '../../atoms/forms/DelayInput';
 import { MultipleSelectInput } from '../../atoms/forms/MultipleSelectInput';
 import { SelectInput } from '../../atoms/forms/SelectInput';
@@ -160,6 +161,20 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
 
   generateField(namePrefix:string, holder:any, defaultHolder:any, field:ConfigurationObjectFieldMetadata, ondelete?:()=>void):m.Children {
     if (!field.list) {
+
+      let realValue = holder[field.name];
+      let defaultValue:string = defaultHolder[field.name] + "";
+      let defaultComponent:m.Children = null;
+      if (defaultValue) {
+        if (realValue === undefined) realValue = defaultValue;
+        defaultComponent = m(DefaultValueCheckbox, {
+          refHolder:holder,
+          refProperty:field.name,
+          value:defaultHolder[field.name]
+        })
+      }
+      defaultHolder[field.name+"__default"] = defaultValue === realValue;
+
       switch (field.type) {
         case ConfigurationObjectFieldType.STRING:
           return m("tr", [
@@ -173,11 +188,9 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
               refProperty:field.name,
               spellcheck:false,
               status:this.getStatus(namePrefix, field.name)
-            }), 
-            !defaultHolder[field.name] ? null:m(".defaultValue", [
-              "Default: ",
-              m("span.monospace", defaultHolder[field.name])
-            ]))
+            }),
+            defaultComponent
+            ),
           ]);
         case ConfigurationObjectFieldType.DELAY:
           return m("tr", [
@@ -190,10 +203,8 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
               refProperty:field.name,
               status:this.getStatus(namePrefix, field.name),
             }),
-            !defaultHolder[field.name] ? null:m(".defaultValue", [
-              "Default: ",
-              m("span.monospace", defaultHolder[field.name])
-            ]))
+            defaultComponent
+            ),
           ]);
       }
     } else { // field.list is true

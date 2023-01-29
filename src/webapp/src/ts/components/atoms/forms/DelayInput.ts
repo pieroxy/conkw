@@ -7,10 +7,11 @@ import { SelectInput } from './SelectInput';
 import { NumberFieldInput } from './TextFieldInput';
 
 export class DelayInput implements m.ClassComponent<DelayInputAttrs> {
-  number:number;
+  number:string;
   unit:string;
 
   view({attrs}: m.Vnode<DelayInputAttrs>): void | Children {
+    this.readValue(attrs);
     return m("table.delayInput", attrs.params, m("tr", [ 
       m("td",
         m(NumberFieldInput, {
@@ -23,6 +24,8 @@ export class DelayInput implements m.ClassComponent<DelayInputAttrs> {
           onenter:()=>{},
           spellcheck:false,
           onchange:()=>{
+            console.log("Setting value " + this.number + " " + this.unit);
+
             attrs.refHolder[attrs.refProperty] = this.number+this.unit;
           },
           status:attrs.status
@@ -44,7 +47,10 @@ export class DelayInput implements m.ClassComponent<DelayInputAttrs> {
           requiredMessage: attrs.requiredMessage,
           form: attrs.form,
           onchange:()=>{
-            attrs.refHolder[attrs.refProperty] = this.number+this.unit;
+            console.log("Unit is " + this.unit);
+            if (this.number !== "") {
+              attrs.refHolder[attrs.refProperty] = this.number+this.unit;
+            }
           },
           disabled:attrs.disabled,
         })
@@ -52,32 +58,32 @@ export class DelayInput implements m.ClassComponent<DelayInputAttrs> {
     ]));
   }
 
-  oninit({attrs}: m.Vnode<DelayInputAttrs>) {
+  readValue(attrs:DelayInputAttrs) {
     let valueString = attrs.refHolder[attrs.refProperty];
     if (!valueString) {
-      this.number = 1;
-      this.unit = 's';
+      this.number = "";
+      if (!this.unit) this.unit = 's';
     } else {
       if (valueString.endsWith("ms")) {
-        this.number = this.parse(valueString, 2);
+        this.number = ""+this.parse(valueString, 2);
         this.unit='ms';
       } else if (valueString.endsWith("s")) {
-        this.number = this.parse(valueString, 1);
+        this.number = ""+this.parse(valueString, 1);
         this.unit='s';
       } else if (valueString.endsWith("m")) {
-        this.number = this.parse(valueString, 1);
+        this.number = ""+this.parse(valueString, 1);
         this.unit='m';
       } else if (valueString.endsWith("h")) {
-        this.number = this.parse(valueString, 1);
+        this.number = ""+this.parse(valueString, 1);
         this.unit='h';
       } else if (valueString.endsWith("d")) {
-        this.number = this.parse(valueString, 1);
+        this.number = ""+this.parse(valueString, 1);
         this.unit='d';
       } else if (valueString.endsWith("y")) {
-        this.number = this.parse(valueString, 1);
+        this.number = ""+this.parse(valueString, 1);
         this.unit='y';
       } else {
-        this.number = 1;
+        this.number = "1";
         this.unit = 's';
       }
     }
