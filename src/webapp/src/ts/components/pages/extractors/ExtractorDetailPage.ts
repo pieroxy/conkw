@@ -164,7 +164,8 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
     if (!field.list) {
 
       let realValue = holder[field.name];
-      let defaultValue:string = defaultHolder[field.name] + "";
+      let defaultValue:string = defaultHolder[field.name];
+      if (defaultValue !== undefined && defaultValue !== null) defaultValue = defaultValue+"";
       let defaultComponent:m.Children = null;
       if (defaultValue) {
         if (realValue === undefined) realValue = defaultValue;
