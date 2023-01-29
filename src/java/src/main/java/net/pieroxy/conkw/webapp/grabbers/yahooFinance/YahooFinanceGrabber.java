@@ -1,5 +1,6 @@
 package net.pieroxy.conkw.webapp.grabbers.yahooFinance;
 
+import net.pieroxy.conkw.api.metadata.grabberConfig.ConfigField;
 import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.utils.DebugTools;
 import net.pieroxy.conkw.utils.JsonHelper;
@@ -30,6 +31,7 @@ public class YahooFinanceGrabber extends TimeThrottledGrabber<YahooFinanceGrabbe
   public YahooFinanceGrabberConfig getDefaultConfig() {
     YahooFinanceGrabberConfig res = new YahooFinanceGrabberConfig();
     res.setTtl(CDurationParser.parse("5h"));
+    res.setErrorTtl(CDurationParser.parse("12h"));
     return res;
   }
 
@@ -79,7 +81,18 @@ public class YahooFinanceGrabber extends TimeThrottledGrabber<YahooFinanceGrabbe
   }
 
   public static class YahooFinanceGrabberConfig extends TimeThrottledGrabber.SimpleTimeThrottledGrabberConfig {
-    private String symbol,region,key;
+    @ConfigField(
+        label="Symbol"
+    )
+    private String symbol;
+    @ConfigField(
+        label="Region"
+    )
+    private String region;
+    @ConfigField(
+        label="API Key"
+    )
+    private String key;
 
     @Override
     public void addToHash(Md5Sum sum) {
