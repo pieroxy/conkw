@@ -24,8 +24,6 @@ export class DelayInput implements m.ClassComponent<DelayInputAttrs> {
           onenter:()=>{},
           spellcheck:false,
           onchange:()=>{
-            console.log("Setting value " + this.number + " " + this.unit);
-
             attrs.refHolder[attrs.refProperty] = this.number+this.unit;
           },
           status:attrs.status
@@ -47,7 +45,6 @@ export class DelayInput implements m.ClassComponent<DelayInputAttrs> {
           requiredMessage: attrs.requiredMessage,
           form: attrs.form,
           onchange:()=>{
-            console.log("Unit is " + this.unit);
             if (this.number !== "") {
               attrs.refHolder[attrs.refProperty] = this.number+this.unit;
             }
