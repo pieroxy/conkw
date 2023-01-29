@@ -89,10 +89,11 @@ export class ExtractorDetailPage extends AbstractPage<ExtractorDetailPageAttrs> 
                 spellcheck:true,
                 status:this.getStatus("", "name")
               }),
-              m(".defaultValue", [
-                "Default: ",
-                m("span.monospace", this.configuration.defaultName)
-              ])
+              m(DefaultValueCheckbox, {
+                refHolder:this.configuration.config,
+                refProperty:'name',
+                value:this.configuration.defaultName
+              })
             )
           ]),
           this.configuration.detailsMetadata.fields.map(md => this.generateField("", this.configuration.config.config, this.configuration.defaultConfig, md))
