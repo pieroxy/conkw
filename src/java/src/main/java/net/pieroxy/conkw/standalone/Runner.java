@@ -6,6 +6,7 @@ import net.pieroxy.conkw.config.LocalStorageManager;
 import net.pieroxy.conkw.utils.FileTools;
 import net.pieroxy.conkw.utils.JsonHelper;
 import net.pieroxy.conkw.utils.Services;
+import net.pieroxy.conkw.utils.StringUtil;
 import net.pieroxy.conkw.utils.hashing.HashTools;
 import net.pieroxy.conkw.utils.logging.GcLogging;
 import net.pieroxy.conkw.utils.logging.LoggingPrintStream;
@@ -272,6 +273,9 @@ public class Runner {
         Connector ctr = new Connector();
         ctr.setPort(services.getConfiguration().getHttpPort());
         tomcat.setConnector(ctr);
+        if (!StringUtil.isNullOrEmptyTrimmed(services.getConfiguration().getAddress())) {
+            ctr.setProperty("address", services.getConfiguration().getAddress());
+        }
         ctr.setProperty("compression", "on");
         ctr.setProperty("compressionMinSize", "512");
         ctr.setProperty("compressibleMimeType", "text/html, text/css, application/javascript, image/svg+xml" + (services.getConfiguration().isEnableApiCompression() ? ", application/json" : ""));

@@ -7,6 +7,7 @@ public class Config {
   private GrabberConfig[]grabbers;
   private ApiAuth apiAuth;
   private int httpPort;
+  private String address;
   private String instanceName;
   private boolean enableApiCompression;
   private boolean disableDefaultUI;
@@ -91,4 +92,11 @@ public class Config {
     this.instanceName = instanceName;
   }
 
+  public String getAddress() {
+    return address;
+  }
+
+  public void setAddress(String address) {
+    this.address = address;
+  }
 }
