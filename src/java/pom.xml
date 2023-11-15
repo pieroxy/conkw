@@ -268,11 +268,13 @@
         <artifactId>maven-jar-plugin</artifactId>
         <executions>
           <execution>
+            <id>api-jar</id>
             <phase>package</phase>
             <goals>
               <goal>jar</goal>
             </goals>
             <configuration>
+              <classifier>api-jar</classifier>
               <finalName>conkw-api-${project.version}</finalName>
               <includes>
                 <include>net/pieroxy/conkw/pub/**/*.class</include>
