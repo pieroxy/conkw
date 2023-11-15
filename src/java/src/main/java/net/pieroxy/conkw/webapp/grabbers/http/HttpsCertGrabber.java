@@ -3,25 +3,25 @@ package net.pieroxy.conkw.webapp.grabbers.http;
 import net.pieroxy.conkw.api.metadata.grabberConfig.ConfigField;
 import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.grabbersBase.TimeThrottledGrabber;
-import net.pieroxy.conkw.utils.duration.CDuration;
 import net.pieroxy.conkw.utils.duration.CDurationParser;
 import net.pieroxy.conkw.utils.hashing.Md5Sum;
-import net.pieroxy.conkw.webapp.model.ResponseData;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
 import java.net.URL;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
-import java.util.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
-
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 // Bluntly copy pasted from https://gist.github.com/sureshpai/8c762603969e78dc2c68
 public class HttpsCertGrabber extends TimeThrottledGrabber<HttpsCertGrabber.HttpsCertGrabberConfig> {
@@ -156,6 +156,7 @@ public class HttpsCertGrabber extends TimeThrottledGrabber<HttpsCertGrabber.Http
           res.collect("ts_" + s, exp.getTime() - now);
         }
       } catch (Exception e) {
+        log(Level.SEVERE, "Could not extract cert date for " + s, e);
         res.addError(e.getMessage());
       }
     });
