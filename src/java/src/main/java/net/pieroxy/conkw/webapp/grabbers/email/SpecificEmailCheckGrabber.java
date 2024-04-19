@@ -110,7 +110,7 @@ public class SpecificEmailCheckGrabber extends TimeThrottledGrabber<SpecificEmai
             if (canLogFine()) log(Level.INFO, "Checking body for message " + m.getSubject());
             if (canLogFine()) log(Level.FINE, "BODY type is " + m.getContent().getClass().getName());
             CharSequence body = MailTools.getPlainContent(m.getContent());
-            if (canLogFine()) log(Level.FINE, "BODY decoded is " + MailTools.getTextFromMail(body));
+            if (canLogFine()) log(Level.FINE, "BODY decoded is " + body);
             if (!getConfig().getBodyRegexp().matcher(body).matches()) return false;
         }
         if (canLogFine()) log(Level.FINE, "Success for message " + m.getSubject());
