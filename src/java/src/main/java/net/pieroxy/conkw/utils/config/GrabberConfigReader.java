@@ -106,6 +106,8 @@ public class GrabberConfigReader {
             return value;
         } else if (value instanceof Boolean && genericType == Boolean.class) {
             return value;
+        } else if (value instanceof Boolean && genericType == boolean.class) {
+            return value;
         } else if (value instanceof List) {
             List list = (List)value;
             if (genericType instanceof ParameterizedType) {
