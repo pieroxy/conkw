@@ -21,6 +21,11 @@ public class Md5Sum {
         return this;
     }
 
+    public Md5Sum add(Hashable part) {
+        part.addToHash(this);
+        return this;
+    }
+
     public String getMd5Sum() {
         return HashTools.byteArrayToHexString(md.digest());
     }
