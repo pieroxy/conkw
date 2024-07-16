@@ -4,22 +4,19 @@ import net.pieroxy.conkw.api.metadata.grabberConfig.ConfigField;
 import net.pieroxy.conkw.collectors.SimpleCollector;
 import net.pieroxy.conkw.grabbersBase.TimeThrottledGrabber;
 import net.pieroxy.conkw.utils.duration.CDurationParser;
+import net.pieroxy.conkw.utils.hashing.Hashable;
 import net.pieroxy.conkw.utils.hashing.Md5Sum;
 
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
+import javax.net.ssl.*;
 import java.io.IOException;
 import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
@@ -40,7 +37,7 @@ public class HttpsCertGrabber extends TimeThrottledGrabber<HttpsCertGrabber.Http
       cn = args[2];
     }
     Date expiresOn = null;
-    expiresOn = new HttpsCertGrabber().getExpirationDate(cn);
+    expiresOn = new HttpsCertGrabber().getExpirationDate(new HttpsTarget(cn));
 
     if (expiresOn!=null) {
       Date now = new Date();
@@ -51,7 +48,7 @@ public class HttpsCertGrabber extends TimeThrottledGrabber<HttpsCertGrabber.Http
     }
   }
 
-  private Date getExpirationDate(String cn) throws IOException, CertificateParsingException {
+  private Date getExpirationDate(HttpsTarget target) throws IOException, CertificateParsingException, NoSuchAlgorithmException, KeyManagementException {
     // without a trust manager, i was having problems of
     // sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
     // the code below was taken from
@@ -78,10 +75,7 @@ public class HttpsCertGrabber extends TimeThrottledGrabber<HttpsCertGrabber.Http
         }
     };
 
-    String bareCn = cn;
-    if (cn.indexOf(":")>-1) {
-      bareCn = cn.substring(0, cn.indexOf(":"));
-    }
+    String bareCn = target.domainName;
 
     // Install the all-trusting trust manager
     try {
@@ -93,8 +87,20 @@ public class HttpsCertGrabber extends TimeThrottledGrabber<HttpsCertGrabber.Http
     }
 
 
-    URL url=new URL("https://"+ cn);
-    HttpsURLConnection conn= (HttpsURLConnection)url.openConnection();
+    URL url = new URL("https://"+ target.getDomainForUrl());
+    HttpsURLConnection conn = (HttpsURLConnection)url.openConnection();
+    if (target.noSslValidation!=null && target.noSslValidation) {
+      HttpsURLConnection httpsConn = conn;
+      HostnameVerifier allHostsValid = new HostnameVerifier() {
+        public boolean verify(String hostname, SSLSession session) {
+          return true;
+        }
+      };
+      SSLContext sc = SSLContext.getInstance("SSL");
+      sc.init(null, trustAllCerts, new java.security.SecureRandom());
+      httpsConn.setHostnameVerifier(allHostsValid);
+      httpsConn.setSSLSocketFactory(sc.getSocketFactory());
+    }
     conn.setConnectTimeout(1000);
     conn.setReadTimeout(1000);
     conn.connect();
@@ -139,7 +145,7 @@ public class HttpsCertGrabber extends TimeThrottledGrabber<HttpsCertGrabber.Http
 
   private String getDomainsAsString() {
     if (_domainsAsString==null) {
-      _domainsAsString = getConfig().getDomains().stream().collect(Collectors.joining(","));
+      _domainsAsString = getConfig().getUnifiedDomains().stream().map(HttpsTarget::getDomainForUrl).collect(Collectors.joining(","));
     }
     return _domainsAsString;
   }
@@ -147,16 +153,19 @@ public class HttpsCertGrabber extends TimeThrottledGrabber<HttpsCertGrabber.Http
   @Override
   protected void load(SimpleCollector res) {
     long now = System.currentTimeMillis();
-    getConfig().getDomains().forEach(s -> {
+    getConfig().getUnifiedDomains().forEach(s -> {
       try {
         Date exp = getExpirationDate(s);
         if (exp!=null) {
-          res.collect("date_" + s, exp.getTime());
-          res.collect("days_" + s, (exp.getTime() - now) / (1000 * 60 * 60 * 24));
-          res.collect("ts_" + s, exp.getTime() - now);
+          log(Level.INFO, "Collected crt date for " + s.getKey());
+          res.collect("date_" + s.getKey(), exp.getTime());
+          res.collect("days_" + s.getKey(), (exp.getTime() - now) / (1000 * 60 * 60 * 24));
+          res.collect("ts_" + s.getKey(), exp.getTime() - now);
+        } else {
+          log(Level.INFO, "Collected  *no* date for " + s);
         }
       } catch (Exception e) {
-        log(Level.SEVERE, "Could not extract cert date for " + s, e);
+        log(Level.SEVERE, "Could not extract crt date for " + s, e);
         res.addError(e.getMessage());
       }
     });
@@ -171,9 +180,17 @@ public class HttpsCertGrabber extends TimeThrottledGrabber<HttpsCertGrabber.Http
         listItemLabel = "Domain"
     )
     List<String>domains;
+    List<HttpsTarget>targets;
 
-    public List<String> getDomains() {
-      return domains;
+    public List<HttpsTarget> getUnifiedDomains() {
+      List<HttpsTarget> result = new ArrayList<>();
+      if (domains!=null) {
+        domains.stream().map(HttpsTarget::new).forEach(result::add);
+      }
+      if (targets!=null) {
+        result.addAll(targets);
+      }
+      return result;
     }
 
     public void setDomains(List<String> domains) {
@@ -182,7 +199,73 @@ public class HttpsCertGrabber extends TimeThrottledGrabber<HttpsCertGrabber.Http
 
     @Override
     public void addToHash(Md5Sum sum) {
-      getDomains().forEach(sum::add);
+      getUnifiedDomains().forEach(sum::add);
+    }
+
+    public void setTargets(List<HttpsTarget> targets) {
+      this.targets = targets;
+    }
+  }
+
+  public static class HttpsTarget implements Hashable  {
+    String target;
+    int port;
+    String domainName;
+    Boolean noSslValidation;
+
+    public void setTarget(String target) {
+      this.target = target;
+    }
+
+    public void setPort(int port) {
+      this.port = port;
+    }
+
+    public void setDomainName(String domainName) {
+      this.domainName = domainName;
+    }
+
+    public void setNoSslValidation(Boolean noSslValidation) {
+      this.noSslValidation = noSslValidation;
+    }
+
+    public HttpsTarget(String domainName) {
+      if (domainName.contains(":")) {
+        this.target = this.domainName = domainName.substring(0, domainName.indexOf(":"));
+        port = Integer.parseInt(domainName.substring(domainName.indexOf(":")+1));
+      } else {
+        this.target = this.domainName = domainName;
+        port = 443;
+      }
+    }
+
+    public HttpsTarget() {
+    }
+
+    public String getDomainForUrl() {
+      if (port == 0) return target;
+      return target + ":" + port;
+    }
+
+    @Override
+    public void addToHash(Md5Sum sum) {
+      sum.add(target);
+      sum.add(port + "");
+      sum.add(domainName);
+    }
+
+    @Override
+    public String toString() {
+      return "HttpsTarget{" +
+              "target='" + target + '\'' +
+              ", port=" + port +
+              ", domainName='" + domainName + '\'' +
+              ", noSslValidation=" + noSslValidation +
+              '}';
+    }
+
+    String getKey() {
+      return target;
     }
   }
 }
