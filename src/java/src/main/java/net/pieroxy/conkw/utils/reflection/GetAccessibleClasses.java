@@ -29,7 +29,9 @@ public class GetAccessibleClasses {
     ArrayList<Class<?>> classList = new ArrayList<Class<?>>();
     for (String clazz : classes) {
       try {
-        classList.add(Class.forName(clazz));
+        if (clazz.startsWith(packageName)) {
+          classList.add(Class.forName(clazz));
+        }
       } catch (Throwable  e) {
         // What to do really?
       }
