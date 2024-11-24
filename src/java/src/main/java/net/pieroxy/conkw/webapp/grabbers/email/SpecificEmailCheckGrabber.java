@@ -58,6 +58,7 @@ public class SpecificEmailCheckGrabber extends TimeThrottledGrabber<SpecificEmai
     protected void load(SimpleCollector res) {
         try {
             Message[] messages = getMessages();
+            if (canLogFine()) log(Level.FINE, "Got back " + messages.length + " messages.");
             if (messages!=null && messages.length>0) {
                 String error = searchForMessage(messages);
                 if (error!=null) res.addError(error);
